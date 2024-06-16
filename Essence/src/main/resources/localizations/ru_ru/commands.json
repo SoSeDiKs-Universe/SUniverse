@@ -1,0 +1,15 @@
+{
+	"command.bedspawn": "Вы были телепортированы в Вашу точку респавна",
+	"command.bedspawn.other": "Игрок <yellow><player></yellow> телепортирован в точку респавна",
+	"command.gravity": "Ваша гравитация была <choice:'<green>включена':'<red>отключена'>",
+	"command.gravity.other": "Вы <choice:'<green>включили':'<red>отключили'> гравитацию для игрока <yellow><player>",
+	"command.heal": "Вы были излечены!",
+	"command.heal.other": "Вы излечили игрока <yellow><player>",
+	"command.health": "Ваши сердца были установлен на <yellow><amount>",
+	"command.health.other": "Вы установили сердца на <yellow><amount></yellow> для игрока <yellow><player>",
+	"command.hunger": "Ваш голод был установлен на <yellow><amount>",
+	"command.hunger.other": "Вы установили голод на <yellow><amount></yellow> для игрока <yellow><player>",
+	"command.more": "Количество установлено на <yellow><amount></yellow> для <item>",
+	"command.world": "Телепортирование в мир <yellow><world>",
+	"command.world.other": "Игрок <yellow><player></yellow> телепортирован в мир <yellow><world>"
+}

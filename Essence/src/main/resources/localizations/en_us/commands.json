@@ -1,0 +1,15 @@
+{
+	"command.bedspawn": "You were teleported to your respawn location",
+	"command.bedspawn.other": "Teleported <yellow><player></yellow> to their respawn location",
+	"command.gravity": "Your gravity was <choice:'<green>enabled':'<red>disabled'>",
+	"command.gravity.other": "You've <choice:'<green>enabled':'<red>disabled'> gravity for <yellow><player>",
+	"command.heal": "You've been healed!",
+	"command.heal.other": "You've healed <yellow><player>",
+	"command.health": "Your health was set to <yellow><amount>",
+	"command.health.other": "You've set health to <yellow><amount></yellow> for <yellow><player>",
+	"command.hunger": "Your hunger was set to <yellow><amount>",
+	"command.hunger.other": "You've set hunger to <yellow><amount></yellow> for <yellow><player>",
+	"command.more": "<item>'s amount set to <yellow><amount>",
+	"command.world": "Teleporting to <yellow><world>",
+	"command.world.other": "Teleported <yellow><player></yellow> to <yellow><world>"
+}

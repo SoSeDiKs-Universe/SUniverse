@@ -1,7 +1,7 @@
 package me.sosedik.requiem;
 
 import me.sosedik.requiem.listener.entity.PrepareGhostMobs;
-import me.sosedik.requiem.listener.player.StartAsGhost;
+import me.sosedik.requiem.listener.player.LoadSaveGhosts;
 import me.sosedik.utilizer.util.EventUtil;
 import me.sosedik.utilizer.util.Scheduler;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
@@ -26,7 +26,7 @@ public final class Requiem extends JavaPlugin {
 			// entity
 			PrepareGhostMobs.class,
 			// player
-			StartAsGhost.class
+			LoadSaveGhosts.class
 		);
 	}
 

@@ -2,6 +2,8 @@ package me.sosedik.requiem.feature;
 
 import me.sosedik.requiem.Requiem;
 import me.sosedik.requiem.listener.entity.PrepareGhostMobs;
+import me.sosedik.requiem.task.GhostAuraTask;
+import me.sosedik.requiem.task.GhostMobVisionTask;
 import net.kyori.adventure.util.TriState;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -57,6 +59,9 @@ public class GhostyPlayer {
 		player.setFlySpeed(speed);
 		player.setFlying(true);
 		player.setFlyingFallDamage(TriState.FALSE);
+
+		new GhostAuraTask(player);
+		new GhostMobVisionTask(player);
 
 		Requiem.logger().info("Making {} a ghost", player.getName());
 	}

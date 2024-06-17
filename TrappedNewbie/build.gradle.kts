@@ -4,6 +4,8 @@ description = "Once you're in, there's no way out"
 
 dependencies {
     compileOnly(project(":Utilizer"))
+    compileOnly(project(":Moves"))
+    compileOnly(project(":Requiem"))
 
     compileOnly("org.incendo:cloud-paper:${project.property("cloudImplVersion")}")
 }
@@ -14,6 +16,12 @@ paper {
 
     serverDependencies {
         register("Utilizer") {
+            load = PaperPluginDescription.RelativeLoadOrder.BEFORE
+        }
+        register("Moves") {
+            load = PaperPluginDescription.RelativeLoadOrder.BEFORE
+        }
+        register("Requiem") {
             load = PaperPluginDescription.RelativeLoadOrder.BEFORE
         }
         // TrappedNewbie registers custom world parser that Essence's /world can use

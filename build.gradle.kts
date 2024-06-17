@@ -16,7 +16,7 @@ allprojects {
     repositories {
         mavenCentral()
         maven("https://papermc.io/repo/repository/maven-public/")
-        maven("https://repo.codemc.io/repository/maven-public/") // NBT-API
+        maven("https://repo.codemc.io/repository/maven-public/") // NBT-API, packetevents
         mavenLocal()
     }
 }

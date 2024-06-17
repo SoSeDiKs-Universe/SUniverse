@@ -1,7 +1,6 @@
 package me.sosedik.trappednewbie.api.command.parser;
 
 import io.papermc.paper.command.brigadier.CommandSourceStack;
-import me.sosedik.trappednewbie.listener.world.PerPlayerWorlds;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;

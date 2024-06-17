@@ -1,5 +1,8 @@
 package me.sosedik.utilizer.util;
 
+import com.github.retrooper.packetevents.PacketEvents;
+import com.github.retrooper.packetevents.event.PacketListener;
+import com.github.retrooper.packetevents.event.PacketListenerPriority;
 import me.sosedik.utilizer.Utilizer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.Listener;
@@ -36,25 +39,27 @@ public class EventUtil {
 					Utilizer.logger().warn("Couldn't register events in {} for {} (class does not implement Listener)", listenerClass, plugin.getName());
 					continue;
 				}
+				Listener listener = null;
 				Constructor<?> constructor = listenerClass.getDeclaredConstructors()[0];
 				int paramCount = constructor.getParameterCount();
 				if (paramCount == 0) {
-					Listener listenerInstance = (Listener) constructor.newInstance();
-					pluginManager.registerEvents(listenerInstance, plugin);
-					continue;
+					listener = (Listener) constructor.newInstance();
 				} else if (paramCount == 1) {
 					if (constructor.getParameterTypes()[0] == Plugin.class) {
-						Listener listenerInstance = (Listener) constructor.newInstance(plugin);
-						pluginManager.registerEvents(listenerInstance, plugin);
-						continue;
+						listener = (Listener) constructor.newInstance(plugin);
 					}
 				} else if (paramCount == 2) {
 					Class<?>[] paramTypes = constructor.getParameterTypes();
 					if (paramTypes[0] == Plugin.class && paramTypes[1] == FileConfiguration.class) {
-						Listener listenerInstance = (Listener) constructor.newInstance(plugin, pluginConfig);
-						pluginManager.registerEvents(listenerInstance, plugin);
-						continue;
+						listener = (Listener) constructor.newInstance(plugin, pluginConfig);
 					}
+				}
+				if (listener != null) {
+					pluginManager.registerEvents(listener, plugin);
+					if (PacketListener.class.isAssignableFrom(listenerClass)) {
+						PacketEvents.getAPI().getEventManager().registerListener((PacketListener) listener, PacketListenerPriority.NORMAL);
+					}
+					continue;
 				}
 				Utilizer.logger().warn("Couldn't register events in {} for {} (unsupported constructor)", listenerClass, plugin.getName());
 			}

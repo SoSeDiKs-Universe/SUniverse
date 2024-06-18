@@ -1,9 +1,11 @@
 package me.sosedik.trappednewbie.listener.world;
 
+import me.sosedik.limboworldgenerator.VoidChunkGenerator;
 import me.sosedik.trappednewbie.TrappedNewbie;
-import me.sosedik.trappednewbie.feature.worldgen.EmptyWorldGenerator;
 import net.kyori.adventure.util.TriState;
 import org.bukkit.Bukkit;
+import org.bukkit.Difficulty;
+import org.bukkit.GameRule;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
@@ -39,7 +41,7 @@ public class PerPlayerWorlds implements Listener {
 		return getWorld("worlds/", playerUuid, (levelName, worldKey) -> Objects.requireNonNull(
 			new WorldCreator(levelName, worldKey)
 				.keepSpawnLoaded(TriState.FALSE)
-				.generator(EmptyWorldGenerator.GENERATOR)
+				.generator(VoidChunkGenerator.GENERATOR)
 				.createWorld()
 		));
 	}
@@ -51,7 +53,7 @@ public class PerPlayerWorlds implements Listener {
 	 * @return world instance
 	 */
 	public static @NotNull World getResourceWorld(@NotNull UUID playerUuid, @NotNull World.Environment environment) {
-		return getWorld("resource-worlds/" + environment.name().toLowerCase(Locale.ENGLISH) + "/", playerUuid, (levelName, worldKey) -> Objects.requireNonNull(
+		return getWorld("worlds-resources/" + environment.name().toLowerCase(Locale.ENGLISH) + "/", playerUuid, (levelName, worldKey) -> Objects.requireNonNull(
 			new WorldCreator(levelName, worldKey)
 				.keepSpawnLoaded(TriState.FALSE)
 				.environment(environment)
@@ -59,11 +61,26 @@ public class PerPlayerWorlds implements Listener {
 		));
 	}
 
+	/**
+	 * Applies plugin's world game rules
+	 *
+	 * @param world world
+	 */
+	public static void applyWorldRules(@NotNull World world) {
+		world.setDifficulty(Difficulty.HARD);
+		world.setGameRule(GameRule.NATURAL_REGENERATION, false);
+		world.setGameRule(GameRule.DO_IMMEDIATE_RESPAWN, true);
+		world.setGameRule(GameRule.DO_LIMITED_CRAFTING, true);
+		world.setGameRule(GameRule.REDUCED_DEBUG_INFO, true);
+	}
+
 	private static @NotNull World getWorld(@NotNull String prefix, @NotNull UUID playerUuid, @NotNull BiFunction<@NotNull String, @NotNull NamespacedKey, @NotNull World> worldCreator) {
 		var worldKey = worldKey(prefix, playerUuid);
 		World world = Bukkit.getWorld(worldKey);
-		if (world == null)
+		if (world == null) {
 			world = worldCreator.apply(prefix + playerUuid, worldKey);
+			applyWorldRules(world);
+		}
 		return world;
 	}
 

@@ -1,0 +1,5 @@
+{
+	"command.revive": "You were revived",
+	"command.revive.other": "You've revived player <yellow><player>",
+	"command.revive.target_alive": "Player <yellow><player></yellow> is already alive"
+}

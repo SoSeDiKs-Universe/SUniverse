@@ -19,8 +19,8 @@ import java.util.UUID;
  */
 public class GhostyPlayer {
 
-	private static final Set<UUID> GHOSTS = new HashSet<>();
 	private static final PotionEffect NIGHT_VISION_EFFECT = new PotionEffect(PotionEffectType.NIGHT_VISION, PotionEffect.INFINITE_DURATION, 0, false, false, false);
+	private static final Set<UUID> GHOSTS = new HashSet<>();
 
 	/**
 	 * Checks whether this player is a ghost
@@ -28,7 +28,7 @@ public class GhostyPlayer {
 	 * @param player player
 	 * @return whether player is a ghost
 	 */
-	public static synchronized boolean isGhost(@NotNull Player player) {
+	public static boolean isGhost(@NotNull Player player) {
 		return GHOSTS.contains(player.getUniqueId());
 	}
 
@@ -41,7 +41,7 @@ public class GhostyPlayer {
 		GHOSTS.add(player.getUniqueId());
 
 		// Hide player from non-ghosts
-		PrepareGhostMobs.hideSelfGhost(player, true);
+		PrepareGhostMobs.makeInvisible(player, true);
 
 		// Ghost attributes
 		player.setHealth(player.getMaxHealth());

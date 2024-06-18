@@ -4,6 +4,9 @@ description = "The burden of life"
 
 dependencies {
     compileOnly(project(":Utilizer"))
+
+    compileOnly("org.incendo:cloud-paper:${project.property("cloudImplVersion")}")
+    compileOnly("org.incendo:cloud-annotations:${project.property("cloudVersion")}")
 }
 
 paper {

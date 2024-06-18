@@ -3,9 +3,9 @@ package me.sosedik.utilizer.util;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonStreamParser;
-import de.tr7zw.changeme.nbtapi.NBTCompound;
-import de.tr7zw.changeme.nbtapi.NBTContainer;
+import de.tr7zw.changeme.nbtapi.NBT;
 import de.tr7zw.changeme.nbtapi.NBTFile;
+import de.tr7zw.changeme.nbtapi.iface.ReadWriteNBT;
 import me.sosedik.utilizer.Utilizer;
 import org.jetbrains.annotations.NotNull;
 
@@ -54,12 +54,12 @@ public class FileUtil {
 	 * @param file file
 	 * @return nbt data
 	 */
-	public static @NotNull NBTCompound readNbtFile(@NotNull File file) {
+	public static @NotNull ReadWriteNBT readNbtFile(@NotNull File file) {
 		try {
 			return NBTFile.readFrom(file);
 		} catch (IOException e) {
 			Utilizer.logger().error("Could not read nbt file!", e);
-			return new NBTContainer();
+			return NBT.createNBTObject();
 		}
 	}
 

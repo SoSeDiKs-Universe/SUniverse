@@ -2,7 +2,7 @@ package me.sosedik.requiem.task;
 
 import me.sosedik.requiem.Requiem;
 import me.sosedik.requiem.feature.GhostyPlayer;
-import me.sosedik.requiem.feature.MobPossessing;
+import me.sosedik.requiem.feature.PossessingPlayer;
 import me.sosedik.utilizer.util.GlowingUtil;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Location;
@@ -54,9 +54,9 @@ public class GhostMobVisionTask extends BukkitRunnable {
 		loc.getNearbyLivingEntities(25, entity -> !glowingMobs.containsKey(entity.getUniqueId()) && !shouldSkipGlow(entity)).forEach(entity -> {
 			glowingMobs.put(entity.getUniqueId(), entity);
 			NamedTextColor glowColor;
-			if (MobPossessing.hasSoul(entity))
+			if (PossessingPlayer.hasSoul(entity))
 				glowColor = NamedTextColor.GREEN;
-			else if (MobPossessing.isAllowedForCapture(player, entity))
+			else if (PossessingPlayer.isAllowedForCapture(player, entity))
 				glowColor = NamedTextColor.YELLOW;
 			else
 				glowColor = NamedTextColor.RED;

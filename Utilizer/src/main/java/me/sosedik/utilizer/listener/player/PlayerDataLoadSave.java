@@ -1,8 +1,9 @@
 package me.sosedik.utilizer.listener.player;
 
-import de.tr7zw.changeme.nbtapi.NBTCompound;
+import de.tr7zw.changeme.nbtapi.NBT;
 import de.tr7zw.changeme.nbtapi.NBTContainer;
 import de.tr7zw.changeme.nbtapi.NBTFile;
+import de.tr7zw.changeme.nbtapi.iface.ReadWriteNBT;
 import me.sosedik.utilizer.Utilizer;
 import me.sosedik.utilizer.api.event.player.PlayerDataLoadedEvent;
 import me.sosedik.utilizer.api.event.player.PlayerDataSaveEvent;
@@ -29,7 +30,7 @@ import java.util.UUID;
  */
 public class PlayerDataLoadSave implements Listener {
 
-	private static final Map<UUID, NBTCompound> STORED_DATA = new HashMap<>();
+	private static final Map<UUID, ReadWriteNBT> STORED_DATA = new HashMap<>();
 
 	private static Plugin plugin;
 
@@ -47,7 +48,7 @@ public class PlayerDataLoadSave implements Listener {
 
 		UUID uuid = event.getUniqueId();
 		Utilizer.scheduler().async(() -> {
-			NBTCompound data = loadData(uuid);
+			ReadWriteNBT data = loadData(uuid);
 			STORED_DATA.put(uuid, data);
 		});
 	}
@@ -55,7 +56,7 @@ public class PlayerDataLoadSave implements Listener {
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onJoin(@NotNull PlayerJoinEvent event) {
 		Player player = event.getPlayer();
-		NBTCompound data = getOrLoadData(player);
+		ReadWriteNBT data = getOrLoadData(player);
 		var dataLoadedEvent = new PlayerDataLoadedEvent(player, data);
 		dataLoadedEvent.callEvent();
 		data.clearNBT();
@@ -67,7 +68,7 @@ public class PlayerDataLoadSave implements Listener {
 		saveData(event.getPlayer(), false);
 	}
 
-	private static @NotNull NBTCompound loadData(@NotNull UUID uuid) {
+	private static @NotNull ReadWriteNBT loadData(@NotNull UUID uuid) {
 		File dataFile = new File(plugin.getDataFolder(), "players/" + uuid + ".dat");
 		if (!dataFile.exists()) return new NBTContainer();
 
@@ -76,19 +77,19 @@ public class PlayerDataLoadSave implements Listener {
 
 	private static synchronized void saveData(@NotNull Player player, boolean keepData) {
 		UUID uuid = player.getUniqueId();
-		NBTCompound data = keepData ? STORED_DATA.get(uuid) : STORED_DATA.remove(uuid);
+		ReadWriteNBT data = keepData ? STORED_DATA.get(uuid) : STORED_DATA.remove(uuid);
 		if (data == null) return; // Shouldn't happen
 
 		var event = new PlayerDataSaveEvent(player, data, !keepData);
 		event.callEvent();
-		NBTCompound saveData = event.getData();
+		ReadWriteNBT saveData = event.getData();
 		File dataFile = new File(plugin.getDataFolder(), "players/" + uuid + ".dat");
 		Utilizer.scheduler().async(() -> saveData(dataFile, saveData));
 	}
 
-	private static synchronized void saveData(@NotNull File file, @NotNull NBTCompound data) {
+	private static synchronized void saveData(@NotNull File file, @NotNull ReadWriteNBT data) {
 		try {
-			NBTFile.saveTo(file, data);
+			NBTFile.saveTo(file, (de.tr7zw.changeme.nbtapi.NBTCompound) data); // TODO update NBT-API
 		} catch (IOException e) {
 			throw new RuntimeException("Couldn't save player data file!", e);
 		}
@@ -100,9 +101,9 @@ public class PlayerDataLoadSave implements Listener {
 	 * @param player player
 	 * @return player nbt data
 	 */
-	private static @NotNull NBTCompound getOrLoadData(@NotNull Player player) {
+	private static @NotNull ReadWriteNBT getOrLoadData(@NotNull Player player) {
 		UUID uuid = player.getUniqueId();
-		NBTCompound data = STORED_DATA.get(uuid);
+		ReadWriteNBT data = STORED_DATA.get(uuid);
 		return data == null ? loadData(uuid) : data;
 	}
 
@@ -112,9 +113,9 @@ public class PlayerDataLoadSave implements Listener {
 	 * @param uuid uuid
 	 * @return player nbt data
 	 */
-	public static @NotNull NBTCompound getData(@NotNull UUID uuid) {
-		NBTCompound data = STORED_DATA.get(uuid);
-		return data == null ? new NBTContainer() : data;
+	public static @NotNull ReadWriteNBT getData(@NotNull UUID uuid) {
+		ReadWriteNBT data = STORED_DATA.get(uuid);
+		return data == null ? NBT.createNBTObject() : data;
 	}
 
 	/**

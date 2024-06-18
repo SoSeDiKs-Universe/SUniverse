@@ -1,6 +1,6 @@
 package me.sosedik.utilizer.api.storage.player;
 
-import de.tr7zw.changeme.nbtapi.NBTCompound;
+import de.tr7zw.changeme.nbtapi.iface.ReadWriteNBT;
 import me.sosedik.utilizer.listener.player.PlayerDataLoadSave;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -15,7 +15,7 @@ public interface PlayerDataStorage {
 	 * @param player player
 	 * @return player nbt data
 	 */
-	static @NotNull NBTCompound getData(@NotNull Player player) {
+	static @NotNull ReadWriteNBT getData(@NotNull Player player) {
 		return getData(player.getUniqueId());
 	}
 
@@ -25,7 +25,7 @@ public interface PlayerDataStorage {
 	 * @param uuid uuid
 	 * @return player nbt data
 	 */
-	static @NotNull NBTCompound getData(@NotNull UUID uuid) {
+	static @NotNull ReadWriteNBT getData(@NotNull UUID uuid) {
 		return PlayerDataLoadSave.getData(uuid);
 	}
 

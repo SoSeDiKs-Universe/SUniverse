@@ -1,7 +1,16 @@
 package me.sosedik.requiem;
 
+import me.sosedik.requiem.command.ReviveCommand;
 import me.sosedik.requiem.listener.entity.PrepareGhostMobs;
-import me.sosedik.requiem.listener.player.LoadSaveGhosts;
+import me.sosedik.requiem.listener.player.DeathMakesGhosts;
+import me.sosedik.requiem.listener.player.GhostsDontSprint;
+import me.sosedik.requiem.listener.player.GhostsDontStarveOrChoke;
+import me.sosedik.requiem.listener.player.GhostsKeepNightVision;
+import me.sosedik.requiem.listener.player.LoadSavePlayers;
+import me.sosedik.requiem.listener.player.NoAirForWaterPossessing;
+import me.sosedik.requiem.listener.player.PossessedDismount;
+import me.sosedik.requiem.listener.player.PossessingOverMobs;
+import me.sosedik.utilizer.CommandManager;
 import me.sosedik.utilizer.util.EventUtil;
 import me.sosedik.utilizer.util.Scheduler;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
@@ -22,11 +31,25 @@ public final class Requiem extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
+		registerCommands();
 		EventUtil.registerListeners(this,
 			// entity
 			PrepareGhostMobs.class,
 			// player
-			LoadSaveGhosts.class
+			DeathMakesGhosts.class,
+			GhostsDontSprint.class,
+			GhostsDontStarveOrChoke.class,
+			GhostsKeepNightVision.class,
+			LoadSavePlayers.class,
+			NoAirForWaterPossessing.class,
+			PossessedDismount.class,
+			PossessingOverMobs.class
+		);
+	}
+
+	private void registerCommands() {
+		CommandManager.commandManager().registerCommands(this,
+			ReviveCommand.class
 		);
 	}
 

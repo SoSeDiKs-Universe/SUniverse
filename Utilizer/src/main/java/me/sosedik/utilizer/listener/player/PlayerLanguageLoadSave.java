@@ -1,6 +1,6 @@
 package me.sosedik.utilizer.listener.player;
 
-import de.tr7zw.changeme.nbtapi.NBTCompound;
+import de.tr7zw.changeme.nbtapi.iface.ReadWriteNBT;
 import me.sosedik.utilizer.api.event.player.PlayerDataLoadedEvent;
 import me.sosedik.utilizer.api.event.player.PlayerDataSaveEvent;
 import me.sosedik.utilizer.api.language.LangHolder;
@@ -28,7 +28,7 @@ public class PlayerLanguageLoadSave implements Listener {
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onLoad(@NonNull PlayerDataLoadedEvent event) {
 		Player player = event.getPlayer();
-		NBTCompound data = event.getData();
+		ReadWriteNBT data = event.getData();
 		LangKey langKey = LangKeysStorage.getLangKey(data.getString("lang"));
 		String translationLanguageId = data.getOrDefault("translation_lang", langKey.translationLanguage().id());
 		var translationLanguage = new TranslationLanguage(translationLanguageId);

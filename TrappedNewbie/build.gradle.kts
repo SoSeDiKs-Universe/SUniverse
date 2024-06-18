@@ -3,6 +3,7 @@ import net.minecrell.pluginyml.paper.PaperPluginDescription
 description = "Once you're in, there's no way out"
 
 dependencies {
+    compileOnly(project(":LimboWorldGenerator"))
     compileOnly(project(":Utilizer"))
     compileOnly(project(":Moves"))
     compileOnly(project(":Requiem"))
@@ -15,6 +16,9 @@ paper {
     main = "me.sosedik.trappednewbie.TrappedNewbie"
 
     serverDependencies {
+        register("LimboWorldGenerator") {
+            load = PaperPluginDescription.RelativeLoadOrder.BEFORE
+        }
         register("Utilizer") {
             load = PaperPluginDescription.RelativeLoadOrder.BEFORE
         }

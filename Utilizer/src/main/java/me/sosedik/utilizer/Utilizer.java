@@ -21,12 +21,11 @@ public final class Utilizer extends JavaPlugin {
 	public void onLoad() {
 		Utilizer.instance = this;
 		scheduler = new Scheduler(this);
-
-		CommandManager.init(this);
 	}
 
 	@Override
 	public void onEnable() {
+		CommandManager.init(this);
 		LangKeysStorage.init(this);
 		EventUtil.registerListeners(this,
 			// entity

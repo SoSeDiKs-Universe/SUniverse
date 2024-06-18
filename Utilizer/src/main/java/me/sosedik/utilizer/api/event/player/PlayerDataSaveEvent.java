@@ -1,7 +1,7 @@
 package me.sosedik.utilizer.api.event.player;
 
-import de.tr7zw.changeme.nbtapi.NBTCompound;
-import de.tr7zw.changeme.nbtapi.NBTContainer;
+import de.tr7zw.changeme.nbtapi.NBT;
+import de.tr7zw.changeme.nbtapi.iface.ReadWriteNBT;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerEvent;
@@ -14,14 +14,14 @@ public class PlayerDataSaveEvent extends PlayerEvent {
 
 	private static final HandlerList HANDLERS = new HandlerList();
 
-	private final NBTCompound preData;
-	private final NBTCompound data;
+	private final ReadWriteNBT preData;
+	private final ReadWriteNBT data;
 	private final boolean quit;
 
-	public PlayerDataSaveEvent(@NotNull Player who, @NotNull NBTCompound preData, boolean quit) {
+	public PlayerDataSaveEvent(@NotNull Player who, @NotNull ReadWriteNBT preData, boolean quit) {
 		super(who);
 		this.preData = preData;
-		this.data = new NBTContainer();
+		this.data = NBT.createNBTObject();
 		this.quit = quit;
 	}
 
@@ -30,7 +30,7 @@ public class PlayerDataSaveEvent extends PlayerEvent {
 	 *
 	 * @return player data
 	 */
-	public @NotNull NBTCompound getPreData() {
+	public @NotNull ReadWriteNBT getPreData() {
 		return preData;
 	}
 
@@ -39,7 +39,7 @@ public class PlayerDataSaveEvent extends PlayerEvent {
 	 *
 	 * @return player data
 	 */
-	public @NotNull NBTCompound getData() {
+	public @NotNull ReadWriteNBT getData() {
 		return data;
 	}
 

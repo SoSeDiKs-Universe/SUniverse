@@ -2,14 +2,19 @@ package me.sosedik.trappednewbie;
 
 import io.leangen.geantyref.TypeToken;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
+import me.sosedik.limboworldgenerator.VoidChunkGenerator;
 import me.sosedik.trappednewbie.api.command.parser.PlayerWorldParser;
-import me.sosedik.trappednewbie.listener.player.FirstWorldJoin;
+import me.sosedik.trappednewbie.listener.world.LimboWorldFall;
 import me.sosedik.trappednewbie.listener.world.PerPlayerWorlds;
 import me.sosedik.utilizer.CommandManager;
 import me.sosedik.utilizer.util.EventUtil;
 import me.sosedik.utilizer.util.FileUtil;
 import me.sosedik.utilizer.util.Scheduler;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.incendo.cloud.bukkit.internal.BukkitBrigadierMapper;
 import org.jetbrains.annotations.NotNull;
@@ -29,21 +34,42 @@ public final class TrappedNewbie extends JavaPlugin {
 		TrappedNewbie.instance = this;
 		this.scheduler = new Scheduler(this);
 
-		registerCommands();
+		cleanupTemporaryWorlds();
+	}
+
+	private void cleanupTemporaryWorlds() {
+		FileUtil.deleteFolder(new File("worlds-resources"));
 	}
 
 	@Override
 	public void onEnable() {
+		checkLimboWorld();
+		applyWorldRules();
+		registerCommands();
 		EventUtil.registerListeners(this,
 			// player
-			FirstWorldJoin.class,
 			// world
+			LimboWorldFall.class,
 			PerPlayerWorlds.class
 		);
 	}
 
-	private void cleanupTemporaryWorlds() {
-		FileUtil.deleteFolder(new File("resource-worlds"));
+	private void checkLimboWorld() {
+		World world = Bukkit.getWorlds().getFirst();
+		if (!(world.getGenerator() instanceof VoidChunkGenerator)) return;
+
+		Block block = world.getHighestBlockAt(0, 0);
+		if (block.getLocation().getBlockY() > world.getMinHeight()) return;
+
+		block = world.getBlockAt(0, 120, 0);
+		block.setType(Material.GLASS);
+		world.setSpawnLocation(0, 121, 0);
+	}
+
+	private void applyWorldRules() {
+		for (World world : Bukkit.getWorlds()) {
+			PerPlayerWorlds.applyWorldRules(world);
+		}
 	}
 
 	private void registerCommands() {

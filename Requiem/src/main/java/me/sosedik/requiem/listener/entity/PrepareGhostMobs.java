@@ -23,24 +23,20 @@ public class PrepareGhostMobs implements Listener {
 	/**
 	 * Scoreboard team id used for "ghosts" mechanics
 	 */
-	public static final String GHOST_TEAM_ID = "Ghost";
+	private static final String GHOST_TEAM_ID = "Ghost";
 
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onJoin(@NotNull PlayerJoinEvent event) {
 		Player player = event.getPlayer();
-		Scoreboard scoreboard = ScoreboardUtil.getScoreboard(player);
 
-		Team team = scoreboard.registerNewTeam(GHOST_TEAM_ID);
-		team.setCanSeeFriendlyInvisibles(true);
-		team.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.NEVER);
+		Team team = getGhostTem(ScoreboardUtil.getScoreboard(player));
 		team.addEntity(player);
-		getGhostTem().getEntries().forEach(team::addEntry);
+		getGhostTem(Bukkit.getScoreboardManager().getMainScoreboard()).getEntries().forEach(team::addEntry);
 
 		Bukkit.getOnlinePlayers().forEach(onlinePlayer -> {
-			Team hide = ScoreboardUtil.getScoreboard(onlinePlayer).getTeam(GHOST_TEAM_ID);
-			if (hide != null)
-				hide.addEntity(player);
 			team.addEntity(onlinePlayer);
+			Team hide = getGhostTem(ScoreboardUtil.getScoreboard(onlinePlayer));
+			hide.addEntity(player);
 		});
 	}
 
@@ -48,9 +44,8 @@ public class PrepareGhostMobs implements Listener {
 	public void onQuit(@NotNull PlayerQuitEvent event) {
 		Player player = event.getPlayer();
 		Bukkit.getOnlinePlayers().forEach(onlinePlayer -> {
-			Team hide = onlinePlayer.getScoreboard().getTeam(GHOST_TEAM_ID);
-			if (hide != null)
-				hide.removeEntity(player);
+			Team hide = getGhostTem(onlinePlayer.getScoreboard());
+			hide.removeEntity(player);
 		});
 	}
 
@@ -65,26 +60,27 @@ public class PrepareGhostMobs implements Listener {
 		});
 	}
 
-	private static @NotNull Team getGhostTem() {
-		Scoreboard scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
-		Team ghosts = scoreboard.getTeam(GHOST_TEAM_ID);
-		if (ghosts == null)
-			return scoreboard.registerNewTeam(GHOST_TEAM_ID);
-		return ghosts;
+	private static @NotNull Team getGhostTem(@NotNull Scoreboard scoreboard) {
+		Team team = scoreboard.getTeam(GHOST_TEAM_ID);
+		if (team == null) {
+			team = scoreboard.registerNewTeam(GHOST_TEAM_ID);
+			team.setCanSeeFriendlyInvisibles(true);
+			team.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.NEVER);
+		}
+		return team;
 	}
 
 	/**
 	 * Makes the player no longer appear as a ghost
 	 *
 	 * @param player player
-	 * @param keepSelf whether the player should see themselves as a ghost
+	 * @param selfVisible whether the player should see themselves as a ghost
 	 */
-	public static void hideSelfGhost(@NotNull Player player, boolean keepSelf) {
+	public static void makeInvisible(@NotNull Player player, boolean selfVisible) {
 		Bukkit.getOnlinePlayers().forEach(onlinePlayer -> {
-			if (keepSelf && onlinePlayer == player) return;
-			Team hide = ScoreboardUtil.getScoreboard(onlinePlayer).getTeam(GHOST_TEAM_ID);
-			if (hide != null)
-				hide.removeEntity(player);
+			if (selfVisible && onlinePlayer == player) return;
+			Team hide = getGhostTem(onlinePlayer.getScoreboard());
+			hide.removeEntity(player);
 		});
 	}
 
@@ -93,11 +89,10 @@ public class PrepareGhostMobs implements Listener {
 	 *
 	 * @param player player
 	 */
-	public static void applySelfGhost(@NotNull Player player) {
+	public static void makeVisible(@NotNull Player player) { // TODO what's the point?
 		Bukkit.getOnlinePlayers().forEach(onlinePlayer -> {
-			Team hide = ScoreboardUtil.getScoreboard(onlinePlayer).getTeam(GHOST_TEAM_ID);
-			if (hide != null)
-				hide.addEntity(player);
+			Team team = getGhostTem(ScoreboardUtil.getScoreboard(onlinePlayer));
+			team.addEntity(player);
 		});
 	}
 

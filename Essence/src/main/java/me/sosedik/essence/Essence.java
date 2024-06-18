@@ -6,6 +6,7 @@ import me.sosedik.essence.command.HealCommand;
 import me.sosedik.essence.command.HealthCommand;
 import me.sosedik.essence.command.HungerCommand;
 import me.sosedik.essence.command.MoreCommand;
+import me.sosedik.essence.command.UpCommand;
 import me.sosedik.essence.command.WorldCommand;
 import me.sosedik.utilizer.CommandManager;
 import me.sosedik.utilizer.api.language.TranslationHolder;
@@ -26,7 +27,10 @@ public final class Essence extends JavaPlugin {
 		this.scheduler = new Scheduler(this);
 
 		TranslationHolder.extractLocales(this);
+	}
 
+	@Override
+	public void onEnable() {
 		registerCommands();
 	}
 
@@ -38,6 +42,7 @@ public final class Essence extends JavaPlugin {
 			HealthCommand.class,
 			HungerCommand.class,
 			MoreCommand.class,
+			UpCommand.class,
 			WorldCommand.class
 		);
 	}

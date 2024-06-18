@@ -1,0 +1,5 @@
+{
+	"command.revive": "Вы были возрождены",
+	"command.revive.other": "Вы возродили игрока <yellow><player>",
+	"command.revive.target_alive": "Игрок <yellow><player></yellow> и так уже жив"
+}

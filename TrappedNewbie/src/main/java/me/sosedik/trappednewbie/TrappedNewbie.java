@@ -34,11 +34,11 @@ public final class TrappedNewbie extends JavaPlugin {
 		TrappedNewbie.instance = this;
 		this.scheduler = new Scheduler(this);
 
-//		cleanupTemporaryWorlds(); // TODO
+		cleanupTemporaryWorlds();
 	}
 
 	private void cleanupTemporaryWorlds() {
-		FileUtil.deleteFolder(new File("worlds-resources"));
+		FileUtil.deleteFolder(new File(Bukkit.getWorldContainer(), "worlds-resources"));
 	}
 
 	@Override
@@ -47,7 +47,6 @@ public final class TrappedNewbie extends JavaPlugin {
 		applyWorldRules();
 		registerCommands();
 		EventUtil.registerListeners(this,
-			// player
 			// world
 			LimboWorldFall.class,
 			PerPlayerWorlds.class

@@ -5,6 +5,7 @@ import me.sosedik.requiem.listener.entity.PrepareGhostMobs;
 import me.sosedik.requiem.task.GhostAuraTask;
 import me.sosedik.requiem.task.GhostMobVisionTask;
 import net.kyori.adventure.util.TriState;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -66,6 +67,11 @@ public class GhostyPlayer {
 		Requiem.logger().info("Making {} a ghost", player.getName());
 	}
 
+	/**
+	 * Removes ghost status from the player
+	 *
+	 * @param player player
+	 */
 	public static void clearGhost(@NotNull Player player) {
 		GHOSTS.remove(player.getUniqueId());
 
@@ -85,6 +91,30 @@ public class GhostyPlayer {
 		player.setFlyingFallDamage(TriState.NOT_SET);
 
 		Requiem.logger().info("Clearing ghost state for {}", player.getName());
+	}
+
+	/**
+	 * Loads player's ghost data
+	 *
+	 * @param player player
+	 * @return whether the player is now a ghost
+	 */
+	public static boolean loadGhostData(@NotNull Player player) {
+		if (!player.isInvisible()) return false;
+		if (!player.getGameMode().isInvulnerable()) return false;
+
+		GhostyPlayer.markGhost(player);
+//		player.setCooldown(ASItems.GHOST_RELOCATOR.getType(), 5 * 20); // TODO
+
+		return true;
+	}
+
+	/**
+	 * Saves all data, should be called on server shutdown
+	 */
+	public static void saveAllData() {
+		// There's no data to save for now, really
+		GHOSTS.clear();
 	}
 
 }

@@ -1,6 +1,8 @@
 package me.sosedik.requiem;
 
 import me.sosedik.requiem.command.ReviveCommand;
+import me.sosedik.requiem.feature.GhostyPlayer;
+import me.sosedik.requiem.feature.PossessingPlayer;
 import me.sosedik.requiem.listener.entity.PrepareGhostMobs;
 import me.sosedik.requiem.listener.player.DeathMakesGhosts;
 import me.sosedik.requiem.listener.player.DeathMakesPossessed;
@@ -78,6 +80,8 @@ public final class Requiem extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
+		GhostyPlayer.saveAllData();
+		PossessingPlayer.saveAllData();
 		PrepareGhostMobs.unregisterGhosts();
 	}
 

@@ -1,10 +1,15 @@
 package me.sosedik.requiem.feature;
 
+import de.tr7zw.changeme.nbtapi.iface.ReadWriteNBT;
 import me.sosedik.requiem.Requiem;
 import me.sosedik.requiem.listener.entity.PrepareGhostMobs;
 import me.sosedik.requiem.listener.player.LoadSavePlayers;
 import me.sosedik.requiem.task.DynamicScaleTask;
+import me.sosedik.utilizer.api.storage.player.PlayerDataStorage;
 import me.sosedik.utilizer.util.EntityUtil;
+import me.sosedik.utilizer.util.NbtProxies;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.AbstractHorse;
 import org.bukkit.entity.Ageable;
@@ -33,7 +38,10 @@ import java.util.UUID;
 public class PossessingPlayer {
 
 	private static final Set<UUID> POSSESSING = new HashSet<>();
+	private static final String POSSESSED_TAG = "possessed";
 	private static final String POSSESSED_PERSISTENT_TAG = "persistent";
+	private static final String POSSESSED_ENTITY_DATA = "entity_data";
+	private static final String POSSESSED_ENTITY_LOC = "location";
 
 	/**
 	 * Checks whether the player is possessing a mob
@@ -79,7 +87,7 @@ public class PossessingPlayer {
 
 		boolean persistent = entity.isPersistent();
 		entity.setPersistent(true);
-		entity.modifyPersistentData(nbt -> nbt.getOrCreateCompound(LoadSavePlayers.POSSESSED_TAG).setBoolean(POSSESSED_PERSISTENT_TAG, persistent));
+		entity.modifyPersistentData(nbt -> nbt.getOrCreateCompound(POSSESSED_TAG).setBoolean(POSSESSED_PERSISTENT_TAG, persistent));
 
 //		EffectManager.addEffect(player, KittenEffects.ATTRITION, -1, 0); // TODO
 		PrepareGhostMobs.makeInvisible(player, false);
@@ -256,6 +264,72 @@ public class PossessingPlayer {
 			case SQUID, GLOW_SQUID, BAT -> true;
 			default -> false;
 		};
+	}
+
+	/**
+	 * Loads player's possessed data
+	 *
+	 * @param player player
+	 * @param data data
+	 * @return whether the player is now a possessor
+	 */
+	public static boolean loadPossessingData(@NotNull Player player, @NotNull ReadWriteNBT data) {
+		if (!data.hasTag(POSSESSED_TAG)) return false;
+
+		data = data.getOrCreateCompound(POSSESSED_TAG);
+		if (!data.hasTag(POSSESSED_ENTITY_DATA)) return false;
+		if (!data.hasTag(POSSESSED_ENTITY_LOC)) return false;
+
+		byte[] entityData = data.getByteArray(POSSESSED_ENTITY_DATA);
+		LivingEntity entity = (LivingEntity) Bukkit.getUnsafe().deserializeEntity(entityData, player.getWorld(), true);
+		Location loc = data.get(POSSESSED_ENTITY_LOC, NbtProxies.LOCATION).world(player.getWorld());
+
+		entity.spawnAt(loc);
+		startPossessing(player, entity);
+//		addExtraControlItems(player); // ToDo: restore inventory? // TODO
+
+		return true;
+	}
+
+	/**
+	 * Saves player's possessed data
+	 *
+	 * @param player player
+	 * @param data data to save into
+	 * @param quit whether this saving is due to player quitting
+	 */
+	public static void savePossessedData(@NotNull Player player, @NotNull ReadWriteNBT data, boolean quit) {
+		if (!isPossessing(player)) return;
+
+		LivingEntity entity = getPossessed(player);
+		if (entity == null) return;
+
+		if (quit)
+			player.leaveVehicle();
+
+		byte[] entityData = Bukkit.getUnsafe().serializeEntity(entity);
+		Location entityLoc = entity.getLocation();
+
+		if (quit) {
+			stopPossessing(player, entity, true);
+		}
+
+		data = data.getOrCreateCompound(POSSESSED_TAG);
+		data.setByteArray(POSSESSED_ENTITY_DATA, entityData);
+		data.set(POSSESSED_ENTITY_LOC, entityLoc.world(null), NbtProxies.LOCATION);
+	}
+
+	/**
+	 * Saves all data, should be called on server shutdown
+	 */
+	public static void saveAllData() {
+		for (UUID uuid : POSSESSING) {
+			Player player = Bukkit.getPlayer(uuid);
+			if (player == null) continue;
+
+			savePossessedData(player, PlayerDataStorage.getData(uuid), true);
+		}
+		POSSESSING.clear();
 	}
 
 }

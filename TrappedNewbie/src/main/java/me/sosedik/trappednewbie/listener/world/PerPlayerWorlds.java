@@ -52,7 +52,6 @@ public class PerPlayerWorlds implements Listener {
 		UUID uuid = event.getPlayer().getUniqueId();
 		String worldKey = dimensionId.getKey();
 		if (!dimensionId.getKey().endsWith(uuid.toString())) return;
-		if (!new File(worldKey).exists()) return;
 
 		World world = Bukkit.getWorld(worldKey);
 		if (world != null) {
@@ -67,6 +66,8 @@ public class PerPlayerWorlds implements Listener {
 			World finalWorld = world;
 			TrappedNewbie.scheduler().sync(() -> LimboWorldFall.runRtp(event.getPlayer(), finalWorld), 1L);
 		} else if (worldKey.startsWith("worlds-personal/")) {
+			if (!new File(Bukkit.getWorldContainer(), worldKey).exists()) return;
+
 			world = getPersonalWorld(uuid);
 			event.setSpawnLocation(event.getInitialLocation().world(world));
 		}

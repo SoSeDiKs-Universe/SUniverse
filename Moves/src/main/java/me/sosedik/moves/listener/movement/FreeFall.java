@@ -60,15 +60,14 @@ public class FreeFall implements Listener {
 //			event.setCancelled(true);
 //	}
 
-	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onFlightToggle(@NotNull PlayerToggleFlightEvent event) {
+		if (!event.isFlying()) return;
+
 		Player player = event.getPlayer();
 		if (!isLeaping(player)) return;
 
-		if (event.isFlying())
-			stopLeaping(player);
-		else
-			MetadataUtil.removeMetadata(player, WAS_FLYING_META);
+		event.setCancelled(true);
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
@@ -76,7 +75,12 @@ public class FreeFall implements Listener {
 		stopLeaping(event.getPlayer()); // ToDo: persist leaping
 	}
 
-	private static void startLeaping(@NotNull Player player) {
+	/**
+	 * Starts free-falling for the player
+	 *
+	 * @param player player
+	 */
+	public static void startLeaping(@NotNull Player player) {
 		if (!LEAPING.add(player.getUniqueId())) return;
 
 		boolean flying = player.isFlying();
@@ -93,18 +97,20 @@ public class FreeFall implements Listener {
 		Moves.scheduler().sync(task -> {
 			if (!isLeaping(player)) return true;
 
+			// Gliding might've been reset by external factors
+			player.setGliding(true);
+
 			Location currentLoc = player.getLocation();
 			double x = loc.getX() - currentLoc.getX();
 			double z = loc.getZ() - currentLoc.getZ();
 			player.setVelocity(new Vector(x, player.getVelocity().getY() - 0.3, z));
 
 			if (player.isOnGround()) {
-				Moves.scheduler().async(() -> stopLeaping(player), 15L);
+				Moves.scheduler().sync(() -> stopLeaping(player), 15L);
 				return true;
 			}
 
-			Block block = player.getLocation().getBlock();
-			if (block.isLiquid() || block.getType() == Material.COBWEB || block.getType() == Material.SCAFFOLDING) {
+			if (isSaveFallLocation(player)) {
 				player.setFallDistance(0F);
 				stopLeaping(player);
 				player.setGliding(false);
@@ -115,25 +121,24 @@ public class FreeFall implements Listener {
 		}, 0L, 1L);
 	}
 
-	private static void stopLeaping(@NotNull Player player) {
+	private static boolean isSaveFallLocation(@NotNull Player player) {
+		Block block = player.getLocation().getBlock();
+		return block.isLiquid()
+				|| block.getType() == Material.COBWEB
+				|| block.getType() == Material.SCAFFOLDING;
+	}
+
+	/**
+	 * Stops free-falling for the player
+	 *
+	 * @param player player
+	 */
+	public static void stopLeaping(@NotNull Player player) {
 		if (!LEAPING.remove(player.getUniqueId())) return;
 
 		var metadata = MetadataUtil.removeMetadata(player, WAS_FLYING_META);
 		if (metadata != null)
 			player.setFlying(true);
-	}
-
-	/**
-	 * Sets or removes leaping state
-	 *
-	 * @param player player
-	 * @param leaping new leaping state
-	 */
-	public static void setLeaping(@NotNull Player player, boolean leaping) {
-		if (leaping)
-			startLeaping(player);
-		else
-			stopLeaping(player);
 	}
 
 	/**

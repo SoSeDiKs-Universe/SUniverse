@@ -101,7 +101,7 @@ public class GhostyPlayer {
 	 */
 	public static boolean loadGhostData(@NotNull Player player) {
 		if (!player.isInvisible()) return false;
-		if (!player.getGameMode().isInvulnerable()) return false;
+		if (player.getGameMode().isInvulnerable()) return false;
 
 		GhostyPlayer.markGhost(player);
 //		player.setCooldown(ASItems.GHOST_RELOCATOR.getType(), 5 * 20); // TODO
@@ -113,7 +113,13 @@ public class GhostyPlayer {
 	 * Saves all data, should be called on server shutdown
 	 */
 	public static void saveAllData() {
-		// There's no data to save for now, really
+		for (UUID uuid : GHOSTS) {
+			Player player = Bukkit.getPlayer(uuid);
+			if (player == null) continue;
+
+			clearGhost(player);
+			player.setInvisible(true);
+		}
 		GHOSTS.clear();
 	}
 

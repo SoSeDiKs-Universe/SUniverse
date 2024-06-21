@@ -44,7 +44,7 @@ public class LimboWorldFall implements Listener {
 	 */
 	public static void runRtp(@NotNull Player player, @NotNull World world) {
 		LocationUtil.runRtp(player, world, RPT_RADIUS)
-			.thenRun(() -> FreeFall.setLeaping(player, true));
+			.thenRun(() -> FreeFall.startLeaping(player));
 	}
 
 }

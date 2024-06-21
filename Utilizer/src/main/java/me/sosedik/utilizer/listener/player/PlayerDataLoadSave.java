@@ -36,7 +36,6 @@ public class PlayerDataLoadSave implements Listener {
 
 	public PlayerDataLoadSave(@NotNull Plugin plugin) {
 		PlayerDataLoadSave.plugin = plugin;
-		plugin.getServer().getPluginManager().registerEvents(this, plugin);
 
 		long saveInterval = 5 * 60 * 20L;
 		Utilizer.scheduler().sync(() -> Bukkit.getOnlinePlayers().forEach(player -> saveData(player, true)), saveInterval, saveInterval);

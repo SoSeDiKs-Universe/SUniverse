@@ -52,10 +52,10 @@ public class LoadSavePlayers implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onGameModeChange(@NotNull PlayerGameModeChangeEvent event) {
-		if (!event.getNewGameMode().isInvulnerable()) return;
+		if (event.getNewGameMode().isInvulnerable()) return;
 
 		Player player = event.getPlayer();
-		if (player.getGameMode().isInvulnerable()) return;
+		if (!player.getGameMode().isInvulnerable()) return;
 		if (!GhostyPlayer.isGhost(player)) return;
 
 		GhostyPlayer.markGhost(player);

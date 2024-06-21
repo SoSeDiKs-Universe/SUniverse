@@ -45,7 +45,7 @@ public class EventUtil {
 				if (paramCount == 0) {
 					listener = (Listener) constructor.newInstance();
 				} else if (paramCount == 1) {
-					if (constructor.getParameterTypes()[0] == Plugin.class) {
+					if (Plugin.class.isAssignableFrom(constructor.getParameterTypes()[0])) {
 						listener = (Listener) constructor.newInstance(plugin);
 					}
 				} else if (paramCount == 2) {

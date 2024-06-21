@@ -34,7 +34,7 @@ public final class TrappedNewbie extends JavaPlugin {
 		TrappedNewbie.instance = this;
 		this.scheduler = new Scheduler(this);
 
-		cleanupTemporaryWorlds();
+//		cleanupTemporaryWorlds(); // TODO
 	}
 
 	private void cleanupTemporaryWorlds() {

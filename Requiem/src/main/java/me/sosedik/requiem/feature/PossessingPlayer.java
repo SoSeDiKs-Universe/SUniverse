@@ -3,17 +3,30 @@ package me.sosedik.requiem.feature;
 import me.sosedik.requiem.Requiem;
 import me.sosedik.requiem.listener.entity.PrepareGhostMobs;
 import me.sosedik.requiem.listener.player.LoadSavePlayers;
+import me.sosedik.requiem.task.DynamicScaleTask;
+import me.sosedik.utilizer.util.EntityUtil;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.AbstractHorse;
+import org.bukkit.entity.Ageable;
 import org.bukkit.entity.Animals;
+import org.bukkit.entity.Bat;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Fish;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.WitherSkeleton;
+import org.bukkit.inventory.EntityEquipment;
+import org.bukkit.inventory.MainHand;
+import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
@@ -73,6 +86,8 @@ public class PossessingPlayer {
 		player.setInvisible(true);
 		player.setInvulnerable(false); // Prevents mobs from targeting the player if true
 
+		new DynamicScaleTask(player, entity);
+
 		Requiem.logger().info("Making " + player.getName() + " possess " + entity.getType().getKey());
 	}
 
@@ -108,7 +123,6 @@ public class PossessingPlayer {
 		}
 
 		player.setInvisible(false);
-		player.setInvulnerable(false);
 
 //		TemperaturedPlayer.of(player).removeFlag(TempFlag.GHOST_IMMUNE); // TODO
 
@@ -136,6 +150,73 @@ public class PossessingPlayer {
 		if (!(player.getVehicle() instanceof LivingEntity riding)) return null;
 		if (player != riding.getRider()) return null;
 		return riding;
+	}
+
+	/**
+	 * Migrates stats (including equipment) from player to the entity
+	 *
+	 * @param player player
+	 * @param entity entity
+	 */
+	public static void migrateStatsToEntity(@NotNull Player player, @NotNull LivingEntity entity) {
+		migrateInvToEntity(player, entity);
+
+		entity.setPersistent(false);
+		entity.setArrowsInBody(player.getArrowsInBody());
+		entity.setFireTicks(player.getFireTicks());
+		entity.setRemainingAir(player.getRemainingAir());
+		if (entity instanceof Mob mob)
+			mob.setLeftHanded(player.getMainHand() == MainHand.LEFT);
+		if (entity instanceof Ageable ageable)
+			ageable.setAdult();
+	}
+
+	private static void migrateInvToEntity(@NotNull Player player, @NotNull LivingEntity entity) {
+		EntityEquipment entityEquipment = entity.getEquipment();
+		if (entityEquipment == null) return;
+
+		PlayerInventory playerInventory = player.getInventory();
+		entityEquipment.clear();
+		entityEquipment.setItemInMainHand(playerInventory.getItemInMainHand());
+		entityEquipment.setItemInOffHand(playerInventory.getItemInOffHand());
+		entityEquipment.setHelmet(playerInventory.getHelmet());
+		entityEquipment.setChestplate(playerInventory.getChestplate());
+		entityEquipment.setLeggings(playerInventory.getLeggings());
+		entityEquipment.setBoots(playerInventory.getBoots());
+	}
+
+	/**
+	 * Migrates stats (including equipment) from entity to the player
+	 *
+	 * @param player player
+	 * @param entity entity
+	 */
+	public static void migrateStatsToPlayer(@NotNull Player player, @NotNull LivingEntity entity) {
+		migrateInvFromEntity(player, entity);
+//		addExtraControlItems(player); // TODO should also be soulbound and not droppable
+
+		if (entity instanceof Bat)
+			player.addPotionEffect(infinitePotionEffect(PotionEffectType.NIGHT_VISION));
+		if (EntityUtil.isFireImmune(entity.getType()))
+			player.addPotionEffect(infinitePotionEffect(PotionEffectType.FIRE_RESISTANCE));
+	}
+
+	private static void migrateInvFromEntity(@NotNull Player player, @NotNull LivingEntity entity) {
+		EntityEquipment entityEquipment = entity.getEquipment();
+		if (entityEquipment == null) return;
+
+		PlayerInventory playerInventory = player.getInventory();
+		playerInventory.clear();
+		playerInventory.setItemInMainHand(entityEquipment.getItemInMainHand());
+		playerInventory.setItemInOffHand(entityEquipment.getItemInOffHand());
+		playerInventory.setHelmet(entityEquipment.getHelmet());
+		playerInventory.setChestplate(entityEquipment.getChestplate());
+		playerInventory.setLeggings(entityEquipment.getLeggings());
+		playerInventory.setBoots(entityEquipment.getBoots());
+	}
+
+	private static @NotNull PotionEffect infinitePotionEffect(@NotNull PotionEffectType type) {
+		return new PotionEffect(type, PotionEffect.INFINITE_DURATION, 0, false, false, false);
 	}
 
 	/**

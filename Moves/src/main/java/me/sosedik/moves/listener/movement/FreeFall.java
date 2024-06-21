@@ -64,6 +64,7 @@ public class FreeFall implements Listener {
 	public void onFlightToggle(@NotNull PlayerToggleFlightEvent event) {
 		Player player = event.getPlayer();
 		if (!isLeaping(player)) return;
+
 		if (event.isFlying())
 			stopLeaping(player);
 		else

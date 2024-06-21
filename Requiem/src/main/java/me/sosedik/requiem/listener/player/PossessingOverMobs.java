@@ -1,19 +1,28 @@
 package me.sosedik.requiem.listener.player;
 
+import de.tr7zw.changeme.nbtapi.NBT;
 import me.sosedik.requiem.Requiem;
 import me.sosedik.requiem.feature.GhostyPlayer;
 import me.sosedik.requiem.feature.PossessingPlayer;
 import me.sosedik.utilizer.util.GlowingUtil;
+import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -39,8 +48,21 @@ public class PossessingOverMobs implements Listener {
 		event.setCancelled(true);
 
 		markSoulboundItems(entity);
+		PossessingPlayer.migrateStatsToPlayer(player, entity);
 		PossessingPlayer.startPossessing(player, entity);
-//		migrateInvFromEntity(player, entity); // TODO
+	}
+
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onSoulboundItemDrop(@NotNull PlayerDropItemEvent event) {
+		Player player = event.getPlayer();
+		if (!PossessingPlayer.isPossessing(player)) return;
+
+		ItemStack item = event.getItemDrop().getItemStack();
+		if (item.getType() == Material.AIR) return;
+		if (!item.getNbt(nbt -> nbt.hasTag(SOULBOUND_ITEM_TAG))) return;
+
+		event.setCancelled(true);
+		player.playSound(player, Sound.PARTICLE_SOUL_ESCAPE, SoundCategory.PLAYERS, 1F, 1F);
 	}
 
 	private void markSoulboundItems(@NotNull LivingEntity entity) {
@@ -51,12 +73,16 @@ public class PossessingOverMobs implements Listener {
 		if (equipment == null) return;
 
 		for (EquipmentSlot slot : EquipmentSlot.values()) {
+			if (!entity.canUseSlot(slot)) continue;
 			if (equipment.getDropChance(slot) > 0.1) continue;
 
 			ItemStack item = equipment.getItem(slot);
 			if (ItemStack.isEmpty(item)) continue;
 
+			Requiem.logger().info("Testing " + slot);
+			Requiem.logger().warn("Test1: " + NBT.itemStackToNBT(item)); // TODO crashes for some reason
 			item.modifyNbt(nbt -> nbt.setBoolean(SOULBOUND_ITEM_TAG, true));
+			Requiem.logger().warn("Test2: " + NBT.itemStackToNBT(item));
 			equipment.setItem(slot, item);
 		}
 	}

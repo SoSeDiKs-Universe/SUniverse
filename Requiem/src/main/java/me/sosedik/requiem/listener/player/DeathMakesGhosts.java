@@ -2,11 +2,14 @@ package me.sosedik.requiem.listener.player;
 
 import com.destroystokyo.paper.event.player.PlayerPostRespawnEvent;
 import me.sosedik.requiem.feature.GhostyPlayer;
+import me.sosedik.requiem.feature.PossessingPlayer;
 import me.sosedik.utilizer.util.EntityUtil;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.jetbrains.annotations.NotNull;
@@ -47,6 +50,17 @@ public class DeathMakesGhosts implements Listener {
 		event.getDrops().clear();
 		event.setDroppedExp(0);
 		event.setShouldDropExperience(false);
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onDeath(@NotNull EntityDeathEvent event) {
+		LivingEntity entity = event.getEntity();
+		Player rider = entity.getRider();
+		if (rider == null) return;
+		if (PossessingPlayer.getPossessed(rider) != entity) return;
+
+		PossessingPlayer.stopPossessing(rider, entity, false);
+		GhostyPlayer.markGhost(rider);
 	}
 
 }

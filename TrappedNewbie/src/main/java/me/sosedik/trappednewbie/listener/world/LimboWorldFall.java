@@ -24,7 +24,7 @@ public class LimboWorldFall implements Listener {
 	private static final int RPT_RADIUS = 15_000_000;
 	private static final World LIMBO_WORLD = Bukkit.getWorlds().getFirst();
 
-	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onFall(@NotNull EntityDamageEvent event) {
 		if (!(event.getEntity() instanceof Player player)) return;
 		if (player.getWorld() != LIMBO_WORLD) return;
@@ -33,6 +33,16 @@ public class LimboWorldFall implements Listener {
 		event.setCancelled(true);
 		GhostyPlayer.markGhost(player);
 		World world = PerPlayerWorlds.getResourceWorld(player.getUniqueId(), World.Environment.NORMAL);
+		runRtp(player, world);
+	}
+
+	/**
+	 * Teleports the player to a random location in the world
+	 *
+	 * @param player player
+	 * @param world world
+	 */
+	public static void runRtp(@NotNull Player player, @NotNull World world) {
 		LocationUtil.runRtp(player, world, RPT_RADIUS)
 			.thenRun(() -> FreeFall.setLeaping(player, true));
 	}

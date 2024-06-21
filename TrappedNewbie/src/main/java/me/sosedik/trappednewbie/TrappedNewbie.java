@@ -4,6 +4,7 @@ import io.leangen.geantyref.TypeToken;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import me.sosedik.limboworldgenerator.VoidChunkGenerator;
 import me.sosedik.trappednewbie.api.command.parser.PlayerWorldParser;
+import me.sosedik.trappednewbie.listener.world.InfiniteStartingNight;
 import me.sosedik.trappednewbie.listener.world.LimboWorldFall;
 import me.sosedik.trappednewbie.listener.world.PerPlayerWorlds;
 import me.sosedik.utilizer.CommandManager;
@@ -12,6 +13,7 @@ import me.sosedik.utilizer.util.FileUtil;
 import me.sosedik.utilizer.util.Scheduler;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.bukkit.Bukkit;
+import org.bukkit.GameRule;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -43,19 +45,26 @@ public final class TrappedNewbie extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
-		checkLimboWorld();
+		setupLimboWorld();
 		applyWorldRules();
 		registerCommands();
 		EventUtil.registerListeners(this,
 			// world
+			InfiniteStartingNight.class,
 			LimboWorldFall.class,
 			PerPlayerWorlds.class
 		);
 	}
 
-	private void checkLimboWorld() {
+	private void setupLimboWorld() {
 		World world = Bukkit.getWorlds().getFirst();
-		if (!(world.getGenerator() instanceof VoidChunkGenerator)) return;
+		if (!(world.getGenerator() instanceof VoidChunkGenerator)) {
+			getLogger().warning("Limbo world generator has changed!");
+			return;
+		}
+
+		world.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
+		world.setFullTime(0);
 
 		Block block = world.getHighestBlockAt(0, 0);
 		if (block.getLocation().getBlockY() > world.getMinHeight()) return;

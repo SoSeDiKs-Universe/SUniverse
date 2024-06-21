@@ -5,6 +5,7 @@ description = "Once you're in, there's no way out"
 dependencies {
     compileOnly(project(":LimboWorldGenerator"))
     compileOnly(project(":Utilizer"))
+    compileOnly(project(":MiscMe"))
     compileOnly(project(":Moves"))
     compileOnly(project(":Requiem"))
 
@@ -20,6 +21,9 @@ paper {
             load = PaperPluginDescription.RelativeLoadOrder.BEFORE
         }
         register("Utilizer") {
+            load = PaperPluginDescription.RelativeLoadOrder.BEFORE
+        }
+        register("MiscMe") {
             load = PaperPluginDescription.RelativeLoadOrder.BEFORE
         }
         register("Moves") {

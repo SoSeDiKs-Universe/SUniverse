@@ -1,8 +1,8 @@
 package me.sosedik.trappednewbie.listener.world;
 
 import me.sosedik.limboworldgenerator.VoidChunkGenerator;
+import me.sosedik.miscme.task.CustomDayCycleTask;
 import me.sosedik.trappednewbie.TrappedNewbie;
-import me.sosedik.utilizer.util.LocationUtil;
 import me.sosedik.utilizer.util.MiscUtil;
 import net.kyori.adventure.util.TriState;
 import org.bukkit.Bukkit;
@@ -12,12 +12,12 @@ import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.jetbrains.annotations.NotNull;
 import org.spigotmc.event.player.PlayerSpawnLocationEvent;
 
@@ -32,8 +32,11 @@ import java.util.function.BiFunction;
  */
 public class PerPlayerWorlds implements Listener {
 
+	private static final double DAY_TIME_TICK_INCREASE = 1;
+	private static final double NIGHT_TIME_TICK_INCREASE = DAY_TIME_TICK_INCREASE;
+
 	@EventHandler(priority = EventPriority.MONITOR)
-	public void onLeave(@NotNull PlayerChangedWorldEvent event) {
+	public void onWorldLeave(@NotNull PlayerChangedWorldEvent event) {
 		World world = event.getFrom();
 		if (!world.getKey().getKey().endsWith(event.getPlayer().getUniqueId().toString())) return;
 		if (!world.getPlayers().isEmpty()) return;
@@ -73,6 +76,27 @@ public class PerPlayerWorlds implements Listener {
 		}
 	}
 
+	private static void startDayCycleTask(@NotNull World world) {
+		new CustomDayCycleTask(world, () -> {
+			if (Bukkit.getServerTickManager().isFrozen()) return 0D;
+			if (world.isDayTime()) return DAY_TIME_TICK_INCREASE;
+
+			double incrementTimeBy = NIGHT_TIME_TICK_INCREASE;
+			int sleepers = (int) Bukkit.getOnlinePlayers().stream().filter(Player::isSleeping).count();
+			if (sleepers > 0) {
+				int players = (int) Bukkit.getOnlinePlayers().stream().filter(PerPlayerWorlds::isSleepCounted).count();
+				if (players > 0)
+					incrementTimeBy += 6D * sleepers / players;
+			}
+			return incrementTimeBy;
+		});
+	}
+
+	private static boolean isSleepCounted(@NotNull Player player) {
+		return !player.isSleepingIgnored()
+				&& !player.getGameMode().isInvulnerable();
+	}
+
 	/**
 	 * Gets the player's unique personal world
 	 *
@@ -80,12 +104,14 @@ public class PerPlayerWorlds implements Listener {
 	 * @return world instance
 	 */
 	public static @NotNull World getPersonalWorld(@NotNull UUID playerUuid) {
-		return getWorld("worlds-personal/", playerUuid, (levelName, worldKey) -> Objects.requireNonNull(
-			new WorldCreator(levelName, worldKey)
-				.keepSpawnLoaded(TriState.FALSE)
-				.generator(VoidChunkGenerator.GENERATOR)
-				.createWorld()
-		));
+		return getWorld("worlds-personal/", playerUuid,
+				(levelName, worldKey) -> Objects.requireNonNull(
+					new WorldCreator(levelName, worldKey)
+						.keepSpawnLoaded(TriState.FALSE)
+						.generator(VoidChunkGenerator.GENERATOR)
+						.createWorld()
+				)
+			);
 	}
 
 	/**
@@ -95,12 +121,14 @@ public class PerPlayerWorlds implements Listener {
 	 * @return world instance
 	 */
 	public static @NotNull World getResourceWorld(@NotNull UUID playerUuid, @NotNull World.Environment environment) {
-		return getWorld("worlds-resources/" + environment.name().toLowerCase(Locale.ENGLISH) + "/", playerUuid, (levelName, worldKey) -> Objects.requireNonNull(
-			new WorldCreator(levelName, worldKey)
-				.keepSpawnLoaded(TriState.FALSE)
-				.environment(environment)
-				.createWorld()
-		));
+		return getWorld("worlds-resources/" + environment.name().toLowerCase(Locale.ENGLISH) + "/", playerUuid,
+				(levelName, worldKey) -> Objects.requireNonNull(
+					new WorldCreator(levelName, worldKey)
+						.keepSpawnLoaded(TriState.FALSE)
+						.environment(environment)
+						.createWorld()
+				)
+			);
 	}
 
 	/**
@@ -122,6 +150,7 @@ public class PerPlayerWorlds implements Listener {
 		if (world == null) {
 			world = worldCreator.apply(prefix + playerUuid, worldKey);
 			applyWorldRules(world);
+			startDayCycleTask(world);
 		}
 		return world;
 	}

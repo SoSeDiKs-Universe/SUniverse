@@ -3,14 +3,11 @@ package me.sosedik.requiem.feature;
 import de.tr7zw.changeme.nbtapi.iface.ReadWriteNBT;
 import me.sosedik.requiem.Requiem;
 import me.sosedik.requiem.listener.entity.PrepareGhostMobs;
-import me.sosedik.requiem.listener.player.LoadSavePlayers;
 import me.sosedik.requiem.task.DynamicScaleTask;
 import me.sosedik.utilizer.api.storage.player.PlayerDataStorage;
 import me.sosedik.utilizer.util.EntityUtil;
-import me.sosedik.utilizer.util.NbtProxies;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.AbstractHorse;
 import org.bukkit.entity.Ageable;
 import org.bukkit.entity.Animals;
@@ -21,7 +18,6 @@ import org.bukkit.entity.Fish;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.WitherSkeleton;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.MainHand;
 import org.bukkit.inventory.PlayerInventory;
@@ -31,7 +27,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
@@ -41,7 +36,6 @@ public class PossessingPlayer {
 	private static final String POSSESSED_TAG = "possessed";
 	private static final String POSSESSED_PERSISTENT_TAG = "persistent";
 	private static final String POSSESSED_ENTITY_DATA = "entity_data";
-	private static final String POSSESSED_ENTITY_LOC = "location";
 
 	/**
 	 * Checks whether the player is possessing a mob
@@ -93,6 +87,7 @@ public class PossessingPlayer {
 		PrepareGhostMobs.makeInvisible(player, false);
 		player.setInvisible(true);
 		player.setInvulnerable(false); // Prevents mobs from targeting the player if true
+		player.setRemainingAir(entity.getRemainingAir());
 
 		new DynamicScaleTask(player, entity);
 
@@ -143,6 +138,8 @@ public class PossessingPlayer {
 
 		player.leaveVehicle();
 //		PrepareGhostMobs.makeVisible(player);
+
+		new RuntimeException("test").printStackTrace();
 
 		if (riding != null) Requiem.logger().info("Making " + player.getName() + " no longer possess " + riding.getType().name());
 		else Requiem.logger().info("Making " + player.getName() + " no longer possess an entity");
@@ -278,13 +275,11 @@ public class PossessingPlayer {
 
 		data = data.getOrCreateCompound(POSSESSED_TAG);
 		if (!data.hasTag(POSSESSED_ENTITY_DATA)) return false;
-		if (!data.hasTag(POSSESSED_ENTITY_LOC)) return false;
 
 		byte[] entityData = data.getByteArray(POSSESSED_ENTITY_DATA);
 		LivingEntity entity = (LivingEntity) Bukkit.getUnsafe().deserializeEntity(entityData, player.getWorld(), true);
-		Location loc = data.get(POSSESSED_ENTITY_LOC, NbtProxies.LOCATION).world(player.getWorld());
 
-		entity.spawnAt(loc);
+		entity.spawnAt(player.getLocation());
 		startPossessing(player, entity);
 //		addExtraControlItems(player); // ToDo: restore inventory? // TODO
 
@@ -316,7 +311,6 @@ public class PossessingPlayer {
 
 		data = data.getOrCreateCompound(POSSESSED_TAG);
 		data.setByteArray(POSSESSED_ENTITY_DATA, entityData);
-		data.set(POSSESSED_ENTITY_LOC, entityLoc.world(null), NbtProxies.LOCATION);
 	}
 
 	/**

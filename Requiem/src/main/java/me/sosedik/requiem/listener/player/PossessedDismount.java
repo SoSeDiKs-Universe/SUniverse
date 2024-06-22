@@ -1,6 +1,7 @@
 package me.sosedik.requiem.listener.player;
 
 import me.sosedik.requiem.Requiem;
+import me.sosedik.requiem.feature.GhostyPlayer;
 import me.sosedik.requiem.feature.PossessingPlayer;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -23,28 +24,35 @@ public class PossessedDismount implements Listener {
 	@EventHandler(ignoreCancelled = true)
 	public void onDismount(@NotNull EntityDismountEvent event) {
 		if (!(event.getEntity() instanceof Player player)) return;
-		if (!(event.getDismounted() instanceof LivingEntity riding)) return;
+		if (!(event.getDismounted() instanceof LivingEntity vehicle)) return;
 		if (!PossessingPlayer.isPossessingSoft(player)) return;
 
 		if (event.isCancellable()) {
 			if (cooldowns.contains(player.getUniqueId())) {
 				event.setCancelled(true);
-				return;
-			}
-			if (riding.getVehicle() != null) {
+			} else if (PossessingPlayer.hasSoul(vehicle)) {
 				event.setCancelled(true);
-				riding.leaveVehicle();
 				cooldowns.add(player.getUniqueId());
 				Requiem.scheduler().sync(() -> cooldowns.remove(player.getUniqueId()), 20L);
-				return;
 			}
-			if (PossessingPlayer.hasSoul(riding)) {
-				event.setCancelled(true);
+
+			if (event.isCancelled()) {
+				// Play safe, check if still mounted tick later
+				Requiem.scheduler().sync(() -> {
+					if (!PossessingPlayer.isPossessingSoft(player)) return;
+
+					LivingEntity possessed = PossessingPlayer.getPossessed(player);
+					if (possessed == vehicle) return;
+
+					PossessingPlayer.stopPossessing(player, possessed, false);
+					GhostyPlayer.markGhost(player);
+				}, 1L);
 				return;
 			}
 		}
 
-		PossessingPlayer.stopPossessing(player, riding, false);
+		PossessingPlayer.stopPossessing(player, vehicle, false);
+		GhostyPlayer.markGhost(player);
 	}
 
 }

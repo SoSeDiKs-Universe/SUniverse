@@ -1,8 +1,6 @@
 package me.sosedik.requiem.listener.player;
 
 import com.destroystokyo.paper.event.player.PlayerLaunchProjectileEvent;
-import io.papermc.paper.tag.EntitySetTag;
-import io.papermc.paper.tag.EntityTags;
 import me.sosedik.kiterino.event.player.PlayerLoadsProjectileEvent;
 import me.sosedik.requiem.feature.PossessingPlayer;
 import org.bukkit.Material;
@@ -13,7 +11,6 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Trident;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.player.PlayerItemDamageEvent;

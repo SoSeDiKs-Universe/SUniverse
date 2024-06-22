@@ -1,19 +1,15 @@
 package me.sosedik.requiem.task;
 
 import me.sosedik.requiem.Requiem;
-import me.sosedik.requiem.feature.GhostyPlayer;
 import me.sosedik.requiem.feature.PossessingPlayer;
 import me.sosedik.utilizer.util.MathUtil;
-import net.kyori.adventure.key.Key;
 import org.bukkit.Location;
-import org.bukkit.NamespacedKey;
-import org.bukkit.Particle;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
-import org.bukkit.attribute.AttributeModifier;
-import org.bukkit.entity.Animals;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,6 +20,8 @@ import java.util.Objects;
  */
 // TODO not ideal, has hardcoded scales, but it works, for now
 public class DynamicScaleTask extends BukkitRunnable {
+
+	private static final PotionEffect INFINITE_BLINDNESS = new PotionEffect(PotionEffectType.BLINDNESS, PotionEffect.INFINITE_DURATION, Integer.MAX_VALUE, false, false, false);
 
 	private final Player player;
 	private final LivingEntity entity;
@@ -44,6 +42,12 @@ public class DynamicScaleTask extends BukkitRunnable {
 			return;
 		}
 
+		if (player.getEyeLocation().addY(0.01).getBlock().isSolid()) {
+			player.addPotionEffect(INFINITE_BLINDNESS);
+		} else {
+			player.removePotionEffect(PotionEffectType.BLINDNESS);
+		}
+
 		Location loc = entity.getLocation();
 		double entityHeight = entity.getHeight();
 		if (shrinkHeightDiff == -1) {
@@ -57,7 +61,7 @@ public class DynamicScaleTask extends BukkitRunnable {
 			double playerScale = 0.5;
 			double entityScale = 1;
 			double heightToRoof = 1D - MathUtil.getDecimalPart(height);
-			if (heightToRoof < 0.1) {
+			if (heightToRoof < 0.15) {
 				playerScale = 0.1;
 				entityScale = 0.8;
 			} else if (heightToRoof < 0.4) {
@@ -79,6 +83,7 @@ public class DynamicScaleTask extends BukkitRunnable {
 	@Override
 	public void cancel() {
 		super.cancel();
+		player.removePotionEffect(PotionEffectType.BLINDNESS);
 		scale(player).setBaseValue(1);
 		scale(entity).setBaseValue(1);
 	}

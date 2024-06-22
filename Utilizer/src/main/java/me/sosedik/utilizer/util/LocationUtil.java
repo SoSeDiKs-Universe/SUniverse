@@ -1,11 +1,13 @@
 package me.sosedik.utilizer.util;
 
+import io.papermc.paper.entity.TeleportFlag;
 import me.sosedik.utilizer.Utilizer;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
@@ -35,15 +37,16 @@ public class LocationUtil {
 	 * @param player player
 	 */
 	public static @NotNull CompletableFuture<Void> runRtp(@NotNull Player player, @NotNull World world, int range) {
-		if (player.getLocation().getBlockY() < 400)
-			player.teleportAsync(player.getLocation().addY(1600));
+		if (player.getLocation().getBlockY() < 400) {
+			player.teleportAsync(player.getLocation().addY(1600), PlayerTeleportEvent.TeleportCause.PLUGIN, TeleportFlag.Relative.YAW, TeleportFlag.Relative.PITCH, TeleportFlag.EntityState.RETAIN_VEHICLE, TeleportFlag.EntityState.RETAIN_PASSENGERS);
+		}
 		Utilizer.scheduler().sync(() -> player.addPotionEffect(new PotionEffect(PotionEffectType.RESISTANCE, 25 * 20, 10)));
 		Utilizer.scheduler().sync(task -> {
 			if (!player.isOnline()) return true;
 			if (player.isDead()) return true;
 
 			player.addPotionEffect(new PotionEffect(PotionEffectType.RESISTANCE, 25 * 20, 10));
-			return player.isOnGround();
+			return player.isOnGround() || player.isInWater();
 		}, 20L, 20L);
 		var teleported = new CompletableFuture<Void>();
 		Utilizer.scheduler().async(() -> findLocation(player, new Location(world, 0, 600, 0), 0, range, teleported));
@@ -58,12 +61,13 @@ public class LocationUtil {
 		loc.setX((RANDOM.nextBoolean() ? 1D : -1D) * RANDOM.nextInt(range));
 		loc.setZ((RANDOM.nextBoolean() ? 1D : -1D) * RANDOM.nextInt(range));
 		loc.getWorld().getChunkAtAsyncUrgently(loc).thenAccept(chunk -> {
-			if (RTP_BLACKLISTED_BIOMES.contains(loc.getBlock().getBiome().getKey())) {
+			if (RTP_BLACKLISTED_BIOMES.contains(loc.toHighestLocation().getBlock().getBiome().getKey())) {
 				findLocation(player, loc, check + 1, range, teleported);
 				return;
 			}
 			Location preLoc = player.getLocation();
-			player.teleportAsync(loc.setDirection(player.getLocation().getDirection())).thenRun(() -> teleported.complete(null));
+			player.teleportAsync(loc, PlayerTeleportEvent.TeleportCause.PLUGIN, TeleportFlag.Relative.YAW, TeleportFlag.Relative.PITCH, TeleportFlag.EntityState.RETAIN_VEHICLE, TeleportFlag.EntityState.RETAIN_PASSENGERS)
+				.thenRun(() -> teleported.complete(null));
 			Utilizer.logger().info("Randomly teleporting %s from %s to %s".formatted(
 				player.getName(),
 				"%s[%s, %s, %s]".formatted(preLoc.getWorld().getName(), preLoc.getX(), preLoc.getY(), preLoc.getZ()),

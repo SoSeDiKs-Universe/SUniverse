@@ -26,7 +26,7 @@ public class PrepareGhostMobs implements Listener {
 	private static final String GHOST_TEAM_ID = "Ghost";
 
 	@EventHandler(priority = EventPriority.LOWEST)
-	public void onJoin(@NotNull PlayerJoinEvent event) {
+	public void onLoad(@NotNull PlayerJoinEvent event) {
 		Player player = event.getPlayer();
 
 		Team team = getGhostTem(ScoreboardUtil.getScoreboard(player));
@@ -78,9 +78,12 @@ public class PrepareGhostMobs implements Listener {
 	 */
 	public static void makeInvisible(@NotNull Player player, boolean selfVisible) {
 		Bukkit.getOnlinePlayers().forEach(onlinePlayer -> {
-			if (selfVisible && onlinePlayer == player) return;
-			Team hide = getGhostTem(onlinePlayer.getScoreboard());
-			hide.removeEntity(player);
+			Team team = getGhostTem(onlinePlayer.getScoreboard());
+			if (selfVisible && onlinePlayer == player) {
+				team.addEntity(player);
+				return;
+			}
+			team.removeEntity(player);
 		});
 	}
 

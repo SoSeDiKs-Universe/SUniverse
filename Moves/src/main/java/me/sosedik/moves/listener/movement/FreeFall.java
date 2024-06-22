@@ -1,6 +1,10 @@
 package me.sosedik.moves.listener.movement;
 
+import de.tr7zw.changeme.nbtapi.iface.ReadWriteNBT;
+import io.papermc.paper.entity.TeleportFlag;
 import me.sosedik.moves.Moves;
+import me.sosedik.utilizer.api.event.player.PlayerDataLoadedEvent;
+import me.sosedik.utilizer.api.event.player.PlayerDataSaveEvent;
 import me.sosedik.utilizer.util.MetadataUtil;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -11,7 +15,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityToggleGlideEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.util.Vector;
@@ -27,6 +31,7 @@ import java.util.UUID;
 public class FreeFall implements Listener {
 
 	private static final Set<UUID> LEAPING = new HashSet<>();
+	private static final String LEAPING_TAG = "leaping";
 	private static final String WAS_FLYING_META = "WasFlyingBeforeLeap";
 
 	@EventHandler(ignoreCancelled = true)
@@ -70,9 +75,23 @@ public class FreeFall implements Listener {
 		event.setCancelled(true);
 	}
 
-	@EventHandler(priority = EventPriority.MONITOR)
-	public void onQuit(@NotNull PlayerQuitEvent event) {
-		stopLeaping(event.getPlayer()); // ToDo: persist leaping
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onSave(@NotNull PlayerDataSaveEvent event) {
+		if (!event.isQuit()) return;
+		if (!isLeaping(event.getPlayer())) return;
+
+		ReadWriteNBT data = event.getData();
+		data.setBoolean(LEAPING_TAG, true);
+
+		stopLeaping(event.getPlayer());
+	}
+
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onLoad(@NotNull PlayerDataLoadedEvent event) {
+		ReadWriteNBT data = event.getData();
+		if (!data.hasTag(LEAPING_TAG)) return;
+
+		startLeaping(event.getPlayer());
 	}
 
 	/**
@@ -91,7 +110,7 @@ public class FreeFall implements Listener {
 
 		player.setGliding(true);
 		Location loc = player.getLocation().center().pitch(90F);
-		player.teleport(loc);
+		player.teleport(loc, PlayerTeleportEvent.TeleportCause.PLUGIN, TeleportFlag.Relative.YAW, TeleportFlag.Relative.PITCH, TeleportFlag.EntityState.RETAIN_VEHICLE, TeleportFlag.EntityState.RETAIN_PASSENGERS);
 		player.emitSound(Sound.ENTITY_ENDER_DRAGON_FLAP, 1F, 1.5F);
 
 		Moves.scheduler().sync(task -> {
@@ -105,7 +124,7 @@ public class FreeFall implements Listener {
 			double z = loc.getZ() - currentLoc.getZ();
 			player.setVelocity(new Vector(x, player.getVelocity().getY() - 0.3, z));
 
-			if (player.isOnGround()) {
+			if (player.isOnGround() || player.isInWater()) {
 				Moves.scheduler().sync(() -> stopLeaping(player), 15L);
 				return true;
 			}

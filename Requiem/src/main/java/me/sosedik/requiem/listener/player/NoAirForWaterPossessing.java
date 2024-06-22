@@ -21,7 +21,7 @@ public class NoAirForWaterPossessing implements Listener {
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onAirChange(@NotNull EntityAirChangeEvent event) {
 		if (!(event.getEntity() instanceof Player player)) return;
-		if (event.getAmount() > player.getRemainingAir()) return;
+		if (event.getAmount() >= player.getRemainingAir()) return;
 		if (!PossessingPlayer.isPossessing(player)) return;
 		if (!isWaterMob(PossessingPlayer.getPossessed(player))) return;
 

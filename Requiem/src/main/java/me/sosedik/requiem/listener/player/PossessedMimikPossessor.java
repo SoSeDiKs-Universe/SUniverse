@@ -1,6 +1,7 @@
 package me.sosedik.requiem.listener.player;
 
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
+import com.google.common.base.Function;
 import io.papermc.paper.event.player.PlayerArmSwingEvent;
 import io.papermc.paper.event.player.PlayerInventorySlotChangeEvent;
 import me.sosedik.requiem.Requiem;
@@ -133,9 +134,17 @@ public class PossessedMimikPossessor implements Listener {
 		LivingEntity entity = PossessingPlayer.getPossessed(player);
 		if (entity == null) return;
 
+		if (entity == damaged) {
+			event.setDamage(0);
+			event.setCancelled(true);
+			return;
+		}
+
 		Map<EntityDamageEvent.DamageModifier, Double> modifiers = new HashMap<>();
 		modifiers.put(EntityDamageEvent.DamageModifier.BASE, event.getFinalDamage());
-		var fakedEvent = new EntityDamageByEntityEvent(entity, damaged, event.getCause(), event.getDamageSource(), modifiers, new HashMap<>(), event.isCritical());
+		Map<EntityDamageEvent.DamageModifier, Function<Double, Double>> modifierFunctions = new HashMap<>();
+		modifierFunctions.put(EntityDamageEvent.DamageModifier.BASE, d -> d);
+		var fakedEvent = new EntityDamageByEntityEvent(entity, damaged, event.getCause(), event.getDamageSource(), modifiers, modifierFunctions, event.isCritical());
 		fakedEvent.callEvent();
 
 		event.setDamage(fakedEvent.getFinalDamage());

@@ -52,7 +52,8 @@ public class PlayerDataLoadSave implements Listener {
 		});
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	// Leave LOWEST for preparation events that should run before custom data overrides them
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onJoin(@NotNull PlayerJoinEvent event) {
 		Player player = event.getPlayer();
 		ReadWriteNBT data = getOrLoadData(player);

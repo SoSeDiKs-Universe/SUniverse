@@ -45,7 +45,6 @@ public class EntityUtil {
 	public static boolean isInDarkness(@NotNull LivingEntity entity) {
 		if (entity.getEyeLocation().getBlock().getLightLevel() > 3) return false;
 		if (isInOpenEnd(entity)) return false;
-		if (entity.isDead()) return true;
 		if (isHoldingALightSource(entity, EquipmentSlot.HAND)) return false;
 		if (isHoldingALightSource(entity, EquipmentSlot.OFF_HAND)) return false;
 

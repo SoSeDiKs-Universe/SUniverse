@@ -32,30 +32,32 @@ public class EventUtil {
 		try {
 			for (Class<?> listenerClass : listenerClasses) {
 				if (listenerClass.getDeclaredConstructors().length != 1) {
-					Utilizer.logger().warn("Couldn't register events in {} for {}", listenerClass, plugin.getName());
+					Utilizer.logger().warn("Couldn't register events in {} for {}: must have only 1 constructor", listenerClass, plugin.getName());
 					continue;
 				}
-				if (!Listener.class.isAssignableFrom(listenerClass)) {
-					Utilizer.logger().warn("Couldn't register events in {} for {} (class does not implement Listener)", listenerClass, plugin.getName());
+				if (!isValidListener(listenerClass)) {
+					Utilizer.logger().warn("Couldn't register events in {} for {} (class does not implement supported listener)", listenerClass, plugin.getName());
 					continue;
 				}
-				Listener listener = null;
+				Object listener = null;
 				Constructor<?> constructor = listenerClass.getDeclaredConstructors()[0];
 				int paramCount = constructor.getParameterCount();
 				if (paramCount == 0) {
-					listener = (Listener) constructor.newInstance();
+					listener = constructor.newInstance();
 				} else if (paramCount == 1) {
 					if (Plugin.class.isAssignableFrom(constructor.getParameterTypes()[0])) {
-						listener = (Listener) constructor.newInstance(plugin);
+						listener = constructor.newInstance(plugin);
 					}
 				} else if (paramCount == 2) {
 					Class<?>[] paramTypes = constructor.getParameterTypes();
 					if (paramTypes[0] == Plugin.class && paramTypes[1] == FileConfiguration.class) {
-						listener = (Listener) constructor.newInstance(plugin, pluginConfig);
+						listener = constructor.newInstance(plugin, pluginConfig);
 					}
 				}
 				if (listener != null) {
-					pluginManager.registerEvents(listener, plugin);
+					if (Listener.class.isAssignableFrom(listenerClass)) {
+						pluginManager.registerEvents((Listener) listener, plugin);
+					}
 					if (PacketListener.class.isAssignableFrom(listenerClass)) {
 						PacketEvents.getAPI().getEventManager().registerListener((PacketListener) listener, PacketListenerPriority.NORMAL);
 					}
@@ -66,6 +68,11 @@ public class EventUtil {
 		} catch (SecurityException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
 			Utilizer.logger().error("Couldn't register listeners for {}", plugin.getName(), e);
 		}
+	}
+
+	private static boolean isValidListener(@NotNull Class<?> listenerClass) {
+		return Listener.class.isAssignableFrom(listenerClass)
+				|| PacketListener.class.isAssignableFrom(listenerClass);
 	}
 
 }

@@ -63,7 +63,7 @@ public class EntityGlowTracker implements PacketListener, Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onDespawn(@NotNull EntityRemoveFromWorldEvent event) {
 		Entity entity = event.getEntity();
 		List<UUID> uuids = ENTITY_TO_PLAYER_GLOW.remove(entity.getEntityId());

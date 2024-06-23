@@ -3,6 +3,7 @@ package me.sosedik.requiem;
 import me.sosedik.requiem.command.ReviveCommand;
 import me.sosedik.requiem.feature.GhostyPlayer;
 import me.sosedik.requiem.feature.PossessingPlayer;
+import me.sosedik.requiem.listener.entity.FakeHorseSaddles;
 import me.sosedik.requiem.listener.entity.PrepareGhostMobs;
 import me.sosedik.requiem.listener.player.DeathMakesGhosts;
 import me.sosedik.requiem.listener.player.DeathMakesPossessed;
@@ -50,6 +51,7 @@ public final class Requiem extends JavaPlugin {
 		registerCommands();
 		EventUtil.registerListeners(this,
 			// entity
+			FakeHorseSaddles.class,
 			PrepareGhostMobs.class,
 			// player
 			DeathMakesGhosts.class,

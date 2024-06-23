@@ -36,36 +36,14 @@ public class GlowingUtil {
 	 */
 	public static void applyGlowingColor(@NotNull Player player, @NotNull Entity entity, @Nullable NamedTextColor glowColor) {
 		setGlowingColor(player, entity, glowColor);
-		byte mask = 0x00;
-		if (entity.getFireTicks() > 0 || entity.isVisualFire()) {
-			mask |= 0x01;
-		}
-		if (entity.getPose() == Pose.SNEAKING) {
-			mask |= 0x02;
-		}
-		if (entity instanceof Player livingEntity && livingEntity.isSprinting()) {
-			mask |= 0x08;
-		}
-		if (entity.getPose() == Pose.SWIMMING) {
-			mask |= 0x10;
-		}
-		if (entity instanceof LivingEntity livingEntity && livingEntity.isInvisible()) {
-			mask |= 0x20;
-		}
 		if (glowColor != null) {
-			mask |= 0x40;
 			EntityGlowTracker.getPlayers(entity.getEntityId(), true).add(player.getUniqueId());
 		} else {
 			List<UUID> playerUuids = EntityGlowTracker.getPlayers(entity.getEntityId(), false);
 			if (playerUuids != null)
 				playerUuids.remove(player.getUniqueId());
 		}
-		if (entity.getPose() == Pose.FALL_FLYING) {
-			mask |= (byte) 0x80;
-		}
-		var entityData = List.of(new EntityData(0, EntityDataTypes.BYTE, mask));
-		var packet = new WrapperPlayServerEntityMetadata(entity.getEntityId(), entityData);
-		PacketEvents.getAPI().getPlayerManager().sendPacket(player, packet);
+		entity.resendMetadata(0);
 	}
 
 	/**

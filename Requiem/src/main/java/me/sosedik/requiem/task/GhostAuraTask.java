@@ -34,4 +34,11 @@ public class GhostAuraTask extends BukkitRunnable {
 		loc.getNearbyEntitiesByType(Animals.class, 2.5).forEach(animal -> animal.setPanicTicks(80));
 	}
 
+	@Override
+	public void cancel() {
+		super.cancel();
+
+		player.sendRedTint(0);
+	}
+
 }

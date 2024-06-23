@@ -2,7 +2,7 @@ package me.sosedik.requiem.feature;
 
 import de.tr7zw.changeme.nbtapi.iface.ReadWriteNBT;
 import me.sosedik.requiem.Requiem;
-import me.sosedik.requiem.listener.entity.PrepareGhostMobs;
+import me.sosedik.requiem.listener.entity.FakeHorseSaddles;
 import me.sosedik.requiem.task.DynamicScaleTask;
 import me.sosedik.utilizer.api.storage.player.PlayerDataStorage;
 import me.sosedik.utilizer.util.EntityUtil;
@@ -81,7 +81,15 @@ public class PossessingPlayer {
 
 		boolean persistent = entity.isPersistent();
 		entity.setPersistent(true);
-		entity.modifyPersistentData(nbt -> nbt.getOrCreateCompound(POSSESSED_TAG).setBoolean(POSSESSED_PERSISTENT_TAG, persistent));
+
+		entity.modifyPersistentData(nbt -> {
+			nbt = nbt.getOrCreateCompound(POSSESSED_TAG);
+			nbt.setBoolean(POSSESSED_PERSISTENT_TAG, persistent);
+
+			if (entity instanceof AbstractHorse) {
+				FakeHorseSaddles.startTracking(player, entity);
+			}
+		});
 
 //		EffectManager.addEffect(player, KittenEffects.ATTRITION, -1, 0); // TODO
 		player.setInvisible(true);
@@ -114,13 +122,19 @@ public class PossessingPlayer {
 		if (quit) {
 			if (riding != null) riding.remove();
 		} else {
-			if (riding != null && riding.getPersistentData(nbt -> nbt.hasTag(POSSESSED_PERSISTENT_TAG))) {
-				boolean persistent = riding.modifyAndGetPersistentData(nbt -> {
-					boolean value = nbt.getBoolean(POSSESSED_PERSISTENT_TAG);
+			if (riding != null && riding.getPersistentData(nbt -> nbt.hasTag(POSSESSED_TAG))) {
+				riding.modifyPersistentData(nbt -> {
+					nbt = nbt.getCompound(POSSESSED_TAG);
+					if (nbt == null) return;
+
+					boolean persistent = nbt.getBoolean(POSSESSED_PERSISTENT_TAG);
 					nbt.removeKey(POSSESSED_PERSISTENT_TAG);
-					return value;
+					riding.setPersistent(persistent);
+
+					if (riding instanceof AbstractHorse) {
+						FakeHorseSaddles.stopTracking(player, riding);
+					}
 				});
-				riding.setPersistent(persistent);
 			}
 		}
 
@@ -228,6 +242,7 @@ public class PossessingPlayer {
 	 * @return whether the entity can be controlled by player
 	 */
 	public static boolean isAllowedForCapture(@NotNull Player player, @NotNull Entity entity) {
+		// TODO llamas are not controllable for whatever reason
 		if (true) return true;
 		if (entity instanceof AbstractHorse) return false; // TODO "Horses" dismount player :L ; there's also dolphins and probably others
 		if (entity instanceof Animals) return true;
@@ -269,7 +284,8 @@ public class PossessingPlayer {
 	public static boolean loadPossessingData(@NotNull Player player, @NotNull ReadWriteNBT data) {
 		if (!data.hasTag(POSSESSED_TAG)) return false;
 
-		data = data.getOrCreateCompound(POSSESSED_TAG);
+		data = data.getCompound(POSSESSED_TAG);
+		if (data == null) return false;
 		if (!data.hasTag(POSSESSED_ENTITY_DATA)) return false;
 
 		byte[] entityData = data.getByteArray(POSSESSED_ENTITY_DATA);

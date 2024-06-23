@@ -6,7 +6,7 @@ dependencies {
     paperLibrary("org.incendo:cloud-paper:${project.property("cloudImplVersion")}")
     paperLibrary("org.incendo:cloud-annotations:${project.property("cloudVersion")}")
 
-    compileOnly("com.github.retrooper:packetevents-spigot:2.3.1-SNAPSHOT")
+    compileOnly("com.github.retrooper:packetevents-spigot:${project.property("packeteventsVersion")}")
 }
 
 paper {

@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class EntityMetadataClearer implements Listener {
 
-	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onDespawn(@NotNull EntityRemoveFromWorldEvent event) {
 		MetadataUtil.clearMetadata(event.getEntity());
 	}

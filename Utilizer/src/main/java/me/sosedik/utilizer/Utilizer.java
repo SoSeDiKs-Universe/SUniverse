@@ -3,6 +3,7 @@ package me.sosedik.utilizer;
 import me.sosedik.utilizer.api.language.LangKeysStorage;
 import me.sosedik.utilizer.listener.entity.EntityGlowTracker;
 import me.sosedik.utilizer.listener.entity.EntityMetadataClearer;
+import me.sosedik.utilizer.listener.player.CleanupPlayerScoreboards;
 import me.sosedik.utilizer.listener.player.PlayerDataLoadSave;
 import me.sosedik.utilizer.listener.player.PlayerLanguageLoadSave;
 import me.sosedik.utilizer.util.EventUtil;
@@ -32,6 +33,7 @@ public final class Utilizer extends JavaPlugin {
 			EntityGlowTracker.class,
 			EntityMetadataClearer.class,
 			// player
+			CleanupPlayerScoreboards.class,
 			PlayerDataLoadSave.class,
 			PlayerLanguageLoadSave.class
 		);

@@ -1,8 +1,5 @@
 package me.sosedik.requiem.listener.entity;
 
-import io.papermc.paper.event.player.AsyncChatEvent;
-import me.sosedik.requiem.Requiem;
-import me.sosedik.requiem.feature.GhostyPlayer;
 import me.sosedik.utilizer.util.ScoreboardUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -10,7 +7,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 import org.jetbrains.annotations.NotNull;
@@ -29,43 +25,22 @@ public class PrepareGhostMobs implements Listener {
 	public void onLoad(@NotNull PlayerJoinEvent event) {
 		Player player = event.getPlayer();
 
-		Team team = getGhostTem(ScoreboardUtil.getScoreboard(player));
-		team.addEntity(player);
-		getGhostTem(Bukkit.getScoreboardManager().getMainScoreboard()).getEntries().forEach(team::addEntry);
-
-		Bukkit.getOnlinePlayers().forEach(onlinePlayer -> {
-			team.addEntity(onlinePlayer);
-			Team hide = getGhostTem(ScoreboardUtil.getScoreboard(onlinePlayer));
-			hide.addEntity(player);
-		});
+		Team team = ScoreboardUtil.getPlayerTeam(player);
+		team.setCanSeeFriendlyInvisibles(true);
+		getGhostTeam(Bukkit.getScoreboardManager().getMainScoreboard()).getEntries().forEach(team::addEntry);
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST)
-	public void onQuit(@NotNull PlayerQuitEvent event) {
-		Player player = event.getPlayer();
-		Bukkit.getOnlinePlayers().forEach(onlinePlayer -> {
-			Team hide = getGhostTem(onlinePlayer.getScoreboard());
-			hide.removeEntity(player);
-		});
-	}
-
-	@EventHandler
-	public void onChat(AsyncChatEvent event) { // TODO remove
-		Requiem.scheduler().sync(() -> {
-			if (GhostyPlayer.isGhost(event.getPlayer())) {
-				GhostyPlayer.clearGhost(event.getPlayer());
-			} else {
-				GhostyPlayer.markGhost(event.getPlayer());
-			}
-		});
-	}
-
-	private static @NotNull Team getGhostTem(@NotNull Scoreboard scoreboard) {
+	/**
+	 * Gets (or registers) ghost team from scoreboard
+	 *
+	 * @param scoreboard scoreboard
+	 * @return ghost team
+	 */
+	private static @NotNull Team getGhostTeam(@NotNull Scoreboard scoreboard) {
 		Team team = scoreboard.getTeam(GHOST_TEAM_ID);
 		if (team == null) {
 			team = scoreboard.registerNewTeam(GHOST_TEAM_ID);
 			team.setCanSeeFriendlyInvisibles(true);
-			team.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.NEVER);
 		}
 		return team;
 	}
@@ -76,29 +51,31 @@ public class PrepareGhostMobs implements Listener {
 	 * @param player player
 	 * @param selfVisible whether the player should see themselves as a ghost
 	 */
-	public static void makeInvisible(@NotNull Player player, boolean selfVisible) {
+	public static void hideVisibility(@NotNull Player player, boolean selfVisible) {
 		Bukkit.getOnlinePlayers().forEach(onlinePlayer -> {
-			Team team = getGhostTem(onlinePlayer.getScoreboard());
-			if (selfVisible && onlinePlayer == player) {
-				team.addEntity(player);
+			Team team = ScoreboardUtil.getPlayerTeam(onlinePlayer);
+			if (onlinePlayer == player) {
+				team.setCanSeeFriendlyInvisibles(selfVisible);
 				return;
 			}
-			team.removeEntity(player);
+			team.removePlayer(player);
 		});
 	}
 
 	/**
-	 * Makes the player appear as a ghost (see-through)
+	 * Makes other player visible for the specified player
 	 *
 	 * @param player player
+	 * @param other player that should be visible
 	 */
-	public static void makeVisible(@NotNull Player player) { // TODO what's the point?
-		Bukkit.getOnlinePlayers().forEach(onlinePlayer -> {
-			Team team = getGhostTem(ScoreboardUtil.getScoreboard(onlinePlayer));
-			team.addEntity(player);
-		});
+	public static void addVisible(@NotNull Player player, @NotNull Player other) {
+		Team team = ScoreboardUtil.getPlayerTeam(player);
+		team.addPlayer(other);
 	}
 
+	/**
+	 * Unregisters ghosts scoreboard team
+	 */
 	public static void unregisterGhosts() {
 		Team ghost = Bukkit.getScoreboardManager().getMainScoreboard().getTeam(GHOST_TEAM_ID);
 		if (ghost != null)

@@ -28,7 +28,7 @@ public class GhostAuraTask extends BukkitRunnable {
 			return;
 		}
 
-		player.sendRedTint(0);
+		player.sendRedTint(1);
 		Location loc = player.getLocation().addY(player.getHeight() / 2);
 		player.spawnParticle(Particle.SOUL, loc, 2, 0.03, 0.08, 0.03, 0.04);
 		loc.getNearbyEntitiesByType(Animals.class, 2.5).forEach(animal -> animal.setPanicTicks(80));

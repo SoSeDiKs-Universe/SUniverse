@@ -84,7 +84,6 @@ public class PossessingPlayer {
 		entity.modifyPersistentData(nbt -> nbt.getOrCreateCompound(POSSESSED_TAG).setBoolean(POSSESSED_PERSISTENT_TAG, persistent));
 
 //		EffectManager.addEffect(player, KittenEffects.ATTRITION, -1, 0); // TODO
-		PrepareGhostMobs.makeInvisible(player, false);
 		player.setInvisible(true);
 		player.setInvulnerable(false); // Prevents mobs from targeting the player if true
 		player.setRemainingAir(entity.getRemainingAir());
@@ -137,9 +136,6 @@ public class PossessingPlayer {
 		if (quit) return;
 
 		player.leaveVehicle();
-//		PrepareGhostMobs.makeVisible(player);
-
-		new RuntimeException("test").printStackTrace();
 
 		if (riding != null) Requiem.logger().info("Making " + player.getName() + " no longer possess " + riding.getType().name());
 		else Requiem.logger().info("Making " + player.getName() + " no longer possess an entity");

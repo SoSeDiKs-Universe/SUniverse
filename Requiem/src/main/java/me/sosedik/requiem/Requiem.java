@@ -9,6 +9,7 @@ import me.sosedik.requiem.listener.player.DeathMakesPossessed;
 import me.sosedik.requiem.listener.player.GhostsDontSprint;
 import me.sosedik.requiem.listener.player.GhostsDontStarveOrChoke;
 import me.sosedik.requiem.listener.player.GhostsKeepNightVision;
+import me.sosedik.requiem.listener.player.GhostsPhaseThroughWalls;
 import me.sosedik.requiem.listener.player.LoadSavePlayers;
 import me.sosedik.requiem.listener.player.MobsDontTargetGhosts;
 import me.sosedik.requiem.listener.player.NoAirForWaterPossessing;
@@ -56,6 +57,7 @@ public final class Requiem extends JavaPlugin {
 			GhostsDontSprint.class,
 			GhostsDontStarveOrChoke.class,
 			GhostsKeepNightVision.class,
+			GhostsPhaseThroughWalls.class,
 			LoadSavePlayers.class,
 			MobsDontTargetGhosts.class,
 			NoAirForWaterPossessing.class,

@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityCombustEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.jetbrains.annotations.NotNull;
 
@@ -22,6 +23,14 @@ public class NoDamageToOrFromGhosts implements Listener {
 		event.setDamage(0);
 		if (event.getCause() != EntityDamageEvent.DamageCause.CUSTOM)
 			event.setCancelled(true);
+	}
+
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onHurt(@NotNull EntityCombustEvent event) {
+		if (!(event.getEntity() instanceof Player player)) return;
+		if (!GhostyPlayer.isGhost(player)) return;
+
+		event.setCancelled(true);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)

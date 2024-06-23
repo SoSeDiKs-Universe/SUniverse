@@ -4,11 +4,13 @@ import me.sosedik.requiem.Requiem;
 import me.sosedik.requiem.listener.entity.PrepareGhostMobs;
 import me.sosedik.requiem.task.GhostAuraTask;
 import me.sosedik.requiem.task.GhostMobVisionTask;
+import me.sosedik.utilizer.util.ScoreboardUtil;
 import net.kyori.adventure.util.TriState;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scoreboard.Team;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
@@ -42,7 +44,16 @@ public class GhostyPlayer {
 		GHOSTS.add(player.getUniqueId());
 
 		// Hide player from non-ghosts
-		PrepareGhostMobs.makeInvisible(player, true);
+		PrepareGhostMobs.hideVisibility(player, true);
+		for (UUID uuid : GHOSTS) {
+			Player onlinePlayer = Bukkit.getPlayer(uuid);
+			if (onlinePlayer == null) continue;
+			if (onlinePlayer == player) continue;
+			if (!isGhost(onlinePlayer)) continue;
+
+			PrepareGhostMobs.addVisible(player, onlinePlayer);
+			PrepareGhostMobs.addVisible(onlinePlayer, player);
+		}
 
 		// Ghost attributes
 		player.setHealth(player.getMaxHealth());
@@ -74,6 +85,8 @@ public class GhostyPlayer {
 	 */
 	public static void clearGhost(@NotNull Player player) {
 		GHOSTS.remove(player.getUniqueId());
+
+		PrepareGhostMobs.hideVisibility(player, false);
 
 		// Restore attributes
 		player.setCollidable(true);

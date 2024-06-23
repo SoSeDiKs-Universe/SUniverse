@@ -2,10 +2,10 @@ package me.sosedik.requiem.listener.player;
 
 import com.destroystokyo.paper.event.player.PlayerPickupExperienceEvent;
 import me.sosedik.requiem.feature.GhostyPlayer;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerAttemptPickupItemEvent;
 import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -22,24 +22,28 @@ public class NoGhostInteractions implements Listener {
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onInteractWorld(@NotNull PlayerInteractEvent event) {
-		Player player = event.getPlayer();
-		if (!GhostyPlayer.isGhost(player)) return;
+		if (!GhostyPlayer.isGhost(event.getPlayer())) return;
 
 		event.setCancelled(true);
 	}
 
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onInteractEntity(@NotNull PlayerInteractEntityEvent event) {
-		Player player = event.getPlayer();
-		if (!GhostyPlayer.isGhost(player)) return;
+		if (!GhostyPlayer.isGhost(event.getPlayer())) return;
 
 		event.setCancelled(true);
 	}
 
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onInteractEntity(@NotNull PlayerInteractAtEntityEvent event) {
-		Player player = event.getPlayer();
-		if (!GhostyPlayer.isGhost(player)) return;
+		if (!GhostyPlayer.isGhost(event.getPlayer())) return;
+
+		event.setCancelled(true);
+	}
+
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onInteractWorld(@NotNull BlockBreakEvent event) {
+		if (!GhostyPlayer.isGhost(event.getPlayer())) return;
 
 		event.setCancelled(true);
 	}

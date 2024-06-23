@@ -95,6 +95,9 @@ public class EntityGlowTracker implements PacketListener, Listener {
 		return compute ? ENTITY_TO_PLAYER_GLOW.computeIfAbsent(entityId, k -> new ArrayList<>()) : ENTITY_TO_PLAYER_GLOW.get(entityId);
 	}
 
+	/**
+	 * Unregisters glow scoreboard teams
+	 */
 	public static void unregisterTeams() {
 		Scoreboard scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
 		for (NamedTextColor color : NamedTextColor.NAMES.values()) {

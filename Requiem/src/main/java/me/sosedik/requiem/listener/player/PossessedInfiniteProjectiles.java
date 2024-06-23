@@ -51,7 +51,7 @@ public class PossessedInfiniteProjectiles implements Listener {
 		if (item == null) return;
 		if (!hasInfiniteArrows(riding.getType(), item)) return;
 
-		event.setConsumeItem(false);
+		event.setConsumeItem(false); // TODO not implemented
 		projectile.setPickupStatus(AbstractArrow.PickupStatus.CREATIVE_ONLY);
 	}
 

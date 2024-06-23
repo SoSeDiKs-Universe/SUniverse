@@ -1,5 +1,6 @@
 package me.sosedik.miscme;
 
+import me.sosedik.miscme.listener.player.HidePlayerNameTags;
 import me.sosedik.miscme.listener.world.CustomDayCycleCleanup;
 import me.sosedik.utilizer.util.EventUtil;
 import me.sosedik.utilizer.util.Scheduler;
@@ -22,6 +23,8 @@ public final class MiscMe extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		EventUtil.registerListeners(this,
+			// player
+			HidePlayerNameTags.class,
 			// world
 			CustomDayCycleCleanup.class
 		);

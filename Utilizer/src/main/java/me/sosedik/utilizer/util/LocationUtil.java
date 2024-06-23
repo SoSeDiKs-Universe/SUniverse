@@ -3,13 +3,21 @@ package me.sosedik.utilizer.util;
 import io.papermc.paper.entity.TeleportFlag;
 import me.sosedik.utilizer.Utilizer;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Tag;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
+import org.bukkit.block.Block;
+import org.bukkit.block.data.type.Door;
+import org.bukkit.block.data.type.Gate;
+import org.bukkit.block.data.type.TrapDoor;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.BoundingBox;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
@@ -74,6 +82,50 @@ public class LocationUtil {
 				"%s[%s, %s, %s]".formatted(loc.getWorld().getName(), loc.getX(), loc.getY(), loc.getZ())
 			));
 		});
+	}
+
+	/**
+	 * Checks whether block's collision is a cube
+	 *
+	 * @param block  block to check
+	 * @return true, if block's bounding box is cube (1x1x1)
+	 */
+	public static boolean isCube(@NotNull Block block) {
+		BoundingBox bb = block.getBoundingBox();
+		return bb.getHeight() == 1 && bb.getWidthX() == 1 && bb.getWidthZ() == 1;
+	}
+
+	/**
+	 * Checks whether block is "truly solid", so that
+	 * the entity can not walk through it
+	 *
+	 * <p>Note: entity should be facing this block!
+	 *
+	 * @param entity entity facing the block
+	 * @param block  block
+	 * @return whether block is "truly solid"
+	 */
+	public static boolean isTrulySolid(@NotNull Entity entity, @NotNull Block block) {
+		if (!block.isSolid()) return false;
+		Material blockType = block.getType();
+		if (Tag.LEAVES.isTagged(blockType)) return false;
+		if (block.getBlockData() instanceof TrapDoor trapDoor) {
+			if (block.getY() == entity.getLocation().getBlockY() - 1) return !trapDoor.isOpen();
+			if (entity.getFacing() != trapDoor.getFacing()) return false;
+			return trapDoor.isOpen();
+		}
+		if (block.getBlockData() instanceof Door door) {
+			if (entity.getFacing().getOppositeFace() == door.getFacing()) return false;
+			if (entity.getFacing() != door.getFacing()) return door.isOpen();
+			return !door.isOpen();
+		}
+		if (block.getBlockData() instanceof Gate gate) {
+			return !gate.isOpen();
+		}
+		if (Tag.PRESSURE_PLATES.isTagged(blockType)) return false;
+		if (Tag.BANNERS.isTagged(blockType)) return false;
+		return !Tag.SIGNS.isTagged(blockType);
+		// Truly solid, congrats!
 	}
 
 }

@@ -2,10 +2,12 @@ package me.sosedik.requiem.task;
 
 import me.sosedik.requiem.Requiem;
 import me.sosedik.requiem.feature.PossessingPlayer;
+import me.sosedik.utilizer.util.LocationUtil;
 import me.sosedik.utilizer.util.MathUtil;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
+import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -42,10 +44,10 @@ public class DynamicScaleTask extends BukkitRunnable {
 			return;
 		}
 
-		if (player.getEyeLocation().addY(0.01).getBlock().isSolid()) {
-			player.addPotionEffect(INFINITE_BLINDNESS);
+		if (LocationUtil.isTrulySolid(player, player.getEyeLocation().addY(0.01).getBlock())) {
+			player.sendPotionEffectChange(player, INFINITE_BLINDNESS);
 		} else {
-			player.removePotionEffect(PotionEffectType.BLINDNESS);
+			player.sendPotionEffectChangeRemove(player, PotionEffectType.BLINDNESS);
 		}
 
 		Location loc = entity.getLocation();
@@ -55,7 +57,8 @@ public class DynamicScaleTask extends BukkitRunnable {
 			if (shrinkHeightDiff == 0) shrinkHeightDiff = 0.000001;
 		}
 		double height = loc.clone().subtract(loc.toBlockLocation()).getY() + entityHeight + shrinkHeightDiff;
-		if (loc.clone().addY(height + 0.5).getBlock().isSolid()) {
+		Block upperBlock = loc.clone().addY(height + 0.5).getBlock();
+		if (LocationUtil.isCube(upperBlock) || LocationUtil.isTrulySolid(player, upperBlock)) {
 			if (shrinkHeightDiff != 0) return;
 
 			double playerScale = 0.5;
@@ -83,7 +86,7 @@ public class DynamicScaleTask extends BukkitRunnable {
 	@Override
 	public void cancel() {
 		super.cancel();
-		player.removePotionEffect(PotionEffectType.BLINDNESS);
+		player.sendPotionEffectChangeRemove(player, PotionEffectType.BLINDNESS);
 		scale(player).setBaseValue(1);
 		scale(entity).setBaseValue(1);
 	}

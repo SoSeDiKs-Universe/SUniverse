@@ -1,6 +1,6 @@
 package me.sosedik.utilizer.api.event.player;
 
-import me.sosedik.utilizer.api.language.LangKey;
+import me.sosedik.utilizer.api.language.LangOptions;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerEvent;
@@ -13,13 +13,13 @@ public class PlayerLanguageChangedEvent extends PlayerEvent {
 
 	private static final HandlerList HANDLERS = new HandlerList();
 
-	private final LangKey oldLangKey;
-	private final LangKey newLangKey;
+	private final LangOptions oldLanguage;
+	private final LangOptions newLanguage;
 
-	public PlayerLanguageChangedEvent(@NotNull Player player, @NotNull LangKey oldLangKey, @NotNull LangKey newLangKey) {
+	public PlayerLanguageChangedEvent(@NotNull Player player, @NotNull LangOptions oldLanguage, @NotNull LangOptions newLanguage) {
 		super(player);
-		this.oldLangKey = oldLangKey;
-		this.newLangKey = newLangKey;
+		this.oldLanguage = oldLanguage;
+		this.newLanguage = newLanguage;
 	}
 
 	/**
@@ -27,8 +27,8 @@ public class PlayerLanguageChangedEvent extends PlayerEvent {
 	 *
 	 * @return old player's language
 	 */
-	public @NotNull LangKey getOldLangKey() {
-		return oldLangKey;
+	public @NotNull LangOptions getOldLanguage() {
+		return oldLanguage;
 	}
 
 	/**
@@ -36,8 +36,8 @@ public class PlayerLanguageChangedEvent extends PlayerEvent {
 	 *
 	 * @return new player's language
 	 */
-	public @NotNull LangKey getNewLangKey() {
-		return newLangKey;
+	public @NotNull LangOptions getNewLanguage() {
+		return newLanguage;
 	}
 
 	@Override

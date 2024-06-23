@@ -18,9 +18,11 @@ paper {
     serverDependencies {
         register("Utilizer") {
             load = PaperPluginDescription.RelativeLoadOrder.BEFORE
+            required = true
         }
         register("packetevents") {
             load = PaperPluginDescription.RelativeLoadOrder.BEFORE
+            required = true
         }
     }
 }

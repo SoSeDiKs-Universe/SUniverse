@@ -16,6 +16,7 @@ paper {
     serverDependencies {
         register("Utilizer") {
             load = PaperPluginDescription.RelativeLoadOrder.BEFORE
+            required = true
         }
     }
 }

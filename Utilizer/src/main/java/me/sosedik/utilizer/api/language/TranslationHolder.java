@@ -34,20 +34,20 @@ public class TranslationHolder {
 	private static final TranslationHolder TRANSLATION_HOLDER = new TranslationHolder();
 	private static final Random RANDOM = new Random();
 
-	private final Map<LangKey, JsonObject> locales = new HashMap<>();
+	private final Map<LangOptions, JsonObject> locales = new HashMap<>();
 
-	public @NotNull String @NotNull [] getMessage(@NotNull LangKey langKey, @NotNull String path) {
-		return getMessage(langKey, path, true);
+	public @NotNull String @NotNull [] getMessage(@NotNull LangOptions langOptions, @NotNull String path) {
+		return getMessage(langOptions, path, true);
 	}
 
 	@Contract("_, _, true -> !null")
-	public @NotNull String @Nullable [] getMessage(@NotNull LangKey langKey, @NotNull String path, boolean scream) {
-		JsonObject langJson = locales.get(langKey);
+	public @NotNull String @Nullable [] getMessage(@NotNull LangOptions langOptions, @NotNull String path, boolean scream) {
+		JsonObject langJson = locales.get(langOptions);
 		if (langJson == null || !langJson.has(path)) {
 			// Retry for default language
-			LangKey defaultLangKey = LangKeysStorage.getDefaultLangKey();
-			if (defaultLangKey != langKey)
-				return getMessage(defaultLangKey, path, scream);
+			LangOptions defaultLangOptions = LangOptionsStorage.getDefaultLangOptions();
+			if (defaultLangOptions != langOptions)
+				return getMessage(defaultLangOptions, path, scream);
 			if (scream) {
 				Utilizer.logger().warn("Missing localization for {}", path);
 				return new String[]{path};
@@ -176,13 +176,7 @@ public class TranslationHolder {
 					var reader = new InputStreamReader(inputStream, StandardCharsets.UTF_8)
 				) {
 					JsonObject locale = new Gson().fromJson(reader, JsonObject.class);
-					if (!locale.has("locale.id")) {
-						toCompute.computeIfAbsent(name.split("/")[0], k -> new ArrayList<>()).add(locale);
-					} else {
-						String rawLangKey = locale.get("locale.id").getAsString();
-						LangKey langKey = LangKeysStorage.getOrCompute(rawLangKey, () -> LangKey.fromJson(locale));
-						loadJson(locale, langKey);
-					}
+					toCompute.computeIfAbsent(name.split("/")[0], k -> new ArrayList<>()).add(locale);
 				}
 //				if (name.startsWith("localizations/") && name.endsWith(".json"))
 //					plugin.saveResource(name, true);
@@ -191,9 +185,8 @@ public class TranslationHolder {
 			e.printStackTrace();
 		}
 		toCompute.forEach((id, jsons) -> {
-			LangKey langKey = LangKeysStorage.getLangKeyIfExists(id);
-			if (langKey != null)
-				jsons.forEach(json -> loadJson(json, langKey));
+			LangOptions langOptions = LangOptionsStorage.getOrCompute(id);
+			jsons.forEach(json -> loadJson(json, langOptions));
 		});
 		reloadLangs(plugin);
 	}
@@ -217,9 +210,8 @@ public class TranslationHolder {
 			loadLangs(localesFolder, file.getName(), toCompute);
 		}
 		toCompute.forEach((id, jsons) -> {
-			LangKey langKey = LangKeysStorage.getLangKeyIfExists(id);
-			if (langKey != null)
-				jsons.forEach(json -> loadJson(json, langKey));
+			LangOptions langOptions = LangOptionsStorage.getOrCompute(id);
+			jsons.forEach(json -> loadJson(json, langOptions));
 		});
 	}
 
@@ -233,17 +225,11 @@ public class TranslationHolder {
 		if (!file.getName().endsWith(".json")) return;
 
 		JsonObject json = FileUtil.readJsonObject(file);
-		if (json.has("locale.id")) {
-			String rawLangKey = json.get("locale.id").getAsString();
-			LangKey langKey = LangKeysStorage.getOrCompute(rawLangKey, () -> LangKey.fromJson(json));
-			loadJson(json, langKey);
-		} else {
-			locales.computeIfAbsent(parentName, k -> new ArrayList<>()).add(json);
-		}
+		locales.computeIfAbsent(parentName, k -> new ArrayList<>()).add(json);
 	}
 
-	private static void loadJson(@NotNull JsonObject json, @NotNull LangKey langKey) {
-		var localesJson = TRANSLATION_HOLDER.locales.computeIfAbsent(langKey, k -> new JsonObject());
+	private static void loadJson(@NotNull JsonObject json, @NotNull LangOptions langOptions) {
+		var localesJson = TRANSLATION_HOLDER.locales.computeIfAbsent(langOptions, k -> new JsonObject());
 		try {
 			json.entrySet().forEach(entry -> localesJson.add(entry.getKey(), entry.getValue()));
 		} catch (JsonSyntaxException | JsonIOException e) {

@@ -4,8 +4,8 @@ import de.tr7zw.changeme.nbtapi.iface.ReadWriteNBT;
 import me.sosedik.utilizer.api.event.player.PlayerDataLoadedEvent;
 import me.sosedik.utilizer.api.event.player.PlayerDataSaveEvent;
 import me.sosedik.utilizer.api.language.LangHolder;
-import me.sosedik.utilizer.api.language.LangKey;
-import me.sosedik.utilizer.api.language.LangKeysStorage;
+import me.sosedik.utilizer.api.language.LangOptions;
+import me.sosedik.utilizer.api.language.LangOptionsStorage;
 import me.sosedik.utilizer.api.language.translator.TranslationLanguage;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -29,10 +29,13 @@ public class PlayerLanguageLoadSave implements Listener {
 	public void onLoad(@NonNull PlayerDataLoadedEvent event) {
 		Player player = event.getPlayer();
 		ReadWriteNBT data = event.getData();
-		LangKey langKey = LangKeysStorage.getLangKey(data.getString("lang"));
-		String translationLanguageId = data.getOrDefault("translation_lang", langKey.translationLanguage().id());
+		LangOptions langOptions = LangOptionsStorage.getLangOptions(data.getString("server_language"));
+		String translationLanguageId = data.getOrDefault("translation_language", langOptions.translatorId());
+		if (translationLanguageId == null) {
+			translationLanguageId = "en"; // TODO actual translations
+		}
 		var translationLanguage = new TranslationLanguage(translationLanguageId);
-		var langHolder = new LangHolder(player.getUniqueId(), langKey, translationLanguage);
+		var langHolder = new LangHolder(player.getUniqueId(), langOptions, translationLanguage);
 		LANG_HOLDERS.put(player.getUniqueId(), langHolder);
 	}
 

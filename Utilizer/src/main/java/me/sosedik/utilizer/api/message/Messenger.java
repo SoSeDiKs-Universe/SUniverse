@@ -1,8 +1,8 @@
 package me.sosedik.utilizer.api.message;
 
 import me.sosedik.utilizer.api.language.LangHolder;
-import me.sosedik.utilizer.api.language.LangKey;
-import me.sosedik.utilizer.api.language.LangKeysStorage;
+import me.sosedik.utilizer.api.language.LangOptions;
+import me.sosedik.utilizer.api.language.LangOptionsStorage;
 import me.sosedik.utilizer.api.language.TranslationHolder;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
@@ -25,20 +25,20 @@ public class Messenger {
 
 	private final Audience audience;
 	private final @Nullable LangHolder langHolder;
-	private final LangKey langKey;
+	private final LangOptions langOptions;
 	private final MiniMessage miniMessage;
 
-	private Messenger(@NotNull LangKey langKey) {
+	private Messenger(@NotNull LangOptions langOptions) {
 		this.audience = Bukkit.getServer();
 		this.langHolder = null;
-		this.langKey = langKey;
+		this.langOptions = langOptions;
 		this.miniMessage = buildMini(this);
 	}
 
 	private Messenger(@Nullable Audience audience) {
 		this.audience = audience == null ? Bukkit.getServer() : audience;
 		this.langHolder = audience instanceof Player player ? LangHolder.langHolder(player) : null;
-		this.langKey = LangKeysStorage.getDefaultLangKey();
+		this.langOptions = LangOptionsStorage.getDefaultLangOptions();
 		this.miniMessage = buildMini(this);
 	}
 
@@ -57,8 +57,8 @@ public class Messenger {
 	 * @return language
 	 */
 	@NotNull
-	public LangKey getLangKey() {
-		return langHolder == null ? langKey : langHolder.getLangKey();
+	public LangOptions getLangOptions() {
+		return langHolder == null ? langOptions : langHolder.getLangOptions();
 	}
 
 	/**
@@ -80,7 +80,7 @@ public class Messenger {
 	 */
 	@NotNull
 	public String[] getRawMessage(@NotNull String messagePath) {
-		return TranslationHolder.translationHolder().getMessage(getLangKey(), messagePath);
+		return TranslationHolder.translationHolder().getMessage(getLangOptions(), messagePath);
 	}
 
 	/**
@@ -92,7 +92,7 @@ public class Messenger {
 	 */
 	@Nullable
 	public String[] getRawMessageIfExists(@NotNull String messagePath) {
-		return TranslationHolder.translationHolder().getMessage(getLangKey(), messagePath, false);
+		return TranslationHolder.translationHolder().getMessage(getLangOptions(), messagePath, false);
 	}
 
 	/**
@@ -203,8 +203,8 @@ public class Messenger {
 		return miniMessage;
 	}
 
-	public static @NotNull Messenger messenger(@NotNull LangKey langKey) {
-		return new Messenger(langKey);
+	public static @NotNull Messenger messenger(@NotNull LangOptions langOptions) {
+		return new Messenger(langOptions);
 	}
 
 	public static @NotNull Messenger messenger(@NotNull Audience audience) {

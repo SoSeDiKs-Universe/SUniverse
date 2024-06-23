@@ -15,12 +15,12 @@ import java.util.UUID;
 public final class LangHolder {
 
 	private final UUID uuid;
-	private LangKey langKey;
+	private LangOptions langOptions;
 	private TranslationLanguage translationLanguage;
 
-	public LangHolder(@NotNull UUID uuid, @NotNull LangKey langKey, @NotNull TranslationLanguage translationLanguage) {
+	public LangHolder(@NotNull UUID uuid, @NotNull LangOptions langOptions, @NotNull TranslationLanguage translationLanguage) {
 		this.uuid = uuid;
-		this.langKey = langKey;
+		this.langOptions = langOptions;
 		this.translationLanguage = translationLanguage;
 	}
 
@@ -32,12 +32,12 @@ public final class LangHolder {
 		return Bukkit.getPlayer(getUUID());
 	}
 
-	public @NotNull LangKey getLangKey() {
+	public @NotNull LangOptions getLangOptions() {
 		Player player = getPlayer();
-		if (player == null) return langKey;
+		if (player == null) return langOptions;
 
-		LangKey clientLang = LangKeysStorage.getLangKeyIfExists(player.getLocale());
-		return clientLang == null ? langKey : clientLang;
+		LangOptions clientLang = LangOptionsStorage.getLangOptionsIfExist(player.getLocale());
+		return clientLang == null ? langOptions : clientLang;
 	}
 
 	public @NotNull TranslationLanguage getTranslationLanguage() {
@@ -47,18 +47,18 @@ public final class LangHolder {
 	/**
 	 * Set this player's server language
 	 *
-	 * @param langKey new server language
+	 * @param langOptions new server language
 	 */
-	public void setLangKey(@NotNull LangKey langKey) {
+	public void setLangOptions(@NotNull LangOptions langOptions) {
 		Player player = getPlayer();
 		if (player == null) return;
 
-		LangKey oldLangKey = this.langKey;
-		this.langKey = langKey;
+		LangOptions oldLanguage = this.langOptions;
+		this.langOptions = langOptions;
 
-		PlayerDataStorage.getData(getUUID()).setString("lang", langKey.locale());
+		PlayerDataStorage.getData(getUUID()).setString("server_language", langOptions.minecraftId());
 
-		Utilizer.scheduler().sync(() -> new PlayerLanguageChangedEvent(player, oldLangKey, langKey).callEvent());
+		Utilizer.scheduler().sync(() -> new PlayerLanguageChangedEvent(player, oldLanguage, langOptions).callEvent());
 	}
 
 	/**
@@ -68,7 +68,7 @@ public final class LangHolder {
 	 */
 	public void setTranslationLanguage(@NotNull TranslationLanguage translationLanguage) {
 		this.translationLanguage = translationLanguage;
-		PlayerDataStorage.getData(getUUID()).setString("translation_lang", translationLanguage.id());
+		PlayerDataStorage.getData(getUUID()).setString("translation_language", translationLanguage.id());
 	}
 
 	public static @NotNull LangHolder langHolder(@NotNull Player player) {
@@ -79,8 +79,8 @@ public final class LangHolder {
 		return PlayerLanguageLoadSave.getLangHolder(uuid);
 	}
 
-	public static @NotNull LangKey getLangKey(@Nullable Player player) {
-		return player == null ? LangKeysStorage.getDefaultLangKey() : langHolder(player).getLangKey();
+	public static @NotNull LangOptions getLangOptions(@Nullable Player player) {
+		return player == null ? LangOptionsStorage.getDefaultLangOptions() : langHolder(player).getLangOptions();
 	}
 
 }

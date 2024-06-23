@@ -1,5 +1,9 @@
 package me.sosedik.utilizer.api.message;
 
+import me.sosedik.utilizer.Utilizer;
+import me.sosedik.utilizer.impl.message.tag.KaomojiTag;
+import me.sosedik.utilizer.impl.message.tag.LocaleResolver;
+import me.sosedik.utilizer.impl.message.tag.RandomColorTag;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
@@ -8,6 +12,7 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.TagPattern;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
@@ -22,8 +27,6 @@ public class Mini {
 	private Mini() {
 		throw new IllegalStateException("Utility class");
 	}
-
-	public static final String DISCORD_LINK = "discord.gg/vrMgAsXK8z";
 
 	private static final MiniMessage MINI_MESSAGE = buildMini();
 
@@ -104,16 +107,15 @@ public class Mini {
 		return MiniMessage.builder().tags(TagResolver.resolver(TagResolver.standard(), getDefaultTags(), getPlaceholders(messenger))).build();
 	}
 
-	@NotNull
-	private static TagResolver getDefaultTags() {
+	private static @NotNull TagResolver getDefaultTags() {
 		return TagResolver.resolver(
-//				KaomojiTag.KAOMOJI,
-//				RandomColorTag.RANDOM_COLOR,
+				TagResolver.resolver("discord", Tag.selfClosingInserting(Component.text(Utilizer.instance().getConfig().getString("discord", "discord.com")))), // TODO unhardcode
+				KaomojiTag.KAOMOJI,
+				RandomColorTag.RANDOM_COLOR
 //				PluralTag.PLURALS,
 //				SpoilerTag.SPOILER,
 //				IconTag.ICON,
-//				TagResolver.resolver("ispace", Tag.selfClosingInserting(SpacingUtil.ICON_SPACE)),
-//				TagResolver.resolver("discord", Tag.selfClosingInserting(Component.text(DISCORD_LINK)))
+//				TagResolver.resolver("ispace", Tag.selfClosingInserting(SpacingUtil.ICON_SPACE))
 		);
 	}
 
@@ -121,7 +123,7 @@ public class Mini {
 		var resolver = TagResolver.resolver(
 //				new CopyResolver(messenger),
 //				new ExecuteResolver(messenger),
-//				new LocaleResolver(messenger)
+			new LocaleResolver(messenger)
 		);
 //		if (messenger.getAudience() instanceof Player player && player.isOp())
 //			resolver = TagResolver.resolver(resolver, SpaceTag.SPACE);

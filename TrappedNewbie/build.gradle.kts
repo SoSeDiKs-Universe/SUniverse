@@ -19,22 +19,28 @@ paper {
     serverDependencies {
         register("LimboWorldGenerator") {
             load = PaperPluginDescription.RelativeLoadOrder.BEFORE
+            required = true
         }
         register("Utilizer") {
             load = PaperPluginDescription.RelativeLoadOrder.BEFORE
+            required = true
         }
         register("MiscMe") {
             load = PaperPluginDescription.RelativeLoadOrder.BEFORE
+            required = true
         }
         register("Moves") {
             load = PaperPluginDescription.RelativeLoadOrder.BEFORE
+            required = true
         }
         register("Requiem") {
             load = PaperPluginDescription.RelativeLoadOrder.BEFORE
+            required = true
         }
         // TrappedNewbie registers custom world parser that Essence's /world can use
         register("Essence") {
             load = PaperPluginDescription.RelativeLoadOrder.AFTER
+            required = false
         }
     }
 }

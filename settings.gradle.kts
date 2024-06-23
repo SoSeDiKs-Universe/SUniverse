@@ -1,6 +1,7 @@
 rootProject.name = "SUniverse"
 
 include("Essence")
+include("FancyMotd")
 include("LimboWorldGenerator")
 include("MiscMe")
 include("Moves")

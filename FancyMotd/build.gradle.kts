@@ -1,19 +1,19 @@
 import net.minecrell.pluginyml.paper.PaperPluginDescription
 
-description = "Shake your booty"
+description = "Server motd fancifier"
 
 dependencies {
     compileOnly(project(":Utilizer"))
 }
 
 paper {
-    name = "Moves"
-    main = "me.sosedik.moves.Moves"
+    name = "FancyMotd"
+    main = "me.sosedik.fancymotd.FancyMotd"
 
     serverDependencies {
         register("Utilizer") {
             load = PaperPluginDescription.RelativeLoadOrder.BEFORE
-            required = true
+            required = false
         }
     }
 }

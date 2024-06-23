@@ -1,0 +1,12 @@
+{
+  "message.kick.not_whitelisted": {
+    "1r": "<red>We are working on the update, come back later!\n\n<discord>",
+    "2r": "<red>We are updating the server, come back later!\n\n<discord>",
+    "3r": "<red>The server is under the maintenance, come back later!\n\n<discord>",
+    "4r": "<red>Aliens took over the server, come back later!\n\n<discord>",
+    "5r": "<red>Everything broke! Applying a fix… Come back later!\n\n<discord>",
+    "6r": "<red>Go drink something while we're preparing an update for you :)\n\n<discord>",
+    "7r": "<red>Feel free to complain about this message in our\n\n<discord>",
+    "8r": "<red>We will definitely open tomorrow! If not, read this message again ♥\n\n<discord>"
+  }
+}

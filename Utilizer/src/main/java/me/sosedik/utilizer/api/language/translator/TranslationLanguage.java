@@ -1,6 +1,5 @@
 package me.sosedik.utilizer.api.language.translator;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -9,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
  * @param displayName native display name
  * @param id language identifier
  */
-public record TranslationLanguage(@NonNull String displayName,
+public record TranslationLanguage(@NotNull String displayName,
                                   @NotNull String id) {
 
 	/**
@@ -17,7 +16,7 @@ public record TranslationLanguage(@NonNull String displayName,
 	 *
 	 * @param id language identifier
 	 */
-	public TranslationLanguage(@NonNull String id) {
+	public TranslationLanguage(@NotNull String id) {
 		this("TOD", id); // ToDo
 	}
 

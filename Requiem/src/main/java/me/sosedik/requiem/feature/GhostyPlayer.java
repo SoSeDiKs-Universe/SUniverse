@@ -1,9 +1,11 @@
 package me.sosedik.requiem.feature;
 
 import me.sosedik.requiem.Requiem;
+import me.sosedik.requiem.dataset.RequiemItems;
 import me.sosedik.requiem.listener.entity.PrepareGhostMobs;
 import me.sosedik.requiem.task.GhostAuraTask;
 import me.sosedik.requiem.task.GhostMobVisionTask;
+import me.sosedik.utilizer.util.EntityUtil;
 import me.sosedik.utilizer.util.ScoreboardUtil;
 import net.kyori.adventure.util.TriState;
 import org.bukkit.Bukkit;
@@ -43,6 +45,8 @@ public class GhostyPlayer {
 	public static void markGhost(@NotNull Player player) {
 		GHOSTS.add(player.getUniqueId());
 
+		EntityUtil.clearTargets(player);
+
 		// Hide player from non-ghosts
 		PrepareGhostMobs.hideVisibility(player, true);
 		for (UUID uuid : GHOSTS) {
@@ -71,6 +75,8 @@ public class GhostyPlayer {
 		player.setFlySpeed(speed);
 		player.setFlying(true);
 		player.setFlyingFallDamage(TriState.FALSE);
+
+		player.getInventory().setItem(0, RequiemItems.GHOST_MOTIVATOR.asItemType().createItemStack());
 
 		new GhostAuraTask(player);
 		new GhostMobVisionTask(player);
@@ -102,6 +108,8 @@ public class GhostyPlayer {
 		player.setAllowFlight(false);
 		player.setFlying(false);
 		player.setFlyingFallDamage(TriState.NOT_SET);
+
+		player.getInventory().remove(RequiemItems.GHOST_MOTIVATOR);
 
 		Requiem.logger().info("Clearing ghost state for {}", player.getName());
 	}

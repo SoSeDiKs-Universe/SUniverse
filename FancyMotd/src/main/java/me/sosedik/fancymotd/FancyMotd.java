@@ -5,6 +5,7 @@ import me.sosedik.fancymotd.feature.MotdIconStorage;
 import me.sosedik.fancymotd.listener.MotdRandomizer;
 import me.sosedik.fancymotd.listener.NotWhitelistedKick;
 import me.sosedik.fancymotd.listener.PaperMotdRandomizer;
+import me.sosedik.fancymotd.listener.PingerRefresher;
 import me.sosedik.utilizer.api.language.TranslationHolder;
 import me.sosedik.utilizer.util.EventUtil;
 import net.kyori.adventure.key.Key;
@@ -34,8 +35,15 @@ public class FancyMotd extends JavaPlugin {
 		}
 		EventUtil.registerListeners(this,
 			MotdRandomizer.class,
-			NotWhitelistedKick.class
+			NotWhitelistedKick.class,
+			PingerRefresher.class
 		);
+		Pinger.runCleanupTask();
+	}
+
+	@Override
+	public void onDisable() {
+		Pinger.closeDatabase();
 	}
 
 	/**

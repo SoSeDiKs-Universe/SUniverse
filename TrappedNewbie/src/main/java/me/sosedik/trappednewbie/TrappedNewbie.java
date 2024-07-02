@@ -40,6 +40,7 @@ public final class TrappedNewbie extends JavaPlugin {
 	}
 
 	private void cleanupTemporaryWorlds() {
+		if (true) return; // TODO only if month had passed?
 		FileUtil.deleteFolder(new File(Bukkit.getWorldContainer(), "worlds-resources"));
 	}
 

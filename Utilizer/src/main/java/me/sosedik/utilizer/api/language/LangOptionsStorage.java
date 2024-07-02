@@ -16,6 +16,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
@@ -27,10 +28,20 @@ public class LangOptionsStorage {
 	private LangOptions defaultLanguage;
 
 	/**
+	 * Gets language name by locale
+	 *
+	 * @param locale locale
+	 * @return language options
+	 */
+	public static @NotNull LangOptions getByLocale(@NotNull Locale locale) {
+		return getLangOptions(locale.getLanguage() + "_" + locale.getCountry());
+	}
+
+	/**
 	 * Gets language name by Minecraft's minecraftId
 	 *
 	 * @param key Minecraft's minecraftId
-	 * @return language name
+	 * @return language options
 	 */
 	public static @NotNull LangOptions getLangOptions(@Nullable String key) {
 		LangOptions langOptions = getLangOptionsIfExist(key);
@@ -41,7 +52,7 @@ public class LangOptionsStorage {
 	 * Gets language name by Minecraft's minecraftId
 	 *
 	 * @param key Minecraft's minecraftId
-	 * @return language name, or null
+	 * @return language options, or null
 	 */
 	public static @Nullable LangOptions getLangOptionsIfExist(@Nullable String key) {
 		return LANG_OPTIONS_STORAGE.supportedLanguages.get(key);
@@ -51,7 +62,7 @@ public class LangOptionsStorage {
 	 * Gets language name by Minecraft's minecraftId
 	 *
 	 * @param key Minecraft's minecraftId
-	 * @return language name, or null
+	 * @return language options, or null
 	 */
 	public static @NotNull LangOptions getOrCompute(@NotNull String key) {
 		LangOptions langOptions = getLangOptionsIfExist(key);
@@ -66,7 +77,7 @@ public class LangOptionsStorage {
 	 * Gets language name by user's IP address
 	 *
 	 * @param address IP address to parse country from
-	 * @return language name
+	 * @return language options
 	 */
 	public static @NotNull LangOptions getByAddress(@NotNull String address) {
 		try (
@@ -86,7 +97,7 @@ public class LangOptionsStorage {
 	 * Gets language name by user's IP country
 	 *
 	 * @param country Country to parse language name from
-	 * @return language name
+	 * @return language options
 	 */
 	public static @NotNull LangOptions getByCountry(@NotNull String country) {
 		for (LangOptions langOptions : getSupportedLanguages()) {
@@ -99,7 +110,7 @@ public class LangOptionsStorage {
 	/**
 	 * Gets default language of this server
 	 *
-	 * @return default language name
+	 * @return default language options
 	 */
 	public static @NotNull LangOptions getDefaultLangOptions() {
 		return LANG_OPTIONS_STORAGE.defaultLanguage;
@@ -108,7 +119,7 @@ public class LangOptionsStorage {
 	/**
 	 * Gets all supported languages on this server
 	 *
-	 * @return supported languages
+	 * @return supported language options
 	 */
 	public static @NotNull Collection<@NotNull LangOptions> getSupportedLanguages() {
 		return LANG_OPTIONS_STORAGE.supportedLanguages.values();

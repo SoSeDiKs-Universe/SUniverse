@@ -141,6 +141,7 @@ public class PerPlayerWorlds implements Listener {
 		world.setGameRule(GameRule.DO_IMMEDIATE_RESPAWN, true);
 		world.setGameRule(GameRule.DO_LIMITED_CRAFTING, true);
 		world.setGameRule(GameRule.REDUCED_DEBUG_INFO, true);
+		world.setGameRule(GameRule.SPAWN_CHUNK_RADIUS, 0);
 	}
 
 	private static @NotNull World getWorld(@NotNull String prefix, @NotNull UUID playerUuid, @NotNull BiFunction<@NotNull String, @NotNull NamespacedKey, @NotNull World> worldCreator) {

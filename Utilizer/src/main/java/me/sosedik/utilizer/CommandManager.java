@@ -2,7 +2,6 @@ package me.sosedik.utilizer;
 
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import org.bukkit.plugin.Plugin;
-import org.checkerframework.checker.nullness.qual.NonNull;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.annotations.AnnotationParser;
 import org.incendo.cloud.execution.ExecutionCoordinator;
@@ -21,7 +20,7 @@ public class CommandManager {
 	private final PaperCommandManager<CommandSourceStack> paperCommandManager;
 	private final AnnotationParser<CommandSourceStack> annotationParser;
 
-	private CommandManager(@NonNull Plugin plugin) {
+	private CommandManager(@NotNull Plugin plugin) {
 		paperCommandManager = PaperCommandManager.builder()
 			.executionCoordinator(ExecutionCoordinator.asyncCoordinator())
 			.buildOnEnable(plugin);
@@ -35,7 +34,7 @@ public class CommandManager {
 	 * @param plugin owning plugin instance
 	 * @param commandClasses command classes
 	 */
-	public void registerCommands(@NotNull Plugin plugin, @NonNull Class<?> @NonNull ... commandClasses) {
+	public void registerCommands(@NotNull Plugin plugin, @NotNull Class<?> @NotNull ... commandClasses) {
 		CommandManager commandManager = commandManager();
 		try {
 			for (Class<?> commandClass : commandClasses) {
@@ -75,20 +74,20 @@ public class CommandManager {
 	 * @param instance instance to scan
 	 * @return a parsed command
 	 */
-	public <T> @NonNull Collection<@NonNull Command<@NonNull CommandSourceStack>> registerCommand(@NonNull T instance) {
+	public <T> @NotNull Collection<@NotNull Command<@NotNull CommandSourceStack>> registerCommand(@NotNull T instance) {
 		return annotationParser.parse(instance);
 	}
 
-	public @NonNull PaperCommandManager<@NonNull CommandSourceStack> manager() {
+	public @NotNull PaperCommandManager<@NotNull CommandSourceStack> manager() {
 		return this.paperCommandManager;
 	}
 
-	static void init(@NonNull Plugin plugin) {
+	static void init(@NotNull Plugin plugin) {
 		if (CommandManager.commandManager != null) return;
 		CommandManager.commandManager = new CommandManager(plugin);
 	}
 
-	public static @NonNull CommandManager commandManager() {
+	public static @NotNull CommandManager commandManager() {
 		return CommandManager.commandManager;
 	}
 

@@ -67,7 +67,7 @@ public class PossessingOverMobs implements Listener {
 		if (equipment == null) return;
 
 		for (EquipmentSlot slot : EquipmentSlot.values()) {
-			if (!entity.canUseSlot(slot)) continue;
+			if (!entity.canUseEquipmentSlot(slot)) continue;
 			if (equipment.getDropChance(slot) > 0.1) continue;
 
 			ItemStack item = equipment.getItem(slot);

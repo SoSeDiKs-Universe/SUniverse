@@ -43,7 +43,7 @@ public class UpCommand {
 
 			Block block = loc.getBlock().getRelative(BlockFace.DOWN);
 			if (!block.isSolid()) {
-				target.sendBlockChange(loc.shiftTowards(BlockFace.DOWN), Material.GLASS.createBlockData());
+				target.sendBlockChange(block.getLocation(), Material.GLASS.createBlockData());
 			}
 
 			target.teleportAsync(loc);

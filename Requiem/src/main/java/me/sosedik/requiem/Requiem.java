@@ -24,6 +24,7 @@ import me.sosedik.requiem.listener.player.PossessedMimikPossessor;
 import me.sosedik.requiem.listener.player.PossessingOverMobs;
 import me.sosedik.requiem.listener.player.PossessorMimiksPossessed;
 import me.sosedik.requiem.listener.player.TransformationsKeepPossessor;
+import me.sosedik.resourcelib.ResourceLib;
 import me.sosedik.utilizer.CommandManager;
 import me.sosedik.utilizer.api.language.TranslationHolder;
 import me.sosedik.utilizer.util.EventUtil;
@@ -44,6 +45,7 @@ public final class Requiem extends JavaPlugin {
 		this.scheduler = new Scheduler(this);
 
 		TranslationHolder.extractLocales(this);
+		ResourceLib.loadDefaultResources(this);
 	}
 
 	@Override

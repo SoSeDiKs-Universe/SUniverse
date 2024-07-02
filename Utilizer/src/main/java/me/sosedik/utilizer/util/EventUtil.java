@@ -8,7 +8,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
-import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Constructor;
@@ -26,7 +25,7 @@ public class EventUtil {
 	 * @param plugin owning plugin instance
 	 * @param listenerClasses listener classes
 	 */
-	public static void registerListeners(@NotNull Plugin plugin, @NonNull Class<?> @NonNull ... listenerClasses) {
+	public static void registerListeners(@NotNull Plugin plugin, @NotNull Class<?> @NotNull ... listenerClasses) {
 		PluginManager pluginManager = plugin.getServer().getPluginManager();
 		FileConfiguration pluginConfig = plugin.getConfig();
 		try {

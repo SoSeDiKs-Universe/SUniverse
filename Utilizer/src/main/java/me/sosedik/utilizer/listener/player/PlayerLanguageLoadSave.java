@@ -11,7 +11,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -26,13 +25,15 @@ public class PlayerLanguageLoadSave implements Listener {
 	private static final Map<UUID, LangHolder> LANG_HOLDERS = new ConcurrentHashMap<>();
 
 	@EventHandler(priority = EventPriority.LOWEST)
-	public void onLoad(@NonNull PlayerDataLoadedEvent event) {
+	public void onLoad(@NotNull PlayerDataLoadedEvent event) {
 		Player player = event.getPlayer();
 		ReadWriteNBT data = event.getData();
 		LangOptions langOptions = LangOptionsStorage.getLangOptions(data.getString("server_language"));
-		String translationLanguageId = data.getOrDefault("translation_language", langOptions.translatorId());
+		String translationLanguageId = data.getOrNull("translation_language", String.class);
 		if (translationLanguageId == null) {
-			translationLanguageId = "en"; // TODO actual translations
+			translationLanguageId = langOptions.translatorId();
+			if (translationLanguageId == null)
+				translationLanguageId = "en"; // TODO actual translations
 		}
 		var translationLanguage = new TranslationLanguage(translationLanguageId);
 		var langHolder = new LangHolder(player.getUniqueId(), langOptions, translationLanguage);
@@ -40,7 +41,7 @@ public class PlayerLanguageLoadSave implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
-	public void onSave(@NonNull PlayerDataSaveEvent event) {
+	public void onSave(@NotNull PlayerDataSaveEvent event) {
 		if (!event.isQuit()) return;
 
 		LANG_HOLDERS.remove(event.getPlayer().getUniqueId());

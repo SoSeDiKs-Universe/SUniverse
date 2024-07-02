@@ -10,6 +10,7 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.checkerframework.checker.units.qual.N;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -56,8 +57,7 @@ public class Messenger {
 	 *
 	 * @return language
 	 */
-	@NotNull
-	public LangOptions getLangOptions() {
+	public @NotNull LangOptions getLangOptions() {
 		return langHolder == null ? langOptions : langHolder.getLangOptions();
 	}
 
@@ -66,8 +66,7 @@ public class Messenger {
 	 *
 	 * @return language holder
 	 */
-	@Nullable
-	public LangHolder getLangHolder() {
+	public @Nullable LangHolder getLangHolder() {
 		return langHolder;
 	}
 
@@ -78,8 +77,7 @@ public class Messenger {
 	 * @param messagePath path for message
 	 * @return row message
 	 */
-	@NotNull
-	public String[] getRawMessage(@NotNull String messagePath) {
+	public @NotNull String @NotNull [] getRawMessage(@NotNull String messagePath) {
 		return TranslationHolder.translationHolder().getMessage(getLangOptions(), messagePath);
 	}
 
@@ -90,8 +88,7 @@ public class Messenger {
 	 * @param messagePath path for message
 	 * @return row message
 	 */
-	@Nullable
-	public String[] getRawMessageIfExists(@NotNull String messagePath) {
+	public @NotNull String @Nullable [] getRawMessageIfExists(@NotNull String messagePath) {
 		return TranslationHolder.translationHolder().getMessage(getLangOptions(), messagePath, false);
 	}
 
@@ -101,15 +98,8 @@ public class Messenger {
 	 * @param messagePath path for message
 	 * @return parsed message
 	 */
-	@NotNull
-	public Component getMessage(@NotNull String messagePath) {
-		String[] minis = getRawMessage(messagePath);
-		if (minis.length == 1) return mini(miniMessage, minis[0]);
-
-		Component[] parsed = new Component[minis.length];
-		for (int i = 0; i < minis.length; i++)
-			parsed[i] = mini(miniMessage, minis[i]);
-		return combine(newline(), parsed);
+	public @NotNull Component getMessage(@NotNull String messagePath) {
+		return combine(newline(), getMessages(messagePath));
 	}
 
 	/**
@@ -118,16 +108,42 @@ public class Messenger {
 	 * @param messagePath path for message
 	 * @return parsed message
 	 */
-	@Nullable
-	public Component getMessageIfExists(@NotNull String messagePath) {
-		String[] minis = getRawMessageIfExists(messagePath);
-		if (minis == null) return null;
-		if (minis.length == 1) return mini(miniMessage, minis[0]);
+	public @NotNull Component @NotNull [] getMessages(@NotNull String messagePath) {
+		String[] minis = getRawMessage(messagePath);
+		if (minis.length == 1) return new Component[]{mini(miniMessage, minis[0])};
 
 		Component[] parsed = new Component[minis.length];
 		for (int i = 0; i < minis.length; i++)
 			parsed[i] = mini(miniMessage, minis[i]);
-		return combine(newline(), parsed);
+		return parsed;
+	}
+
+	/**
+	 * Returns parsed message
+	 *
+	 * @param messagePath path for message
+	 * @return parsed message
+	 */
+	public @Nullable Component getMessageIfExists(@NotNull String messagePath) {
+		Component[] messages = getMessagesIfExists(messagePath);
+		return messages == null ? null : combine(newline(), messages);
+	}
+
+	/**
+	 * Returns parsed message
+	 *
+	 * @param messagePath path for message
+	 * @return parsed message
+	 */
+	public @NotNull Component @Nullable [] getMessagesIfExists(@NotNull String messagePath) {
+		String[] minis = getRawMessageIfExists(messagePath);
+		if (minis == null) return null;
+		if (minis.length == 1) return new Component[]{mini(miniMessage, minis[0])};
+
+		Component[] parsed = new Component[minis.length];
+		for (int i = 0; i < minis.length; i++)
+			parsed[i] = mini(miniMessage, minis[i]);
+		return parsed;
 	}
 
 	/**
@@ -137,15 +153,25 @@ public class Messenger {
 	 * @param resolvers   message tag resolvers
 	 * @return parsed message
 	 */
-	@NotNull
-	public Component getMessage(@NotNull String messagePath, @NotNull TagResolver... resolvers) {
+	public @NotNull Component getMessage(@NotNull String messagePath, @NotNull TagResolver @NotNull ... resolvers) {
+		return combine(newline(), getMessages(messagePath, resolvers));
+	}
+
+	/**
+	 * Returns parsed message
+	 *
+	 * @param messagePath path for message
+	 * @param resolvers   message tag resolvers
+	 * @return parsed message
+	 */
+	public @NotNull Component @NotNull [] getMessages(@NotNull String messagePath, @NotNull TagResolver @NotNull ... resolvers) {
 		String[] minis = getRawMessage(messagePath);
-		if (minis.length == 1) return mini(miniMessage, minis[0], resolvers);
+		if (minis.length == 1) return new Component[]{mini(miniMessage, minis[0], resolvers)};
 
 		Component[] parsed = new Component[minis.length];
 		for (int i = 0; i < minis.length; i++)
 			parsed[i] = mini(miniMessage, minis[i], resolvers);
-		return combine(newline(), parsed);
+		return parsed;
 	}
 
 	/**
@@ -154,8 +180,7 @@ public class Messenger {
 	 * @param mini mini message
 	 * @return parsed message
 	 */
-	@NotNull
-	public Component getMiniMessage(@NotNull String mini) {
+	public @NotNull Component getMiniMessage(@NotNull String mini) {
 		return mini(miniMessage, mini);
 	}
 
@@ -166,8 +191,7 @@ public class Messenger {
 	 * @param resolvers message tag resolvers
 	 * @return parsed message
 	 */
-	@NotNull
-	public Component getMiniMessage(@NotNull String mini, @NotNull TagResolver... resolvers) {
+	public @NotNull Component getMiniMessage(@NotNull String mini, @NotNull TagResolver... resolvers) {
 		return mini(miniMessage, mini, resolvers);
 	}
 

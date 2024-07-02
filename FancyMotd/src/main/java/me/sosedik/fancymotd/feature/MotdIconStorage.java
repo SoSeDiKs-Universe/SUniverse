@@ -1,6 +1,7 @@
 package me.sosedik.fancymotd.feature;
 
 import me.sosedik.fancymotd.FancyMotd;
+import me.sosedik.utilizer.util.FileUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.CachedServerIcon;
@@ -48,8 +49,7 @@ public class MotdIconStorage {
 	private static void extractIcons(@NotNull Plugin plugin, @NotNull File storage) {
 		if (storage.exists()) return;
 
-		if (!storage.mkdirs())
-			FancyMotd.logger().warn("Could not create icons folder!");
+		FileUtil.createFolder(storage);
 		var jarFile = new File(plugin.getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
 		if (!jarFile.isFile()) return;
 

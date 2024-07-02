@@ -42,7 +42,7 @@ public class PaperMotdRandomizer implements Listener {
 			event.setVersion("On maintenance!");
 			List<PaperServerListPingEvent.ListedPlayerInfo> listedPlayers = event.getListedPlayers();
 			listedPlayers.clear();
-			listedPlayers.add(new PaperServerListPingEvent.ListedPlayerInfo(ChatColor.RED + "Server is under maintenance", UUID.randomUUID()));
+			listedPlayers.add(getListedPlayerInfo());
 			Component motd = combine(Component.newline(),
 				MINI.deserialize("<#37BBF5>SoSeDiK's <#ECF3FC>Universe <red>♥"),
 				MINI.deserialize("<red>Have a good day!")
@@ -64,9 +64,14 @@ public class PaperMotdRandomizer implements Listener {
 		// Random motd
 		Component motd = combine(Component.newline(),
 			MINI.deserialize("<#37BBF5>SoSeDiK's <#ECF3FC>Universe <red>♥"),
-			MINI.deserialize("<gray>Testing random stuff")
+				MINI.deserialize("<gray>Testing random stuff")
 		);
 		event.motd(motd);
+	}
+
+	@SuppressWarnings("deprecation")
+	private @NotNull PaperServerListPingEvent.ListedPlayerInfo getListedPlayerInfo() {
+		return new PaperServerListPingEvent.ListedPlayerInfo(ChatColor.RED + "Server is under maintenance", UUID.randomUUID());
 	}
 
 }

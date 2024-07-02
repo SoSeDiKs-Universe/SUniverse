@@ -161,6 +161,7 @@ public class TranslationHolder {
 			return;
 		}
 
+		var gson = new Gson();
 		Map<String, List<JsonObject>> toCompute = new HashMap<>();
 		try (var jar = new JarFile(jarFile)) {
 			Enumeration<JarEntry> entries = jar.entries();
@@ -175,7 +176,7 @@ public class TranslationHolder {
 					InputStream inputStream = jar.getInputStream(entry);
 					var reader = new InputStreamReader(inputStream, StandardCharsets.UTF_8)
 				) {
-					JsonObject locale = new Gson().fromJson(reader, JsonObject.class);
+					JsonObject locale = gson.fromJson(reader, JsonObject.class);
 					toCompute.computeIfAbsent(name.split("/")[0], k -> new ArrayList<>()).add(locale);
 				}
 //				if (name.startsWith("localizations/") && name.endsWith(".json"))
@@ -199,7 +200,7 @@ public class TranslationHolder {
 	public static void reloadLangs(@NotNull Plugin plugin) {
 		var localesFolder = new File(plugin.getDataFolder() + File.separator + "localizations");
 		if (!localesFolder.exists()) {
-			localesFolder.mkdirs();
+			FileUtil.createFolder(localesFolder);
 			return;
 		}
 		if (!localesFolder.isDirectory()) return;

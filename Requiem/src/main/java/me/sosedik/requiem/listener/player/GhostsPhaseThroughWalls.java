@@ -3,10 +3,9 @@ package me.sosedik.requiem.listener.player;
 import me.sosedik.kiterino.event.player.PlayerLoadsProjectileEvent;
 import me.sosedik.kiterino.event.player.PlayerStartUsingItemEvent;
 import me.sosedik.requiem.Requiem;
+import me.sosedik.requiem.dataset.RequiemItems;
 import me.sosedik.requiem.feature.GhostyPlayer;
 import me.sosedik.requiem.task.GoingThroughWallsTask;
-import org.bukkit.Material;
-import org.bukkit.Tag;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -39,20 +38,20 @@ public class GhostsPhaseThroughWalls implements Listener {
 
 		Player player = event.getPlayer();
 		if (!GhostyPlayer.isGhost(player)) return;
-		if (!isBow(player, EquipmentSlot.HAND) && !isBow(player, EquipmentSlot.OFF_HAND)) return;
+		if (!isGhostMotivator(player, EquipmentSlot.HAND) && !isGhostMotivator(player, EquipmentSlot.OFF_HAND)) return;
 
 		event.setCancelled(false);
 	}
 
-	private boolean isBow(@NotNull Player player, @NotNull EquipmentSlot hand) {
+	private boolean isGhostMotivator(@NotNull Player player, @NotNull EquipmentSlot hand) {
 		ItemStack item = player.getInventory().getItem(hand);
-		return item.getType() == Material.BOW;
+		return item.getType() == RequiemItems.GHOST_MOTIVATOR;
 	}
 
 	@EventHandler
 	public void onLoad(@NotNull PlayerLoadsProjectileEvent event) {
 		if (event.isFiringAllowed()) return;
-		if (event.getWeapon().getType() != Material.BOW) return;
+		if (event.getWeapon().getType() != RequiemItems.GHOST_MOTIVATOR) return;
 
 		Player player = event.getPlayer();
 		if (!GhostyPlayer.isGhost(player)) return;
@@ -67,7 +66,7 @@ public class GhostsPhaseThroughWalls implements Listener {
 		if (!GhostyPlayer.isGhost(player)) return;
 
 		ItemStack item = event.getItem();
-		if (item.getType() != Material.BOW) return;
+		if (item.getType() != RequiemItems.GHOST_MOTIVATOR) return;
 
 		Requiem.scheduler().sync(() -> {
 			if (item.isSimilar(player.getActiveItem()))

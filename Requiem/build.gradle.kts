@@ -4,6 +4,7 @@ description = "The burden of life"
 
 dependencies {
     compileOnly(project(":Utilizer"))
+    compileOnly(project(":ResourceLib-nms"))
 
     compileOnly("org.incendo:cloud-paper:${project.property("cloudImplVersion")}")
     compileOnly("org.incendo:cloud-annotations:${project.property("cloudVersion")}")
@@ -14,9 +15,15 @@ dependencies {
 paper {
     name = "Requiem"
     main = "me.sosedik.requiem.Requiem"
+    bootstrapper = "me.sosedik.requiem.RequiemBootstrap"
+    //loader = "me.sosedik.requiem.RequiemLoader"
 
     serverDependencies {
         register("Utilizer") {
+            load = PaperPluginDescription.RelativeLoadOrder.BEFORE
+            required = true
+        }
+        register("ResourceLib") {
             load = PaperPluginDescription.RelativeLoadOrder.BEFORE
             required = true
         }

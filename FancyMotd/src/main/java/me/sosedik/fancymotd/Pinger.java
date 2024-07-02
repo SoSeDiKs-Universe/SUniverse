@@ -34,11 +34,11 @@ public class Pinger {
 	private static final LoadingCache<String, Pinger> PINGERS = CacheBuilder.newBuilder()
 			.expireAfterAccess(5, TimeUnit.MINUTES)
 			.build(
-					new CacheLoader<>() {
-						public @NotNull Pinger load(@NotNull String ip) {
-							return constructPinger(ip);
-						}
+				new CacheLoader<>() {
+					public @NotNull Pinger load(@NotNull String ip) {
+						return constructPinger(ip);
 					}
+				}
 			);
 
 	private static @Nullable Predicate<UUID> clockAccessor = null;
@@ -93,12 +93,12 @@ public class Pinger {
 	}
 
 	/**
-	 * Create a Pinger instance from the provided IP
+	 * Creates a Pinger instance from the provided IP
 	 *
 	 * @param ip client's IP address
-	 * @return Pinger
+	 * @return Pinger instance
 	 */
-	public static @NotNull Pinger constructPinger(@NotNull String ip) {
+	private static @NotNull Pinger constructPinger(@NotNull String ip) {
 		try (var con = PINGERS_DATABASE.openConnection();
 			 var ps = con.prepareStatement("SELECT * FROM " + DATABASE_NAME + " WHERE IP LIKE '%" + ip + "%'")) {
 			ResultSet rs = ps.executeQuery();
@@ -121,7 +121,7 @@ public class Pinger {
 	}
 
 	/**
-	 * Store a Pinger instance from the provided Player object
+	 * Stores a Pinger instance from the provided Player object
 	 *
 	 * @param player player
 	 */
@@ -182,7 +182,8 @@ public class Pinger {
 	}
 
 	/**
-	 * Returns a Pinger instance for the provided IP
+	 * Returns a Pinger instance for the provided IP.
+	 * <br>Will create a Pinger instance if missing.
 	 *
 	 * @param ip IP
 	 * @return Pinger instance

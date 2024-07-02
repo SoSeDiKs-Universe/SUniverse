@@ -57,7 +57,7 @@ public class MotdRandomizer implements Listener {
 			String[] displays = display.split("\n", -1);
 			for (var i = 0; i < displays.length; i++) {
 				String line = displays[i];
-				String coloredSpace = SPACER + ChatColor.RESET + ChatColor.getLastColors(line);
+				String coloredSpace = getColoredSpace(line);
 				line = line.replace(" ", coloredSpace);
 				playerProfiles.add(i, new PaperServerListPingEvent.ListedPlayerInfo(line, UUID.randomUUID()));
 			}
@@ -100,6 +100,12 @@ public class MotdRandomizer implements Listener {
 			messenger.getMessage("motd.splash")
 		);
 		event.motd(motd);
+	}
+
+	// Player names in motd do not support modern colors, using legacy hack
+	@SuppressWarnings("deprecation")
+	private @NotNull String getColoredSpace(@NotNull String line) {
+		return SPACER + ChatColor.RESET + ChatColor.getLastColors(line);
 	}
 
 	private @NotNull Component getTime(@NotNull Pinger pinger, @NotNull Messenger messenger) {

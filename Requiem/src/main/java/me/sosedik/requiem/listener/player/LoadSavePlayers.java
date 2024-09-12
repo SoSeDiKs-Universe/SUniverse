@@ -1,6 +1,6 @@
 package me.sosedik.requiem.listener.player;
 
-import de.tr7zw.changeme.nbtapi.iface.ReadWriteNBT;
+import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import me.sosedik.requiem.feature.GhostyPlayer;
 import me.sosedik.requiem.feature.PossessingPlayer;
 import me.sosedik.utilizer.api.event.player.PlayerDataLoadedEvent;

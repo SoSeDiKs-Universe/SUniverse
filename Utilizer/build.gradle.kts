@@ -8,6 +8,7 @@ dependencies {
     paperLibrary("org.incendo:cloud-paper:${project.property("cloudImplVersion")}")
     paperLibrary("org.incendo:cloud-annotations:${project.property("cloudVersion")}")
 
+    compileOnly("de.tr7zw:item-nbt-api-plugin:${project.property("nbtApiVersion")}")
     compileOnly("com.github.retrooper:packetevents-spigot:${project.property("packeteventsVersion")}")
 }
 
@@ -18,6 +19,10 @@ paper {
     generateLibrariesJson = true
 
     serverDependencies {
+        register("NBTAPI") {
+            load = PaperPluginDescription.RelativeLoadOrder.BEFORE
+            required = true
+        }
         register("packetevents") {
             load = PaperPluginDescription.RelativeLoadOrder.BEFORE
             required = true

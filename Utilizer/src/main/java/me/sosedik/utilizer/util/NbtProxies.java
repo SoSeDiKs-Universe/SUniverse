@@ -1,8 +1,8 @@
 package me.sosedik.utilizer.util;
 
-import de.tr7zw.changeme.nbtapi.iface.NBTHandler;
-import de.tr7zw.changeme.nbtapi.iface.ReadWriteNBT;
-import de.tr7zw.changeme.nbtapi.iface.ReadableNBT;
+import de.tr7zw.nbtapi.iface.NBTHandler;
+import de.tr7zw.nbtapi.iface.ReadWriteNBT;
+import de.tr7zw.nbtapi.iface.ReadableNBT;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;

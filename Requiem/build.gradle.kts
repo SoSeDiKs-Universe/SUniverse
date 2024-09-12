@@ -9,6 +9,7 @@ dependencies {
     compileOnly("org.incendo:cloud-paper:${project.property("cloudImplVersion")}")
     compileOnly("org.incendo:cloud-annotations:${project.property("cloudVersion")}")
 
+    compileOnly("de.tr7zw:item-nbt-api-plugin:${project.property("nbtApiVersion")}")
     compileOnly("com.github.retrooper:packetevents-spigot:${project.property("packeteventsVersion")}")
 }
 
@@ -16,7 +17,13 @@ paper {
     name = "Requiem"
     main = "me.sosedik.requiem.Requiem"
     bootstrapper = "me.sosedik.requiem.RequiemBootstrap"
-    //loader = "me.sosedik.requiem.RequiemLoader"
+
+    bootstrapDependencies {
+        register("ResourceLib") {
+            load = PaperPluginDescription.RelativeLoadOrder.BEFORE
+            required = true
+        }
+    }
 
     serverDependencies {
         register("Utilizer") {
@@ -24,6 +31,10 @@ paper {
             required = true
         }
         register("ResourceLib") {
+            load = PaperPluginDescription.RelativeLoadOrder.BEFORE
+            required = true
+        }
+        register("NBTAPI") {
             load = PaperPluginDescription.RelativeLoadOrder.BEFORE
             required = true
         }

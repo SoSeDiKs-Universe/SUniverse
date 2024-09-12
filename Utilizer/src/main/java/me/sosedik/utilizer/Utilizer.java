@@ -3,6 +3,7 @@ package me.sosedik.utilizer;
 import me.sosedik.utilizer.api.language.LangOptionsStorage;
 import me.sosedik.utilizer.listener.entity.EntityGlowTracker;
 import me.sosedik.utilizer.listener.entity.EntityMetadataClearer;
+import me.sosedik.utilizer.listener.misc.MilkImmuneEffects;
 import me.sosedik.utilizer.listener.player.CleanupPlayerScoreboards;
 import me.sosedik.utilizer.listener.player.PlayerDataLoadSave;
 import me.sosedik.utilizer.listener.player.PlayerLanguageLoadSave;
@@ -36,6 +37,8 @@ public final class Utilizer extends JavaPlugin {
 			// entity
 			EntityGlowTracker.class,
 			EntityMetadataClearer.class,
+			// misc
+			MilkImmuneEffects.class,
 			// player
 			CleanupPlayerScoreboards.class,
 			PlayerDataLoadSave.class,

@@ -6,13 +6,11 @@ import me.sosedik.requiem.listener.entity.PrepareGhostMobs;
 import me.sosedik.requiem.task.GhostAuraTask;
 import me.sosedik.requiem.task.GhostMobVisionTask;
 import me.sosedik.utilizer.util.EntityUtil;
-import me.sosedik.utilizer.util.ScoreboardUtil;
 import net.kyori.adventure.util.TriState;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scoreboard.Team;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;

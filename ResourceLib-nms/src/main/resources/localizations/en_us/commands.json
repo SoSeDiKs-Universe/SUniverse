@@ -1,0 +1,6 @@
+{
+	"command.ceffect.give": "Effect <green><effect></green> was applied to you",
+	"command.ceffect.give.other": "You applied effect <effect> to <yellow><player></yellow>",
+	"command.ceffect.clear": "Effect <green><effect></green> was cleared from you",
+	"command.ceffect.clear.other": "You cleared effect <effect> from <yellow><player></yellow>"
+}

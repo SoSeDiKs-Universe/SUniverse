@@ -22,7 +22,7 @@ public class PackMeta {
 		var packIconFile = new File(generator.getDataDir(), "pack_icon.png");
 		if (packIconFile.exists()) {
 			String namespace = generator.getPackOptions().getPackNamespace();
-			String packIcon = "font/server/pack_icon";
+			String packIcon = "server/pack_icon";
 			var iconOptions = new JsonObject();
 			iconOptions.addProperty("ascent", 19);
 			iconOptions.addProperty("height", 32);

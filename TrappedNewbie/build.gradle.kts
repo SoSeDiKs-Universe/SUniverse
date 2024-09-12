@@ -5,6 +5,7 @@ description = "Once you're in, there's no way out"
 dependencies {
     compileOnly(project(":LimboWorldGenerator"))
     compileOnly(project(":Utilizer"))
+    compileOnly(project(":ResourceLib-nms"))
     compileOnly(project(":MiscMe"))
     compileOnly(project(":Moves"))
     compileOnly(project(":Requiem"))
@@ -15,6 +16,14 @@ dependencies {
 paper {
     name = "TrappedNewbie"
     main = "me.sosedik.trappednewbie.TrappedNewbie"
+    bootstrapper = "me.sosedik.trappednewbie.TrappedNewbieBootstrap"
+
+    bootstrapDependencies {
+        register("ResourceLib") {
+            load = PaperPluginDescription.RelativeLoadOrder.BEFORE
+            required = true
+        }
+    }
 
     serverDependencies {
         register("LimboWorldGenerator") {
@@ -22,6 +31,10 @@ paper {
             required = true
         }
         register("Utilizer") {
+            load = PaperPluginDescription.RelativeLoadOrder.BEFORE
+            required = true
+        }
+        register("ResourceLib") {
             load = PaperPluginDescription.RelativeLoadOrder.BEFORE
             required = true
         }

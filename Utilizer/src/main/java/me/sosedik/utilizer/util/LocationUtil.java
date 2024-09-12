@@ -88,7 +88,7 @@ public class LocationUtil {
 	 * Checks whether block's collision is a cube
 	 *
 	 * @param block  block to check
-	 * @return true, if block's bounding box is cube (1x1x1)
+	 * @return true, if block's bounding box is a 1x1x1 cube
 	 */
 	public static boolean isCube(@NotNull Block block) {
 		BoundingBox bb = block.getBoundingBox();

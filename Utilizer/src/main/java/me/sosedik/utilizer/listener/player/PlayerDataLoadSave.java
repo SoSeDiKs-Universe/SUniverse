@@ -1,9 +1,8 @@
 package me.sosedik.utilizer.listener.player;
 
-import de.tr7zw.changeme.nbtapi.NBT;
-import de.tr7zw.changeme.nbtapi.NBTContainer;
-import de.tr7zw.changeme.nbtapi.NBTFile;
-import de.tr7zw.changeme.nbtapi.iface.ReadWriteNBT;
+import de.tr7zw.nbtapi.NBT;
+import de.tr7zw.nbtapi.NBTFile;
+import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import me.sosedik.utilizer.Utilizer;
 import me.sosedik.utilizer.api.event.player.PlayerDataLoadedEvent;
 import me.sosedik.utilizer.api.event.player.PlayerDataSaveEvent;
@@ -70,7 +69,7 @@ public class PlayerDataLoadSave implements Listener {
 
 	private static @NotNull ReadWriteNBT loadData(@NotNull UUID uuid) {
 		File dataFile = new File(plugin.getDataFolder(), "players/" + uuid + ".dat");
-		if (!dataFile.exists()) return new NBTContainer();
+		if (!dataFile.exists()) return NBT.createNBTObject();
 
 		return FileUtil.readNbtFile(dataFile);
 	}
@@ -89,7 +88,7 @@ public class PlayerDataLoadSave implements Listener {
 
 	private static synchronized void saveData(@NotNull File file, @NotNull ReadWriteNBT data) {
 		try {
-			NBTFile.saveTo(file, (de.tr7zw.changeme.nbtapi.NBTCompound) data); // TODO update NBT-API
+			NBTFile.saveTo(file, (de.tr7zw.nbtapi.NBTCompound) data); // TODO update NBT-API
 		} catch (IOException e) {
 			throw new RuntimeException("Couldn't save player data file!", e);
 		}

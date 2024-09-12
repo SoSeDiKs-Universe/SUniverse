@@ -1,6 +1,7 @@
 package me.sosedik.requiem.feature;
 
-import de.tr7zw.changeme.nbtapi.iface.ReadWriteNBT;
+import de.tr7zw.nbtapi.NBT;
+import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import me.sosedik.requiem.Requiem;
 import me.sosedik.requiem.listener.entity.FakeHorseSaddles;
 import me.sosedik.requiem.task.DynamicScaleTask;
@@ -82,7 +83,7 @@ public class PossessingPlayer {
 		boolean persistent = entity.isPersistent();
 		entity.setPersistent(true);
 
-		entity.modifyPersistentData(nbt -> {
+		NBT.modifyPersistentData(entity, nbt -> {
 			nbt = nbt.getOrCreateCompound(POSSESSED_TAG);
 			nbt.setBoolean(POSSESSED_PERSISTENT_TAG, persistent);
 
@@ -122,8 +123,8 @@ public class PossessingPlayer {
 		if (quit) {
 			if (riding != null) riding.remove();
 		} else {
-			if (riding != null && riding.getPersistentData(nbt -> nbt.hasTag(POSSESSED_TAG))) {
-				riding.modifyPersistentData(nbt -> {
+			if (riding != null && NBT.getPersistentData(riding, nbt -> nbt.hasTag(POSSESSED_TAG))) {
+				NBT.modifyPersistentData(riding, nbt -> {
 					nbt = nbt.getCompound(POSSESSED_TAG);
 					if (nbt == null) return;
 
@@ -243,7 +244,7 @@ public class PossessingPlayer {
 	 */
 	public static boolean isAllowedForCapture(@NotNull Player player, @NotNull Entity entity) {
 		// TODO llamas are not controllable for whatever reason
-		if (true) return true;
+		if (true) return true; // TODO no.
 		if (entity instanceof AbstractHorse) return false; // TODO "Horses" dismount player :L ; there's also dolphins and probably others
 		if (entity instanceof Animals) return true;
 		EntityType entityType = entity.getType();

@@ -1,6 +1,6 @@
 plugins {
     `java-library`
-    id("io.papermc.paperweight.userdev") version "1.7.1" // Accessing NMS
+    id("io.papermc.paperweight.userdev") version "1.7.2" // Accessing NMS
     id("net.minecrell.plugin-yml.paper") version "0.6.0" // Generates paper-plugin.yml
 }
 
@@ -17,7 +17,7 @@ allprojects {
         mavenCentral()
         maven("https://papermc.io/repo/repository/maven-public/")
         maven("https://repo.codemc.io/repository/maven-public/") // NBT-API, packetevents
-        mavenLocal()
+        mavenLocal() // Kiterino
     }
 }
 

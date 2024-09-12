@@ -1,14 +1,21 @@
 package me.sosedik.resourcelib;
 
+import me.sosedik.resourcelib.command.CEffectCommand;
 import me.sosedik.resourcelib.dataset.ResourcePackStorage;
 import me.sosedik.resourcelib.impl.item.modifier.CustomLoreModifier;
 import me.sosedik.resourcelib.impl.item.modifier.CustomNameModifier;
-import me.sosedik.resourcelib.listener.LocalizedResourcePackMessage;
+import me.sosedik.resourcelib.listener.misc.LocalizedResourcePackMessage;
+import me.sosedik.resourcelib.listener.player.DisplayCustomPotionEffectsOnHud;
+import me.sosedik.resourcelib.listener.player.LoadSaveHudMessengerOnJoinLeave;
+import me.sosedik.resourcelib.listener.player.LoadSaveTabRendererOnJoinLeave;
 import me.sosedik.resourcelib.rpgenerator.ResourcePackGenerator;
+import me.sosedik.utilizer.CommandManager;
 import me.sosedik.utilizer.api.language.TranslationHolder;
 import me.sosedik.utilizer.util.EventUtil;
 import me.sosedik.utilizer.util.FileUtil;
+import me.sosedik.utilizer.util.Scheduler;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
+import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -22,12 +29,15 @@ import java.util.jar.JarFile;
 public class ResourceLib extends JavaPlugin {
 
 	private static ResourceLib instance;
+
+	private Scheduler scheduler;
 	private ResourcePackStorage storage;
 	private ResourcePackGenerator generator;
 
 	@Override
 	public void onLoad() {
 		ResourceLib.instance = this;
+		this.scheduler = new Scheduler(this);
 		this.storage = new ResourcePackStorage();
 		this.generator = new ResourcePackGenerator(this);
 		this.generator.init();
@@ -43,7 +53,7 @@ public class ResourceLib extends JavaPlugin {
 			return;
 		}
 
-		this.generator.parseResources(datasetsDir);
+		this.generator.parseResources(datasetsDir, true);
 	}
 
 	@Override
@@ -51,12 +61,27 @@ public class ResourceLib extends JavaPlugin {
 		this.generator.generate();
 		this.generator = null;
 
+		registerCommands();
+
 		new CustomNameModifier(this).register();
 		new CustomLoreModifier(this).register();
+
+		EventUtil.registerListeners(this,
+			// player
+			DisplayCustomPotionEffectsOnHud.class,
+			LoadSaveHudMessengerOnJoinLeave.class,
+			LoadSaveTabRendererOnJoinLeave.class
+		);
 
 		if (getServer().getPluginManager().isPluginEnabled("FancyMotd")) {
 			EventUtil.registerListeners(this, LocalizedResourcePackMessage.class);
 		}
+	}
+
+	private void registerCommands() {
+		CommandManager.commandManager().registerCommands(this,
+			CEffectCommand.class
+		);
 	}
 
 	/**
@@ -69,6 +94,15 @@ public class ResourceLib extends JavaPlugin {
 	}
 
 	/**
+	 * Gets the plugin's task scheduler
+	 *
+	 * @return the plugin's task scheduler
+	 */
+	public static @NotNull Scheduler scheduler() {
+		return instance().scheduler;
+	}
+
+	/**
 	 * Gets the plugin's component logger
 	 *
 	 * @return the plugin's component logger
@@ -77,8 +111,23 @@ public class ResourceLib extends JavaPlugin {
 		return instance().getComponentLogger();
 	}
 
+	/**
+	 * Gets the resource pack storage
+	 *
+	 * @return the resource pack storage
+	 */
 	public static @NotNull ResourcePackStorage storage() {
 		return instance().storage;
+	}
+
+	/**
+	 * Makes a namespaced key with this plugin's namespace
+	 *
+	 * @param value value
+	 * @return namespaced key
+	 */
+	public static @NotNull NamespacedKey resourceLibKey(@NotNull String value) {
+		return new NamespacedKey(instance(), value);
 	}
 
 	/**
@@ -126,7 +175,7 @@ public class ResourceLib extends JavaPlugin {
 			throw new RuntimeException(e);
 		}
 
-		instance().generator.parseResources(datasetsDir);
+		instance().generator.parseResources(datasetsDir, false);
 	}
 
 }

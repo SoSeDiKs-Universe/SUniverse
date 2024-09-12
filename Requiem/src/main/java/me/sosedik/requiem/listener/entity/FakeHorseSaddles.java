@@ -6,7 +6,6 @@ import com.github.retrooper.packetevents.event.PacketSendEvent;
 import com.github.retrooper.packetevents.protocol.entity.data.EntityData;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityMetadata;
-import me.sosedik.requiem.Requiem;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -23,7 +22,7 @@ import java.util.UUID;
 /**
  * Fakes saddles for clients to allow controlling horses without actual saddles
  */
-// MCCheck: 1.21, abstract horse metadata index for saddles
+// MCCheck: 1.21.1, abstract horse metadata index for saddles
 public class FakeHorseSaddles implements PacketListener, Listener {
 
 	private static final int HORSE_META_INDEX = 17;

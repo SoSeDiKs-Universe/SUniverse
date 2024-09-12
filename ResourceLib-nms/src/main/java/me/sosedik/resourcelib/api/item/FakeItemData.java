@@ -1,4 +1,4 @@
-package me.sosedik.resourcelib.api;
+package me.sosedik.resourcelib.api.item;
 
 import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;

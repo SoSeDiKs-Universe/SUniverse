@@ -1,6 +1,6 @@
 package me.sosedik.utilizer.api.storage.player;
 
-import de.tr7zw.changeme.nbtapi.iface.ReadWriteNBT;
+import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import me.sosedik.utilizer.listener.player.PlayerDataLoadSave;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;

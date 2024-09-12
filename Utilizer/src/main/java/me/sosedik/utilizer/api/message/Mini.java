@@ -40,7 +40,7 @@ public class Mini {
 	}
 
 	public static @NotNull Component combined(@NotNull ComponentLike... components) {
-		return Component.join(JoinConfiguration.noSeparators(), components);
+		return Component.textOfChildren(components);
 	}
 
 	public static <T extends ComponentLike> @NotNull Component combined(@NotNull Collection<T> components) {

@@ -1,12 +1,11 @@
 package me.sosedik.resourcelib.api.item;
 
 import me.sosedik.kiterino.modifier.item.ItemContextBox;
-import me.sosedik.kiterino.world.item.KiterinoNMSItem;
+import me.sosedik.kiterino.modifier.item.KiterinoItemModifier;
 import me.sosedik.resourcelib.ResourceLib;
-import me.sosedik.resourcelib.api.FakeItemData;
 import org.jetbrains.annotations.NotNull;
 
-public interface FakeableItem extends KiterinoNMSItem {
+public interface FakeableItem extends KiterinoItemModifier {
 
 	@Override
 	default void modify(@NotNull ItemContextBox contextBox) {

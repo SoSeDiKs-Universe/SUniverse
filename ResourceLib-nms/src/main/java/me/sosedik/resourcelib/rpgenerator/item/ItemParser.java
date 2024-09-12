@@ -2,11 +2,11 @@ package me.sosedik.resourcelib.rpgenerator.item;
 
 import com.google.gson.JsonObject;
 import me.sosedik.resourcelib.ResourceLib;
-import me.sosedik.resourcelib.api.FakeItemData;
+import me.sosedik.resourcelib.api.item.FakeItemData;
 import me.sosedik.resourcelib.rpgenerator.ResourcePackGenerator;
+import me.sosedik.resourcelib.rpgenerator.item.parser.ItemParseOptions;
 import me.sosedik.resourcelib.rpgenerator.item.parser.ItemParserOverrides;
 import me.sosedik.resourcelib.rpgenerator.item.parser.type.BaseItemParser;
-import me.sosedik.resourcelib.rpgenerator.item.parser.ItemParseOptions;
 import me.sosedik.resourcelib.rpgenerator.item.parser.type.TexturedItemParser;
 import me.sosedik.utilizer.util.FileUtil;
 import org.bukkit.Material;

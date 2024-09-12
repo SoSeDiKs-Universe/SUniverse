@@ -5,9 +5,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonStreamParser;
 import com.google.gson.stream.JsonWriter;
-import de.tr7zw.changeme.nbtapi.NBT;
-import de.tr7zw.changeme.nbtapi.NBTFile;
-import de.tr7zw.changeme.nbtapi.iface.ReadWriteNBT;
+import de.tr7zw.nbtapi.NBT;
+import de.tr7zw.nbtapi.NBTFile;
+import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import me.sosedik.utilizer.Utilizer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -231,6 +231,8 @@ public class FileUtil {
 	 * @return file with provided name if found
 	 */
 	public static @Nullable File findFile(@NotNull File base, @NotNull String name) {
+		if (!base.exists()) return null;
+
 		for (File file : Objects.requireNonNull(base.listFiles())) {
 			if (file.isDirectory()) {
 				var f = findFile(file, name);

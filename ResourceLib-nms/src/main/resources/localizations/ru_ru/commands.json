@@ -1,0 +1,6 @@
+{
+	"command.ceffect.give": "На Вас был наложен эффект <green><effect></green>",
+	"command.ceffect.give.other": "Вы наложили эффект <effect> на игрока <yellow><player></yellow>",
+	"command.ceffect.clear": "С Вас был очищен эффект <green><effect></green>",
+	"command.ceffect.clear.other": "Вы очистили эффект <effect> у игрока <yellow><player></yellow>"
+}

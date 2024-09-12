@@ -3,11 +3,13 @@ package me.sosedik.trappednewbie;
 import io.leangen.geantyref.TypeToken;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import me.sosedik.limboworldgenerator.VoidChunkGenerator;
+import me.sosedik.resourcelib.ResourceLib;
 import me.sosedik.trappednewbie.api.command.parser.PlayerWorldParser;
 import me.sosedik.trappednewbie.listener.world.InfiniteStartingNight;
 import me.sosedik.trappednewbie.listener.world.LimboWorldFall;
 import me.sosedik.trappednewbie.listener.world.PerPlayerWorlds;
 import me.sosedik.utilizer.CommandManager;
+import me.sosedik.utilizer.api.language.TranslationHolder;
 import me.sosedik.utilizer.util.EventUtil;
 import me.sosedik.utilizer.util.FileUtil;
 import me.sosedik.utilizer.util.Scheduler;
@@ -15,6 +17,7 @@ import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.bukkit.Bukkit;
 import org.bukkit.GameRule;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -22,8 +25,6 @@ import org.incendo.cloud.bukkit.internal.BukkitBrigadierMapper;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
-
-import static me.sosedik.trappednewbie.api.command.parser.PlayerWorldParser.playerWorldParser;
 
 public final class TrappedNewbie extends JavaPlugin {
 
@@ -37,6 +38,9 @@ public final class TrappedNewbie extends JavaPlugin {
 		this.scheduler = new Scheduler(this);
 
 		cleanupTemporaryWorlds();
+
+		TranslationHolder.extractLocales(this);
+		ResourceLib.loadDefaultResources(this);
 	}
 
 	private void cleanupTemporaryWorlds() {
@@ -83,7 +87,7 @@ public final class TrappedNewbie extends JavaPlugin {
 
 	private void registerCommands() {
 		var commandManager = CommandManager.commandManager();
-		commandManager.manager().parserRegistry().registerParser(playerWorldParser());
+		commandManager.manager().parserRegistry().registerParser(PlayerWorldParser.playerWorldParser());
 		BukkitBrigadierMapper<CommandSourceStack> mapper = new BukkitBrigadierMapper<>(
 			getLogger(),
 			commandManager.manager().brigadierManager()
@@ -116,6 +120,16 @@ public final class TrappedNewbie extends JavaPlugin {
 	 */
 	public static @NotNull ComponentLogger logger() {
 		return instance().getComponentLogger();
+	}
+
+	/**
+	 * Makes a namespaced key with this plugin's namespace
+	 *
+	 * @param value value
+	 * @return namespaced key
+	 */
+	public static @NotNull NamespacedKey trappedNewbieKey(@NotNull String value) {
+		return new NamespacedKey("trapped_newbie", value);
 	}
 
 }

@@ -1,6 +1,6 @@
 package me.sosedik.utilizer.listener.player;
 
-import de.tr7zw.changeme.nbtapi.iface.ReadWriteNBT;
+import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import me.sosedik.utilizer.api.event.player.PlayerDataLoadedEvent;
 import me.sosedik.utilizer.api.event.player.PlayerDataSaveEvent;
 import me.sosedik.utilizer.api.language.LangHolder;

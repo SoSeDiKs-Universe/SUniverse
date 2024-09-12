@@ -24,12 +24,15 @@ import me.sosedik.requiem.listener.player.PossessedMimikPossessor;
 import me.sosedik.requiem.listener.player.PossessingOverMobs;
 import me.sosedik.requiem.listener.player.PossessorMimiksPossessed;
 import me.sosedik.requiem.listener.player.TransformationsKeepPossessor;
+import me.sosedik.requiem.listener.player.damage.DamageFeetOnFall;
+import me.sosedik.requiem.listener.player.damage.DamageModelLoadSave;
 import me.sosedik.resourcelib.ResourceLib;
 import me.sosedik.utilizer.CommandManager;
 import me.sosedik.utilizer.api.language.TranslationHolder;
 import me.sosedik.utilizer.util.EventUtil;
 import me.sosedik.utilizer.util.Scheduler;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
+import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
@@ -56,6 +59,8 @@ public final class Requiem extends JavaPlugin {
 			FakeHorseSaddles.class,
 			PrepareGhostMobs.class,
 			// player
+			DamageFeetOnFall.class,
+			DamageModelLoadSave.class,
 			DeathMakesGhosts.class,
 			DeathMakesPossessed.class,
 			GhostsDontSprint.class,
@@ -89,6 +94,7 @@ public final class Requiem extends JavaPlugin {
 		GhostyPlayer.saveAllData();
 		PossessingPlayer.saveAllData();
 		PrepareGhostMobs.unregisterGhosts();
+		DamageModelLoadSave.saveAll();
 	}
 
 	/**
@@ -116,6 +122,16 @@ public final class Requiem extends JavaPlugin {
 	 */
 	public static @NotNull ComponentLogger logger() {
 		return instance().getComponentLogger();
+	}
+
+	/**
+	 * Makes a namespaced key with this plugin's namespace
+	 *
+	 * @param value value
+	 * @return namespaced key
+	 */
+	public static @NotNull NamespacedKey requiemKey(@NotNull String value) {
+		return new NamespacedKey("requiem", value);
 	}
 
 }

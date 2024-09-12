@@ -1,7 +1,8 @@
 package me.sosedik.requiem.listener.player;
 
-import de.tr7zw.changeme.nbtapi.NBT;
-import me.sosedik.requiem.Requiem;
+import de.tr7zw.nbtapi.NBT;
+import de.tr7zw.nbtapi.iface.ReadWriteItemNBT;
+import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import me.sosedik.requiem.feature.GhostyPlayer;
 import me.sosedik.requiem.feature.PossessingPlayer;
 import org.bukkit.Material;
@@ -18,6 +19,7 @@ import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import java.util.function.Consumer;
 
 /**
  * Taking control of other mobs
@@ -53,16 +55,16 @@ public class PossessingOverMobs implements Listener {
 
 		ItemStack item = event.getItemDrop().getItemStack();
 		if (item.getType() == Material.AIR) return;
-		if (!item.getNbt(nbt -> nbt.hasTag(SOULBOUND_ITEM_TAG))) return;
+		if (!NBT.get(item, nbt -> (boolean) nbt.hasTag(SOULBOUND_ITEM_TAG))) return;
 
 		event.setCancelled(true);
 		player.playSound(player, Sound.PARTICLE_SOUL_ESCAPE, SoundCategory.PLAYERS, 1F, 1F);
 	}
 
 	private void markSoulboundItems(@NotNull LivingEntity entity) {
-		if (entity.getPersistentData(nbt -> nbt.hasTag(EQUIPMENT_CHECKED_TAG))) return;
+		if (NBT.getPersistentData(entity, nbt -> nbt.hasTag(EQUIPMENT_CHECKED_TAG))) return;
 
-		entity.modifyPersistentData(nbt -> nbt.setBoolean(EQUIPMENT_CHECKED_TAG, true));
+		NBT.modifyPersistentData(entity, (Consumer<ReadWriteNBT>) nbt -> nbt.setBoolean(EQUIPMENT_CHECKED_TAG, true));
 		EntityEquipment equipment = entity.getEquipment();
 		if (equipment == null) return;
 
@@ -73,10 +75,7 @@ public class PossessingOverMobs implements Listener {
 			ItemStack item = equipment.getItem(slot);
 			if (ItemStack.isEmpty(item)) continue;
 
-			Requiem.logger().info("Testing " + slot);
-			Requiem.logger().warn("Test1: " + NBT.itemStackToNBT(item)); // TODO crashes for some reason
-			item.modifyNbt(nbt -> nbt.setBoolean(SOULBOUND_ITEM_TAG, true));
-			Requiem.logger().warn("Test2: " + NBT.itemStackToNBT(item));
+			NBT.modify(item, (Consumer<ReadWriteItemNBT>) nbt -> nbt.setBoolean(SOULBOUND_ITEM_TAG, true));
 			equipment.setItem(slot, item);
 		}
 	}

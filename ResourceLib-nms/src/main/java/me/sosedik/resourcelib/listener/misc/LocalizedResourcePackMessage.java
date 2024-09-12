@@ -1,4 +1,4 @@
-package me.sosedik.resourcelib.listener;
+package me.sosedik.resourcelib.listener.misc;
 
 import com.github.retrooper.packetevents.event.PacketListener;
 import com.github.retrooper.packetevents.event.PacketSendEvent;

@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import me.sosedik.utilizer.util.FileUtil;
 import org.bukkit.Material;
+import org.intellij.lang.annotations.Subst;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -77,7 +78,7 @@ public class PackOptions {
 		return new String[]{this.options.get("description").getAsString()};
 	}
 
-	public @NotNull String getPackNamespace() {
+	public @Subst("rlib") @NotNull String getPackNamespace() {
 		if (!this.options.has("pack_namespace")) {
 			this.options.addProperty("pack_namespace", "rlib");
 			this.dirty = true;

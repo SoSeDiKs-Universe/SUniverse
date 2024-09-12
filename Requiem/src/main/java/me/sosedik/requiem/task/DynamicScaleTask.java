@@ -27,13 +27,13 @@ public class DynamicScaleTask extends BukkitRunnable {
 
 	private final Player player;
 	private final LivingEntity entity;
-	private double previousHeight;
-	private double shrinkHeightDiff = 0.000001;
+	private final double baseEntityHeight;
+	private int delayTicks = 0;
 
 	public DynamicScaleTask(@NotNull Player player, @NotNull LivingEntity entity) {
 		this.player = player;
 		this.entity = entity;
-		this.previousHeight = entity.getHeight();
+		this.baseEntityHeight = entity.getHeight();
 		Requiem.scheduler().sync(this, 0L, 1L);
 	}
 
@@ -50,17 +50,16 @@ public class DynamicScaleTask extends BukkitRunnable {
 			player.sendPotionEffectChangeRemove(player, PotionEffectType.BLINDNESS);
 		}
 
-		Location loc = entity.getLocation();
-		double entityHeight = entity.getHeight();
-		if (shrinkHeightDiff == -1) {
-			shrinkHeightDiff = previousHeight - entityHeight;
-			if (shrinkHeightDiff == 0) shrinkHeightDiff = 0.000001;
+		if (delayTicks > 0) {
+			delayTicks--;
+			return;
 		}
-		double height = loc.clone().subtract(loc.toBlockLocation()).getY() + entityHeight + shrinkHeightDiff;
-		Block upperBlock = loc.clone().addY(height + 0.5).getBlock();
-		if (LocationUtil.isCube(upperBlock) || LocationUtil.isTrulySolid(player, upperBlock)) {
-			if (shrinkHeightDiff != 0) return;
+		delayTicks = 20;
 
+		Location loc = entity.getLocation();
+		double height = loc.clone().subtract(loc.toBlockLocation()).getY() + baseEntityHeight;
+		Block upperBlock = loc.clone().addY(height + 0.5).getBlock();
+		if (LocationUtil.isCube(upperBlock) || LocationUtil.isTrulySolid(player, upperBlock)) { // TODO foliage is also cube :f
 			double playerScale = 0.5;
 			double entityScale = 1;
 			double heightToRoof = 1D - MathUtil.getDecimalPart(height);
@@ -72,14 +71,9 @@ public class DynamicScaleTask extends BukkitRunnable {
 			}
 			scale(player).setBaseValue(playerScale);
 			scale(entity).setBaseValue(entityScale);
-			previousHeight = entityHeight;
-			shrinkHeightDiff = -1;
 		} else {
-			if (shrinkHeightDiff == 0) return;
-
 			scale(player).setBaseValue(0.5);
 			scale(entity).setBaseValue(1);
-			shrinkHeightDiff = 0;
 		}
 	}
 

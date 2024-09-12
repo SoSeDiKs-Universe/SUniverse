@@ -1,3 +1,4 @@
 {
-	"client_type": "bow"
+	"client_type": "bow",
+	"stack_size": 1
 }

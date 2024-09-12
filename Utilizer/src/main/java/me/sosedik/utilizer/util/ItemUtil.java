@@ -6,14 +6,14 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashSet;
 import java.util.Set;
 
-// MCCheck: 1.21, item types
+// MCCheck: 1.21.1, item types
 public class ItemUtil {
 
 	private ItemUtil() {
 		throw new IllegalStateException("Utility class");
 	}
 
-	private static final Set<Material> ITEM_LIGHT_SOURCES = new HashSet<>();
+	private static final Set<Material> ITEM_LIGHT_SOURCES = new HashSet<>(); // TODO should be datapack tag
 
 	static {
 		ITEM_LIGHT_SOURCES.addAll(Set.of(

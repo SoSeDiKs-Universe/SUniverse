@@ -5,13 +5,13 @@ import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 import me.sosedik.resourcelib.ResourceLib;
 import me.sosedik.resourcelib.dataset.ResourcePackStorage;
+import me.sosedik.resourcelib.rpgenerator.extras.PackRemapper;
+import me.sosedik.resourcelib.rpgenerator.extras.ZipPacker;
 import me.sosedik.resourcelib.rpgenerator.item.ItemParser;
 import me.sosedik.resourcelib.rpgenerator.misc.CopyPaster;
 import me.sosedik.resourcelib.rpgenerator.misc.FontCreator;
 import me.sosedik.resourcelib.rpgenerator.misc.PackMeta;
 import me.sosedik.resourcelib.rpgenerator.misc.PackOptions;
-import me.sosedik.resourcelib.rpgenerator.extras.PackRemapper;
-import me.sosedik.resourcelib.rpgenerator.extras.ZipPacker;
 import me.sosedik.utilizer.api.language.LangOptionsStorage;
 import me.sosedik.utilizer.api.message.Messenger;
 import me.sosedik.utilizer.util.FileUtil;
@@ -37,7 +37,9 @@ import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Files;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 
 public class ResourcePackGenerator {
@@ -50,6 +52,7 @@ public class ResourcePackGenerator {
 	private final FontCreator fontCreator;
 	private File outputDir;
 	private File mcAssetsDir;
+	private final Set<String> postGens = new HashSet<>();
 
 	public ResourcePackGenerator(@NotNull Plugin plugin) {
 		this.dataDir = plugin.getDataFolder();
@@ -112,7 +115,7 @@ public class ResourcePackGenerator {
 		this.fontCreator.prepareFonts();
 	}
 
-	public void parseResources(@NotNull File datasetsDir) {
+	public void parseResources(@NotNull File datasetsDir, boolean userDataSet) {
 		if (!datasetsDir.isDirectory()) return;
 		if (datasetsDir.listFiles() == null) return;
 
@@ -128,6 +131,9 @@ public class ResourcePackGenerator {
 				String type = typeDir.getName();
 				parseResources(typeDir, namespace, type);
 			}
+			if (userDataSet) continue;
+
+			this.postGens.add(namespace);
 		}
 	}
 
@@ -151,6 +157,11 @@ public class ResourcePackGenerator {
 			return;
 		}
 		PackMeta.generatePackMeta(this);
+
+		for (String namespace : this.postGens) {
+			getFontCreator().addCustomEffects(namespace);
+		}
+
 		this.itemParser.generateItems();
 		this.fontCreator.generateFonts();
 
@@ -196,7 +207,7 @@ public class ResourcePackGenerator {
 		String mcVer = Bukkit.getMinecraftVersion();
 		this.mcAssetsDir = new File(this.mcAssetsDir, mcVer);
 		findMcAssets();
-		var packMetaFile = new File(this.mcAssetsDir, "1.21.json");
+		var packMetaFile = new File(this.mcAssetsDir, mcVer + ".json");
 		if (!packMetaFile.exists()) {
 			FileUtil.createFolder(packMetaFile.getParentFile());
 			ResourceLib.logger().info("Minecraft {} assets are missing, downloading from https://mcasset.cloud/", mcVer);

@@ -4,8 +4,11 @@ import me.sosedik.utilizer.api.message.Mini;
 import me.sosedik.utilizer.util.ChatUtil;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 public class SpacingUtil {
 
@@ -27,9 +30,23 @@ public class SpacingUtil {
 	 */
 	public static final String NEGATIVE_PIXEL = "\uF801";
 	/**
+	 * One pixel forward, but in minecraft font
+	 */
+	public static final String POSITIVE_PIXEL = "\uF802";
+	/**
 	 * Space of icon's width
 	 */
 	public static final Component ICON_SPACE = getSpacing(9);
+
+	/**
+	 * Color used in text shader to position text to the top left corner
+	 */
+	public static final TextColor TOP_LEFT_CORNER = Objects.requireNonNull(TextColor.fromHexString("#2804F9"));
+
+	/**
+	 * Color used in text shader to position text to the top left corner
+	 */
+	public static final TextColor TOP_RIGHT_CORNER = Objects.requireNonNull(TextColor.fromHexString("#6804F9"));
 
 	/**
 	 * Gets raw spacing symbols
@@ -60,6 +77,7 @@ public class SpacingUtil {
 	 * @return offset Component
 	 */
 	public static @NotNull Component getOffset(int offset, int length, @NotNull Component component) {
+		if (offset == 0) return Mini.combined(component, getSpacing(-length));
 		return Mini.combined(getSpacing(offset), component, getSpacing(-(offset + length)));
 	}
 

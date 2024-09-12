@@ -1,13 +1,17 @@
 package me.sosedik.requiem.dataset;
 
+import me.sosedik.kiterino.util.KiterinoBootstrapMaterialInjector;
+import me.sosedik.requiem.Requiem;
 import org.bukkit.Material;
-
-import static me.sosedik.kiterino.util.KiterinoBootstrapMaterialInjector.injectMaterial;
-import static me.sosedik.resourcelib.util.ItemCreator.bowItem;
+import org.jetbrains.annotations.NotNull;
 
 public final class RequiemItems {
 
-	public static final Material GHOST_MOTIVATOR = injectMaterial(() -> bowItem().get()); // TODO remove workaround? can't access other plugins during bootstrap
-	public static final Material GHOST_RELOCATOR = injectMaterial(() -> bowItem().get());
+	public static final Material GHOST_MOTIVATOR = byKey("ghost_motivator");
+	public static final Material GHOST_RELOCATOR = byKey("ghost_relocator");
+
+	private static @NotNull Material byKey(@NotNull String value) {
+		return KiterinoBootstrapMaterialInjector.injectMaterial(Requiem.requiemKey(value));
+	}
 
 }

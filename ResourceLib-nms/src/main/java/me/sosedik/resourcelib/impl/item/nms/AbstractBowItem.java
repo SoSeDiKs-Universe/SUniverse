@@ -1,6 +1,5 @@
 package me.sosedik.resourcelib.impl.item.nms;
 
-import me.sosedik.kiterino.world.item.KiterinoNMSItem;
 import me.sosedik.resourcelib.api.item.FakeableItem;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.Item;
@@ -10,12 +9,12 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class AbstractBowItem extends BowItem implements KiterinoNMSItem, FakeableItem {
+public class AbstractBowItem extends BowItem implements FakeableItem {
 
 	private final @Nullable BowReleaseLogic bowReleaseLogic;
 
-	public AbstractBowItem(@Nullable BowReleaseLogic bowReleaseLogic) {
-		super(new Item.Properties());
+	public AbstractBowItem(@NotNull Object properties, @Nullable BowReleaseLogic bowReleaseLogic) {
+		super((Item.Properties) properties);
 		this.bowReleaseLogic = bowReleaseLogic;
 	}
 

@@ -62,8 +62,13 @@ public class PerPlayerWorlds implements Listener {
 		}
 
 		if (worldKey.startsWith("worlds-resources/")) {
+			boolean rtp = !new File(Bukkit.getWorldContainer(), worldKey).exists();
 			World.Environment environment = MiscUtil.parseOr(worldKey.split("/")[1], World.Environment.NORMAL);
 			world = getResourceWorld(uuid, environment);
+			if (!rtp) {
+				event.setSpawnLocation(event.getInitialLocation().world(world));
+				return;
+			}
 			event.setSpawnLocation(new Location(world, 0, 1600, 0));
 			World finalWorld = world;
 			TrappedNewbie.scheduler().sync(() -> LimboWorldFall.runRtp(event.getPlayer(), finalWorld), 1L);

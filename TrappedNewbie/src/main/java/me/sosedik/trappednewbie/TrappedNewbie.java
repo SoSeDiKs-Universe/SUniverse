@@ -5,6 +5,7 @@ import io.papermc.paper.command.brigadier.CommandSourceStack;
 import me.sosedik.limboworldgenerator.VoidChunkGenerator;
 import me.sosedik.resourcelib.ResourceLib;
 import me.sosedik.trappednewbie.api.command.parser.PlayerWorldParser;
+import me.sosedik.trappednewbie.command.SpitCommand;
 import me.sosedik.trappednewbie.impl.item.modifier.NoGhostTooltipsModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.VisualArmorModifier;
 import me.sosedik.trappednewbie.listener.player.TeamableLeatherEquipment;
@@ -98,6 +99,11 @@ public final class TrappedNewbie extends JavaPlugin {
 
 	private void registerCommands() {
 		var commandManager = CommandManager.commandManager();
+
+		commandManager.registerCommands(this,
+			SpitCommand.class
+		);
+
 		commandManager.manager().parserRegistry().registerParser(PlayerWorldParser.playerWorldParser());
 		BukkitBrigadierMapper<CommandSourceStack> mapper = new BukkitBrigadierMapper<>(
 			getLogger(),

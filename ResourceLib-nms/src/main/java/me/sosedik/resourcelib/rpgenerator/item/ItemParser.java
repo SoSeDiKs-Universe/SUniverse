@@ -28,7 +28,7 @@ public class ItemParser {
 	}
 
 	private final ResourcePackGenerator generator;
-	private final Map<String, ItemParseOptions> itemOptionsMap = new HashMap<>();
+	private final Map<NamespacedKey, ItemParseOptions> itemOptionsMap = new HashMap<>();
 	private final Map<Material, ItemParserOverrides> itemOverridesMap = new HashMap<>();
 
 	public ItemParser(@NotNull ResourcePackGenerator generator) {
@@ -65,10 +65,10 @@ public class ItemParser {
 		}
 
 		var itemOptions = new ItemParseOptions(vanillaType, namespace, path, key, options);
-		String combinedKey = itemOptions.combinedKeyWithPath();
-		if (this.itemOptionsMap.containsKey(combinedKey)) return;
+		NamespacedKey namespacedKey = itemOptions.namespacedKey();
+		if (this.itemOptionsMap.containsKey(namespacedKey)) return;
 
-		this.itemOptionsMap.put(combinedKey, itemOptions);
+		this.itemOptionsMap.put(namespacedKey, itemOptions);
 	}
 
 	public void generateItems() {

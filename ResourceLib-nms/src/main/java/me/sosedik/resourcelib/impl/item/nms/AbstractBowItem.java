@@ -1,6 +1,5 @@
 package me.sosedik.resourcelib.impl.item.nms;
 
-import me.sosedik.resourcelib.api.item.FakeableItem;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
@@ -9,7 +8,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class AbstractBowItem extends BowItem implements FakeableItem {
+public class AbstractBowItem extends BowItem  {
 
 	private final @Nullable BowReleaseLogic bowReleaseLogic;
 

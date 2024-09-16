@@ -5,6 +5,10 @@ import io.papermc.paper.command.brigadier.CommandSourceStack;
 import me.sosedik.limboworldgenerator.VoidChunkGenerator;
 import me.sosedik.resourcelib.ResourceLib;
 import me.sosedik.trappednewbie.api.command.parser.PlayerWorldParser;
+import me.sosedik.trappednewbie.impl.item.modifier.NoGhostTooltipsModifier;
+import me.sosedik.trappednewbie.impl.item.modifier.VisualArmorModifier;
+import me.sosedik.trappednewbie.listener.player.TeamableLeatherEquipment;
+import me.sosedik.trappednewbie.listener.player.VisualArmorLayer;
 import me.sosedik.trappednewbie.listener.world.InfiniteStartingNight;
 import me.sosedik.trappednewbie.listener.world.LimboWorldFall;
 import me.sosedik.trappednewbie.listener.world.PerPlayerWorlds;
@@ -53,7 +57,14 @@ public final class TrappedNewbie extends JavaPlugin {
 		setupLimboWorld();
 		applyWorldRules();
 		registerCommands();
+
+		new NoGhostTooltipsModifier(trappedNewbieKey("no_ghost_tooltips")).register();
+		new VisualArmorModifier(trappedNewbieKey("visual_armor")).register();
+
 		EventUtil.registerListeners(this,
+			// player
+			TeamableLeatherEquipment.class,
+			VisualArmorLayer.class,
 			// world
 			InfiniteStartingNight.class,
 			LimboWorldFall.class,

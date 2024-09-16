@@ -104,7 +104,10 @@ public class PackRemapper {
 
 	private void remapModelTextures(@NotNull File modelFile, @NotNull File outputModelFile) {
 		JsonObject json = FileUtil.readJsonObject(modelFile);
-		if (!json.has("textures")) return;
+		if (!json.has("textures")) {
+			FileUtil.createJsonFile(outputModelFile, json);
+			return;
+		}
 
 		JsonObject textures = json.getAsJsonObject("textures");
 		textures.entrySet().forEach(entry -> {

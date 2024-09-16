@@ -13,6 +13,7 @@ import java.io.File;
 public class TexturedItemParser extends BaseItemParser {
 
 	private final String parentModel;
+	private boolean modelOnly = false;
 
 	public TexturedItemParser(@NotNull ItemParser itemParser, @NotNull ItemParseOptions itemParseOptions) {
 		super(itemParser, itemParseOptions);
@@ -26,6 +27,9 @@ public class TexturedItemParser extends BaseItemParser {
 				ResourceLib.logger().warn("Couldn't find item model: {}, requested by {}", parentModel, itemParseOptions.combinedKeyWithPath());
 				this.parentModel = overrides.getBaseModel().get("parent").getAsString();
 			}
+		} else if (getItemOptions().has("model")) {
+			this.parentModel = getItemOptions().get("model").getAsString();
+			this.modelOnly = true;
 		} else {
 			this.parentModel = overrides.getBaseModel().get("parent").getAsString();
 		}
@@ -57,12 +61,29 @@ public class TexturedItemParser extends BaseItemParser {
 
 	@Override
 	public void constructModel() {
+		// If item had direct "model" property
+		if (this.modelOnly) {
+			var model = new JsonObject();
+			model.addProperty("parent", this.parentModel);
+			setModelJson(model);
+			return;
+		}
+
+		// Construct simple model
 		tryToCopyTexture();
 		var model = new JsonObject();
 		model.addProperty("parent", this.parentModel);
 		var textures = new JsonObject();
 		textures.addProperty("layer0", getNamespace() + ":" + getPath() + getKey());
 		model.add("textures", textures);
+
+		// Extra model properties
+		if (getItemOptions().has("model_extras")) {
+			getItemOptions().getAsJsonObject("model_extras")
+				.entrySet()
+				.forEach(entry -> model.add(entry.getKey(), entry.getValue()));
+		}
+
 		setModelJson(model);
 	}
 

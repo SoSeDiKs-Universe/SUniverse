@@ -10,6 +10,8 @@ dependencies {
     compileOnly(project(":Moves"))
     compileOnly(project(":Requiem"))
 
+    compileOnly("de.tr7zw:item-nbt-api-plugin:${project.property("nbtApiVersion")}")
+
     compileOnly("org.incendo:cloud-paper:${project.property("cloudImplVersion")}")
 }
 
@@ -26,6 +28,10 @@ paper {
     }
 
     serverDependencies {
+        register("NBTAPI") {
+            load = PaperPluginDescription.RelativeLoadOrder.BEFORE
+            required = true
+        }
         register("LimboWorldGenerator") {
             load = PaperPluginDescription.RelativeLoadOrder.BEFORE
             required = true

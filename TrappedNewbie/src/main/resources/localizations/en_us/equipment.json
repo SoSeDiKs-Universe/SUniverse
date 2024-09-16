@@ -1,0 +1,15 @@
+{
+	"equipment.cosmetic": "<dark_gray><i>Cosmetic",
+	"equipment.underwear": "<dark_gray><i>Underwear",
+	"equipment.layer_switch.underwear": "Press <yellow><key:key.drop></yellow> to switch to cosmetic layer",
+	"equipment.layer_switch.cosmetic": "Press <yellow><key:key.drop></yellow> to switch to armor layer",
+	"equipment.head.armor": "Armor Helmet Slot",
+	"equipment.head.cosmetic": "Cosmetic Helmet Slot",
+	"equipment.chest.armor": "Armor Chestplate Slot",
+	"equipment.chest.cosmetic": "Cosmetic Chestplate Slot",
+	"equipment.legs.armor": "Armor Leggings Slot",
+	"equipment.legs.cosmetic": "Cosmetic Leggings Slot",
+	"equipment.feet.armor": "Armor Boots Slot",
+	"equipment.feet.cosmetic": "Cosmetic Boots Slot",
+	"equipment.off_hand.armor": "Gloves Slot"
+}

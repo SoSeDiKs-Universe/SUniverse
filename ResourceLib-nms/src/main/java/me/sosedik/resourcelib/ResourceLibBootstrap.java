@@ -15,7 +15,6 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemRarity;
 import org.bukkit.inventory.ItemType;
-import org.intellij.lang.annotations.Subst;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -30,9 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Objects;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 public class ResourceLibBootstrap implements PluginBootstrap {
@@ -72,9 +69,9 @@ public class ResourceLibBootstrap implements PluginBootstrap {
 				Material type = Material.matchMaterial(json.get("client_type").getAsString());
 				assert type != null;
 				var namespacedKey = new NamespacedKey(itemKey.namespace(), itemKey.value());
-				var data = ResourceLib.storage().getFakeItemData(namespacedKey);
 				b.modifier(box -> {
 					box.setNewMaterial(type);
+					var data = ResourceLib.storage().getFakeItemData(namespacedKey);
 					if (data != null) box.getMeta().setCustomModelData(data.customModelData());
 				});
 			}

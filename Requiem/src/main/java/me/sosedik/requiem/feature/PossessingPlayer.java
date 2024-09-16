@@ -3,8 +3,11 @@ package me.sosedik.requiem.feature;
 import de.tr7zw.nbtapi.NBT;
 import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import me.sosedik.requiem.Requiem;
+import me.sosedik.requiem.api.event.player.PlayerStartPossessingEntityEvent;
+import me.sosedik.requiem.api.event.player.PlayerStopPossessingEntityEvent;
 import me.sosedik.requiem.listener.entity.FakeHorseSaddles;
 import me.sosedik.requiem.task.DynamicScaleTask;
+import me.sosedik.requiem.task.PoseMimikingTask;
 import me.sosedik.utilizer.api.storage.player.PlayerDataStorage;
 import me.sosedik.utilizer.util.EntityUtil;
 import org.bukkit.Bukkit;
@@ -86,10 +89,6 @@ public class PossessingPlayer {
 		NBT.modifyPersistentData(entity, nbt -> {
 			nbt = nbt.getOrCreateCompound(POSSESSED_TAG);
 			nbt.setBoolean(POSSESSED_PERSISTENT_TAG, persistent);
-
-			if (entity instanceof AbstractHorse) {
-				FakeHorseSaddles.startTracking(player, entity);
-			}
 		});
 
 //		EffectManager.addEffect(player, KittenEffects.ATTRITION, -1, 0); // TODO
@@ -97,7 +96,10 @@ public class PossessingPlayer {
 		player.setInvulnerable(false); // Prevents mobs from targeting the player if true
 		player.setRemainingAir(entity.getRemainingAir());
 
+		new PlayerStartPossessingEntityEvent(player, entity).callEvent();
+
 		new DynamicScaleTask(player, entity);
+		new PoseMimikingTask(player, entity);
 
 		Requiem.logger().info("Making " + player.getName() + " possess " + entity.getType().getKey());
 	}
@@ -131,10 +133,6 @@ public class PossessingPlayer {
 					boolean persistent = nbt.getBoolean(POSSESSED_PERSISTENT_TAG);
 					nbt.removeKey(POSSESSED_PERSISTENT_TAG);
 					riding.setPersistent(persistent);
-
-					if (riding instanceof AbstractHorse) {
-						FakeHorseSaddles.stopTracking(player, riding);
-					}
 				});
 			}
 		}
@@ -147,6 +145,8 @@ public class PossessingPlayer {
 //		playerInventory.clear();
 
 		POSSESSING.remove(player.getUniqueId());
+
+		if (riding != null) new PlayerStopPossessingEntityEvent(player, riding).callEvent();
 
 		if (quit) return;
 

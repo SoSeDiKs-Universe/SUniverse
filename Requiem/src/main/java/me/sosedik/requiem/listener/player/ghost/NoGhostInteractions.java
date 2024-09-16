@@ -1,4 +1,4 @@
-package me.sosedik.requiem.listener.player;
+package me.sosedik.requiem.listener.player.ghost;
 
 import com.destroystokyo.paper.event.player.PlayerPickupExperienceEvent;
 import me.sosedik.requiem.feature.GhostyPlayer;

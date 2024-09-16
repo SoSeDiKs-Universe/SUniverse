@@ -16,6 +16,7 @@ paper {
     name = "Utilizer"
     main = "me.sosedik.utilizer.Utilizer"
     loader = "me.sosedik.utilizer.PaperPluginLibrariesLoader"
+    bootstrapper = "me.sosedik.utilizer.UtilizerBootstrap"
     generateLibrariesJson = true
 
     serverDependencies {

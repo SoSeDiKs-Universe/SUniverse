@@ -1,4 +1,4 @@
-package me.sosedik.requiem.listener.player;
+package me.sosedik.requiem.listener.player.ghost;
 
 import io.papermc.paper.event.player.PrePlayerAttackEntityEvent;
 import me.sosedik.requiem.feature.GhostyPlayer;

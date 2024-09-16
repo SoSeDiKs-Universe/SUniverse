@@ -1,4 +1,4 @@
-package me.sosedik.requiem.listener.player;
+package me.sosedik.requiem.listener.player.possessed;
 
 import de.tr7zw.nbtapi.NBT;
 import de.tr7zw.nbtapi.iface.ReadWriteItemNBT;
@@ -19,6 +19,7 @@ import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+
 import java.util.function.Consumer;
 
 /**

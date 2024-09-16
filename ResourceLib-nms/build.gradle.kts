@@ -21,6 +21,13 @@ paper {
     bootstrapper = "me.sosedik.resourcelib.ResourceLibBootstrap"
     generateLibrariesJson = true
 
+    bootstrapDependencies {
+        register("Utilizer") {
+            load = PaperPluginDescription.RelativeLoadOrder.BEFORE
+            required = true
+        }
+    }
+
     serverDependencies {
         register("Utilizer") {
             load = PaperPluginDescription.RelativeLoadOrder.BEFORE

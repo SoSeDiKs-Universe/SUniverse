@@ -1,4 +1,4 @@
-package me.sosedik.requiem.listener.player;
+package me.sosedik.requiem.listener.player.ghost;
 
 import me.sosedik.requiem.feature.GhostyPlayer;
 import me.sosedik.requiem.feature.PossessingPlayer;

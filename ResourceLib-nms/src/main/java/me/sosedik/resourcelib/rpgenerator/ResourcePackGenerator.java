@@ -106,7 +106,7 @@ public class ResourcePackGenerator {
 	}
 
 	public void init() {
-		ResourceLib.logger().info("Preparing to generating server resource pack");
+		ResourceLib.logger().info("Preparing to generating the server resource pack");
 		FileUtil.deleteFolder(this.outputDir);
 
 		checkMcAssets();

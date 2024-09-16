@@ -1,4 +1,4 @@
-package me.sosedik.requiem.listener.player;
+package me.sosedik.requiem.listener.player.possessed;
 
 import com.destroystokyo.paper.event.player.PlayerLaunchProjectileEvent;
 import me.sosedik.kiterino.event.player.PlayerLoadsProjectileEvent;

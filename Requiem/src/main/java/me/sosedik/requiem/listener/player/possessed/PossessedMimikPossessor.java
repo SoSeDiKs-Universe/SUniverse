@@ -1,4 +1,4 @@
-package me.sosedik.requiem.listener.player;
+package me.sosedik.requiem.listener.player.possessed;
 
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import com.google.common.base.Function;
@@ -107,6 +107,7 @@ public class PossessedMimikPossessor implements Listener {
 		entity.setFireTicks((int) Math.max(event.getDuration() * 20, entity.getFireTicks()));
 	}
 
+	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onDamageAnotherEntity(@NotNull EntityDamageByEntityEvent event) {
 		if (!(event.getDamager() instanceof Player player)) return;

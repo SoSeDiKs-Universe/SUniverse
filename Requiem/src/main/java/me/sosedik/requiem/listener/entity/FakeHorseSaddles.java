@@ -6,6 +6,9 @@ import com.github.retrooper.packetevents.event.PacketSendEvent;
 import com.github.retrooper.packetevents.protocol.entity.data.EntityData;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityMetadata;
+import me.sosedik.requiem.api.event.player.PlayerStartPossessingEntityEvent;
+import me.sosedik.requiem.api.event.player.PlayerStopPossessingEntityEvent;
+import org.bukkit.entity.AbstractHorse;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -51,6 +54,18 @@ public class FakeHorseSaddles implements PacketListener, Listener {
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onDespawn(@NotNull EntityRemoveFromWorldEvent event) {
 		ENTITY_TO_PLAYER_SADDLES.remove(event.getEntity().getEntityId());
+	}
+
+	@EventHandler
+	public void onPossess(@NotNull PlayerStartPossessingEntityEvent event) {
+		if (event.getEntity() instanceof AbstractHorse entity)
+			FakeHorseSaddles.startTracking(event.getPlayer(), entity);
+	}
+
+	@EventHandler
+	public void onUnPossess(@NotNull PlayerStopPossessingEntityEvent event) {
+		if (event.getEntity() instanceof AbstractHorse entity)
+			FakeHorseSaddles.stopTracking(event.getPlayer(), entity);
 	}
 
 	/**

@@ -1,4 +1,4 @@
-package me.sosedik.requiem.listener.player;
+package me.sosedik.requiem.listener.player.possessed;
 
 import me.sosedik.requiem.feature.PossessingPlayer;
 import org.bukkit.entity.LivingEntity;
@@ -6,24 +6,25 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityCombustEvent;
+import org.bukkit.event.entity.EntityTransformEvent;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Possessor mimiks actions of possessed mob
+ * Entity transformations keep the possessing player
  */
-public class PossessorMimiksPossessed implements Listener {
+public class TransformationsKeepPossessor implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	public void onCombust(@NotNull EntityCombustEvent event) {
+	public void onTransform(@NotNull EntityTransformEvent event) {
+		if (!(event.getTransformedEntity() instanceof LivingEntity transformed)) return;
 		if (!(event.getEntity() instanceof LivingEntity entity)) return;
 
 		Player rider = entity.getRider();
 		if (rider == null) return;
 		if (!PossessingPlayer.isPossessing(rider)) return;
-		if (PossessingPlayer.getPossessed(rider) != entity) return;
 
-		rider.setFireTicks((int) (event.getDuration() * 20));
+		PossessingPlayer.migrateStatsToEntity(rider, transformed);
+		PossessingPlayer.startPossessing(rider, transformed);
 	}
 
 }

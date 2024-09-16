@@ -1,4 +1,4 @@
-package me.sosedik.requiem.listener.player;
+package me.sosedik.requiem.listener.player.ghost;
 
 import me.sosedik.kiterino.event.player.PlayerLoadsProjectileEvent;
 import me.sosedik.kiterino.event.player.PlayerStartUsingItemEvent;

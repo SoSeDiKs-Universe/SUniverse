@@ -1,4 +1,4 @@
-package me.sosedik.requiem.listener.player;
+package me.sosedik.requiem.listener.player.possessed;
 
 import me.sosedik.requiem.feature.PossessingPlayer;
 import me.sosedik.utilizer.util.EntityUtil;

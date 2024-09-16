@@ -1,8 +1,6 @@
 package me.sosedik.resourcelib.api.effect;
 
 import me.sosedik.kiterino.registry.wrapper.KiterinoMobEffectBehaviourWrapper;
-import org.bukkit.potion.PotionEffectTypeCategory;
-import org.jetbrains.annotations.NotNull;
 
 public abstract class TickableCustomEffect implements KiterinoMobEffectBehaviourWrapper {
 

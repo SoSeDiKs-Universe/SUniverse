@@ -4,28 +4,30 @@ import me.sosedik.requiem.command.ReviveCommand;
 import me.sosedik.requiem.feature.GhostyPlayer;
 import me.sosedik.requiem.feature.PossessingPlayer;
 import me.sosedik.requiem.listener.entity.FakeHorseSaddles;
+import me.sosedik.requiem.listener.entity.OverwriteControlledPandasGenes;
 import me.sosedik.requiem.listener.entity.PrepareGhostMobs;
-import me.sosedik.requiem.listener.player.DeathMakesGhosts;
-import me.sosedik.requiem.listener.player.DeathMakesPossessed;
-import me.sosedik.requiem.listener.player.GhostsDontSprint;
-import me.sosedik.requiem.listener.player.GhostsDontStarveOrChoke;
-import me.sosedik.requiem.listener.player.GhostsKeepNightVision;
-import me.sosedik.requiem.listener.player.GhostsPhaseThroughWalls;
+import me.sosedik.requiem.listener.player.ghost.DeathMakesGhosts;
+import me.sosedik.requiem.listener.player.possessed.DeathMakesPossessed;
+import me.sosedik.requiem.listener.player.ghost.GhostsDontSprint;
+import me.sosedik.requiem.listener.player.ghost.GhostsDontStarveOrChoke;
+import me.sosedik.requiem.listener.player.ghost.GhostsKeepNightVision;
+import me.sosedik.requiem.listener.player.ghost.GhostsPhaseThroughWalls;
 import me.sosedik.requiem.listener.player.LoadSavePlayers;
-import me.sosedik.requiem.listener.player.MobsDontTargetGhosts;
-import me.sosedik.requiem.listener.player.NoAirForWaterPossessing;
-import me.sosedik.requiem.listener.player.NoDamageToOrFromGhosts;
-import me.sosedik.requiem.listener.player.NoExpFromPossessedKill;
-import me.sosedik.requiem.listener.player.NoGhostInteractions;
-import me.sosedik.requiem.listener.player.PossessedDismount;
-import me.sosedik.requiem.listener.player.PossessedInfiniteProjectiles;
-import me.sosedik.requiem.listener.player.PossessedLimitedControl;
-import me.sosedik.requiem.listener.player.PossessedMimikPossessor;
-import me.sosedik.requiem.listener.player.PossessingOverMobs;
-import me.sosedik.requiem.listener.player.PossessorMimiksPossessed;
-import me.sosedik.requiem.listener.player.TransformationsKeepPossessor;
+import me.sosedik.requiem.listener.player.ghost.MobsDontTargetGhosts;
+import me.sosedik.requiem.listener.player.possessed.NoAirForWaterPossessing;
+import me.sosedik.requiem.listener.player.ghost.NoDamageToOrFromGhosts;
+import me.sosedik.requiem.listener.player.possessed.NoExpFromPossessedKill;
+import me.sosedik.requiem.listener.player.ghost.NoGhostInteractions;
+import me.sosedik.requiem.listener.player.possessed.PossessedDismount;
+import me.sosedik.requiem.listener.player.possessed.PossessedInfiniteProjectiles;
+import me.sosedik.requiem.listener.player.possessed.PossessedLimitedControl;
+import me.sosedik.requiem.listener.player.possessed.PossessedMimikPossessor;
+import me.sosedik.requiem.listener.player.possessed.PossessingOverMobs;
+import me.sosedik.requiem.listener.player.possessed.PossessorMimiksPossessed;
+import me.sosedik.requiem.listener.player.possessed.TransformationsKeepPossessor;
 import me.sosedik.requiem.listener.player.damage.DamageFeetOnFall;
 import me.sosedik.requiem.listener.player.damage.DamageModelLoadSave;
+import me.sosedik.requiem.listener.player.possessed.MilkHelpsSkeletons;
 import me.sosedik.resourcelib.ResourceLib;
 import me.sosedik.utilizer.CommandManager;
 import me.sosedik.utilizer.api.language.TranslationHolder;
@@ -57,10 +59,14 @@ public final class Requiem extends JavaPlugin {
 		EventUtil.registerListeners(this,
 			// entity
 			FakeHorseSaddles.class,
+			OverwriteControlledPandasGenes.class,
 			PrepareGhostMobs.class,
 			// player
+			/// damage
 			DamageFeetOnFall.class,
 			DamageModelLoadSave.class,
+			/// possessed
+			MilkHelpsSkeletons.class,
 			DeathMakesGhosts.class,
 			DeathMakesPossessed.class,
 			GhostsDontSprint.class,

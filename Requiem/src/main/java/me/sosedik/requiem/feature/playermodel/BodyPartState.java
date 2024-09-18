@@ -78,21 +78,21 @@ public class BodyPartState {
 		return this.damageTicks > 0;
 	}
 
-	public @NotNull FontData getFontData() {
+	public @NotNull FontData getFontData(boolean tab) {
 		if (isBleeding())
-			return getBodyPart().getFontData(BodyDamage.RED);
+			return this.bodyPart.getFontData(tab, BodyDamage.RED);
 
 		double ratio = getHealth() / (double) getMaxHealth();
-		if (ratio >= 0.95) getBodyPart().getFontData(BodyDamage.GREEN);
-		if (ratio >= 0.85) getBodyPart().getFontData(BodyDamage.LIME);
-		if (ratio >= 0.5) getBodyPart().getFontData(BodyDamage.YELLOW);
-		if (ratio >= 0.35) getBodyPart().getFontData(BodyDamage.ORANGE);
-		if (ratio <= 0) getBodyPart().getFontData(BodyDamage.BLACK);
-		return getBodyPart().getFontData(BodyDamage.RED);
+		if (ratio >= 0.95) this.bodyPart.getFontData(tab, BodyDamage.GREEN);
+		if (ratio >= 0.85) this.bodyPart.getFontData(tab, BodyDamage.LIME);
+		if (ratio >= 0.5) this.bodyPart.getFontData(tab, BodyDamage.YELLOW);
+		if (ratio >= 0.35) this.bodyPart.getFontData(tab, BodyDamage.ORANGE);
+		if (ratio <= 0) this.bodyPart.getFontData(tab, BodyDamage.BLACK);
+		return this.bodyPart.getFontData(tab, BodyDamage.RED);
 	}
 
-	public @NotNull FontData getOverlayData() {
-		return getBodyPart().getFontData(BodyDamage.OVERLAY);
+	public @NotNull FontData getOverlayData(boolean tab) {
+		return getBodyPart().getFontData(tab, BodyDamage.OVERLAY);
 	}
 
 	public void tick(@NotNull Player player) {

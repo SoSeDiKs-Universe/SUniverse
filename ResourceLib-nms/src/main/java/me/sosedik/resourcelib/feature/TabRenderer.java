@@ -16,12 +16,16 @@ import java.util.UUID;
 import java.util.function.Supplier;
 
 import static me.sosedik.utilizer.api.message.Mini.combine;
+import static me.sosedik.utilizer.api.message.Mini.combined;
 
 public class TabRenderer extends BukkitRunnable {
 
 	private static final Map<UUID, TabRenderer> STORED_HUDS = new HashMap<>();
 
 	private final Map<NamespacedKey, HudProvider> hudProviders = new HashMap<>();
+	private final Map<NamespacedKey, HudProvider> headerProviders = new HashMap<>();
+	private final Map<NamespacedKey, HudProvider> footerProviders = new HashMap<>();
+	private final List<Component> components = new ArrayList<>();
 	private final Player player;
 
 	private TabRenderer(@NotNull Player player) {
@@ -30,26 +34,60 @@ public class TabRenderer extends BukkitRunnable {
 	}
 
 	/**
-	 * Adds hud element for displaying until manually removed
+	 * Adds tab header element for displaying until manually removed
 	 *
 	 * @param hudElementId hud element id
 	 * @param hudElement   hud element
 	 */
-	public void addTopElement(@NotNull NamespacedKey hudElementId, @NotNull Supplier<List<Component>> hudElement) {
+	public void addHudElement(@NotNull NamespacedKey hudElementId, @NotNull Supplier<@Nullable List<Component>> hudElement) {
 		this.hudProviders.put(hudElementId, new HudProvider(hudElementId, hudElement));
+	}
+
+	/**
+	 * Adds tab header element for displaying until manually removed
+	 *
+	 * @param hudElementId hud element id
+	 * @param hudElement   hud element
+	 */
+	public void addHeaderElement(@NotNull NamespacedKey hudElementId, @NotNull Supplier<@Nullable List<Component>> hudElement) {
+		this.headerProviders.put(hudElementId, new HudProvider(hudElementId, hudElement));
+	}
+
+	/**
+	 * Adds tab footer element for displaying until manually removed
+	 *
+	 * @param hudElementId hud element id
+	 * @param hudElement   hud element
+	 */
+	public void addFooterElement(@NotNull NamespacedKey hudElementId, @NotNull Supplier<@Nullable List<Component>> hudElement) {
+		this.footerProviders.put(hudElementId, new HudProvider(hudElementId, hudElement));
 	}
 
 	@Override
 	public void run() {
-		List<Component> huds = new ArrayList<>();
+		components.clear();
 		for (HudProvider hudProvider : this.hudProviders.values()) {
 			List<Component> hudElement = hudProvider.getHud();
 			if (hudElement != null)
-				huds.addAll(hudElement);
+				components.addAll(hudElement);
 		}
-		huds.add(Component.empty()); // TODO
-		Component hud = combine(Component.newline(), huds);
-		this.player.sendPlayerListHeader(hud);
+		Component hud = combined(components);
+		components.clear();
+		components.add(hud);
+		for (HudProvider hudProvider : this.headerProviders.values()) {
+			List<Component> hudElement = hudProvider.getHud();
+			if (hudElement != null)
+				components.addAll(hudElement);
+		}
+		Component header = combine(Component.newline(), components);
+		components.clear();
+		for (HudProvider hudProvider : this.footerProviders.values()) {
+			List<Component> hudElement = hudProvider.getHud();
+			if (hudElement != null)
+				components.addAll(hudElement);
+		}
+		Component footer = combine(Component.newline(), components);
+		this.player.sendPlayerListHeaderAndFooter(header, footer);
 	}
 
 	public static @NotNull TabRenderer of(@NotNull Player player) {
@@ -62,7 +100,7 @@ public class TabRenderer extends BukkitRunnable {
 			hudMessenger.cancel();
 	}
 
-	private record HudProvider(@NotNull NamespacedKey providerId, @NotNull Supplier<List<Component>> hudProvider) {
+	private record HudProvider(@NotNull NamespacedKey providerId, @NotNull Supplier<@Nullable List<Component>> hudProvider) {
 
 		public @Nullable List<Component> getHud() {
 			return hudProvider().get();

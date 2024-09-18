@@ -78,7 +78,7 @@ public class DisplayCustomPotionEffectsOnHud implements Listener {
 	public void onJoin(@NotNull PlayerJoinEvent event) {
 		Player player = event.getPlayer();
 		HudMessenger.of(player).addHudElement(ResourceLib.resourceLibKey("custom_potion_effects"), () -> getPotionEffectsHud(player));
-		TabRenderer.of(player).addTopElement(ResourceLib.resourceLibKey("custom_potion_effects"), () -> getPotionEffectsTab(player));
+		TabRenderer.of(player).addHeaderElement(ResourceLib.resourceLibKey("custom_potion_effects"), () -> getPotionEffectsTab(player));
 	}
 
 	private @Nullable Component getPotionEffectsHud(@NotNull Player player) {
@@ -102,7 +102,7 @@ public class DisplayCustomPotionEffectsOnHud implements Listener {
 		return combined(
 			combined(beneficialEffects),
 			combined(harmfulEffects)
-		).color(SpacingUtil.TOP_RIGHT_CORNER);
+		).color(SpacingUtil.TOP_RIGHT_CORNER_HUD);
 	}
 
 	private @Nullable List<@NotNull Component> getPotionEffectsTab(@NotNull Player player) {

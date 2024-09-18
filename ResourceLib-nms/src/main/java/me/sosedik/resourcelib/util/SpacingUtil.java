@@ -39,14 +39,24 @@ public class SpacingUtil {
 	public static final Component ICON_SPACE = getSpacing(9);
 
 	/**
-	 * Color used in text shader to position text to the top left corner
+	 * Color used in text shader to position action bar text to the top left corner
 	 */
-	public static final TextColor TOP_LEFT_CORNER = Objects.requireNonNull(TextColor.fromHexString("#2804F9"));
+	public static final TextColor TOP_LEFT_CORNER_HUD = Objects.requireNonNull(TextColor.fromHexString("#2804F9"));
 
 	/**
-	 * Color used in text shader to position text to the top left corner
+	 * Color used in text shader to position tab text to the top left corner
 	 */
-	public static final TextColor TOP_RIGHT_CORNER = Objects.requireNonNull(TextColor.fromHexString("#6804F9"));
+	public static final TextColor TOP_LEFT_CORNER_TAB = Objects.requireNonNull(TextColor.fromHexString("#2404F9"));
+
+	/**
+	 * Color used in text shader to position action bar text to the top left corner
+	 */
+	public static final TextColor TOP_RIGHT_CORNER_HUD = Objects.requireNonNull(TextColor.fromHexString("#6804F9"));
+
+	/**
+	 * Color used in text shader to position tab text to the top left corner
+	 */
+	public static final TextColor TOP_RIGHT_CORNER_TAB = Objects.requireNonNull(TextColor.fromHexString("#6404F9"));
 
 	/**
 	 * Gets raw spacing symbols

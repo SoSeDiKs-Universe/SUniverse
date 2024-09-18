@@ -240,7 +240,7 @@ public class FileUtil {
 					return f;
 				continue;
 			}
-			if (file.getName().equals(name))
+			if (file.getPath().endsWith(name))
 				return file;
 		}
 		return null;

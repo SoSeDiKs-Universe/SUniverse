@@ -27,17 +27,20 @@ public class BodyPart {
 	private final int defaultMaxHealth;
 	private final boolean vital;
 	private final FontData[] displays;
+	private final FontData[] tabDisplays;
 
 	private BodyPart(
 		@NotNull String id,
 		int defaultMaxHealth,
 		boolean vital,
-		@NotNull FontData @NotNull [] displays
+		@NotNull FontData @NotNull [] displays,
+		@NotNull FontData @NotNull [] tabDisplays
 	) {
 		this.id = id;
 		this.defaultMaxHealth = defaultMaxHealth;
 		this.vital = vital;
 		this.displays = displays;
+		this.tabDisplays = tabDisplays;
 	}
 
 	public @NotNull String getId() {
@@ -52,7 +55,8 @@ public class BodyPart {
 		return this.vital;
 	}
 
-	public @NotNull FontData getFontData(@NotNull BodyDamage bodyDamage) {
+	public @NotNull FontData getFontData(boolean tab, @NotNull BodyDamage bodyDamage) {
+		if (tab) return this.tabDisplays[bodyDamage.ordinal()];
 		return this.displays[bodyDamage.ordinal()];
 	}
 
@@ -66,16 +70,18 @@ public class BodyPart {
 		private int defaultMaxHealth = 10;
 		private boolean vital = false;
 		private final FontData[] displays = new FontData[BodyDamage.values().length];
+		private final FontData[] tabDisplays = new FontData[displays.length];
 
 		public Builder(@NotNull String id, @NotNull String mapping) {
 			this.id = id;
 			for (BodyDamage bodyDamage : BodyDamage.values()) {
-				displays[bodyDamage.ordinal()] = mapping(bodyDamage, mapping);
+				displays[bodyDamage.ordinal()] = mapping(bodyDamage, mapping, "");
+				tabDisplays[bodyDamage.ordinal()] = mapping(bodyDamage, mapping, "_tab");
 			}
 		}
 
-		private @NotNull FontData mapping(@NotNull BodyDamage bodyDamage, @NotNull String mapping) {
-			mapping = "requiem:health/" + mapping + "_" + bodyDamage.name().toLowerCase(Locale.ENGLISH);
+		private @NotNull FontData mapping(@NotNull BodyDamage bodyDamage, @NotNull String mapping, @NotNull String suffix) {
+			mapping = "requiem:health/" + mapping + "_" + bodyDamage.name().toLowerCase(Locale.ENGLISH) + suffix;
 			FontData fontData = ResourceLib.storage().getFontData(mapping);
 			return Objects.requireNonNull(fontData);
 		}
@@ -95,7 +101,8 @@ public class BodyPart {
 				this.id,
 				this.defaultMaxHealth,
 				this.vital,
-				this.displays
+				this.displays,
+				this.tabDisplays
 			);
 		}
 

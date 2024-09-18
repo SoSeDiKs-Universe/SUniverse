@@ -218,7 +218,7 @@ public class FontCreator {
 			} else {
 				iconFile = FileUtil.findFile(generator.getOutputDir(), iconKey + ".png");
 				if (iconFile == null) {
-					ResourceLib.logger().error("[FontCreator] Custom texture mapping not found: {}", iconKey);
+					ResourceLib.logger().error("[FontCreator] Custom texture reference mapping not found: {}", iconKey);
 					return iconKey;
 				}
 				textureMapping = iconFile.getPath().split("textures")[1].substring(1);

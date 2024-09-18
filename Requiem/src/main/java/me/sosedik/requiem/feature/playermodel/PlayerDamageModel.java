@@ -8,6 +8,7 @@ import me.sosedik.resourcelib.feature.HudMessenger;
 import me.sosedik.resourcelib.feature.TabRenderer;
 import me.sosedik.resourcelib.util.SpacingUtil;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
@@ -36,7 +37,7 @@ public class PlayerDamageModel extends BukkitRunnable {
 	private static int calcOffset(@NotNull BodyPart @NotNull ... bodyParts) {
 		int offset = 4;
 		for (BodyPart bodyPart : bodyParts)
-			offset += bodyPart.getFontData(BodyDamage.GREEN).width();
+			offset += bodyPart.getFontData(false, BodyDamage.GREEN).width();
 		return offset;
 	}
 
@@ -53,7 +54,7 @@ public class PlayerDamageModel extends BukkitRunnable {
 		}
 
 		HudMessenger.of(player).addHudElement(Requiem.requiemKey("player_damage_model"), this::constructPlayerModel);
-		TabRenderer.of(player).addTopElement(Requiem.requiemKey("player_damage_model"), this::constructTabPlayerModel);
+		TabRenderer.of(player).addHudElement(Requiem.requiemKey("player_damage_model"), this::constructTabPlayerModel); // TODO doesn't render :(
 
 		Requiem.scheduler().sync(this, 1L, 1L);
 	}
@@ -61,23 +62,23 @@ public class PlayerDamageModel extends BukkitRunnable {
 	private @Nullable Component constructPlayerModel() {
 		if (!hasDamageTick()) return null; // TODO
 
-		return getPlayerModel();
+		return getPlayerModel(false).color(SpacingUtil.TOP_LEFT_CORNER_HUD);
 	}
 
 	private @NotNull List<Component> constructTabPlayerModel() {
-		return List.of(getPlayerModel());
+		return List.of(getPlayerModel(true).color(SpacingUtil.TOP_LEFT_CORNER_TAB));
 	}
 
-	private @NotNull Component getPlayerModel() {
+	private @NotNull Component getPlayerModel(boolean tab) {
 		List<Component> bodyComponents = new ArrayList<>();
 		this.bodyParts.values().forEach(bodyPartState -> {
 			int offset = HUD_OFFSETS.get(bodyPartState.getBodyPart());
-			bodyComponents.add(bodyPartState.getFontData().offsetMapping(offset));
+			bodyComponents.add(bodyPartState.getFontData(tab).offsetMapping(offset));
 			if (showDamage && bodyPartState.hasDamageTicks())
-				bodyComponents.add(bodyPartState.getOverlayData().offsetMapping(offset));
+				bodyComponents.add(bodyPartState.getOverlayData(tab).offsetMapping(offset));
 		});
 
-		return combined(bodyComponents).color(SpacingUtil.TOP_LEFT_CORNER);
+		return combined(bodyComponents);
 	}
 
 	public boolean hasDamageTick() {

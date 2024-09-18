@@ -1,4 +1,4 @@
-package me.sosedik.miscme.event.world;
+package me.sosedik.miscme.api.event.world;
 
 import org.bukkit.World;
 import org.bukkit.event.HandlerList;

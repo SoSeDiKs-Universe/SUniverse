@@ -2,6 +2,7 @@ package me.sosedik.resourcelib;
 
 import me.sosedik.resourcelib.command.CEffectCommand;
 import me.sosedik.resourcelib.dataset.ResourcePackStorage;
+import me.sosedik.resourcelib.feature.TabRenderer;
 import me.sosedik.resourcelib.impl.item.modifier.CustomLoreModifier;
 import me.sosedik.resourcelib.impl.item.modifier.CustomNameModifier;
 import me.sosedik.resourcelib.listener.misc.LocalizedResourcePackMessage;
@@ -44,6 +45,8 @@ public class ResourceLib extends JavaPlugin {
 		loadUserResources();
 
 		TranslationHolder.extractLocales(this);
+
+		TabRenderer.init(this);
 	}
 
 	private void loadUserResources() {
@@ -76,6 +79,8 @@ public class ResourceLib extends JavaPlugin {
 		if (getServer().getPluginManager().isPluginEnabled("FancyMotd")) {
 			EventUtil.registerListeners(this, LocalizedResourcePackMessage.class);
 		}
+
+		saveConfig();
 	}
 
 	private void registerCommands() {

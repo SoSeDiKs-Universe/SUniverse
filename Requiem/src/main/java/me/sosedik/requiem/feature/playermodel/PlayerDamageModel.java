@@ -9,6 +9,7 @@ import me.sosedik.resourcelib.feature.TabRenderer;
 import me.sosedik.resourcelib.util.SpacingUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
@@ -33,6 +34,7 @@ public class PlayerDamageModel extends BukkitRunnable {
 		BodyPart.LEFT_FOOT, calcOffset(BodyPart.LEFT_ARM),
 		BodyPart.RIGHT_FOOT, calcOffset(BodyPart.LEFT_ARM, BodyPart.LEFT_FOOT)
 	);
+	private static final NamespacedKey HUD_RENDERER_KEY = Requiem.requiemKey("player_damage_model");
 
 	private static int calcOffset(@NotNull BodyPart @NotNull ... bodyParts) {
 		int offset = 4;
@@ -53,14 +55,14 @@ public class PlayerDamageModel extends BukkitRunnable {
 			this.bodyParts.put(bodyPart.getId(), new BodyPartState(bodyPart, bodyPartNbt));
 		}
 
-		HudMessenger.of(player).addHudElement(Requiem.requiemKey("player_damage_model"), this::constructPlayerModel);
-		TabRenderer.of(player).addHudElement(Requiem.requiemKey("player_damage_model"), this::constructTabPlayerModel); // TODO doesn't render :(
+		HudMessenger.of(player).addHudElement(HUD_RENDERER_KEY, this::constructPlayerModel);
+		TabRenderer.of(player).addHudElement(HUD_RENDERER_KEY, this::constructTabPlayerModel);
 
 		Requiem.scheduler().sync(this, 1L, 1L);
 	}
 
 	private @Nullable Component constructPlayerModel() {
-		if (!hasDamageTick()) return null; // TODO
+		if (!hasDamageTick()) return null;
 
 		return getPlayerModel(false).color(SpacingUtil.TOP_LEFT_CORNER_HUD);
 	}

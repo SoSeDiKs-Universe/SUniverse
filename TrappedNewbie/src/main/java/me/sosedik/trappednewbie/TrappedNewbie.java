@@ -8,6 +8,8 @@ import me.sosedik.trappednewbie.api.command.parser.PlayerWorldParser;
 import me.sosedik.trappednewbie.command.SpitCommand;
 import me.sosedik.trappednewbie.impl.item.modifier.NoGhostTooltipsModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.VisualArmorModifier;
+import me.sosedik.trappednewbie.listener.misc.DisableJoinQuitMessages;
+import me.sosedik.trappednewbie.listener.misc.TabHeaderFooterBeautifier;
 import me.sosedik.trappednewbie.listener.player.TeamableLeatherEquipment;
 import me.sosedik.trappednewbie.listener.player.VisualArmorLayer;
 import me.sosedik.trappednewbie.listener.world.InfiniteStartingNight;
@@ -63,6 +65,9 @@ public final class TrappedNewbie extends JavaPlugin {
 		new VisualArmorModifier(trappedNewbieKey("visual_armor")).register();
 
 		EventUtil.registerListeners(this,
+			// misc
+			DisableJoinQuitMessages.class,
+			TabHeaderFooterBeautifier.class,
 			// player
 			TeamableLeatherEquipment.class,
 			VisualArmorLayer.class,

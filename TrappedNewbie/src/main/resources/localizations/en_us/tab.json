@@ -1,0 +1,11 @@
+{
+	"tab.header": [
+		"<red>Open <white>Alpha <red>Test <dark_gray>– <gray>Bugs expected!",
+		"",
+		"<light_purple><bold>SoSeDiK's Universe",
+		"<gray> (and its Players' crazy ideas) "
+	],
+	"tab.footer": [
+		"<gray>Ping: <ping>   TPS: <tps>"
+	]
+}

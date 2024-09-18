@@ -9,6 +9,7 @@ import org.bukkit.Tag;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.type.Door;
 import org.bukkit.block.data.type.Gate;
 import org.bukkit.block.data.type.TrapDoor;
@@ -21,6 +22,7 @@ import org.bukkit.util.BoundingBox;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
@@ -30,6 +32,14 @@ public class LocationUtil {
 	private LocationUtil() {
 		throw new IllegalStateException("Utility class");
 	}
+
+	/**
+	 * The surrounding block faces in horizontal pane
+	 */
+	public static final List<BlockFace> SURROUNDING_BLOCKS = List.of(
+		BlockFace.NORTH_EAST, BlockFace.EAST, BlockFace.SOUTH_EAST, BlockFace.SOUTH,
+		BlockFace.SOUTH_WEST, BlockFace.WEST, BlockFace.NORTH_WEST, BlockFace.NORTH
+	);
 
 	private static final Random RANDOM = new Random();
 	private static final Set<NamespacedKey> RTP_BLACKLISTED_BIOMES = new HashSet<>();

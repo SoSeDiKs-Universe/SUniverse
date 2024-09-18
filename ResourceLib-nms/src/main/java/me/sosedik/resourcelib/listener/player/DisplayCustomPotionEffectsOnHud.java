@@ -43,6 +43,7 @@ public class DisplayCustomPotionEffectsOnHud implements Listener {
 	private static final FontData BACKGROUND_HARMFUL;
 	private static final Map<NamespacedKey, Component> SMALL_ICONS = new HashMap<>();
 	private static final Map<NamespacedKey, Component> BIG_ICONS = new HashMap<>();
+	private static final NamespacedKey HUD_RENDERER_KEY = ResourceLib.resourceLibKey("custom_potion_effects");
 
 	static {
 		BACKGROUND_BENEFICIAL = Objects.requireNonNull(ResourceLib.storage().getFontData("minecraft:effect_background_beneficial"));
@@ -77,8 +78,8 @@ public class DisplayCustomPotionEffectsOnHud implements Listener {
 	@EventHandler(priority = EventPriority.LOW)
 	public void onJoin(@NotNull PlayerJoinEvent event) {
 		Player player = event.getPlayer();
-		HudMessenger.of(player).addHudElement(ResourceLib.resourceLibKey("custom_potion_effects"), () -> getPotionEffectsHud(player));
-		TabRenderer.of(player).addHeaderElement(ResourceLib.resourceLibKey("custom_potion_effects"), () -> getPotionEffectsTab(player));
+		HudMessenger.of(player).addHudElement(HUD_RENDERER_KEY, () -> getPotionEffectsHud(player));
+		TabRenderer.of(player).addHeaderElement(HUD_RENDERER_KEY, () -> getPotionEffectsTab(player));
 	}
 
 	private @Nullable Component getPotionEffectsHud(@NotNull Player player) {

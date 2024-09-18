@@ -1,7 +1,7 @@
 package me.sosedik.miscme.task;
 
 import me.sosedik.miscme.MiscMe;
-import me.sosedik.miscme.event.world.DayChangeEvent;
+import me.sosedik.miscme.api.event.world.DayChangeEvent;
 import org.bukkit.GameRule;
 import org.bukkit.World;
 import org.bukkit.scheduler.BukkitRunnable;

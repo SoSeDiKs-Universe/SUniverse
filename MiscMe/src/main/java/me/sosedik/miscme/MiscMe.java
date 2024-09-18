@@ -1,5 +1,9 @@
 package me.sosedik.miscme;
 
+import me.sosedik.miscme.listener.block.CampfireSetsOnFire;
+import me.sosedik.miscme.listener.block.BlockKnocking;
+import me.sosedik.miscme.listener.block.DoorBells;
+import me.sosedik.miscme.listener.misc.BetterTimeSetCommand;
 import me.sosedik.miscme.listener.player.HidePlayerNameTags;
 import me.sosedik.miscme.listener.world.CustomDayCycleCleanup;
 import me.sosedik.utilizer.util.EventUtil;
@@ -23,6 +27,12 @@ public final class MiscMe extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		EventUtil.registerListeners(this,
+			// block
+			BlockKnocking.class,
+			CampfireSetsOnFire.class,
+			DoorBells.class,
+			// misc
+			BetterTimeSetCommand.class,
 			// player
 			HidePlayerNameTags.class,
 			// world

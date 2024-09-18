@@ -73,7 +73,7 @@ public class EntityUtil {
 		if (equipment == null) return false;
 
 		ItemStack item = equipment.getItem(slot);
-		return ItemUtil.isLightSource(item.getType());
+		return ItemUtil.isLightSource(item);
 	}
 
 	/**

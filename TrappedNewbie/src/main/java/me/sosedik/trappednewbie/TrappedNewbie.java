@@ -6,7 +6,7 @@ import me.sosedik.limboworldgenerator.VoidChunkGenerator;
 import me.sosedik.resourcelib.ResourceLib;
 import me.sosedik.trappednewbie.api.command.parser.PlayerWorldParser;
 import me.sosedik.trappednewbie.command.SpitCommand;
-import me.sosedik.trappednewbie.impl.item.modifier.NoGhostTooltipsModifier;
+import me.sosedik.utilizer.impl.item.modifier.HiddenTooltipsModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.VisualArmorModifier;
 import me.sosedik.trappednewbie.listener.misc.DisableJoinQuitMessages;
 import me.sosedik.trappednewbie.listener.misc.TabHeaderFooterBeautifier;
@@ -61,7 +61,6 @@ public final class TrappedNewbie extends JavaPlugin {
 		applyWorldRules();
 		registerCommands();
 
-		new NoGhostTooltipsModifier(trappedNewbieKey("no_ghost_tooltips")).register();
 		new VisualArmorModifier(trappedNewbieKey("visual_armor")).register();
 
 		EventUtil.registerListeners(this,

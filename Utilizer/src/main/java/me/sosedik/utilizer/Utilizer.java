@@ -1,6 +1,7 @@
 package me.sosedik.utilizer;
 
 import me.sosedik.utilizer.api.language.LangOptionsStorage;
+import me.sosedik.utilizer.impl.item.modifier.HiddenTooltipsModifier;
 import me.sosedik.utilizer.listener.entity.EntityGlowTracker;
 import me.sosedik.utilizer.listener.entity.EntityMetadataClearer;
 import me.sosedik.utilizer.listener.misc.MilkImmuneEffects;
@@ -10,6 +11,7 @@ import me.sosedik.utilizer.listener.player.PlayerLanguageLoadSave;
 import me.sosedik.utilizer.util.EventUtil;
 import me.sosedik.utilizer.util.Scheduler;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
+import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -33,6 +35,9 @@ public final class Utilizer extends JavaPlugin {
 	public void onEnable() {
 		CommandManager.init(this);
 		LangOptionsStorage.init(this);
+
+		new HiddenTooltipsModifier(utilizerKey("hidden_tooltips")).register();
+
 		EventUtil.registerListeners(this,
 			// entity
 			EntityGlowTracker.class,
@@ -83,6 +88,16 @@ public final class Utilizer extends JavaPlugin {
 	 */
 	public static @NotNull ComponentLogger logger() {
 		return instance().getComponentLogger();
+	}
+
+	/**
+	 * Makes a namespaced key with this plugin's namespace
+	 *
+	 * @param value value
+	 * @return namespaced key
+	 */
+	public static @NotNull NamespacedKey utilizerKey(@NotNull String value) {
+		return new NamespacedKey("utilizer", value);
 	}
 
 }

@@ -8,9 +8,12 @@ import de.tr7zw.nbtapi.iface.ReadableNBT;
 import me.sosedik.kiterino.inventory.InventorySlotHelper;
 import me.sosedik.trappednewbie.api.item.VisualArmor;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieItems;
+import me.sosedik.trappednewbie.dataset.TrappedNewbieTags;
 import me.sosedik.utilizer.api.event.player.PlayerDataLoadedEvent;
 import me.sosedik.utilizer.api.event.player.PlayerDataSaveEvent;
+import me.sosedik.utilizer.util.EntityUtil;
 import me.sosedik.utilizer.util.InventoryUtil;
+import me.sosedik.utilizer.util.ItemUtil;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.enchantments.Enchantment;
@@ -54,6 +57,15 @@ public class VisualArmorLayer implements Listener {
 	private static final String GLOVES_TAG = "gloves";
 
 	private static final Map<UUID, VisualArmor> ARMOR_BUNDLES = new HashMap<>();
+
+	public VisualArmorLayer() {
+		EntityUtil.addDarknessExemptRule(entity -> {
+			if (!(entity instanceof Player player)) return false;
+
+			VisualArmor visualArmor = getVisualArmor(player);
+			return visualArmor.hasHelmet() && ItemUtil.isLightSource(visualArmor.getHelmet());
+		});
+	}
 
 	@EventHandler
 	public void onJoin(@NotNull PlayerJoinEvent event) {
@@ -103,14 +115,14 @@ public class VisualArmorLayer implements Listener {
 				event.setCurrentItem(null);
 				event.setCancelled(true);
 			}
-		}/* else if (ASurvivalItems.isSimilar(DefItemGroups.GLOVES, item)) { // TODO gloves
+		} else if (TrappedNewbieTags.GLOVES.isTagged(item.getType())) {
 			VisualArmor visualArmor = getVisualArmor(player);
 			if (!visualArmor.isArmorPreview()) return;
 			if (visualArmor.hasGloves()) return;
 			visualArmor.setGloves(item);
 			event.setCurrentItem(null);
 			event.setCancelled(true);
-		}*/
+		}
 	}
 
 	private boolean tryToEquip(@NotNull Player player, @NotNull ItemStack item, @NotNull EquipmentSlot slot) {
@@ -220,7 +232,7 @@ public class VisualArmorLayer implements Listener {
 				case CHEST -> MaterialTags.CHEST_EQUIPPABLE.isTagged(cursor);
 				case LEGS -> MaterialTags.LEGGINGS.isTagged(cursor);
 				case FEET -> MaterialTags.BOOTS.isTagged(cursor);
-				case OFF_HAND -> false; // ASurvivalItems.isSimilar(DefItemGroups.GLOVES, cursor); // TODO gloves
+				case OFF_HAND -> TrappedNewbieTags.GLOVES.isTagged(cursor.getType());
 				default -> false;
 			};
 			if (!canEquip) return;
@@ -320,10 +332,10 @@ public class VisualArmorLayer implements Listener {
 		} else if (MaterialTags.BOOTS.isTagged(item)) {
 			swapItems(player, item, EquipmentSlot.FEET);
 			event.setCancelled(true);
-		}/* else if (ASurvivalItems.isSimilar(DefItemGroups.GLOVES, item)) { // TODO gloves
+		} else if (TrappedNewbieTags.GLOVES.isTagged(item.getType())) {
 			swapItems(player, item, EquipmentSlot.OFF_HAND);
 			event.setCancelled(true);
-		}*/
+		}
 	}
 
 	private void swapItems(@NotNull Player player, @NotNull ItemStack hand, @NotNull EquipmentSlot slot) {
@@ -334,7 +346,7 @@ public class VisualArmorLayer implements Listener {
 			player.getInventory().setItemInMainHand(visualArmor.getGloves());
 			visualArmor.setGloves(hand);
 		} else {
-			boolean cosmetic = false; // ASurvivalItems.getById(hand) instanceof TrimmableVisual trimmableVisual && trimmableVisual.isCosmetic(); // TODO whether item is cosmetic
+			boolean cosmetic = TrappedNewbieTags.COSMETIC_ARMOR.isTagged(hand.getType());
 			boolean bundle = cosmetic != player.isSneaking();
 			if (bundle) {
 				player.getInventory().setItemInMainHand(visualArmor.getItem(slot));

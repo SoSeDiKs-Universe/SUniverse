@@ -1,6 +1,7 @@
 package me.sosedik.moves;
 
 import me.sosedik.moves.listener.movement.FreeFall;
+import me.sosedik.moves.listener.movement.HigherWaterJump;
 import me.sosedik.moves.listener.movement.SneakCounter;
 import me.sosedik.utilizer.util.EventUtil;
 import me.sosedik.utilizer.util.Scheduler;
@@ -25,6 +26,7 @@ public final class Moves extends JavaPlugin {
 		EventUtil.registerListeners(this,
 			// movement
 			FreeFall.class,
+			HigherWaterJump.class,
 			SneakCounter.class
 		);
 	}

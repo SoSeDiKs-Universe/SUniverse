@@ -97,8 +97,10 @@ public class DoorBells implements Listener {
 
 		MiscMe.scheduler().sync(() -> {
 			if (BELLS_IN_USE.get(worldBlockPosition) != dings) return;
+
 			BELLS_IN_USE.remove(worldBlockPosition);
 			if (block.getType() != buttonType) return;
+
 			loc.getWorld().playSound(loc, Sound.BLOCK_NOTE_BLOCK_CHIME, 1F, 0.8F);
 			powerable.setPowered(false);
 			block.setBlockData(powerable, false);

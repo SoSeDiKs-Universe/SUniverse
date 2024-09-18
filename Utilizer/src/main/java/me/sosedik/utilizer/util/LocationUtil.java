@@ -1,7 +1,9 @@
 package me.sosedik.utilizer.util;
 
+import io.papermc.paper.block.fluid.FluidData;
 import io.papermc.paper.entity.TeleportFlag;
 import me.sosedik.utilizer.Utilizer;
+import org.bukkit.Fluid;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -103,6 +105,19 @@ public class LocationUtil {
 	public static boolean isCube(@NotNull Block block) {
 		BoundingBox bb = block.getBoundingBox();
 		return bb.getHeight() == 1 && bb.getWidthX() == 1 && bb.getWidthZ() == 1;
+	}
+
+	/**
+	 * Checks if this block is water or water-covered
+	 *
+	 * @param block block
+	 * @return whether block is watery
+	 */
+	public static boolean isWatery(@NotNull Block block) {
+		if (block.getType() == Material.WATER_CAULDRON) return true;
+
+		FluidData fluidData = block.getWorld().getFluidData(block.getLocation());
+		return fluidData.getFluidType() == Fluid.WATER || fluidData.getFluidType() == Fluid.FLOWING_WATER;
 	}
 
 	/**

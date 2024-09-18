@@ -1,8 +1,10 @@
 package me.sosedik.moves;
 
+import me.sosedik.moves.listener.movement.DontLoseAirOnTopOfWater;
 import me.sosedik.moves.listener.movement.FreeFall;
 import me.sosedik.moves.listener.movement.HigherWaterJump;
 import me.sosedik.moves.listener.movement.SneakCounter;
+import me.sosedik.moves.listener.movement.SwimmingInOneBlockSpace;
 import me.sosedik.utilizer.util.EventUtil;
 import me.sosedik.utilizer.util.Scheduler;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
@@ -25,9 +27,11 @@ public final class Moves extends JavaPlugin {
 	public void onEnable() {
 		EventUtil.registerListeners(this,
 			// movement
+			DontLoseAirOnTopOfWater.class,
 			FreeFall.class,
 			HigherWaterJump.class,
-			SneakCounter.class
+			SneakCounter.class,
+			SwimmingInOneBlockSpace.class
 		);
 	}
 

@@ -66,8 +66,8 @@ public class ResourceLib extends JavaPlugin {
 
 		registerCommands();
 
-		new CustomNameModifier(this).register();
-		new CustomLoreModifier(this).register();
+		new CustomNameModifier(resourceLibKey("custom_name")).register();
+		new CustomLoreModifier(resourceLibKey("custom_lore")).register();
 
 		EventUtil.registerListeners(this,
 			// player

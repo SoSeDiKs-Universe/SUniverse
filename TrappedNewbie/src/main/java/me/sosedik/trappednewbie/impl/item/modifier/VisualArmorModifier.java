@@ -114,11 +114,11 @@ public class VisualArmorModifier extends ItemModifier {
 
 	private @NotNull ItemStack getOutline(@NotNull Messenger messenger, @NotNull EquipmentSlot slot, boolean armorPreview) {
 		ItemStack item = switch (slot) {
-			case HEAD -> new ItemStack(TrappedNewbieItems.HELMET_OUTLINE);
-			case CHEST -> new ItemStack(TrappedNewbieItems.CHESTPLATE_OUTLINE);
-			case LEGS -> new ItemStack(TrappedNewbieItems.LEGGINGS_OUTLINE);
-			case FEET -> new ItemStack(TrappedNewbieItems.BOOTS_OUTLINE);
-			case OFF_HAND -> new ItemStack(TrappedNewbieItems.GLOVES_OUTLINE);
+			case HEAD -> ItemStack.of(TrappedNewbieItems.HELMET_OUTLINE);
+			case CHEST -> ItemStack.of(TrappedNewbieItems.CHESTPLATE_OUTLINE);
+			case LEGS -> ItemStack.of(TrappedNewbieItems.LEGGINGS_OUTLINE);
+			case FEET -> ItemStack.of(TrappedNewbieItems.BOOTS_OUTLINE);
+			case OFF_HAND -> ItemStack.of(TrappedNewbieItems.GLOVES_OUTLINE);
 			default -> throw new IllegalArgumentException("Unsupported equipment slot: " + slot.name());
 		};
 		item.editMeta(meta -> {

@@ -58,7 +58,7 @@ public class VisualArmor {
 			case LEGS -> getLeggings();
 			case FEET -> getBoots();
 			case OFF_HAND -> getGloves();
-			default -> new ItemStack(Material.AIR);
+			default -> ItemStack.of(Material.AIR);
 		};
 	}
 
@@ -77,7 +77,7 @@ public class VisualArmor {
 	}
 
 	public @NotNull ItemStack getHelmet() {
-		return helmet == null ? new ItemStack(Material.AIR) : helmet;
+		return helmet == null ? ItemStack.of(Material.AIR) : helmet;
 	}
 
 	public void setHelmet(@Nullable ItemStack helmet) {
@@ -90,7 +90,7 @@ public class VisualArmor {
 	}
 
 	public @NotNull ItemStack getChestplate() {
-		return chestplate == null ? new ItemStack(Material.AIR) : chestplate;
+		return chestplate == null ? ItemStack.of(Material.AIR) : chestplate;
 	}
 
 	public void setChestplate(@Nullable ItemStack chestplate) {
@@ -103,7 +103,7 @@ public class VisualArmor {
 	}
 
 	public @NotNull ItemStack getLeggings() {
-		return leggings == null ? new ItemStack(Material.AIR) : leggings;
+		return leggings == null ? ItemStack.of(Material.AIR) : leggings;
 	}
 
 	public void setLeggings(@Nullable ItemStack leggings) {
@@ -116,7 +116,7 @@ public class VisualArmor {
 	}
 
 	public @NotNull ItemStack getBoots() {
-		return boots == null ? new ItemStack(Material.AIR) : boots;
+		return boots == null ? ItemStack.of(Material.AIR) : boots;
 	}
 
 	public void setBoots(@Nullable ItemStack boots) {
@@ -133,7 +133,7 @@ public class VisualArmor {
 	}
 
 	public @NotNull ItemStack getGloves() {
-		return gloves == null ? new ItemStack(Material.AIR) : gloves;
+		return gloves == null ? ItemStack.of(Material.AIR) : gloves;
 	}
 
 	public void setGloves(@Nullable ItemStack gloves) {

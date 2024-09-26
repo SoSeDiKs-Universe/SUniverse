@@ -8,7 +8,6 @@ import me.sosedik.resourcelib.feature.HudMessenger;
 import me.sosedik.resourcelib.feature.TabRenderer;
 import me.sosedik.resourcelib.util.SpacingUtil;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;

@@ -22,7 +22,7 @@ public class GlowingUtil {
 	private static final String GLOW_TEAM_ID_PREFIX = "Glow-";
 
 	/**
-	 * Sets entity's glowing color for the player
+	 * Sets entity's glowing color for the player and refreshes it for the player
 	 *
 	 * @param player player
 	 * @param entity entity
@@ -41,7 +41,7 @@ public class GlowingUtil {
 	}
 
 	/**
-	 * Sets entity's glowing color for the player
+	 * Sets entity's glowing color for the player without refreshing
 	 *
 	 * @param player player
 	 * @param entity entity
@@ -49,13 +49,13 @@ public class GlowingUtil {
 	 */
 	public static void setGlowingColor(@NotNull Player player, @NotNull Entity entity, @Nullable NamedTextColor glowColor) {
 		Scoreboard scoreboard = ScoreboardUtil.getScoreboard(player);
-		for (NamedTextColor color : NamedTextColor.NAMES.values()) {
-			Team glowTeam = getGlowTeam(scoreboard, color);
-			glowTeam.removeEntity(entity);
-			if (color == glowColor)
-				glowTeam.addEntity(entity);
-			else
+		if (glowColor == null) {
+			Team glowTeam = scoreboard.getEntityTeam(entity);
+			if (glowTeam != null)
 				glowTeam.removeEntity(entity);
+		} else {
+			Team glowTeam = getGlowTeam(scoreboard, glowColor);
+			glowTeam.addEntity(entity);
 		}
 	}
 

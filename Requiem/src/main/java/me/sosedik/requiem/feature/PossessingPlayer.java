@@ -5,7 +5,6 @@ import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import me.sosedik.requiem.Requiem;
 import me.sosedik.requiem.api.event.player.PlayerStartPossessingEntityEvent;
 import me.sosedik.requiem.api.event.player.PlayerStopPossessingEntityEvent;
-import me.sosedik.requiem.listener.entity.FakeHorseSaddles;
 import me.sosedik.requiem.task.DynamicScaleTask;
 import me.sosedik.requiem.task.PoseMimikingTask;
 import me.sosedik.utilizer.api.storage.player.PlayerDataStorage;

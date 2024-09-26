@@ -254,7 +254,7 @@ public class VisualArmorLayer implements Listener {
 		if (clickType.isShiftClick()) {
 			if (visualArmor.isArmorPreview()) {
 				if (!InventoryUtil.tryToAdd(player, Objects.requireNonNull(event.getCurrentItem()))) return;
-				player.getInventory().setItem(equipmentSlot, new ItemStack(TrappedNewbieItems.MATERIAL_AIR));
+				player.getInventory().setItem(equipmentSlot, ItemStack.of(TrappedNewbieItems.MATERIAL_AIR));
 			} else {
 				if (!InventoryUtil.tryToAdd(player, visualArmor.getItem(equipmentSlot))) return;
 				visualArmor.setItem(equipmentSlot, null);
@@ -275,7 +275,7 @@ public class VisualArmorLayer implements Listener {
 			if (!ItemStack.isEmpty(current)) return;
 			if (visualArmor.isArmorPreview()) {
 				player.getInventory().setItem(slot, event.getCurrentItem());
-				player.getInventory().setItem(equipmentSlot, new ItemStack(TrappedNewbieItems.MATERIAL_AIR));
+				player.getInventory().setItem(equipmentSlot, ItemStack.of(TrappedNewbieItems.MATERIAL_AIR));
 			} else {
 				player.getInventory().setItem(slot, visualArmor.getItem(equipmentSlot));
 				visualArmor.setItem(equipmentSlot, null);
@@ -283,7 +283,7 @@ public class VisualArmorLayer implements Listener {
 		} else if (clickType == ClickType.LEFT || clickType == ClickType.RIGHT) {
 			if (visualArmor.isArmorPreview()) {
 				player.setItemOnCursor(event.getCurrentItem());
-				player.getInventory().setItem(equipmentSlot, new ItemStack(TrappedNewbieItems.MATERIAL_AIR));
+				player.getInventory().setItem(equipmentSlot, ItemStack.of(TrappedNewbieItems.MATERIAL_AIR));
 			} else {
 				player.setItemOnCursor(visualArmor.getItem(equipmentSlot));
 				visualArmor.setItem(equipmentSlot, null);
@@ -419,10 +419,10 @@ public class VisualArmorLayer implements Listener {
 	 */
 	public static void applyVisualArmor(@NotNull Player player) {
 		PlayerInventory inv = player.getInventory();
-		if (ItemStack.isEmpty(inv.getHelmet())) inv.setHelmet(new ItemStack(TrappedNewbieItems.MATERIAL_AIR));
-		if (ItemStack.isEmpty(inv.getChestplate())) inv.setChestplate(new ItemStack(TrappedNewbieItems.MATERIAL_AIR));
-		if (ItemStack.isEmpty(inv.getLeggings())) inv.setLeggings(new ItemStack(TrappedNewbieItems.MATERIAL_AIR));
-		if (ItemStack.isEmpty(inv.getBoots())) inv.setBoots(new ItemStack(TrappedNewbieItems.MATERIAL_AIR));
+		if (ItemStack.isEmpty(inv.getHelmet())) inv.setHelmet(ItemStack.of(TrappedNewbieItems.MATERIAL_AIR));
+		if (ItemStack.isEmpty(inv.getChestplate())) inv.setChestplate(ItemStack.of(TrappedNewbieItems.MATERIAL_AIR));
+		if (ItemStack.isEmpty(inv.getLeggings())) inv.setLeggings(ItemStack.of(TrappedNewbieItems.MATERIAL_AIR));
+		if (ItemStack.isEmpty(inv.getBoots())) inv.setBoots(ItemStack.of(TrappedNewbieItems.MATERIAL_AIR));
 	}
 
 	private static @NotNull VisualArmor empty(@NotNull Player player) {

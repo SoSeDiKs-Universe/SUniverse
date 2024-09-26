@@ -4,10 +4,14 @@ import me.sosedik.utilizer.api.language.LangOptionsStorage;
 import me.sosedik.utilizer.impl.item.modifier.HiddenTooltipsModifier;
 import me.sosedik.utilizer.listener.entity.EntityGlowTracker;
 import me.sosedik.utilizer.listener.entity.EntityMetadataClearer;
+import me.sosedik.utilizer.listener.misc.CustomRecipeLeftovers;
+import me.sosedik.utilizer.listener.misc.DurabilityRecipeLeftovers;
+import me.sosedik.utilizer.listener.misc.ExtraRecipeHandlers;
 import me.sosedik.utilizer.listener.misc.MilkImmuneEffects;
 import me.sosedik.utilizer.listener.player.CleanupPlayerScoreboards;
 import me.sosedik.utilizer.listener.player.PlayerDataLoadSave;
 import me.sosedik.utilizer.listener.player.PlayerLanguageLoadSave;
+import me.sosedik.utilizer.listener.player.SetupPlayerScoreboards;
 import me.sosedik.utilizer.util.EventUtil;
 import me.sosedik.utilizer.util.Scheduler;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
@@ -43,11 +47,15 @@ public final class Utilizer extends JavaPlugin {
 			EntityGlowTracker.class,
 			EntityMetadataClearer.class,
 			// misc
+			CustomRecipeLeftovers.class,
+			DurabilityRecipeLeftovers.class,
+			ExtraRecipeHandlers.class,
 			MilkImmuneEffects.class,
 			// player
 			CleanupPlayerScoreboards.class,
 			PlayerDataLoadSave.class,
-			PlayerLanguageLoadSave.class
+			PlayerLanguageLoadSave.class,
+			SetupPlayerScoreboards.class
 		);
 		saveConfig();
 	}

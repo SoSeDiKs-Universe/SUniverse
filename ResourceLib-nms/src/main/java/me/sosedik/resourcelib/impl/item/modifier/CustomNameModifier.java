@@ -9,13 +9,12 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
 public class CustomNameModifier extends ItemModifier {
 
-	public CustomNameModifier(@NotNull Plugin plugin) {
-		super(new NamespacedKey(plugin, "custom_name"));
+	public CustomNameModifier(@NotNull NamespacedKey modifierId) {
+		super(modifierId);
 	}
 
 	@Override

@@ -58,6 +58,42 @@ public class InventoryUtil {
 	}
 
 	/**
+	 * Adds items to player's inventory, or
+	 * drops if not enough space
+	 *
+	 * @param player player
+	 * @param item item
+	 */
+	public static void addOrDrop(@NotNull Player player, @NotNull ItemStack item) {
+		PlayerInventory inv = player.getInventory();
+		// Check all slots to see if the item fits into any
+		for (int slot : SHIFT_CLICK_SLOTS_PRIORITY) {
+			ItemStack current = inv.getItem(slot);
+			if (ItemStack.isEmpty(current)) continue;
+			if (!current.isSimilar(item)) continue;
+
+			int amount = current.getAmount();
+			int adding = item.getAmount();
+			int max = current.getMaxStackSize();
+			int result = Math.min(max, amount + adding);
+			current.setAmount(result);
+			item.subtract(result - amount);
+			if (item.getAmount() <= 0)
+				return;
+		}
+		// Check for empty slots
+		for (int slot : SHIFT_CLICK_SLOTS_PRIORITY) {
+			ItemStack current = inv.getItem(slot);
+			if (!ItemStack.isEmpty(current)) continue;
+
+			inv.setItem(slot, item);
+			return;
+		}
+		// No space left, drop item
+		player.dropItem(item);
+	}
+
+	/**
 	 * Gets the equipment slot from the provided slot.
 	 * Will default to {@link EquipmentSlot#HAND} if not unique slot.
 	 *

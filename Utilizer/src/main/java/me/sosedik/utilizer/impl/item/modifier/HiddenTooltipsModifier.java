@@ -15,8 +15,8 @@ public class HiddenTooltipsModifier extends ItemModifier {
 
 	private static final Tag<Material> LIGHT_SOURCES = ItemUtil.itemTag(Utilizer.utilizerKey("no_tooltip_items"));
 
-	public HiddenTooltipsModifier(@NotNull NamespacedKey key) {
-		super(key);
+	public HiddenTooltipsModifier(@NotNull NamespacedKey modifierId) {
+		super(modifierId);
 	}
 
 	@Override

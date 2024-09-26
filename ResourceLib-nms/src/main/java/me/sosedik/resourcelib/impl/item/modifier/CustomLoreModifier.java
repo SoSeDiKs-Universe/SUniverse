@@ -9,7 +9,6 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -17,8 +16,8 @@ import java.util.List;
 
 public class CustomLoreModifier extends ItemModifier {
 
-	public CustomLoreModifier(@NotNull Plugin plugin) {
-		super(new NamespacedKey(plugin, "custom_lore"));
+	public CustomLoreModifier(@NotNull NamespacedKey modifierId) {
+		super(modifierId);
 	}
 
 	@Override

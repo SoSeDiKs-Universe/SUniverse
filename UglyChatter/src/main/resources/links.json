@@ -1,0 +1,15 @@
+{
+  "default": {
+    "hex1": "#b9b9b9",
+    "hex2": "#ffffff",
+    "links": []
+  },
+  "Minecraft": {
+    "hex1": "#b6845a",
+    "hex2": "#97c868",
+    "links": [
+      "minecraft.net",
+      "minecraft.wiki"
+    ]
+  }
+}

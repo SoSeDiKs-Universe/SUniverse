@@ -1,14 +1,20 @@
 package me.sosedik.resourcelib.util;
 
+import me.sosedik.utilizer.api.message.Messenger;
 import me.sosedik.utilizer.api.message.Mini;
 import me.sosedik.utilizer.util.ChatUtil;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+
+import static me.sosedik.utilizer.api.message.Mini.combine;
 
 public class SpacingUtil {
 
@@ -117,6 +123,22 @@ public class SpacingUtil {
 	 */
 	public static @NotNull Component getNegativePixel() {
 		return Component.text(NEGATIVE_PIXEL);
+	}
+
+	/**
+	 * Constructs components list with an icon prefix
+	 *
+	 * @param icon        icon
+	 * @param messagePath path for message
+	 * @return components list
+	 */
+	public static @NotNull List<Component> iconize(@NotNull Messenger messenger, @NotNull Component icon, @NotNull String messagePath, @NotNull TagResolver... placeholders) {
+		String[] message = messenger.getRawMessage(messagePath);
+		List<Component> components = new ArrayList<>();
+		components.add(combine(Component.space(), icon, messenger.getMiniMessage(message[0], placeholders)));
+		for (int j = 1; j < message.length; j++)
+			components.add(combine(Component.space(), ICON_SPACE, messenger.getMiniMessage(message[j], placeholders)));
+		return components;
 	}
 
 	/**

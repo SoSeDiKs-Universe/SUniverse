@@ -48,7 +48,7 @@ public class Messenger {
 	 * @return messages receiver
 	 */
 	public @NotNull Audience getAudience() {
-		return audience;
+		return this.audience;
 	}
 
 	/**
@@ -57,7 +57,7 @@ public class Messenger {
 	 * @return language
 	 */
 	public @NotNull LangOptions getLangOptions() {
-		return langHolder == null ? langOptions : langHolder.getLangOptions();
+		return this.langHolder == null ? this.langOptions : this.langHolder.getLangOptions();
 	}
 
 	/**
@@ -66,7 +66,7 @@ public class Messenger {
 	 * @return language holder
 	 */
 	public @Nullable LangHolder getLangHolder() {
-		return langHolder;
+		return this.langHolder;
 	}
 
 	/**
@@ -109,11 +109,11 @@ public class Messenger {
 	 */
 	public @NotNull Component @NotNull [] getMessages(@NotNull String messagePath) {
 		String[] minis = getRawMessage(messagePath);
-		if (minis.length == 1) return new Component[]{mini(miniMessage, minis[0])};
+		if (minis.length == 1) return new Component[]{mini(this.miniMessage, minis[0])};
 
 		Component[] parsed = new Component[minis.length];
 		for (int i = 0; i < minis.length; i++)
-			parsed[i] = mini(miniMessage, minis[i]);
+			parsed[i] = mini(this.miniMessage, minis[i]);
 		return parsed;
 	}
 
@@ -137,11 +137,11 @@ public class Messenger {
 	public @NotNull Component @Nullable [] getMessagesIfExists(@NotNull String messagePath) {
 		String[] minis = getRawMessageIfExists(messagePath);
 		if (minis == null) return null;
-		if (minis.length == 1) return new Component[]{mini(miniMessage, minis[0])};
+		if (minis.length == 1) return new Component[]{mini(this.miniMessage, minis[0])};
 
 		Component[] parsed = new Component[minis.length];
 		for (int i = 0; i < minis.length; i++)
-			parsed[i] = mini(miniMessage, minis[i]);
+			parsed[i] = mini(this.miniMessage, minis[i]);
 		return parsed;
 	}
 
@@ -165,11 +165,11 @@ public class Messenger {
 	 */
 	public @NotNull Component @NotNull [] getMessages(@NotNull String messagePath, @NotNull TagResolver @NotNull ... resolvers) {
 		String[] minis = getRawMessage(messagePath);
-		if (minis.length == 1) return new Component[]{mini(miniMessage, minis[0], resolvers)};
+		if (minis.length == 1) return new Component[]{mini(this.miniMessage, minis[0], resolvers)};
 
 		Component[] parsed = new Component[minis.length];
 		for (int i = 0; i < minis.length; i++)
-			parsed[i] = mini(miniMessage, minis[i], resolvers);
+			parsed[i] = mini(this.miniMessage, minis[i], resolvers);
 		return parsed;
 	}
 
@@ -180,7 +180,7 @@ public class Messenger {
 	 * @return parsed message
 	 */
 	public @NotNull Component getMiniMessage(@NotNull String mini) {
-		return mini(miniMessage, mini);
+		return mini(this.miniMessage, mini);
 	}
 
 	/**
@@ -191,7 +191,7 @@ public class Messenger {
 	 * @return parsed message
 	 */
 	public @NotNull Component getMiniMessage(@NotNull String mini, @NotNull TagResolver... resolvers) {
-		return mini(miniMessage, mini, resolvers);
+		return mini(this.miniMessage, mini, resolvers);
 	}
 
 	/**
@@ -223,7 +223,7 @@ public class Messenger {
 	 * @return MiniMessage instance
 	 */
 	public @NotNull MiniMessage miniMessage() {
-		return miniMessage;
+		return this.miniMessage;
 	}
 
 	public static @NotNull Messenger messenger(@NotNull LangOptions langOptions) {

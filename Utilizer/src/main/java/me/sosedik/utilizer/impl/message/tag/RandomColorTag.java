@@ -12,6 +12,9 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+/**
+ * Parses {@code <random_color>} into a random default color, excluding black
+ */
 public class RandomColorTag {
 
 	private RandomColorTag() {}

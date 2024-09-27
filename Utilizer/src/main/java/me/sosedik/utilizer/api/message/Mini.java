@@ -1,9 +1,5 @@
 package me.sosedik.utilizer.api.message;
 
-import me.sosedik.utilizer.Utilizer;
-import me.sosedik.utilizer.impl.message.tag.KaomojiTag;
-import me.sosedik.utilizer.impl.message.tag.LocaleResolver;
-import me.sosedik.utilizer.impl.message.tag.RandomColorTag;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
@@ -12,15 +8,16 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.TagPattern;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Function;
 
 public class Mini {
 
@@ -28,7 +25,8 @@ public class Mini {
 		throw new IllegalStateException("Utility class");
 	}
 
-	private static final MiniMessage MINI_MESSAGE = buildMini();
+	private static final List<TagResolver> DEFAULT_RESOLVERS = new ArrayList<>();
+	private static final List<Function<Messenger, @Nullable TagResolver>> DEFAULT_VIEWER_AWARE_RESOLVERS = new ArrayList<>();
 
 	@SafeVarargs
 	public static <T extends ComponentLike> @NotNull List<@NotNull T> combined(@NotNull Collection<T>... components) {
@@ -76,11 +74,11 @@ public class Mini {
 	}
 
 	public static @NotNull Component mini(@NotNull String text) {
-		return mini(MINI_MESSAGE, text);
+		return mini(buildMini(), text);
 	}
 
 	public static @NotNull Component mini(@NotNull String text, @NotNull TagResolver... resolvers) {
-		return mini(MINI_MESSAGE, text, resolvers);
+		return mini(buildMini(), text, resolvers);
 	}
 
 	public static @NotNull Component mini(@NotNull Audience viewer, @NotNull String text) {
@@ -100,34 +98,21 @@ public class Mini {
 	}
 
 	public static @NotNull MiniMessage buildMini() {
-		return MiniMessage.builder().tags(TagResolver.resolver(TagResolver.standard(), getDefaultTags())).build();
+		return MiniMessage.builder().tags(TagResolver.resolver(TagResolver.standard(), TagResolver.resolver(DEFAULT_RESOLVERS))).build();
 	}
 
 	public static @NotNull MiniMessage buildMini(@NotNull Messenger messenger) {
-		return MiniMessage.builder().tags(TagResolver.resolver(TagResolver.standard(), getDefaultTags(), getPlaceholders(messenger))).build();
-	}
-
-	private static @NotNull TagResolver getDefaultTags() {
-		return TagResolver.resolver(
-				TagResolver.resolver("discord", Tag.selfClosingInserting(Component.text(Utilizer.instance().getConfig().getString("discord", "discord.com")))), // TODO unhardcode
-				KaomojiTag.KAOMOJI,
-				RandomColorTag.RANDOM_COLOR
-//				PluralTag.PLURALS,
-//				SpoilerTag.SPOILER,
-//				IconTag.ICON,
-//				TagResolver.resolver("ispace", Tag.selfClosingInserting(SpacingUtil.ICON_SPACE))
-		);
+		return MiniMessage.builder().tags(TagResolver.resolver(TagResolver.standard(), TagResolver.resolver(DEFAULT_RESOLVERS), getPlaceholders(messenger))).build();
 	}
 
 	private static @NotNull TagResolver getPlaceholders(@NotNull Messenger messenger) {
-		var resolver = TagResolver.resolver(
-//				new CopyResolver(messenger),
-//				new ExecuteResolver(messenger),
-			new LocaleResolver(messenger)
-		);
-//		if (messenger.getAudience() instanceof Player player && player.isOp())
-//			resolver = TagResolver.resolver(resolver, SpaceTag.SPACE);
-		return resolver;
+		List<TagResolver> resolvers = new ArrayList<>();
+		for (Function<Messenger, TagResolver> provider : DEFAULT_VIEWER_AWARE_RESOLVERS) {
+			TagResolver resolver = provider.apply(messenger);
+			if (resolver != null)
+				resolvers.add(resolver);
+		}
+		return TagResolver.resolver(resolvers);
 	}
 
 	public static @NotNull Component iconize(@NotNull String content) {
@@ -143,15 +128,32 @@ public class Mini {
 				.build();
 	}
 
-	public static @NotNull Component iconify(@NotNull String content) {
-		return Component.text().content(content)
-				.color(NamedTextColor.WHITE)
-				.decoration(TextDecoration.ITALIC, false)
-				.build();
+	public static @NotNull Component asIcon(@NotNull Component content) {
+		return content.colorIfAbsent(NamedTextColor.WHITE)
+				.decorationIfAbsent(TextDecoration.ITALIC, TextDecoration.State.FALSE);
 	}
 
 	public static @NotNull String serialize(@NotNull Component component) {
 		return buildMini().serialize(component);
+	}
+
+	/**
+	 * Adds new tag resolvers
+	 *
+	 * @param tagResolvers tag resolvers
+	 */
+	public static void registerTagResolvers(@NotNull TagResolver... tagResolvers) {
+		DEFAULT_RESOLVERS.addAll(List.of(tagResolvers));
+	}
+
+	/**
+	 * Adds new viewer-aware tag resolvers
+	 *
+	 * @param tagResolvers viewer-aware tag resolvers
+	 */
+	@SafeVarargs
+	public static void registerViewerAwareTagResolvers(@NotNull Function<Messenger, @Nullable TagResolver>... tagResolvers) {
+		DEFAULT_VIEWER_AWARE_RESOLVERS.addAll(List.of(tagResolvers));
 	}
 
 }

@@ -5,10 +5,14 @@ import de.tr7zw.nbtapi.iface.ReadableNBT;
 import me.sosedik.kiterino.modifier.item.ItemContextBox;
 import me.sosedik.kiterino.modifier.item.ItemModifier;
 import me.sosedik.kiterino.modifier.item.ModificationResult;
+import me.sosedik.uglychatter.api.chat.FancyMessageRenderer;
+import me.sosedik.utilizer.api.message.Messenger;
+import me.sosedik.utilizer.api.message.Mini;
 import me.sosedik.utilizer.util.ChatUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Sign;
 import org.bukkit.block.sign.Side;
@@ -78,18 +82,17 @@ public class SignsShowTextInLore extends ItemModifier {
 	}
 
 	private boolean addLines(@Nullable Player player, @NotNull List<Component> lines, @NotNull List<Component> lore) {
+		MiniMessage miniMessage = player == null ? Mini.buildMini() : Messenger.messenger(player).miniMessage();
 		boolean hasLines = false;
 		List<Component> loreLines = new ArrayList<>();
 		for (var i = 0; i < lines.size(); i++) {
 			Component line = lines.get(i);
-			String rawLine = ChatUtil.getPlainText(line); // FancyChatRenderer.getRawInput(line); // TODO fancy support :/ markdown, links, placeholders
+			String rawLine = FancyMessageRenderer.getRawInput(line);
 			if (rawLine.isEmpty()) {
 				loreLines.add(PARENT_LORE.append(combined(Component.text("#" + (i + 1) + ": ", NamedTextColor.DARK_GRAY), line)));
 			} else {
 				hasLines = true;
-//				line = Mini.mini(player, MarkdownParser.parseMarkdown(rawLine));
-//				line = LinkParser.parseLinks(line, player);
-//				line = Placeholder.parsePlaceholders(line, player, player);
+				line = FancyMessageRenderer.renderMessage(miniMessage, rawLine, player, player);
 				loreLines.add(PARENT_LORE.append(combined(Component.text("#" + (i + 1) + ": ", NamedTextColor.DARK_GRAY), line)));
 			}
 		}

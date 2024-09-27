@@ -1,0 +1,15 @@
+{
+	"equipment.cosmetic": "<dark_gray><i>Косметичний предмет",
+	"equipment.underwear": "<dark_gray><i>Нижній слой броні",
+	"equipment.layer_switch.underwear": "Натисніть <yellow><key:key.drop></yellow> для перегляду косметичної броні",
+	"equipment.layer_switch.cosmetic": "Натисніть <yellow><key:key.drop></yellow> для перегляду броні",
+	"equipment.head.armor": "Слот шолома",
+	"equipment.head.cosmetic": "Косметичний слот шолома",
+	"equipment.chest.armor": "Слот нагрудника",
+	"equipment.chest.cosmetic": "Косметичний слот нагрудника",
+	"equipment.legs.armor": "Слот наголінників",
+	"equipment.legs.cosmetic": "Косметичний слот наголінників",
+	"equipment.feet.armor": "Слот чобіт",
+	"equipment.feet.cosmetic": "Косметичний слот чобіт",
+	"equipment.off_hand.armor": "Слот рукавиць"
+}

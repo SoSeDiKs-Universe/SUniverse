@@ -6,10 +6,10 @@ import me.sosedik.resourcelib.feature.HudMessenger;
 import me.sosedik.resourcelib.feature.TabRenderer;
 import me.sosedik.resourcelib.util.SpacingUtil;
 import me.sosedik.utilizer.api.message.Messenger;
+import me.sosedik.utilizer.api.message.Mini;
 import me.sosedik.utilizer.util.RomanNumerals;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
 import org.bukkit.entity.Player;
@@ -64,7 +64,7 @@ public class DisplayCustomPotionEffectsOnHud implements Listener {
 				ResourceLib.logger().warn("Couldn't find effect mapping for {}_icon", effectKey);
 				return;
 			}
-			Component smallIcon = smallFontData.mapping().color(NamedTextColor.WHITE);
+			Component smallIcon = Mini.asIcon(smallFontData.mapping());
 			FontData backgroundData = effectType.getEffectCategory() == PotionEffectType.Category.BENEFICIAL ? BACKGROUND_BENEFICIAL : BACKGROUND_HARMFUL;
 			Component bigIcon = combined(
 				backgroundData.offsetMapping(),

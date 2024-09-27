@@ -18,6 +18,7 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -308,8 +309,9 @@ public class VisualArmorLayer implements Listener {
 		player.updateInventory();
 	}
 
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onPlayerInteract(@NotNull PlayerInteractEvent event) {
+		if (event.useItemInHand() == Event.Result.DENY) return;
 		if (event.getHand() != EquipmentSlot.HAND) return;
 		if (!event.getAction().isRightClick()) return;
 		if (event.isBlockInHand() && event.getAction() == Action.RIGHT_CLICK_BLOCK) return;

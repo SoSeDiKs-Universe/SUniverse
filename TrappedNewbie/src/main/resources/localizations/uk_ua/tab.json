@@ -1,0 +1,11 @@
+{
+	"tab.header": [
+		"<red>Відкрите <white>Альфа <red>Тестування <dark_gray>– <gray>В очікуванні багів!",
+		"",
+		"<light_purple><bold>Всесвіт Сусіда",
+		"<gray> (та безумні ідеї його гравців) "
+	],
+	"tab.footer": [
+		"<gray>Пінг: <ping>   TPS: <tps>"
+	]
+}

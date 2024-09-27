@@ -1,5 +1,6 @@
 package me.sosedik.miscme;
 
+import me.sosedik.miscme.impl.item.modifier.BookAuthorOnlineModifier;
 import me.sosedik.miscme.impl.item.modifier.SignsShowTextInLore;
 import me.sosedik.miscme.listener.block.BlockKnocking;
 import me.sosedik.miscme.listener.block.CampfireSetsOnFire;
@@ -7,6 +8,7 @@ import me.sosedik.miscme.listener.block.DontEditSignsOnPlace;
 import me.sosedik.miscme.listener.block.DoorBells;
 import me.sosedik.miscme.listener.block.SignsRetain;
 import me.sosedik.miscme.listener.item.BottledAir;
+import me.sosedik.miscme.listener.item.ReadableBooksInFrames;
 import me.sosedik.miscme.listener.misc.BetterTimeSetCommand;
 import me.sosedik.miscme.listener.misc.WaterAwarePotionReset;
 import me.sosedik.miscme.listener.player.HidePlayerNameTags;
@@ -32,6 +34,7 @@ public final class MiscMe extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
+		new BookAuthorOnlineModifier(miscmeKey("book_author_online")).register();
 		new SignsShowTextInLore(miscmeKey("signs_show_text_in_lore")).register();
 
 		EventUtil.registerListeners(this,
@@ -43,6 +46,7 @@ public final class MiscMe extends JavaPlugin {
 			SignsRetain.class,
 			// item
 			BottledAir.class,
+			ReadableBooksInFrames.class,
 			// misc
 			BetterTimeSetCommand.class,
 			WaterAwarePotionReset.class,

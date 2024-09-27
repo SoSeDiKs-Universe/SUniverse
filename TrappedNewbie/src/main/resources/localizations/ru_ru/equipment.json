@@ -1,0 +1,15 @@
+{
+	"equipment.cosmetic": "<dark_gray><i>Косметический предмет",
+	"equipment.underwear": "<dark_gray><i>Нижний слой брони",
+	"equipment.layer_switch.underwear": "Нажмите <yellow><key:key.drop></yellow> для просмотра косметической брони",
+	"equipment.layer_switch.cosmetic": "Нажмите <yellow><key:key.drop></yellow> для просмотра брони",
+	"equipment.head.armor": "Слот шлема",
+	"equipment.head.cosmetic": "Косметический слот шлема",
+	"equipment.chest.armor": "Слот нагрудника",
+	"equipment.chest.cosmetic": "Косметический слот нагрудника",
+	"equipment.legs.armor": "Слот поножей",
+	"equipment.legs.cosmetic": "Косметический слот поножей",
+	"equipment.feet.armor": "Слот ботинок",
+	"equipment.feet.cosmetic": "Косметический слот ботинок",
+	"equipment.off_hand.armor": "Слот перчаток"
+}

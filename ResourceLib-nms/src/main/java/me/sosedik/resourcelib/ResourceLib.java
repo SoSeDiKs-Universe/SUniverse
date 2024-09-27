@@ -1,5 +1,6 @@
 package me.sosedik.resourcelib;
 
+import me.sosedik.resourcelib.api.font.FontData;
 import me.sosedik.resourcelib.command.CEffectCommand;
 import me.sosedik.resourcelib.dataset.ResourcePackStorage;
 import me.sosedik.resourcelib.feature.TabRenderer;
@@ -20,10 +21,12 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Enumeration;
+import java.util.Objects;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -62,7 +65,8 @@ public class ResourceLib extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		this.generator.generate();
-		this.generator = null;
+		// Give the last chance for plugins to access the data before invalidating
+		getServer().getScheduler().runTaskLater(this, () -> this.generator = null, 1L);
 
 		registerCommands();
 
@@ -126,6 +130,17 @@ public class ResourceLib extends JavaPlugin {
 	}
 
 	/**
+	 * Gets the resource pack generator.
+	 * <p>
+	 * Available only during load, becomes invalid after the plugin has enabled.
+	 *
+	 * @return the resource pack generator
+	 */
+	public static @Nullable ResourcePackGenerator generator() {
+		return instance().generator;
+	}
+
+	/**
 	 * Makes a namespaced key with this plugin's namespace
 	 *
 	 * @param value value
@@ -181,6 +196,17 @@ public class ResourceLib extends JavaPlugin {
 		}
 
 		instance().generator.parseResources(datasetsDir, false);
+	}
+
+	/**
+	 * Gets the font data by key
+	 *
+	 * @param key font key
+	 * @return font data
+	 */
+	public static @NotNull FontData requireFontData(@NotNull NamespacedKey key) {
+		FontData fontData = ResourceLib.storage().getFontData(key.asString());
+		return Objects.requireNonNull(fontData);
 	}
 
 }

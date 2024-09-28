@@ -1,0 +1,4 @@
+{
+	"death.attack.chest_crush": "<entity> був роздавлений кришкою скрині через <attacker>",
+	"death.attack.chest_crush.item": "<entity> був роздавлений кришкою скрині через <attacker>, тримаючого <item>"
+}

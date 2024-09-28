@@ -4,6 +4,10 @@ import me.sosedik.miscme.impl.item.modifier.BookAuthorOnlineModifier;
 import me.sosedik.miscme.impl.item.modifier.SignsShowTextInLore;
 import me.sosedik.miscme.listener.block.BlockKnocking;
 import me.sosedik.miscme.listener.block.CampfireSetsOnFire;
+import me.sosedik.miscme.listener.block.ChestThrowsEntities;
+import me.sosedik.miscme.listener.block.ClickThroughHanging;
+import me.sosedik.miscme.listener.block.ClickThroughSigns;
+import me.sosedik.miscme.listener.block.Couplings;
 import me.sosedik.miscme.listener.block.DontEditSignsOnPlace;
 import me.sosedik.miscme.listener.block.DoorBells;
 import me.sosedik.miscme.listener.block.SignsRetain;
@@ -13,6 +17,7 @@ import me.sosedik.miscme.listener.misc.BetterTimeSetCommand;
 import me.sosedik.miscme.listener.misc.WaterAwarePotionReset;
 import me.sosedik.miscme.listener.player.HidePlayerNameTags;
 import me.sosedik.miscme.listener.world.CustomDayCycleCleanup;
+import me.sosedik.utilizer.api.language.TranslationHolder;
 import me.sosedik.utilizer.util.EventUtil;
 import me.sosedik.utilizer.util.Scheduler;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
@@ -30,6 +35,8 @@ public final class MiscMe extends JavaPlugin {
 	public void onLoad() {
 		MiscMe.instance = this;
 		this.scheduler = new Scheduler(this);
+
+		TranslationHolder.extractLocales(this);
 	}
 
 	@Override
@@ -41,6 +48,10 @@ public final class MiscMe extends JavaPlugin {
 			// block
 			BlockKnocking.class,
 			CampfireSetsOnFire.class,
+			ChestThrowsEntities.class,
+			ClickThroughHanging.class,
+			ClickThroughSigns.class,
+			Couplings.class,
 			DontEditSignsOnPlace.class,
 			DoorBells.class,
 			SignsRetain.class,

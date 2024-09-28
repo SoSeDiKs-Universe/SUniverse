@@ -6,6 +6,7 @@ import me.sosedik.resourcelib.dataset.ResourcePackStorage;
 import me.sosedik.resourcelib.feature.TabRenderer;
 import me.sosedik.resourcelib.impl.item.modifier.CustomLoreModifier;
 import me.sosedik.resourcelib.impl.item.modifier.CustomNameModifier;
+import me.sosedik.resourcelib.listener.misc.LocalizedDeathMessages;
 import me.sosedik.resourcelib.listener.misc.LocalizedResourcePackMessage;
 import me.sosedik.resourcelib.listener.player.DisplayCustomPotionEffectsOnHud;
 import me.sosedik.resourcelib.listener.player.LoadSaveHudMessengerOnJoinLeave;
@@ -74,12 +75,15 @@ public class ResourceLib extends JavaPlugin {
 		new CustomLoreModifier(resourceLibKey("custom_lore")).register();
 
 		EventUtil.registerListeners(this,
+			// misc
+			LocalizedDeathMessages.class,
 			// player
 			DisplayCustomPotionEffectsOnHud.class,
 			LoadSaveHudMessengerOnJoinLeave.class,
 			LoadSaveTabRendererOnJoinLeave.class
 		);
 
+		// RP message depends on FancyMotd Pinger's locale
 		if (getServer().getPluginManager().isPluginEnabled("FancyMotd")) {
 			EventUtil.registerListeners(this, LocalizedResourcePackMessage.class);
 		}

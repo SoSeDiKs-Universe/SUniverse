@@ -1,0 +1,4 @@
+{
+	"death.attack.chest_crush": "<entity> был раздавлен крышкой сундука из-за <attacker>",
+	"death.attack.chest_crush.item": "<entity> был раздавлен крышкой сундука из-за <attacker>, держащего <item>"
+}

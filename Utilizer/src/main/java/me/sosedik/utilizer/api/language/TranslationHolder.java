@@ -29,6 +29,9 @@ import java.util.Random;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+/**
+ * Holds custom translations
+ */
 public class TranslationHolder {
 
 	private static final TranslationHolder TRANSLATION_HOLDER = new TranslationHolder();
@@ -36,13 +39,41 @@ public class TranslationHolder {
 
 	private final Map<LangOptions, JsonObject> locales = new HashMap<>();
 
+	/**
+	 * Checks whether there's a localization message for the provided path
+	 *
+	 * @param path message path
+	 * @return whether the localization exists
+	 */
+	public boolean hasMessage(@NotNull String path) {
+		JsonObject locale = this.locales.get(LangOptionsStorage.getDefaultLangOptions());
+		return locale.has(path);
+	}
+
+	/**
+	 * Gets the message from the storage.
+	 * Will scream (print the warning) and return the path back if missing.
+	 *
+	 * @param langOptions language options
+	 * @param path message path
+	 * @return stored message
+	 */
 	public @NotNull String @NotNull [] getMessage(@NotNull LangOptions langOptions, @NotNull String path) {
 		return getMessage(langOptions, path, true);
 	}
 
+	/**
+	 * Gets the message from the storage.
+	 * Will return the path back if {@code scream}, or {@code null} otherwise.
+	 *
+	 * @param langOptions language options
+	 * @param path message path
+	 * @param scream whether to print a warning on a missing path
+	 * @return stored message if exists
+	 */
 	@Contract("_, _, true -> !null")
 	public @NotNull String @Nullable [] getMessage(@NotNull LangOptions langOptions, @NotNull String path, boolean scream) {
-		JsonObject langJson = locales.get(langOptions);
+		JsonObject langJson = this.locales.get(langOptions);
 		if (langJson == null || !langJson.has(path)) {
 			// Retry for default language
 			LangOptions defaultLangOptions = LangOptionsStorage.getDefaultLangOptions();
@@ -179,8 +210,6 @@ public class TranslationHolder {
 					JsonObject locale = gson.fromJson(reader, JsonObject.class);
 					toCompute.computeIfAbsent(name.split("/")[0], k -> new ArrayList<>()).add(locale);
 				}
-//				if (name.startsWith("localizations/") && name.endsWith(".json"))
-//					plugin.saveResource(name, true);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -238,6 +267,11 @@ public class TranslationHolder {
 		}
 	}
 
+	/**
+	 * Gets the translation holder
+	 *
+	 * @return the translation holder
+	 */
 	public static @NotNull TranslationHolder translationHolder() {
 		return TRANSLATION_HOLDER;
 	}

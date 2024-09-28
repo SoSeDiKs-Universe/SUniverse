@@ -2,6 +2,7 @@ package me.sosedik.utilizer.util;
 
 import org.bukkit.HeightMap;
 import org.bukkit.World;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -24,6 +25,11 @@ public class EntityUtil {
 	private EntityUtil() {
 		throw new IllegalStateException("Utility class");
 	}
+
+	/**
+	 * Covers entities that should be excluded from interactions
+	 */
+	public static Predicate<LivingEntity> IGNORE_INTERACTION = (entity) -> entity instanceof ArmorStand armorStand && armorStand.isMarker();
 
 	private static final List<Predicate<LivingEntity>> EXTRA_PLAYER_VISIBILITY_RULES = new ArrayList<>();
 

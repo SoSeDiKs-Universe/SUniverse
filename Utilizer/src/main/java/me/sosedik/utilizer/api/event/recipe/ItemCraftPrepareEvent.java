@@ -130,7 +130,7 @@ public class ItemCraftPrepareEvent extends Event {
 		if (this.parentEvent instanceof PrepareItemCraftEvent event) {
 			return event.getInventory().getMatrix();
 		} else if (this.parentEvent instanceof CrafterCraftEvent event) {
-			if (!(event.getBlock().getState() instanceof Crafter crafter)) return new ItemStack[] {};
+			if (!(event.getBlock().getState(false) instanceof Crafter crafter)) return new ItemStack[] {};
 			return crafter.getInventory().getContents();
 		} else {
 			return new ItemStack[] {};

@@ -151,7 +151,7 @@ public class ResourceLib extends JavaPlugin {
 	 * @return namespaced key
 	 */
 	public static @NotNull NamespacedKey resourceLibKey(@NotNull String value) {
-		return new NamespacedKey(instance(), value);
+		return new NamespacedKey("resourcelib", value);
 	}
 
 	/**

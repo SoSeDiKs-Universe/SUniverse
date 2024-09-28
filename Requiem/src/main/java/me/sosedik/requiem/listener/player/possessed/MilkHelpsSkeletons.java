@@ -1,6 +1,7 @@
 package me.sosedik.requiem.listener.player.possessed;
 
 import me.sosedik.requiem.feature.PossessingPlayer;
+import me.sosedik.resourcelib.impl.item.RLibItemTags;
 import org.bukkit.Material;
 import org.bukkit.entity.AbstractSkeleton;
 import org.bukkit.entity.EntityType;
@@ -20,7 +21,7 @@ public class MilkHelpsSkeletons implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onConsume(@NotNull PlayerItemConsumeEvent event) {
-		if (event.getItem().getType() != Material.MILK_BUCKET) return; // TODO milk bottle
+		if (!RLibItemTags.MILK_DRINKABLES.isTagged(event.getItem().getType())) return;
 
 		LivingEntity possessed = PossessingPlayer.getPossessed(event.getPlayer());
 		if (possessed == null) return;

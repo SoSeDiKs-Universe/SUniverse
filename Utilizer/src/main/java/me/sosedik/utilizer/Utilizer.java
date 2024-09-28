@@ -49,7 +49,7 @@ public final class Utilizer extends JavaPlugin {
 		LangOptionsStorage.init(this);
 
 		Mini.registerTagResolvers(
-			TagResolver.resolver("discord", Tag.selfClosingInserting(Component.text(Utilizer.instance().getConfig().getString("discord", "discord.com")))), // TODO unhardcode
+			TagResolver.resolver("discord", Tag.selfClosingInserting(Component.text(getConfig().getString("discord", "discord.com")))),
 			KaomojiTag.KAOMOJI,
 			RandomColorTag.RANDOM_COLOR
 		);

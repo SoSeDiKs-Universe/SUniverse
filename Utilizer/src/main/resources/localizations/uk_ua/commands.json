@@ -1,0 +1,8 @@
+{
+	"command.lang.unsupported": "<red>Непідтримувана резервна мова сервера: <green><language></green>",
+	"command.lang.set": "Резервна мова сервера встановлена: <green><language></green>",
+	"command.lang.set.other": "Вы встановили резервну мову сервера на <green><language></green> для гравця <yellow><player></yellow>",
+	"command.translator.unsupported": "<red>Непідтримувана мова для перекладів: <green><translation></green>",
+	"command.translator.set": "Мову перекладів встановлено: <green><translation></green>",
+	"command.translator.set.other": "Ви встановили мову перекладів на <green><translation></green> для гравця <yellow><player></yellow>"
+}

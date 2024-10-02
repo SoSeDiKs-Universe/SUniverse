@@ -1,0 +1,8 @@
+{
+	"command.lang.unsupported": "<red>Unsupported server fallback language: <green><language></green>",
+	"command.lang.set": "Server fallback language set: <green><language></green>",
+	"command.lang.set.other": "You've set server fallback language to <green><language></green> for <yellow><player></yellow>",
+	"command.translator.unsupported": "<red>Unsupported translation language: <green><translation></green>",
+	"command.translator.set": "Translations language set: <green><translation></green>",
+	"command.translator.set.other": "You've set translation language to <green><translation></green> for <yellow><player></yellow>"
+}

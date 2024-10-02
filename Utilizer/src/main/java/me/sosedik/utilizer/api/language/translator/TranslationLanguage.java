@@ -5,19 +5,17 @@ import org.jetbrains.annotations.NotNull;
 /**
  * A language used in translation service
  *
- * @param displayName native display name
  * @param id language identifier
+ * @param displayName native display name
  */
-public record TranslationLanguage(@NotNull String displayName,
-                                  @NotNull String id) {
+public record TranslationLanguage(
+	@NotNull String id,
+	@NotNull String displayName
+) {
 
 	/**
-	 * A language used in translation service
-	 *
-	 * @param id language identifier
+	 * Auto detect language
 	 */
-	public TranslationLanguage(@NotNull String id) {
-		this("TOD", id); // ToDo
-	}
+	public static final TranslationLanguage AUTO = new TranslationLanguage("auto", "Auto");
 
 }

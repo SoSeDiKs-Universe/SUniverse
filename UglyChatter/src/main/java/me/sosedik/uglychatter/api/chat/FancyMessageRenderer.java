@@ -4,16 +4,23 @@ import io.papermc.paper.chat.ChatRenderer;
 import me.sosedik.uglychatter.api.markdown.MiniMarkdown;
 import me.sosedik.uglychatter.api.mini.placeholder.EmojiPlaceholder;
 import me.sosedik.uglychatter.api.mini.placeholder.ReplacementPlaceholder;
+import me.sosedik.utilizer.api.language.LangHolder;
+import me.sosedik.utilizer.api.language.translator.TranslationLanguage;
 import me.sosedik.utilizer.api.message.Messenger;
+import me.sosedik.utilizer.impl.translator.OnlineTranslator;
 import me.sosedik.utilizer.util.ChatUtil;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.Style;
+import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static me.sosedik.utilizer.api.message.Mini.combined;
 
@@ -22,15 +29,23 @@ import static me.sosedik.utilizer.api.message.Mini.combined;
  */
 public class FancyMessageRenderer implements ChatRenderer {
 
+	private final Map<String, String> translations = new HashMap<>();
+	private String rawMessage = null;
+
 	@Override
 	public @NotNull Component render(@NotNull Player source, @NotNull Component sourceDisplayName, @NotNull Component message, @NotNull Audience viewer) {
 		if (!(viewer instanceof Player playerViewer)) {
 			Component strippedMessage = ReplacementPlaceholder.stripPlaceholders(message);
 			return combined(sourceDisplayName, Component.text(": "), strippedMessage);
 		}
+
+		if (this.rawMessage == null) this.rawMessage = getRawInput(message);
+
+		boolean self = source == viewer;
+		TextColor baseColor = TextColor.fromHexString(self ? "#fbe9d1" : "#dceefa");
 		var messenger = Messenger.messenger(viewer);
-		String rawMessage = getRawInput(message);
-		Component renderedMessage = renderMessage(messenger.miniMessage(), rawMessage, source, playerViewer);
+		Component renderedMessage = renderAndTranslate(messenger.miniMessage(), this.rawMessage, source, playerViewer, Style.style(baseColor));
+
 		return combined(
 			sourceDisplayName,
 			Component.text(": "),
@@ -39,17 +54,40 @@ public class FancyMessageRenderer implements ChatRenderer {
 	}
 
 	/**
+	 * Renders the message and adds translated hover to it
+	 *
+	 * @param deserializer deserializer for the message
+	 * @param rawMessage raw message
+	 * @param source message sender
+	 * @param viewer message viewer
+	 * @param baseStyle parent style to use for the message
+	 * @return rendered message
+	 */
+	public @NotNull Component renderAndTranslate(@NotNull MiniMessage deserializer, @NotNull String rawMessage, @NotNull Player source, @NotNull Player viewer, @NotNull Style baseStyle) {
+		Component message = renderMessage(deserializer, rawMessage, source, viewer);
+		Component hover = getTranslation(deserializer, source, viewer);
+		hover = Component.text().style(baseStyle).append(hover).build();
+		return Component.text().style(baseStyle).hoverEvent(hover).append(message).build();
+	}
+
+	private @NotNull Component getTranslation(@NotNull MiniMessage deserializer, @NotNull Player source, @NotNull Player viewer) {
+		TranslationLanguage translateTo = LangHolder.langHolder(viewer).getTranslationLanguage();
+		String translated = translations.computeIfAbsent(translateTo.id(), k -> OnlineTranslator.translate(this.rawMessage, TranslationLanguage.AUTO, translateTo));
+		return renderMessage(deserializer, translated, source, viewer);
+	}
+
+	/**
 	 * Renders the message using minimessage and registered replacement placeholders
 	 *
 	 * @param deserializer deserializer for the message
 	 * @param rawMessage raw message
-	 * @param sender message sender
+	 * @param source message sender
 	 * @param viewer message viewer
 	 * @return rendered message
 	 */
-	public static @NotNull Component renderMessage(@NotNull MiniMessage deserializer, @NotNull String rawMessage, @Nullable Player sender, @Nullable Player viewer) {
+	public static @NotNull Component renderMessage(@NotNull MiniMessage deserializer, @NotNull String rawMessage, @Nullable Player source, @Nullable Player viewer) {
 		Component message = deserializer.deserialize(rawMessage);
-		message = ReplacementPlaceholder.parsePlaceholders(message, sender, viewer);
+		message = ReplacementPlaceholder.parsePlaceholders(message, source, viewer);
 		return message;
 	}
 

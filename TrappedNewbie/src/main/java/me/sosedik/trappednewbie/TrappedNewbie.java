@@ -103,16 +103,16 @@ public final class TrappedNewbie extends JavaPlugin {
 	private void registerCommands() {
 		var commandManager = CommandManager.commandManager();
 
-		commandManager.registerCommands(this,
-			SpitCommand.class
-		);
-
 		commandManager.manager().parserRegistry().registerParser(PlayerWorldParser.playerWorldParser());
 		BukkitBrigadierMapper<CommandSourceStack> mapper = new BukkitBrigadierMapper<>(
 			getLogger(),
 			commandManager.manager().brigadierManager()
 		);
 		mapper.mapSimpleNMS(new TypeToken<PlayerWorldParser<CommandSourceStack>>() {}, "nbt_path", true);
+
+		commandManager.registerCommands(this,
+			SpitCommand.class
+		);
 	}
 
 	/**

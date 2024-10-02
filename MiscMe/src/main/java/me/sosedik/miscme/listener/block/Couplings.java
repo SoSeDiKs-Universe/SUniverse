@@ -36,7 +36,7 @@ public class Couplings implements Listener {
 		if (block == null) return;
 
 		Material blockType = block.getType();
-		if (Tag.WOODEN_DOORS.isTagged(blockType)) {
+		if (Tag.MOB_INTERACTABLE_DOORS.isTagged(blockType)) {
 			if (!(block.getBlockData() instanceof Door door)) return;
 
 			Player player = event.getPlayer();

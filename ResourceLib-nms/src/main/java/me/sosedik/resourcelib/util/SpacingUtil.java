@@ -30,7 +30,7 @@ public class SpacingUtil {
 	/**
 	 * Same as normal space
 	 */
-	public static final String FAKE_SPACE = "\uF834";
+	public static final String FAKE_SPACE = ChatUtil.SPACE_REPLACER;
 	/**
 	 * One pixel back, but in minecraft font
 	 */
@@ -135,9 +135,9 @@ public class SpacingUtil {
 	public static @NotNull List<Component> iconize(@NotNull Messenger messenger, @NotNull Component icon, @NotNull String messagePath, @NotNull TagResolver... placeholders) {
 		String[] message = messenger.getRawMessage(messagePath);
 		List<Component> components = new ArrayList<>();
-		components.add(combine(Component.space(), icon, messenger.getMiniMessage(message[0], placeholders)));
+		components.add(combine(Component.space(), icon, Mini.mini(messenger.miniMessage(), message[0], placeholders)));
 		for (int j = 1; j < message.length; j++)
-			components.add(combine(Component.space(), ICON_SPACE, messenger.getMiniMessage(message[j], placeholders)));
+			components.add(combine(Component.space(), ICON_SPACE, Mini.mini(messenger.miniMessage(), message[j], placeholders)));
 		return components;
 	}
 

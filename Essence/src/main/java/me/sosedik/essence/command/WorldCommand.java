@@ -2,7 +2,6 @@ package me.sosedik.essence.command;
 
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import me.sosedik.essence.Essence;
-import me.sosedik.utilizer.CommandManager;
 import me.sosedik.utilizer.api.message.Messenger;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -20,10 +19,6 @@ import static me.sosedik.utilizer.api.message.Mini.raw;
  */
 @Permission("essence.command.world")
 public class WorldCommand {
-
-	public WorldCommand(@NotNull CommandManager manager) {
-		manager.registerCommand(this);
-	}
 
 	@Command("world <world> [player]")
 	public void onCommand(

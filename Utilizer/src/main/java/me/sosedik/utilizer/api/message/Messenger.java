@@ -8,7 +8,6 @@ import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -19,26 +18,23 @@ import static me.sosedik.utilizer.api.message.Mini.mini;
 import static net.kyori.adventure.text.Component.newline;
 
 /**
- * Wrapper for sending translated messages
+ * Wrapper for getting translated messages
  */
 public class Messenger {
 
-	private final Audience audience;
-	private final @Nullable LangHolder langHolder;
-	private final LangOptions langOptions;
+	private final @Nullable Audience audience;
+	private final @Nullable LangOptions langOptions;
 	private final MiniMessage miniMessage;
 
 	private Messenger(@NotNull LangOptions langOptions) {
-		this.audience = Bukkit.getServer();
-		this.langHolder = null;
+		this.audience = null;
 		this.langOptions = langOptions;
 		this.miniMessage = buildMini(this);
 	}
 
-	private Messenger(@Nullable Audience audience) {
-		this.audience = audience == null ? Bukkit.getServer() : audience;
-		this.langHolder = audience instanceof Player player ? LangHolder.langHolder(player) : null;
-		this.langOptions = LangOptionsStorage.getDefaultLangOptions();
+	private Messenger(@NotNull Audience audience) {
+		this.audience = audience;
+		this.langOptions = null;
 		this.miniMessage = buildMini(this);
 	}
 
@@ -47,7 +43,7 @@ public class Messenger {
 	 *
 	 * @return messages receiver
 	 */
-	public @NotNull Audience getAudience() {
+	public @Nullable Audience getAudience() {
 		return this.audience;
 	}
 
@@ -57,16 +53,17 @@ public class Messenger {
 	 * @return language
 	 */
 	public @NotNull LangOptions getLangOptions() {
-		return this.langHolder == null ? this.langOptions : this.langHolder.getLangOptions();
+		if (this.langOptions != null) return this.langOptions;
+		return this.audience instanceof Player player ? LangHolder.langHolder(player).getLangOptions() : LangOptionsStorage.getDefaultLangOptions();
 	}
 
 	/**
-	 * Language holder, if present
+	 * Returns MiniMessage instance of this Messenger
 	 *
-	 * @return language holder
+	 * @return MiniMessage instance
 	 */
-	public @Nullable LangHolder getLangHolder() {
-		return this.langHolder;
+	public @NotNull MiniMessage miniMessage() {
+		return this.miniMessage;
 	}
 
 	/**
@@ -89,16 +86,6 @@ public class Messenger {
 	 */
 	public @NotNull String @Nullable [] getRawMessageIfExists(@NotNull String messagePath) {
 		return TranslationHolder.translationHolder().getMessage(getLangOptions(), messagePath, false);
-	}
-
-	/**
-	 * Returns parsed message
-	 *
-	 * @param messagePath path for message
-	 * @return parsed message
-	 */
-	public @NotNull Component getMessage(@NotNull String messagePath) {
-		return combine(newline(), getMessages(messagePath));
 	}
 
 	/**
@@ -152,17 +139,6 @@ public class Messenger {
 	 * @param resolvers   message tag resolvers
 	 * @return parsed message
 	 */
-	public @NotNull Component getMessage(@NotNull String messagePath, @NotNull TagResolver @NotNull ... resolvers) {
-		return combine(newline(), getMessages(messagePath, resolvers));
-	}
-
-	/**
-	 * Returns parsed message
-	 *
-	 * @param messagePath path for message
-	 * @param resolvers   message tag resolvers
-	 * @return parsed message
-	 */
 	public @NotNull Component @NotNull [] getMessages(@NotNull String messagePath, @NotNull TagResolver @NotNull ... resolvers) {
 		String[] minis = getRawMessage(messagePath);
 		if (minis.length == 1) return new Component[]{mini(this.miniMessage, minis[0], resolvers)};
@@ -174,62 +150,82 @@ public class Messenger {
 	}
 
 	/**
-	 * Returns parsed mini message
+	 * Returns parsed message
 	 *
-	 * @param mini mini message
+	 * @param messagePath path for message
 	 * @return parsed message
 	 */
-	public @NotNull Component getMiniMessage(@NotNull String mini) {
-		return mini(this.miniMessage, mini);
+	public @NotNull Component getMessage(@NotNull String messagePath) {
+		return combine(newline(), getMessages(messagePath));
 	}
 
 	/**
-	 * Returns parsed mini message
+	 * Returns parsed message
 	 *
-	 * @param mini      mini message
-	 * @param resolvers message tag resolvers
+	 * @param messagePath path for message
+	 * @param resolvers   message tag resolvers
 	 * @return parsed message
 	 */
-	public @NotNull Component getMiniMessage(@NotNull String mini, @NotNull TagResolver... resolvers) {
-		return mini(this.miniMessage, mini, resolvers);
+	public @NotNull Component getMessage(@NotNull String messagePath, @NotNull TagResolver @NotNull ... resolvers) {
+		return combine(newline(), getMessages(messagePath, resolvers));
 	}
 
 	/**
-	 * Parses and sends message
+	 * Parses and sends a chat message
 	 *
 	 * @param messagePath path for message
 	 */
 	public void sendMessage(@NotNull String messagePath) {
-		getAudience().sendMessage(getMessage(messagePath));
+		if (this.audience == null) return;
+		this.audience.sendMessage(getMessage(messagePath));
 	}
 
 	/**
-	 * Parses and sends message
+	 * Parses and sends a chat message
 	 *
 	 * @param messagePath path for message
-	 * @param resolvers   message tag resolvers
 	 */
-	public void sendMessage(@NotNull String messagePath, @NotNull TagResolver... resolvers) {
-		getAudience().sendMessage(getMessage(messagePath, resolvers));
+	public void sendMessage(@NotNull String messagePath, @NotNull TagResolver... tags) {
+		if (this.audience == null) return;
+		this.audience.sendMessage(getMessage(messagePath, tags));
 	}
-
-//	public void sendActionBar(@NotNull String messagePath, @NotNull TagResolver... resolvers) {
-//		if (audience instanceof Player player) HudMessenger.get(player).displayMessage(getMessage(messagePath, resolvers));
-//	}
 
 	/**
-	 * Returns MiniMessage instance of this Messenger
+	 * Parses and sends an action bar message
 	 *
-	 * @return MiniMessage instance
+	 * @param messagePath path for message
 	 */
-	public @NotNull MiniMessage miniMessage() {
-		return this.miniMessage;
+	public void sendActionBar(@NotNull String messagePath) {
+		if (this.audience == null) return;
+		this.audience.sendActionBar(getMessage(messagePath));
 	}
 
+	/**
+	 * Parses and sends an action bar message
+	 *
+	 * @param messagePath path for message
+	 */
+	public void sendActionBar(@NotNull String messagePath, @NotNull TagResolver... tags) {
+		if (this.audience == null) return;
+		this.audience.sendActionBar(getMessage(messagePath, tags));
+	}
+
+	/**
+	 * Constructs a new messenger
+	 *
+	 * @param langOptions language options
+	 * @return messenger wrapper
+	 */
 	public static @NotNull Messenger messenger(@NotNull LangOptions langOptions) {
 		return new Messenger(langOptions);
 	}
 
+	/**
+	 * Constructs a new messenger
+	 *
+	 * @param audience messages viewer
+	 * @return messenger wrapper
+	 */
 	public static @NotNull Messenger messenger(@NotNull Audience audience) {
 		return new Messenger(audience);
 	}

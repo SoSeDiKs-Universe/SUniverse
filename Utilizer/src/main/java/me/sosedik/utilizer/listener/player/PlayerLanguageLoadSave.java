@@ -13,16 +13,16 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Loads and saves player's language
  */
 public class PlayerLanguageLoadSave implements Listener {
 
-	private static final Map<UUID, LangHolder> LANG_HOLDERS = new ConcurrentHashMap<>();
+	private static final Map<UUID, LangHolder> LANG_HOLDERS = new HashMap<>();
 
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onLoad(@NotNull PlayerDataLoadedEvent event) {
@@ -30,12 +30,7 @@ public class PlayerLanguageLoadSave implements Listener {
 		ReadWriteNBT data = event.getData();
 		LangOptions langOptions = LangOptionsStorage.getLangOptions(data.getString("server_language"));
 		String translationLanguageId = data.getOrNull("translation_language", String.class);
-		if (translationLanguageId == null) {
-			translationLanguageId = langOptions.translatorId();
-			if (translationLanguageId == null)
-				translationLanguageId = "en"; // TODO actual translations
-		}
-		var translationLanguage = new TranslationLanguage(translationLanguageId);
+		TranslationLanguage translationLanguage = translationLanguageId == null ? null : LangOptionsStorage.getTranslator(translationLanguageId);
 		var langHolder = new LangHolder(player.getUniqueId(), langOptions, translationLanguage);
 		LANG_HOLDERS.put(player.getUniqueId(), langHolder);
 	}

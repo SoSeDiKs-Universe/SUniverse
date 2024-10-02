@@ -37,7 +37,7 @@ public class TranslationHolder {
 	private static final TranslationHolder TRANSLATION_HOLDER = new TranslationHolder();
 	private static final Random RANDOM = new Random();
 
-	private final Map<LangOptions, JsonObject> locales = new HashMap<>();
+	private final Map<String, JsonObject> locales = new HashMap<>();
 
 	/**
 	 * Checks whether there's a localization message for the provided path
@@ -46,7 +46,7 @@ public class TranslationHolder {
 	 * @return whether the localization exists
 	 */
 	public boolean hasMessage(@NotNull String path) {
-		JsonObject locale = this.locales.get(LangOptionsStorage.getDefaultLangOptions());
+		JsonObject locale = this.locales.get(LangOptionsStorage.getDefaultLangOptions().minecraftId());
 		return locale.has(path);
 	}
 
@@ -73,7 +73,7 @@ public class TranslationHolder {
 	 */
 	@Contract("_, _, true -> !null")
 	public @NotNull String @Nullable [] getMessage(@NotNull LangOptions langOptions, @NotNull String path, boolean scream) {
-		JsonObject langJson = this.locales.get(langOptions);
+		JsonObject langJson = this.locales.get(langOptions.minecraftId());
 		if (langJson == null || !langJson.has(path)) {
 			// Retry for default language
 			LangOptions defaultLangOptions = LangOptionsStorage.getDefaultLangOptions();
@@ -215,8 +215,8 @@ public class TranslationHolder {
 			e.printStackTrace();
 		}
 		toCompute.forEach((id, jsons) -> {
-			LangOptions langOptions = LangOptionsStorage.getOrCompute(id);
-			jsons.forEach(json -> loadJson(json, langOptions));
+			LangOptions langOptions = LangOptionsStorage.getLangOptionsIfExist(id);
+			if (langOptions != null) jsons.forEach(json -> loadJson(json, langOptions));
 		});
 		reloadLangs(plugin);
 	}
@@ -240,8 +240,8 @@ public class TranslationHolder {
 			loadLangs(localesFolder, file.getName(), toCompute);
 		}
 		toCompute.forEach((id, jsons) -> {
-			LangOptions langOptions = LangOptionsStorage.getOrCompute(id);
-			jsons.forEach(json -> loadJson(json, langOptions));
+			LangOptions langOptions = LangOptionsStorage.getLangOptionsIfExist(id);
+			if (langOptions != null) jsons.forEach(json -> loadJson(json, langOptions));
 		});
 	}
 
@@ -259,7 +259,7 @@ public class TranslationHolder {
 	}
 
 	private static void loadJson(@NotNull JsonObject json, @NotNull LangOptions langOptions) {
-		var localesJson = TRANSLATION_HOLDER.locales.computeIfAbsent(langOptions, k -> new JsonObject());
+		var localesJson = TRANSLATION_HOLDER.locales.computeIfAbsent(langOptions.minecraftId(), k -> new JsonObject());
 		try {
 			json.entrySet().forEach(entry -> localesJson.add(entry.getKey(), entry.getValue()));
 		} catch (JsonSyntaxException | JsonIOException e) {

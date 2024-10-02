@@ -3,6 +3,7 @@ package me.sosedik.utilizer.api.language;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import me.sosedik.utilizer.Utilizer;
+import me.sosedik.utilizer.api.language.translator.TranslationLanguage;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.jetbrains.annotations.NotNull;
@@ -16,15 +17,18 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Objects;
 
 public class LangOptionsStorage {
 
 	private static final LangOptionsStorage LANG_OPTIONS_STORAGE = new LangOptionsStorage();
 
-	private final Map<String, LangOptions> supportedLanguages = new HashMap<>();
+	private final Map<String, LangOptions> keyToLang = new HashMap<>();
+	private final Map<String, LangOptions> countryToLang = new HashMap<>();
+	private final Map<String, TranslationLanguage> keyToTranslator = new HashMap<>();
+	private final Map<String, TranslationLanguage> langToTranslator = new HashMap<>();
 	private LangOptions defaultLanguage;
 
 	/**
@@ -55,22 +59,7 @@ public class LangOptionsStorage {
 	 * @return language options, or null
 	 */
 	public static @Nullable LangOptions getLangOptionsIfExist(@Nullable String key) {
-		return LANG_OPTIONS_STORAGE.supportedLanguages.get(key);
-	}
-
-	/**
-	 * Gets language name by Minecraft's minecraftId
-	 *
-	 * @param key Minecraft's minecraftId
-	 * @return language options, or null
-	 */
-	public static @NotNull LangOptions getOrCompute(@NotNull String key) {
-		LangOptions langOptions = getLangOptionsIfExist(key);
-		if (langOptions == null) {
-			langOptions = new LangOptions(key);
-			LANG_OPTIONS_STORAGE.supportedLanguages.put(key, langOptions);
-		}
-		return langOptions;
+		return LANG_OPTIONS_STORAGE.keyToLang.get(key);
 	}
 
 	/**
@@ -94,17 +83,38 @@ public class LangOptionsStorage {
 	}
 
 	/**
-	 * Gets language name by user's IP country
+	 * Gets language name by user's country
 	 *
-	 * @param country Country to parse language name from
+	 * @param country country to parse language name from
 	 * @return language options
 	 */
 	public static @NotNull LangOptions getByCountry(@NotNull String country) {
-		for (LangOptions langOptions : getSupportedLanguages()) {
-			if (country.equalsIgnoreCase(langOptions.country()))
-				return langOptions;
-		}
-		return getDefaultLangOptions();
+		LangOptions langOptions = LANG_OPTIONS_STORAGE.countryToLang.get(country.toLowerCase());
+		return langOptions != null ? langOptions : getDefaultLangOptions();
+	}
+
+	/**
+	 * Gets language name by translator id
+	 *
+	 * @param translatorId translator id to parse language name from
+	 * @return language options
+	 */
+	public static @Nullable TranslationLanguage getTranslator(@NotNull String translatorId) {
+		return LANG_OPTIONS_STORAGE.keyToTranslator.get(translatorId);
+	}
+
+	/**
+	 * Gets language name by Minecraft's lang key
+	 *
+	 * @param minecraftId translator id to parse language name from
+	 * @return language options
+	 */
+	public static @NotNull TranslationLanguage getTranslatorLanguage(@NotNull String minecraftId) {
+		TranslationLanguage lang = LANG_OPTIONS_STORAGE.langToTranslator.get(minecraftId);
+		if (lang != null) return lang;
+
+		String defaultKey = getDefaultLangOptions().minecraftId();
+		return LANG_OPTIONS_STORAGE.langToTranslator.get(defaultKey);
 	}
 
 	/**
@@ -122,13 +132,68 @@ public class LangOptionsStorage {
 	 * @return supported language options
 	 */
 	public static @NotNull Collection<@NotNull LangOptions> getSupportedLanguages() {
-		return LANG_OPTIONS_STORAGE.supportedLanguages.values();
+		return LANG_OPTIONS_STORAGE.keyToLang.values();
+	}
+
+	/**
+	 * Gets all supported languages on this server
+	 *
+	 * @return supported language options
+	 */
+	public static @NotNull Collection<@NotNull TranslationLanguage> getSupportedTranslators() {
+		return LANG_OPTIONS_STORAGE.keyToTranslator.values();
 	}
 
 	public static void init(@NotNull Utilizer plugin) {
 		FileConfiguration config = plugin.getConfig();
+
+		if (config.contains("translators")) {
+			ConfigurationSection translators = config.getConfigurationSection("translators");
+			translators.getKeys(false).forEach(id -> {
+				String displayName = translators.getString(id, id);
+				LANG_OPTIONS_STORAGE.keyToTranslator.put(id, new TranslationLanguage(id, displayName));
+			});
+		}
+
+		if (!config.contains("supported-languages")) {
+			ConfigurationSection defaultLang = config.createSection("supported-languages").createSection("en_us");
+			defaultLang.set("name", "English");
+			defaultLang.set("extra-langs", List.of());
+			defaultLang.set("translator", "en");
+			defaultLang.set("countries", List.of("Worldwide"));
+		}
+
+		ConfigurationSection supportedLangs = config.getConfigurationSection("supported-languages");
+		assert supportedLangs != null;
+		for (String minecraftId : supportedLangs.getKeys(false)) {
+			ConfigurationSection supportedLang = supportedLangs.getConfigurationSection(minecraftId);
+			assert supportedLang != null;
+			String displayName = supportedLang.getString("name", minecraftId);
+
+			var langOptions = new LangOptions(minecraftId, displayName);
+			LANG_OPTIONS_STORAGE.keyToLang.put(minecraftId, langOptions);
+
+			List<String> extraLangs = supportedLang.getStringList("extra-langs");
+			for (String langId: extraLangs)
+				LANG_OPTIONS_STORAGE.keyToLang.put(langId, langOptions);
+
+			List<String> countries = supportedLang.getStringList("countries");
+			for (String country : countries)
+				LANG_OPTIONS_STORAGE.countryToLang.put(country.toLowerCase(), langOptions);
+
+			String translatorId = supportedLang.getString("translator");
+			if (translatorId == null) continue;
+
+			TranslationLanguage translator = LANG_OPTIONS_STORAGE.keyToTranslator.get(translatorId);
+			if (translator == null)
+				Utilizer.logger().error("Unknown translator: {}", translatorId);
+			else
+				LANG_OPTIONS_STORAGE.langToTranslator.put(minecraftId, translator);
+		}
+
 		if (!config.contains("default-language"))
 			config.set("default-language", "en_us");
+
 		String defaultLanguageId = config.getString("default-language");
 		LangOptions defaultLanguage = getLangOptionsIfExist(defaultLanguageId);
 		if (defaultLanguage == null) {
@@ -136,22 +201,8 @@ public class LangOptionsStorage {
 			plugin.getServer().getPluginManager().disablePlugin(plugin);
 			return;
 		}
-		if (!config.contains("supported-languages")) {
-			ConfigurationSection defaultLang = config.createSection("supported-languages").createSection("en_us");
-			defaultLang.set("country", "Worldwide");
-		}
-		if (config.isConfigurationSection("supported-languages")) {
-			ConfigurationSection supportedKeys = config.getConfigurationSection("supported-languages");
-			assert supportedKeys != null;
-			for (String minecraftId : supportedKeys.getKeys(false)) {
-				LangOptions langOptions = getLangOptionsIfExist(minecraftId);
-				if (langOptions == null) continue;
-
-				if (supportedKeys.contains("country"))
-					langOptions.metadata().put("country", Objects.requireNonNull(supportedKeys.getString("country")));
-			}
-		}
 		LANG_OPTIONS_STORAGE.defaultLanguage = defaultLanguage;
+		Utilizer.logger().info("Using {} language as the default", defaultLanguage.minecraftId());
 	}
 
 }

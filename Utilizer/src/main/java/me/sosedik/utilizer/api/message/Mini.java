@@ -5,7 +5,6 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.JoinConfiguration;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.TagPattern;
@@ -97,14 +96,6 @@ public class Mini {
 		return miniMessage.deserialize(text, TagResolver.resolver(resolvers));
 	}
 
-	public static @NotNull MiniMessage buildMini() {
-		return MiniMessage.builder().tags(TagResolver.resolver(TagResolver.standard(), TagResolver.resolver(DEFAULT_RESOLVERS))).build();
-	}
-
-	public static @NotNull MiniMessage buildMini(@NotNull Messenger messenger) {
-		return MiniMessage.builder().tags(TagResolver.resolver(TagResolver.standard(), TagResolver.resolver(DEFAULT_RESOLVERS), getPlaceholders(messenger))).build();
-	}
-
 	private static @NotNull TagResolver getPlaceholders(@NotNull Messenger messenger) {
 		List<TagResolver> resolvers = new ArrayList<>();
 		for (Function<Messenger, TagResolver> provider : DEFAULT_VIEWER_AWARE_RESOLVERS) {
@@ -115,26 +106,28 @@ public class Mini {
 		return TagResolver.resolver(resolvers);
 	}
 
-	public static @NotNull Component iconize(@NotNull String content) {
-		return iconize(content, false);
-	}
-
-	private static final TextColor SHADOWLESS_COLOR = TextColor.fromHexString("#4e5c24");
-	public static @NotNull Component iconize(@NotNull String content, boolean removeShadow) {
-		return Component.text().content(content)
-//				.font(ChatUtil.ICONS_FONT)
-				.color(removeShadow ? SHADOWLESS_COLOR : NamedTextColor.WHITE)
-				.decoration(TextDecoration.ITALIC, false)
-				.build();
-	}
-
 	public static @NotNull Component asIcon(@NotNull Component content) {
 		return content.colorIfAbsent(NamedTextColor.WHITE)
 				.decorationIfAbsent(TextDecoration.ITALIC, TextDecoration.State.FALSE);
 	}
 
-	public static @NotNull String serialize(@NotNull Component component) {
-		return buildMini().serialize(component);
+	/**
+	 * Builds a mini message instance with registered global placeholders
+	 *
+	 * @return a mini message instance
+	 */
+	public static @NotNull MiniMessage buildMini() {
+		return MiniMessage.builder().tags(TagResolver.resolver(TagResolver.standard(), TagResolver.resolver(DEFAULT_RESOLVERS))).build();
+	}
+
+	/**
+	 * Builds a mini message instance with registered global and viewer-aware placeholders
+	 *
+	 * @param messenger viewer
+	 * @return a mini message instance
+	 */
+	public static @NotNull MiniMessage buildMini(@NotNull Messenger messenger) {
+		return MiniMessage.builder().tags(TagResolver.resolver(TagResolver.standard(), TagResolver.resolver(DEFAULT_RESOLVERS), getPlaceholders(messenger))).build();
 	}
 
 	/**

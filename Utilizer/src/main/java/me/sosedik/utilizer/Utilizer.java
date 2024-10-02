@@ -1,7 +1,13 @@
 package me.sosedik.utilizer;
 
+import io.leangen.geantyref.TypeToken;
+import io.papermc.paper.command.brigadier.CommandSourceStack;
+import me.sosedik.utilizer.api.command.parser.AnyString;
 import me.sosedik.utilizer.api.language.LangOptionsStorage;
+import me.sosedik.utilizer.api.language.TranslationHolder;
 import me.sosedik.utilizer.api.message.Mini;
+import me.sosedik.utilizer.command.LangCommand;
+import me.sosedik.utilizer.command.TranslatorCommand;
 import me.sosedik.utilizer.impl.item.modifier.HiddenTooltipsModifier;
 import me.sosedik.utilizer.impl.message.tag.KaomojiTag;
 import me.sosedik.utilizer.impl.message.tag.LocaleResolver;
@@ -26,6 +32,8 @@ import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.incendo.cloud.bukkit.internal.BukkitBrigadierMapper;
+import org.incendo.cloud.parser.ParserDescriptor;
 import org.jetbrains.annotations.NotNull;
 
 public final class Utilizer extends JavaPlugin {
@@ -40,13 +48,15 @@ public final class Utilizer extends JavaPlugin {
 
 		setupDefaultConfig();
 
+		LangOptionsStorage.init(this);
+		TranslationHolder.extractLocales(this);
+
 		scheduler = new Scheduler(this);
 	}
 
 	@Override
 	public void onEnable() {
 		CommandManager.init(this);
-		LangOptionsStorage.init(this);
 
 		Mini.registerTagResolvers(
 			TagResolver.resolver("discord", Tag.selfClosingInserting(Component.text(getConfig().getString("discord", "discord.com")))),
@@ -58,6 +68,8 @@ public final class Utilizer extends JavaPlugin {
 		);
 
 		new HiddenTooltipsModifier(utilizerKey("hidden_tooltips")).register();
+
+		registerCommands();
 
 		EventUtil.registerListeners(this,
 			// entity
@@ -76,6 +88,23 @@ public final class Utilizer extends JavaPlugin {
 			SetupPlayerScoreboards.class
 		);
 		saveConfig();
+	}
+
+	private void registerCommands() {
+		var commandManager = CommandManager.commandManager();
+
+		BukkitBrigadierMapper<CommandSourceStack> mapper = new BukkitBrigadierMapper<>(
+			getLogger(),
+			commandManager.manager().brigadierManager()
+		);
+		var anyStringTypeToken = new TypeToken<AnyString.AnyStringParser<CommandSourceStack>>() {};
+		mapper.mapSimpleNMS(anyStringTypeToken, "nbt_path", true);
+		commandManager.manager().parserRegistry().registerParser(ParserDescriptor.of(new AnyString.AnyStringParser<>(), AnyString.class));
+
+		commandManager.registerCommands(this,
+			LangCommand.class,
+			TranslatorCommand.class
+		);
 	}
 
 	private void setupDefaultConfig() {

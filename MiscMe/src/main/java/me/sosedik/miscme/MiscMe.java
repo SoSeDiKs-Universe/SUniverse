@@ -16,6 +16,7 @@ import me.sosedik.miscme.listener.item.ReadableBooksInFrames;
 import me.sosedik.miscme.listener.misc.BetterTimeSetCommand;
 import me.sosedik.miscme.listener.misc.WaterAwarePotionReset;
 import me.sosedik.miscme.listener.player.HidePlayerNameTags;
+import me.sosedik.miscme.listener.vehicle.JumpyBoats;
 import me.sosedik.miscme.listener.world.CustomDayCycleCleanup;
 import me.sosedik.utilizer.api.language.TranslationHolder;
 import me.sosedik.utilizer.util.EventUtil;
@@ -63,6 +64,8 @@ public final class MiscMe extends JavaPlugin {
 			WaterAwarePotionReset.class,
 			// player
 			HidePlayerNameTags.class,
+			// vehicle
+			JumpyBoats.class,
 			// world
 			CustomDayCycleCleanup.class
 		);

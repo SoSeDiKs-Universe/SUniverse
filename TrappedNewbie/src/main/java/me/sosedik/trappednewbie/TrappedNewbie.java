@@ -8,6 +8,7 @@ import me.sosedik.trappednewbie.api.command.parser.PlayerWorldParser;
 import me.sosedik.trappednewbie.command.SpitCommand;
 import me.sosedik.trappednewbie.impl.item.modifier.VisualArmorModifier;
 import me.sosedik.trappednewbie.listener.misc.DisableJoinQuitMessages;
+import me.sosedik.trappednewbie.listener.misc.FakeHardcoreHearts;
 import me.sosedik.trappednewbie.listener.misc.TabHeaderFooterBeautifier;
 import me.sosedik.trappednewbie.listener.player.TeamableLeatherEquipment;
 import me.sosedik.trappednewbie.listener.player.VisualArmorLayer;
@@ -65,6 +66,7 @@ public final class TrappedNewbie extends JavaPlugin {
 		EventUtil.registerListeners(this,
 			// misc
 			DisableJoinQuitMessages.class,
+			FakeHardcoreHearts.class,
 			TabHeaderFooterBeautifier.class,
 			// player
 			TeamableLeatherEquipment.class,

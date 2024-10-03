@@ -7,6 +7,7 @@ dependencies {
     compileOnly(project(":UglyChatter"))
 
     compileOnly("de.tr7zw:item-nbt-api-plugin:${project.property("nbtApiVersion")}")
+    compileOnly("com.github.retrooper:packetevents-spigot:${project.property("packeteventsVersion")}")
 }
 
 paper {
@@ -15,6 +16,10 @@ paper {
 
     serverDependencies {
         register("NBTAPI") {
+            load = PaperPluginDescription.RelativeLoadOrder.BEFORE
+            required = true
+        }
+        register("packetevents") {
             load = PaperPluginDescription.RelativeLoadOrder.BEFORE
             required = true
         }

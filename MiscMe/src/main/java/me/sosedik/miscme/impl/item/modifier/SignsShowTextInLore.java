@@ -47,7 +47,7 @@ public class SignsShowTextInLore extends ItemModifier {
 		if (!(contextBox.getMeta() instanceof BlockStateMeta bookMeta)) return ModificationResult.PASS;
 		if (!(bookMeta.getBlockState() instanceof Sign sign)) return ModificationResult.PASS;
 
-		boolean hasText = NBT.modifyComponents(contextBox.getItem(), nbt -> { // TODO getComponents, update NBT-API
+		boolean hasText = NBT.getComponents(contextBox.getItem(), nbt -> {
 			if (!nbt.hasTag(BLOCK_ENTITY_TAG)) return false;
 
 			ReadableNBT blockEntityTag = nbt.getCompound(BLOCK_ENTITY_TAG);

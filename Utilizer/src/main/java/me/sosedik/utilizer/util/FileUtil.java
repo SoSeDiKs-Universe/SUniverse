@@ -6,7 +6,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonStreamParser;
 import com.google.gson.stream.JsonWriter;
 import de.tr7zw.nbtapi.NBT;
-import de.tr7zw.nbtapi.NBTFile;
 import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import me.sosedik.utilizer.Utilizer;
 import org.jetbrains.annotations.NotNull;
@@ -119,7 +118,7 @@ public class FileUtil {
 	 */
 	public static @NotNull ReadWriteNBT readNbtFile(@NotNull File file) {
 		try {
-			return NBTFile.readFrom(file);
+			return NBT.readFile(file);
 		} catch (IOException e) {
 			Utilizer.logger().error("Could not read nbt file!", e);
 			return NBT.createNBTObject();

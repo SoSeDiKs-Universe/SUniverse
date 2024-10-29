@@ -11,10 +11,18 @@ import me.sosedik.miscme.listener.block.Couplings;
 import me.sosedik.miscme.listener.block.DontEditSignsOnPlace;
 import me.sosedik.miscme.listener.block.DoorBells;
 import me.sosedik.miscme.listener.block.SignsRetain;
+import me.sosedik.miscme.listener.entity.ArmorStandBedrockPoses;
+import me.sosedik.miscme.listener.entity.ArmorStandSpawnsWithArms;
+import me.sosedik.miscme.listener.entity.BurningSpreadsWhenAttacking;
+import me.sosedik.miscme.listener.entity.DynamicCreeperExplosion;
+import me.sosedik.miscme.listener.entity.RainbowSheepDropRandomWool;
+import me.sosedik.miscme.listener.entity.SheepBurnableWool;
+import me.sosedik.miscme.listener.entity.SheepRegrowNaturalWool;
 import me.sosedik.miscme.listener.item.BottledAir;
 import me.sosedik.miscme.listener.item.ReadableBooksInFrames;
 import me.sosedik.miscme.listener.misc.BetterTimeSetCommand;
 import me.sosedik.miscme.listener.misc.WaterAwarePotionReset;
+import me.sosedik.miscme.listener.player.BurningForcesToRun;
 import me.sosedik.miscme.listener.player.HidePlayerNameTags;
 import me.sosedik.miscme.listener.vehicle.JumpyBoats;
 import me.sosedik.miscme.listener.world.CustomDayCycleCleanup;
@@ -56,6 +64,14 @@ public final class MiscMe extends JavaPlugin {
 			DontEditSignsOnPlace.class,
 			DoorBells.class,
 			SignsRetain.class,
+			// entity
+			ArmorStandBedrockPoses.class,
+			ArmorStandSpawnsWithArms.class,
+			BurningSpreadsWhenAttacking.class,
+			DynamicCreeperExplosion.class,
+			RainbowSheepDropRandomWool.class,
+			SheepBurnableWool.class,
+			SheepRegrowNaturalWool.class,
 			// item
 			BottledAir.class,
 			ReadableBooksInFrames.class,
@@ -63,6 +79,7 @@ public final class MiscMe extends JavaPlugin {
 			BetterTimeSetCommand.class,
 			WaterAwarePotionReset.class,
 			// player
+			BurningForcesToRun.class,
 			HidePlayerNameTags.class,
 			// vehicle
 			JumpyBoats.class,

@@ -43,6 +43,13 @@ public class LocationUtil {
 		BlockFace.SOUTH_WEST, BlockFace.WEST, BlockFace.NORTH_WEST, BlockFace.NORTH
 	);
 
+	/**
+	 * The surrounding block faces
+	 */
+	public static final List<BlockFace> SURROUNDING_BLOCKS_XZ = List.of(
+		BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST, BlockFace.NORTH
+	);
+
 	private static final Random RANDOM = new Random();
 	private static final Set<NamespacedKey> RTP_BLACKLISTED_BIOMES = new HashSet<>();
 

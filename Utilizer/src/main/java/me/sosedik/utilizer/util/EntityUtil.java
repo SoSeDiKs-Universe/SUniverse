@@ -9,6 +9,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.EquipmentSlot;
@@ -128,6 +129,21 @@ public class EntityUtil {
 					WARDEN -> true;
 			default -> false;
 		};
+	}
+
+	/**
+	 * Checks whether entity was naturally spawned
+	 * (including spawner and spawner egg)
+	 *
+	 * @param entity entity
+	 * @return whether entity was naturally spawned
+	 */
+	public static boolean isNaturallySpawned(@NotNull Entity entity) {
+		CreatureSpawnEvent.SpawnReason spawnReason = entity.getEntitySpawnReason();
+		return spawnReason == CreatureSpawnEvent.SpawnReason.NATURAL
+				|| spawnReason == CreatureSpawnEvent.SpawnReason.DEFAULT
+				|| spawnReason == CreatureSpawnEvent.SpawnReason.SPAWNER
+				|| spawnReason == CreatureSpawnEvent.SpawnReason.SPAWNER_EGG;
 	}
 
 }

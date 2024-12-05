@@ -14,6 +14,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -81,6 +82,16 @@ public class EntityUtil {
 
 		ItemStack item = equipment.getItem(slot);
 		return ItemUtil.isLightSource(item);
+	}
+
+	/**
+	 * Checks whether the entity can see (i.e. is not in darkness or has night vision)
+	 *
+	 * @param entity entity
+	 * @return whether the entity can see
+	 */
+	public static boolean canSee(@NotNull LivingEntity entity) {
+		return !isInDarkness(entity) || entity.hasPotionEffect(PotionEffectType.NIGHT_VISION);
 	}
 
 	/**

@@ -53,15 +53,15 @@ public class Mini {
 	}
 
 	public static @NotNull TagResolver.Single raw(@TagPattern @NotNull String key, int value) {
-		return raw(key, String.valueOf(value));
+		return Placeholder.unparsed(key, String.valueOf(value));
 	}
 
 	public static @NotNull TagResolver.Single raw(@TagPattern @NotNull String key, double value) {
-		return raw(key, String.valueOf(value));
+		return Placeholder.unparsed(key, String.valueOf(value));
 	}
 
 	public static @NotNull TagResolver.Single raw(@TagPattern @NotNull String key, @NotNull String value) {
-		return Placeholder.unparsed(key, value);
+		return Placeholder.parsed(key, value);
 	}
 
 	public static @NotNull TagResolver.Single raw(@TagPattern @NotNull String key, @NotNull Component value) {
@@ -117,7 +117,10 @@ public class Mini {
 	 * @return a mini message instance
 	 */
 	public static @NotNull MiniMessage buildMini() {
-		return MiniMessage.builder().tags(TagResolver.resolver(TagResolver.standard(), TagResolver.resolver(DEFAULT_RESOLVERS))).build();
+		return MiniMessage.builder().tags(TagResolver.resolver(
+			TagResolver.standard(),
+			TagResolver.resolver(DEFAULT_RESOLVERS)
+		)).build();
 	}
 
 	/**
@@ -127,7 +130,22 @@ public class Mini {
 	 * @return a mini message instance
 	 */
 	public static @NotNull MiniMessage buildMini(@NotNull Messenger messenger) {
-		return MiniMessage.builder().tags(TagResolver.resolver(TagResolver.standard(), TagResolver.resolver(DEFAULT_RESOLVERS), getPlaceholders(messenger))).build();
+		return buildMini(messenger, TagResolver.standard());
+	}
+
+	/**
+	 * Builds a mini message instance with registered global and viewer-aware placeholders
+	 *
+	 * @param messenger viewer
+	 * @param standardResolver standard tag resolver
+	 * @return a mini message instance
+	 */
+	public static @NotNull MiniMessage buildMini(@NotNull Messenger messenger, @NotNull TagResolver standardResolver) {
+		return MiniMessage.builder().tags(TagResolver.resolver(
+			standardResolver,
+			TagResolver.resolver(DEFAULT_RESOLVERS),
+			getPlaceholders(messenger)
+		)).build();
 	}
 
 	/**

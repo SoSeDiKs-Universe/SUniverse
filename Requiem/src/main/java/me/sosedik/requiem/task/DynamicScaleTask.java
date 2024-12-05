@@ -86,7 +86,7 @@ public class DynamicScaleTask extends BukkitRunnable {
 	}
 
 	private static @NotNull AttributeInstance scale(@NotNull LivingEntity entity) {
-		return Objects.requireNonNull(entity.getAttribute(Attribute.GENERIC_SCALE));
+		return Objects.requireNonNull(entity.getAttribute(Attribute.SCALE));
 	}
 
 }

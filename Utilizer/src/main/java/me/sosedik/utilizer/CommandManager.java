@@ -1,6 +1,7 @@
 package me.sosedik.utilizer;
 
 import io.papermc.paper.command.brigadier.CommandSourceStack;
+import me.sosedik.utilizer.api.command.FilteringCommandCaselessSuggestionProcessor;
 import org.bukkit.plugin.Plugin;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.annotations.AnnotationParser;
@@ -24,6 +25,8 @@ public class CommandManager {
 		paperCommandManager = PaperCommandManager.builder()
 			.executionCoordinator(ExecutionCoordinator.asyncCoordinator())
 			.buildOnEnable(plugin);
+
+		paperCommandManager.suggestionProcessor(new FilteringCommandCaselessSuggestionProcessor<>());
 
 		annotationParser = new AnnotationParser<>(paperCommandManager, CommandSourceStack.class, parserParameters -> CommandMeta.empty());
 	}

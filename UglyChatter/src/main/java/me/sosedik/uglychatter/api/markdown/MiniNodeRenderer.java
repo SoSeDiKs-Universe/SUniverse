@@ -61,10 +61,15 @@ public class MiniNodeRenderer extends CoreMarkdownNodeRenderer {
 
 	@Override
 	public void visit(@NotNull Link link) {
+		String destination = link.getDestination();
+		if (destination.startsWith("click:open_url")) {
+			writer.raw("<" + destination + ">");
+			return;
+		}
 		writer.raw("<link:'");
 		visitChildren(link);
 		writer.raw("':'");
-		writer.raw(link.getDestination());
+		writer.raw(destination);
 		writer.raw("'>");
 	}
 

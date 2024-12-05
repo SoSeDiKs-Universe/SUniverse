@@ -1,18 +1,22 @@
 package me.sosedik.miscme.impl.item.modifier;
 
+import io.papermc.paper.datacomponent.DataComponentTypes;
+import io.papermc.paper.datacomponent.item.WrittenBookContent;
 import me.sosedik.kiterino.modifier.item.ItemContextBox;
 import me.sosedik.kiterino.modifier.item.ItemModifier;
 import me.sosedik.kiterino.modifier.item.ModificationResult;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.meta.BookMeta;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 import static me.sosedik.utilizer.api.message.Mini.combined;
@@ -37,17 +41,24 @@ public class BookAuthorOnlineModifier extends ItemModifier {
 		Player player = contextBox.getViewer();
 		if (player == null) return ModificationResult.PASS;
 
-		if (!(contextBox.getMeta() instanceof BookMeta meta)) return ModificationResult.PASS;
-		if (!meta.hasAuthor()) return ModificationResult.PASS;
+		ItemStack item = contextBox.getItem();
+		if (!item.hasData(DataComponentTypes.WRITTEN_BOOK_CONTENT)) return ModificationResult.PASS;
 
-		String author = meta.getAuthor();
-		if (author == null) return ModificationResult.PASS;
+		WrittenBookContent writtenBookContent = item.getData(DataComponentTypes.WRITTEN_BOOK_CONTENT);
+		assert writtenBookContent != null;
+		String author = writtenBookContent.author();
 		if (!VALID_NICKNAME.matcher(author).matches()) return ModificationResult.PASS;
 
 		Component status = getStatus(author);
 		if (status == null) return ModificationResult.PASS;
 
-		meta.author(status);
+		// TODO replace with #toBuilder once available
+		writtenBookContent = WrittenBookContent.writtenBookContent(writtenBookContent.title(), LegacyComponentSerializer.legacySection().serialize(status))
+			.generation(writtenBookContent.generation())
+			.resolved(writtenBookContent.resolved())
+			.addFilteredPages(new ArrayList<>(writtenBookContent.pages()))
+			.build();
+		item.setData(DataComponentTypes.WRITTEN_BOOK_CONTENT, writtenBookContent);
 
 		return ModificationResult.OK;
 	}
@@ -59,12 +70,15 @@ public class BookAuthorOnlineModifier extends ItemModifier {
 	 * @return online status indicator, or null if unknown/invalid player
 	 */
 	public static @Nullable Component getStatus(@NotNull String author) {
-		if (Bukkit.getPlayerExact(author) != null) return combined(Component.text(author), ONLINE);
+		if (Bukkit.getPlayerExact(author) != null)
+			return combined(Component.text(author), ONLINE);
+
 		OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayerIfCached(author);
-		if (offlinePlayer == null)
-			offlinePlayer = Bukkit.getOfflinePlayer(author);
+		if (offlinePlayer == null) offlinePlayer = Bukkit.getOfflinePlayer(author);
+
 		if (offlinePlayer.hasPlayedBefore())
 			return combined(Component.text(author), OFFLINE);
+
 		return null;
 	}
 

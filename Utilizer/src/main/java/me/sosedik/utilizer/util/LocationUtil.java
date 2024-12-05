@@ -65,7 +65,7 @@ public class LocationUtil {
 	 */
 	public static @NotNull CompletableFuture<Void> runRtp(@NotNull Player player, @NotNull World world, int range) {
 		if (player.getLocation().getBlockY() < 400) {
-			player.teleportAsync(player.getLocation().addY(1600), PlayerTeleportEvent.TeleportCause.PLUGIN, TeleportFlag.Relative.YAW, TeleportFlag.Relative.PITCH, TeleportFlag.EntityState.RETAIN_VEHICLE, TeleportFlag.EntityState.RETAIN_PASSENGERS);
+			player.teleportAsync(player.getLocation().addY(1600), PlayerTeleportEvent.TeleportCause.PLUGIN, TeleportFlag.Relative.VELOCITY_ROTATION, TeleportFlag.EntityState.RETAIN_VEHICLE, TeleportFlag.EntityState.RETAIN_PASSENGERS);
 		}
 		Utilizer.scheduler().sync(() -> player.addPotionEffect(new PotionEffect(PotionEffectType.RESISTANCE, 25 * 20, 10)));
 		Utilizer.scheduler().sync(task -> {
@@ -93,7 +93,7 @@ public class LocationUtil {
 				return;
 			}
 			Location preLoc = player.getLocation();
-			player.teleportAsync(loc, PlayerTeleportEvent.TeleportCause.PLUGIN, TeleportFlag.Relative.YAW, TeleportFlag.Relative.PITCH, TeleportFlag.EntityState.RETAIN_VEHICLE, TeleportFlag.EntityState.RETAIN_PASSENGERS)
+			player.teleportAsync(loc, PlayerTeleportEvent.TeleportCause.PLUGIN, TeleportFlag.Relative.VELOCITY_ROTATION, TeleportFlag.EntityState.RETAIN_VEHICLE, TeleportFlag.EntityState.RETAIN_PASSENGERS)
 				.thenRun(() -> teleported.complete(null));
 			Utilizer.logger().info("Randomly teleporting %s from %s to %s".formatted(
 				player.getName(),
@@ -156,7 +156,7 @@ public class LocationUtil {
 		}
 		if (Tag.PRESSURE_PLATES.isTagged(blockType)) return false;
 		if (Tag.BANNERS.isTagged(blockType)) return false;
-		return !Tag.SIGNS.isTagged(blockType);
+		return !Tag.ALL_SIGNS.isTagged(blockType);
 		// Truly solid, congrats!
 	}
 

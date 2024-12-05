@@ -17,14 +17,30 @@ public abstract class ShapedRecipeBuilder<T extends ShapedRecipeBuilder<T>> exte
 		Preconditions.checkArgument(shape.length != 0, "Shaped recipes can't have an empty shape");
 
 		this.shape = shape;
-		int columns = this.shape.length;
-		int rows = this.shape[0].length();
-		this.matrixSize = columns * rows;
+		int rows = this.shape.length;
+		int columns = this.shape[0].length();
+		this.matrixSize = rows * columns;
 		this.symmetrical = isSymmetrical();
 	}
 
-	private boolean isSymmetrical() { // TODO proper symmetrical check
-		return this.shape[0].length() == 1;
+	private boolean isSymmetrical() {
+		int columns = this.shape[0].length();
+		if (columns == 1) return true;
+
+		int rows = this.shape.length;
+		if (columns == 2) {
+			if (shape[0].charAt(0) != shape[0].charAt(1)) return false;
+			if (rows > 1 && shape[1].charAt(0) != shape[1].charAt(1)) return false;
+			return rows <= 2 || shape[2].charAt(0) == shape[2].charAt(1);
+		}
+
+		if (columns == 3) {
+			if (shape[0].charAt(0) != shape[0].charAt(2)) return false;
+			if (rows > 1 && shape[1].charAt(0) != shape[1].charAt(2)) return false;
+			return rows <= 2 || shape[2].charAt(0) == shape[2].charAt(2);
+		}
+
+		return false;
 	}
 
 	/**
@@ -53,18 +69,18 @@ public abstract class ShapedRecipeBuilder<T extends ShapedRecipeBuilder<T>> exte
 	}
 
 	private boolean matches(@Nullable ItemStack @NotNull [] input, boolean mirrored) {
-		int columns = this.shape.length;
-		int rows = this.shape[0].length();
-		for (int i = 0; i < columns; i++) {
-			for (int j = 0; j < rows; j++) {
+		int rows = this.shape.length;
+		int columns = this.shape[0].length();
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < columns; j++) {
 				char key;
 				if (mirrored) {
-					key = this.shape[i].charAt(rows - j - 1);
+					key = this.shape[i].charAt(columns - j - 1);
 				} else {
 					key = this.shape[i].charAt(j);
 				}
 
-				ItemStack item = input[j + i * rows];
+				ItemStack item = input[j + i * columns];
 				if (!findMatch(key, item))
 					return false;
 			}

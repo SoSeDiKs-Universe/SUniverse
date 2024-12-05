@@ -1,0 +1,3 @@
+{
+	"placeholder.discord": "<hover:show_text:'<white>Нажмите, чтобы перейти по <#5662f6>Discord</#5662f6> ссылке!'><click:open_url:'<full_link>'><#5662f6>Discord: <underlined><link>"
+}

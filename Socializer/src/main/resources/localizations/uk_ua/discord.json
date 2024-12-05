@@ -1,0 +1,11 @@
+{
+	"discord.link": "<aqua>Натисніть <gray>на це повідомлення для отримання посилання!",
+	"discord.verify": "<gray>Ви підтверджуєте, що <#5662f6>Discord</#5662f6> акаунт «<#5662f6><discord_tag></#5662f6>» належить Вам?",
+	"discord.verify.yes": "<gray>[<green>ТАК</green>]",
+	"discord.verify.yes.hover": "<green>Підтвердити акаунт",
+	"discord.verify.verified": "<gray>Дякуємо за підтвердження Вашого <#5662f6>Discord</#5662f6>!",
+	"discord.not_verified": "<gray>Ваш <#5662f6>Discord</#5662f6> ще не був прив’язаний.",
+	"discord.unlink": "<gray>Ви впевнені? Напишіть <red>/discord --unverify --sure</red>, щоб продовжити.",
+	"discord.unlinked": "<gray>Ваш <#5662f6>Discord</#5662f6> було відв’язано!",
+	"discord.pm.error": "<red>Discord бот сервера не зміг написати Вам в особисті повідомлення."
+}

@@ -2,6 +2,8 @@ package me.sosedik.miscme.impl.item.modifier;
 
 import de.tr7zw.nbtapi.NBT;
 import de.tr7zw.nbtapi.iface.ReadableNBT;
+import io.papermc.paper.datacomponent.DataComponentTypes;
+import io.papermc.paper.datacomponent.item.BlockItemDataProperties;
 import me.sosedik.kiterino.modifier.item.ItemContextBox;
 import me.sosedik.kiterino.modifier.item.ItemModifier;
 import me.sosedik.kiterino.modifier.item.ModificationResult;
@@ -14,10 +16,12 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Tag;
+import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
 import org.bukkit.block.sign.Side;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.meta.BlockStateMeta;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -44,10 +48,17 @@ public class SignsShowTextInLore extends ItemModifier {
 	@Override
 	public @NotNull ModificationResult modify(@NotNull ItemContextBox contextBox) {
 		if (!contextBox.getContextType().hasVisibleLore()) return ModificationResult.PASS;
-		if (!(contextBox.getMeta() instanceof BlockStateMeta bookMeta)) return ModificationResult.PASS;
-		if (!(bookMeta.getBlockState() instanceof Sign sign)) return ModificationResult.PASS;
 
-		boolean hasText = NBT.getComponents(contextBox.getItem(), nbt -> {
+		ItemStack item = contextBox.getItem();
+		if (!Tag.ALL_SIGNS.isTagged(contextBox.getInitialType())) return ModificationResult.PASS;
+		if (!item.hasData(DataComponentTypes.BLOCK_DATA)) return ModificationResult.PASS;
+
+		BlockItemDataProperties blockItemDataProperties = item.getData(DataComponentTypes.BLOCK_DATA);
+		assert blockItemDataProperties != null;
+		BlockState blockState = blockItemDataProperties.createBlockData(contextBox.getInitialType().asItemType().getBlockType()).createBlockState();
+		if (!(blockState instanceof Sign sign)) return ModificationResult.PASS;
+
+		boolean hasText = NBT.getComponents(item, nbt -> {
 			if (!nbt.hasTag(BLOCK_ENTITY_TAG)) return false;
 
 			ReadableNBT blockEntityTag = nbt.getCompound(BLOCK_ENTITY_TAG);
@@ -57,7 +68,7 @@ public class SignsShowTextInLore extends ItemModifier {
 		if (!hasText) return ModificationResult.PASS;
 
 		hasText = false;
-		List<Component> lore = contextBox.getLore();
+		List<Component> lore = new ArrayList<>();
 		List<Component> lines = sign.getSide(Side.FRONT).lines();
 		if (addLines(contextBox.getViewer(), lines, lore)) {
 			hasText = true;
@@ -76,7 +87,7 @@ public class SignsShowTextInLore extends ItemModifier {
 		}
 		if (!hasText) return ModificationResult.PASS;
 
-		bookMeta.lore(lore);
+		contextBox.addLore(lore);
 
 		return ModificationResult.OK;
 	}

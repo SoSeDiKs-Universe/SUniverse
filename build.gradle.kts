@@ -1,6 +1,6 @@
 plugins {
     `java-library`
-    id("io.papermc.paperweight.userdev") version "1.7.3" // Accessing NMS
+    id("io.papermc.paperweight.userdev") version "1.7.5" // Accessing NMS
     id("net.minecrell.plugin-yml.paper") version "0.6.0" // Generates paper-plugin.yml
 }
 

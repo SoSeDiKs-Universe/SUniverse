@@ -1,0 +1,12 @@
+{
+	"chat.deaths": "Количество смертей: <deaths>",
+	"chat.playtime": "Наиграно <playtime>: <time>",
+	"chat.playtime.h": "часов",
+	"chat.playtime.m": "минут",
+	"chat.pm": {
+		"1": "Нажмите, чтобы",
+		"2": "написать <player>"
+	},
+	"chat.pinged.title": "<gray>Игрок <yellow><player>",
+	"chat.pinged.subtitle": "<gray>упомянул Вас в чате!"
+}

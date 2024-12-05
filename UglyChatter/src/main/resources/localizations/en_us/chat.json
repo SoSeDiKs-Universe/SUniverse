@@ -1,0 +1,9 @@
+{
+	"chat.deaths": "Number of Deaths: <deaths>",
+	"chat.playtime": "<playtime> played: <time>",
+	"chat.playtime.h": "Hours",
+	"chat.playtime.m": "Minutes",
+	"chat.pm": "Click to PM <player>",
+	"chat.pinged.title": "<gray>Player <yellow><player>",
+	"chat.pinged.subtitle": "<gray>mentioned you in the chat!"
+}

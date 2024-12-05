@@ -18,9 +18,10 @@ public class AbstractBowItem extends BowItem  {
 	}
 
 	@Override
-	public void releaseUsing(net.minecraft.world.item.ItemStack stack, Level world, net.minecraft.world.entity.LivingEntity user, int remainingUseTicks) {
+	public boolean releaseUsing(net.minecraft.world.item.ItemStack stack, Level world, net.minecraft.world.entity.LivingEntity user, int remainingUseTicks) {
 		if (bowReleaseLogic == null || !bowReleaseLogic.onRelease(stack.asBukkitMirror(), user.getBukkitLivingEntity(), remainingUseTicks))
-			super.releaseUsing(stack, world, user, remainingUseTicks);
+			return super.releaseUsing(stack, world, user, remainingUseTicks);
+		return true;
 	}
 
 	public interface BowReleaseLogic {

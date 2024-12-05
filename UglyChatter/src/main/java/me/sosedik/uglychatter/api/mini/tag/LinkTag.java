@@ -49,7 +49,7 @@ public record LinkTag(@NotNull Messenger messenger) implements TagResolver {
 				combined(
 					knownLink.getLinkIcon(),
 					Component.space(),
-					messenger.getMessage("chat.url.visit"),
+					messenger.getMessage("tag.link.visit"),
 					Component.newline(),
 					Component.newline(),
 					Component.text(fullUrl, NamedTextColor.GRAY)

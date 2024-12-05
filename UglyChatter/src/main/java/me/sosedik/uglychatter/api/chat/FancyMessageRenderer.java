@@ -7,13 +7,15 @@ import me.sosedik.uglychatter.api.mini.placeholder.ReplacementPlaceholder;
 import me.sosedik.utilizer.api.language.LangHolder;
 import me.sosedik.utilizer.api.language.translator.TranslationLanguage;
 import me.sosedik.utilizer.api.message.Messenger;
+import me.sosedik.utilizer.api.message.Mini;
 import me.sosedik.utilizer.impl.translator.OnlineTranslator;
-import me.sosedik.utilizer.util.ChatUtil;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import net.kyori.adventure.text.minimessage.tag.standard.StandardTags;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -30,7 +32,7 @@ import static me.sosedik.utilizer.api.message.Mini.combined;
 public class FancyMessageRenderer implements ChatRenderer {
 
 	private final Map<String, String> translations = new HashMap<>();
-	private String rawMessage = null;
+	private String cachedRawMessage = null;
 
 	@Override
 	public @NotNull Component render(@NotNull Player source, @NotNull Component sourceDisplayName, @NotNull Component message, @NotNull Audience viewer) {
@@ -39,12 +41,23 @@ public class FancyMessageRenderer implements ChatRenderer {
 			return combined(sourceDisplayName, Component.text(": "), strippedMessage);
 		}
 
-		if (this.rawMessage == null) this.rawMessage = getRawInput(message);
+		if (this.cachedRawMessage == null) this.cachedRawMessage = getRawInput(message);
 
 		boolean self = source == viewer;
 		TextColor baseColor = TextColor.fromHexString(self ? "#fbe9d1" : "#dceefa");
-		var messenger = Messenger.messenger(viewer);
-		Component renderedMessage = renderAndTranslate(messenger.miniMessage(), this.rawMessage, source, playerViewer, Style.style(baseColor));
+		var messenger = Messenger.messenger(viewer, TagResolver.resolver(
+			StandardTags.color(),
+			StandardTags.keybind(),
+			StandardTags.translatable(),
+			StandardTags.translatableFallback(),
+			StandardTags.decorations(),
+			StandardTags.gradient(),
+			StandardTags.rainbow(),
+			StandardTags.reset(),
+			StandardTags.newline(),
+			StandardTags.transition()
+		));
+		Component renderedMessage = renderAndTranslate(messenger.miniMessage(), this.cachedRawMessage, source, playerViewer, Style.style(baseColor));
 
 		return combined(
 			sourceDisplayName,
@@ -65,14 +78,14 @@ public class FancyMessageRenderer implements ChatRenderer {
 	 */
 	public @NotNull Component renderAndTranslate(@NotNull MiniMessage deserializer, @NotNull String rawMessage, @NotNull Player source, @NotNull Player viewer, @NotNull Style baseStyle) {
 		Component message = renderMessage(deserializer, rawMessage, source, viewer);
-		Component hover = getTranslation(deserializer, source, viewer);
+		Component hover = getTranslation(deserializer, rawMessage, source, viewer);
 		hover = Component.text().style(baseStyle).append(hover).build();
 		return Component.text().style(baseStyle).hoverEvent(hover).append(message).build();
 	}
 
-	private @NotNull Component getTranslation(@NotNull MiniMessage deserializer, @NotNull Player source, @NotNull Player viewer) {
+	private @NotNull Component getTranslation(@NotNull MiniMessage deserializer, @NotNull String rawMessage, @NotNull Player source, @NotNull Player viewer) {
 		TranslationLanguage translateTo = LangHolder.langHolder(viewer).getTranslationLanguage();
-		String translated = translations.computeIfAbsent(translateTo.id(), k -> OnlineTranslator.translate(this.rawMessage, TranslationLanguage.AUTO, translateTo));
+		String translated = this.translations.computeIfAbsent(translateTo.id(), k -> OnlineTranslator.translate(rawMessage, TranslationLanguage.AUTO, translateTo));
 		return renderMessage(deserializer, translated, source, viewer);
 	}
 
@@ -100,9 +113,11 @@ public class FancyMessageRenderer implements ChatRenderer {
 	 */
 	public static @NotNull String getRawInput(@NotNull Component message, @NotNull FancyRendererTag... tags) {
 		List<FancyRendererTag> rendererTags = List.of(tags);
-		// User's input is plain anyway, no big deal if something's a miss in a plain form
-		// This also allows parsing minimessage tags later, which would be escaped otherwise
-		String plain = ChatUtil.getPlainText(message);
+		// Try to preserve initial input decorations
+		// And unescape escaped placeholders to allow parsing them with minimessage
+		String plain = Mini.buildMini()
+				.serialize(message)
+				.replace("\\<", "<");
 		// Replace unsupported emoji sequences with mappings
 		if (!rendererTags.contains(FancyRendererTag.SKIP_EMOJI_MAPPINGS)) plain = EmojiPlaceholder.applyMappings(plain);
 		// Strip placeholders

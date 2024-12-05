@@ -56,7 +56,7 @@ public class LimboWorldFall implements Listener {
 					vehicle.setFallDistance(0F);
 					player.setFallDistance(0F);
 					Location loc = player.getLocation().toHighestLocation().above();
-					player.teleportAsync(loc, PlayerTeleportEvent.TeleportCause.PLUGIN, TeleportFlag.Relative.YAW, TeleportFlag.Relative.PITCH, TeleportFlag.EntityState.RETAIN_VEHICLE, TeleportFlag.EntityState.RETAIN_PASSENGERS);
+					player.teleportAsync(loc, PlayerTeleportEvent.TeleportCause.PLUGIN, TeleportFlag.Relative.VELOCITY_ROTATION, TeleportFlag.EntityState.RETAIN_VEHICLE, TeleportFlag.EntityState.RETAIN_PASSENGERS);
 				}
 			});
 	}

@@ -1,5 +1,6 @@
 package me.sosedik.resourcelib.impl.item.modifier;
 
+import io.papermc.paper.datacomponent.DataComponentTypes;
 import me.sosedik.kiterino.modifier.item.ItemContextBox;
 import me.sosedik.kiterino.modifier.item.ItemModifier;
 import me.sosedik.kiterino.modifier.item.ModificationResult;
@@ -8,7 +9,7 @@ import me.sosedik.utilizer.api.message.Messenger;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 public class CustomNameModifier extends ItemModifier {
@@ -21,18 +22,19 @@ public class CustomNameModifier extends ItemModifier {
 	public @NotNull ModificationResult modify(@NotNull ItemContextBox contextBox) {
 		if (!contextBox.getContextType().hasVisibleName()) return ModificationResult.PASS;
 
-		Material type = contextBox.getItem().getType();
+		Material type = contextBox.getInitialType();
 		if (NamespacedKey.MINECRAFT.equals(type.getKey().namespace())) return ModificationResult.PASS;
 
-		ItemMeta meta = contextBox.getMeta();
-		if (meta.hasItemName()) return ModificationResult.PASS;
+		ItemStack item = contextBox.getItem();
+		if (item.hasData(DataComponentTypes.CUSTOM_NAME)) return ModificationResult.PASS;
+		if (item.hasData(DataComponentTypes.ITEM_NAME)) return ModificationResult.PASS;
 
 		NamespacedKey key = type.getKey();
 		Component name = Messenger.messenger(LangOptionsStorage.getByLocale(contextBox.getLocale()))
 				.getMessageIfExists("item." + key.getNamespace() + "." + key.getKey() + ".name");
 		if (name == null) return ModificationResult.PASS;
 
-		meta.itemName(name);
+		item.setData(DataComponentTypes.ITEM_NAME, name);
 
 		return ModificationResult.OK;
 	}

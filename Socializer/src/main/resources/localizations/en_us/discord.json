@@ -1,0 +1,11 @@
+{
+	"discord.link": "<aqua>Click <gray>on this message to get the link!",
+	"discord.verify": "<gray>Would you like to verify your <#5662f6>Discord</#5662f6> account «<#5662f6><discord_tag></#5662f6>»?",
+	"discord.verify.yes": "<gray>[<green>YES</green>]",
+	"discord.verify.yes.hover": "<green>Verify account",
+	"discord.verify.verified": "<gray>Thank you for verifying your <#5662f6>Discord</#5662f6>!",
+	"discord.not_verified": "<gray>Your <#5662f6>Discord</#5662f6> wasn't linked yet.",
+	"discord.unlink": "<gray>Are you sure? Type <red>/discord --unverify --sure</red> to continue.",
+	"discord.unlinked": "<gray>Your <#5662f6>Discord</#5662f6> was unlinked!",
+	"discord.pm.error": "<red>Discord server bot wasn't able to private message you."
+}

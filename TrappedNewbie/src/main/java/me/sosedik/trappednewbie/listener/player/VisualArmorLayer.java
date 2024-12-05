@@ -5,6 +5,11 @@ import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import com.destroystokyo.paper.event.player.PlayerPostRespawnEvent;
 import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import de.tr7zw.nbtapi.iface.ReadableNBT;
+import io.papermc.paper.datacomponent.DataComponentTypes;
+import io.papermc.paper.datacomponent.item.Equippable;
+import io.papermc.paper.registry.RegistryKey;
+import io.papermc.paper.registry.TypedKey;
+import io.papermc.paper.registry.set.RegistryKeySet;
 import me.sosedik.kiterino.inventory.InventorySlotHelper;
 import me.sosedik.trappednewbie.api.item.VisualArmor;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieItems;
@@ -17,6 +22,7 @@ import me.sosedik.utilizer.util.ItemUtil;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -47,7 +53,7 @@ import java.util.UUID;
 /**
  * Players have a visual second armor layer
  */
-// MCCheck: 1.21.1, new equipable tag
+// MCCheck: 1.21.4, new equipable items
 public class VisualArmorLayer implements Listener {
 
 	private static final String ARMOR_BUNDLE_TAG = "visual_armor";
@@ -56,6 +62,7 @@ public class VisualArmorLayer implements Listener {
 	private static final String LEGGINGS_TAG = "leggings";
 	private static final String BOOTS_TAG = "boots";
 	private static final String GLOVES_TAG = "gloves";
+	private static final TypedKey<EntityType> PLAYER_TYPED_KEY = TypedKey.create(RegistryKey.ENTITY_TYPE, EntityType.PLAYER.getKey());
 
 	private static final Map<UUID, VisualArmor> ARMOR_BUNDLES = new HashMap<>();
 
@@ -83,6 +90,7 @@ public class VisualArmorLayer implements Listener {
 		applyVisualArmor(event.getPlayer());
 	}
 
+	// Shift + LMB with empty equipment slot
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onShiftEquip(@NotNull InventoryClickEvent event) {
 		if (!(event.getWhoClicked() instanceof Player player)) return;
@@ -96,22 +104,22 @@ public class VisualArmorLayer implements Listener {
 		ItemStack item = event.getCurrentItem();
 		if (item == null) return;
 
-		if (MaterialTags.HELMETS.isTagged(item)) {
+		if (MaterialTags.HELMETS.isTagged(item) || isEquipable(item, EquipmentSlot.HEAD, false)) {
 			if (tryToEquip(player, item, EquipmentSlot.HEAD)) {
 				event.setCurrentItem(null);
 				event.setCancelled(true);
 			}
-		} else if (MaterialTags.CHESTPLATES.isTagged(item) || item.getType() == Material.ELYTRA) {
+		} else if (MaterialTags.CHESTPLATES.isTagged(item) || item.getType() == Material.ELYTRA || isEquipable(item, EquipmentSlot.CHEST, false)) {
 			if (tryToEquip(player, item, EquipmentSlot.CHEST)) {
 				event.setCurrentItem(null);
 				event.setCancelled(true);
 			}
-		} else if (MaterialTags.LEGGINGS.isTagged(item)) {
+		} else if (MaterialTags.LEGGINGS.isTagged(item) || isEquipable(item, EquipmentSlot.LEGS, false)) {
 			if (tryToEquip(player, item, EquipmentSlot.LEGS)) {
 				event.setCurrentItem(null);
 				event.setCancelled(true);
 			}
-		} else if (MaterialTags.BOOTS.isTagged(item)) {
+		} else if (MaterialTags.BOOTS.isTagged(item) || isEquipable(item, EquipmentSlot.FEET, false)) {
 			if (tryToEquip(player, item, EquipmentSlot.FEET)) {
 				event.setCurrentItem(null);
 				event.setCancelled(true);
@@ -120,6 +128,7 @@ public class VisualArmorLayer implements Listener {
 			VisualArmor visualArmor = getVisualArmor(player);
 			if (!visualArmor.isArmorPreview()) return;
 			if (visualArmor.hasGloves()) return;
+
 			visualArmor.setGloves(item);
 			event.setCurrentItem(null);
 			event.setCancelled(true);
@@ -141,11 +150,12 @@ public class VisualArmorLayer implements Listener {
 		return true;
 	}
 
+	// LMB/RMB on visual head slot
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onItemEquip(@NotNull InventoryClickEvent event) {
 		if (!(event.getWhoClicked() instanceof Player player)) return;
 		if (player.getOpenInventory().getTopInventory().getType() != InventoryType.CRAFTING) return;
-		if (event.getRawSlot() != 5) return;
+		if (event.getRawSlot() != InventorySlotHelper.HEAD_SLOT) return;
 		if (event.getClick() != ClickType.LEFT && event.getClick() != ClickType.RIGHT) return;
 
 		ItemStack item = event.getCursor();
@@ -161,6 +171,9 @@ public class VisualArmorLayer implements Listener {
 		player.updateInventory();
 	}
 
+	// Toggling visual layer with Q
+	// Swapping visual gloves with F
+	// Manually handling all remaining click types to account for fake air in armor slots
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onArmorSwap(@NotNull InventoryClickEvent event) {
 		if (!(event.getWhoClicked() instanceof Player player)) return;
@@ -174,6 +187,7 @@ public class VisualArmorLayer implements Listener {
 		InventoryAction action = event.getAction();
 		if (action == InventoryAction.DROP_ONE_SLOT || action == InventoryAction.DROP_ALL_SLOT || (action == InventoryAction.NOTHING && isMissingArmor(player, rawSlot))) {
 			if (rawSlot == InventorySlotHelper.OFF_HAND) return;
+
 			getVisualArmor(player).toggleArmorPreview();
 			player.updateInventory();
 			return;
@@ -185,6 +199,7 @@ public class VisualArmorLayer implements Listener {
 				event.setCancelled(false);
 				return;
 			}
+
 			if (!player.hasPotionEffect(PotionEffectType.WEAKNESS)
 					|| Objects.requireNonNull(player.getPotionEffect(PotionEffectType.WEAKNESS)).getAmplifier() < 1) {
 				if (visualArmor.hasGloves() && visualArmor.getGloves().containsEnchantment(Enchantment.BINDING_CURSE)) return;
@@ -229,10 +244,10 @@ public class VisualArmorLayer implements Listener {
 		if (player.getItemOnCursor().getType() != Material.AIR) {
 			ItemStack cursor = event.getCursor();
 			boolean canEquip = switch (equipmentSlot) {
-				case HEAD -> MaterialTags.HEAD_EQUIPPABLE.isTagged(cursor);
-				case CHEST -> MaterialTags.CHEST_EQUIPPABLE.isTagged(cursor);
-				case LEGS -> MaterialTags.LEGGINGS.isTagged(cursor);
-				case FEET -> MaterialTags.BOOTS.isTagged(cursor);
+				case HEAD -> MaterialTags.HEAD_EQUIPPABLE.isTagged(cursor) || isEquipable(cursor, EquipmentSlot.HEAD, false);
+				case CHEST -> MaterialTags.CHEST_EQUIPPABLE.isTagged(cursor) || isEquipable(cursor, EquipmentSlot.CHEST, false);
+				case LEGS -> MaterialTags.LEGGINGS.isTagged(cursor) || isEquipable(cursor, EquipmentSlot.LEGS, false);
+				case FEET -> MaterialTags.BOOTS.isTagged(cursor) || isEquipable(cursor, EquipmentSlot.BODY, false);
 				case OFF_HAND -> TrappedNewbieTags.GLOVES.isTagged(cursor.getType());
 				default -> false;
 			};
@@ -309,6 +324,7 @@ public class VisualArmorLayer implements Listener {
 		player.updateInventory();
 	}
 
+	// Quick equip with RMB
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onPlayerInteract(@NotNull PlayerInteractEvent event) {
 		if (event.useItemInHand() == Event.Result.DENY) return;
@@ -322,22 +338,34 @@ public class VisualArmorLayer implements Listener {
 		ItemStack item = player.getInventory().getItemInMainHand();
 		if (item.getAmount() > 1) return;
 
-		if (MaterialTags.HEAD_EQUIPPABLE.isTagged(item)) {
+		if (MaterialTags.HEAD_EQUIPPABLE.isTagged(item) || isEquipable(item, EquipmentSlot.HEAD, true)) {
 			swapItems(player, item, EquipmentSlot.HEAD);
 			event.setCancelled(true);
-		} else if (MaterialTags.CHEST_EQUIPPABLE.isTagged(item)) {
+		} else if (MaterialTags.CHEST_EQUIPPABLE.isTagged(item) || isEquipable(item, EquipmentSlot.CHEST, true)) {
 			swapItems(player, item, EquipmentSlot.CHEST);
 			event.setCancelled(true);
-		} else if (MaterialTags.LEGGINGS.isTagged(item)) {
+		} else if (MaterialTags.LEGGINGS.isTagged(item) || isEquipable(item, EquipmentSlot.LEGS, true)) {
 			swapItems(player, item, EquipmentSlot.LEGS);
 			event.setCancelled(true);
-		} else if (MaterialTags.BOOTS.isTagged(item)) {
+		} else if (MaterialTags.BOOTS.isTagged(item) || isEquipable(item, EquipmentSlot.FEET, true)) {
 			swapItems(player, item, EquipmentSlot.FEET);
 			event.setCancelled(true);
 		} else if (TrappedNewbieTags.GLOVES.isTagged(item.getType())) {
 			swapItems(player, item, EquipmentSlot.OFF_HAND);
 			event.setCancelled(true);
 		}
+	}
+
+	private boolean isEquipable(@NotNull ItemStack item, @NotNull EquipmentSlot slot, boolean quickSwap) {
+		if (!item.hasData(DataComponentTypes.EQUIPPABLE)) return false;
+
+		Equippable equippable = item.getData(DataComponentTypes.EQUIPPABLE);
+		assert equippable != null;
+		if (quickSwap && !equippable.swappable()) return false;
+		if (equippable.slot() != slot) return false;
+
+		RegistryKeySet<EntityType> allowedEntities = equippable.allowedEntities();
+		return allowedEntities == null || allowedEntities.contains(PLAYER_TYPED_KEY);
 	}
 
 	private void swapItems(@NotNull Player player, @NotNull ItemStack hand, @NotNull EquipmentSlot slot) {

@@ -1,5 +1,6 @@
 package me.sosedik.utilizer.impl.item.modifier;
 
+import io.papermc.paper.datacomponent.DataComponentTypes;
 import me.sosedik.kiterino.modifier.item.ItemContextBox;
 import me.sosedik.kiterino.modifier.item.ItemModifier;
 import me.sosedik.kiterino.modifier.item.ModificationResult;
@@ -9,6 +10,7 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Tag;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 public class HiddenTooltipsModifier extends ItemModifier {
@@ -21,12 +23,11 @@ public class HiddenTooltipsModifier extends ItemModifier {
 
 	@Override
 	public @NotNull ModificationResult modify(@NotNull ItemContextBox contextBox) {
-		if (!LIGHT_SOURCES.isTagged(contextBox.getItem().getType())) return ModificationResult.PASS;
+		if (!LIGHT_SOURCES.isTagged(contextBox.getInitialType())) return ModificationResult.PASS;
 
-		contextBox.editMeta(meta -> {
-			meta.setHideTooltip(true);
-			meta.displayName(Component.empty());
-		});
+		ItemStack item = contextBox.getItem();
+		item.setData(DataComponentTypes.HIDE_TOOLTIP);
+		item.setData(DataComponentTypes.ITEM_NAME, Component.empty());
 
 		return ModificationResult.OK;
 	}

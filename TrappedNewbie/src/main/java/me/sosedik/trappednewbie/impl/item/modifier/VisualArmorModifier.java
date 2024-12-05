@@ -1,5 +1,6 @@
 package me.sosedik.trappednewbie.impl.item.modifier;
 
+import io.papermc.paper.datacomponent.DataComponentTypes;
 import me.sosedik.kiterino.inventory.InventorySlotHelper;
 import me.sosedik.kiterino.modifier.item.ItemContextBox;
 import me.sosedik.kiterino.modifier.item.ItemModifier;
@@ -24,7 +25,6 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,8 +41,6 @@ public class VisualArmorModifier extends ItemModifier {
 
 	@Override
 	public @NotNull ModificationResult modify(@NotNull ItemContextBox contextBox) {
-		if (contextBox.getContextType() == VISUAL_ARMOR) return ModificationResult.PASS;
-
 		Player target;
 		if (contextBox.getContext() instanceof EntityEquipmentPacketContext ctx && ctx.getEntity() instanceof Player other) {
 			target = other;
@@ -51,7 +49,7 @@ public class VisualArmorModifier extends ItemModifier {
 		}
 		if (target == null) return ModificationResult.PASS;
 
-		@Nullable Player player = contextBox.getViewer();
+		Player player = contextBox.getViewer();
 		if (player == null) return ModificationResult.PASS;
 
 		int slot = resolveSlot(target, contextBox.getContext());
@@ -96,9 +94,14 @@ public class VisualArmorModifier extends ItemModifier {
 		return false;
 	}
 
+	@Override
+	public boolean skipContext(@NotNull ItemModifierContextType contextType) {
+		return contextType == VISUAL_ARMOR;
+	}
+
 	private @NotNull ItemStack parseItem(@NotNull Player player, @NotNull Locale locale, @NotNull ItemStack item) {
 		ItemStack newItem = modifyItem(new ItemContextBox(player, locale, VISUAL_ARMOR, ItemModifierContext.EMPTY, item));
-		return newItem == null ? item : newItem;
+		return newItem == null ? item.clone() : newItem;
 	}
 
 	private int resolveSlot(@NotNull Player player, @NotNull ItemModifierContext context) {
@@ -121,14 +124,12 @@ public class VisualArmorModifier extends ItemModifier {
 			case OFF_HAND -> ItemStack.of(TrappedNewbieItems.GLOVES_OUTLINE);
 			default -> throw new IllegalArgumentException("Unsupported equipment slot: " + slot.name());
 		};
-		item.editMeta(meta -> {
-			String localeKey = "equipment." + slot.name().toLowerCase() + "." + (armorPreview ? "armor" : "cosmetic");
-			meta.itemName(messenger.getMessage(localeKey));
-		});
+		String localeKey = "equipment." + slot.name().toLowerCase(Locale.ROOT) + "." + (armorPreview ? "armor" : "cosmetic");
+		item.setData(DataComponentTypes.ITEM_NAME, messenger.getMessage(localeKey));
 		return item;
 	}
 
-	private boolean isGhost(@NotNull Material type) {
+	private boolean isGhost(@NotNull Material type) { // TODO make tag
 		return type == TrappedNewbieItems.MATERIAL_AIR
 			|| type == TrappedNewbieItems.HELMET_OUTLINE
 			|| type == TrappedNewbieItems.CHESTPLATE_OUTLINE
@@ -178,6 +179,7 @@ public class VisualArmorModifier extends ItemModifier {
 	private static @NotNull ItemStack parseUnderwear(@NotNull Messenger messenger, @NotNull Player player, @NotNull Locale locale, @NotNull ItemStack underwear) {
 		ItemStack newUnderwear = modifyItem(player, locale, underwear);
 		if (newUnderwear != null) underwear = newUnderwear;
+		else underwear = underwear.clone();
 
 		underwear.editMeta(meta -> {
 			List<Component> lore = meta.hasLore() ? Objects.requireNonNull(meta.lore()) : new ArrayList<>();

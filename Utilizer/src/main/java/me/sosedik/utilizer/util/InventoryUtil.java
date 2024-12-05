@@ -14,10 +14,10 @@ public class InventoryUtil {
 	}
 
 	private static final int[] SHIFT_CLICK_SLOTS_PRIORITY = {
-			8, 7, 6, 5, 4, 3, 2, 1, 0,
-			35, 34, 33, 32, 31, 30, 29, 28, 27,
-			26, 25, 24, 23, 22, 21, 20, 19, 18,
-			17, 16, 15, 14, 13, 12, 11, 10, 9
+		8, 7, 6, 5, 4, 3, 2, 1, 0,
+		35, 34, 33, 32, 31, 30, 29, 28, 27,
+		26, 25, 24, 23, 22, 21, 20, 19, 18,
+		17, 16, 15, 14, 13, 12, 11, 10, 9
 	};
 
 	/**
@@ -102,10 +102,10 @@ public class InventoryUtil {
 	 */
 	public static @NotNull EquipmentSlot getBySlot(int slot) {
 		return switch (slot) {
-			case 5 -> EquipmentSlot.HEAD;
-			case 6 -> EquipmentSlot.CHEST;
-			case 7 -> EquipmentSlot.LEGS;
-			case 8 -> EquipmentSlot.FEET;
+			case InventorySlotHelper.HEAD_SLOT -> EquipmentSlot.HEAD;
+			case InventorySlotHelper.CHEST_SLOT -> EquipmentSlot.CHEST;
+			case InventorySlotHelper.LEGS_SLOT -> EquipmentSlot.LEGS;
+			case InventorySlotHelper.FEET_SLOT -> EquipmentSlot.FEET;
 			case InventorySlotHelper.OFF_HAND -> EquipmentSlot.OFF_HAND;
 			default -> EquipmentSlot.HAND;
 		};
@@ -121,10 +121,10 @@ public class InventoryUtil {
 	 */
 	public static int getSlot(@NotNull Player player, @NotNull EquipmentSlot slot) {
 		return switch (slot) {
-			case HEAD -> 5;
-			case CHEST -> 6;
-			case LEGS -> 7;
-			case FEET -> 8;
+			case HEAD -> InventorySlotHelper.HEAD_SLOT;
+			case CHEST -> InventorySlotHelper.CHEST_SLOT;
+			case LEGS -> InventorySlotHelper.LEGS_SLOT;
+			case FEET -> InventorySlotHelper.FEET_SLOT;
 			case OFF_HAND -> InventorySlotHelper.OFF_HAND;
 			case HAND -> 36 + player.getInventory().getHeldItemSlot();
 			default -> throw new IllegalArgumentException("Unsupported equipment slot: " + slot.name());

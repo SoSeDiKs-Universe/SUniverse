@@ -38,6 +38,12 @@ public class Messenger {
 		this.miniMessage = buildMini(this);
 	}
 
+	private Messenger(@NotNull Audience audience, @NotNull TagResolver standardTagResolver) {
+		this.audience = audience;
+		this.langOptions = null;
+		this.miniMessage = buildMini(this, standardTagResolver);
+	}
+
 	/**
 	 * Messages receiver, mostly player
 	 *
@@ -228,6 +234,17 @@ public class Messenger {
 	 */
 	public static @NotNull Messenger messenger(@NotNull Audience audience) {
 		return new Messenger(audience);
+	}
+
+	/**
+	 * Constructs a new messenger
+	 *
+	 * @param audience messages viewer
+	 * @param standardResolver standard tag resolver
+	 * @return messenger wrapper
+	 */
+	public static @NotNull Messenger messenger(@NotNull Audience audience, @NotNull TagResolver standardResolver) {
+		return new Messenger(audience, standardResolver);
 	}
 
 }

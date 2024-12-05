@@ -11,9 +11,10 @@ import io.papermc.paper.registry.event.RegistryEvents;
 import io.papermc.paper.registry.event.RegistryFreezeEvent;
 import me.sosedik.kiterino.registry.data.ItemRegistryEntity;
 import net.kyori.adventure.key.Key;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Rarity;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.inventory.ItemRarity;
 import org.bukkit.inventory.ItemType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -59,10 +60,7 @@ public class ResourceLibBootstrap implements PluginBootstrap {
 	private static void readItem(@NotNull RegistryFreezeEvent<ItemType, ItemRegistryEntity.Builder> event, @Nullable BiConsumer<String, ItemRegistryEntity.Builder> modifier, @NotNull Key itemKey, @NotNull JsonObject json) {
 		var typedKey = TypedKey.create(RegistryKey.ITEM, itemKey);
 		event.registry().register(typedKey, b -> {
-			if (json.has("stack_size")) b.maxStackSize(json.get("stack_size").getAsInt());
-			if (json.has("durability")) b.durability(json.get("durability").getAsInt());
-			if (json.has("fire_resistance")) b.fireResistant(json.get("fire_resistance").getAsBoolean());
-			if (json.has("rarity")) b.rarity(ItemRarity.valueOf(json.get("rarity").getAsString().toUpperCase(Locale.ROOT)));
+			b.nmsItemFunction(properties -> applyItemProperties(json, properties));
 			if (json.has("compost_chance")) b.compostChance(json.get("compost_chance").getAsFloat());
 
 			if (json.has("client_type")) {
@@ -70,14 +68,23 @@ public class ResourceLibBootstrap implements PluginBootstrap {
 				assert type != null;
 				var namespacedKey = new NamespacedKey(itemKey.namespace(), itemKey.value());
 				b.modifier(box -> {
-					box.setNewMaterial(type);
+					box.setType(type);
 					var data = ResourceLib.storage().getFakeItemData(namespacedKey);
-					if (data != null) box.getMeta().setCustomModelData(data.customModelData());
+					if (data != null) box.getItem().setCustomModelData(data.customModelData());
 				});
 			}
 
 			if (modifier != null) modifier.accept(itemKey.value(), b);
 		});
+	}
+
+	private static @NotNull Object applyItemProperties(@NotNull JsonObject json, @NotNull Object props) {
+		Item.Properties properties = (Item.Properties) props;
+		if (json.has("durability")) properties.durability(json.get("durability").getAsInt());
+		if (json.has("stack_size")) properties.stacksTo(json.get("stack_size").getAsInt());
+		if (json.has("fire_resistance") && json.get("fire_resistance").getAsBoolean()) properties.fireResistant();
+		if (json.has("rarity")) properties.rarity(Rarity.valueOf(json.get("rarity").getAsString().toUpperCase(Locale.ROOT)));
+		return new Item(properties);
 	}
 
 	private static @NotNull List<Map.Entry<String, JsonElement>> readJsons(@NotNull Path path) {

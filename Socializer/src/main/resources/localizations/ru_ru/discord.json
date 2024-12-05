@@ -1,0 +1,11 @@
+{
+	"discord.link": "<aqua>Нажмите <gray>на сообщение для получения ссылки!",
+	"discord.verify": "<gray>Вы подтверждаете, что <#5662f6>Discord</#5662f6> аккаунт «<#5662f6><discord_tag></#5662f6>» принадлежит Вам?",
+	"discord.verify.yes": "<gray>[<green>ДА</green>]",
+	"discord.verify.yes.hover": "<green>Подтвердить аккаунт",
+	"discord.verify.verified": "<gray>Спасибо за подтверждение Вашего <#5662f6>Discord</#5662f6>!",
+	"discord.not_verified": "<gray>Ваш <#5662f6>Discord</#5662f6> ещё не был привязан.",
+	"discord.unlink": "<gray>Вы уверены? Напишите <red>/discord --unverify --sure</red>, чтобы продолжить.",
+	"discord.unlinked": "<gray>Ваш <#5662f6>Discord</#5662f6> был отвязан!",
+	"discord.pm.error": "<red>Discord бот сервера не смог написать Вам в личные сообщения."
+}

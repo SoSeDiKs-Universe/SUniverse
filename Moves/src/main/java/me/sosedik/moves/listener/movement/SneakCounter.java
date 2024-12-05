@@ -35,7 +35,7 @@ public class SneakCounter implements Listener {
 	private static void increaseSneaksCount(@NotNull Player player) {
 		UUID uuid = player.getUniqueId();
 		int count = getSneaksCount(player) + 1;
-		SNEAKS.put(uuid, count);
+		SNEAKS.put(uuid, Integer.valueOf(count));
 		LAST_SNEAK_TIMES.put(uuid, System.currentTimeMillis());
 		Moves.scheduler().async(() -> {
 			if (getSneaksCount(player) == count)

@@ -20,13 +20,17 @@ public record DiscordResolver(@NotNull Messenger messenger) implements TagResolv
 	@Override
 	public @Nullable Tag resolve(@NotNull String name, @NotNull ArgumentQueue args, @NotNull Context ctx) {
 		if (!has(name)) return null;
+
+		if ("ds".equals(name))
+			return Tag.selfClosingInserting(Component.text(DISCORD_URL));
+
 		Component render = messenger.getMessage("placeholder.discord", Mini.raw("link", DISCORD_URL), Mini.raw("full_link", DISCORD_URL.startsWith("http") ? DISCORD_URL : "https://" + DISCORD_URL));
 		return Tag.selfClosingInserting(render);
 	}
 
 	@Override
 	public boolean has(@NotNull String name) {
-		return name.equals("discord");
+		return name.equals("discord") || name.equals("ds");
 	}
 
 	/**
@@ -36,6 +40,15 @@ public record DiscordResolver(@NotNull Messenger messenger) implements TagResolv
 	 */
 	public static @NotNull String discordTag() {
 		return "<discord>";
+	}
+
+	/**
+	 * Constructs raw Discord tag
+	 *
+	 * @return Discord tag
+	 */
+	public static @NotNull String dsTag() {
+		return "<ds>";
 	}
 
 }

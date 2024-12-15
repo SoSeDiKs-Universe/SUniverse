@@ -110,7 +110,7 @@ public class FreeFall implements Listener {
 
 		player.setGliding(true);
 		Location loc = player.getLocation().center().pitch(90F);
-		player.teleport(loc, PlayerTeleportEvent.TeleportCause.PLUGIN, TeleportFlag.Relative.YAW, TeleportFlag.Relative.PITCH, TeleportFlag.EntityState.RETAIN_VEHICLE, TeleportFlag.EntityState.RETAIN_PASSENGERS);
+		player.teleport(loc, PlayerTeleportEvent.TeleportCause.PLUGIN, TeleportFlag.Relative.VELOCITY_ROTATION, TeleportFlag.EntityState.RETAIN_VEHICLE, TeleportFlag.EntityState.RETAIN_PASSENGERS);
 		player.emitSound(Sound.ENTITY_ENDER_DRAGON_FLAP, 1F, 1.5F);
 
 		Moves.scheduler().sync(task -> {

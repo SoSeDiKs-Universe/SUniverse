@@ -1,9 +1,8 @@
 package me.sosedik.miscme.impl.item.modifier;
 
 import de.tr7zw.nbtapi.NBT;
+import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import de.tr7zw.nbtapi.iface.ReadableNBT;
-import io.papermc.paper.datacomponent.DataComponentTypes;
-import io.papermc.paper.datacomponent.item.BlockItemDataProperties;
 import me.sosedik.kiterino.modifier.item.ItemContextBox;
 import me.sosedik.kiterino.modifier.item.ItemModifier;
 import me.sosedik.kiterino.modifier.item.ModificationResult;
@@ -17,23 +16,24 @@ import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Tag;
-import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
 import org.bukkit.block.sign.Side;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BlockStateMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 import static me.sosedik.utilizer.api.message.Mini.combined;
 
 /**
  * Signs show stored text in lore
  */
-// MCCheck: 1.21.1, item block entity tag
+// MCCheck: 1.21.4, item block entity tag
 public class SignsShowTextInLore extends ItemModifier {
 
 	private static final String BLOCK_ENTITY_TAG = "minecraft:block_entity_data";
@@ -51,14 +51,15 @@ public class SignsShowTextInLore extends ItemModifier {
 
 		ItemStack item = contextBox.getItem();
 		if (!Tag.ALL_SIGNS.isTagged(contextBox.getInitialType())) return ModificationResult.PASS;
-		if (!item.hasData(DataComponentTypes.BLOCK_DATA)) return ModificationResult.PASS;
+//		if (!item.hasData(DataComponentTypes.ENTITY_DATA)) return ModificationResult.PASS; // TODO Entity data component
 
-		BlockItemDataProperties blockItemDataProperties = item.getData(DataComponentTypes.BLOCK_DATA);
-		assert blockItemDataProperties != null;
-		BlockState blockState = blockItemDataProperties.createBlockData(contextBox.getInitialType().asItemType().getBlockType()).createBlockState();
-		if (!(blockState instanceof Sign sign)) return ModificationResult.PASS;
+//		BlockItemDataProperties blockItemDataProperties = item.getData(DataComponentTypes.ENTITY_DATA);
+//		assert blockItemDataProperties != null;
+//		BlockState blockState = blockItemDataProperties.createBlockData(contextBox.getInitialType().asItemType().getBlockType()).createBlockState();
+		if (!(item.getItemMeta() instanceof BlockStateMeta blockStateMeta)) return ModificationResult.PASS;
+		if (!(blockStateMeta.getBlockState() instanceof Sign sign)) return ModificationResult.PASS;
 
-		boolean hasText = NBT.getComponents(item, nbt -> {
+		boolean hasText = NBT.getComponents(item, nbt -> { // TODO use components api?
 			if (!nbt.hasTag(BLOCK_ENTITY_TAG)) return false;
 
 			ReadableNBT blockEntityTag = nbt.getCompound(BLOCK_ENTITY_TAG);
@@ -88,6 +89,9 @@ public class SignsShowTextInLore extends ItemModifier {
 		if (!hasText) return ModificationResult.PASS;
 
 		contextBox.addLore(lore);
+		// Remove tooltip warning
+		NBT.modifyComponents(item, (Consumer<ReadWriteNBT>) nbt -> nbt.removeKey(BLOCK_ENTITY_TAG));
+//		item.resetData(DataComponentTypes.ENTITY_DATA); // TODO
 
 		return ModificationResult.OK;
 	}
@@ -96,7 +100,7 @@ public class SignsShowTextInLore extends ItemModifier {
 		MiniMessage miniMessage = player == null ? Mini.buildMini() : Messenger.messenger(player).miniMessage();
 		boolean hasLines = false;
 		List<Component> loreLines = new ArrayList<>();
-		for (var i = 0; i < lines.size(); i++) {
+		for (int i = 0; i < lines.size(); i++) {
 			Component line = lines.get(i);
 			String rawLine = FancyMessageRenderer.getRawInput(line);
 			if (rawLine.isEmpty()) {

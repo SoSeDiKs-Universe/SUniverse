@@ -25,7 +25,7 @@ import java.util.UUID;
 /**
  * Fakes saddles for clients to allow controlling horses without actual saddles
  */
-// MCCheck: 1.21.1, abstract horse metadata index for saddles
+// MCCheck: 1.21.4, abstract horse metadata index for saddles
 public class FakeHorseSaddles implements PacketListener, Listener {
 
 	private static final int HORSE_META_INDEX = 17;

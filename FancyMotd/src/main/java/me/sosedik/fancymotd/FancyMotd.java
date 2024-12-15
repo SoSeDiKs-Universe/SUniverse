@@ -21,14 +21,16 @@ public class FancyMotd extends JavaPlugin {
 	public void onLoad() {
 		FancyMotd.instance = this;
 
-		TranslationHolder.extractLocales(this);
+		if (getServer().getPluginManager().getPlugin("Utilizer") != null) {
+			TranslationHolder.extractLocales(this);
+		}
 		Pinger.setupDatabase();
 	}
 
 	@Override
 	public void onEnable() {
 		MotdIconStorage.refreshIcons(this);
-		if (!ServerBuildInfo.buildInfo().isBrandCompatible(Key.key("kiterino", "kiterino"))) {
+		if (getServer().getPluginManager().getPlugin("Utilizer") == null || !ServerBuildInfo.buildInfo().isBrandCompatible(Key.key("kiterino", "kiterino"))) {
 			getLogger().warning("Current server software does not support Kiterino API");
 			getServer().getPluginManager().registerEvents(new PaperMotdRandomizer(), this);
 			return;

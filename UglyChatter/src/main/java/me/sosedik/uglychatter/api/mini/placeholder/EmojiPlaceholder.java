@@ -1,12 +1,12 @@
 package me.sosedik.uglychatter.api.mini.placeholder;
 
 import com.google.gson.JsonObject;
-import me.sosedik.resourcelib.rpgenerator.ResourcePackGenerator;
 import me.sosedik.utilizer.listener.misc.ExtraChatTabSuggestions;
 import me.sosedik.utilizer.util.FileUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
+import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -86,10 +86,14 @@ public class EmojiPlaceholder extends ReplacementPlaceholder {
 	/**
 	 * Loads emoji mappings
 	 *
-	 * @param generator resource pack generator
+	 * @param plugin plugin instance
 	 */
-	public static void setupEmoji(@NotNull ResourcePackGenerator generator) {
-		var emojiAssetsDir = new File(generator.getUserDataDir(), "emoji/assets");
+	public static void setupEmoji(@NotNull Plugin plugin) {
+		var emojiAssetsDir = new File(plugin.getDataFolder(), "emoji/assets");
+		if (!emojiAssetsDir.exists()) {
+			plugin.getLogger().warning("Emoji assets are missing!");
+			return;
+		}
 
 		// Load emoji remappings
 		JsonObject emojiRemappings = FileUtil.readJsonObject(new File(emojiAssetsDir, "emoji_remappings/lang/en_us.json"));

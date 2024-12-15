@@ -18,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Start swimming in one block space
  */
-// MCCheck: 1.21.1, workaround to swimming state metadata
+// MCCheck: 1.21.4, workaround to swimming state metadata
 public class SwimmingInOneBlockSpace implements Listener {
 
 	private static final int SWIMMING_METADATA_INDEX = 0;

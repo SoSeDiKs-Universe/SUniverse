@@ -64,7 +64,7 @@ public class PaperMotdRandomizer implements Listener {
 		// Random motd
 		Component motd = combine(Component.newline(),
 			MINI.deserialize("<#37BBF5>SoSeDiK's <#ECF3FC>Universe <red>♥"),
-				MINI.deserialize("<gray>Testing random stuff")
+			MINI.deserialize("<gray>Testing random stuff")
 		);
 		event.motd(motd);
 	}

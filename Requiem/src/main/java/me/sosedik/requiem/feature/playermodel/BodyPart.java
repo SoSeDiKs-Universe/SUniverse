@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
+import static me.sosedik.requiem.Requiem.requiemKey;
+
 public class BodyPart {
 
 	public static final BodyPart HEAD = builder("head", "head").vital().build();
@@ -81,8 +83,8 @@ public class BodyPart {
 		}
 
 		private @NotNull FontData mapping(@NotNull BodyDamage bodyDamage, @NotNull String mapping, @NotNull String suffix) {
-			mapping = "requiem:health/" + mapping + "_" + bodyDamage.name().toLowerCase(Locale.ENGLISH) + suffix;
-			FontData fontData = ResourceLib.storage().getFontData(mapping);
+			mapping = "health/" + mapping + "_" + bodyDamage.name().toLowerCase(Locale.ENGLISH) + suffix;
+			FontData fontData = ResourceLib.storage().getFontData(requiemKey(mapping));
 			return Objects.requireNonNull(fontData);
 		}
 

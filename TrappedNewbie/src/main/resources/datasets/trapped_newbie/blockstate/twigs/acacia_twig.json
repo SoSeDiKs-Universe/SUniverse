@@ -1,0 +1,51 @@
+{
+  "parser": "tripwire",
+  "dummy": true,
+  "variations": [
+    {
+      "model": "small_acacia_twig"
+    },
+    {
+      "model": "small_acacia_twig",
+      "y": 90
+    },
+    {
+      "model": "small_acacia_twig",
+      "y": 180
+    },
+    {
+      "model": "small_acacia_twig",
+      "y": 270
+    },
+    {
+      "model": "medium_acacia_twig"
+    },
+    {
+      "model": "medium_acacia_twig",
+      "y": 90
+    },
+    {
+      "model": "medium_acacia_twig",
+      "y": 180
+    },
+    {
+      "model": "medium_acacia_twig",
+      "y": 270
+    },
+    {
+      "model": "large_acacia_twig"
+    },
+    {
+      "model": "large_acacia_twig",
+      "y": 90
+    },
+    {
+      "model": "large_acacia_twig",
+      "y": 180
+    },
+    {
+      "model": "large_acacia_twig",
+      "y": 270
+    }
+  ]
+}

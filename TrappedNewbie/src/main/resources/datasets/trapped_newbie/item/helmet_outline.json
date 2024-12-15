@@ -1,5 +1,5 @@
 {
-	"client_type": "light_gray_stained_glass_pane",
+	"client_type": "minecraft:light_gray_stained_glass_pane",
 	"stack_size": 1,
 	"model_extras": {
 		"display": {

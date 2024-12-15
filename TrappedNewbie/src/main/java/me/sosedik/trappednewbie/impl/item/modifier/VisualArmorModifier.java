@@ -9,6 +9,7 @@ import me.sosedik.kiterino.modifier.item.context.ItemModifierContext;
 import me.sosedik.kiterino.modifier.item.context.ItemModifierContextType;
 import me.sosedik.kiterino.modifier.item.context.SlottedItemModifierContext;
 import me.sosedik.kiterino.modifier.item.context.packet.EntityEquipmentPacketContext;
+import me.sosedik.trappednewbie.TrappedNewbie;
 import me.sosedik.trappednewbie.api.item.VisualArmor;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieItems;
 import me.sosedik.utilizer.api.message.Messenger;
@@ -34,6 +35,7 @@ import java.util.Objects;
 public class VisualArmorModifier extends ItemModifier {
 
 	public static final ItemModifierContextType VISUAL_ARMOR = ItemModifierContextType.context(ItemModifierContext.EMPTY.getClass()).withName().withLore().build();
+	private static final NamespacedKey SADDLE_HEAD_MODEL = TrappedNewbie.trappedNewbieKey("saddle_head");
 
 	public VisualArmorModifier(@NotNull NamespacedKey key) {
 		super(key);
@@ -105,7 +107,7 @@ public class VisualArmorModifier extends ItemModifier {
 	}
 
 	private int resolveSlot(@NotNull Player player, @NotNull ItemModifierContext context) {
-		if (context instanceof EntityEquipmentPacketContext ctx) return InventoryUtil.getSlot(player, ctx.getSlot());
+		if (context instanceof EntityEquipmentPacketContext ctx) return player.canUseEquipmentSlot(ctx.getSlot()) ? InventoryUtil.getSlot(player, ctx.getSlot()) : -1;
 		if (context instanceof SlottedItemModifierContext ctx) return ctx.slot();
 		return -1;
 	}
@@ -129,7 +131,7 @@ public class VisualArmorModifier extends ItemModifier {
 		return item;
 	}
 
-	private boolean isGhost(@NotNull Material type) { // TODO make tag
+	private boolean isGhost(@NotNull Material type) { // TODO make tag?
 		return type == TrappedNewbieItems.MATERIAL_AIR
 			|| type == TrappedNewbieItems.HELMET_OUTLINE
 			|| type == TrappedNewbieItems.CHESTPLATE_OUTLINE
@@ -169,7 +171,7 @@ public class VisualArmorModifier extends ItemModifier {
 
 		// Using custom model for saddles on head
 		if (!armorPreview && slot == EquipmentSlot.HEAD && item.getType() == Material.SADDLE) {
-			meta.setCustomModelData(1);
+			meta.setItemModel(SADDLE_HEAD_MODEL);
 		}
 
 		item.setItemMeta(meta);

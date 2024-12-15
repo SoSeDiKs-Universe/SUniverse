@@ -1,0 +1,51 @@
+{
+  "parser": "tripwire",
+  "dummy": true,
+  "variations": [
+    {
+      "model": "small_cherry_twig"
+    },
+    {
+      "model": "small_cherry_twig",
+      "y": 90
+    },
+    {
+      "model": "small_cherry_twig",
+      "y": 180
+    },
+    {
+      "model": "small_cherry_twig",
+      "y": 270
+    },
+    {
+      "model": "medium_cherry_twig"
+    },
+    {
+      "model": "medium_cherry_twig",
+      "y": 90
+    },
+    {
+      "model": "medium_cherry_twig",
+      "y": 180
+    },
+    {
+      "model": "medium_cherry_twig",
+      "y": 270
+    },
+    {
+      "model": "large_cherry_twig"
+    },
+    {
+      "model": "large_cherry_twig",
+      "y": 90
+    },
+    {
+      "model": "large_cherry_twig",
+      "y": 180
+    },
+    {
+      "model": "large_cherry_twig",
+      "y": 270
+    }
+  ]
+}

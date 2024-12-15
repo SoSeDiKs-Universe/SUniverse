@@ -31,7 +31,7 @@ public class UglyChatter extends JavaPlugin {
 
 		TranslationHolder.extractLocales(this);
 
-		EmojiPlaceholder.setupEmoji(Objects.requireNonNull(ResourceLib.generator()));
+		EmojiPlaceholder.setupEmoji(this);
 	}
 
 	@Override

@@ -1,6 +1,8 @@
 package me.sosedik.resourcelib;
 
+import com.google.gson.JsonObject;
 import me.sosedik.resourcelib.api.font.FontData;
+import me.sosedik.resourcelib.api.item.FakeItemData;
 import me.sosedik.resourcelib.command.CEffectCommand;
 import me.sosedik.resourcelib.dataset.ResourcePackStorage;
 import me.sosedik.resourcelib.feature.TabRenderer;
@@ -11,25 +13,26 @@ import me.sosedik.resourcelib.listener.misc.LocalizedResourcePackMessage;
 import me.sosedik.resourcelib.listener.player.DisplayCustomPotionEffectsOnHud;
 import me.sosedik.resourcelib.listener.player.LoadSaveHudMessengerOnJoinLeave;
 import me.sosedik.resourcelib.listener.player.LoadSaveTabRendererOnJoinLeave;
-import me.sosedik.resourcelib.rpgenerator.ResourcePackGenerator;
+import me.sosedik.resourcelib.util.ResourcePackHoster;
 import me.sosedik.utilizer.CommandManager;
 import me.sosedik.utilizer.api.language.TranslationHolder;
 import me.sosedik.utilizer.util.EventUtil;
 import me.sosedik.utilizer.util.FileUtil;
 import me.sosedik.utilizer.util.Scheduler;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Enumeration;
-import java.util.Objects;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+
+import static java.util.Objects.requireNonNull;
 
 public class ResourceLib extends JavaPlugin {
 
@@ -37,38 +40,21 @@ public class ResourceLib extends JavaPlugin {
 
 	private Scheduler scheduler;
 	private ResourcePackStorage storage;
-	private ResourcePackGenerator generator;
 
 	@Override
 	public void onLoad() {
 		ResourceLib.instance = this;
 		this.scheduler = new Scheduler(this);
-		this.storage = new ResourcePackStorage();
-		this.generator = new ResourcePackGenerator(this);
-		this.generator.init();
-		loadUserResources();
+		this.storage = new ResourcePackStorage(this);
 
 		TranslationHolder.extractLocales(this);
+		ResourcePackHoster.hostResourcePack(this);
 
 		TabRenderer.init(this);
 	}
 
-	private void loadUserResources() {
-		var datasetsDir = new File(instance().getDataFolder(), "datasets");
-		if (!datasetsDir.exists()) {
-			FileUtil.createFolder(datasetsDir);
-			return;
-		}
-
-		this.generator.parseResources(datasetsDir, true);
-	}
-
 	@Override
 	public void onEnable() {
-		this.generator.generate();
-		// Give the last chance for plugins to access the data before invalidating
-		getServer().getScheduler().runTaskLater(this, () -> this.generator = null, 1L);
-
 		registerCommands();
 
 		new CustomNameModifier(resourceLibKey("custom_name")).register();
@@ -134,17 +120,6 @@ public class ResourceLib extends JavaPlugin {
 	}
 
 	/**
-	 * Gets the resource pack generator.
-	 * <p>
-	 * Available only during load, becomes invalid after the plugin has enabled.
-	 *
-	 * @return the resource pack generator
-	 */
-	public static @Nullable ResourcePackGenerator generator() {
-		return instance().generator;
-	}
-
-	/**
 	 * Makes a namespaced key with this plugin's namespace
 	 *
 	 * @param value value
@@ -156,17 +131,12 @@ public class ResourceLib extends JavaPlugin {
 
 	/**
 	 * Loads default plugin resources under /resources/dataset.
+	 * <br />
 	 * Should be called only during {@link Plugin#onLoad()}.
 	 *
 	 * @param plugin plugin instance
 	 */
 	public static void loadDefaultResources(@NotNull Plugin plugin) {
-		ResourcePackGenerator packGenerator = instance().generator;
-		if (packGenerator == null) {
-			logger().warn("Plugin {} tried to load resources too early or too late!", plugin.getName());
-			return;
-		}
-
 		var jarFile = new File(plugin.getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
 		if (!jarFile.isFile()) {
 			logger().error("Couldn't obtain the JAR file for {}", plugin.getName());
@@ -199,7 +169,39 @@ public class ResourceLib extends JavaPlugin {
 			throw new RuntimeException(e);
 		}
 
-		instance().generator.parseResources(datasetsDir, false);
+		loadItemMappings(plugin);
+	}
+	
+	private static void loadItemMappings(@NotNull Plugin plugin) {
+		var datasetsDir = new File(plugin.getDataFolder(), "datasets");
+		for (File datasetDir : requireNonNull(datasetsDir.listFiles())) {
+			if (!datasetDir.isDirectory()) continue;
+
+			var itemsDir = new File(datasetDir, "item");
+			if (!itemsDir.exists()) continue;
+			if (!itemsDir.isDirectory()) continue;
+
+			loadItemMappings(itemsDir, datasetDir.getName());
+		}
+	}
+
+	private static void loadItemMappings(@NotNull File itemsDir, @NotNull String namespace) {
+		for (File itemFile : requireNonNull(itemsDir.listFiles())) {
+			if (itemFile.isDirectory()) {
+				loadItemMappings(itemFile, namespace);
+				continue;
+			}
+			if (!itemFile.getName().endsWith(".json")) continue;
+
+			String key = itemFile.getName().substring(0, itemFile.getName().length() - ".json".length());
+			var namespacedKey = new NamespacedKey(namespace, key);
+			JsonObject itemData = FileUtil.readJsonObject(itemFile);
+			var fakeItemData = new FakeItemData(
+				requireNonNull(Material.matchMaterial(itemData.get("client_type").getAsString())),
+				storage().getItemModelMapping(namespacedKey)
+			);
+			storage().addItemOption(namespacedKey, itemData, fakeItemData);
+		}
 	}
 
 	/**
@@ -209,8 +211,8 @@ public class ResourceLib extends JavaPlugin {
 	 * @return font data
 	 */
 	public static @NotNull FontData requireFontData(@NotNull NamespacedKey key) {
-		FontData fontData = ResourceLib.storage().getFontData(key.asString());
-		return Objects.requireNonNull(fontData);
+		FontData fontData = storage().getFontData(key);
+		return requireNonNull(fontData);
 	}
 
 }

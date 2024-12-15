@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class HiddenTooltipsModifier extends ItemModifier {
 
-	private static final Tag<Material> LIGHT_SOURCES = ItemUtil.itemTag(Utilizer.utilizerKey("no_tooltip_items"));
+	private static final Tag<Material> NO_TOOLTIP_ITEMS = ItemUtil.itemTag(Utilizer.utilizerKey("no_tooltip_items"));
 
 	public HiddenTooltipsModifier(@NotNull NamespacedKey modifierId) {
 		super(modifierId);
@@ -23,7 +23,7 @@ public class HiddenTooltipsModifier extends ItemModifier {
 
 	@Override
 	public @NotNull ModificationResult modify(@NotNull ItemContextBox contextBox) {
-		if (!LIGHT_SOURCES.isTagged(contextBox.getInitialType())) return ModificationResult.PASS;
+		if (!NO_TOOLTIP_ITEMS.isTagged(contextBox.getInitialType())) return ModificationResult.PASS;
 
 		ItemStack item = contextBox.getItem();
 		item.setData(DataComponentTypes.HIDE_TOOLTIP);

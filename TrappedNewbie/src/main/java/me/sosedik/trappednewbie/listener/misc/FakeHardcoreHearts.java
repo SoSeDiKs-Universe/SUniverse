@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Makes client always display hardcore hearts
  */
-// MCCheck: 1.21.1, login packet
+// MCCheck: 1.21.4, login packet
 public class FakeHardcoreHearts implements PacketListener {
 
 	@Override

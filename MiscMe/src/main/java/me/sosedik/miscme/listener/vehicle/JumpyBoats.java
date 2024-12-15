@@ -3,6 +3,7 @@ package me.sosedik.miscme.listener.vehicle;
 import com.github.retrooper.packetevents.event.PacketListener;
 import com.github.retrooper.packetevents.event.PacketReceiveEvent;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
+import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientPlayerInput;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientSteerVehicle;
 import me.sosedik.miscme.MiscMe;
 import org.bukkit.Sound;
@@ -18,19 +19,19 @@ import java.util.UUID;
 /**
  * Boats are jumpy! :D
  */
-// MCCheck: 1.21.1, steer vehicle packet
+// MCCheck: 1.21.4, player input packet
 public class JumpyBoats implements PacketListener {
 
 	private static final Set<UUID> JUMP_DELAYS = new HashSet<>();
 
 	@Override
 	public void onPacketReceive(@NotNull PacketReceiveEvent event) {
-		if (event.getPacketType() != PacketType.Play.Client.STEER_VEHICLE) return;
+		if (event.getPacketType() != PacketType.Play.Client.PLAYER_INPUT) return;
 
-		var packet = new WrapperPlayClientSteerVehicle(event);
+		var packet = new WrapperPlayClientPlayerInput(event);
 		if (!packet.isJump()) return;
 
-		Player player = (Player) event.getPlayer();
+		Player player = event.getPlayer();
 		if (JUMP_DELAYS.contains(player.getUniqueId())) return;
 
 		MiscMe.scheduler().sync(() -> {

@@ -1,5 +1,7 @@
 package me.sosedik.utilizer.util;
 
+import io.papermc.paper.datacomponent.DataComponentTypes;
+import io.papermc.paper.datacomponent.item.PotionContents;
 import me.sosedik.utilizer.Utilizer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -8,7 +10,6 @@ import org.bukkit.Tag;
 import org.bukkit.block.data.type.Campfire;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
-import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionType;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,7 +18,7 @@ import java.util.Objects;
 /**
  * General utilities around items
  */
-// MCCheck: 1.21.1, item types
+// MCCheck: 1.21.4, item types
 public class ItemUtil {
 
 	private ItemUtil() {
@@ -48,11 +49,12 @@ public class ItemUtil {
 	 * @return whether the item is a water bottle
 	 */
 	public static boolean isWaterBottle(@NotNull ItemStack item) {
-		return item.getType() == Material.POTION
-				&& item.hasItemMeta()
-				&& item.getItemMeta() instanceof PotionMeta meta
-				&& meta.hasBasePotionType()
-				&& meta.getBasePotionType() == PotionType.WATER;
+		if (item.getType() != Material.POTION) return false;
+		if (!item.hasData(DataComponentTypes.POTION_CONTENTS)) return false;
+
+		PotionContents potionContents = item.getData(DataComponentTypes.POTION_CONTENTS);
+		assert potionContents != null;
+		return potionContents.potion() == PotionType.WATER;
 	}
 
 	/**

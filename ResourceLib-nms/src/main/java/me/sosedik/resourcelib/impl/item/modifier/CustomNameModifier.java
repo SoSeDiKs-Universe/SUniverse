@@ -27,7 +27,6 @@ public class CustomNameModifier extends ItemModifier {
 
 		ItemStack item = contextBox.getItem();
 		if (item.hasData(DataComponentTypes.CUSTOM_NAME)) return ModificationResult.PASS;
-		if (item.hasData(DataComponentTypes.ITEM_NAME)) return ModificationResult.PASS;
 
 		NamespacedKey key = type.getKey();
 		Component name = Messenger.messenger(LangOptionsStorage.getByLocale(contextBox.getLocale()))

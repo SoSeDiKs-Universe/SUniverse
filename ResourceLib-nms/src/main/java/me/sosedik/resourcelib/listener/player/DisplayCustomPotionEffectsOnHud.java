@@ -27,8 +27,8 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
+import static java.util.Objects.requireNonNull;
 import static me.sosedik.utilizer.api.message.Mini.combine;
 import static me.sosedik.utilizer.api.message.Mini.combined;
 import static me.sosedik.utilizer.api.message.Mini.component;
@@ -46,20 +46,20 @@ public class DisplayCustomPotionEffectsOnHud implements Listener {
 	private static final NamespacedKey HUD_RENDERER_KEY = ResourceLib.resourceLibKey("custom_potion_effects");
 
 	static {
-		BACKGROUND_BENEFICIAL = Objects.requireNonNull(ResourceLib.storage().getFontData("minecraft:effect_background_beneficial"));
-		BACKGROUND_HARMFUL = Objects.requireNonNull(ResourceLib.storage().getFontData("minecraft:effect_background_harmful"));
+		BACKGROUND_BENEFICIAL = requireNonNull(ResourceLib.storage().getFontData(NamespacedKey.minecraft("effect_background_beneficial")));
+		BACKGROUND_HARMFUL = requireNonNull(ResourceLib.storage().getFontData(NamespacedKey.minecraft("effect_background_harmful")));
 
 		Registry.EFFECT.forEach(effectType -> {
 			NamespacedKey key = effectType.getKey();
 			if (NamespacedKey.MINECRAFT.equals(key.getNamespace())) return;
 
 			String effectKey = key.getNamespace() + ":effect/" + key.getKey();
-			FontData bigFontData = ResourceLib.storage().getFontData(effectKey);
+			FontData bigFontData = ResourceLib.storage().getFontData(requireNonNull(NamespacedKey.fromString(effectKey)));
 			if (bigFontData == null) {
 				ResourceLib.logger().warn("Couldn't find effect mapping for {}", effectKey);
 				return;
 			}
-			FontData smallFontData = ResourceLib.storage().getFontData(effectKey + "_icon");
+			FontData smallFontData = ResourceLib.storage().getFontData(requireNonNull(NamespacedKey.fromString(effectKey + "_icon")));
 			if (smallFontData == null) {
 				ResourceLib.logger().warn("Couldn't find effect mapping for {}_icon", effectKey);
 				return;

@@ -6,6 +6,7 @@ import org.bukkit.Sound;
 import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.Bisected;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Openable;
 import org.bukkit.block.data.type.Door;
@@ -22,10 +23,19 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.PlayerInventory;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Map;
+
 /**
  * Open blocks together!
  */
 public class Couplings implements Listener {
+
+	private static final Map<BlockFace, BlockFace[]> TALL_DOOR_FACINGS = Map.of(
+		BlockFace.NORTH, new BlockFace[]{BlockFace.WEST, BlockFace.NORTH, BlockFace.EAST, BlockFace.NORTH},
+		BlockFace.WEST, new BlockFace[]{BlockFace.SOUTH, BlockFace.WEST, BlockFace.NORTH, BlockFace.WEST},
+		BlockFace.EAST, new BlockFace[]{BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.EAST},
+		BlockFace.SOUTH, new BlockFace[]{BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST, BlockFace.SOUTH}
+	);
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onOpen(@NotNull PlayerInteractEvent event) {
@@ -60,6 +70,11 @@ public class Couplings implements Listener {
 
 				event.setCancelled(true);
 				switchOpenableState(block, trapDoor, Sound.BLOCK_WOODEN_TRAPDOOR_OPEN, Sound.BLOCK_IRON_TRAPDOOR_CLOSE);
+				return;
+			}
+
+			if (openTallDoor(block, trapDoor)) {
+				event.setCancelled(true);
 				return;
 			}
 
@@ -99,15 +114,26 @@ public class Couplings implements Listener {
 		switch (blockData) {
 			case Door door -> {
 				Block neighbourBlock = getDoorNeighbour(block, door);
-				if (!(neighbourBlock.getBlockData() instanceof Door)) return;
+				if (!(neighbourBlock.getBlockData() instanceof Door)) {
+					// Already powered and opened
+					if (door.isOpen() && newCurrent > 7) return;
+					// Already closed and no power
+					if (!door.isOpen() && newCurrent <= 7) return;
+
+					openTallDoor(block, door);
+					return;
+				}
 
 				// Don't close if neighbour is powered
 				if (newCurrent <= 7 && neighbourBlock.getBlockPower() > 7) {
 					event.setNewCurrent(neighbourBlock.getBlockPower());
-				} else {
-					if (newCurrent == 0 && !door.isOpen()) door.setOpen(true);
-					openNeighbourDoor(block, door);
+					return;
 				}
+
+				// Edge cases: door is already in intended state (manually set), but calculations expect the "pre-state"
+				if (newCurrent == 0 && !door.isOpen()) door.setOpen(true);
+				else if (door.isOpen() && newCurrent > 7) door.setOpen(false);
+				openNeighbourDoor(block, door);
 			}
 			case TrapDoor trapDoor -> {
 				Block neighbourBlock = block.getRelative(trapDoor.getFacing());
@@ -123,6 +149,7 @@ public class Couplings implements Listener {
 						return;
 					}
 				}
+
 				openTrapDoors(block, trapDoor);
 			}
 			case Gate gate -> {
@@ -151,13 +178,54 @@ public class Couplings implements Listener {
 	}
 
 	private void openNeighbourDoor(@NotNull Block block, @NotNull Door door) {
+		openTallDoor(block, door);
 		Block neighbourBlock = getDoorNeighbour(block, door);
 		if (!(neighbourBlock.getBlockData() instanceof Door neighbourDoor)) return;
 		if (neighbourDoor.getFacing() != door.getFacing()) return;
 		if (neighbourDoor.getHinge() == door.getHinge()) return;
+		if (door.isOpen() != neighbourDoor.isOpen()) return;
 
+		openTallDoor(neighbourBlock, neighbourDoor);
 		neighbourDoor.setOpen(!door.isOpen());
+		// Fixup potentially incorrect powered state due to holding the unpowered door open early
+		neighbourDoor.setPowered(neighbourBlock.getBlockPower() > 0);
 		neighbourBlock.setBlockData(neighbourDoor);
+	}
+
+	private void openTallDoor(@NotNull Block doorBlock, @NotNull Door door) {
+		Block trapDoorBlock = doorBlock.getRelative(BlockFace.UP, door.getHalf() == Bisected.Half.BOTTOM ? 2 : 1);
+		if (openTallTrapdoor(trapDoorBlock, doorBlock, door))
+			openTallTrapdoor(trapDoorBlock.getRelative(BlockFace.UP), doorBlock, door);
+	}
+
+	private boolean openTallTrapdoor(@NotNull Block trapDoorBlock, @NotNull Block doorBlock, @NotNull Door door) {
+		if (!(trapDoorBlock.getBlockData() instanceof TrapDoor trapDoor)) return false;
+		if (!trapDoor.isOpen()) return false;
+		if (!isCompatible(doorBlock, trapDoorBlock)) return false;
+
+		BlockFace doorFace = door.getFacing();
+		BlockFace trapDoorFace = trapDoor.getFacing();
+
+		BlockFace[] faces = TALL_DOOR_FACINGS.get(doorFace);
+		int index = (door.getHinge() == Door.Hinge.RIGHT) ? 0 : 2;
+
+		if (door.isOpen()) {
+			if (trapDoorFace != faces[index]) return false;
+			trapDoor.setFacing(faces[index + 1]);
+		} else {
+			if (trapDoorFace != faces[index + 1]) return false;
+			trapDoor.setFacing(faces[index]);
+		}
+
+		trapDoorBlock.setBlockData(trapDoor, false);
+		return true;
+	}
+
+	private boolean isCompatible(@NotNull Block door, @NotNull Block trapDoor) {
+		if (door.getType() == Material.IRON_DOOR) return trapDoor.getType() == Material.IRON_TRAPDOOR;
+		if (door.getType().name().contains("COPPER")) return trapDoor.getType().name().contains("COPPER");
+		if (Tag.WOODEN_DOORS.isTagged(door.getType())) return Tag.WOODEN_TRAPDOORS.isTagged(trapDoor.getType());
+		return false;
 	}
 
 	private @NotNull Block getDoorNeighbour(@NotNull Block block, @NotNull Door door) {
@@ -214,12 +282,61 @@ public class Couplings implements Listener {
 		}
 	}
 
+	private boolean openTallDoor(@NotNull Block trapDoorBlock, @NotNull TrapDoor trapDoor) {
+		if (!trapDoor.isOpen()) return false;
+
+		Block doorBlock = trapDoorBlock.getRelative(BlockFace.DOWN);
+		if (!(doorBlock.getBlockData() instanceof Door door)) return false;
+		if (!isCompatible(doorBlock, trapDoorBlock)) return false;
+
+		BlockFace doorFace = door.getFacing();
+		BlockFace trapDoorFace = trapDoor.getFacing();
+
+		BlockFace[] faces = TALL_DOOR_FACINGS.get(doorFace);
+		int index = (door.getHinge() == Door.Hinge.RIGHT) ? 0 : 2;
+
+		if (door.isOpen()) {
+			if (trapDoorFace != faces[index]) return false;
+			trapDoor.setFacing(faces[index + 1]);
+			door.setOpen(false);
+		} else {
+			if (trapDoorFace != faces[index + 1]) return false;
+			trapDoor.setFacing(faces[index]);
+			door.setOpen(true);
+		}
+
+		doorBlock.setBlockData(door);
+		trapDoorBlock.setBlockData(trapDoor, false);
+
+		Block upperBlock = trapDoorBlock.getRelative(BlockFace.UP);
+		if (upperBlock.getBlockData() instanceof TrapDoor upperTrapDoor
+				&& upperTrapDoor.isOpen()
+				&& isCompatible(doorBlock, upperBlock)) {
+			upperTrapDoor.setFacing(trapDoor.getFacing());
+			upperBlock.setBlockData(upperTrapDoor, false);
+		}
+
+		Block neighbourBlock = getDoorNeighbour(doorBlock, door);
+		if (!(neighbourBlock.getBlockData() instanceof Door neighbourDoor)) return true;
+		if (neighbourDoor.getFacing() != door.getFacing()) return true;
+		if (neighbourDoor.getHinge() == door.getHinge()) return true;
+		if (door.isOpen() == neighbourDoor.isOpen()) return true;
+
+		openTallDoor(neighbourBlock, neighbourDoor);
+		neighbourDoor.setOpen(door.isOpen());
+		neighbourBlock.setBlockData(neighbourDoor);
+
+		return true;
+	}
+
 	private boolean openTrapDoor(@NotNull Block block, @NotNull BlockFace facing, boolean opened) {
 		if (!(block.getBlockData() instanceof TrapDoor trapDoor)) return false;
 		if (trapDoor.isOpen() == opened) return true;
 		if (trapDoor.getFacing() != facing) return false;
 
 		trapDoor.setOpen(opened);
+		// Fixup potentially incorrect powered state due to holding the unpowered trapdoor open early
+		trapDoor.setPowered(block.getBlockPower() > 0);
 		block.setBlockData(trapDoor);
 		return true;
 	}

@@ -207,6 +207,7 @@ public class ResourceLibBootstrap implements PluginBootstrap {
 		}
 	}
 
+	// Yes, ugly; better way?
 	private static void extractDatapack(@NotNull BootstrapContext context) {
 		File jarFile = context.getPluginSource().toFile();
 		if (!jarFile.isFile()) {
@@ -215,8 +216,15 @@ public class ResourceLibBootstrap implements PluginBootstrap {
 			return;
 		}
 
-		// Yes, ugly; better way?
 		var datapacksDir = new File(context.getDataDirectory().toAbsolutePath().getParent().getParent().toFile(), "world/datapacks");
+		if (datapacksDir.exists()) {
+			for (File datapackDir : requireNonNull(datapacksDir.listFiles())) {
+				if (!datapacksDir.isDirectory()) continue;
+				if (datapacksDir.getName().charAt(0) != '_') continue;
+
+				FileUtil.deleteFolder(datapackDir);
+			}
+		}
 		try (var jar = new JarFile(jarFile)) {
 			Enumeration<JarEntry> entries = jar.entries();
 			while (entries.hasMoreElements()) {
@@ -226,10 +234,7 @@ public class ResourceLibBootstrap implements PluginBootstrap {
 				String name = entry.getName();
 				if (!name.startsWith("datapack/")) continue;
 
-				var datapackDir = new File(datapacksDir, name.substring("datapack/".length()).split("/")[0]);
-				FileUtil.deleteFolder(datapackDir);
-
-				File outputFile = new File(datapacksDir, name.substring("datapack/".length()));
+				File outputFile = new File(datapacksDir, "_" + name.substring("datapack/".length()));
 				FileUtil.createFolder(outputFile.getParentFile());
 				try (InputStream inputStream = jar.getInputStream(entry);
 				     FileOutputStream outputStream = new FileOutputStream(outputFile)) {

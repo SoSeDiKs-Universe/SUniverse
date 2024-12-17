@@ -1,5 +1,8 @@
 package me.sosedik.miscme.listener.block;
 
+import io.papermc.paper.block.LidMode;
+import io.papermc.paper.block.LidState;
+import io.papermc.paper.block.Lidded;
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
 import me.sosedik.miscme.MiscMe;
@@ -55,6 +58,7 @@ public class ChestThrowsEntities implements Listener {
 		if (!(event.getInventory().getHolder(false) instanceof TileState tileState)) return;
 		if (!(tileState.getBlockData() instanceof Directional directional)) return;
 		if (!isChest(tileState)) return;
+		if (tileState instanceof Lidded lidded && lidded.getLidMode() == LidMode.FORCED_OPEN) return;
 
 		Vector velocity = directional.getFacing().getDirection().multiply(0.4).setY(0.4);
 		Location loc = tileState.getLocation().toCenterLocation().shiftTowards(BlockFace.UP);
@@ -91,6 +95,7 @@ public class ChestThrowsEntities implements Listener {
 		if (!(block.getBlockData() instanceof Directional directional)) return;
 		if (block.getRelative(BlockFace.UP).isSolid()) return;
 		if (!(block.getState(false) instanceof TileState tileState)) return;
+		if (tileState instanceof Lidded lidded && lidded.getEffectiveLidState() == LidState.OPEN) return;
 
 		Collection<LivingEntity> entities = block.getLocation().toCenterLocation().shiftTowards(BlockFace.UP).getNearbyLivingEntities(0.4);
 		entities.removeIf(EntityUtil.IGNORE_INTERACTION);

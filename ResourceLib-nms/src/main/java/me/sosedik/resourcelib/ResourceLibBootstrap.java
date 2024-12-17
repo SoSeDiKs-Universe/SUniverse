@@ -18,6 +18,7 @@ import me.sosedik.utilizer.util.FileUtil;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
+import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
@@ -143,6 +144,24 @@ public class ResourceLibBootstrap implements PluginBootstrap {
 		if (json.has("stack_size")) properties.stacksTo(json.get("stack_size").getAsInt());
 		if (json.has("fire_resistance") && json.get("fire_resistance").getAsBoolean()) properties.fireResistant();
 		if (json.has("rarity")) properties.rarity(Rarity.valueOf(json.get("rarity").getAsString().toUpperCase(Locale.ROOT)));
+
+		if (json.has("food")) {
+			JsonObject foodJson = json.getAsJsonObject("food");
+			var foodProperties = new FoodProperties.Builder()
+				.nutrition(foodJson.get("nutrition").getAsInt())
+				.saturationModifier(foodJson.get("saturation").getAsFloat());
+			if (foodJson.has("always_edible") && foodJson.get("always_edible").getAsBoolean())
+				foodProperties.alwaysEdible();
+
+			if (foodJson.has("consumable")) {
+				JsonObject consumableJson = foodJson.getAsJsonObject("consumable");
+				// TODO consumable
+				properties.food(foodProperties.build());
+			} else {
+				properties.food(foodProperties.build());
+			}
+		}
+
 		return properties;
 	}
 
@@ -150,7 +169,7 @@ public class ResourceLibBootstrap implements PluginBootstrap {
 		Path jarPath = context.getPluginSource();
 		try (FileSystem fs = FileSystems.newFileSystem(URI.create("jar:" + jarPath.toUri()), new HashMap<>())) {
 			Path datasetsPath = fs.getPath("/datasets");
-			if (!Files.exists(datasetsPath) || !Files.isDirectory(datasetsPath)) {
+			if (!Files.isDirectory(datasetsPath)) {
 				context.getLogger().warn("Couldn't find datasets directory inside {}", context.getPluginMeta().getName());
 				return;
 			}
@@ -159,7 +178,6 @@ public class ResourceLibBootstrap implements PluginBootstrap {
 				dirs.filter(Files::isDirectory)
 					.forEach(dir -> {
 						Path itemDir = dir.resolve(subdir);
-						if (!Files.exists(itemDir)) return;
 						if (!Files.isDirectory(itemDir)) return;
 
 						String namespace = dir.getFileName().toString();

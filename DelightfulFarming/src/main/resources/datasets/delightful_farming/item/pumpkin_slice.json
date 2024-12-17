@@ -1,0 +1,7 @@
+{
+	"client_type": "minecraft:iron_nugget",
+	"food": {
+		"nutrition": 3,
+		"saturation": 0.3
+	}
+}

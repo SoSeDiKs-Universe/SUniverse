@@ -1,11 +1,16 @@
 {
-	"client_type": "minecraft:light_gray_stained_glass_pane",
-	"stack_size": 1,
-	"model_extras": {
-		"display": {
-			"head": {
-				"scale": [0, 0, 0]
-			}
-		}
-	}
+  "parent_model": "generated",
+  "no_texture": true,
+  "model_extras": {
+    "textures": {
+      "layer0": "minecraft:gui_slot/helmet"
+    },
+    "display": {
+      "head": {
+        "scale": [0, 0, 0]
+      }
+    }
+  },
+  "client_type": "minecraft:light_gray_stained_glass_pane",
+  "stack_size": 1
 }

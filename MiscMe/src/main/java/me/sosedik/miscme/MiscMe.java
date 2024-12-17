@@ -7,9 +7,13 @@ import me.sosedik.miscme.listener.block.CampfireSetsOnFire;
 import me.sosedik.miscme.listener.block.ChestThrowsEntities;
 import me.sosedik.miscme.listener.block.ClickThroughHanging;
 import me.sosedik.miscme.listener.block.ClickThroughSigns;
+import me.sosedik.miscme.listener.block.ContainersInLiquidsReleaseContents;
 import me.sosedik.miscme.listener.block.Couplings;
 import me.sosedik.miscme.listener.block.DontEditSignsOnPlace;
 import me.sosedik.miscme.listener.block.DoorBells;
+import me.sosedik.miscme.listener.block.MelonPumpkinBlowing;
+import me.sosedik.miscme.listener.block.NoIceInNether;
+import me.sosedik.miscme.listener.block.NoteBlockShowsNotes;
 import me.sosedik.miscme.listener.block.SignsRetain;
 import me.sosedik.miscme.listener.entity.ArmorStandBedrockPoses;
 import me.sosedik.miscme.listener.entity.ArmorStandSpawnsWithArms;
@@ -60,9 +64,13 @@ public final class MiscMe extends JavaPlugin {
 			ChestThrowsEntities.class,
 			ClickThroughHanging.class,
 			ClickThroughSigns.class,
+			ContainersInLiquidsReleaseContents.class,
 			Couplings.class,
 			DontEditSignsOnPlace.class,
 			DoorBells.class,
+			MelonPumpkinBlowing.class,
+			NoIceInNether.class,
+			NoteBlockShowsNotes.class,
 			SignsRetain.class,
 			// entity
 			ArmorStandBedrockPoses.class,

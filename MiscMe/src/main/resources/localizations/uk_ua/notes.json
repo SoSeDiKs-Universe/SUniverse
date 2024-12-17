@@ -1,0 +1,18 @@
+{
+	"note_block.note.piano.name": "Рояль / арфа",
+	"note_block.note.bass_drum.name": "Басовий барабан",
+	"note_block.note.snare_drum.name": "Малий барабан",
+	"note_block.note.sticks.name": "Клацання паличками",
+	"note_block.note.bass_guitar.name": "Бас-гітара",
+	"note_block.note.flute.name": "Флейта",
+	"note_block.note.bell.name": "Дзвіночки",
+	"note_block.note.guitar.name": "Гітара",
+	"note_block.note.chime.name": "Бар чаймс",
+	"note_block.note.xylophone.name": "Ксилофон",
+	"note_block.note.iron_xylophone.name": "Вібрафон",
+	"note_block.note.cow_bell.name": "Тронка",
+	"note_block.note.didgeridoo.name": "Діджеріду",
+	"note_block.note.bit.name": "Меандр",
+	"note_block.note.banjo.name": "Банджо",
+	"note_block.note.pling.name": "Електропіано"
+}

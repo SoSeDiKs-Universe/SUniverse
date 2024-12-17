@@ -1,4 +1,11 @@
 {
-	"client_type": "minecraft:light_gray_stained_glass_pane",
-	"stack_size": 1
+  "parent_model": "generated",
+  "no_texture": true,
+  "model_extras": {
+    "textures": {
+      "layer0": "minecraft:gui_slot/boots"
+    }
+  },
+  "client_type": "minecraft:light_gray_stained_glass_pane",
+  "stack_size": 1
 }

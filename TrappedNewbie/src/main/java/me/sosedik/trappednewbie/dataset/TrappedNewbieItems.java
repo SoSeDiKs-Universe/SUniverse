@@ -3,8 +3,9 @@ package me.sosedik.trappednewbie.dataset;
 import me.sosedik.kiterino.util.KiterinoBootstrapMaterialInjector;
 import me.sosedik.trappednewbie.TrappedNewbie;
 import org.bukkit.Material;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 @SuppressWarnings("unused")
 public class TrappedNewbieItems {
 
@@ -57,7 +58,7 @@ public class TrappedNewbieItems {
 	public static final Material CRIMSON_STICK = byKey("crimson_stick");
 	public static final Material WARPED_STICK = byKey("warped_stick");
 
-	private static @NotNull Material byKey(@NotNull String value) {
+	private static Material byKey(String value) {
 		return KiterinoBootstrapMaterialInjector.injectMaterial(TrappedNewbie.trappedNewbieKey(value));
 	}
 

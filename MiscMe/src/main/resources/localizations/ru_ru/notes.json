@@ -1,0 +1,18 @@
+{
+	"note_block.note.piano.name": "Пианино / арфа",
+	"note_block.note.bass_drum.name": "Большой барабан",
+	"note_block.note.snare_drum.name": "Малый барабан",
+	"note_block.note.sticks.name": "Палочки",
+	"note_block.note.bass_guitar.name": "Бас-гитара",
+	"note_block.note.flute.name": "Флейта",
+	"note_block.note.bell.name": "Колокольчики (глокеншпиль)",
+	"note_block.note.guitar.name": "Гитара",
+	"note_block.note.chime.name": "Бар чаймс (чаймс, ветряной колокольчик)",
+	"note_block.note.xylophone.name": "Ксилофон",
+	"note_block.note.iron_xylophone.name": "Вибрафон",
+	"note_block.note.cow_bell.name": "Коровий колокольчик",
+	"note_block.note.didgeridoo.name": "Диджериду",
+	"note_block.note.bit.name": "Битная музыка",
+	"note_block.note.banjo.name": "Банджо",
+	"note_block.note.pling.name": "Электронное пианино / звонкая арфа"
+}

@@ -2,13 +2,14 @@ package me.sosedik.limboworldgenerator;
 
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
+@NullMarked
 public final class LimboWorldGenerator extends JavaPlugin {
 
 	@Override
-	public @NotNull ChunkGenerator getDefaultWorldGenerator(@NotNull String worldName, @Nullable String id) {
+	public ChunkGenerator getDefaultWorldGenerator(String worldName, @Nullable String id) {
 		return VoidChunkGenerator.GENERATOR;
 	}
 

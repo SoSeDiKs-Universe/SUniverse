@@ -16,15 +16,19 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.jetbrains.annotations.NotNull;
 import org.spigotmc.event.player.PlayerSpawnLocationEvent;
 
 import java.io.File;
+import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.function.BiFunction;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * Creates per-player worlds
@@ -33,14 +37,41 @@ public class PerPlayerWorlds implements Listener {
 
 	private static final double DAY_TIME_TICK_INCREASE = 1;
 	private static final double NIGHT_TIME_TICK_INCREASE = DAY_TIME_TICK_INCREASE;
+	
+	private static final List<World.Environment> RESOURCE_ENVIRONMENTS = List.of(
+		World.Environment.NORMAL, World.Environment.NETHER, World.Environment.THE_END
+	);
 
-	@EventHandler(priority = EventPriority.MONITOR)
+//	@EventHandler(priority = EventPriority.MONITOR)
 	public void onWorldLeave(@NotNull PlayerChangedWorldEvent event) {
 		World world = event.getFrom();
 		if (!world.getKey().getKey().endsWith(event.getPlayer().getUniqueId().toString())) return;
 		if (!world.getPlayers().isEmpty()) return;
 
+		Bukkit.unloadWorld(world, true); // TODO "breaks" /world command
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void onWorldLeave(@NotNull PlayerQuitEvent event) {
+		Player player = event.getPlayer();
+		unloadIfNeeded(getPersonalWorld(player.getUniqueId()));
+		for (World.Environment environment : RESOURCE_ENVIRONMENTS)
+			unloadIfNeeded(getResourceWorld(player.getUniqueId(), environment));
+	}
+
+	private void unloadIfNeeded(@NotNull World world) {
+		if (!world.getPlayers().isEmpty()) return;
+
 		Bukkit.unloadWorld(world, true);
+	}
+
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onPreJoin(@NotNull AsyncPlayerPreLoginEvent event) {
+		TrappedNewbie.scheduler().sync(() -> {
+			getPersonalWorld(event.getUniqueId());
+			for (World.Environment environment : RESOURCE_ENVIRONMENTS)
+				getResourceWorld(event.getUniqueId(), environment);
+		});
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
@@ -49,7 +80,7 @@ public class PerPlayerWorlds implements Listener {
 
 		NamespacedKey dimensionId = event.getInitialDimensionId();
 		if (dimensionId == null) return;
-		if (!dimensionId.getNamespace().equals(TrappedNewbie.instance().getName().toLowerCase(Locale.ENGLISH))) return;
+		if (!TrappedNewbie.NAMESPACE.equals(dimensionId.getNamespace())) return;
 
 		UUID uuid = event.getPlayer().getUniqueId();
 		String worldKey = dimensionId.getKey();
@@ -109,7 +140,7 @@ public class PerPlayerWorlds implements Listener {
 	 */
 	public static @NotNull World getPersonalWorld(@NotNull UUID playerUuid) {
 		return getWorld("worlds-personal/", playerUuid,
-				(levelName, worldKey) -> Objects.requireNonNull(
+				(levelName, worldKey) -> requireNonNull(
 					new WorldCreator(levelName, worldKey)
 						.keepSpawnLoaded(TriState.FALSE)
 						.generator(VoidChunkGenerator.GENERATOR)
@@ -125,8 +156,9 @@ public class PerPlayerWorlds implements Listener {
 	 * @return world instance
 	 */
 	public static @NotNull World getResourceWorld(@NotNull UUID playerUuid, @NotNull World.Environment environment) {
+		if (!RESOURCE_ENVIRONMENTS.contains(environment)) throw new IllegalArgumentException("Invalid resources dimension: %s".formatted(environment.name()));
 		return getWorld("worlds-resources/" + environment.name().toLowerCase(Locale.ENGLISH) + "/", playerUuid,
-				(levelName, worldKey) -> Objects.requireNonNull(
+				(levelName, worldKey) -> requireNonNull(
 					new WorldCreator(levelName, worldKey)
 						.keepSpawnLoaded(TriState.FALSE)
 						.environment(environment)
@@ -161,7 +193,7 @@ public class PerPlayerWorlds implements Listener {
 	}
 
 	private static @NotNull NamespacedKey worldKey(@NotNull String prefix, @NotNull UUID uuid) {
-		return new NamespacedKey(TrappedNewbie.instance(), prefix + uuid);
+		return TrappedNewbie.trappedNewbieKey(prefix + uuid);
 	}
 
 }

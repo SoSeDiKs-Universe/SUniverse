@@ -15,7 +15,9 @@ import me.sosedik.utilizer.impl.message.tag.LocaleResolver;
 import me.sosedik.utilizer.impl.message.tag.RandomColorTag;
 import me.sosedik.utilizer.listener.entity.EntityGlowTracker;
 import me.sosedik.utilizer.listener.entity.EntityMetadataClearer;
+import me.sosedik.utilizer.listener.item.NotDroppableItems;
 import me.sosedik.utilizer.listener.misc.CustomRecipeLeftovers;
+import me.sosedik.utilizer.listener.misc.DelayedActions;
 import me.sosedik.utilizer.listener.misc.DurabilityRecipeLeftovers;
 import me.sosedik.utilizer.listener.misc.ExtraChatTabSuggestions;
 import me.sosedik.utilizer.listener.misc.ExtraRecipeHandlers;
@@ -73,8 +75,11 @@ public final class Utilizer extends JavaPlugin {
 			// entity
 			EntityGlowTracker.class,
 			EntityMetadataClearer.class,
+			// item
+			NotDroppableItems.class,
 			// misc
 			CustomRecipeLeftovers.class,
+			DelayedActions.class,
 			DurabilityRecipeLeftovers.class,
 			ExtraRecipeHandlers.class,
 			ExtraChatTabSuggestions.class,

@@ -1,0 +1,9 @@
+{
+	"client_type": "minecraft:iron_nugget",
+	"rarity": "rare",
+	"food": {
+		"always_edible": true,
+		"nutrition": 4,
+		"saturation": 2.5
+	}
+}

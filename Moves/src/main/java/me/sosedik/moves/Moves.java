@@ -1,13 +1,22 @@
 package me.sosedik.moves;
 
+import me.sosedik.moves.listener.block.WaterPuddleHurts;
+import me.sosedik.moves.listener.entity.ShulkerCrawlerHandler;
+import me.sosedik.moves.listener.movement.CrawlingMechanics;
 import me.sosedik.moves.listener.movement.DontLoseAirOnTopOfWater;
+import me.sosedik.moves.listener.movement.FallSoftener;
 import me.sosedik.moves.listener.movement.FreeFall;
 import me.sosedik.moves.listener.movement.HigherWaterJump;
+import me.sosedik.moves.listener.movement.PlayerFallTicker;
+import me.sosedik.moves.listener.movement.RollOnFall;
 import me.sosedik.moves.listener.movement.SneakCounter;
+import me.sosedik.moves.listener.movement.StickingToBlocks;
 import me.sosedik.moves.listener.movement.SwimmingInOneBlockSpace;
+import me.sosedik.utilizer.api.language.TranslationHolder;
 import me.sosedik.utilizer.util.EventUtil;
 import me.sosedik.utilizer.util.Scheduler;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
+import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,16 +30,27 @@ public final class Moves extends JavaPlugin {
 	public void onLoad() {
 		Moves.instance = this;
 		this.scheduler = new Scheduler(this);
+
+		TranslationHolder.extractLocales(this);
 	}
 
 	@Override
 	public void onEnable() {
 		EventUtil.registerListeners(this,
+			// block
+			WaterPuddleHurts.class,
+			// entity
+			ShulkerCrawlerHandler.class,
 			// movement
+			CrawlingMechanics.class,
 			DontLoseAirOnTopOfWater.class,
+			FallSoftener.class,
 			FreeFall.class,
 			HigherWaterJump.class,
+			PlayerFallTicker.class,
+			RollOnFall.class,
 			SneakCounter.class,
+			StickingToBlocks.class,
 			SwimmingInOneBlockSpace.class
 		);
 	}
@@ -65,6 +85,16 @@ public final class Moves extends JavaPlugin {
 	 */
 	public static @NotNull ComponentLogger logger() {
 		return instance().getComponentLogger();
+	}
+
+	/**
+	 * Makes a namespaced key with this plugin's namespace
+	 *
+	 * @param value value
+	 * @return namespaced key
+	 */
+	public static @NotNull NamespacedKey movesKey(@NotNull String value) {
+		return new NamespacedKey("moves", value);
 	}
 
 }

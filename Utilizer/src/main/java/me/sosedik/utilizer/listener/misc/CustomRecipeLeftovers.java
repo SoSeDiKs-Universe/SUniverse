@@ -7,6 +7,7 @@ import me.sosedik.utilizer.util.InventoryUtil;
 import org.bukkit.Keyed;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -68,7 +69,9 @@ public class CustomRecipeLeftovers implements Listener {
 		} else if (clickType == ClickType.DROP || clickType == ClickType.CONTROL_DROP) {
 			result = generateResult(event, keyed);
 			if (result == null) return;
-			if (!player.dropItem(result).isValid()) return;
+
+			Item drop = player.dropItem(result);
+			if (drop == null) return;
 
 			updateMatrix(event, keyed.getKey(), player, 1);
 		} else if (clickType == ClickType.SWAP_OFFHAND) {

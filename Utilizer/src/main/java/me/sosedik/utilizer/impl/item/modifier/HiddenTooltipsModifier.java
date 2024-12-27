@@ -4,18 +4,13 @@ import io.papermc.paper.datacomponent.DataComponentTypes;
 import me.sosedik.kiterino.modifier.item.ItemContextBox;
 import me.sosedik.kiterino.modifier.item.ItemModifier;
 import me.sosedik.kiterino.modifier.item.ModificationResult;
-import me.sosedik.utilizer.Utilizer;
-import me.sosedik.utilizer.util.ItemUtil;
+import me.sosedik.utilizer.dataset.UtilizerTags;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.Tag;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 public class HiddenTooltipsModifier extends ItemModifier {
-
-	private static final Tag<Material> NO_TOOLTIP_ITEMS = ItemUtil.itemTag(Utilizer.utilizerKey("no_tooltip_items"));
 
 	public HiddenTooltipsModifier(@NotNull NamespacedKey modifierId) {
 		super(modifierId);
@@ -23,7 +18,7 @@ public class HiddenTooltipsModifier extends ItemModifier {
 
 	@Override
 	public @NotNull ModificationResult modify(@NotNull ItemContextBox contextBox) {
-		if (!NO_TOOLTIP_ITEMS.isTagged(contextBox.getInitialType())) return ModificationResult.PASS;
+		if (!UtilizerTags.NO_TOOLTIP_ITEMS.isTagged(contextBox.getInitialType())) return ModificationResult.PASS;
 
 		ItemStack item = contextBox.getItem();
 		item.setData(DataComponentTypes.HIDE_TOOLTIP);

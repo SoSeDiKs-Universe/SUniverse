@@ -3,9 +3,11 @@ package me.sosedik.requiem;
 import me.sosedik.requiem.command.ReviveCommand;
 import me.sosedik.requiem.feature.GhostyPlayer;
 import me.sosedik.requiem.feature.PossessingPlayer;
+import me.sosedik.requiem.listener.entity.CreepersDropCreeperHearts;
 import me.sosedik.requiem.listener.entity.FakeHorseSaddles;
 import me.sosedik.requiem.listener.entity.OverwriteControlledPandasGenes;
 import me.sosedik.requiem.listener.entity.PrepareGhostMobs;
+import me.sosedik.requiem.listener.item.ExplodingCreeperHeart;
 import me.sosedik.requiem.listener.player.LoadSavePlayers;
 import me.sosedik.requiem.listener.player.damage.DamageFeetOnFall;
 import me.sosedik.requiem.listener.player.damage.DamageModelLoadSave;
@@ -58,27 +60,31 @@ public final class Requiem extends JavaPlugin {
 		registerCommands();
 		EventUtil.registerListeners(this,
 			// entity
+			CreepersDropCreeperHearts.class,
 			FakeHorseSaddles.class,
 			OverwriteControlledPandasGenes.class,
 			PrepareGhostMobs.class,
+			// item
+			ExplodingCreeperHeart.class,
 			// player
+			LoadSavePlayers.class,
 			/// damage
 			DamageFeetOnFall.class,
 			DamageModelLoadSave.class,
-			/// possessed
-			MilkHelpsSkeletons.class,
+			/// ghost
 			DeathMakesGhosts.class,
-			DeathMakesPossessed.class,
 			GhostsDontSprint.class,
 			GhostsDontStarveOrChoke.class,
 			GhostsKeepNightVision.class,
 			GhostsPhaseThroughWalls.class,
-			LoadSavePlayers.class,
 			MobsDontTargetGhosts.class,
-			NoAirForWaterPossessing.class,
 			NoDamageToOrFromGhosts.class,
-			NoExpFromPossessedKill.class,
 			NoGhostInteractions.class,
+			/// possessed
+			MilkHelpsSkeletons.class,
+			DeathMakesPossessed.class,
+			NoAirForWaterPossessing.class,
+			NoExpFromPossessedKill.class,
 			PossessedDismount.class,
 			PossessedInfiniteProjectiles.class,
 			PossessedLimitedControl.class,

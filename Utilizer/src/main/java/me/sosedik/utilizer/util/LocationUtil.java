@@ -115,6 +115,50 @@ public class LocationUtil {
 	}
 
 	/**
+	 * Checks whether block's collision is higher
+	 * than the provided value
+	 *
+	 * @param block  block to check
+	 * @param height max height to fail
+	 * @return true, if block's bounding box is higher than provided value
+	 */
+	public static boolean isBlockHigher(@NotNull Block block, float height) {
+		for (BoundingBox boundingBox : block.getCollisionShape().getBoundingBoxes()) {
+			if (boundingBox.getMaxY() > height)
+				return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Gets the highest Y point of the block
+	 *
+	 * @param block block
+	 * @return the highest Y point
+	 */
+	public static double getMaxYPoint(@NotNull Block block) {
+		double maxY = 0;
+		for (BoundingBox boundingBox : block.getCollisionShape().getBoundingBoxes()) {
+			maxY = Math.max(maxY, boundingBox.getMaxY());
+		}
+		return maxY;
+	}
+
+	/**
+	 * Gets the lowest Y point of the block
+	 *
+	 * @param block block
+	 * @return the lowest Y point
+	 */
+	public static double getMinYPoint(@NotNull Block block) {
+		double minY = 1;
+		for (BoundingBox boundingBox : block.getCollisionShape().getBoundingBoxes()) {
+			minY = Math.min(minY, boundingBox.getMinY());
+		}
+		return minY;
+	}
+
+	/**
 	 * Checks if this block is water or water-covered
 	 *
 	 * @param block block
@@ -125,6 +169,16 @@ public class LocationUtil {
 
 		FluidData fluidData = block.getWorld().getFluidData(block.getLocation());
 		return fluidData.getFluidType() == Fluid.WATER || fluidData.getFluidType() == Fluid.FLOWING_WATER;
+	}
+
+	/**
+	 * Checks whether this block is water, lava, or covered in water
+	 *
+	 * @param block block
+	 * @return whether block is fluid
+	 */
+	public static boolean isFluid(@NotNull Block block) {
+		return isWatery(block) || block.getType() == Material.LAVA || block.getType() == Material.LAVA_CAULDRON;
 	}
 
 	/**

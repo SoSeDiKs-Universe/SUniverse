@@ -113,17 +113,28 @@ public class EntityUtil {
 	}
 
 	/**
+	 * Tries to find entity's last damager
+	 *
+	 * @param entity damaged entity
+	 * @return player damager
+	 */
+	public static @Nullable Entity getCausingDamager(@NotNull Entity entity) {
+		if (entity instanceof LivingEntity livingEntity && livingEntity.getKiller() != null) return livingEntity.getKiller();
+		if (!(entity.getLastDamageCause() instanceof EntityDamageByEntityEvent lastDamage)) return null;
+		if (lastDamage.getDamager() instanceof Projectile projectile && projectile.getShooter() instanceof Entity shooter) return shooter;
+		return lastDamage.getDamager();
+	}
+
+	/**
 	 * Tries to find entity's player damager
 	 *
 	 * @param entity damaged entity
 	 * @return player damager
 	 */
-	public static @Nullable Player getDamager(@NotNull Entity entity) {
+	public static @Nullable Entity getDirectDamager(@NotNull Entity entity) {
 		if (entity instanceof LivingEntity livingEntity && livingEntity.getKiller() != null) return livingEntity.getKiller();
 		if (!(entity.getLastDamageCause() instanceof EntityDamageByEntityEvent lastDamage)) return null;
-		if (lastDamage.getDamager() instanceof Player damager) return damager;
-		if (lastDamage.getDamager() instanceof Projectile projectile && projectile.getShooter() instanceof Player shooter) return shooter;
-		return null;
+		return lastDamage.getDamager();
 	}
 
 	/**
@@ -155,6 +166,17 @@ public class EntityUtil {
 				|| spawnReason == CreatureSpawnEvent.SpawnReason.DEFAULT
 				|| spawnReason == CreatureSpawnEvent.SpawnReason.SPAWNER
 				|| spawnReason == CreatureSpawnEvent.SpawnReason.SPAWNER_EGG;
+	}
+
+	/**
+	 * Gets the required jump height.
+	 * Adapted only for a default height player.
+	 *
+	 * @param height height
+	 * @return jump height
+	 */
+	public static double getJumpHeight(double height) {
+		return Math.sqrt(2 * height * 0.08);
 	}
 
 }

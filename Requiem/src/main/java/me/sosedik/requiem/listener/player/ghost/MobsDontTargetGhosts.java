@@ -29,7 +29,7 @@ public class MobsDontTargetGhosts implements Listener {
 
 		event.setCancelled(true);
 		if (!(event.getEntity() instanceof Mob entity)) return;
-		if (EntityUtil.getDamager(entity) != player) return;
+		if (EntityUtil.getCausingDamager(entity) != player) return;
 
 		event.setTarget(PossessingPlayer.getPossessed(player));
 		event.setCancelled(false);

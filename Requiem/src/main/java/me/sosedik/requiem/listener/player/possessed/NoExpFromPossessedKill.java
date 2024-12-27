@@ -17,8 +17,7 @@ public class NoExpFromPossessedKill implements Listener {
 	public void onDeath(@NotNull EntityDeathEvent event) {
 		if (event.getDroppedExp() == 0) return;
 
-		Player killer = EntityUtil.getDamager(event.getEntity());
-		if (killer == null) return;
+		if (!(EntityUtil.getCausingDamager(event.getEntity()) instanceof Player killer)) return;
 		if (!PossessingPlayer.isPossessing(killer)) return;
 
 		event.setDroppedExp(0);

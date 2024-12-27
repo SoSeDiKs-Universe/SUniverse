@@ -35,6 +35,8 @@ import java.io.File;
 
 public final class TrappedNewbie extends JavaPlugin {
 
+	public static final String NAMESPACE = "trapped_newbie";
+
 	private static TrappedNewbie instance;
 
 	private Scheduler scheduler;
@@ -151,7 +153,7 @@ public final class TrappedNewbie extends JavaPlugin {
 	 * @return namespaced key
 	 */
 	public static @NotNull NamespacedKey trappedNewbieKey(@NotNull String value) {
-		return new NamespacedKey("trapped_newbie", value);
+		return new NamespacedKey(NAMESPACE, value);
 	}
 
 }

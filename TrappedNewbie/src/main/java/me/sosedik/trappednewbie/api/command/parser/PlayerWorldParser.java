@@ -1,6 +1,7 @@
 package me.sosedik.trappednewbie.api.command.parser;
 
 import io.papermc.paper.command.brigadier.CommandSourceStack;
+import me.sosedik.trappednewbie.TrappedNewbie;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
@@ -15,6 +16,7 @@ import org.incendo.cloud.parser.ParserDescriptor;
 import org.incendo.cloud.suggestion.Suggestion;
 import org.incendo.cloud.suggestion.SuggestionProvider;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,18 +42,11 @@ public final class PlayerWorldParser<C> implements ArgumentParser<C, World>, Sug
 
 		// Player's own world
 		if ("@s".equals(input)) {
-			Player target = null;
-			if (commandContext.sender() instanceof CommandSourceStack stack) {
-				if (stack.getExecutor() instanceof Player player) {
-					target = player;
-				} else if (stack.getSender() instanceof Player player) {
-					target = player;
-				}
-			}
+			Player target = resolveTarget(commandContext);
 			if (target == null) {
 				return ArgumentParseResult.failure(new WorldParser.WorldParseException(input, commandContext));
 			}
-			input = "worlds/" + target.getUniqueId();
+			input = "worlds-personal/" + target.getUniqueId();
 		}
 
 		// @ + Player nicknames to world names
@@ -61,10 +56,26 @@ public final class PlayerWorldParser<C> implements ArgumentParser<C, World>, Sug
 			if (input.contains("#")) {
 				String[] split = input.split("#");
 				worldPrefix = "worlds-resources/" + split[1] + "/";
-				playerName = split[0].substring(1);
+				if (input.startsWith("@s#")) {
+					Player target = resolveTarget(commandContext);
+					if (target == null) {
+						return ArgumentParseResult.failure(new WorldParser.WorldParseException(input, commandContext));
+					}
+					playerName = target.getName();
+				} else {
+					playerName = split[0].substring(1);
+				}
 			} else {
-				worldPrefix = "worlds/";
-				playerName = input.substring(1);
+				worldPrefix = "worlds-personal/";
+				if (input.startsWith("@s#")) {
+					Player target = resolveTarget(commandContext);
+					if (target == null) {
+						return ArgumentParseResult.failure(new WorldParser.WorldParseException(input, commandContext));
+					}
+					playerName = target.getName();
+				} else {
+					playerName = input.substring(1);
+				}
 			}
 			Player player = Bukkit.getPlayerExact(playerName);
 			if (player == null)
@@ -89,6 +100,17 @@ public final class PlayerWorldParser<C> implements ArgumentParser<C, World>, Sug
 		return ArgumentParseResult.success(world);
 	}
 
+	private @Nullable Player resolveTarget(@NotNull CommandContext<C> commandContext) {
+		if (commandContext.sender() instanceof CommandSourceStack stack) {
+			if (stack.getExecutor() instanceof Player player) {
+				return player;
+			} else if (stack.getSender() instanceof Player player) {
+				return player;
+			}
+		}
+		return null;
+	}
+
 	@Override
 	public @NotNull CompletableFuture<? extends @NotNull Iterable<? extends @NotNull Suggestion>> suggestionsFuture(
 		final @NotNull CommandContext<C> commandContext,
@@ -105,28 +127,28 @@ public final class PlayerWorldParser<C> implements ArgumentParser<C, World>, Sug
 			}
 		}
 
-		if ("@s".startsWith(input.readString())) {
-			completions.add(Suggestion.suggestion("@s"));
-		}
-
-		for (Player player : Bukkit.getOnlinePlayers()) {
-			if (player == target) continue;
-
-			completions.add(Suggestion.suggestion("@" + player.getName()));
-			for (World.Environment environment : World.Environment.values()) {
-				if (environment == World.Environment.CUSTOM) continue;
-				completions.add(Suggestion.suggestion("@" + player.getName() + "#" + environment.name().toLowerCase(Locale.ENGLISH)));
+		if ("@".startsWith(input.readString())) {
+			for (Player player : Bukkit.getOnlinePlayers()) {
+				String playerPrefix = player == target ? "@s" : "@" + player.getName();
+				completions.add(Suggestion.suggestion(playerPrefix));
+				for (World.Environment environment : World.Environment.values()) {
+					if (environment == World.Environment.CUSTOM) continue;
+					completions.add(Suggestion.suggestion(playerPrefix + "#" + environment.name().toLowerCase(Locale.ENGLISH)));
+				}
 			}
 		}
 
 		for (World world : Bukkit.getWorlds()) {
-			String name = world.getName();
-			if (name.startsWith("worlds/")) continue;
+			NamespacedKey key = world.getKey();
+			if (TrappedNewbie.NAMESPACE.equals(key.getNamespace())) {
+				if (key.getKey().startsWith("worlds-personal/")) continue;
+				if (key.getKey().startsWith("worlds-resources/")) continue;
+			}
+
 			if (target != null && target.getWorld() == world) continue;
 
-			completions.add(Suggestion.suggestion(name));
+			completions.add(Suggestion.suggestion(world.getName()));
 
-			NamespacedKey key = world.getKey();
 			if (input.hasRemainingInput() && key.getNamespace().equals(NamespacedKey.MINECRAFT_NAMESPACE)) {
 				completions.add(Suggestion.suggestion(key.getKey()));
 			}

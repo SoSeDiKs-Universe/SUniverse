@@ -1,7 +1,7 @@
 package me.sosedik.requiem.listener.player.possessed;
 
 import com.destroystokyo.paper.event.player.PlayerLaunchProjectileEvent;
-import me.sosedik.kiterino.event.player.PlayerLoadsProjectileEvent;
+import me.sosedik.kiterino.event.entity.EntityLoadsProjectileEvent;
 import me.sosedik.requiem.feature.PossessingPlayer;
 import org.bukkit.Material;
 import org.bukkit.Tag;
@@ -10,20 +10,27 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Trident;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityShootBowEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemDamageEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Projectiles from some possessed should be infinite
  */
+@NullMarked
 public class PossessedInfiniteProjectiles implements Listener {
 
+	private static final ItemStack DUMMY_ARROW = new ItemStack(Material.ARROW);
+
 	@EventHandler(ignoreCancelled = true)
-	public void onTridentLaunch(@NotNull PlayerLaunchProjectileEvent event) {
+	public void onTridentLaunch(PlayerLaunchProjectileEvent event) {
 		if (!(event.getProjectile() instanceof Trident trident)) return;
 
 		Player player = event.getPlayer();
@@ -38,7 +45,7 @@ public class PossessedInfiniteProjectiles implements Listener {
 	}
 
 	@EventHandler(ignoreCancelled = true)
-	public void onArrowLaunch(@NotNull EntityShootBowEvent event) {
+	public void onArrowLaunch(EntityShootBowEvent event) {
 		if (!(event.getEntity() instanceof Player player)) return;
 		if (!(event.getProjectile() instanceof AbstractArrow projectile)) return;
 		if (projectile instanceof Trident) return;
@@ -56,22 +63,37 @@ public class PossessedInfiniteProjectiles implements Listener {
 	}
 
 	@EventHandler
-	public void onArrowLoad(@NotNull PlayerLoadsProjectileEvent event) {
-		if (event.isFiringAllowed()) return;
-
-		Player player = event.getPlayer();
+	public void onArrowLoad(EntityLoadsProjectileEvent event) {
+		if (!(event.getEntity() instanceof Player player)) return;
 		if (!PossessingPlayer.isPossessing(player)) return;
+		if (!event.getProjectile().isEmpty()) return;
 
 		LivingEntity riding = PossessingPlayer.getPossessed(player);
 		if (riding == null) return;
 		if (!hasInfiniteArrows(riding.getType(), event.getWeapon())) return;
 
-		event.setProjectile(null);
-		event.setFiringAllowed(true);
+		event.setProjectile(DUMMY_ARROW);
+	}
+
+	@EventHandler(priority = EventPriority.LOW)
+	public void onInteract(PlayerInteractEvent event) {
+		if (event.getHand() != EquipmentSlot.OFF_HAND) return;
+		if (event.getClickedBlock() == null) return;
+
+		Player player = event.getPlayer();
+		if (player.hasActiveItem()) return;
+
+		LivingEntity riding = PossessingPlayer.getPossessed(player);
+		if (riding == null) return;
+
+		if (hasInfiniteArrows(riding.getType(), player.getInventory().getItemInMainHand()))
+			player.startUsingItem(EquipmentSlot.HAND);
+		else if (hasInfiniteArrows(riding.getType(), player.getInventory().getItemInOffHand()))
+			player.startUsingItem(EquipmentSlot.OFF_HAND);
 	}
 
 	@EventHandler(ignoreCancelled = true)
-	public void onDurabilityChange(@NotNull PlayerItemDamageEvent event) {
+	public void onDurabilityChange(PlayerItemDamageEvent event) {
 		Player player = event.getPlayer();
 		if (!PossessingPlayer.isPossessing(player)) return;
 
@@ -83,7 +105,7 @@ public class PossessedInfiniteProjectiles implements Listener {
 		event.setCancelled(true);
 	}
 
-	private boolean hasInfiniteArrows(@NotNull EntityType type, @NotNull ItemStack bow) {
+	private boolean hasInfiniteArrows(EntityType type, ItemStack bow) {
 		if (Tag.ENTITY_TYPES_SKELETONS.isTagged(type)) return bow.getType() == Material.BOW;
 		if (type == EntityType.PILLAGER) return bow.getType() == Material.CROSSBOW;
 		return false;

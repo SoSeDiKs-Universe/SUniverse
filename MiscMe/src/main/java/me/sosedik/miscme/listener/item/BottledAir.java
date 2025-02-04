@@ -32,7 +32,7 @@ public class BottledAir implements Listener {
 		if (currentAir >= maxAir) return;
 
 		player.setRemainingAir(Math.min(maxAir, currentAir + 150));
-		player.setCooldown(bottle.getType(), 15);
+		player.setCooldown(bottle, 15);
 
 		ItemStack secondItem = player.getInventory().getItemInOffHand();
 		if (secondItem.getType() == Material.GLASS_BOTTLE)

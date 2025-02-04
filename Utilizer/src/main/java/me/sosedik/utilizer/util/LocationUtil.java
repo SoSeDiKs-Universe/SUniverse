@@ -120,7 +120,7 @@ public class LocationUtil {
 	 *
 	 * @param block  block to check
 	 * @param height max height to fail
-	 * @return true, if block's bounding box is higher than provided value
+	 * @return true, if block's bounding box is higher than the provided value
 	 */
 	public static boolean isBlockHigher(@NotNull Block block, float height) {
 		for (BoundingBox boundingBox : block.getCollisionShape().getBoundingBoxes()) {

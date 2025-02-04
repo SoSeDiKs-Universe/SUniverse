@@ -123,7 +123,7 @@ public class GhostyPlayer {
 		if (player.getGameMode().isInvulnerable()) return false;
 
 		GhostyPlayer.markGhost(player);
-//		player.setCooldown(ASItems.GHOST_RELOCATOR.getType(), 5 * 20); // TODO
+		player.setCooldown(RequiemItems.GHOST_RELOCATOR, 5 * 20);
 
 		return true;
 	}

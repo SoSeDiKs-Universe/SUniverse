@@ -86,7 +86,7 @@ public class Pinger {
 	/**
 	 * Checks if this user wasn't recognized as already played
 	 *
-	 * @return true, if player haven't joined the server before
+	 * @return true, if a player hasn't joined the server before
 	 */
 	public boolean isNewbie() {
 		return isNewbie;

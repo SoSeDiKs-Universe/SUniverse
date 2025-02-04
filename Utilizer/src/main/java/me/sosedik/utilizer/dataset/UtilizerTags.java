@@ -20,6 +20,7 @@ public class UtilizerTags {
 	public static final Tag<Material> LIGHT_SOURCES = itemTag("light_sources");
 	public static final Tag<Material> NO_TOOLTIP_ITEMS = itemTag("no_tooltip_items");
 	public static final Tag<Material> NOT_DROPPABLE = itemTag("not_droppable");
+	public static final Tag<Material> NO_ARROW_USABLE = itemTag("no_arrow_usable");
 
 	private static Tag<Material> itemTag(String key) {
 		return ItemUtil.itemTag(Utilizer.utilizerKey(key));

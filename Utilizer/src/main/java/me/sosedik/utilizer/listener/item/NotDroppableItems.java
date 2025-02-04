@@ -6,10 +6,12 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.ItemSpawnEvent;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Some items shouldn't be dropped
  */
+@NullMarked
 public class NotDroppableItems implements Listener {
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)

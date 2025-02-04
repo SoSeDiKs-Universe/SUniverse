@@ -16,11 +16,11 @@ import org.bukkit.event.player.PlayerPickupArrowEvent;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Prevent ghosts from interacting with world
+ * Prevent ghosts from interacting with a world
  */
 public class NoGhostInteractions implements Listener {
 
-	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOWEST) // Interact has special cancellation
 	public void onInteractWorld(@NotNull PlayerInteractEvent event) {
 		if (!GhostyPlayer.isGhost(event.getPlayer())) return;
 

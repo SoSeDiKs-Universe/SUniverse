@@ -10,6 +10,7 @@ import me.sosedik.utilizer.api.message.Mini;
 import me.sosedik.utilizer.util.RomanNumerals;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.ShadowColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
 import org.bukkit.entity.Player;
@@ -103,7 +104,7 @@ public class DisplayCustomPotionEffectsOnHud implements Listener {
 		return combined(
 			combined(beneficialEffects),
 			combined(harmfulEffects)
-		).color(SpacingUtil.TOP_RIGHT_CORNER_HUD);
+		).color(SpacingUtil.TOP_RIGHT_CORNER_HUD).shadowColor(ShadowColor.none());
 	}
 
 	private @Nullable List<@NotNull Component> getPotionEffectsTab(@NotNull Player player) {

@@ -5,6 +5,7 @@ import io.papermc.paper.block.LidState;
 import io.papermc.paper.block.Lidded;
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
+import io.papermc.paper.world.damagesource.CombatEntry;
 import me.sosedik.miscme.MiscMe;
 import me.sosedik.utilizer.util.EntityUtil;
 import org.bukkit.Location;
@@ -116,7 +117,7 @@ public class ChestThrowsEntities implements Listener {
 				.withDirectEntity(player)
 				.withDamageLocation(tileState.getLocation())
 				.build();
-			entity.getCombatTracker().recordDamage(damageSource, 0F);
+			entity.getCombatTracker().addCombatEntry(CombatEntry.combatEntry(entity, damageSource, 0F));
 
 			if (entity != player) {
 				if (damage) {

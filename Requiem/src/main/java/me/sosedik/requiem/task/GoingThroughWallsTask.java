@@ -86,7 +86,7 @@ public class GoingThroughWallsTask extends BukkitRunnable {
 		tries++;
 		Location forward = player.getLocation().add(player.getLocation().getDirection().normalize().multiply(tries > 10 ? (tries > 20 ? 0.3 : 0.2 ) : 0.1));
 		if (!isUnpassable(forward.getBlock()))
-			player.teleport(forward, TeleportFlag.Relative.VELOCITY_ROTATION, TeleportFlag.EntityState.RETAIN_PASSENGERS);
+			player.teleport(forward, TeleportFlag.Relative.VELOCITY_ROTATION, TeleportFlag.Relative.VELOCITY_X, TeleportFlag.Relative.VELOCITY_Y, TeleportFlag.Relative.VELOCITY_Z, TeleportFlag.EntityState.RETAIN_PASSENGERS);
 	}
 
 	private void goBack() {
@@ -97,7 +97,7 @@ public class GoingThroughWallsTask extends BukkitRunnable {
 		player.teleport(lastClearLoc, TeleportFlag.Relative.VELOCITY_ROTATION, TeleportFlag.EntityState.RETAIN_PASSENGERS);
 		player.playSound(lastClearLoc, Sound.ITEM_CHORUS_FRUIT_TELEPORT, 1F, 0F);
 		player.clearActiveItem();
-		player.setCooldown(Material.BOW, 10);
+		player.setCooldown(item, 10);
 	}
 
 	private boolean isEmpty(@NotNull Block block) {

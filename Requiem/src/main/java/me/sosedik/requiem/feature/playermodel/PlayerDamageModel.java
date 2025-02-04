@@ -8,6 +8,7 @@ import me.sosedik.resourcelib.feature.HudMessenger;
 import me.sosedik.resourcelib.feature.TabRenderer;
 import me.sosedik.resourcelib.util.SpacingUtil;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.ShadowColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -63,11 +64,11 @@ public class PlayerDamageModel extends BukkitRunnable {
 	private @Nullable Component constructPlayerModel() {
 		if (!hasDamageTick()) return null;
 
-		return getPlayerModel(false).color(SpacingUtil.TOP_LEFT_CORNER_HUD);
+		return getPlayerModel(false).color(SpacingUtil.TOP_LEFT_CORNER_HUD).shadowColor(ShadowColor.none());
 	}
 
 	private @NotNull List<Component> constructTabPlayerModel() {
-		return List.of(getPlayerModel(true).color(SpacingUtil.TOP_LEFT_CORNER_TAB));
+		return List.of(getPlayerModel(true).color(SpacingUtil.TOP_LEFT_CORNER_TAB).shadowColor(ShadowColor.none()));
 	}
 
 	private @NotNull Component getPlayerModel(boolean tab) {

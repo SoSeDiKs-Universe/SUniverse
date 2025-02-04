@@ -66,6 +66,7 @@ public class CrawlingMechanics implements Listener {
 		}
 
 		if (player.isSwimming()) return;
+		if (player.isFlying()) return;
 		if (!player.isOnGround()) return;
 		if (CRAWL_COOLDOWNS.contains(player.getUniqueId())) return;
 		if (player.isInsideVehicle()) return;
@@ -79,7 +80,6 @@ public class CrawlingMechanics implements Listener {
 	}
 
 	private boolean shouldAllowStanding(Block block, Player player) {
-		if (block.getType().isInteractable()) return true;
 		if (!LocationUtil.isTrulySolid(player, block)) return true;
 		return block.getBlockData() instanceof Slab slab && slab.getType() == Slab.Type.TOP;
 	}

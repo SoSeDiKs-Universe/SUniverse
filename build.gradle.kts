@@ -1,8 +1,8 @@
 plugins {
     `java-library`
-    id("io.papermc.paperweight.userdev") version "1.7.5" // Accessing NMS
-    id("net.minecrell.plugin-yml.paper") version "0.6.0" // Generates paper-plugin.yml
-    id("com.gradleup.shadow") version "9.0.0-beta4" // Shading
+    id("io.papermc.paperweight.userdev") version "2.0.0-beta.14" // Accessing NMS
+    id("de.eldoria.plugin-yml.paper") version "0.7.0" // Generates paper-plugin.yml
+    id("com.gradleup.shadow") version "9.0.0-beta7" // Shading
 }
 
 val mcVersion: String = project.property("mcVersion").toString()
@@ -16,7 +16,7 @@ allprojects {
 
     repositories {
         mavenCentral()
-        maven("https://papermc.io/repo/repository/maven-public/")
+        maven("https://repo.papermc.io/repository/maven-public/")
         maven("https://repo.codemc.io/repository/maven-public/") // NBT-API, packetevents
         mavenLocal() // Kiterino
     }
@@ -69,7 +69,7 @@ subprojects {
         }
     }
 
-    apply(plugin = "net.minecrell.plugin-yml.paper")
+    apply(plugin = "de.eldoria.plugin-yml.paper")
     paper {
         apiVersion = "${project.property("apiVersion")}"
         authors = listOf("SoSeDiK")

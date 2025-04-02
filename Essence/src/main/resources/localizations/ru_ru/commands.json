@@ -5,7 +5,7 @@
 	"command.gravity.other": "Вы <choice:'<green>включили':'<red>отключили'> гравитацию для игрока <yellow><player>",
 	"command.heal": "Вы были излечены!",
 	"command.heal.other": "Вы излечили игрока <yellow><player>",
-	"command.health": "Ваши сердца были установлен на <yellow><amount>",
+	"command.health": "Ваши сердца были установлены на <yellow><amount>",
 	"command.health.other": "Вы установили сердца на <yellow><amount></yellow> для игрока <yellow><player>",
 	"command.hunger": "Ваш голод был установлен на <yellow><amount>",
 	"command.hunger.other": "Вы установили голод на <yellow><amount></yellow> для игрока <yellow><player>",

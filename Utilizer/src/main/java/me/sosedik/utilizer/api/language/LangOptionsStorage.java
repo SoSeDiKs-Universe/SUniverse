@@ -38,7 +38,7 @@ public class LangOptionsStorage {
 	 * @return language options
 	 */
 	public static @NotNull LangOptions getByLocale(@NotNull Locale locale) {
-		return getLangOptions(locale.getLanguage() + "_" + locale.getCountry());
+		return getLangOptions(locale.getLanguage() + "_" + locale.getCountry().toLowerCase(Locale.US));
 	}
 
 	/**

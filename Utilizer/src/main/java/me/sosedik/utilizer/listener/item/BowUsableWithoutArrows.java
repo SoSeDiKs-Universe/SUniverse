@@ -63,7 +63,6 @@ public class BowUsableWithoutArrows implements Listener {
 		if (!UtilizerTags.NO_ARROW_USABLE.isTagged(weapon.getType())) return;
 
 		event.setCancelled(true);
-		event.getEntity().sendMessage("W: " + weapon);
 		if (event.getEntity() instanceof Player player) player.updateInventory();
 	}
 

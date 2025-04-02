@@ -27,7 +27,6 @@ tasks.withType<ShadowJar> {
 
 paper {
     name = "ResourceLib"
-    loader
     main = "me.sosedik.resourcelib.ResourceLib"
     loader = "me.sosedik.resourcelib.PaperPluginLibrariesLoader"
     bootstrapper = "me.sosedik.resourcelib.ResourceLibBootstrap"

@@ -9,17 +9,18 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Air can be obtained from empty bottles.
- * <br>Bottle won't be filled with water (with a chance to consume/break the bottle)
+ * <br>The bottle won't be filled with water (with a chance to consume/break the bottle)
  * if the player is holding a hot item in the second hand.
  */
+@NullMarked
 public class BottledAir implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-	public void onFill(@NotNull PlayerFillBottleEvent event) {
+	public void onFill(PlayerFillBottleEvent event) {
 		ItemStack bottle = event.getBottle();
 		if (bottle.getType() != Material.GLASS_BOTTLE) return;
 		if (!ItemUtil.isWaterBottle(event.getResultItem())) return;

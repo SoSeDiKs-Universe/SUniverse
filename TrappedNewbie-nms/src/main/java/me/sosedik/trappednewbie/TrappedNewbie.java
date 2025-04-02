@@ -7,6 +7,7 @@ import me.sosedik.resourcelib.ResourceLib;
 import me.sosedik.trappednewbie.api.command.parser.PlayerWorldParser;
 import me.sosedik.trappednewbie.command.SpitCommand;
 import me.sosedik.trappednewbie.impl.item.modifier.VisualArmorModifier;
+import me.sosedik.trappednewbie.listener.item.PaperPlanes;
 import me.sosedik.trappednewbie.listener.misc.DisableJoinQuitMessages;
 import me.sosedik.trappednewbie.listener.misc.FakeHardcoreHearts;
 import me.sosedik.trappednewbie.listener.misc.TabHeaderFooterBeautifier;
@@ -66,6 +67,8 @@ public final class TrappedNewbie extends JavaPlugin {
 		new VisualArmorModifier(trappedNewbieKey("visual_armor")).register();
 
 		EventUtil.registerListeners(this,
+			// item
+			PaperPlanes.class,
 			// misc
 			DisableJoinQuitMessages.class,
 			FakeHardcoreHearts.class,

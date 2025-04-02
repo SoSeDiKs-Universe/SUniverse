@@ -41,8 +41,8 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffectType;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.List;
@@ -54,6 +54,7 @@ import java.util.UUID;
  * Players have a visual second armor layer
  */
 // MCCheck: 1.21.4, new equipable items
+@NullMarked
 public class VisualArmorLayer implements Listener {
 
 	private static final String ARMOR_BUNDLE_TAG = "visual_armor";
@@ -76,23 +77,23 @@ public class VisualArmorLayer implements Listener {
 	}
 
 	@EventHandler
-	public void onJoin(@NotNull PlayerJoinEvent event) {
+	public void onJoin(PlayerJoinEvent event) {
 		applyVisualArmor(event.getPlayer());
 	}
 
 	@EventHandler
-	public void onRespawn(@NotNull PlayerPostRespawnEvent event) {
+	public void onRespawn(PlayerPostRespawnEvent event) {
 		applyVisualArmor(event.getPlayer());
 	}
 
 	@EventHandler
-	public void onArmorChange(@NotNull PlayerArmorChangeEvent event) {
+	public void onArmorChange(PlayerArmorChangeEvent event) {
 		applyVisualArmor(event.getPlayer());
 	}
 
 	// Shift + LMB with empty equipment slot
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onShiftEquip(@NotNull InventoryClickEvent event) {
+	public void onShiftEquip(InventoryClickEvent event) {
 		if (!(event.getWhoClicked() instanceof Player player)) return;
 		if (!event.isShiftClick()) return;
 		if (player.getOpenInventory().getTopInventory().getType() != InventoryType.CRAFTING) return;
@@ -135,7 +136,7 @@ public class VisualArmorLayer implements Listener {
 		}
 	}
 
-	private boolean tryToEquip(@NotNull Player player, @NotNull ItemStack item, @NotNull EquipmentSlot slot) {
+	private boolean tryToEquip(Player player, ItemStack item, EquipmentSlot slot) {
 		VisualArmor visualArmor = getVisualArmor(player);
 		if (visualArmor.isArmorPreview()) {
 			ItemStack currentItem = player.getInventory().getItem(slot);
@@ -152,7 +153,7 @@ public class VisualArmorLayer implements Listener {
 
 	// LMB/RMB on visual head slot
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onItemEquip(@NotNull InventoryClickEvent event) {
+	public void onItemEquip(InventoryClickEvent event) {
 		if (!(event.getWhoClicked() instanceof Player player)) return;
 		if (player.getOpenInventory().getTopInventory().getType() != InventoryType.CRAFTING) return;
 		if (event.getRawSlot() != InventorySlotHelper.HEAD_SLOT) return;
@@ -175,7 +176,7 @@ public class VisualArmorLayer implements Listener {
 	// Swapping visual gloves with F
 	// Manually handling all remaining click types to account for fake air in armor slots
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-	public void onArmorSwap(@NotNull InventoryClickEvent event) {
+	public void onArmorSwap(InventoryClickEvent event) {
 		if (!(event.getWhoClicked() instanceof Player player)) return;
 		if (player.getOpenInventory().getTopInventory().getType() != InventoryType.CRAFTING) return;
 
@@ -309,14 +310,14 @@ public class VisualArmorLayer implements Listener {
 		player.updateInventory();
 	}
 
-	private boolean isMissingArmor(@NotNull Player player, int slot) {
+	private boolean isMissingArmor(Player player, int slot) {
 		boolean missing = ItemStack.isEmpty(player.getOpenInventory().getItem(slot));
 		if (missing) applyVisualArmor(player);
 		return missing;
 	}
 
 	@EventHandler
-	public void onInventoryClose(@NotNull InventoryCloseEvent event) {
+	public void onInventoryClose(InventoryCloseEvent event) {
 		if (!(event.getPlayer() instanceof Player player)) return;
 		if (player.getOpenInventory().getTopInventory().getType() != InventoryType.CRAFTING) return;
 
@@ -326,7 +327,7 @@ public class VisualArmorLayer implements Listener {
 
 	// Quick equip with RMB
 	@EventHandler(priority = EventPriority.HIGH)
-	public void onPlayerInteract(@NotNull PlayerInteractEvent event) {
+	public void onPlayerInteract(PlayerInteractEvent event) {
 		if (event.useItemInHand() == Event.Result.DENY) return;
 		if (event.getHand() != EquipmentSlot.HAND) return;
 		if (!event.getAction().isRightClick()) return;
@@ -356,7 +357,7 @@ public class VisualArmorLayer implements Listener {
 		}
 	}
 
-	private boolean isEquipable(@NotNull ItemStack item, @NotNull EquipmentSlot slot, boolean quickSwap) {
+	private boolean isEquipable(ItemStack item, EquipmentSlot slot, boolean quickSwap) {
 		if (!item.hasData(DataComponentTypes.EQUIPPABLE)) return false;
 
 		Equippable equippable = item.getData(DataComponentTypes.EQUIPPABLE);
@@ -368,7 +369,7 @@ public class VisualArmorLayer implements Listener {
 		return allowedEntities == null || allowedEntities.contains(PLAYER_TYPED_KEY);
 	}
 
-	private void swapItems(@NotNull Player player, @NotNull ItemStack hand, @NotNull EquipmentSlot slot) {
+	private void swapItems(Player player, ItemStack hand, EquipmentSlot slot) {
 		hand = hand.clone();
 
 		VisualArmor visualArmor = getVisualArmor(player);
@@ -394,7 +395,7 @@ public class VisualArmorLayer implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	public void onDeath(@NotNull PlayerDeathEvent event) {
+	public void onDeath(PlayerDeathEvent event) {
 		Player player = event.getPlayer();
 		List<ItemStack> drops = event.getDrops();
 		VisualArmor visualArmor = getVisualArmor(player);
@@ -409,7 +410,7 @@ public class VisualArmorLayer implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
-	public void onLoad(@NotNull PlayerDataLoadedEvent event) {
+	public void onLoad(PlayerDataLoadedEvent event) {
 		ReadWriteNBT nbt = event.getData();
 		if (!nbt.hasTag(ARMOR_BUNDLE_TAG)) return;
 
@@ -420,7 +421,7 @@ public class VisualArmorLayer implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
-	public void onSave(@NotNull PlayerDataSaveEvent event) {
+	public void onSave(PlayerDataSaveEvent event) {
 		Player player = event.getPlayer();
 		VisualArmor visualArmor = event.isQuit() ? ARMOR_BUNDLES.remove(player.getUniqueId()) : getVisualArmor(player);
 		if (visualArmor == null) return;
@@ -429,7 +430,7 @@ public class VisualArmorLayer implements Listener {
 		save(visualArmor, nbt.getOrCreateCompound(ARMOR_BUNDLE_TAG));
 	}
 
-	private void save(@NotNull VisualArmor visualArmor, @NotNull ReadWriteNBT nbt) {
+	private void save(VisualArmor visualArmor, ReadWriteNBT nbt) {
 		if (visualArmor.hasHelmet()) nbt.setItemStack(HELMET_TAG, visualArmor.getHelmet());
 		if (visualArmor.hasChestplate()) nbt.setItemStack(CHESTPLATE_TAG, visualArmor.getChestplate());
 		if (visualArmor.hasLeggings()) nbt.setItemStack(LEGGINGS_TAG, visualArmor.getLeggings());
@@ -447,7 +448,7 @@ public class VisualArmorLayer implements Listener {
 	 *
 	 * @param player player
 	 */
-	public static void applyVisualArmor(@NotNull Player player) {
+	public static void applyVisualArmor(Player player) {
 		PlayerInventory inv = player.getInventory();
 		if (ItemStack.isEmpty(inv.getHelmet())) inv.setHelmet(ItemStack.of(TrappedNewbieItems.MATERIAL_AIR));
 		if (ItemStack.isEmpty(inv.getChestplate())) inv.setChestplate(ItemStack.of(TrappedNewbieItems.MATERIAL_AIR));
@@ -455,11 +456,11 @@ public class VisualArmorLayer implements Listener {
 		if (ItemStack.isEmpty(inv.getBoots())) inv.setBoots(ItemStack.of(TrappedNewbieItems.MATERIAL_AIR));
 	}
 
-	private static @NotNull VisualArmor empty(@NotNull Player player) {
+	private static VisualArmor empty(Player player) {
 		return new VisualArmor(player, null, null, null, null, null);
 	}
 
-	private static @NotNull VisualArmor load(@NotNull Player player, @NotNull ReadableNBT nbt) {
+	private static VisualArmor load(Player player, ReadableNBT nbt) {
 		return new VisualArmor(
 				player,
 				nbt.hasTag(HELMET_TAG) ? nbt.getItemStack(HELMET_TAG) : null,
@@ -476,7 +477,7 @@ public class VisualArmorLayer implements Listener {
 	 * @param player player
 	 * @return visual armor
 	 */
-	public static @NotNull VisualArmor getVisualArmor(@NotNull Player player) {
+	public static VisualArmor getVisualArmor(Player player) {
 		return ARMOR_BUNDLES.computeIfAbsent(player.getUniqueId(), k -> empty(player));
 	}
 

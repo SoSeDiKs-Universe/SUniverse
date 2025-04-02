@@ -35,9 +35,9 @@ subprojects {
             doLast {
                 val pluginsPath: String = projectDir.parentFile.path + "/server/plugins"
                 val finalFileName: String = project.name.replace("-nms", "")
-                var fileName: String = if (project.name.endsWith("-nms")) project.name + "-" + version + "-dev-all.jar" else project.name + "-" + version + "-all.jar"
+                var fileName: String = project.name + "-" + version + "-all.jar"
                 if (!file("./build/libs/$fileName").exists())
-                    fileName = if (project.name.endsWith("-nms")) project.name + "-" + version + "-dev.jar" else project.name + "-" + version + ".jar"
+                    fileName = project.name + "-" + version + ".jar"
                 copy {
                     from("./build/libs/$fileName")
                     into(pluginsPath)

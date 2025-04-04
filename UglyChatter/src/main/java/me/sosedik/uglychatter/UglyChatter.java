@@ -1,6 +1,5 @@
 package me.sosedik.uglychatter;
 
-import me.sosedik.resourcelib.ResourceLib;
 import me.sosedik.uglychatter.api.mini.placeholder.EmojiPlaceholder;
 import me.sosedik.uglychatter.api.mini.tag.CopyTag;
 import me.sosedik.uglychatter.api.mini.tag.ExecuteTag;
@@ -18,8 +17,6 @@ import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Objects;
 
 public class UglyChatter extends JavaPlugin {
 

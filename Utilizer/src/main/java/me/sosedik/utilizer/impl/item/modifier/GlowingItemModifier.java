@@ -38,6 +38,7 @@ public class GlowingItemModifier extends ItemModifier {
 		ItemStack item = contextBox.getItem();
 		if (!NBT.get(item, nbt -> (boolean) nbt.getOrDefault(GLOW_MODIFIER_KEY, false))) return ModificationResult.PASS;
 
+		boolean modified = false;
 		if (contextBox.getContextType().hasVisibleName() && item.hasData(DataComponentTypes.DYED_COLOR)) {
 			Color color = Objects.requireNonNull(item.getData(DataComponentTypes.DYED_COLOR)).color();
 
@@ -49,16 +50,16 @@ public class GlowingItemModifier extends ItemModifier {
 				name = name.style(style);
 				item.setData(DataComponentTypes.CUSTOM_NAME, name);
 			}
+			modified = true;
 		}
 
 		if (contextBox.getContextType().hasVisibleLore()) {
 			Messenger messenger = Messenger.messenger(LangOptionsStorage.getByLocale(contextBox.getLocale()));
 			contextBox.addLore(messenger.getMessage("item.modifier.glowy"));
+			modified = true;
 		}
 
-		item.setData(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
-
-		return ModificationResult.OK;
+		return modified ? ModificationResult.OK : ModificationResult.PASS;
 	}
 
 }

@@ -85,7 +85,7 @@ public class ContainersInLiquidsReleaseContents implements Listener {
 			world.dropItemNaturally(location, itemStack);
 			world.spawnParticle(lava ? Particle.DRIPPING_LAVA : Particle.BUBBLE_COLUMN_UP, location, 1);
 		}
-		world.playSound(location, lava ? Sound.BLOCK_LAVA_POP : Sound.BLOCK_BUBBLE_COLUMN_BUBBLE_POP, 1F, 1F);
+		block.emitSound(lava ? Sound.BLOCK_LAVA_POP : Sound.BLOCK_BUBBLE_COLUMN_BUBBLE_POP, 1F, 1F);
 
 		inventory.clear();
 

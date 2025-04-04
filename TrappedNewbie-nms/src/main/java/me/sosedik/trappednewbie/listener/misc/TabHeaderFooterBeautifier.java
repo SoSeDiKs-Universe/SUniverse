@@ -48,15 +48,23 @@ public class TabHeaderFooterBeautifier implements Listener {
 	}
 
 	private @NotNull Component getTPS() {
-		double tps = Bukkit.getServer().getTPS()[0];
-		if (tps > 19.9) // Prevents 19 <-> 20 jumping for very minor drops
-			tps = 20;
+		double tps = Bukkit.getTPS()[0];
+		float tickRate = Bukkit.getServerTickManager().getTickRate();
+		if (tps > tickRate)
+			tps = tickRate;
+		else if (tps != tickRate && tickRate - tps < 0.1) // Prevents 19 <-> 20 jumping for very minor drops
+			tps = tickRate;
 		return Component.text(TPS_FORMAT.format(tps), getTPSColor(tps));
 	}
 
 	private @NotNull NamedTextColor getTPSColor(double tps) {
-		if (tps > 18) return NamedTextColor.GREEN;
-		if (tps > 16) return NamedTextColor.GOLD;
+		float tickRate = Bukkit.getServerTickManager().getTickRate();
+		if (tickRate == 0F) return NamedTextColor.AQUA;
+		if (tps > tickRate && tps - tickRate > 0.3) return NamedTextColor.YELLOW;
+
+		double ratio = tps / tickRate;
+		if (ratio > 0.9) return NamedTextColor.GREEN;
+		if (ratio > 0.8) return NamedTextColor.GOLD;
 		return NamedTextColor.RED;
 	}
 

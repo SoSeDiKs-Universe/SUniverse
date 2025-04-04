@@ -4,8 +4,15 @@ import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.type.Campfire;
+import org.bukkit.block.data.type.Candle;
 import org.bukkit.block.data.type.Fire;
-import org.bukkit.entity.AbstractArrow;
+import org.bukkit.entity.Creeper;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Projectile;
+import org.bukkit.entity.TNTPrimed;
+import org.bukkit.entity.minecart.ExplosiveMinecart;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -24,9 +31,23 @@ public class BurningArrowCreatesFire implements Listener {
 	private static final List<Material> burnableBlocks = List.of(Material.SHORT_GRASS, Material.TALL_GRASS, Material.FERN, Material.LARGE_FERN);
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	public void onFireArrowLand(ProjectileHitEvent event) {
-		if (!(event.getEntity() instanceof AbstractArrow)) return;
-		if (event.getEntity().getFireTicks() <= 0) return;
+	public void onFireProjectileLand(ProjectileHitEvent event) {
+		Projectile projectile = event.getEntity();
+		if (projectile.getFireTicks() <= 0) return;
+
+		Entity hitEntity = event.getHitEntity();
+		if (hitEntity != null) {
+			if (hitEntity instanceof ExplosiveMinecart explosiveMinecart && !explosiveMinecart.isIgnited()) {
+				explosiveMinecart.ignite();
+				return;
+			}
+			hitEntity.setFireTicks(Math.max(hitEntity.getFireTicks(), 20 * 5));
+			if (hitEntity instanceof Creeper creeper && !creeper.isIgnited()) {
+				creeper.ignite(projectile);
+				return;
+			}
+			return;
+		}
 
 		var hitBlock = event.getHitBlock();
 		var hitBlockFace = event.getHitBlockFace();
@@ -45,8 +66,29 @@ public class BurningArrowCreatesFire implements Listener {
 		if (!hitBlock.getType().isBurnable() && !hitBlock.getRelative(hitBlockFace).getRelative(BlockFace.DOWN).getType().isSolid())
 			return;
 
+		if (hitBlock.getType() == Material.TNT) {
+			hitBlock.setType(Material.AIR);
+			hitBlock.getWorld().spawn(hitBlock.getLocation().center(), TNTPrimed.class);
+			return;
+		}
+		BlockData blockData = hitBlock.getBlockData();
+		if (blockData instanceof Campfire campfire && !campfire.isLit()) {
+			campfire.setLit(true);
+			hitBlock.setBlockData(blockData);
+			return;
+		}
+		if (blockData instanceof Candle candle && !candle.isLit()) {
+			candle.setLit(true);
+			hitBlock.setBlockData(blockData);
+			return;
+		}
+
 		hitBlock = hitBlock.getRelative(hitBlockFace);
-		if (!(hitBlock.getType().isEmpty() || Tag.CORAL_PLANTS.isTagged(hitBlock.getType()) || burnableBlocks.contains(hitBlock.getType()))) return;
+		if (!(
+			hitBlock.getType().isEmpty()
+			|| Tag.CORAL_PLANTS.isTagged(hitBlock.getType())
+			|| burnableBlocks.contains(hitBlock.getType())
+		)) return;
 
 		hitBlock.setType(Material.FIRE);
 		if (hitBlockFace == BlockFace.UP) return;

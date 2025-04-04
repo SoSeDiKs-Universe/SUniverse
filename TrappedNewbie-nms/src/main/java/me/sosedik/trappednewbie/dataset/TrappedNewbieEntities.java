@@ -14,7 +14,7 @@ public class TrappedNewbieEntities {
 			EntityType.Builder.<PaperPlaneImpl>of(PaperPlaneImpl::new, MobCategory.MISC) // Same as Arrow
 				.noLootTable()
 				.sized(0.5F, 0.5F)
-				.eyeHeight(0.13F)
+				.eyeHeight(0.25F)
 				.clientTrackingRange(4)
 				.updateInterval(20)
 		);

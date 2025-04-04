@@ -2,7 +2,6 @@ package me.sosedik.requiem.listener.player.possessed;
 
 import me.sosedik.requiem.feature.PossessingPlayer;
 import me.sosedik.resourcelib.impl.item.RLibItemTags;
-import org.bukkit.Material;
 import org.bukkit.entity.AbstractSkeleton;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;

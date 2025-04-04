@@ -3,7 +3,6 @@ package me.sosedik.miscme.listener.block;
 import me.sosedik.miscme.MiscMe;
 import me.sosedik.utilizer.api.math.WorldBlockPosition;
 import me.sosedik.utilizer.util.LocationUtil;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.Tag;
@@ -19,7 +18,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,12 +26,13 @@ import java.util.Map;
 /**
  * Button can be used as a doorbell
  */
+@NullMarked
 public class DoorBells implements Listener {
 
 	private static final Map<WorldBlockPosition, Integer> BELLS_IN_USE = new HashMap<>();
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	public void onBell(@NotNull PlayerInteractEvent event) {
+	public void onBell(PlayerInteractEvent event) {
 		if (event.getAction() != Action.LEFT_CLICK_BLOCK) return;
 		if (event.getHand() != EquipmentSlot.HAND) return;
 		if (event.getPlayer().getGameMode().isInvulnerable()) return;
@@ -85,11 +85,9 @@ public class DoorBells implements Listener {
 		};
 		if (!attached) return;
 
-		Location loc = block.getLocation().center();
-
 		int dings = BELLS_IN_USE.getOrDefault(worldBlockPosition, 0) + 1;
 		BELLS_IN_USE.put(worldBlockPosition, dings);
-		loc.getWorld().playSound(loc, Sound.BLOCK_NOTE_BLOCK_BELL, 1F, 0.2F);
+		block.emitSound(Sound.BLOCK_NOTE_BLOCK_BELL, 1F, 0.2F);
 		if (!powerable.isPowered()) {
 			powerable.setPowered(true);
 			block.setBlockData(powerable, false);
@@ -101,17 +99,17 @@ public class DoorBells implements Listener {
 			BELLS_IN_USE.remove(worldBlockPosition);
 			if (block.getType() != buttonType) return;
 
-			loc.getWorld().playSound(loc, Sound.BLOCK_NOTE_BLOCK_CHIME, 1F, 0.8F);
+			block.emitSound(Sound.BLOCK_NOTE_BLOCK_CHIME, 1F, 0.8F);
 			powerable.setPowered(false);
 			block.setBlockData(powerable, false);
 		}, 15L);
 	}
 
-	private boolean isTrapdoor(@NotNull Block base, @NotNull BlockFace blockFace) {
+	private boolean isTrapdoor(Block base, BlockFace blockFace) {
 		return Tag.TRAPDOORS.isTagged(base.getRelative(blockFace).getType());
 	}
 
-	private boolean isDoor(@NotNull Block base, @NotNull BlockFace blockFace) {
+	private boolean isDoor(Block base, BlockFace blockFace) {
 		return Tag.DOORS.isTagged(base.getRelative(blockFace).getType());
 	}
 

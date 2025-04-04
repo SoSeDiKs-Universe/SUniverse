@@ -390,7 +390,7 @@ public class VisualArmorLayer implements Listener {
 		}
 
 		player.swingMainHand();
-		player.getWorld().playSound(player.getLocation(), Sound.ITEM_ARMOR_EQUIP_GENERIC, 2F, 0.3F);
+		player.emitSound(Sound.ITEM_ARMOR_EQUIP_GENERIC, 2F, 0.3F);
 		player.updateInventory();
 	}
 

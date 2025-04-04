@@ -28,7 +28,7 @@ public class PaperPlaneItem extends TridentItem implements ProjectileItem {
 		float powerForTime = BowItem.getPowerForTime(i);
 		if (powerForTime < 0.1) return false;
 
-		Projectile.spawnProjectileFromRotation(PaperPlaneImpl::new, serverLevel, stack.split(1), entity, 0F, powerForTime * 2.2F, 1F);
+		Projectile.spawnProjectileFromRotation(PaperPlaneImpl::new, serverLevel, stack.split(1), entity, 0F, powerForTime * 1.4F, 1F);
 		return true;
 	}
 

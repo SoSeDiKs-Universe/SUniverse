@@ -4,6 +4,9 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NullMarked;
 
+/**
+ * Represents a paper plane entity
+ */
 @NullMarked
 public interface PaperPlane extends Projectile {
 

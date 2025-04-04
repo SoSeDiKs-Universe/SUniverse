@@ -8,6 +8,7 @@ import me.sosedik.utilizer.api.language.TranslationHolder;
 import me.sosedik.utilizer.api.message.Mini;
 import me.sosedik.utilizer.command.LangCommand;
 import me.sosedik.utilizer.command.TranslatorCommand;
+import me.sosedik.utilizer.impl.item.modifier.GlowingItemModifier;
 import me.sosedik.utilizer.impl.item.modifier.HiddenTooltipsModifier;
 import me.sosedik.utilizer.impl.message.tag.DiscordResolver;
 import me.sosedik.utilizer.impl.message.tag.KaomojiTag;
@@ -27,6 +28,7 @@ import me.sosedik.utilizer.listener.player.CleanupPlayerScoreboards;
 import me.sosedik.utilizer.listener.player.PlayerDataLoadSave;
 import me.sosedik.utilizer.listener.player.PlayerLanguageLoadSave;
 import me.sosedik.utilizer.listener.player.SetupPlayerScoreboards;
+import me.sosedik.utilizer.listener.player.UpdateInventoryOnLocaleChange;
 import me.sosedik.utilizer.util.EventUtil;
 import me.sosedik.utilizer.util.Scheduler;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
@@ -68,6 +70,7 @@ public final class Utilizer extends JavaPlugin {
 			LocaleResolver::new
 		);
 
+		new GlowingItemModifier(utilizerKey("glowing_item")).register();
 		new HiddenTooltipsModifier(utilizerKey("hidden_tooltips")).register();
 
 		registerCommands();
@@ -90,7 +93,8 @@ public final class Utilizer extends JavaPlugin {
 			CleanupPlayerScoreboards.class,
 			PlayerDataLoadSave.class,
 			PlayerLanguageLoadSave.class,
-			SetupPlayerScoreboards.class
+			SetupPlayerScoreboards.class,
+			UpdateInventoryOnLocaleChange.class
 		);
 		saveConfig();
 	}

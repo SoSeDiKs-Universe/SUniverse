@@ -34,14 +34,14 @@ import static me.sosedik.utilizer.api.message.Mini.combined;
  * Signs show stored text in lore
  */
 // MCCheck: 1.21.4, item block entity tag
-public class SignsShowTextInLore extends ItemModifier {
+public class SignsShowTextInLoreModifier extends ItemModifier {
 
 	private static final String BLOCK_ENTITY_TAG = "minecraft:block_entity_data";
 	private static final String FRONT_TEXT_TAG = "front_text";
 	private static final String BACK_TEXT_TAG = "back_text";
 	private static final Component PARENT_LORE = Component.empty().color(NamedTextColor.WHITE).decoration(TextDecoration.ITALIC, false);
 
-	public SignsShowTextInLore(@NotNull NamespacedKey modifierId) {
+	public SignsShowTextInLoreModifier(@NotNull NamespacedKey modifierId) {
 		super(modifierId);
 	}
 

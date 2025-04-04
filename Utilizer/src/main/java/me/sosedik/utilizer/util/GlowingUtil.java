@@ -7,12 +7,13 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.UUID;
 
+@NullMarked
 public class GlowingUtil {
 
 	private GlowingUtil() {
@@ -28,7 +29,7 @@ public class GlowingUtil {
 	 * @param entity entity
 	 * @param glowColor color
 	 */
-	public static void applyGlowingColor(@NotNull Player player, @NotNull Entity entity, @Nullable NamedTextColor glowColor) {
+	public static void applyGlowingColor(Player player, Entity entity, @Nullable NamedTextColor glowColor) {
 		setGlowingColor(player, entity, glowColor);
 		if (glowColor != null) {
 			EntityGlowTracker.getPlayers(entity.getEntityId(), true).add(player.getUniqueId());
@@ -47,7 +48,7 @@ public class GlowingUtil {
 	 * @param entity entity
 	 * @param glowColor color
 	 */
-	public static void setGlowingColor(@NotNull Player player, @NotNull Entity entity, @Nullable NamedTextColor glowColor) {
+	public static void setGlowingColor(Player player, Entity entity, @Nullable NamedTextColor glowColor) {
 		Scoreboard scoreboard = ScoreboardUtil.getScoreboard(player);
 		if (glowColor == null) {
 			Team glowTeam = scoreboard.getEntityTeam(entity);
@@ -65,7 +66,7 @@ public class GlowingUtil {
 	 * @param entity entity
 	 * @param glowColor color
 	 */
-	public static void setGlowingColor(@NotNull Entity entity, @Nullable NamedTextColor glowColor) {
+	public static void setGlowingColor(Entity entity, @Nullable NamedTextColor glowColor) {
 		Scoreboard scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
 		for (NamedTextColor color : NamedTextColor.NAMES.values()) {
 			Team glowTeam = getGlowTeam(scoreboard, color);
@@ -74,6 +75,7 @@ public class GlowingUtil {
 			else
 				glowTeam.removeEntity(entity);
 		}
+		Bukkit.getOnlinePlayers().forEach(player -> applyGlowingColor(player, entity, glowColor));
 	}
 
 	/**
@@ -83,7 +85,7 @@ public class GlowingUtil {
 	 * @param glowColor glow color
 	 * @return scoreboard team
 	 */
-	public static @NotNull Team getGlowTeam(@NotNull Scoreboard scoreboard, @NotNull NamedTextColor glowColor) {
+	public static Team getGlowTeam(Scoreboard scoreboard, NamedTextColor glowColor) {
 		Team glowTeam = scoreboard.getTeam(GLOW_TEAM_ID_PREFIX + glowColor);
 		if (glowTeam == null) {
 			glowTeam = scoreboard.registerNewTeam(GLOW_TEAM_ID_PREFIX + glowColor);

@@ -1,6 +1,7 @@
 package me.sosedik.miscme.listener.block;
 
 import com.destroystokyo.paper.MaterialTags;
+import me.sosedik.miscme.listener.item.ImmersiveDyes;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -37,10 +38,8 @@ public class ClickThroughSigns implements Listener {
 		if (handItem.getType() == Material.AIR) {
 			if (!sign.isWaxed()) return;
 		} else if (MaterialTags.DYES.isTagged(handItem.getType())) {
-			try {
-				var dyeColor = DyeColor.valueOf(handItem.getType().name().replace("_DYE", ""));
-				if (dyeColor != sign.getTargetSide(player).getColor()) return;
-			} catch (IllegalArgumentException ignored) {}
+			DyeColor dyeColor = ImmersiveDyes.getDyeColor(handItem);
+			if (dyeColor != sign.getTargetSide(player).getColor()) return;
 		} else if (handItem.getType() == Material.GLOW_INK_SAC) {
 			if (!sign.getTargetSide(player).isGlowingText()) return;
 		} else if (handItem.getType() == Material.HONEYCOMB) {

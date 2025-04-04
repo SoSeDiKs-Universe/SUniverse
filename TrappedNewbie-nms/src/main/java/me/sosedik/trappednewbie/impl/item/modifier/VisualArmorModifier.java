@@ -25,24 +25,25 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
+@NullMarked
 public class VisualArmorModifier extends ItemModifier {
 
 	public static final ItemModifierContextType VISUAL_ARMOR = ItemModifierContextType.context(ItemModifierContext.EMPTY.getClass()).withName().withLore().build();
 	private static final NamespacedKey SADDLE_HEAD_MODEL = TrappedNewbie.trappedNewbieKey("saddle_head");
 
-	public VisualArmorModifier(@NotNull NamespacedKey key) {
+	public VisualArmorModifier(NamespacedKey key) {
 		super(key);
 	}
 
 	@Override
-	public @NotNull ModificationResult modify(@NotNull ItemContextBox contextBox) {
+	public ModificationResult modify(ItemContextBox contextBox) {
 		Player target;
 		if (contextBox.getContext() instanceof EntityEquipmentPacketContext ctx && ctx.getEntity() instanceof Player other) {
 			target = other;
@@ -97,27 +98,28 @@ public class VisualArmorModifier extends ItemModifier {
 	}
 
 	@Override
-	public boolean skipContext(@NotNull ItemModifierContextType contextType) {
+	public boolean skipContext(ItemModifierContextType contextType) {
 		return contextType == VISUAL_ARMOR;
 	}
 
-	private @NotNull ItemStack parseItem(@NotNull Player player, @NotNull Locale locale, @NotNull ItemStack item) {
+	private ItemStack parseItem(Player player, Locale locale, ItemStack item) {
+		item = item.clone();
 		ItemStack newItem = modifyItem(new ItemContextBox(player, locale, VISUAL_ARMOR, ItemModifierContext.EMPTY, item));
-		return newItem == null ? item.clone() : newItem;
+		return newItem == null ? item : newItem;
 	}
 
-	private int resolveSlot(@NotNull Player player, @NotNull ItemModifierContext context) {
+	private int resolveSlot(Player player, ItemModifierContext context) {
 		if (context instanceof EntityEquipmentPacketContext ctx) return player.canUseEquipmentSlot(ctx.getSlot()) ? InventoryUtil.getSlot(player, ctx.getSlot()) : -1;
 		if (context instanceof SlottedItemModifierContext ctx) return ctx.slot();
 		return -1;
 	}
 
-	private @NotNull ItemStack getEmpty(@NotNull Messenger messenger, @NotNull Locale locale, @NotNull Player player, @NotNull Player target, @NotNull EquipmentSlot slot, boolean armorPreview) {
+	private ItemStack getEmpty(Messenger messenger, Locale locale, Player player, Player target, EquipmentSlot slot, boolean armorPreview) {
 		ItemStack item = parseItem(player, locale, getOutline(messenger, slot, armorPreview));
 		return getLored(messenger, locale, player, target, item, slot, armorPreview, false);
 	}
 
-	private @NotNull ItemStack getOutline(@NotNull Messenger messenger, @NotNull EquipmentSlot slot, boolean armorPreview) {
+	private ItemStack getOutline(Messenger messenger, EquipmentSlot slot, boolean armorPreview) {
 		ItemStack item = switch (slot) {
 			case HEAD -> ItemStack.of(TrappedNewbieItems.HELMET_OUTLINE);
 			case CHEST -> ItemStack.of(TrappedNewbieItems.CHESTPLATE_OUTLINE);
@@ -131,7 +133,7 @@ public class VisualArmorModifier extends ItemModifier {
 		return item;
 	}
 
-	private boolean isGhost(@NotNull Material type) { // TODO make tag?
+	private boolean isGhost(Material type) { // TODO make tag?
 		return type == TrappedNewbieItems.MATERIAL_AIR
 			|| type == TrappedNewbieItems.HELMET_OUTLINE
 			|| type == TrappedNewbieItems.CHESTPLATE_OUTLINE
@@ -140,7 +142,7 @@ public class VisualArmorModifier extends ItemModifier {
 			|| type == TrappedNewbieItems.GLOVES_OUTLINE;
 	}
 
-	private @NotNull ItemStack getLored(@NotNull Messenger messenger, @NotNull Locale locale, @NotNull Player player, @NotNull Player target, @NotNull ItemStack item, @NotNull EquipmentSlot slot, boolean armorPreview, boolean realItem) {
+	private ItemStack getLored(Messenger messenger, Locale locale, Player player, Player target, ItemStack item, EquipmentSlot slot, boolean armorPreview, boolean realItem) {
 		if (ItemStack.isEmpty(item)) return item;
 
 		// Show real armor if not wearing visual
@@ -178,7 +180,7 @@ public class VisualArmorModifier extends ItemModifier {
 		return item;
 	}
 
-	private static @NotNull ItemStack parseUnderwear(@NotNull Messenger messenger, @NotNull Player player, @NotNull Locale locale, @NotNull ItemStack underwear) {
+	private static ItemStack parseUnderwear(Messenger messenger, Player player, Locale locale, ItemStack underwear) {
 		ItemStack newUnderwear = modifyItem(player, locale, underwear);
 		if (newUnderwear != null) underwear = newUnderwear;
 		else underwear = underwear.clone();
@@ -193,7 +195,7 @@ public class VisualArmorModifier extends ItemModifier {
 		return underwear;
 	}
 
-	public static boolean isArmorSlot(@NotNull Player player, int slot) {
+	public static boolean isArmorSlot(Player player, int slot) {
 		if (slot < 5) return false;
 		if (slot > 8 && slot != InventorySlotHelper.OFF_HAND) return false;
 		InventoryType inventoryType = player.getOpenInventory().getTopInventory().getType();

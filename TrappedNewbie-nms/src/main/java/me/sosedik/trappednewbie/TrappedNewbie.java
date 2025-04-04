@@ -6,6 +6,7 @@ import me.sosedik.limboworldgenerator.VoidChunkGenerator;
 import me.sosedik.resourcelib.ResourceLib;
 import me.sosedik.trappednewbie.api.command.parser.PlayerWorldParser;
 import me.sosedik.trappednewbie.command.SpitCommand;
+import me.sosedik.trappednewbie.impl.item.modifier.PaperPlaneModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.VisualArmorModifier;
 import me.sosedik.trappednewbie.listener.item.PaperPlanes;
 import me.sosedik.trappednewbie.listener.misc.DisableJoinQuitMessages;
@@ -16,6 +17,7 @@ import me.sosedik.trappednewbie.listener.player.VisualArmorLayer;
 import me.sosedik.trappednewbie.listener.world.InfiniteStartingNight;
 import me.sosedik.trappednewbie.listener.world.LimboWorldFall;
 import me.sosedik.trappednewbie.listener.world.PerPlayerWorlds;
+import me.sosedik.trappednewbie.misc.TrappedNewbieRecipes;
 import me.sosedik.utilizer.CommandManager;
 import me.sosedik.utilizer.api.language.TranslationHolder;
 import me.sosedik.utilizer.util.EventUtil;
@@ -64,6 +66,9 @@ public final class TrappedNewbie extends JavaPlugin {
 		applyWorldRules();
 		registerCommands();
 
+		TrappedNewbieRecipes.addRecipes();
+
+		new PaperPlaneModifier(trappedNewbieKey("paper_plane")).register();
 		new VisualArmorModifier(trappedNewbieKey("visual_armor")).register();
 
 		EventUtil.registerListeners(this,

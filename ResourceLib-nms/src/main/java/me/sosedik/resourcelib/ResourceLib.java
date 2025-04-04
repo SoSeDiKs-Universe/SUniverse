@@ -212,7 +212,7 @@ public class ResourceLib extends JavaPlugin {
 	 */
 	public static @NotNull FontData requireFontData(@NotNull NamespacedKey key) {
 		FontData fontData = storage().getFontData(key);
-		return requireNonNull(fontData);
+		return requireNonNull(fontData, "Couldn't find font mapping: %s".formatted(key));
 	}
 
 }

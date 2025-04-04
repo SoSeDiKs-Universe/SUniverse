@@ -1,17 +1,27 @@
 package me.sosedik.resourcelib.util;
 
 import me.sosedik.resourcelib.impl.item.nms.AbstractBowItem;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import me.sosedik.resourcelib.impl.item.nms.AbstractTridentItem;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
+@NullMarked
 public class ItemCreator {
 
-	public static @NotNull Object bowItem(@NotNull Object properties) {
+	public static Object bowItem(Object properties) {
 		return bowItem(properties, null);
 	}
 
-	public static @NotNull Object bowItem(@NotNull Object properties, @Nullable AbstractBowItem.BowReleaseLogic bowReleaseLogic) {
+	public static Object bowItem(Object properties, AbstractBowItem.@Nullable BowReleaseLogic bowReleaseLogic) {
 		return new AbstractBowItem(properties, bowReleaseLogic);
+	}
+
+	public static Object tridentItem(Object properties) {
+		return tridentItem(properties, null);
+	}
+
+	public static Object tridentItem(Object properties, AbstractTridentItem.@Nullable TridentReleaseLogic tridentReleaseLogic) {
+		return new AbstractTridentItem(properties, tridentReleaseLogic);
 	}
 
 }

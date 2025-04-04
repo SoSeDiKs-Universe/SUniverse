@@ -1,7 +1,9 @@
 package me.sosedik.miscme;
 
 import me.sosedik.miscme.impl.item.modifier.BookAuthorOnlineModifier;
-import me.sosedik.miscme.impl.item.modifier.SignsShowTextInLore;
+import me.sosedik.miscme.impl.item.modifier.FancierDyedLoreModifier;
+import me.sosedik.miscme.impl.item.modifier.FancierTrimLoreModifier;
+import me.sosedik.miscme.impl.item.modifier.SignsShowTextInLoreModifier;
 import me.sosedik.miscme.listener.block.BlockKnocking;
 import me.sosedik.miscme.listener.block.CampfireSetsOnFire;
 import me.sosedik.miscme.listener.block.ChestThrowsEntities;
@@ -24,12 +26,16 @@ import me.sosedik.miscme.listener.entity.RainbowSheepDropRandomWool;
 import me.sosedik.miscme.listener.entity.SheepBurnableWool;
 import me.sosedik.miscme.listener.entity.SheepRegrowNaturalWool;
 import me.sosedik.miscme.listener.item.BottledAir;
+import me.sosedik.miscme.listener.item.DyeableItemsInItemFrames;
+import me.sosedik.miscme.listener.item.ImmersiveDyes;
 import me.sosedik.miscme.listener.item.ReadableBooksInFrames;
 import me.sosedik.miscme.listener.misc.BetterTimeSetCommand;
 import me.sosedik.miscme.listener.misc.WaterAwarePotionReset;
 import me.sosedik.miscme.listener.player.BurningForcesToRun;
 import me.sosedik.miscme.listener.player.HidePlayerNameTags;
 import me.sosedik.miscme.listener.player.JumpingOverFences;
+import me.sosedik.miscme.listener.projectile.BurningArrowCreatesFire;
+import me.sosedik.miscme.listener.projectile.BurningLitsProjectiles;
 import me.sosedik.miscme.listener.vehicle.JumpyBoats;
 import me.sosedik.miscme.listener.world.CustomDayCycleCleanup;
 import me.sosedik.utilizer.api.language.TranslationHolder;
@@ -57,7 +63,9 @@ public final class MiscMe extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		new BookAuthorOnlineModifier(miscmeKey("book_author_online")).register();
-		new SignsShowTextInLore(miscmeKey("signs_show_text_in_lore")).register();
+		new FancierDyedLoreModifier(miscmeKey("fancier_dyed_lore")).register();
+		new FancierTrimLoreModifier(miscmeKey("fancier_trim_lore")).register();
+		new SignsShowTextInLoreModifier(miscmeKey("signs_show_text_in_lore")).register();
 
 		EventUtil.registerListeners(this,
 			// block
@@ -85,6 +93,8 @@ public final class MiscMe extends JavaPlugin {
 			SheepRegrowNaturalWool.class,
 			// item
 			BottledAir.class,
+			DyeableItemsInItemFrames.class,
+			ImmersiveDyes.class,
 			ReadableBooksInFrames.class,
 			// misc
 			BetterTimeSetCommand.class,
@@ -93,6 +103,9 @@ public final class MiscMe extends JavaPlugin {
 			BurningForcesToRun.class,
 			HidePlayerNameTags.class,
 			JumpingOverFences.class,
+			// projectile
+			BurningArrowCreatesFire.class,
+			BurningLitsProjectiles.class,
 			// vehicle
 			JumpyBoats.class,
 			// world

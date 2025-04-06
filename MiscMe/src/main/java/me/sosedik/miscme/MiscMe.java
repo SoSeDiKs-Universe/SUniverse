@@ -20,6 +20,8 @@ import me.sosedik.miscme.listener.block.SignsRetain;
 import me.sosedik.miscme.listener.entity.ArmorStandBedrockPoses;
 import me.sosedik.miscme.listener.entity.ArmorStandSpawnsWithArms;
 import me.sosedik.miscme.listener.entity.BurningSpreadsWhenAttacking;
+import me.sosedik.miscme.listener.entity.ColoredShulkerUponSpawn;
+import me.sosedik.miscme.listener.entity.DyeableShulkers;
 import me.sosedik.miscme.listener.entity.DynamicCreeperExplosion;
 import me.sosedik.miscme.listener.entity.EndermanTeleportsPlayers;
 import me.sosedik.miscme.listener.entity.ItemFrameReverseRotate;
@@ -27,6 +29,7 @@ import me.sosedik.miscme.listener.entity.PrimingExplosiveMinecart;
 import me.sosedik.miscme.listener.entity.RainbowSheepDropRandomWool;
 import me.sosedik.miscme.listener.entity.SheepBurnableWool;
 import me.sosedik.miscme.listener.entity.SheepRegrowNaturalWool;
+import me.sosedik.miscme.listener.entity.TNTDefuse;
 import me.sosedik.miscme.listener.item.BottledAir;
 import me.sosedik.miscme.listener.item.DyeableItemsInItemFrames;
 import me.sosedik.miscme.listener.item.ImmersiveDyes;
@@ -46,14 +49,15 @@ import me.sosedik.utilizer.util.Scheduler;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.UnknownNullability;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
 public final class MiscMe extends JavaPlugin {
 
-	private static MiscMe instance;
+	private static @UnknownNullability MiscMe instance;
 
-	private Scheduler scheduler;
+	private @UnknownNullability Scheduler scheduler;
 
 	@Override
 	public void onLoad() {
@@ -89,6 +93,8 @@ public final class MiscMe extends JavaPlugin {
 			ArmorStandBedrockPoses.class,
 			ArmorStandSpawnsWithArms.class,
 			BurningSpreadsWhenAttacking.class,
+			ColoredShulkerUponSpawn.class,
+			DyeableShulkers.class,
 			DynamicCreeperExplosion.class,
 			EndermanTeleportsPlayers.class,
 			ItemFrameReverseRotate.class,
@@ -96,6 +102,7 @@ public final class MiscMe extends JavaPlugin {
 			RainbowSheepDropRandomWool.class,
 			SheepBurnableWool.class,
 			SheepRegrowNaturalWool.class,
+			TNTDefuse.class,
 			// item
 			BottledAir.class,
 			DyeableItemsInItemFrames.class,

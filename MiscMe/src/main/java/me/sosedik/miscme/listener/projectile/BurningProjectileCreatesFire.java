@@ -5,6 +5,7 @@ import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.Lightable;
 import org.bukkit.block.data.type.Campfire;
 import org.bukkit.block.data.type.Candle;
 import org.bukkit.block.data.type.Fire;
@@ -74,19 +75,11 @@ public class BurningProjectileCreatesFire implements Listener {
 			hitBlock.getWorld().spawn(hitBlock.getLocation().center(), TNTPrimed.class);
 			return;
 		}
-		BlockData blockData = hitBlock.getBlockData();
-		if (blockData instanceof Campfire campfire && !campfire.isLit()) {
-			campfire.setLit(true);
-			hitBlock.setBlockData(blockData);
-			return;
-		}
-		if (blockData instanceof Candle candle && !candle.isLit()) {
-			candle.setLit(true);
-			hitBlock.setBlockData(blockData);
-			return;
-		}
+		if (tryToLit(hitBlock)) return;
 
 		hitBlock = hitBlock.getRelative(hitBlockFace);
+		if (tryToLit(hitBlock)) return;
+
 		if (!(
 			hitBlock.getType().isEmpty()
 			|| Tag.CORAL_PLANTS.isTagged(hitBlock.getType())
@@ -102,6 +95,26 @@ public class BurningProjectileCreatesFire implements Listener {
 				fire.setFace(face, true);
 		}
 		hitBlock.setBlockData(fire);
+	}
+
+	private static boolean tryToLit(Block block) {
+		BlockData blockData = block.getBlockData();
+		if (blockData instanceof Campfire campfire && !campfire.isLit()) {
+			campfire.setLit(true);
+			block.setBlockData(blockData);
+			return true;
+		}
+		if (blockData instanceof Candle candle && !candle.isLit()) {
+			candle.setLit(true);
+			block.setBlockData(blockData);
+			return true;
+		}
+		if (Tag.CANDLE_CAKES.isTagged(block.getType()) && blockData instanceof Lightable lightable && !lightable.isLit()) {
+			lightable.setLit(true);
+			block.setBlockData(blockData);
+			return true;
+		}
+		return false;
 	}
 
 }

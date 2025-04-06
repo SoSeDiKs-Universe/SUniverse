@@ -33,29 +33,32 @@ public class DyeableItemsInItemFrames implements Listener {
 
 		Player player = event.getPlayer();
 
-		if (tryToDye(event, itemFrame, item, player, EquipmentSlot.HAND))
+		if (!tryToDye(event, itemFrame, item, player, EquipmentSlot.HAND))
 			tryToDye(event, itemFrame, item, player, EquipmentSlot.OFF_HAND);
 	}
 
-	private boolean tryToDye(PlayerInteractEntityEvent event, ItemFrame itemFrame, ItemStack item, Player player, EquipmentSlot hand) {
+	private boolean tryToDye(PlayerInteractEntityEvent event, ItemFrame itemFrame, ItemStack frameItem, Player player, EquipmentSlot hand) {
 		ItemStack handItem = player.getInventory().getItem(hand);
-		if (!MaterialTags.DYES.isTagged(handItem)) return false;
+		if (!ImmersiveDyes.isDyingItem(handItem)) return false;
 
 		event.setCancelled(true);
 		player.swingHand(hand);
 
-		DyeColor appliedColor = ImmersiveDyes.getDyeColor(handItem);
-		if (appliedColor == null) return false;
+		DyeColor dyeColor = handItem.getType() == ImmersiveDyes.CLEARING_MATERIAL ? null : ImmersiveDyes.getDyeColor(handItem);
+		Color currentColor = extractColor(frameItem);
+		if (currentColor == null && dyeColor == null) return false;
 
-		Color currentColor = extractColor(item);
-		Color newColor = currentColor == null ? appliedColor.getColor() : currentColor.mixDyes(appliedColor);
-		if (newColor.equals(currentColor)) return false;
+		Color newColor = currentColor == null ? dyeColor.getColor() : (dyeColor == null ? null : currentColor.mixDyes(dyeColor));
+		if (currentColor != null && currentColor.equals(newColor)) return false;
 
-		item.setData(DataComponentTypes.DYED_COLOR, DyedItemColor.dyedItemColor(newColor, true));
-		itemFrame.setItem(item);
+		if (newColor == null)
+			frameItem.resetData(DataComponentTypes.DYED_COLOR);
+		else
+			frameItem.setData(DataComponentTypes.DYED_COLOR, DyedItemColor.dyedItemColor(newColor, true));
+		itemFrame.setItem(frameItem);
 
 		ImmersiveDyes.playEffect(player, null, itemFrame.getLocation(), null);
-		if (Math.random() < ImmersiveDyes.DYE_REDUCE_CHANCE)
+		if (!player.getGameMode().isInvulnerable() && Math.random() < ImmersiveDyes.DYE_REDUCE_CHANCE)
 			handItem.subtract();
 
 		return true;

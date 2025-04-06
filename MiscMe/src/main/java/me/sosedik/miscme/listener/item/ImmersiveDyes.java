@@ -1,6 +1,7 @@
 package me.sosedik.miscme.listener.item;
 
 import com.destroystokyo.paper.MaterialTags;
+import me.sosedik.miscme.MiscMe;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
@@ -15,8 +16,10 @@ import org.bukkit.block.ShulkerBox;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Directional;
+import org.bukkit.block.data.Lightable;
 import org.bukkit.block.data.Rotatable;
 import org.bukkit.block.data.type.Bed;
+import org.bukkit.block.data.type.Candle;
 import org.bukkit.block.data.type.Piston;
 import org.bukkit.block.data.type.PistonHead;
 import org.bukkit.block.data.type.TechnicalPiston;
@@ -35,7 +38,8 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * Dyes can be applied onto blocks immersible
+ * Dyes can be applied onto blocks immersible.
+ * Also allows applying/removing sicky state from pistons.
  */
 // MCCheck: 1.21.4, new colored blocks
 @NullMarked
@@ -119,6 +123,36 @@ public class ImmersiveDyes implements Listener {
 				newState.setPatterns(patterns);
 				newState.update();
 			}
+			return postEffect(player, hand, item, block);
+		}
+
+		if (Tag.CANDLES.isTagged(apply)) {
+			if (!(block.getBlockData() instanceof Candle oldData)) return false;
+			if (!(apply.createBlockData() instanceof Candle newData)) return false;
+
+			newData.setCandles(oldData.getCandles());
+			newData.setLit(oldData.isLit());
+			newData.setWaterlogged(oldData.isWaterlogged());
+			block.setBlockData(newData, false);
+			// Workaround candles getting unlit
+			Block finalBlock = block;
+			MiscMe.scheduler().sync(() -> {
+				if (finalBlock.getType() == apply)
+					finalBlock.setBlockData(newData);
+			}, 1L);
+			return postEffect(player, hand, item, block);
+		}
+		if (Tag.CANDLE_CAKES.isTagged(block.getType())) {
+			if (!(block.getBlockData() instanceof Lightable oldData)) return false;
+			if (!(apply.createBlockData() instanceof Lightable newData)) return false;
+			newData.setLit(oldData.isLit());
+			block.setBlockData(newData, false);
+			// Workaround candles getting unlit
+			Block finalBlock = block;
+			MiscMe.scheduler().sync(() -> {
+				if (finalBlock.getType() == apply)
+					finalBlock.setBlockData(newData);
+			}, 1L);
 			return postEffect(player, hand, item, block);
 		}
 

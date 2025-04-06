@@ -5,11 +5,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerEvent;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Called when player tries to knock on a block
  */
+@NullMarked
 public class PlayerBlockKnockEvent extends PlayerEvent implements Cancellable {
 
 	private static final HandlerList HANDLERS = new HandlerList();
@@ -17,7 +18,7 @@ public class PlayerBlockKnockEvent extends PlayerEvent implements Cancellable {
 	private final Block block;
 	private boolean cancelled;
 
-	public PlayerBlockKnockEvent(@NotNull Player who, @NotNull Block block, boolean allowed) {
+	public PlayerBlockKnockEvent(Player who, Block block, boolean allowed) {
 		super(who);
 		this.block = block;
 		this.cancelled = !allowed;
@@ -28,16 +29,16 @@ public class PlayerBlockKnockEvent extends PlayerEvent implements Cancellable {
 	 *
 	 * @return knocked block
 	 */
-	public @NotNull Block getBlock() {
+	public Block getBlock() {
 		return this.block;
 	}
 
 	@Override
-	public @NotNull HandlerList getHandlers() {
+	public HandlerList getHandlers() {
 		return HANDLERS;
 	}
 
-	public static @NotNull HandlerList getHandlerList() {
+	public static HandlerList getHandlerList() {
 		return HANDLERS;
 	}
 

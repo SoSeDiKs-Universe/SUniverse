@@ -7,15 +7,16 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLoginEvent;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Custom whitelist messages
  */
+@NullMarked
 public class NotWhitelistedKick implements Listener {
 
 	@EventHandler(priority = EventPriority.LOWEST)
-	public void onWhitelistKick(@NotNull PlayerLoginEvent event) {
+	public void onWhitelistKick(PlayerLoginEvent event) {
 		if (!PlayerLoginEvent.Result.KICK_WHITELIST.equals(event.getResult())) return;
 
 		String ip = event.getAddress().getHostAddress();

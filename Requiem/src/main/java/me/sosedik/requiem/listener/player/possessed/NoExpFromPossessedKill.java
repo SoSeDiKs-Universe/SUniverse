@@ -6,15 +6,16 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Mobs killed by possessing players should not drop exp
  */
+@NullMarked
 public class NoExpFromPossessedKill implements Listener {
 
 	@EventHandler(ignoreCancelled = true)
-	public void onDeath(@NotNull EntityDeathEvent event) {
+	public void onDeath(EntityDeathEvent event) {
 		if (event.getDroppedExp() == 0) return;
 
 		if (!(EntityUtil.getCausingDamager(event.getEntity()) instanceof Player killer)) return;

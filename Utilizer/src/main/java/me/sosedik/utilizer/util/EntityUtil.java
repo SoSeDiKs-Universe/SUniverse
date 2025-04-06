@@ -3,25 +3,29 @@ package me.sosedik.utilizer.util;
 import org.bukkit.HeightMap;
 import org.bukkit.World;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Drowned;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
+import org.bukkit.entity.Turtle;
+import org.bukkit.entity.WaterMob;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
+@NullMarked
 public class EntityUtil {
 
 	private EntityUtil() {
@@ -40,7 +44,7 @@ public class EntityUtil {
 	 *
 	 * @param rule rule
 	 */
-	public static void addDarknessExemptRule(@NotNull Predicate<@NotNull LivingEntity> rule) {
+	public static void addDarknessExemptRule(Predicate<LivingEntity> rule) {
 		EXTRA_PLAYER_VISIBILITY_RULES.add(rule);
 	}
 
@@ -50,7 +54,7 @@ public class EntityUtil {
 	 * @param entity entity
 	 * @return whether the entity is in darkness
 	 */
-	public static boolean isInDarkness(@NotNull LivingEntity entity) {
+	public static boolean isInDarkness(LivingEntity entity) {
 		if (entity.getEyeLocation().getBlock().getLightLevel() > 3) return false;
 		if (isInOpenEnd(entity)) return false;
 		if (isHoldingALightSource(entity, EquipmentSlot.HAND)) return false;
@@ -64,7 +68,7 @@ public class EntityUtil {
 		return true;
 	}
 
-	private static boolean isInOpenEnd(@NotNull LivingEntity entity) {
+	private static boolean isInOpenEnd(LivingEntity entity) {
 		if (entity.getWorld().getEnvironment() != World.Environment.THE_END) return false;
 		return entity.getLocation().getY() >= entity.getLocation().toHighestLocation(HeightMap.MOTION_BLOCKING_NO_LEAVES).getY();
 	}
@@ -76,7 +80,7 @@ public class EntityUtil {
 	 * @param slot slot
 	 * @return whether the entity is holding a light source
 	 */
-	public static boolean isHoldingALightSource(@NotNull LivingEntity entity, @NotNull EquipmentSlot slot) {
+	public static boolean isHoldingALightSource(LivingEntity entity, EquipmentSlot slot) {
 		EntityEquipment equipment = entity.getEquipment();
 		if (equipment == null) return false;
 
@@ -90,7 +94,7 @@ public class EntityUtil {
 	 * @param entity entity
 	 * @return whether the entity can see
 	 */
-	public static boolean canSee(@NotNull LivingEntity entity) {
+	public static boolean canSee(LivingEntity entity) {
 		return !isInDarkness(entity) || entity.hasPotionEffect(PotionEffectType.NIGHT_VISION);
 	}
 
@@ -99,7 +103,7 @@ public class EntityUtil {
 	 *
 	 * @param player player
 	 */
-	public static void clearTargets(@NotNull Player player) {
+	public static void clearTargets(Player player) {
 		clearTargets(player, 48);
 	}
 
@@ -108,7 +112,7 @@ public class EntityUtil {
 	 *
 	 * @param player player
 	 */
-	public static void clearTargets(@NotNull Player player, int radius) {
+	public static void clearTargets(Player player, int radius) {
 		player.getLocation().getNearbyEntitiesByType(Mob.class, radius, mob -> mob.getTarget() == player).forEach(mob -> mob.setTarget(null));
 	}
 
@@ -118,7 +122,7 @@ public class EntityUtil {
 	 * @param entity damaged entity
 	 * @return player damager
 	 */
-	public static @Nullable Entity getCausingDamager(@NotNull Entity entity) {
+	public static @Nullable Entity getCausingDamager(Entity entity) {
 		if (entity instanceof LivingEntity livingEntity && livingEntity.getKiller() != null) return livingEntity.getKiller();
 		if (!(entity.getLastDamageCause() instanceof EntityDamageByEntityEvent lastDamage)) return null;
 		if (lastDamage.getDamager() instanceof Projectile projectile && projectile.getShooter() instanceof Entity shooter) return shooter;
@@ -131,7 +135,7 @@ public class EntityUtil {
 	 * @param entity damaged entity
 	 * @return player damager
 	 */
-	public static @Nullable Entity getDirectDamager(@NotNull Entity entity) {
+	public static @Nullable Entity getDirectDamager(Entity entity) {
 		if (entity instanceof LivingEntity livingEntity && livingEntity.getKiller() != null) return livingEntity.getKiller();
 		if (!(entity.getLastDamageCause() instanceof EntityDamageByEntityEvent lastDamage)) return null;
 		return lastDamage.getDamager();
@@ -143,7 +147,7 @@ public class EntityUtil {
 	 * @param type entity type
 	 * @return whether this entity type is immune to fire
 	 */
-	public static boolean isFireImmune(@NotNull EntityType type) {
+	public static boolean isFireImmune(EntityType type) {
 		return switch (type) {
 			case WITHER, ENDER_DRAGON, WITHER_SKULL,
 					BLAZE, GHAST, MAGMA_CUBE, STRIDER,
@@ -160,7 +164,7 @@ public class EntityUtil {
 	 * @param entity entity
 	 * @return whether entity was naturally spawned
 	 */
-	public static boolean isNaturallySpawned(@NotNull Entity entity) {
+	public static boolean isNaturallySpawned(Entity entity) {
 		CreatureSpawnEvent.SpawnReason spawnReason = entity.getEntitySpawnReason();
 		return spawnReason == CreatureSpawnEvent.SpawnReason.NATURAL
 				|| spawnReason == CreatureSpawnEvent.SpawnReason.DEFAULT
@@ -177,6 +181,16 @@ public class EntityUtil {
 	 */
 	public static double getJumpHeight(double height) {
 		return Math.sqrt(2 * height * 0.08);
+	}
+
+	/**
+	 * Checks whether the entity is a water mob
+	 *
+	 * @param entity entity
+	 * @return whether the entity is a water mob
+	 */
+	public static boolean isWaterMob(@Nullable LivingEntity entity) {
+		return entity instanceof WaterMob || entity instanceof Turtle || entity instanceof Drowned;
 	}
 
 }

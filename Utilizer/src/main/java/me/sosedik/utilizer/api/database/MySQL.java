@@ -3,11 +3,12 @@ package me.sosedik.utilizer.api.database;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 
+@NullMarked
 public class MySQL implements Database {
 
 	private final HikariDataSource dataSource;
@@ -17,7 +18,7 @@ public class MySQL implements Database {
 	private final String password;
 	private final int port;
 
-	public MySQL(@NotNull FileConfiguration config) {
+	public MySQL(FileConfiguration config) {
 		host = config.getString("connection.mysql.host");
 		port = config.getInt("connection.mysql.port");
 		database = config.getString("connection.mysql.database");
@@ -27,7 +28,7 @@ public class MySQL implements Database {
 		this.dataSource = setupPool();
 	}
 
-	private @NotNull HikariDataSource setupPool() {
+	private HikariDataSource setupPool() {
 		var config = new HikariConfig();
 		try {
 			config.setDriverClassName(Class.forName("com.mysql.cj.jdbc.Driver").getName());
@@ -41,13 +42,13 @@ public class MySQL implements Database {
 	}
 
 	@Override
-	public @NotNull Connection openConnection() throws SQLException {
+	public Connection openConnection() throws SQLException {
 		return dataSource.getConnection();
 	}
 
 	@Override
 	public void close() {
-		if (dataSource != null && !dataSource.isClosed())
+		if (!dataSource.isClosed())
 			dataSource.close();
 	}
 

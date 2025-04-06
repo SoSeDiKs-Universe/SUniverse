@@ -19,8 +19,9 @@ import me.sosedik.utilizer.util.Scheduler;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public final class Socializer extends JavaPlugin {
 
 	private static Socializer instance;
@@ -76,7 +77,7 @@ public final class Socializer extends JavaPlugin {
 	 *
 	 * @return the plugin instance
 	 */
-	public static @NotNull Socializer instance() {
+	public static Socializer instance() {
 		return Socializer.instance;
 	}
 
@@ -85,7 +86,7 @@ public final class Socializer extends JavaPlugin {
 	 *
 	 * @return the plugin's task scheduler
 	 */
-	public static @NotNull Scheduler scheduler() {
+	public static Scheduler scheduler() {
 		return instance().scheduler;
 	}
 
@@ -94,7 +95,7 @@ public final class Socializer extends JavaPlugin {
 	 *
 	 * @return the plugin's component logger
 	 */
-	public static @NotNull ComponentLogger logger() {
+	public static ComponentLogger logger() {
 		return instance().getComponentLogger();
 	}
 
@@ -104,7 +105,7 @@ public final class Socializer extends JavaPlugin {
 	 * @param value value
 	 * @return namespaced key
 	 */
-	public static @NotNull NamespacedKey socializerKey(@NotNull String value) {
+	public static NamespacedKey socializerKey(String value) {
 		return new NamespacedKey("socializer", value);
 	}
 
@@ -113,7 +114,7 @@ public final class Socializer extends JavaPlugin {
 	 *
 	 * @return the plugin's database
 	 */
-	public static @NotNull Database database() {
+	public static Database database() {
 		return instance().database;
 	}
 

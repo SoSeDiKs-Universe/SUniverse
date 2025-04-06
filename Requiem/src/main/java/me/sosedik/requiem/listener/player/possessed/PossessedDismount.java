@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDismountEvent;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -17,12 +17,13 @@ import java.util.UUID;
 /**
  * Custom dismount logic for possessed mobs
  */
+@NullMarked
 public class PossessedDismount implements Listener {
 
 	private final Set<UUID> cooldowns = new HashSet<>();
 
 	@EventHandler(ignoreCancelled = true)
-	public void onDismount(@NotNull EntityDismountEvent event) {
+	public void onDismount(EntityDismountEvent event) {
 		if (!(event.getEntity() instanceof Player player)) return;
 		if (!(event.getDismounted() instanceof LivingEntity vehicle)) return;
 		if (!PossessingPlayer.isPossessingSoft(player)) return;

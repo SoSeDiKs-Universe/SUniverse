@@ -13,18 +13,19 @@ import org.bukkit.entity.Pose;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Start swimming in one block space
  */
 // MCCheck: 1.21.4, workaround to swimming state metadata
+@NullMarked
 public class SwimmingInOneBlockSpace implements Listener {
 
 	private static final int SWIMMING_METADATA_INDEX = 0;
 
 	@EventHandler(ignoreCancelled = true)
-	public void onSprintToggle(@NotNull PlayerToggleSprintEvent event) {
+	public void onSprintToggle(PlayerToggleSprintEvent event) {
 		if (event.isSprinting()) return;
 
 		Player player = event.getPlayer();
@@ -48,7 +49,7 @@ public class SwimmingInOneBlockSpace implements Listener {
 		}, 2L);
 	}
 
-	private boolean isInPuddle(@NotNull Block block) {
+	private boolean isInPuddle(Block block) {
 		return block.getType() == Material.WATER
 				&& !LocationUtil.isWatery(block.getRelative(BlockFace.DOWN))
 				&& block.getBlockData() instanceof Levelled levelled

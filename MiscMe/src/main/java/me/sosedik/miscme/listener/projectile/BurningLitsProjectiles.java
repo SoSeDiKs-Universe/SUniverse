@@ -14,6 +14,7 @@ public class BurningLitsProjectiles implements Listener {
 	public void onShootWhileBurning(ProjectileLaunchEvent event) {
 		Projectile projectile = event.getEntity();
 		if (projectile.getFireTicks() > 0) return;
+		if (projectile.isImmuneToFire()) return;
 		if (!(projectile.getShooter() instanceof LivingEntity shooter)) return;
 		if (shooter.getFireTicks() <= 0) return;
 

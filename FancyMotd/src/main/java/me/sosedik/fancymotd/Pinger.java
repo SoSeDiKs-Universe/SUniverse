@@ -10,8 +10,8 @@ import me.sosedik.utilizer.api.language.LangOptions;
 import me.sosedik.utilizer.api.language.LangOptionsStorage;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.net.InetSocketAddress;
 import java.sql.Connection;
@@ -26,6 +26,7 @@ import java.util.function.Predicate;
 /**
  * Represents a client that pings the server
  */
+@NullMarked
 public class Pinger {
 
 	public static final String DATABASE_NAME = "Pingers";
@@ -35,7 +36,7 @@ public class Pinger {
 			.expireAfterAccess(5, TimeUnit.MINUTES)
 			.build(
 				new CacheLoader<>() {
-					public @NotNull Pinger load(@NotNull String ip) {
+					public Pinger load(String ip) {
 						return constructPinger(ip);
 					}
 				}
@@ -47,19 +48,19 @@ public class Pinger {
 	private final boolean hasClock;
 	private final boolean isNewbie;
 
-	private Pinger(@NotNull String ip, boolean hasClock) {
+	private Pinger(String ip, boolean hasClock) {
 		this(LangOptionsStorage.getByAddress(ip), hasClock, true);
 	}
 
-	private Pinger(@NotNull UUID uuid) {
+	private Pinger(UUID uuid) {
 		this(LangHolder.langHolder(uuid).getLangOptions(), clockAccessor != null && clockAccessor.test(uuid), false);
 	}
 
-	private Pinger(@NotNull LangOptions langOptions, boolean hasClock) {
+	private Pinger(LangOptions langOptions, boolean hasClock) {
 		this(langOptions, hasClock, false);
 	}
 
-	private Pinger(@NotNull LangOptions langOptions, boolean hasClock, boolean isNewbie) {
+	private Pinger(LangOptions langOptions, boolean hasClock, boolean isNewbie) {
 		this.langOptions = langOptions;
 		this.hasClock = hasClock;
 		this.isNewbie = isNewbie;
@@ -70,7 +71,7 @@ public class Pinger {
 	 *
 	 * @return supported language key for messages
 	 */
-	public @NotNull LangOptions getLanguage() {
+	public LangOptions getLanguage() {
 		return langOptions;
 	}
 
@@ -98,7 +99,7 @@ public class Pinger {
 	 * @param ip client's IP address
 	 * @return Pinger instance
 	 */
-	private static @NotNull Pinger constructPinger(@NotNull String ip) {
+	private static Pinger constructPinger(String ip) {
 		try (var con = PINGERS_DATABASE.openConnection();
 			 var ps = con.prepareStatement("SELECT * FROM " + DATABASE_NAME + " WHERE IP LIKE '%" + ip + "%'")) {
 			ResultSet rs = ps.executeQuery();
@@ -125,7 +126,7 @@ public class Pinger {
 	 *
 	 * @param player player
 	 */
-	public static void addPinger(@NotNull Player player) {
+	public static void addPinger(Player player) {
 		InetSocketAddress address = player.getAddress();
 		if (address == null) return;
 
@@ -142,11 +143,11 @@ public class Pinger {
 	 *
 	 * @param ip IP
 	 */
-	public static void removePinger(@NotNull String ip) {
+	public static void removePinger(String ip) {
 		PINGERS.invalidate(ip);
 	}
 
-	private static void updatePingerData(@NotNull Pinger pinger, @NotNull UUID uuid, @NotNull String ip) {
+	private static void updatePingerData(Pinger pinger, UUID uuid, String ip) {
 		String getIpsSql = "SELECT IP FROM " + DATABASE_NAME + " WHERE UUID = '" + uuid + "';";
 		String updateDataSql = "INSERT OR REPLACE INTO " + DATABASE_NAME + "(UUID, IP, LastLang, Clock) VALUES(?, ?, ?, ?)";
 		try (Connection con = PINGERS_DATABASE.openConnection();
@@ -188,7 +189,7 @@ public class Pinger {
 	 * @param ip IP
 	 * @return Pinger instance
 	 */
-	public static @NotNull Pinger getPinger(@NotNull String ip) {
+	public static Pinger getPinger(String ip) {
 		return PINGERS.getUnchecked(ip);
 	}
 
@@ -198,7 +199,7 @@ public class Pinger {
 	 * @param clockAccessor clock check
 	 */
 	@SuppressWarnings("unused")
-	public static void setClockAccessor(@NotNull Predicate<UUID> clockAccessor) {
+	public static void setClockAccessor(Predicate<UUID> clockAccessor) {
 		Pinger.clockAccessor = clockAccessor;
 	}
 

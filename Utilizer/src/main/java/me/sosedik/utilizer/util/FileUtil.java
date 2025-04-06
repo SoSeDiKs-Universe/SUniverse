@@ -8,8 +8,8 @@ import com.google.gson.stream.JsonWriter;
 import de.tr7zw.nbtapi.NBT;
 import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import me.sosedik.utilizer.Utilizer;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.io.File;
 import java.io.FileReader;
@@ -23,6 +23,7 @@ import java.nio.file.Paths;
 import java.util.Objects;
 import java.util.stream.Stream;
 
+@NullMarked
 public class FileUtil {
 
 	private FileUtil() {
@@ -35,7 +36,7 @@ public class FileUtil {
 	 * @param json file
 	 * @return json object representing the read file
 	 */
-	public static @NotNull JsonObject readJsonObject(@NotNull File json) {
+	public static JsonObject readJsonObject(File json) {
 		return readJsonElement(json).getAsJsonObject();
 	}
 
@@ -45,7 +46,7 @@ public class FileUtil {
 	 * @param json file
 	 * @return json element representing the read file
 	 */
-	public static @NotNull JsonElement readJsonElement(@NotNull File json) {
+	public static JsonElement readJsonElement(File json) {
 		try (var reader = new FileReader(json)) {
 			return new JsonStreamParser(reader).next();
 		} catch (IOException e) {
@@ -60,7 +61,7 @@ public class FileUtil {
 	 * @param result file to be created
 	 * @param json   json to write into the file
 	 */
-	public static void createPrettyJsonFile(@NotNull File result, @NotNull JsonElement json) {
+	public static void createPrettyJsonFile(File result, JsonElement json) {
 		createJsonFile(result, getPrettyJson(json));
 	}
 
@@ -70,7 +71,7 @@ public class FileUtil {
 	 * @param result file to be created
 	 * @param json   json to write into the file
 	 */
-	public static void createJsonFile(@NotNull File result, @NotNull JsonElement json) {
+	public static void createJsonFile(File result, JsonElement json) {
 		createJsonFile(result, json.toString());
 	}
 
@@ -80,7 +81,7 @@ public class FileUtil {
 	 * @param result file to be created
 	 * @param json   json to write into the file
 	 */
-	public static void createJsonFile(@NotNull File result, @NotNull String json) {
+	public static void createJsonFile(File result, String json) {
 		createFolder(result.getParentFile());
 		deleteFile(result);
 		try (var writer = new FileWriter(result)) {
@@ -96,7 +97,7 @@ public class FileUtil {
 	 * @param jsonElement json element to prettify
 	 * @return prettified json
 	 */
-	public static @NotNull String getPrettyJson(@NotNull JsonElement jsonElement) {
+	public static String getPrettyJson(JsonElement jsonElement) {
 		var gsonPrettyPrinting = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
 		try (var sWriter = new StringWriter();
 		     JsonWriter jWriter = gsonPrettyPrinting.newJsonWriter(sWriter)) {
@@ -116,7 +117,7 @@ public class FileUtil {
 	 * @param file file
 	 * @return nbt data
 	 */
-	public static @NotNull ReadWriteNBT readNbtFile(@NotNull File file) {
+	public static ReadWriteNBT readNbtFile(File file) {
 		try {
 			return NBT.readFile(file);
 		} catch (IOException e) {
@@ -130,7 +131,7 @@ public class FileUtil {
 	 *
 	 * @param dir the directory to create
 	 */
-	public static void createFolder(@NotNull File dir) {
+	public static void createFolder(File dir) {
 		boolean dirCreated = dir.exists();
 		if (!dirCreated)
 			dirCreated = dir.mkdirs();
@@ -143,7 +144,7 @@ public class FileUtil {
 	 *
 	 * @param file file to delete
 	 */
-	public static void deleteFile(@NotNull File file) {
+	public static void deleteFile(File file) {
 		if (!file.exists()) return;
 
 		try {
@@ -156,11 +157,11 @@ public class FileUtil {
 	/**
 	 * Deletes folder with its contents
 	 */
-	public static void deleteFolder(@NotNull File folder) {
+	public static void deleteFolder(File folder) {
 		deleteFolder(folder.toPath());
 	}
 
-	private static void deleteFolder(@NotNull Path path) {
+	private static void deleteFolder(Path path) {
 		if (!Files.exists(path)) return;
 		try {
 			if (Files.isRegularFile(path)) { // Delete regular file directly
@@ -184,7 +185,7 @@ public class FileUtil {
 	 * @param from source file
 	 * @param to   target file
 	 */
-	public static void copyFile(@NotNull File from, @NotNull File to) {
+	public static void copyFile(File from, File to) {
 		if (!from.exists()) {
 			Utilizer.logger().error("Copy operation: Source file {} does not exist.", from.getPath());
 		}
@@ -229,7 +230,7 @@ public class FileUtil {
 	 * @param name file name
 	 * @return file with provided name if found
 	 */
-	public static @Nullable File findFile(@NotNull File base, @NotNull String name) {
+	public static @Nullable File findFile(File base, String name) {
 		if (!base.exists()) return null;
 
 		for (File file : Objects.requireNonNull(base.listFiles())) {

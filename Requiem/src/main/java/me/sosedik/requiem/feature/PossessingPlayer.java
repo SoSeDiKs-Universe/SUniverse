@@ -26,13 +26,14 @@ import org.bukkit.inventory.MainHand;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+@NullMarked
 public class PossessingPlayer {
 
 	private static final Set<UUID> POSSESSING = new HashSet<>();
@@ -46,7 +47,7 @@ public class PossessingPlayer {
 	 * @param player player
 	 * @return whether the player is possessing a mob
 	 */
-	public static boolean isPossessing(@NotNull Player player) {
+	public static boolean isPossessing(Player player) {
 		boolean possessing = isPossessingSoft(player);
 		if (possessing && getPossessed(player) == null) {
 			possessing = false;
@@ -61,7 +62,7 @@ public class PossessingPlayer {
 	 * @param player player
 	 * @return whether the player is possessing a mob
 	 */
-	public static boolean isPossessingSoft(@NotNull Player player) {
+	public static boolean isPossessingSoft(Player player) {
 		return POSSESSING.contains(player.getUniqueId());
 	}
 
@@ -71,7 +72,7 @@ public class PossessingPlayer {
 	 * @param player player
 	 * @param entity possessed entity
 	 */
-	public static void startPossessing(@NotNull Player player, @NotNull LivingEntity entity) {
+	public static void startPossessing(Player player, LivingEntity entity) {
 		if (isPossessing(player) && getPossessed(player) == entity) return;
 		if (!entity.setRider(player)) return;
 
@@ -108,7 +109,7 @@ public class PossessingPlayer {
 	 *
 	 * @param player player
 	 */
-	public static void stopPossessing(@NotNull Player player) {
+	public static void stopPossessing(Player player) {
 		stopPossessing(player, getPossessed(player), false);
 	}
 
@@ -118,7 +119,7 @@ public class PossessingPlayer {
 	 * @param player player
 	 * @param riding possessed entity
 	 */
-	public static void stopPossessing(@NotNull Player player, @Nullable LivingEntity riding, boolean quit) {
+	public static void stopPossessing(Player player, @Nullable LivingEntity riding, boolean quit) {
 		if (!isPossessingSoft(player)) return;
 
 		if (quit) {
@@ -161,7 +162,7 @@ public class PossessingPlayer {
 	 * @param player player
 	 * @return the possessed entity
 	 */
-	public static @Nullable LivingEntity getPossessed(@NotNull Player player) {
+	public static @Nullable LivingEntity getPossessed(Player player) {
 		if (!(player.getVehicle() instanceof LivingEntity riding)) return null;
 		if (player != riding.getRider()) return null;
 		return riding;
@@ -173,7 +174,7 @@ public class PossessingPlayer {
 	 * @param player player
 	 * @param entity entity
 	 */
-	public static void migrateStatsToEntity(@NotNull Player player, @NotNull LivingEntity entity) {
+	public static void migrateStatsToEntity(Player player, LivingEntity entity) {
 		migrateInvToEntity(player, entity);
 
 		entity.setPersistent(false);
@@ -186,7 +187,7 @@ public class PossessingPlayer {
 			ageable.setAdult();
 	}
 
-	private static void migrateInvToEntity(@NotNull Player player, @NotNull LivingEntity entity) {
+	private static void migrateInvToEntity(Player player, LivingEntity entity) {
 		EntityEquipment entityEquipment = entity.getEquipment();
 		if (entityEquipment == null) return;
 
@@ -206,7 +207,7 @@ public class PossessingPlayer {
 	 * @param player player
 	 * @param entity entity
 	 */
-	public static void migrateStatsToPlayer(@NotNull Player player, @NotNull LivingEntity entity) {
+	public static void migrateStatsToPlayer(Player player, LivingEntity entity) {
 		migrateInvFromEntity(player, entity);
 //		addExtraControlItems(player); // TODO should also be soulbound and not droppable
 
@@ -216,7 +217,7 @@ public class PossessingPlayer {
 			player.addPotionEffect(infinitePotionEffect(PotionEffectType.FIRE_RESISTANCE));
 	}
 
-	private static void migrateInvFromEntity(@NotNull Player player, @NotNull LivingEntity entity) {
+	private static void migrateInvFromEntity(Player player, LivingEntity entity) {
 		EntityEquipment entityEquipment = entity.getEquipment();
 		if (entityEquipment == null) return;
 
@@ -230,7 +231,7 @@ public class PossessingPlayer {
 		playerInventory.setBoots(entityEquipment.getBoots());
 	}
 
-	private static @NotNull PotionEffect infinitePotionEffect(@NotNull PotionEffectType type) {
+	private static PotionEffect infinitePotionEffect(PotionEffectType type) {
 		return new PotionEffect(type, PotionEffect.INFINITE_DURATION, 0, false, false, false);
 	}
 
@@ -241,7 +242,7 @@ public class PossessingPlayer {
 	 * @param entity entity
 	 * @return whether the entity can be controlled by player
 	 */
-	public static boolean isAllowedForCapture(@NotNull Player player, @NotNull Entity entity) {
+	public static boolean isAllowedForCapture(Player player, Entity entity) {
 		// TODO llamas are not controllable for whatever reason
 		if (true) return true; // TODO no.
 		if (entity instanceof AbstractHorse) return false; // TODO "Horses" dismount player :L ; there's also dolphins and probably others
@@ -263,7 +264,7 @@ public class PossessingPlayer {
 	 * @param entity entity
 	 * @return whether the entity has soul
 	 */
-	public static boolean hasSoul(@NotNull LivingEntity entity) {
+	public static boolean hasSoul(LivingEntity entity) {
 		if (true) return true;
 		if (entity instanceof Animals) return true;
 		if (entity instanceof Fish) return true;
@@ -281,7 +282,7 @@ public class PossessingPlayer {
 	 * @param data data
 	 * @return whether the player is now a possessor
 	 */
-	public static boolean loadPossessingData(@NotNull Player player, @NotNull ReadWriteNBT data) {
+	public static boolean loadPossessingData(Player player, ReadWriteNBT data) {
 		if (!data.hasTag(POSSESSED_TAG)) return false;
 
 		data = data.getCompound(POSSESSED_TAG);
@@ -305,7 +306,7 @@ public class PossessingPlayer {
 	 * @param data data to save into
 	 * @param quit whether this saving is due to player quitting
 	 */
-	public static void savePossessedData(@NotNull Player player, @NotNull ReadWriteNBT data, boolean quit) {
+	public static void savePossessedData(Player player, ReadWriteNBT data, boolean quit) {
 		if (!isPossessing(player)) return;
 
 		LivingEntity entity = getPossessed(player);

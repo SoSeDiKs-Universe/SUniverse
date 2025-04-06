@@ -5,11 +5,12 @@ import io.papermc.paper.math.BlockPosition;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Represents block position within a world
  */
+@NullMarked
 public interface WorldBlockPosition extends BlockPosition {
 
 	/**
@@ -17,14 +18,14 @@ public interface WorldBlockPosition extends BlockPosition {
 	 *
 	 * @return world
 	 */
-	@NotNull World world();
+	World world();
 
 	/**
 	 * Creates a new location object
 	 *
 	 * @return a new location
 	 */
-	default @NotNull Location toLocation() {
+	default Location toLocation() {
 		return toLocation(world());
 	}
 
@@ -34,7 +35,7 @@ public interface WorldBlockPosition extends BlockPosition {
 	 * @param block block
 	 * @return a new world position
 	 */
-	static @NotNull WorldBlockPosition worldPosition(@NotNull Block block) {
+	static WorldBlockPosition worldPosition(Block block) {
 		return worldPosition(block.getLocation());
 	}
 
@@ -44,7 +45,7 @@ public interface WorldBlockPosition extends BlockPosition {
 	 * @param loc location
 	 * @return a new world position
 	 */
-	static @NotNull WorldBlockPosition worldPosition(@NotNull Location loc) {
+	static WorldBlockPosition worldPosition(Location loc) {
 		Preconditions.checkArgument(loc.getWorld() != null, "World can't be null");
 		return worldPosition(loc.getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
 	}
@@ -58,7 +59,7 @@ public interface WorldBlockPosition extends BlockPosition {
 	 * @param blockZ block Z coord
 	 * @return a new world position
 	 */
-	static @NotNull WorldBlockPosition worldPosition(@NotNull World world, int blockX, int blockY, int blockZ) {
+	static WorldBlockPosition worldPosition(World world, int blockX, int blockY, int blockZ) {
 		return new WorldBlockPositionImpl(world, blockX, blockY, blockZ);
 	}
 

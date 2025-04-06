@@ -16,7 +16,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.io.File;
 import java.util.regex.Pattern;
@@ -24,6 +24,7 @@ import java.util.regex.Pattern;
 /**
  * Sends messages from Discord's chat into other supported chats
  */
+@NullMarked
 public class DiscordChatLinker extends ListenerAdapter {
 
 	private static final Pattern IMAGE_URL = Pattern.compile("(http(s?):)([/.\\w\\s:-])*\\.(?:jpg|gif|png)(\\S*)");
@@ -33,14 +34,14 @@ public class DiscordChatLinker extends ListenerAdapter {
 
 	private final MinecraftChatRenderer chatRenderer;
 
-	public DiscordChatLinker(@NotNull Socializer plugin, MinecraftChatRenderer chatRenderer) {
+	public DiscordChatLinker(Socializer plugin, MinecraftChatRenderer chatRenderer) {
 		this.chatRenderer = chatRenderer;
 		serverChat = DiscordBot.getDiscordBot().getTextChannelById(plugin.getConfig().getLong("discord.channels.server-chat"));
 		DiscordBot.getDiscordBot().addEventListener(this);
 	}
 
 	@Override
-	public void onMessageReceived(@NotNull MessageReceivedEvent event) {
+	public void onMessageReceived(MessageReceivedEvent event) {
 		if (event.getAuthor().isBot()) return;
 		if (!event.isFromGuild()) return;
 		if (event.getChannel().getIdLong() != serverChat.getIdLong()) return;
@@ -102,7 +103,7 @@ public class DiscordChatLinker extends ListenerAdapter {
 		chatRenderer.sendBukkitMessage(nickname, gameMessage);
 	}
 
-	private @NotNull WebhookEmbed convertEmbed(@NotNull MessageEmbed embed) {
+	private WebhookEmbed convertEmbed(MessageEmbed embed) {
 		var embedBuilder = new WebhookEmbedBuilder()
 				.setDescription(embed.getDescription())
 				.setTimestamp(embed.getTimestamp());

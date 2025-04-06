@@ -12,8 +12,8 @@ import org.incendo.cloud.annotations.Argument;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.Flag;
 import org.incendo.cloud.annotations.suggestion.Suggestions;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,6 +24,7 @@ import static me.sosedik.utilizer.api.message.Mini.raw;
 /**
  * Picking translation language
  */
+@NullMarked
 public class TranslatorCommand {
 
 	private final Map<String, TranslationLanguage> translators = new HashMap<>();
@@ -37,8 +38,8 @@ public class TranslatorCommand {
 
 	@Command("translator <translator> [player]")
 	public void onCommand(
-		@NotNull CommandSourceStack stack,
-		@NotNull @Argument(value = "translator", suggestions = "@translatorCommandSuggestionTranslators") AnyString translatorKeyS,
+		CommandSourceStack stack,
+		@Argument(value = "translator", suggestions = "@translatorCommandSuggestionTranslators") AnyString translatorKeyS,
 		@Nullable @Argument(value = "player") Player player,
 		@Flag(value = "silent") boolean silent
 	) {
@@ -65,7 +66,7 @@ public class TranslatorCommand {
 	}
 
 	@Suggestions("@translatorCommandSuggestionTranslators")
-	public @NotNull Set<String> onTranslatorSuggestion(@NotNull CommandSourceStack stack) {
+	public Set<String> onTranslatorSuggestion(CommandSourceStack stack) {
 		return translators.keySet();
 	}
 

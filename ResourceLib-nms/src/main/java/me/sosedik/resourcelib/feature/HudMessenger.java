@@ -6,8 +6,8 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,6 +18,7 @@ import java.util.function.Supplier;
 
 import static me.sosedik.utilizer.api.message.Mini.combined;
 
+@NullMarked
 public class HudMessenger extends BukkitRunnable {
 
 	private static final long ACTION_BAR_MESSAGE_DURATION = 50L;
@@ -25,9 +26,9 @@ public class HudMessenger extends BukkitRunnable {
 
 	private final Map<NamespacedKey, HudProvider> hudProviders = new HashMap<>();
 	private final Player player;
-	private Component actionBarMessage = null;
+	private @Nullable Component actionBarMessage = null;
 
-	private HudMessenger(@NotNull Player player) {
+	private HudMessenger(Player player) {
 		this.player = player;
 		ResourceLib.scheduler().async(this, 0L, 1L);
 	}
@@ -38,7 +39,7 @@ public class HudMessenger extends BukkitRunnable {
 	 *
 	 * @param message action bar message
 	 */
-	public void displayMessage(@NotNull Component message) {
+	public void displayMessage(Component message) {
 		int length = SpacingUtil.getWidth(message);
 		message = SpacingUtil.getOffset((int) Math.ceil(length / -2D), length, message);
 		this.actionBarMessage = message;
@@ -55,7 +56,7 @@ public class HudMessenger extends BukkitRunnable {
 	 * @param hudElementId hud element id
 	 * @param hudElement   hud element
 	 */
-	public void addHudElement(@NotNull NamespacedKey hudElementId, @NotNull Supplier<Component> hudElement) {
+	public void addHudElement(NamespacedKey hudElementId, Supplier<Component> hudElement) {
 		this.hudProviders.put(hudElementId, new HudProvider(hudElementId, hudElement));
 	}
 
@@ -73,17 +74,17 @@ public class HudMessenger extends BukkitRunnable {
 		this.player.sendActionBar(hud);
 	}
 
-	public static @NotNull HudMessenger of(@NotNull Player player) {
+	public static HudMessenger of(Player player) {
 		return STORED_HUDS.computeIfAbsent(player.getUniqueId(), k -> new HudMessenger(player));
 	}
 
-	public static void removePlayer(@NotNull Player player) {
+	public static void removePlayer(Player player) {
 		HudMessenger hudMessenger = STORED_HUDS.remove(player.getUniqueId());
 		if (hudMessenger != null)
 			hudMessenger.cancel();
 	}
 
-	private record HudProvider(@NotNull NamespacedKey providerId, @NotNull Supplier<Component> hudProvider) {
+	private record HudProvider(NamespacedKey providerId, Supplier<@Nullable Component> hudProvider) {
 
 		public @Nullable Component getHud() {
 			return hudProvider().get();

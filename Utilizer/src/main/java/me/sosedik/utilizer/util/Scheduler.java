@@ -4,7 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.function.Predicate;
 
@@ -13,7 +13,8 @@ import java.util.function.Predicate;
  *
  * @param plugin owning plugin
  */
-public record Scheduler(@NotNull Plugin plugin) {
+@NullMarked
+public record Scheduler(Plugin plugin) {
 
 	/**
 	 * Schedules a once off task to occur as soon as possible.
@@ -23,7 +24,7 @@ public record Scheduler(@NotNull Plugin plugin) {
 	 * @param runnable Task to be executed
 	 * @return Task id number (-1 if scheduling failed)
 	 */
-	public int sync(@NotNull Runnable runnable) {
+	public int sync(Runnable runnable) {
 		return Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, runnable);
 	}
 
@@ -36,7 +37,7 @@ public record Scheduler(@NotNull Plugin plugin) {
 	 * @param delay Delay in server ticks before executing task
 	 * @return Task id number (-1 if scheduling failed)
 	 */
-	public int sync(@NotNull Runnable runnable, long delay) {
+	public int sync(Runnable runnable, long delay) {
 		return Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, runnable, delay);
 	}
 
@@ -48,7 +49,7 @@ public record Scheduler(@NotNull Plugin plugin) {
 	 * @param period the ticks to wait between runs
 	 * @return a BukkitTask that contains the id number
 	 */
-	public @NotNull BukkitTask sync(@NotNull Predicate<@NotNull BukkitRunnable> runnable, long delay, long period) {
+	public BukkitTask sync(Predicate<BukkitRunnable> runnable, long delay, long period) {
 		return new BukkitRunnable() {
 			@Override
 			public void run() {
@@ -66,7 +67,7 @@ public record Scheduler(@NotNull Plugin plugin) {
 	 * @param period the ticks to wait between runs
 	 * @return a BukkitTask that contains the id number
 	 */
-	public @NotNull BukkitTask sync(@NotNull Runnable runnable, long delay, long period) {
+	public BukkitTask sync(Runnable runnable, long delay, long period) {
 		return Bukkit.getScheduler().runTaskTimer(plugin, runnable, delay, period);
 	}
 
@@ -78,7 +79,7 @@ public record Scheduler(@NotNull Plugin plugin) {
 	 * @param period the ticks to wait between runs
 	 * @return a BukkitTask that contains the id number
 	 */
-	public @NotNull BukkitTask sync(@NotNull BukkitRunnable runnable, long delay, long period) {
+	public BukkitTask sync(BukkitRunnable runnable, long delay, long period) {
 		return runnable.runTaskTimer(plugin, delay, period);
 	}
 
@@ -91,7 +92,7 @@ public record Scheduler(@NotNull Plugin plugin) {
 	 * @param runnable the task to be run
 	 * @return a BukkitTask that contains the id number
 	 */
-	public @NotNull BukkitTask async(@NotNull Runnable runnable) {
+	public BukkitTask async(Runnable runnable) {
 		return Bukkit.getScheduler().runTaskAsynchronously(plugin, runnable);
 	}
 
@@ -106,7 +107,7 @@ public record Scheduler(@NotNull Plugin plugin) {
 	 * @param delay the ticks to wait before running the task
 	 * @return a BukkitTask that contains the id number
 	 */
-	public @NotNull BukkitTask async(@NotNull Runnable runnable, long delay) {
+	public BukkitTask async(Runnable runnable, long delay) {
 		return Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, runnable, delay);
 	}
 
@@ -122,7 +123,7 @@ public record Scheduler(@NotNull Plugin plugin) {
 	 * @param period the ticks to wait between runs
 	 * @return a BukkitTask that contains the id number
 	 */
-	public @NotNull BukkitTask async(@NotNull Predicate<BukkitRunnable> runnable, long delay, long period) {
+	public BukkitTask async(Predicate<BukkitRunnable> runnable, long delay, long period) {
 		return new BukkitRunnable() {
 			@Override
 			public void run() {
@@ -144,7 +145,7 @@ public record Scheduler(@NotNull Plugin plugin) {
 	 * @param period the ticks to wait between runs
 	 * @return a BukkitTask that contains the id number
 	 */
-	public @NotNull BukkitTask async(@NotNull Runnable runnable, long delay, long period) {
+	public BukkitTask async(Runnable runnable, long delay, long period) {
 		return Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, runnable, delay, period);
 	}
 
@@ -160,7 +161,7 @@ public record Scheduler(@NotNull Plugin plugin) {
 	 * @param period the ticks to wait between runs
 	 * @return a BukkitTask that contains the id number
 	 */
-	public @NotNull BukkitTask async(@NotNull BukkitRunnable runnable, long delay, long period) {
+	public BukkitTask async(BukkitRunnable runnable, long delay, long period) {
 		return runnable.runTaskTimerAsynchronously(plugin, delay, period);
 	}
 

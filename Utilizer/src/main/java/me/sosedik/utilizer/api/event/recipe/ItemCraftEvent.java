@@ -9,12 +9,13 @@ import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.inventory.CraftingRecipe;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Called when an item is crafted
  */
+@NullMarked
 public class ItemCraftEvent extends Event {
 
 	private static final HandlerList handlers = new HandlerList();
@@ -25,7 +26,7 @@ public class ItemCraftEvent extends Event {
 	private final @Nullable Player player;
 	private final String recipeGroup;
 
-	public ItemCraftEvent(@NotNull Event parentEvent, @NotNull NamespacedKey key) {
+	public ItemCraftEvent(Event parentEvent, NamespacedKey key) {
 		super();
 		this.parentEvent = parentEvent;
 		this.key = key;
@@ -52,7 +53,7 @@ public class ItemCraftEvent extends Event {
 	 *
 	 * @return the parent event
 	 */
-	public @NotNull Event getParentEvent() {
+	public Event getParentEvent() {
 		return this.parentEvent;
 	}
 
@@ -61,7 +62,7 @@ public class ItemCraftEvent extends Event {
 	 *
 	 * @return the crafted recipe
 	 */
-	public @NotNull Recipe getRecipe() {
+	public Recipe getRecipe() {
 		return this.recipe;
 	}
 
@@ -70,7 +71,7 @@ public class ItemCraftEvent extends Event {
 	 *
 	 * @return the recipe key
 	 */
-	public @NotNull NamespacedKey getKey() {
+	public NamespacedKey getKey() {
 		return this.key;
 	}
 
@@ -88,7 +89,7 @@ public class ItemCraftEvent extends Event {
 	 *
 	 * @return the recipe group
 	 */
-	public @NotNull String getRecipeGroup() {
+	public String getRecipeGroup() {
 		return this.recipeGroup;
 	}
 
@@ -121,11 +122,11 @@ public class ItemCraftEvent extends Event {
 	}
 
 	@Override
-	public @NotNull HandlerList getHandlers() {
+	public HandlerList getHandlers() {
 		return handlers;
 	}
 
-	public static @NotNull HandlerList getHandlerList() {
+	public static HandlerList getHandlerList() {
 		return handlers;
 	}
 

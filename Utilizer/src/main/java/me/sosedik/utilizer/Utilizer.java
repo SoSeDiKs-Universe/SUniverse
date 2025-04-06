@@ -37,8 +37,9 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.incendo.cloud.bukkit.internal.BukkitBrigadierMapper;
 import org.incendo.cloud.parser.ParserDescriptor;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public final class Utilizer extends JavaPlugin {
 
 	private static Utilizer instance;
@@ -132,7 +133,7 @@ public final class Utilizer extends JavaPlugin {
 	 *
 	 * @return the plugin instance
 	 */
-	public static @NotNull Utilizer instance() {
+	public static Utilizer instance() {
 		return Utilizer.instance;
 	}
 
@@ -141,7 +142,7 @@ public final class Utilizer extends JavaPlugin {
 	 *
 	 * @return the plugin's task scheduler
 	 */
-	public static @NotNull Scheduler scheduler() {
+	public static Scheduler scheduler() {
 		return instance().scheduler;
 	}
 
@@ -150,7 +151,7 @@ public final class Utilizer extends JavaPlugin {
 	 *
 	 * @return the plugin's component logger
 	 */
-	public static @NotNull ComponentLogger logger() {
+	public static ComponentLogger logger() {
 		return instance().getComponentLogger();
 	}
 
@@ -160,7 +161,7 @@ public final class Utilizer extends JavaPlugin {
 	 * @param value value
 	 * @return namespaced key
 	 */
-	public static @NotNull NamespacedKey utilizerKey(@NotNull String value) {
+	public static NamespacedKey utilizerKey(String value) {
 		return new NamespacedKey("utilizer", value);
 	}
 

@@ -5,8 +5,8 @@ import me.sosedik.utilizer.util.FileUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.CachedServerIcon;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,6 +18,7 @@ import java.util.Random;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+@NullMarked
 public class MotdIconStorage {
 
 	private static final List<CachedServerIcon> SERVER_ICONS = new ArrayList<>();
@@ -38,7 +39,7 @@ public class MotdIconStorage {
 	 *
 	 * @param plugin plugin instance
 	 */
-	public static void refreshIcons(@NotNull FancyMotd plugin) {
+	public static void refreshIcons(FancyMotd plugin) {
 		SERVER_ICONS.clear();
 
 		var storage = new File(plugin.getDataFolder(), "icons");
@@ -46,7 +47,7 @@ public class MotdIconStorage {
 		loadIcons(storage);
 	}
 
-	private static void extractIcons(@NotNull Plugin plugin, @NotNull File storage) {
+	private static void extractIcons(Plugin plugin, File storage) {
 		if (storage.exists()) return;
 
 		FileUtil.createFolder(storage);
@@ -66,7 +67,7 @@ public class MotdIconStorage {
 		}
 	}
 
-	private static void loadIcons(@NotNull File storage) {
+	private static void loadIcons(File storage) {
 		for (File icon : Objects.requireNonNull(storage.listFiles())) {
 			if (!icon.getName().endsWith(".png")) continue;
 			try {

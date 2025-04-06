@@ -5,11 +5,12 @@ import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerEvent;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Called when player's data has finished loading
  */
+@NullMarked
 public class PlayerDataLoadedEvent extends PlayerEvent {
 
 	private static final HandlerList HANDLERS = new HandlerList();
@@ -17,7 +18,7 @@ public class PlayerDataLoadedEvent extends PlayerEvent {
 	private final ReadWriteNBT data;
 	private final ReadWriteNBT backupData;
 
-	public PlayerDataLoadedEvent(@NotNull Player who, @NotNull ReadWriteNBT data) {
+	public PlayerDataLoadedEvent(Player who, ReadWriteNBT data) {
 		super(who);
 		this.data = data;
 		this.backupData = NBT.createNBTObject();
@@ -28,7 +29,7 @@ public class PlayerDataLoadedEvent extends PlayerEvent {
 	 *
 	 * @return player data
 	 */
-	public @NotNull ReadWriteNBT getData() {
+	public ReadWriteNBT getData() {
 		return data;
 	}
 
@@ -38,16 +39,16 @@ public class PlayerDataLoadedEvent extends PlayerEvent {
 	 *
 	 * @return player data
 	 */
-	public @NotNull ReadWriteNBT getBackupData() {
+	public ReadWriteNBT getBackupData() {
 		return backupData;
 	}
 
 	@Override
-	public @NotNull HandlerList getHandlers() {
+	public HandlerList getHandlers() {
 		return HANDLERS;
 	}
 
-	public static @NotNull HandlerList getHandlerList() {
+	public static HandlerList getHandlerList() {
 		return HANDLERS;
 	}
 

@@ -5,14 +5,15 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
+@NullMarked
 public class AbstractBowItem extends BowItem  {
 
 	private final @Nullable BowReleaseLogic bowReleaseLogic;
 
-	public AbstractBowItem(@NotNull Object properties, @Nullable BowReleaseLogic bowReleaseLogic) {
+	public AbstractBowItem(Object properties, @Nullable BowReleaseLogic bowReleaseLogic) {
 		super((Item.Properties) properties);
 		this.bowReleaseLogic = bowReleaseLogic;
 	}
@@ -26,7 +27,7 @@ public class AbstractBowItem extends BowItem  {
 
 	public interface BowReleaseLogic {
 
-		boolean onRelease(@NotNull ItemStack item, @NotNull LivingEntity entity, int timeLeft);
+		boolean onRelease(ItemStack item, LivingEntity entity, int timeLeft);
 
 	}
 

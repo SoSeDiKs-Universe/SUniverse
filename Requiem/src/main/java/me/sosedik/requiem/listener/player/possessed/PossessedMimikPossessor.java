@@ -17,7 +17,7 @@ import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.EquipmentSlot;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,10 +25,11 @@ import java.util.Map;
 /**
  * Possessed mimik actions of their possessor
  */
+@NullMarked
 public class PossessedMimikPossessor implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	public void onSwing(@NotNull PlayerArmSwingEvent event) {
+	public void onSwing(PlayerArmSwingEvent event) {
 		Player player = event.getPlayer();
 		if (!PossessingPlayer.isPossessing(player)) return;
 
@@ -39,7 +40,7 @@ public class PossessedMimikPossessor implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	public void onSlotChange(@NotNull PlayerItemHeldEvent event) {
+	public void onSlotChange(PlayerItemHeldEvent event) {
 		Player player = event.getPlayer();
 		if (!PossessingPlayer.isPossessing(player)) return;
 
@@ -53,7 +54,7 @@ public class PossessedMimikPossessor implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	public void onSwap(@NotNull PlayerSwapHandItemsEvent event) {
+	public void onSwap(PlayerSwapHandItemsEvent event) {
 		Player player = event.getPlayer();
 		if (!PossessingPlayer.isPossessing(player)) return;
 
@@ -68,7 +69,7 @@ public class PossessedMimikPossessor implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	public void onHeldItemChange(@NotNull PlayerInventorySlotChangeEvent event) {
+	public void onHeldItemChange(PlayerInventorySlotChangeEvent event) {
 		Player player = event.getPlayer();
 		if (event.getSlot() != player.getInventory().getHeldItemSlot()) return;
 		if (!PossessingPlayer.isPossessing(player)) return;
@@ -83,7 +84,7 @@ public class PossessedMimikPossessor implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	public void onArmorChange(@NotNull PlayerArmorChangeEvent event) {
+	public void onArmorChange(PlayerArmorChangeEvent event) {
 		Player player = event.getPlayer();
 		if (!PossessingPlayer.isPossessing(player)) return;
 
@@ -97,7 +98,7 @@ public class PossessedMimikPossessor implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	public void onCombust(@NotNull EntityCombustEvent event) {
+	public void onCombust(EntityCombustEvent event) {
 		if (!(event.getEntity() instanceof Player player)) return;
 		if (!PossessingPlayer.isPossessing(player)) return;
 
@@ -109,7 +110,7 @@ public class PossessedMimikPossessor implements Listener {
 
 	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onDamageAnotherEntity(@NotNull EntityDamageByEntityEvent event) {
+	public void onDamageAnotherEntity(EntityDamageByEntityEvent event) {
 		if (!(event.getDamager() instanceof Player player)) return;
 		if (!PossessingPlayer.isPossessing(player)) return;
 		if (!(event.getEntity() instanceof LivingEntity damaged)) return;

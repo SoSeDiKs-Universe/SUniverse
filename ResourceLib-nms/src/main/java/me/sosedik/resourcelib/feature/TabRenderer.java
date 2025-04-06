@@ -6,8 +6,8 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,6 +18,7 @@ import java.util.UUID;
 import static me.sosedik.utilizer.api.message.Mini.combine;
 import static me.sosedik.utilizer.api.message.Mini.combined;
 
+@NullMarked
 public class TabRenderer extends BukkitRunnable {
 
 	private static final NamespacedKey EMPTY_LINE_KEY = ResourceLib.resourceLibKey("empty_line");
@@ -32,7 +33,7 @@ public class TabRenderer extends BukkitRunnable {
 	private final List<Component> components = new ArrayList<>();
 	private final Player player;
 
-	private TabRenderer(@NotNull Player player) {
+	private TabRenderer(Player player) {
 		this.player = player;
 
 		addHeaderElement(EMPTY_LINE_KEY, () -> List.of(Component.empty()));
@@ -47,7 +48,7 @@ public class TabRenderer extends BukkitRunnable {
 	 * @param hudElementId hud element id
 	 * @param hudElement   hud element
 	 */
-	public void addHudElement(@NotNull NamespacedKey hudElementId, @NotNull HudProvider hudElement) {
+	public void addHudElement(NamespacedKey hudElementId, HudProvider hudElement) {
 		this.hudProviders.put(hudElementId, hudElement);
 	}
 
@@ -57,7 +58,7 @@ public class TabRenderer extends BukkitRunnable {
 	 * @param hudElementId hud element id
 	 * @param hudElement   hud element
 	 */
-	public void addHeaderElement(@NotNull NamespacedKey hudElementId, @NotNull HudProvider hudElement) {
+	public void addHeaderElement(NamespacedKey hudElementId, HudProvider hudElement) {
 		this.headerProviders.put(hudElementId, hudElement);
 	}
 
@@ -67,7 +68,7 @@ public class TabRenderer extends BukkitRunnable {
 	 * @param hudElementId hud element id
 	 * @param hudElement   hud element
 	 */
-	public void addFooterElement(@NotNull NamespacedKey hudElementId, @NotNull HudProvider hudElement) {
+	public void addFooterElement(NamespacedKey hudElementId, HudProvider hudElement) {
 		this.footerProviders.put(hudElementId, hudElement);
 	}
 
@@ -104,11 +105,11 @@ public class TabRenderer extends BukkitRunnable {
 		this.player.sendPlayerListHeaderAndFooter(header, footer);
 	}
 
-	public static @NotNull TabRenderer of(@NotNull Player player) {
+	public static TabRenderer of(Player player) {
 		return STORED_HUDS.computeIfAbsent(player.getUniqueId(), k -> new TabRenderer(player));
 	}
 
-	public static void removePlayer(@NotNull Player player) {
+	public static void removePlayer(Player player) {
 		TabRenderer hudMessenger = STORED_HUDS.remove(player.getUniqueId());
 		if (hudMessenger != null)
 			hudMessenger.cancel();
@@ -126,7 +127,7 @@ public class TabRenderer extends BukkitRunnable {
 	 *
 	 * @param plugin plugin instance
 	 */
-	public static void init(@NotNull ResourceLib plugin) {
+	public static void init(ResourceLib plugin) {
 		FileConfiguration config = plugin.getConfig();
 		if (!config.contains("tab.header-priorities") || !config.contains("tab.footer-priorities")) {
 			config.set("tab.header-priorities", List.of());

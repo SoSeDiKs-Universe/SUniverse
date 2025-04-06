@@ -11,8 +11,8 @@ import me.sosedik.utilizer.Utilizer;
 import me.sosedik.utilizer.util.FileUtil;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,6 +32,7 @@ import java.util.jar.JarFile;
 /**
  * Holds custom translations
  */
+@NullMarked
 public class TranslationHolder {
 
 	private static final TranslationHolder TRANSLATION_HOLDER = new TranslationHolder();
@@ -45,7 +46,7 @@ public class TranslationHolder {
 	 * @param path message path
 	 * @return whether the localization exists
 	 */
-	public boolean hasMessage(@NotNull String path) {
+	public boolean hasMessage(String path) {
 		JsonObject locale = this.locales.get(LangOptionsStorage.getDefaultLangOptions().minecraftId());
 		return locale.has(path);
 	}
@@ -58,7 +59,7 @@ public class TranslationHolder {
 	 * @param path message path
 	 * @return stored message
 	 */
-	public @NotNull String @NotNull [] getMessage(@NotNull LangOptions langOptions, @NotNull String path) {
+	public String [] getMessage(LangOptions langOptions, String path) {
 		return getMessage(langOptions, path, true);
 	}
 
@@ -72,7 +73,7 @@ public class TranslationHolder {
 	 * @return stored message if exists
 	 */
 	@Contract("_, _, true -> !null")
-	public @NotNull String @Nullable [] getMessage(@NotNull LangOptions langOptions, @NotNull String path, boolean scream) {
+	public String @Nullable [] getMessage(LangOptions langOptions, String path, boolean scream) {
 		JsonObject langJson = this.locales.get(langOptions.minecraftId());
 		if (langJson == null || !langJson.has(path)) {
 			// Retry for default language
@@ -118,14 +119,14 @@ public class TranslationHolder {
 		return new String[]{path};
 	}
 
-	private @NotNull String @NotNull [] parseRandomized(@NotNull JsonObject langJson) {
+	private String [] parseRandomized(JsonObject langJson) {
 		var amount = 1;
 		while (langJson.has((amount + 1) + "r"))
 			amount++;
 		return parseElement(langJson.get((RANDOM.nextInt(amount) + 1) + "r"));
 	}
 
-	private @NotNull String @NotNull [] parseRandomized(@NotNull JsonObject langJson, @NotNull String path) {
+	private String [] parseRandomized(JsonObject langJson, String path) {
 		// Get all available random messages
 		List<Map.Entry<String, JsonElement>> randoms = langJson.entrySet().stream()
 				.filter(entry -> entry.getKey().endsWith("r")).toList();
@@ -163,7 +164,7 @@ public class TranslationHolder {
 		return new String[]{path};
 	}
 
-	private @NotNull String @NotNull [] parseElement(@NotNull JsonElement jsonElement) {
+	private String [] parseElement(JsonElement jsonElement) {
 		// Simple message
 		if (jsonElement instanceof JsonPrimitive)
 			return new String[]{jsonElement.getAsString()};
@@ -171,7 +172,7 @@ public class TranslationHolder {
 		return parseMultiLined(jsonElement.getAsJsonObject());
 	}
 
-	private @NotNull String @NotNull [] parseMultiLined(@NotNull JsonObject langJson) {
+	private String [] parseMultiLined(JsonObject langJson) {
 		int amount = langJson.size();
 		String[] lines = new String[amount];
 		for (int i = 0; i < amount; i++)
@@ -184,7 +185,7 @@ public class TranslationHolder {
 	 *
 	 * @param plugin plugin instance
 	 */
-	public static void extractLocales(@NotNull Plugin plugin) {
+	public static void extractLocales(Plugin plugin) {
 		var jarFile = new File(plugin.getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
 		if (!jarFile.isFile()) {
 			Utilizer.logger().error("Couldn't obtain the JAR file for {}", plugin.getName());
@@ -226,7 +227,7 @@ public class TranslationHolder {
 	 *
 	 * @param plugin plugin instance
 	 */
-	public static void reloadLangs(@NotNull Plugin plugin) {
+	public static void reloadLangs(Plugin plugin) {
 		var localesFolder = new File(plugin.getDataFolder() + File.separator + "localizations");
 		if (!localesFolder.exists()) {
 			FileUtil.createFolder(localesFolder);
@@ -245,7 +246,7 @@ public class TranslationHolder {
 		});
 	}
 
-	private static void loadLangs(@NotNull File file, @NotNull String parentName, @NotNull Map<String, List<JsonObject>> locales) {
+	private static void loadLangs(File file, String parentName, Map<String, List<JsonObject>> locales) {
 		if (file.isDirectory()) {
 			for (File f : Objects.requireNonNull(file.listFiles())) {
 				loadLangs(f, parentName, locales);
@@ -258,7 +259,7 @@ public class TranslationHolder {
 		locales.computeIfAbsent(parentName, k -> new ArrayList<>()).add(json);
 	}
 
-	private static void loadJson(@NotNull JsonObject json, @NotNull LangOptions langOptions) {
+	private static void loadJson(JsonObject json, LangOptions langOptions) {
 		var localesJson = TRANSLATION_HOLDER.locales.computeIfAbsent(langOptions.minecraftId(), k -> new JsonObject());
 		try {
 			json.entrySet().forEach(entry -> localesJson.add(entry.getKey(), entry.getValue()));
@@ -272,7 +273,7 @@ public class TranslationHolder {
 	 *
 	 * @return the translation holder
 	 */
-	public static @NotNull TranslationHolder translationHolder() {
+	public static TranslationHolder translationHolder() {
 		return TRANSLATION_HOLDER;
 	}
 

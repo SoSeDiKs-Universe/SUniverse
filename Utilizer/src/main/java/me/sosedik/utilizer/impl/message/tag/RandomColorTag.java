@@ -5,7 +5,7 @@ import net.kyori.adventure.text.minimessage.Context;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.ArgumentQueue;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +15,7 @@ import java.util.Set;
 /**
  * Parses {@code <random_color>} into a random default color, excluding black
  */
+@NullMarked
 public class RandomColorTag {
 
 	private RandomColorTag() {}
@@ -28,11 +29,11 @@ public class RandomColorTag {
 		COLORS.remove(NamedTextColor.BLACK); // Ignoring black color due to its bad visibility
 	}
 
-	static @NotNull Tag create(@NotNull ArgumentQueue args, @NotNull Context ctx) {
+	static Tag create(ArgumentQueue args, Context ctx) {
 		return Tag.styling(getColor());
 	}
 
-	private static @NotNull NamedTextColor getColor() {
+	private static NamedTextColor getColor() {
 		return COLORS.get(RANDOM.nextInt(COLORS.size()));
 	}
 

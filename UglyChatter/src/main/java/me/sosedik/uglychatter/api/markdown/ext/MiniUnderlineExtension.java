@@ -13,36 +13,37 @@ import org.commonmark.renderer.NodeRenderer;
 import org.commonmark.renderer.markdown.MarkdownNodeRendererContext;
 import org.commonmark.renderer.markdown.MarkdownNodeRendererFactory;
 import org.commonmark.renderer.markdown.MarkdownRenderer;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Set;
 
 /**
  * Adds support for parsing {@code __underline__} to {@code <u>underline</u>}.
  */
+@NullMarked
 public class MiniUnderlineExtension implements Parser.ParserExtension, MarkdownRenderer.MarkdownRendererExtension {
 
 	private MiniUnderlineExtension() {}
 
-	public static @NotNull MiniUnderlineExtension create() {
+	public static MiniUnderlineExtension create() {
 		return new MiniUnderlineExtension();
 	}
 
 	@Override
-	public void extend(@NotNull Parser.Builder parserBuilder) {
+	public void extend(Parser.Builder parserBuilder) {
 		parserBuilder.customDelimiterProcessor(new MiniUnderlineDelimiterProcessor());
 	}
 
 	@Override
-	public void extend(@NotNull MarkdownRenderer.Builder rendererBuilder) {
+	public void extend(MarkdownRenderer.Builder rendererBuilder) {
 		rendererBuilder.nodeRendererFactory(new MarkdownNodeRendererFactory() {
 			@Override
-			public NodeRenderer create(@NotNull MarkdownNodeRendererContext context) {
+			public NodeRenderer create(MarkdownNodeRendererContext context) {
 				return new MiniUnderlineMarkdownNodeRenderer(context);
 			}
 
 			@Override
-			public @NotNull Set<Character> getSpecialCharacters() {
+			public Set<Character> getSpecialCharacters() {
 				return Set.of('_');
 			}
 		});
@@ -85,7 +86,7 @@ public class MiniUnderlineExtension implements Parser.ParserExtension, MarkdownR
 		}
 
 		@Override
-		public int process(@NotNull DelimiterRun openingRun, @NotNull DelimiterRun closingRun) {
+		public int process(DelimiterRun openingRun, DelimiterRun closingRun) {
 			if (openingRun.length() >= 2 && closingRun.length() >= 2) {
 				Text opener = openingRun.getOpener();
 
@@ -113,7 +114,7 @@ public class MiniUnderlineExtension implements Parser.ParserExtension, MarkdownR
 
 	public static class MiniUnderlineMarkdownNodeRenderer extends SimpleMiniMarkdownNodeRenderer {
 
-		public MiniUnderlineMarkdownNodeRenderer(@NotNull MarkdownNodeRendererContext context) {
+		public MiniUnderlineMarkdownNodeRenderer(MarkdownNodeRendererContext context) {
 			super(context);
 		}
 
@@ -123,7 +124,7 @@ public class MiniUnderlineExtension implements Parser.ParserExtension, MarkdownR
 		}
 
 		@Override
-		public void render(@NotNull Node node) {
+		public void render(Node node) {
 			writer.raw("<u>");
 			renderChildren(node);
 			writer.raw("</u>");

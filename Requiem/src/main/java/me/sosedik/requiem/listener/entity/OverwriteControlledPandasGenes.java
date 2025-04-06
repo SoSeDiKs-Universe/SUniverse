@@ -6,18 +6,19 @@ import me.sosedik.requiem.api.event.player.PlayerStopPossessingEntityEvent;
 import org.bukkit.entity.Panda;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Overwrite pandas' genes when controlling them
  */
+@NullMarked
 public class OverwriteControlledPandasGenes implements Listener {
 
 	private static final String MAIN_GENE_KEY = "main_gene";
 	private static final String HIDDEN_GENE_KEY = "hidden_gene";
 
 	@EventHandler
-	public void onPossess(@NotNull PlayerStartPossessingEntityEvent event) {
+	public void onPossess(PlayerStartPossessingEntityEvent event) {
 		if (!(event.getEntity() instanceof Panda entity)) return;
 
 		NBT.modifyPersistentData(entity, nbt -> {
@@ -34,12 +35,12 @@ public class OverwriteControlledPandasGenes implements Listener {
 		});
 	}
 
-	private boolean shouldBeKept(@NotNull Panda.Gene gene) {
+	private boolean shouldBeKept(Panda.Gene gene) {
 		return gene == Panda.Gene.BROWN;
 	}
 
 	@EventHandler
-	public void onUnPossess(@NotNull PlayerStopPossessingEntityEvent event) {
+	public void onUnPossess(PlayerStopPossessingEntityEvent event) {
 		if (!(event.getEntity() instanceof Panda entity)) return;
 
 		NBT.modifyPersistentData(entity, nbt -> {

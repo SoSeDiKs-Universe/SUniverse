@@ -6,23 +6,27 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.UnknownNullability;
+import org.jspecify.annotations.NullMarked;
+
+import java.util.Objects;
 
 /**
  * Granting Member role for accepting the rules
  */
+@NullMarked
 public class MembershipGaining extends ListenerAdapter {
 
-	private final Role memberRole;
+	private final @UnknownNullability Role memberRole;
 
-	public MembershipGaining(@NotNull Socializer plugin) {
+	public MembershipGaining(Socializer plugin) {
 		if (!plugin.getConfig().getBoolean("grant-memberships", false)) {
 			this.memberRole = null;
 			return;
 		}
 
 		long roleId = plugin.getConfig().getLong("discord.roles.member");
-		this.memberRole = DiscordBot.getDiscordBot().getRoleById(roleId);
+		this.memberRole = Objects.requireNonNull(DiscordBot.getDiscordBot().getRoleById(roleId));
 		DiscordBot.getDiscordBot().addEventListener(this);
 	}
 

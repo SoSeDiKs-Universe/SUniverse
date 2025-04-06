@@ -1,8 +1,8 @@
 package me.sosedik.utilizer.util;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.math.BigDecimal;
 import java.util.Collection;
@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
+@NullMarked
 public class MathUtil {
 
 	private MathUtil() {
@@ -47,7 +48,7 @@ public class MathUtil {
 	 * @return randomly picked value
 	 */
 	@SafeVarargs
-	public static <T> @UnknownNullability T getRandom(@Nullable T @NotNull ... values) {
+	public static <T> @UnknownNullability T getRandom(@Nullable T... values) {
 		return values[RANDOM.nextInt(values.length)];
 	}
 
@@ -59,7 +60,7 @@ public class MathUtil {
 	 * @return randomly picked value
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> @UnknownNullability T getRandom(@NotNull Collection<? extends @Nullable T> values) {
+	public static <T> @UnknownNullability T getRandom(Collection<? extends @Nullable T> values) {
 		if (values.isEmpty()) return null;
 
 		int index = RANDOM.nextInt(values.size());

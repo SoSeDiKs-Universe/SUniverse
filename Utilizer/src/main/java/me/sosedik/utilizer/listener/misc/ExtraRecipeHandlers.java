@@ -9,7 +9,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,6 +18,7 @@ import java.util.function.Consumer;
 /**
  * Extra handlers for crafting recipes
  */
+@NullMarked
 public class ExtraRecipeHandlers implements Listener {
 
 	private static final Map<NamespacedKey, Consumer<ItemCraftPrepareEvent>> PRE_EXTRA = new HashMap<>();
@@ -25,14 +26,14 @@ public class ExtraRecipeHandlers implements Listener {
 	private static final Map<NamespacedKey, Consumer<RemainingItemEvent>> REMAINS = new HashMap<>();
 
 	@EventHandler(priority = EventPriority.HIGH)
-	public void onPreCraft(@NotNull PrepareItemCraftEvent event) {
+	public void onPreCraft(PrepareItemCraftEvent event) {
 		if (!(event.getRecipe() instanceof Keyed keyed)) return;
 
 		new ItemCraftPrepareEvent(event, keyed.getKey()).callEvent();
 	}
 
 	@EventHandler
-	public void onPreCraft(@NotNull ItemCraftPrepareEvent event) {
+	public void onPreCraft(ItemCraftPrepareEvent event) {
 		Consumer<ItemCraftPrepareEvent> extra = PRE_EXTRA.get(event.getKey());
 		if (extra == null) return;
 
@@ -40,7 +41,7 @@ public class ExtraRecipeHandlers implements Listener {
 	}
 
 	@EventHandler
-	public void onCraft(@NotNull ItemCraftEvent event) {
+	public void onCraft(ItemCraftEvent event) {
 		Consumer<ItemCraftEvent> extra = EXTRA.get(event.getKey());
 		if (extra == null) return;
 
@@ -48,7 +49,7 @@ public class ExtraRecipeHandlers implements Listener {
 	}
 
 	@EventHandler
-	public void onCraft(@NotNull RemainingItemEvent event) {
+	public void onCraft(RemainingItemEvent event) {
 		Consumer<RemainingItemEvent> extra = REMAINS.get(event.getKey());
 		if (extra == null) return;
 
@@ -61,7 +62,7 @@ public class ExtraRecipeHandlers implements Listener {
 	 * @param key recipe key
 	 * @param check check
 	 */
-	public static void addPreCraftCheck(@NotNull NamespacedKey key, @NotNull Consumer<@NotNull ItemCraftPrepareEvent> check) {
+	public static void addPreCraftCheck(NamespacedKey key, Consumer<ItemCraftPrepareEvent> check) {
 		PRE_EXTRA.put(key, check);
 	}
 
@@ -71,7 +72,7 @@ public class ExtraRecipeHandlers implements Listener {
 	 * @param key recipe key
 	 * @param check check
 	 */
-	public static void addLeftoverCheck(@NotNull NamespacedKey key, @NotNull Consumer<@NotNull RemainingItemEvent> check) {
+	public static void addLeftoverCheck(NamespacedKey key, Consumer<RemainingItemEvent> check) {
 		REMAINS.put(key, check);
 	}
 
@@ -81,7 +82,7 @@ public class ExtraRecipeHandlers implements Listener {
 	 * @param key recipe key
 	 * @param check check
 	 */
-	public static void addExtraCheck(@NotNull NamespacedKey key, @NotNull Consumer<@NotNull ItemCraftEvent> check) {
+	public static void addExtraCheck(NamespacedKey key, Consumer<ItemCraftEvent> check) {
 		EXTRA.put(key, check);
 	}
 

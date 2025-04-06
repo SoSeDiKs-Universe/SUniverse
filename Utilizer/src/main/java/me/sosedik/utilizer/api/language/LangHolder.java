@@ -5,24 +5,25 @@ import me.sosedik.utilizer.api.storage.player.PlayerDataStorage;
 import me.sosedik.utilizer.listener.player.PlayerLanguageLoadSave;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.UUID;
 
+@NullMarked
 public final class LangHolder {
 
 	private final UUID uuid;
 	private LangOptions langOptions;
 	private @Nullable TranslationLanguage translationLanguage;
 
-	public LangHolder(@NotNull UUID uuid, @NotNull LangOptions langOptions, @Nullable TranslationLanguage translationLanguage) {
+	public LangHolder(UUID uuid, LangOptions langOptions, @Nullable TranslationLanguage translationLanguage) {
 		this.uuid = uuid;
 		this.langOptions = langOptions;
 		this.translationLanguage = translationLanguage;
 	}
 
-	public @NotNull UUID getUUID() {
+	public UUID getUUID() {
 		return this.uuid;
 	}
 
@@ -30,7 +31,7 @@ public final class LangHolder {
 		return Bukkit.getPlayer(getUUID());
 	}
 
-	public @NotNull LangOptions getLangOptions() {
+	public LangOptions getLangOptions() {
 		Player player = getPlayer();
 		if (player == null) return this.langOptions;
 
@@ -38,7 +39,7 @@ public final class LangHolder {
 		return clientLang == null ? this.langOptions : clientLang;
 	}
 
-	public @NotNull TranslationLanguage getTranslationLanguage() {
+	public TranslationLanguage getTranslationLanguage() {
 		if (this.translationLanguage != null) return this.translationLanguage;
 
 		return LangOptionsStorage.getTranslatorLanguage(getLangOptions().minecraftId());
@@ -49,7 +50,7 @@ public final class LangHolder {
 	 *
 	 * @param langOptions new server language
 	 */
-	public void setLangOptions(@NotNull LangOptions langOptions) {
+	public void setLangOptions(LangOptions langOptions) {
 		Player player = getPlayer();
 		if (player == null) return;
 
@@ -63,16 +64,16 @@ public final class LangHolder {
 	 *
 	 * @param translationLanguage translation language
 	 */
-	public void setTranslationLanguage(@NotNull TranslationLanguage translationLanguage) {
+	public void setTranslationLanguage(TranslationLanguage translationLanguage) {
 		this.translationLanguage = translationLanguage;
 		PlayerDataStorage.getData(getUUID()).setString("translation_language", translationLanguage.id());
 	}
 
-	public static @NotNull LangHolder langHolder(@NotNull Player player) {
+	public static LangHolder langHolder(Player player) {
 		return langHolder(player.getUniqueId());
 	}
 
-	public static @NotNull LangHolder langHolder(@NotNull UUID uuid) {
+	public static LangHolder langHolder(UUID uuid) {
 		return PlayerLanguageLoadSave.getLangHolder(uuid);
 	}
 

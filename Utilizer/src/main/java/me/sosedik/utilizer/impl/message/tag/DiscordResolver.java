@@ -8,17 +8,18 @@ import net.kyori.adventure.text.minimessage.Context;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.ArgumentQueue;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
-public record DiscordResolver(@NotNull Messenger messenger) implements TagResolver {
+@NullMarked
+public record DiscordResolver(Messenger messenger) implements TagResolver {
 
 	private static final String DISCORD_URL = Objects.requireNonNull(Utilizer.instance().getConfig().getString("discord", "discord.com"));
 
 	@Override
-	public @Nullable Tag resolve(@NotNull String name, @NotNull ArgumentQueue args, @NotNull Context ctx) {
+	public @Nullable Tag resolve(String name, ArgumentQueue args, Context ctx) {
 		if (!has(name)) return null;
 
 		if ("ds".equals(name))
@@ -29,7 +30,7 @@ public record DiscordResolver(@NotNull Messenger messenger) implements TagResolv
 	}
 
 	@Override
-	public boolean has(@NotNull String name) {
+	public boolean has(String name) {
 		return name.equals("discord") || name.equals("ds");
 	}
 
@@ -38,7 +39,7 @@ public record DiscordResolver(@NotNull Messenger messenger) implements TagResolv
 	 *
 	 * @return Discord tag
 	 */
-	public static @NotNull String discordTag() {
+	public static String discordTag() {
 		return "<discord>";
 	}
 
@@ -47,7 +48,7 @@ public record DiscordResolver(@NotNull Messenger messenger) implements TagResolv
 	 *
 	 * @return Discord tag
 	 */
-	public static @NotNull String dsTag() {
+	public static String dsTag() {
 		return "<ds>";
 	}
 

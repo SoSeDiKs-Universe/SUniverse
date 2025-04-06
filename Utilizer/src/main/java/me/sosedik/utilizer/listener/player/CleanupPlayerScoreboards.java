@@ -8,15 +8,16 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scoreboard.Team;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Remove scoreboard entries of offline players
  */
+@NullMarked
 public class CleanupPlayerScoreboards implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR)
-	public void onQuit(@NotNull PlayerQuitEvent event) {
+	public void onQuit(PlayerQuitEvent event) {
 		Player player = event.getPlayer();
 		Bukkit.getOnlinePlayers().forEach(onlinePlayer -> {
 			if (onlinePlayer == player) return;

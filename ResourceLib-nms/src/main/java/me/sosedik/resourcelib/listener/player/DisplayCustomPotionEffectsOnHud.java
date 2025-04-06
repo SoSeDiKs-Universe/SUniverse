@@ -20,8 +20,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -38,6 +38,7 @@ import static me.sosedik.utilizer.api.message.Mini.raw;
 /**
  * Fakes custom effects displays
  */
+@NullMarked
 public class DisplayCustomPotionEffectsOnHud implements Listener {
 
 	private static final FontData BACKGROUND_BENEFICIAL;
@@ -77,13 +78,13 @@ public class DisplayCustomPotionEffectsOnHud implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.LOW)
-	public void onJoin(@NotNull PlayerJoinEvent event) {
+	public void onJoin(PlayerJoinEvent event) {
 		Player player = event.getPlayer();
 		HudMessenger.of(player).addHudElement(HUD_RENDERER_KEY, () -> getPotionEffectsHud(player));
 		TabRenderer.of(player).addHeaderElement(HUD_RENDERER_KEY, () -> getPotionEffectsTab(player));
 	}
 
-	private @Nullable Component getPotionEffectsHud(@NotNull Player player) {
+	private @Nullable Component getPotionEffectsHud(Player player) {
 		PotionEffectData effectData = getEffectsData(player);
 		if (effectData == null) return null;
 
@@ -107,7 +108,7 @@ public class DisplayCustomPotionEffectsOnHud implements Listener {
 		).color(SpacingUtil.TOP_RIGHT_CORNER_HUD).shadowColor(ShadowColor.none());
 	}
 
-	private @Nullable List<@NotNull Component> getPotionEffectsTab(@NotNull Player player) {
+	private @Nullable List<Component> getPotionEffectsTab(Player player) {
 		PotionEffectData effectData = getEffectsData(player);
 		if (effectData == null) return null;
 
@@ -138,7 +139,7 @@ public class DisplayCustomPotionEffectsOnHud implements Listener {
 		return visuals;
 	}
 
-	private @Nullable PotionEffectData getEffectsData(@NotNull Player player) {
+	private @Nullable PotionEffectData getEffectsData(Player player) {
 		List<PotionEffect> customEffects = new ArrayList<>();
 		int vanillaBeneficial = 0;
 		int vanillaHarmful = 0;
@@ -157,20 +158,20 @@ public class DisplayCustomPotionEffectsOnHud implements Listener {
 	}
 
 	private record PotionEffectData(
-		@NotNull List<@NotNull PotionEffect> customEffects,
+		List<PotionEffect> customEffects,
 		int vanillaBeneficial,
 		int vanillaHarmful
 	) {}
 
-	private static @Nullable Component getBigIcon(@NotNull PotionEffectType effectType) {
+	private static @Nullable Component getBigIcon(PotionEffectType effectType) {
 		return BIG_ICONS.get(effectType.getKey());
 	}
 
-	public static @NotNull Component getSmallIcon(@NotNull PotionEffectType effectType) {
+	public static Component getSmallIcon(PotionEffectType effectType) {
 		return SMALL_ICONS.get(effectType.getKey());
 	}
 
-	private static @NotNull Component getTabDisplay(@NotNull Audience viewer, @NotNull PotionEffect effect, int spacing) {
+	private static Component getTabDisplay(Audience viewer, PotionEffect effect, int spacing) {
 		var messenger = Messenger.messenger(viewer);
 		String durationDisplay;
 		int duration = effect.getDuration();
@@ -193,18 +194,18 @@ public class DisplayCustomPotionEffectsOnHud implements Listener {
 		);
 	}
 
-	public static @NotNull Component getName(@NotNull Audience viewer, @NotNull PotionEffect effect) {
+	public static Component getName(Audience viewer, PotionEffect effect) {
 		int amplifier = effect.getAmplifier();
 		if (amplifier == 0)
 			return Messenger.messenger(viewer).getMessage(getTranslationKey(effect.getType()));
 		return combine(Component.space(), Messenger.messenger(viewer).getMessage(getTranslationKey(effect.getType())), Component.text(RomanNumerals.toRoman(amplifier)));
 	}
 
-	public static @NotNull Component getIconAndName(@NotNull Audience viewer, @NotNull PotionEffect effect) {
+	public static Component getIconAndName(Audience viewer, PotionEffect effect) {
 		return combine(Component.space(), getSmallIcon(effect.getType()), getName(viewer, effect));
 	}
 
-	private static @NotNull String getTranslationKey(@NotNull PotionEffectType effectType) {
+	private static String getTranslationKey(PotionEffectType effectType) {
 		NamespacedKey effectId = effectType.getKey();
 		return "effect." + effectId.getNamespace() + "." + effectId.getKey() + ".name";
 	}

@@ -2,7 +2,7 @@ package me.sosedik.utilizer.listener.misc;
 
 import me.sosedik.utilizer.api.event.recipe.ItemCraftEvent;
 import me.sosedik.utilizer.api.event.recipe.RemainingItemEvent;
-import me.sosedik.utilizer.util.Durability;
+import me.sosedik.utilizer.util.DurabilityUtil;
 import me.sosedik.utilizer.util.InventoryUtil;
 import org.bukkit.Keyed;
 import org.bukkit.Material;
@@ -17,8 +17,9 @@ import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,6 +29,7 @@ import java.util.function.BiPredicate;
  * Custom recipe handlers and leftovers.
  * Accounts for durability when calculating the craftable amount of the item.
  */
+@NullMarked
 public class CustomRecipeLeftovers implements Listener {
 
 	private static final Map<NamespacedKey, @Nullable BiPredicate<RemainingItemEvent, ItemStack>> LEFTOVER_EXEMPTS = new HashMap<>();
@@ -38,7 +40,7 @@ public class CustomRecipeLeftovers implements Listener {
 	// empty with the result to be set to the player's cursor, but due to
 	// the fake event vanilla does not process it
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	public void onCraft(@NotNull CraftItemEvent event) {
+	public void onCraft(CraftItemEvent event) {
 		if (!(event.getRecipe() instanceof Keyed keyed)) return;
 		if (!(event.getWhoClicked() instanceof Player player)) return;
 
@@ -112,10 +114,10 @@ public class CustomRecipeLeftovers implements Listener {
 		}
 	}
 
-	private void updateMatrix(@NotNull CraftItemEvent event, @NotNull NamespacedKey key, @NotNull Player player, int amount) {
+	private void updateMatrix(CraftItemEvent event, NamespacedKey key, Player player, int amount) {
 		CraftingInventory inv = event.getInventory();
-		@Nullable BiPredicate<RemainingItemEvent, ItemStack> exemptCheck = LEFTOVER_EXEMPTS.get(key);
-		ItemStack[] matrix = inv.getMatrix();
+		BiPredicate<RemainingItemEvent, ItemStack> exemptCheck = LEFTOVER_EXEMPTS.get(key);
+		@UnknownNullability ItemStack[] matrix = inv.getMatrix();
 		for (int i = 0; i < matrix.length; i++) {
 			if (ItemStack.isEmpty(matrix[i])) continue;
 
@@ -152,14 +154,14 @@ public class CustomRecipeLeftovers implements Listener {
 		inv.setMatrix(matrix);
 	}
 
-	private @Nullable ItemStack generateResult(@NotNull CraftItemEvent parentEvent, @NotNull Keyed recipe) {
+	private @Nullable ItemStack generateResult(CraftItemEvent parentEvent, Keyed recipe) {
 		var event = new ItemCraftEvent(parentEvent, recipe.getKey());
 		event.callEvent();
 		ItemStack result = event.getResult();
 		return result == null ? null : result.clone();
 	}
 
-	private int getCraftableAmount(@NotNull CraftingInventory inv, @NotNull NamespacedKey recipeKey) {
+	private int getCraftableAmount(CraftingInventory inv, NamespacedKey recipeKey) {
 		if (LEFTOVER_EXEMPTS.containsKey(recipeKey)) return 1;
 
 		int amount = 64;
@@ -167,14 +169,14 @@ public class CustomRecipeLeftovers implements Listener {
 		for (ItemStack stack : inv.getMatrix()) {
 			if (ItemStack.isEmpty(stack)) continue;
 
-			int craftable = Durability.hasDurability(stack) ? Durability.getDurability(stack) : stack.getAmount();
+			int craftable = DurabilityUtil.hasDurability(stack) ? DurabilityUtil.getDurability(stack) : stack.getAmount();
 			amount = Math.min(amount, craftable);
 		}
 
 		return amount == -1 ? 1 : amount;
 	}
 
-	private int getReceptiveAmount(@NotNull PlayerInventory inv, @NotNull ItemStack item) {
+	private int getReceptiveAmount(PlayerInventory inv, ItemStack item) {
 		int amount = 0;
 
 		for (int slot = 0; slot < 36; slot++) {
@@ -196,7 +198,7 @@ public class CustomRecipeLeftovers implements Listener {
 	 * @param key recipe key
 	 * @param check checks whether the item should be exempt from leaving a leftover
 	 */
-	public static void addExemptRule(@NotNull NamespacedKey key, @Nullable BiPredicate<RemainingItemEvent, ItemStack> check) {
+	public static void addExemptRule(NamespacedKey key, @Nullable BiPredicate<RemainingItemEvent, ItemStack> check) {
 		LEFTOVER_EXEMPTS.computeIfAbsent(key, k -> check == null ? (event, item) -> true : check);
 	}
 

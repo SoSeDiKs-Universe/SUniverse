@@ -30,7 +30,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.util.Vector;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Collection;
 import java.util.List;
@@ -38,6 +38,7 @@ import java.util.List;
 /**
  * Opening or closing a chest throws entities on it
  */
+@NullMarked
 public class ChestThrowsEntities implements Listener {
 
 	/**
@@ -50,7 +51,7 @@ public class ChestThrowsEntities implements Listener {
 	public static final DamageType CHEST_CRUSH = RegistryAccess.registryAccess().getRegistry(RegistryKey.DAMAGE_TYPE).getOrThrow(MiscMe.miscmeKey("chest_crush"));
 
 	@EventHandler(priority = EventPriority.HIGH)
-	public void onClose(@NotNull InventoryCloseEvent event) {
+	public void onClose(InventoryCloseEvent event) {
 		if (!(event.getPlayer() instanceof Player player)) return;
 
 		List<HumanEntity> viewers = event.getViewers();
@@ -78,12 +79,12 @@ public class ChestThrowsEntities implements Listener {
 		});
 	}
 
-	private boolean isChest(@NotNull TileState tileState) {
+	private boolean isChest(TileState tileState) {
 		return tileState instanceof org.bukkit.block.Chest || tileState instanceof EnderChest;
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-	public void onOpen(@NotNull PlayerInteractEvent event) {
+	public void onOpen(PlayerInteractEvent event) {
 		if (event.getHand() != EquipmentSlot.HAND) return;
 		if (event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
 
@@ -132,7 +133,7 @@ public class ChestThrowsEntities implements Listener {
 		});
 	}
 
-	private boolean hasCat(@NotNull Collection<LivingEntity> entities) {
+	private boolean hasCat(Collection<LivingEntity> entities) {
 		for (LivingEntity entity : entities) {
 			if (entity.getType() == EntityType.CAT)
 				return true;
@@ -140,7 +141,7 @@ public class ChestThrowsEntities implements Listener {
 		return false;
 	}
 
-	private boolean isChest(@NotNull Material type) {
+	private boolean isChest(Material type) {
 		return type == Material.CHEST
 				|| type == Material.TRAPPED_CHEST
 				|| type == Material.ENDER_CHEST;

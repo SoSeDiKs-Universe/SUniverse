@@ -8,14 +8,15 @@ import me.sosedik.requiem.effect.AttritionEffect;
 import me.sosedik.requiem.effect.ParasitesEffect;
 import me.sosedik.resourcelib.ResourceLibBootstrap;
 import me.sosedik.resourcelib.util.ItemCreator;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.function.Function;
 
+@NullMarked
 public class RequiemBootstrap implements PluginBootstrap {
 
 	@Override
-	public void bootstrap(@NotNull BootstrapContext context) {
+	public void bootstrap(BootstrapContext context) {
 		Function<String, KiterinoMobEffectBehaviourWrapper> effectsProvider = key -> switch (key.substring("requiem:".length())) {
 			case "parasites" -> new ParasitesEffect();
 			case "attrition" -> new AttritionEffect();

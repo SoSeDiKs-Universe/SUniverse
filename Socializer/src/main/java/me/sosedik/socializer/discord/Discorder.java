@@ -4,8 +4,8 @@ import me.sosedik.socializer.Socializer;
 import me.sosedik.socializer.util.DiscordUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+@NullMarked
 public class Discorder {
 
 	private static final Map<UUID, Discorder> DISCORDERS = new ConcurrentHashMap<>();
@@ -21,7 +22,7 @@ public class Discorder {
 	private final UUID uuid;
 	private long discordId;
 
-	public Discorder(@NotNull Player player) {
+	public Discorder(Player player) {
 		this.uuid = player.getUniqueId();
 		this.discordId = -1L;
 		Socializer.scheduler().async(this::load);
@@ -32,7 +33,7 @@ public class Discorder {
 	 *
 	 * @return the player's uuid
 	 */
-	public @NotNull UUID getUUID() {
+	public UUID getUUID() {
 		return uuid;
 	}
 
@@ -88,7 +89,7 @@ public class Discorder {
 	 * @param newDiscordId new Discord user id
 	 * @param uuid player's in-game uuid
 	 */
-	public static void save(long oldDiscordId, long newDiscordId, @NotNull String uuid) {
+	public static void save(long oldDiscordId, long newDiscordId, String uuid) {
 		String updateSql;
 		if (newDiscordId <= 0L) {
 			if (uuid.isEmpty()) {
@@ -113,7 +114,7 @@ public class Discorder {
 	 * @param player player
 	 * @return Discorder
 	 */
-	public static @NotNull Discorder getDiscorder(@NotNull Player player) {
+	public static Discorder getDiscorder(Player player) {
 		return DISCORDERS.computeIfAbsent(player.getUniqueId(), k -> new Discorder(player));
 	}
 
@@ -136,7 +137,7 @@ public class Discorder {
 	 *
 	 * @param player player
 	 */
-	public static @Nullable Discorder removePlayer(@NotNull Player player) {
+	public static @Nullable Discorder removePlayer(Player player) {
 		return DISCORDERS.remove(player.getUniqueId());
 	}
 

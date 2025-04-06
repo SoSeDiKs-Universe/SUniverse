@@ -32,10 +32,11 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.incendo.cloud.bukkit.internal.BukkitBrigadierMapper;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.io.File;
 
+@NullMarked
 public final class TrappedNewbie extends JavaPlugin {
 
 	public static final String NAMESPACE = "trapped_newbie";
@@ -132,7 +133,7 @@ public final class TrappedNewbie extends JavaPlugin {
 	 *
 	 * @return the plugin instance
 	 */
-	public static @NotNull TrappedNewbie instance() {
+	public static TrappedNewbie instance() {
 		return TrappedNewbie.instance;
 	}
 
@@ -141,7 +142,7 @@ public final class TrappedNewbie extends JavaPlugin {
 	 *
 	 * @return the plugin's task scheduler
 	 */
-	public static @NotNull Scheduler scheduler() {
+	public static Scheduler scheduler() {
 		return instance().scheduler;
 	}
 
@@ -150,7 +151,7 @@ public final class TrappedNewbie extends JavaPlugin {
 	 *
 	 * @return the plugin's component logger
 	 */
-	public static @NotNull ComponentLogger logger() {
+	public static ComponentLogger logger() {
 		return instance().getComponentLogger();
 	}
 
@@ -160,7 +161,7 @@ public final class TrappedNewbie extends JavaPlugin {
 	 * @param value value
 	 * @return namespaced key
 	 */
-	public static @NotNull NamespacedKey trappedNewbieKey(@NotNull String value) {
+	public static NamespacedKey trappedNewbieKey(String value) {
 		return new NamespacedKey(NAMESPACE, value);
 	}
 

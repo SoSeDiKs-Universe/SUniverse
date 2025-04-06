@@ -9,8 +9,8 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import static me.sosedik.utilizer.api.message.Mini.buildMini;
 import static me.sosedik.utilizer.api.message.Mini.combine;
@@ -20,25 +20,26 @@ import static net.kyori.adventure.text.Component.newline;
 /**
  * Wrapper for getting translated messages
  */
+@NullMarked
 public class Messenger {
 
 	private final @Nullable Audience audience;
 	private final @Nullable LangOptions langOptions;
 	private final MiniMessage miniMessage;
 
-	private Messenger(@NotNull LangOptions langOptions) {
+	private Messenger(LangOptions langOptions) {
 		this.audience = null;
 		this.langOptions = langOptions;
 		this.miniMessage = buildMini(this);
 	}
 
-	private Messenger(@NotNull Audience audience) {
+	private Messenger(Audience audience) {
 		this.audience = audience;
 		this.langOptions = null;
 		this.miniMessage = buildMini(this);
 	}
 
-	private Messenger(@NotNull Audience audience, @NotNull TagResolver standardTagResolver) {
+	private Messenger(Audience audience, TagResolver standardTagResolver) {
 		this.audience = audience;
 		this.langOptions = null;
 		this.miniMessage = buildMini(this, standardTagResolver);
@@ -58,7 +59,7 @@ public class Messenger {
 	 *
 	 * @return language
 	 */
-	public @NotNull LangOptions getLangOptions() {
+	public LangOptions getLangOptions() {
 		if (this.langOptions != null) return this.langOptions;
 		return this.audience instanceof Player player ? LangHolder.langHolder(player).getLangOptions() : LangOptionsStorage.getDefaultLangOptions();
 	}
@@ -68,7 +69,7 @@ public class Messenger {
 	 *
 	 * @return MiniMessage instance
 	 */
-	public @NotNull MiniMessage miniMessage() {
+	public MiniMessage miniMessage() {
 		return this.miniMessage;
 	}
 
@@ -79,7 +80,7 @@ public class Messenger {
 	 * @param messagePath path for message
 	 * @return row message
 	 */
-	public @NotNull String @NotNull [] getRawMessage(@NotNull String messagePath) {
+	public String [] getRawMessage(String messagePath) {
 		return TranslationHolder.translationHolder().getMessage(getLangOptions(), messagePath);
 	}
 
@@ -90,7 +91,7 @@ public class Messenger {
 	 * @param messagePath path for message
 	 * @return row message
 	 */
-	public @NotNull String @Nullable [] getRawMessageIfExists(@NotNull String messagePath) {
+	public String @Nullable [] getRawMessageIfExists(String messagePath) {
 		return TranslationHolder.translationHolder().getMessage(getLangOptions(), messagePath, false);
 	}
 
@@ -100,7 +101,7 @@ public class Messenger {
 	 * @param messagePath path for message
 	 * @return parsed message
 	 */
-	public @NotNull Component @NotNull [] getMessages(@NotNull String messagePath) {
+	public Component [] getMessages(String messagePath) {
 		String[] minis = getRawMessage(messagePath);
 		if (minis.length == 1) return new Component[]{mini(this.miniMessage, minis[0])};
 
@@ -116,7 +117,7 @@ public class Messenger {
 	 * @param messagePath path for message
 	 * @return parsed message
 	 */
-	public @Nullable Component getMessageIfExists(@NotNull String messagePath) {
+	public @Nullable Component getMessageIfExists(String messagePath) {
 		Component[] messages = getMessagesIfExists(messagePath);
 		return messages == null ? null : combine(newline(), messages);
 	}
@@ -127,7 +128,7 @@ public class Messenger {
 	 * @param messagePath path for message
 	 * @return parsed message
 	 */
-	public @NotNull Component @Nullable [] getMessagesIfExists(@NotNull String messagePath) {
+	public Component @Nullable [] getMessagesIfExists(String messagePath) {
 		String[] minis = getRawMessageIfExists(messagePath);
 		if (minis == null) return null;
 		if (minis.length == 1) return new Component[]{mini(this.miniMessage, minis[0])};
@@ -145,7 +146,7 @@ public class Messenger {
 	 * @param resolvers   message tag resolvers
 	 * @return parsed message
 	 */
-	public @NotNull Component @NotNull [] getMessages(@NotNull String messagePath, @NotNull TagResolver @NotNull ... resolvers) {
+	public Component [] getMessages(String messagePath, TagResolver ... resolvers) {
 		String[] minis = getRawMessage(messagePath);
 		if (minis.length == 1) return new Component[]{mini(this.miniMessage, minis[0], resolvers)};
 
@@ -161,7 +162,7 @@ public class Messenger {
 	 * @param messagePath path for message
 	 * @return parsed message
 	 */
-	public @NotNull Component getMessage(@NotNull String messagePath) {
+	public Component getMessage(String messagePath) {
 		return combine(newline(), getMessages(messagePath));
 	}
 
@@ -172,7 +173,7 @@ public class Messenger {
 	 * @param resolvers   message tag resolvers
 	 * @return parsed message
 	 */
-	public @NotNull Component getMessage(@NotNull String messagePath, @NotNull TagResolver @NotNull ... resolvers) {
+	public Component getMessage(String messagePath, TagResolver ... resolvers) {
 		return combine(newline(), getMessages(messagePath, resolvers));
 	}
 
@@ -181,7 +182,7 @@ public class Messenger {
 	 *
 	 * @param messagePath path for message
 	 */
-	public void sendMessage(@NotNull String messagePath) {
+	public void sendMessage(String messagePath) {
 		if (this.audience == null) return;
 		this.audience.sendMessage(getMessage(messagePath));
 	}
@@ -191,7 +192,7 @@ public class Messenger {
 	 *
 	 * @param messagePath path for message
 	 */
-	public void sendMessage(@NotNull String messagePath, @NotNull TagResolver... tags) {
+	public void sendMessage(String messagePath, TagResolver... tags) {
 		if (this.audience == null) return;
 		this.audience.sendMessage(getMessage(messagePath, tags));
 	}
@@ -201,7 +202,7 @@ public class Messenger {
 	 *
 	 * @param messagePath path for message
 	 */
-	public void sendActionBar(@NotNull String messagePath) {
+	public void sendActionBar(String messagePath) {
 		if (this.audience == null) return;
 		this.audience.sendActionBar(getMessage(messagePath));
 	}
@@ -211,7 +212,7 @@ public class Messenger {
 	 *
 	 * @param messagePath path for message
 	 */
-	public void sendActionBar(@NotNull String messagePath, @NotNull TagResolver... tags) {
+	public void sendActionBar(String messagePath, TagResolver... tags) {
 		if (this.audience == null) return;
 		this.audience.sendActionBar(getMessage(messagePath, tags));
 	}
@@ -222,7 +223,7 @@ public class Messenger {
 	 * @param langOptions language options
 	 * @return messenger wrapper
 	 */
-	public static @NotNull Messenger messenger(@NotNull LangOptions langOptions) {
+	public static Messenger messenger(LangOptions langOptions) {
 		return new Messenger(langOptions);
 	}
 
@@ -232,7 +233,7 @@ public class Messenger {
 	 * @param audience messages viewer
 	 * @return messenger wrapper
 	 */
-	public static @NotNull Messenger messenger(@NotNull Audience audience) {
+	public static Messenger messenger(Audience audience) {
 		return new Messenger(audience);
 	}
 
@@ -243,7 +244,7 @@ public class Messenger {
 	 * @param standardResolver standard tag resolver
 	 * @return messenger wrapper
 	 */
-	public static @NotNull Messenger messenger(@NotNull Audience audience, @NotNull TagResolver standardResolver) {
+	public static Messenger messenger(Audience audience, TagResolver standardResolver) {
 		return new Messenger(audience, standardResolver);
 	}
 

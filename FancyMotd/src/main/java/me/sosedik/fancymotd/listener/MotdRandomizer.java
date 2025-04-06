@@ -13,7 +13,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.util.CachedServerIcon;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
 import java.util.UUID;
@@ -25,13 +25,14 @@ import static me.sosedik.utilizer.api.message.Mini.raw;
 /**
  * Custom motd messages
  */
+@NullMarked
 public class MotdRandomizer implements Listener {
 
 	private static final String SPACER = LegacyComponentSerializer.legacySection().serialize(Component.text("..", NamedTextColor.BLACK));
 	private static final String VERSION = " [" + Bukkit.getMinecraftVersion() + "]";
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	public void onPing(@NotNull PaperServerListPingEvent event) {
+	public void onPing(PaperServerListPingEvent event) {
 		// Change version requirement if whitelist
 		boolean whitelist = Bukkit.hasWhitelist();
 		if (whitelist) event.setProtocolVersion(Integer.MAX_VALUE);
@@ -104,11 +105,11 @@ public class MotdRandomizer implements Listener {
 
 	// Player names in motd do not support modern colors, using legacy hack
 	@SuppressWarnings("deprecation")
-	private @NotNull String getColoredSpace(@NotNull String line) {
+	private String getColoredSpace(String line) {
 		return SPACER + ChatColor.RESET + ChatColor.getLastColors(line);
 	}
 
-	private @NotNull Component getTime(@NotNull Pinger pinger, @NotNull Messenger messenger) {
+	private Component getTime(Pinger pinger, Messenger messenger) {
 		if (!pinger.hasClock()) return Component.empty();
 		int h = (int) (Bukkit.getWorlds().getFirst().getTime() / 1000) + 6;
 		if (h > 23)

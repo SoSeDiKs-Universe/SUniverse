@@ -21,8 +21,8 @@ import org.bukkit.block.sign.Side;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +34,7 @@ import static me.sosedik.utilizer.api.message.Mini.combined;
  * Signs show stored text in lore
  */
 // MCCheck: 1.21.4, item block entity tag
+@NullMarked
 public class SignsShowTextInLoreModifier extends ItemModifier {
 
 	private static final String BLOCK_ENTITY_TAG = "minecraft:block_entity_data";
@@ -41,12 +42,12 @@ public class SignsShowTextInLoreModifier extends ItemModifier {
 	private static final String BACK_TEXT_TAG = "back_text";
 	private static final Component PARENT_LORE = Component.empty().color(NamedTextColor.WHITE).decoration(TextDecoration.ITALIC, false);
 
-	public SignsShowTextInLoreModifier(@NotNull NamespacedKey modifierId) {
+	public SignsShowTextInLoreModifier(NamespacedKey modifierId) {
 		super(modifierId);
 	}
 
 	@Override
-	public @NotNull ModificationResult modify(@NotNull ItemContextBox contextBox) {
+	public ModificationResult modify(ItemContextBox contextBox) {
 		if (!contextBox.getContextType().hasVisibleLore()) return ModificationResult.PASS;
 
 		ItemStack item = contextBox.getItem();
@@ -96,7 +97,7 @@ public class SignsShowTextInLoreModifier extends ItemModifier {
 		return ModificationResult.OK;
 	}
 
-	private boolean addLines(@Nullable Player player, @NotNull List<Component> lines, @NotNull List<Component> lore) {
+	private boolean addLines(@Nullable Player player, List<Component> lines, List<Component> lore) {
 		MiniMessage miniMessage = player == null ? Mini.buildMini() : Messenger.messenger(player).miniMessage();
 		boolean hasLines = false;
 		List<Component> loreLines = new ArrayList<>();

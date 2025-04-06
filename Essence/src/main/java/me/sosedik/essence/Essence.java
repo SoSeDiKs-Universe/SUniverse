@@ -13,8 +13,9 @@ import me.sosedik.utilizer.api.language.TranslationHolder;
 import me.sosedik.utilizer.util.Scheduler;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public final class Essence extends JavaPlugin {
 
 	private static Essence instance;
@@ -52,7 +53,7 @@ public final class Essence extends JavaPlugin {
 	 *
 	 * @return the plugin instance
 	 */
-	public static @NotNull Essence instance() {
+	public static Essence instance() {
 		return Essence.instance;
 	}
 
@@ -61,7 +62,7 @@ public final class Essence extends JavaPlugin {
 	 *
 	 * @return the plugin's task scheduler
 	 */
-	public static @NotNull Scheduler scheduler() {
+	public static Scheduler scheduler() {
 		return instance().scheduler;
 	}
 
@@ -70,7 +71,7 @@ public final class Essence extends JavaPlugin {
 	 *
 	 * @return the plugin's component logger
 	 */
-	public static @NotNull ComponentLogger logger() {
+	public static ComponentLogger logger() {
 		return instance().getComponentLogger();
 	}
 

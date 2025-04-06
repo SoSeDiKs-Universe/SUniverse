@@ -11,19 +11,20 @@ import net.kyori.adventure.text.minimessage.Context;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.ArgumentQueue;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import static me.sosedik.uglychatter.UglyChatter.uglyChatterKey;
 import static me.sosedik.utilizer.api.message.Mini.combine;
 import static net.kyori.adventure.text.Component.newline;
 
-public record ExecuteTag(@NotNull Messenger messenger) implements TagResolver {
+@NullMarked
+public record ExecuteTag(Messenger messenger) implements TagResolver {
 
 	public static final Component COMMAND_ICON = Mini.asIcon(ResourceLib.requireFontData(uglyChatterKey("command")).mapping());
 
 	@Override
-	public @Nullable Tag resolve(@NotNull String name, @NotNull ArgumentQueue arguments, @NotNull Context ctx) {
+	public @Nullable Tag resolve(String name, ArgumentQueue arguments, Context ctx) {
 		if (!has(name)) return null;
 		String command = arguments.popOr("Command tag requires command argument").value();
 		command = command.startsWith("/") ? command : "/" + command;
@@ -45,7 +46,7 @@ public record ExecuteTag(@NotNull Messenger messenger) implements TagResolver {
 	}
 
 	@Override
-	public boolean has(@NotNull String name) {
+	public boolean has(String name) {
 		return "cd".equals(name) || "command".equals(name) || "execute".equals(name);
 	}
 

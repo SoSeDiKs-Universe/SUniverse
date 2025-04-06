@@ -4,8 +4,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public class ScoreboardUtil {
 
 	private ScoreboardUtil() {
@@ -20,7 +21,7 @@ public class ScoreboardUtil {
 	 * @param player player
 	 * @return player's unique scoreboard
 	 */
-	public static synchronized @NotNull Scoreboard getScoreboard(@NotNull Player player) {
+	public static synchronized Scoreboard getScoreboard(Player player) {
 		Scoreboard scoreboard = player.getScoreboard();
 		if (scoreboard == Bukkit.getScoreboardManager().getMainScoreboard()) {
 			scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
@@ -35,7 +36,7 @@ public class ScoreboardUtil {
 	 * @param player player
 	 * @return player's unique scoreboard team
 	 */
-	public static synchronized @NotNull Team getPlayerTeam(@NotNull Player player) {
+	public static synchronized Team getPlayerTeam(Player player) {
 		Scoreboard scoreboard = getScoreboard(player);
 		Team team = scoreboard.getPlayerTeam(player);
 		if (team == null) {

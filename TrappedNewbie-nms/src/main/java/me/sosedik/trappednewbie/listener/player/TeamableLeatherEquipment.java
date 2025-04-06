@@ -13,15 +13,16 @@ import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Wearing the same leather chestplate or helmet will cancel the dealt damage
  */
+@NullMarked
 public class TeamableLeatherEquipment implements Listener {
 
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-	public void onDamage(@NotNull PrePlayerAttackEntityEvent event) {
+	public void onDamage(PrePlayerAttackEntityEvent event) {
 		if (!(event.getAttacked() instanceof Player damaged)) return;
 
 		Player damager = event.getPlayer();
@@ -33,7 +34,7 @@ public class TeamableLeatherEquipment implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-	public void onDamage(@NotNull ProjectileHitEvent event) {
+	public void onDamage(ProjectileHitEvent event) {
 		if (!(event.getHitEntity() instanceof Player damaged)) return;
 
 		Projectile projectile = event.getEntity();
@@ -45,7 +46,7 @@ public class TeamableLeatherEquipment implements Listener {
 		}
 	}
 
-	private boolean checkEquipment(@NotNull Player player1, @NotNull Player player2, @NotNull EquipmentSlot slot, @NotNull Material type) {
+	private boolean checkEquipment(Player player1, Player player2, EquipmentSlot slot, Material type) {
 		ItemStack item1 = getVisualItem(player1, slot);
 		if (item1.getType() != type) return false;
 
@@ -58,7 +59,7 @@ public class TeamableLeatherEquipment implements Listener {
 		return meta1.getColor().equals(meta2.getColor());
 	}
 
-	private @NotNull ItemStack getVisualItem(@NotNull Player player, @NotNull EquipmentSlot slot) {
+	private ItemStack getVisualItem(Player player, EquipmentSlot slot) {
 		var visualArmor = VisualArmor.of(player);
 		if (visualArmor.hasItem(slot)) return visualArmor.getItem(slot);
 

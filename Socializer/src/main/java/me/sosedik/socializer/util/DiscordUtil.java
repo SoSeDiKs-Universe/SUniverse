@@ -34,8 +34,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.awt.*;
 import java.io.IOException;
@@ -50,6 +50,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@NullMarked
 public class DiscordUtil {
 
 	private DiscordUtil() {
@@ -78,7 +79,7 @@ public class DiscordUtil {
 	private static Role staffRole;
 	private static Role ownerRole;
 
-	public static void setupUtils(@NotNull Socializer plugin) {
+	public static void setupUtils(Socializer plugin) {
 		ConfigurationSection config = plugin.getConfig().getConfigurationSection("discord");
 		assert config != null;
 
@@ -109,7 +110,7 @@ public class DiscordUtil {
 	 * @param message message
 	 * @return message with mentions
 	 */
-	public static @NotNull String parseMentions(@NotNull String message) {
+	public static String parseMentions(String message) {
 		List<String> mentions = null;
 		Matcher matcher = MENTION_PATTERN.matcher(message);
 		while (matcher.find()) {
@@ -129,7 +130,7 @@ public class DiscordUtil {
 	 * @param message message
 	 * @return found mentions
 	 */
-	public static @Nullable Map<String, Map.Entry<Component, String>> getMentions(@NotNull Component message) {
+	public static @Nullable Map<String, Map.Entry<Component, String>> getMentions(Component message) {
 		List<String> mentions = null;
 		Matcher matcher = MENTION_PATTERN.matcher(ChatUtil.getPlainText(message));
 		while (matcher.find()) {
@@ -140,7 +141,7 @@ public class DiscordUtil {
 	}
 
 	// <in_message, <name, mention>>
-	private static @NotNull Map<String, Map.Entry<Component, String>> getMentions(@NotNull List<String> mentions) {
+	private static Map<String, Map.Entry<Component, String>> getMentions(List<String> mentions) {
 		Map<String, Map.Entry<Component, String>> mentionMappings = new HashMap<>();
 
 		// Custom aliases
@@ -190,7 +191,7 @@ public class DiscordUtil {
 	 * @param message message
 	 * @return formatted message
 	 */
-	public static @NotNull String formatGameMessage(@NotNull Player sender, @NotNull String message) {
+	public static String formatGameMessage(Player sender, String message) {
 		return formatGameMessage(getEmote(sender), message);
 	}
 
@@ -201,11 +202,11 @@ public class DiscordUtil {
 	 * @param message message
 	 * @return formatted message
 	 */
-	public static @NotNull String formatGameMessage(@NotNull String emote, @NotNull String message) {
+	public static String formatGameMessage(String emote, String message) {
 		return emote + " " + LARGE_EMOJI_DISABLER + message;
 	}
 
-	private static @NotNull String getEmote(@NotNull Player sender) {
+	private static String getEmote(Player sender) {
 		if (sender.isUnderWater()) return UNDER_WATER_EMOTE;
 		if (!EntityUtil.canSee(sender)) return NIGHT_EMOTE;
 
@@ -223,7 +224,7 @@ public class DiscordUtil {
 	 * @param id Discord user id
 	 * @param nickname nickname
 	 */
-	public static void modifyNickname(long id, @NotNull String nickname) {
+	public static void modifyNickname(long id, String nickname) {
 		DiscordBot.getGuild().retrieveMemberById(id)
 			.queue(member -> modifyNickname(member, nickname),
 				error -> {
@@ -250,7 +251,7 @@ public class DiscordUtil {
 	 * @param member server member
 	 * @param nickname nickname
 	 */
-	public static void modifyNickname(@NotNull Member member, @Nullable String nickname) {
+	public static void modifyNickname(Member member, @Nullable String nickname) {
 		if (nickname != null) NoNicknameChange.whitelist(member.getIdLong(), nickname);
 		if (PermissionUtil.canInteract(Objects.requireNonNull(DiscordBot.getGuild().getMember(DiscordBot.getDiscordBot().getSelfUser())), member))
 			member.modifyNickname(nickname).queue();
@@ -318,7 +319,7 @@ public class DiscordUtil {
 	 *
 	 * @param description message
 	 */
-	public static synchronized void updateStatus(@NotNull String description) {
+	public static synchronized void updateStatus(String description) {
 		if (onlineMessage != null) onlineMessage.editMessageEmbeds(
 			new EmbedBuilder()
 				.setColor(8027237)
@@ -337,7 +338,7 @@ public class DiscordUtil {
 	 * @param uuid player's in-game uuid
 	 * @param nickname player's nickname
 	 */
-	public static void announceVerify(long id, @NotNull String uuid, @NotNull String nickname) {
+	public static void announceVerify(long id, String uuid, String nickname) {
 		DiscordBot.getGuild().retrieveMemberById(id).queue(member -> {
 			DiscordBot.getGuild().addRoleToMember(member, verifiedRole).queue();
 			floodChat.createWebhook(nickname + "-verify").queue(hook -> {
@@ -392,7 +393,7 @@ public class DiscordUtil {
 			);
 	}
 
-	public static void sendGameProgressResetRequest(@NotNull Player player, @NotNull Discorder discorder) {
+	public static void sendGameProgressResetRequest(Player player, Discorder discorder) {
 		if (!discorder.hasDiscord()) return;
 
 		long id = discorder.getDiscordId();
@@ -419,7 +420,7 @@ public class DiscordUtil {
 	 *
 	 * @return the verified player role
 	 */
-	public static @NotNull Role getVerifiedRole() {
+	public static Role getVerifiedRole() {
 		return verifiedRole;
 	}
 
@@ -428,7 +429,7 @@ public class DiscordUtil {
 	 *
 	 * @return the owner role
 	 */
-	public static @NotNull Role getOwnerRole() {
+	public static Role getOwnerRole() {
 		return ownerRole;
 	}
 

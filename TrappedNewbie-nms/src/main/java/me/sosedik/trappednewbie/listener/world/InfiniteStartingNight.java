@@ -11,17 +11,18 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Locale;
 
 /**
  * The very first night in resource world should be infinite
  */
+@NullMarked
 public class InfiniteStartingNight implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR)
-	public void onJoin(@NotNull PlayerJoinEvent event) {
+	public void onJoin(PlayerJoinEvent event) {
 		Player player = event.getPlayer();
 		if (shouldHaveDayCycle(player)) return;
 
@@ -33,7 +34,7 @@ public class InfiniteStartingNight implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
-	public void onWorldJoin(@NotNull PlayerChangedWorldEvent event) {
+	public void onWorldJoin(PlayerChangedWorldEvent event) {
 		Player player = event.getPlayer();
 		if (shouldHaveDayCycle(player)) return;
 
@@ -43,7 +44,7 @@ public class InfiniteStartingNight implements Listener {
 		Bukkit.unloadWorld(world, true);
 	}
 
-	private boolean isNormalResourceWorld(@NotNull World world) {
+	private boolean isNormalResourceWorld(World world) {
 		if (world.getEnvironment() != World.Environment.NORMAL) return false;
 
 		NamespacedKey worldKey = world.getKey();
@@ -51,7 +52,7 @@ public class InfiniteStartingNight implements Listener {
 		return worldKey.getKey().startsWith("worlds-resources/");
 	}
 
-	private boolean shouldHaveDayCycle(@NotNull Player player) { // TODO actually, should be world's owner?
+	private boolean shouldHaveDayCycle(Player player) { // TODO actually, should be world's owner?
 		return false; // TODO
 	}
 

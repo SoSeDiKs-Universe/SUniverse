@@ -8,16 +8,17 @@ import me.sosedik.utilizer.dataset.UtilizerTags;
 import net.kyori.adventure.text.Component;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public class HiddenTooltipsModifier extends ItemModifier {
 
-	public HiddenTooltipsModifier(@NotNull NamespacedKey modifierId) {
+	public HiddenTooltipsModifier(NamespacedKey modifierId) {
 		super(modifierId);
 	}
 
 	@Override
-	public @NotNull ModificationResult modify(@NotNull ItemContextBox contextBox) {
+	public ModificationResult modify(ItemContextBox contextBox) {
 		if (!UtilizerTags.NO_TOOLTIP_ITEMS.isTagged(contextBox.getInitialType())) return ModificationResult.PASS;
 
 		ItemStack item = contextBox.getItem();

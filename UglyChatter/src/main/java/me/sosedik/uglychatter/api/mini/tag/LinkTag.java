@@ -18,8 +18,8 @@ import net.kyori.adventure.text.minimessage.Context;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.ArgumentQueue;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 
 import java.io.File;
 import java.net.URI;
@@ -31,13 +31,14 @@ import static me.sosedik.uglychatter.UglyChatter.uglyChatterKey;
 import static me.sosedik.utilizer.api.message.Mini.combine;
 import static me.sosedik.utilizer.api.message.Mini.combined;
 
-public record LinkTag(@NotNull Messenger messenger) implements TagResolver {
+@NullMarked
+public record LinkTag(Messenger messenger) implements TagResolver {
 
 	private static final List<KnownLink> KNOWN_LINKS = new ArrayList<>();
 	private static KnownLink defaultLink;
 
 	@Override
-	public @Nullable Tag resolve(@NotNull String name, @NotNull ArgumentQueue arguments, @NotNull Context ctx) {
+	public @Nullable Tag resolve(String name, ArgumentQueue arguments, Context ctx) {
 		if (!has(name)) return null;
 		String url = arguments.popOr("Link tag requires url argument").value();
 		String fullUrl = url.startsWith("http") ? url : "https://" + url;
@@ -67,11 +68,11 @@ public record LinkTag(@NotNull Messenger messenger) implements TagResolver {
 	}
 
 	@Override
-	public boolean has(@NotNull String name) {
+	public boolean has(String name) {
 		return name.equals("link");
 	}
 
-	public static @NotNull KnownLink parseLink(@NotNull String link) {
+	public static KnownLink parseLink(String link) {
 		for (KnownLink knownLink : KNOWN_LINKS) {
 			if (knownLink.isParsable(link))
 				return knownLink;
@@ -79,7 +80,7 @@ public record LinkTag(@NotNull Messenger messenger) implements TagResolver {
 		return defaultLink;
 	}
 
-	public static void reloadLinks(@NotNull UglyChatter plugin) {
+	public static void reloadLinks(UglyChatter plugin) {
 		KNOWN_LINKS.clear();
 		var linksFile = new File(plugin.getDataFolder(), "links.json");
 		if (!linksFile.exists())
@@ -105,7 +106,7 @@ public record LinkTag(@NotNull Messenger messenger) implements TagResolver {
 		private final Component link;
 		private final String[] urls;
 
-		public KnownLink(@NotNull String name, @NotNull JsonObject jsonObject) {
+		public KnownLink(String name, JsonObject jsonObject) {
 			this.name = name;
 			TextColor hex1 = TextColor.fromHexString(jsonObject.get("hex1").getAsString());
 			TextColor hex2 = TextColor.fromHexString(jsonObject.get("hex2").getAsString());
@@ -120,19 +121,19 @@ public record LinkTag(@NotNull Messenger messenger) implements TagResolver {
 				urls[i] = links.get(i).getAsString();
 		}
 
-		public @NotNull String getName() {
+		public String getName() {
 			return name;
 		}
 
-		public @NotNull TextColor getColor() {
+		public TextColor getColor() {
 			return color;
 		}
 
-		public @NotNull Component getLinkIcon() {
+		public Component getLinkIcon() {
 			return link;
 		}
 
-		public boolean isParsable(@NotNull String link) {
+		public boolean isParsable(String link) {
 			for (String url : urls) {
 				if (link.endsWith(url))
 					return true;
@@ -140,7 +141,7 @@ public record LinkTag(@NotNull Messenger messenger) implements TagResolver {
 			return false;
 		}
 
-		public static @NotNull Component getLinkIcon(@NotNull TextColor hex1, @NotNull TextColor hex2) {
+		public static Component getLinkIcon(TextColor hex1, TextColor hex2) {
 			return combine(SpacingUtil.getSpacing(-7),
 				LINK_TOP.color(hex1),
 				LINK_BOTTOM.color(hex2)

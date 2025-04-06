@@ -1,10 +1,11 @@
 package me.sosedik.socializer.util;
 
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Used to send the raw message from the messenger into the chat message
  */
+@NullMarked
 public interface MinecraftChatRenderer {
 
 	/**
@@ -13,6 +14,6 @@ public interface MinecraftChatRenderer {
 	 * @param nickname sender nickname
 	 * @param rawMessage raw message
 	 */
-	void sendBukkitMessage(@NotNull String nickname, @NotNull String rawMessage);
+	void sendBukkitMessage(String nickname, String rawMessage);
 
 }

@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.text.DecimalFormat;
 import java.util.List;
@@ -21,6 +21,7 @@ import static me.sosedik.utilizer.api.message.Mini.component;
 /**
  * Renders custom messages in tab with Ping and TPS info
  */
+@NullMarked
 public class TabHeaderFooterBeautifier implements Listener {
 
 	private static final DecimalFormat TPS_FORMAT = new DecimalFormat("#0.0#");
@@ -28,7 +29,7 @@ public class TabHeaderFooterBeautifier implements Listener {
 	private static final NamespacedKey TAB_FOOTER_RENDERER_KEY = TrappedNewbie.trappedNewbieKey("tab_footer");
 
 	@EventHandler
-	public void onJoin(@NotNull PlayerJoinEvent event) {
+	public void onJoin(PlayerJoinEvent event) {
 		Player player = event.getPlayer();
 		var messenger = Messenger.messenger(player);
 		var tabRenderer = TabRenderer.of(player);
@@ -36,18 +37,18 @@ public class TabHeaderFooterBeautifier implements Listener {
 		tabRenderer.addFooterElement(TAB_FOOTER_RENDERER_KEY, () -> renderFooter(player, messenger));
 	}
 
-	private @NotNull List<Component> renderHeader(@NotNull Messenger messenger) {
+	private List<Component> renderHeader(Messenger messenger) {
 		return List.of(messenger.getMessage("tab.header"));
 	}
 
-	private @NotNull List<Component> renderFooter(@NotNull Player player, @NotNull Messenger messenger) {
+	private List<Component> renderFooter(Player player, Messenger messenger) {
 		var tpsPlaceholder = component("tps", getTPS());
 		var pingPlaceholder = component("ping", getPing(player));
 		Component footer = messenger.getMessage("tab.footer", tpsPlaceholder, pingPlaceholder);
 		return List.of(footer);
 	}
 
-	private @NotNull Component getTPS() {
+	private Component getTPS() {
 		double tps = Bukkit.getTPS()[0];
 		float tickRate = Bukkit.getServerTickManager().getTickRate();
 		if (tps > tickRate)
@@ -57,7 +58,7 @@ public class TabHeaderFooterBeautifier implements Listener {
 		return Component.text(TPS_FORMAT.format(tps), getTPSColor(tps));
 	}
 
-	private @NotNull NamedTextColor getTPSColor(double tps) {
+	private NamedTextColor getTPSColor(double tps) {
 		float tickRate = Bukkit.getServerTickManager().getTickRate();
 		if (tickRate == 0F) return NamedTextColor.AQUA;
 		if (tps > tickRate && tps - tickRate > 0.3) return NamedTextColor.YELLOW;
@@ -68,12 +69,12 @@ public class TabHeaderFooterBeautifier implements Listener {
 		return NamedTextColor.RED;
 	}
 
-	private @NotNull Component getPing(@NotNull Player player) {
+	private Component getPing(Player player) {
 		int ping = player.getPing();
 		return Component.text(ping, getPingColor(ping));
 	}
 
-	private @NotNull NamedTextColor getPingColor(int ping) {
+	private NamedTextColor getPingColor(int ping) {
 		if (ping < 200) return NamedTextColor.GREEN;
 		if (ping < 500) return NamedTextColor.GOLD;
 		return NamedTextColor.RED;

@@ -14,7 +14,7 @@ import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -24,6 +24,7 @@ import static me.sosedik.socializer.Socializer.socializerKey;
 import static me.sosedik.utilizer.api.message.Mini.combine;
 import static me.sosedik.utilizer.api.message.Mini.combined;
 
+@NullMarked
 public class DiscordChatRenderer implements MinecraftChatRenderer {
 
 	private static final Component DISCORD_ICON = Mini.asIcon(ResourceLib.requireFontData(socializerKey("discord")).mapping());
@@ -33,7 +34,7 @@ public class DiscordChatRenderer implements MinecraftChatRenderer {
 	private static final Style BASE_STYLE = Style.style(TextColor.fromHexString("#9fb2f4"));
 
 	@Override
-	public void sendBukkitMessage(@NotNull String nickname, @NotNull String rawMessage) {
+	public void sendBukkitMessage(String nickname, String rawMessage) {
 		Collection<? extends Player> onlinePlayers = Bukkit.getOnlinePlayers();
 		if (onlinePlayers.isEmpty()) return;
 

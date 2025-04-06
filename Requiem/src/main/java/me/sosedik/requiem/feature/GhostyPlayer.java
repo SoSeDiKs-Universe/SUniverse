@@ -9,9 +9,10 @@ import me.sosedik.utilizer.util.EntityUtil;
 import net.kyori.adventure.util.TriState;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -20,6 +21,7 @@ import java.util.UUID;
 /**
  * Implements after-life ghost mechanic
  */
+@NullMarked
 public class GhostyPlayer {
 
 	private static final PotionEffect NIGHT_VISION_EFFECT = new PotionEffect(PotionEffectType.NIGHT_VISION, PotionEffect.INFINITE_DURATION, 0, false, false, false);
@@ -31,7 +33,7 @@ public class GhostyPlayer {
 	 * @param player player
 	 * @return whether player is a ghost
 	 */
-	public static boolean isGhost(@NotNull Player player) {
+	public static boolean isGhost(Player player) {
 		return GHOSTS.contains(player.getUniqueId());
 	}
 
@@ -40,7 +42,7 @@ public class GhostyPlayer {
 	 *
 	 * @param player player
 	 */
-	public static void markGhost(@NotNull Player player) {
+	public static void markGhost(Player player) {
 		GHOSTS.add(player.getUniqueId());
 
 		EntityUtil.clearTargets(player);
@@ -74,7 +76,7 @@ public class GhostyPlayer {
 		player.setFlying(true);
 		player.setFlyingFallDamage(TriState.FALSE);
 
-		player.getInventory().setItem(0, RequiemItems.GHOST_MOTIVATOR.asItemType().createItemStack());
+		player.getInventory().setItem(0, new ItemStack(RequiemItems.GHOST_MOTIVATOR));
 
 		new GhostAuraTask(player);
 		new GhostMobVisionTask(player);
@@ -87,7 +89,7 @@ public class GhostyPlayer {
 	 *
 	 * @param player player
 	 */
-	public static void clearGhost(@NotNull Player player) {
+	public static void clearGhost(Player player) {
 		GHOSTS.remove(player.getUniqueId());
 
 		PrepareGhostMobs.hideVisibility(player, false);
@@ -118,7 +120,7 @@ public class GhostyPlayer {
 	 * @param player player
 	 * @return whether the player is now a ghost
 	 */
-	public static boolean loadGhostData(@NotNull Player player) {
+	public static boolean loadGhostData(Player player) {
 		if (!player.isInvisible()) return false;
 		if (player.getGameMode().isInvulnerable()) return false;
 

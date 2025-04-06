@@ -5,15 +5,16 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.WorldUnloadEvent;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Stops custom day cycle task when the world is unloaded
  */
+@NullMarked
 public class CustomDayCycleCleanup implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	public void onWorldUnload(@NotNull WorldUnloadEvent event) {
+	public void onWorldUnload(WorldUnloadEvent event) {
 		CustomDayCycleTask.stopDayCycle(event.getWorld());
 	}
 

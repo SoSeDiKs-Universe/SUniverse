@@ -11,8 +11,8 @@ import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.Flag;
 import org.incendo.cloud.annotations.Permission;
 import org.incendo.cloud.annotations.suggestion.Suggestions;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Set;
 
@@ -21,15 +21,16 @@ import static me.sosedik.utilizer.api.message.Mini.raw;
 /**
  * Quickly changing item's amount
  */
+@NullMarked
 @Permission("essence.command.more")
 public class MoreCommand {
 
 	@Command("more [amount]")
 	public void onCommand(
-		@NotNull CommandSourceStack stack,
-		@Nullable @Argument(value = "amount") @Range(min = "0") Integer amount, // , suggestions = "@moreCommandSuggestionAmount"
-		@Flag(value = "offHand") boolean offHand,
-		@Flag(value = "feedback") boolean feedback
+			CommandSourceStack stack,
+			@Nullable @Argument(value = "amount") @Range(min = "0") Integer amount, // , suggestions = "@moreCommandSuggestionAmount"
+			@Flag(value = "offHand") boolean offHand,
+			@Flag(value = "feedback") boolean feedback
 	) {
 		if (!(stack.getExecutor() instanceof Player target)) return;
 
@@ -44,7 +45,7 @@ public class MoreCommand {
 	}
 
 	@Suggestions("@moreCommandSuggestionAmount")
-	public @NotNull Set<String> onAmountSuggestion() {
+	public Set<String> onAmountSuggestion() {
 		return Set.of("64");
 	}
 

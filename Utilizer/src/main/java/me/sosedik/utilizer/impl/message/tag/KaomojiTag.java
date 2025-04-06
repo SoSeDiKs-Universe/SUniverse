@@ -5,13 +5,14 @@ import net.kyori.adventure.text.minimessage.Context;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.ArgumentQueue;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+@NullMarked
 public class KaomojiTag {
 
 	private KaomojiTag() {}
@@ -20,7 +21,7 @@ public class KaomojiTag {
 
 	private static final Random RANDOM = new Random();
 
-	static @NotNull Tag create(@NotNull ArgumentQueue args, @NotNull Context ctx) {
+	static Tag create(ArgumentQueue args, Context ctx) {
 		if (!args.hasNext())
 			throw ctx.newException("Can't turn " + args + " into kaomoji", args);
 
@@ -43,15 +44,15 @@ public class KaomojiTag {
 
 		private final String[] kaomojis;
 
-		KaomojiType(@NotNull String... kaomojis) {
+		KaomojiType(String... kaomojis) {
 			this.kaomojis = kaomojis;
 		}
 
-		public @NotNull String getKaomoji() {
+		public String getKaomoji() {
 			return kaomojis[RANDOM.nextInt(kaomojis.length)];
 		}
 
-		public static @Nullable KaomojiType getKaomoji(@NotNull String kaomojiType) {
+		public static @Nullable KaomojiType getKaomoji(String kaomojiType) {
 			kaomojiType = kaomojiType.toUpperCase();
 			for (KaomojiType type : values()) {
 				if (type.toString().equals(kaomojiType))

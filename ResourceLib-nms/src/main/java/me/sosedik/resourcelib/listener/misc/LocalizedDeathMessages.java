@@ -16,7 +16,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.intellij.lang.annotations.Subst;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
 import java.util.UUID;
@@ -25,10 +25,11 @@ import java.util.UUID;
  * Handles localizations for death messages.
  * Mostly for custom death causes, but can overwrite vanilla as well.
  */
+@NullMarked
 public class LocalizedDeathMessages implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	public void onDeath(@NotNull PlayerDeathEvent event) {
+	public void onDeath(PlayerDeathEvent event) {
 		if (!(event.deathMessage() instanceof TranslatableComponent component)) return;
 
 		String locale = component.key();
@@ -42,7 +43,7 @@ public class LocalizedDeathMessages implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	public void onTamedDeath(@NotNull TameableDeathMessageEvent event) {
+	public void onTamedDeath(TameableDeathMessageEvent event) {
 		if (!(event.deathMessage() instanceof TranslatableComponent component)) return;
 
 		String locale = component.key();
@@ -61,7 +62,7 @@ public class LocalizedDeathMessages implements Listener {
 		event.deathMessage(newMessage);
 	}
 
-	private @NotNull TagResolver[] tagResolvers(@NotNull TranslatableComponent component) {
+	private TagResolver[] tagResolvers(TranslatableComponent component) {
 		List<TranslationArgument> arguments = component.arguments();
 		TagResolver[] tagResolvers = new TagResolver[arguments.size()];
 		for (int i = 0; i < arguments.size(); i++) {

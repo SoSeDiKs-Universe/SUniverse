@@ -6,20 +6,21 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Clears entity metadata of entities
  */
+@NullMarked
 public class EntityMetadataClearer implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR)
-	public void onDespawn(@NotNull EntityRemoveFromWorldEvent event) {
+	public void onDespawn(EntityRemoveFromWorldEvent event) {
 		MetadataUtil.clearMetadata(event.getEntity());
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
-	public void onLeave(@NotNull PlayerQuitEvent event) {
+	public void onLeave(PlayerQuitEvent event) {
 		MetadataUtil.clearMetadata(event.getPlayer());
 	}
 

@@ -8,18 +8,19 @@ import me.sosedik.utilizer.api.message.Messenger;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
 
+@NullMarked
 public class CustomLoreModifier extends ItemModifier {
 
-	public CustomLoreModifier(@NotNull NamespacedKey modifierId) {
+	public CustomLoreModifier(NamespacedKey modifierId) {
 		super(modifierId);
 	}
 
 	@Override
-	public @NotNull ModificationResult modify(@NotNull ItemContextBox contextBox) {
+	public ModificationResult modify(ItemContextBox contextBox) {
 		if (!contextBox.getContextType().hasVisibleLore()) return ModificationResult.PASS;
 
 		Material type = contextBox.getInitialType();

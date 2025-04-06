@@ -1,8 +1,9 @@
 package me.sosedik.utilizer.util;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
+@NullMarked
 public class MiscUtil {
 
 	private MiscUtil() {
@@ -19,7 +20,7 @@ public class MiscUtil {
 	 * @param <T> enum
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T extends Enum<?>> @NotNull T parseOr(@Nullable String value, @NotNull T defaultValue) {
+	public static <T extends Enum<?>> T parseOr(@Nullable String value, T defaultValue) {
 		if (value == null || value.isEmpty()) return defaultValue;
 		try {
 			return (T) Enum.valueOf(defaultValue.getClass(), value.toUpperCase());

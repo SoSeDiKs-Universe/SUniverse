@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,12 +20,13 @@ import java.util.UUID;
 /**
  * Loads and saves player's language
  */
+@NullMarked
 public class PlayerLanguageLoadSave implements Listener {
 
 	private static final Map<UUID, LangHolder> LANG_HOLDERS = new HashMap<>();
 
 	@EventHandler(priority = EventPriority.LOWEST)
-	public void onLoad(@NotNull PlayerDataLoadedEvent event) {
+	public void onLoad(PlayerDataLoadedEvent event) {
 		Player player = event.getPlayer();
 		ReadWriteNBT data = event.getData();
 		LangOptions langOptions = LangOptionsStorage.getLangOptions(data.getString("server_language"));
@@ -36,13 +37,13 @@ public class PlayerLanguageLoadSave implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
-	public void onSave(@NotNull PlayerDataSaveEvent event) {
+	public void onSave(PlayerDataSaveEvent event) {
 		if (!event.isQuit()) return;
 
 		LANG_HOLDERS.remove(event.getPlayer().getUniqueId());
 	}
 
-	public static @NotNull LangHolder getLangHolder(@NotNull UUID uuid) {
+	public static LangHolder getLangHolder(UUID uuid) {
 		return LANG_HOLDERS.get(uuid);
 	}
 

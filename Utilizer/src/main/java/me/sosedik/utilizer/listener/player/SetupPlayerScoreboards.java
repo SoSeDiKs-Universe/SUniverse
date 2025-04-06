@@ -9,22 +9,23 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.scoreboard.Scoreboard;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Register per-player scoreboards if missing,
  * and create glowing teams
  */
+@NullMarked
 public class SetupPlayerScoreboards implements Listener {
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onJoin(@NotNull PlayerJoinEvent event) {
+	public void onJoin(PlayerJoinEvent event) {
 		Player player = event.getPlayer();
 		Scoreboard scoreboard = ScoreboardUtil.getScoreboard(player);
 		registerToScoreboard(scoreboard);
 	}
 
-	private void registerToScoreboard(@NotNull Scoreboard scoreboard) {
+	private void registerToScoreboard(Scoreboard scoreboard) {
 		for (NamedTextColor color : NamedTextColor.NAMES.values()) {
 			GlowingUtil.getGlowTeam(scoreboard, color);
 		}

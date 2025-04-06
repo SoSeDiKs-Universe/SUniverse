@@ -12,8 +12,8 @@ import net.kyori.adventure.text.format.ShadowColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,6 +22,7 @@ import java.util.Map;
 
 import static me.sosedik.utilizer.api.message.Mini.combined;
 
+@NullMarked
 public class PlayerDamageModel extends BukkitRunnable {
 
 	private static final Map<BodyPart, Integer> HUD_OFFSETS = Map.of(
@@ -36,7 +37,7 @@ public class PlayerDamageModel extends BukkitRunnable {
 	);
 	private static final NamespacedKey HUD_RENDERER_KEY = Requiem.requiemKey("player_damage_model");
 
-	private static int calcOffset(@NotNull BodyPart @NotNull ... bodyParts) {
+	private static int calcOffset(BodyPart ... bodyParts) {
 		int offset = 4;
 		for (BodyPart bodyPart : bodyParts)
 			offset += bodyPart.getFontData(false, BodyDamage.GREEN).width();
@@ -48,7 +49,7 @@ public class PlayerDamageModel extends BukkitRunnable {
 	private boolean showDamage = false;
 	private int damageTick = 0;
 
-	public PlayerDamageModel(@NotNull Player player, @Nullable ReadableNBT nbt) {
+	public PlayerDamageModel(Player player, @Nullable ReadableNBT nbt) {
 		this.player = player;
 		for (BodyPart bodyPart : BodyPart.BODY_PARTS) {
 			ReadableNBT bodyPartNbt = nbt == null ? null : nbt.getCompound(bodyPart.getId());
@@ -67,11 +68,11 @@ public class PlayerDamageModel extends BukkitRunnable {
 		return getPlayerModel(false).color(SpacingUtil.TOP_LEFT_CORNER_HUD).shadowColor(ShadowColor.none());
 	}
 
-	private @NotNull List<Component> constructTabPlayerModel() {
+	private List<Component> constructTabPlayerModel() {
 		return List.of(getPlayerModel(true).color(SpacingUtil.TOP_LEFT_CORNER_TAB).shadowColor(ShadowColor.none()));
 	}
 
-	private @NotNull Component getPlayerModel(boolean tab) {
+	private Component getPlayerModel(boolean tab) {
 		List<Component> bodyComponents = new ArrayList<>();
 		this.bodyParts.values().forEach(bodyPartState -> {
 			int offset = HUD_OFFSETS.get(bodyPartState.getBodyPart());
@@ -91,7 +92,7 @@ public class PlayerDamageModel extends BukkitRunnable {
 		return false;
 	}
 
-	public @NotNull BodyPartState getState(@NotNull BodyPart bodyPart) {
+	public BodyPartState getState(BodyPart bodyPart) {
 		return this.bodyParts.get(bodyPart.getId());
 	}
 
@@ -103,11 +104,11 @@ public class PlayerDamageModel extends BukkitRunnable {
 		this.bodyParts.values().forEach(bodyPartState -> bodyPartState.tick(this.player));
 	}
 
-	public void save(@NotNull ReadWriteNBT nbt) {
+	public void save(ReadWriteNBT nbt) {
 		this.bodyParts.forEach((id, bodyPartState) -> bodyPartState.save(nbt.getOrCreateCompound(id)));
 	}
 
-	public static @NotNull PlayerDamageModel of(@NotNull Player player) {
+	public static PlayerDamageModel of(Player player) {
 		return DamageModelLoadSave.of(player);
 	}
 

@@ -2,7 +2,7 @@ package me.sosedik.requiem.feature.playermodel;
 
 import me.sosedik.resourcelib.ResourceLib;
 import me.sosedik.resourcelib.api.font.FontData;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
 import java.util.Locale;
@@ -10,6 +10,7 @@ import java.util.Objects;
 
 import static me.sosedik.requiem.Requiem.requiemKey;
 
+@NullMarked
 public class BodyPart {
 
 	public static final BodyPart HEAD = builder("head", "head").vital().build();
@@ -32,11 +33,11 @@ public class BodyPart {
 	private final FontData[] tabDisplays;
 
 	private BodyPart(
-		@NotNull String id,
+		String id,
 		int defaultMaxHealth,
 		boolean vital,
-		@NotNull FontData @NotNull [] displays,
-		@NotNull FontData @NotNull [] tabDisplays
+		FontData [] displays,
+		FontData [] tabDisplays
 	) {
 		this.id = id;
 		this.defaultMaxHealth = defaultMaxHealth;
@@ -45,7 +46,7 @@ public class BodyPart {
 		this.tabDisplays = tabDisplays;
 	}
 
-	public @NotNull String getId() {
+	public String getId() {
 		return this.id;
 	}
 
@@ -57,12 +58,12 @@ public class BodyPart {
 		return this.vital;
 	}
 
-	public @NotNull FontData getFontData(boolean tab, @NotNull BodyDamage bodyDamage) {
+	public FontData getFontData(boolean tab, BodyDamage bodyDamage) {
 		if (tab) return this.tabDisplays[bodyDamage.ordinal()];
 		return this.displays[bodyDamage.ordinal()];
 	}
 
-	private static @NotNull Builder builder(@NotNull String id, @NotNull String mapping) {
+	private static Builder builder(String id, String mapping) {
 		return new Builder(id, mapping);
 	}
 
@@ -74,7 +75,7 @@ public class BodyPart {
 		private final FontData[] displays = new FontData[BodyDamage.values().length];
 		private final FontData[] tabDisplays = new FontData[displays.length];
 
-		public Builder(@NotNull String id, @NotNull String mapping) {
+		public Builder(String id, String mapping) {
 			this.id = id;
 			for (BodyDamage bodyDamage : BodyDamage.values()) {
 				displays[bodyDamage.ordinal()] = mapping(bodyDamage, mapping, "");
@@ -82,23 +83,23 @@ public class BodyPart {
 			}
 		}
 
-		private @NotNull FontData mapping(@NotNull BodyDamage bodyDamage, @NotNull String mapping, @NotNull String suffix) {
+		private FontData mapping(BodyDamage bodyDamage, String mapping, String suffix) {
 			mapping = "health/" + mapping + "_" + bodyDamage.name().toLowerCase(Locale.ENGLISH) + suffix;
 			FontData fontData = ResourceLib.storage().getFontData(requiemKey(mapping));
 			return Objects.requireNonNull(fontData);
 		}
 
-		public @NotNull Builder maxHealth(int defaultMaxHealth) {
+		public Builder maxHealth(int defaultMaxHealth) {
 			this.defaultMaxHealth = defaultMaxHealth;
 			return this;
 		}
 
-		public @NotNull Builder vital() {
+		public Builder vital() {
 			this.vital = true;
 			return this;
 		}
 
-		public @NotNull BodyPart build() {
+		public BodyPart build() {
 			return new BodyPart(
 				this.id,
 				this.defaultMaxHealth,

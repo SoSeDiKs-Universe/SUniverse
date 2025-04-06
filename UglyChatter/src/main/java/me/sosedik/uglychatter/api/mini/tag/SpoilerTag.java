@@ -9,11 +9,12 @@ import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.minimessage.tag.Modifying;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import static me.sosedik.uglychatter.UglyChatter.uglyChatterKey;
 import static me.sosedik.utilizer.api.message.Mini.combined;
 
+@NullMarked
 public record SpoilerTag(boolean withCopy) implements Modifying {
 
 	public static final Component SPOILER_ICON = Mini.asIcon(ResourceLib.requireFontData(uglyChatterKey("spoiler")).mapping());
@@ -30,7 +31,7 @@ public record SpoilerTag(boolean withCopy) implements Modifying {
 	);
 
 	@Override
-	public @NotNull Component apply(@NotNull Component current, int depth) {
+	public Component apply(Component current, int depth) {
 		if (depth != 0) return Component.empty();
 		return Component.text()
 			.content("")

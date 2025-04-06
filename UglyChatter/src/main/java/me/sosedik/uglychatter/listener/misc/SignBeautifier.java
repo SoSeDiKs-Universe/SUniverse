@@ -29,7 +29,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.HashSet;
 import java.util.List;
@@ -40,12 +40,13 @@ import java.util.UUID;
  * Adds fancies support for signs
  */
 // MCCheck 1.21.1, sign block entity data
+@NullMarked
 public class SignBeautifier implements PacketListener, Listener {
 
 	private static final Set<UUID> RENDER_BLACKLIST = new HashSet<>();
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	public void onSignChange(@NotNull SignChangeEvent event) {
+	public void onSignChange(SignChangeEvent event) {
 		Player player = event.getPlayer();
 		RENDER_BLACKLIST.remove(player.getUniqueId());
 
@@ -62,13 +63,13 @@ public class SignBeautifier implements PacketListener, Listener {
 	}
 
 	@EventHandler
-	public void onQuit(@NotNull PlayerQuitEvent event) {
+	public void onQuit(PlayerQuitEvent event) {
 		Player player = event.getPlayer();
 		RENDER_BLACKLIST.remove(player.getUniqueId());
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	public void onSignClick(@NotNull PlayerOpenSignEvent event) {
+	public void onSignClick(PlayerOpenSignEvent event) {
 		Player player = event.getPlayer();
 		RENDER_BLACKLIST.add(player.getUniqueId());
 
@@ -78,7 +79,7 @@ public class SignBeautifier implements PacketListener, Listener {
 	}
 
 	@Override
-	public void onPacketSend(@NotNull PacketSendEvent event) {
+	public void onPacketSend(PacketSendEvent event) {
 		if (event.getPacketType() == PacketType.Play.Server.BLOCK_ENTITY_DATA) {
 			handleBlockEntityData(event.getPlayer(), new WrapperPlayServerBlockEntityData(event));
 		} else if (event.getPacketType() == PacketType.Play.Server.CHUNK_DATA) {
@@ -86,7 +87,7 @@ public class SignBeautifier implements PacketListener, Listener {
 		}
 	}
 
-	private void handleBlockEntityData(@NotNull Player player, @NotNull WrapperPlayServerBlockEntityData wrapper) {
+	private void handleBlockEntityData(Player player, WrapperPlayServerBlockEntityData wrapper) {
 		if (!isSign(wrapper.getBlockEntityType())) return;
 		if (RENDER_BLACKLIST.contains(player.getUniqueId())) return;
 
@@ -96,7 +97,7 @@ public class SignBeautifier implements PacketListener, Listener {
 		renderText(miniMessage, player, nbt, Side.BACK);
 	}
 
-	private void handleChunkData(@NotNull Player player, @NotNull WrapperPlayServerChunkData wrapper) {
+	private void handleChunkData(Player player, WrapperPlayServerChunkData wrapper) {
 		ClientVersion clientVersion = PacketEvents.getAPI().getPlayerManager().getClientVersion(player);
 		MiniMessage miniMessage = null;
 		Column column = wrapper.getColumn();
@@ -112,11 +113,11 @@ public class SignBeautifier implements PacketListener, Listener {
 		}
 	}
 
-	private boolean isSign(@NotNull BlockEntityType blockEntityType) {
+	private boolean isSign(BlockEntityType blockEntityType) {
 		return blockEntityType == BlockEntityTypes.SIGN || blockEntityType == BlockEntityTypes.HANGING_SIGN;
 	}
 
-	private void renderText(@NotNull MiniMessage miniMessage, @NotNull Player player, @NotNull NBTCompound nbt, @NotNull Side side) {
+	private void renderText(MiniMessage miniMessage, Player player, NBTCompound nbt, Side side) {
 		String sideKey = side == Side.FRONT ? "front_text" : "back_text";
 		NBTCompound sideText = nbt.getCompoundTagOrNull(sideKey);
 		if (sideText == null) return;

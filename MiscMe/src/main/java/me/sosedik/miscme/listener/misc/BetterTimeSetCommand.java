@@ -4,15 +4,16 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.TimeSkipEvent;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Don't reset time on time set command
  */
+@NullMarked
 public class BetterTimeSetCommand implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	public void onTimeSet(@NotNull TimeSkipEvent event) {
+	public void onTimeSet(TimeSkipEvent event) {
 		if (event.getSkipReason() != TimeSkipEvent.SkipReason.COMMAND) return;
 
 		long skipAmount = event.getSkipAmount();

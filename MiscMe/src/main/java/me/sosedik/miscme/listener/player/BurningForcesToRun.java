@@ -8,15 +8,16 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityCombustEvent;
 import org.bukkit.potion.PotionEffectType;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Players are forced to run when burning
  */
+@NullMarked
 public class BurningForcesToRun implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	public void onBurn(@NotNull EntityCombustEvent event) {
+	public void onBurn(EntityCombustEvent event) {
 		if (!(event.getEntity() instanceof Player player)) return;
 
 		MiscMe.scheduler().sync(task -> {

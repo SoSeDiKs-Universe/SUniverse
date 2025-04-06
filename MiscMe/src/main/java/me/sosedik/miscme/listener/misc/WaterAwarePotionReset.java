@@ -17,8 +17,7 @@ import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionType;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Objects;
 import java.util.Set;
@@ -27,6 +26,7 @@ import java.util.Set;
  * Converts bottles to water bottles when in water,
  * and allows converting potions to water bottles
  */
+@NullMarked
 public class WaterAwarePotionReset implements Listener {
 
 	public WaterAwarePotionReset() {
@@ -34,8 +34,8 @@ public class WaterAwarePotionReset implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
-	public void onCraft(@NotNull ItemCraftPrepareEvent event) {
-		@Nullable Player player = event.getPlayer();
+	public void onCraft(ItemCraftPrepareEvent event) {
+		Player player = event.getPlayer();
 		if (player == null) return;
 		if (!player.isUnderWater()) return;
 
@@ -46,8 +46,8 @@ public class WaterAwarePotionReset implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
-	public void onCraft(@NotNull RemainingItemEvent event) {
-		@Nullable Player player = event.getPlayer();
+	public void onCraft(RemainingItemEvent event) {
+		Player player = event.getPlayer();
 		if (player == null) return;
 		if (!player.isUnderWater()) return;
 
@@ -64,7 +64,7 @@ public class WaterAwarePotionReset implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-	public void onConsume(@NotNull PlayerItemConsumeEvent event) {
+	public void onConsume(PlayerItemConsumeEvent event) {
 		if (event.getReplacement() != null && !ItemStack.isType(event.getReplacement(), Material.GLASS_BOTTLE)) return;
 		if (!event.getPlayer().isUnderWater()) return;
 		if (!ItemUtil.isWaterBottle(event.getItem())) return;
@@ -72,7 +72,7 @@ public class WaterAwarePotionReset implements Listener {
 		event.setReplacement(getWaterBottle(1));
 	}
 
-	private @NotNull ItemStack getWaterBottle(int amount) {
+	private ItemStack getWaterBottle(int amount) {
 		var item = ItemStack.of(Material.POTION, amount);
 		item.editMeta(PotionMeta.class, meta -> meta.setBasePotionType(PotionType.WATER));
 		return item;

@@ -6,22 +6,23 @@ import de.tr7zw.nbtapi.iface.ReadableNBT;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
+@NullMarked
 public class NbtProxies {
 
 	public static final NBTHandler<Location> LOCATION = new NBTHandler<>() {
 
 		@Override
-		public boolean fuzzyMatch(@NotNull Object obj) {
+		public boolean fuzzyMatch(Object obj) {
 			return obj instanceof Location;
 		}
 
 		@Override
-		public void set(@NotNull ReadWriteNBT nbt, @NotNull String key, @NotNull Location value) {
+		public void set(ReadWriteNBT nbt, String key, Location value) {
 			nbt.removeKey(key);
 			ReadWriteNBT tag = nbt.getOrCreateCompound(key);
 			World world = value.getWorld();
@@ -34,7 +35,7 @@ public class NbtProxies {
 		}
 
 		@Override
-		public @Nullable Location get(@NotNull ReadableNBT nbt, @NotNull String key) {
+		public @Nullable Location get(ReadableNBT nbt, String key) {
 			ReadableNBT tag = nbt.getCompound(key);
 			if (tag == null) return null;
 

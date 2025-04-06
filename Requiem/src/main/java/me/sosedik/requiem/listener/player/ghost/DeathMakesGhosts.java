@@ -12,15 +12,16 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Players turn into ghosts upon death instead of respawning
  */
+@NullMarked
 public class DeathMakesGhosts implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGH)
-	public void onRespawn(@NotNull PlayerRespawnEvent event) {
+	public void onRespawn(PlayerRespawnEvent event) {
 		if (event.getRespawnFlags().contains(PlayerRespawnEvent.RespawnFlag.END_PORTAL)) return;
 
 		Player player = event.getPlayer();
@@ -29,7 +30,7 @@ public class DeathMakesGhosts implements Listener {
 	}
 
 	@EventHandler
-	public void onPostRespawn(@NotNull PlayerPostRespawnEvent event) {
+	public void onPostRespawn(PlayerPostRespawnEvent event) {
 		if (event.getRespawnFlags().contains(PlayerRespawnEvent.RespawnFlag.END_PORTAL)) return;
 
 		Player player = event.getPlayer();
@@ -44,7 +45,7 @@ public class DeathMakesGhosts implements Listener {
 
 	// Ghosts should never die, but in case they do...
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onDeath(@NotNull PlayerDeathEvent event) {
+	public void onDeath(PlayerDeathEvent event) {
 		if (!GhostyPlayer.isGhost(event.getPlayer())) return;
 
 		event.getDrops().clear();
@@ -53,7 +54,7 @@ public class DeathMakesGhosts implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	public void onDeath(@NotNull EntityDeathEvent event) {
+	public void onDeath(EntityDeathEvent event) {
 		LivingEntity entity = event.getEntity();
 		Player rider = entity.getRider();
 		if (rider == null) return;

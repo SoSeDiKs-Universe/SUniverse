@@ -3,7 +3,7 @@ package me.sosedik.utilizer.impl.translator;
 import me.sosedik.utilizer.Utilizer;
 import me.sosedik.utilizer.api.language.translator.TranslationLanguage;
 import org.apache.commons.lang3.StringEscapeUtils;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -24,6 +24,7 @@ import java.util.regex.Pattern;
 /**
  * Uses Google translate
  */
+@NullMarked
 public class OnlineTranslator {
 
 	private static final Pattern TRANSLATION_RESULT = Pattern.compile("class=\"result-container\">([^<]*)</div>", Pattern.MULTILINE);
@@ -39,7 +40,7 @@ public class OnlineTranslator {
 	 * @return translated text
 	 */
 	@SuppressWarnings("deprecation")
-	public static @NotNull String translate(@NotNull String textToTranslate, @NotNull TranslationLanguage translateFrom, @NotNull TranslationLanguage translateTo) {
+	public static String translate(String textToTranslate, TranslationLanguage translateFrom, TranslationLanguage translateTo) {
 		if (failedToTranslate) return textToTranslate;
 		if (textToTranslate.isBlank()) return textToTranslate;
 
@@ -77,7 +78,7 @@ public class OnlineTranslator {
 		}
 	}
 
-	private static @NotNull String getPageSource(@NotNull String textToTranslate, @NotNull String translateFrom, @NotNull String translateTo) throws IOException, TranslatorException {
+	private static String getPageSource(String textToTranslate, String translateFrom, String translateTo) throws IOException, TranslatorException {
 		String pageUrl = String.format("https://translate.google.com/m?hl=en&sl=%s&tl=%s&ie=UTF-8&prev=_m&q=%s", translateFrom, translateTo, URLEncoder.encode(textToTranslate.trim(), StandardCharsets.UTF_8));
 		URL url;
 		try {

@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Objects;
 
@@ -21,6 +21,7 @@ import java.util.Objects;
  * Dynamically scales player's size to prevent clipping camera into blocks
  */
 // TODO not ideal, has hardcoded scales, but it works, for now
+@NullMarked
 public class DynamicScaleTask extends BukkitRunnable {
 
 	private static final PotionEffect INFINITE_BLINDNESS = new PotionEffect(PotionEffectType.BLINDNESS, PotionEffect.INFINITE_DURATION, Integer.MAX_VALUE, false, false, false);
@@ -30,7 +31,7 @@ public class DynamicScaleTask extends BukkitRunnable {
 	private final double baseEntityHeight;
 	private int delayTicks = 0;
 
-	public DynamicScaleTask(@NotNull Player player, @NotNull LivingEntity entity) {
+	public DynamicScaleTask(Player player, LivingEntity entity) {
 		this.player = player;
 		this.entity = entity;
 		this.baseEntityHeight = entity.getHeight();
@@ -85,7 +86,7 @@ public class DynamicScaleTask extends BukkitRunnable {
 		scale(entity).setBaseValue(1);
 	}
 
-	private static @NotNull AttributeInstance scale(@NotNull LivingEntity entity) {
+	private static AttributeInstance scale(LivingEntity entity) {
 		return Objects.requireNonNull(entity.getAttribute(Attribute.SCALE));
 	}
 

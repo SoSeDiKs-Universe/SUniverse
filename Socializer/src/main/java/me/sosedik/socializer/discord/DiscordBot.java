@@ -10,18 +10,19 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import org.bukkit.configuration.ConfigurationSection;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
+@NullMarked
 public class DiscordBot {
 
 	private DiscordBot() {
 		throw new IllegalStateException("Utility class");
 	}
 
-	private static JDA discordBot;
+	private static @Nullable JDA discordBot;
 	private static Guild guild;
 	private static WebhookClient chatHook;
 
@@ -30,7 +31,7 @@ public class DiscordBot {
 	 *
 	 * @param plugin plugin instance
 	 */
-	public static void setupBot(@NotNull Socializer plugin) {
+	public static void setupBot(Socializer plugin) {
 		if (discordBot != null) return;
 
 		ConfigurationSection config = plugin.getConfig().getConfigurationSection("discord");
@@ -69,7 +70,7 @@ public class DiscordBot {
 	 * @param uuid sender's in-game uuid
 	 * @param builder message
 	 */
-	public static void sendMessage(@NotNull String nickname, @Nullable String uuid, @NotNull WebhookMessageBuilder builder) {
+	public static void sendMessage(String nickname, @Nullable String uuid, WebhookMessageBuilder builder) {
 		// Setting chat hook's avatar seems to break things :(
 		builder.setAvatarUrl("https://minotar.net/helm/" + Objects.requireNonNullElse(uuid, nickname));
 		chatHook.send(builder.build());
@@ -88,9 +89,11 @@ public class DiscordBot {
 	 * Gets the running JDA instance
 	 *
 	 * @return the JDA instance
+	 * @see #isEnabled()
+	 * @throws NullPointerException if not enabled
 	 */
-	public static @NotNull JDA getDiscordBot() {
-		return discordBot;
+	public static JDA getDiscordBot() {
+		return Objects.requireNonNull(discordBot);
 	}
 
 	/**
@@ -98,7 +101,7 @@ public class DiscordBot {
 	 *
 	 * @return the server guild
 	 */
-	public static @NotNull Guild getGuild() {
+	public static Guild getGuild() {
 		return guild;
 	}
 

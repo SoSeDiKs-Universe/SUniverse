@@ -5,7 +5,7 @@ import me.sosedik.socializer.discord.DiscordBot;
 import me.sosedik.socializer.util.DiscordUtil;
 import net.dv8tion.jda.api.events.guild.member.update.GuildMemberUpdateNicknameEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,6 +13,7 @@ import java.util.Map;
 /**
  * Deny changing nicknames for verified players
  */
+@NullMarked
 public class NoNicknameChange extends ListenerAdapter {
 
 	private static final Map<Long, String> ALLOWED_NICKNAMES = new HashMap<>();
@@ -22,7 +23,7 @@ public class NoNicknameChange extends ListenerAdapter {
 	}
 
 	@Override
-	public void onGuildMemberUpdateNickname(@NotNull GuildMemberUpdateNicknameEvent event) {
+	public void onGuildMemberUpdateNickname(GuildMemberUpdateNicknameEvent event) {
 		var member = event.getMember();
 		if (!member.getRoles().contains(DiscordUtil.getVerifiedRole())) return;
 
@@ -39,7 +40,7 @@ public class NoNicknameChange extends ListenerAdapter {
 	 * @param userId Discord user id
 	 * @param nickname nickname
 	 */
-	public static synchronized void whitelist(long userId, @NotNull String nickname) {
+	public static synchronized void whitelist(long userId, String nickname) {
 		ALLOWED_NICKNAMES.put(userId, nickname);
 		Socializer.scheduler().sync(() -> ALLOWED_NICKNAMES.remove(userId), 30L);
 	}

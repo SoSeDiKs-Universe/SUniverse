@@ -1,19 +1,20 @@
 package me.sosedik.trappednewbie.api.item;
 
 import me.sosedik.trappednewbie.listener.player.VisualArmorLayer;
-import me.sosedik.utilizer.util.Durability;
+import me.sosedik.utilizer.util.DurabilityUtil;
 import me.sosedik.utilizer.util.InventoryUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents a second (visual) armor slots
  */
+@NullMarked
 public class VisualArmor {
 
 	private final Player player;
@@ -25,7 +26,7 @@ public class VisualArmor {
 	private boolean armorPreview;
 
 	public VisualArmor(
-			@NotNull Player player,
+			Player player,
 			@Nullable ItemStack helmet,
 			@Nullable ItemStack chestplate,
 			@Nullable ItemStack leggings,
@@ -40,7 +41,7 @@ public class VisualArmor {
 		this.gloves = gloves;
 	}
 
-	public boolean hasItem(@NotNull EquipmentSlot slot) {
+	public boolean hasItem(EquipmentSlot slot) {
 		return switch (slot) {
 			case HEAD -> hasHelmet();
 			case CHEST -> hasChestplate();
@@ -51,7 +52,7 @@ public class VisualArmor {
 		};
 	}
 
-	public @NotNull ItemStack getItem(@NotNull EquipmentSlot slot) {
+	public ItemStack getItem(EquipmentSlot slot) {
 		return switch (slot) {
 			case HEAD -> getHelmet();
 			case CHEST -> getChestplate();
@@ -62,7 +63,7 @@ public class VisualArmor {
 		};
 	}
 
-	public void setItem(@NotNull EquipmentSlot slot, @Nullable ItemStack item) {
+	public void setItem(EquipmentSlot slot, @Nullable ItemStack item) {
 		switch (slot) {
 			case HEAD -> setHelmet(item);
 			case CHEST -> setChestplate(item);
@@ -76,7 +77,7 @@ public class VisualArmor {
 		return helmet != null;
 	}
 
-	public @NotNull ItemStack getHelmet() {
+	public ItemStack getHelmet() {
 		return helmet == null ? ItemStack.of(Material.AIR) : helmet;
 	}
 
@@ -89,7 +90,7 @@ public class VisualArmor {
 		return chestplate != null;
 	}
 
-	public @NotNull ItemStack getChestplate() {
+	public ItemStack getChestplate() {
 		return chestplate == null ? ItemStack.of(Material.AIR) : chestplate;
 	}
 
@@ -102,7 +103,7 @@ public class VisualArmor {
 		return leggings != null;
 	}
 
-	public @NotNull ItemStack getLeggings() {
+	public ItemStack getLeggings() {
 		return leggings == null ? ItemStack.of(Material.AIR) : leggings;
 	}
 
@@ -115,7 +116,7 @@ public class VisualArmor {
 		return boots != null;
 	}
 
-	public @NotNull ItemStack getBoots() {
+	public ItemStack getBoots() {
 		return boots == null ? ItemStack.of(Material.AIR) : boots;
 	}
 
@@ -129,10 +130,10 @@ public class VisualArmor {
 	}
 
 	public boolean hasNonBrokenGloves() {
-		return hasGloves() && !Durability.isBroken(gloves);
+		return hasGloves() && !DurabilityUtil.isBroken(gloves);
 	}
 
-	public @NotNull ItemStack getGloves() {
+	public ItemStack getGloves() {
 		return gloves == null ? ItemStack.of(Material.AIR) : gloves;
 	}
 
@@ -140,7 +141,7 @@ public class VisualArmor {
 		this.gloves = ItemStack.isEmpty(gloves) ? null : gloves;
 	}
 
-	private void refreshVisuals(@NotNull EquipmentSlot slot) {
+	private void refreshVisuals(EquipmentSlot slot) {
 		if (!slot.isArmor()) return;
 
 		this.player.sendItem(InventoryUtil.getSlot(this.player, slot), getItem(slot));
@@ -168,7 +169,7 @@ public class VisualArmor {
 	 * @param player player
 	 * @return visual armor
 	 */
-	public static @NotNull VisualArmor of(@NotNull Player player) {
+	public static VisualArmor of(Player player) {
 		return VisualArmorLayer.getVisualArmor(player);
 	}
 

@@ -7,22 +7,23 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.recipe.CraftingBookCategory;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Builder for {@link ShapelessRecipe}
  */
+@NullMarked
 public final class ShapelessCraft extends ShapelessRecipeBuilder<ShapelessCraft> {
 
 	private CraftingBookCategory category;
 
-	public ShapelessCraft(@NotNull ItemStack result, @NotNull NamespacedKey key) {
+	public ShapelessCraft(ItemStack result, NamespacedKey key) {
 		super(result, key);
 		this.category = CraftingBookCategory.MISC;
 	}
 
 	@Override
-	public @NotNull ShapelessCraft register() {
+	public ShapelessCraft register() {
 		var recipe = new ShapelessRecipe(getKey(), getResult());
 
 		recipe.setGroup(getGroup());
@@ -44,7 +45,7 @@ public final class ShapelessCraft extends ShapelessRecipeBuilder<ShapelessCraft>
 	 *
 	 * @return the recipe's crafting book category
 	 */
-	public @NotNull CraftingBookCategory getCategory() {
+	public CraftingBookCategory getCategory() {
 		return this.category;
 	}
 
@@ -54,7 +55,7 @@ public final class ShapelessCraft extends ShapelessRecipeBuilder<ShapelessCraft>
 	 * @param category the recipe's crafting book category
 	 * @return this builder
 	 */
-	public @NotNull ShapelessCraft withCategory(@NotNull CraftingBookCategory category) {
+	public ShapelessCraft withCategory(CraftingBookCategory category) {
 		this.category = category;
 		return this;
 	}

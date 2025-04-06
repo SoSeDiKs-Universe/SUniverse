@@ -17,8 +17,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,6 +29,7 @@ import java.util.UUID;
 /**
  * Implements per-player glowing
  */
+@NullMarked
 public class EntityGlowTracker implements PacketListener, Listener {
 
 	private static final int GLOWING_METADATA_INDEX = 0;
@@ -43,7 +44,7 @@ public class EntityGlowTracker implements PacketListener, Listener {
 	}
 
 	@Override
-	public void onPacketSend(@NotNull PacketSendEvent event) {
+	public void onPacketSend(PacketSendEvent event) {
 		if (event.getPacketType() != PacketType.Play.Server.ENTITY_METADATA) return;
 
 		var packet = new WrapperPlayServerEntityMetadata(event);
@@ -63,7 +64,7 @@ public class EntityGlowTracker implements PacketListener, Listener {
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
-	public void onDespawn(@NotNull EntityRemoveFromWorldEvent event) {
+	public void onDespawn(EntityRemoveFromWorldEvent event) {
 		Entity entity = event.getEntity();
 		List<UUID> uuids = ENTITY_TO_PLAYER_GLOW.remove(entity.getEntityId());
 		if (uuids == null) return;
@@ -77,7 +78,7 @@ public class EntityGlowTracker implements PacketListener, Listener {
 	}
 
 	@Contract("_, true -> !null")
-	public static @Nullable List<@NotNull UUID> getPlayers(int entityId, boolean compute) {
+	public static @Nullable List<UUID> getPlayers(int entityId, boolean compute) {
 		return compute ? ENTITY_TO_PLAYER_GLOW.computeIfAbsent(entityId, k -> new ArrayList<>()) : ENTITY_TO_PLAYER_GLOW.get(entityId);
 	}
 

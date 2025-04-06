@@ -8,7 +8,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +16,7 @@ import java.util.Objects;
 
 import static me.sosedik.utilizer.api.message.Mini.combine;
 
+@NullMarked
 public class SpacingUtil {
 
 	private SpacingUtil() {
@@ -70,7 +71,7 @@ public class SpacingUtil {
 	 * @param spacing spacing
 	 * @return spacings string without font applied
 	 */
-	public static @NotNull String getSpacingSymbols(int spacing) {
+	public static String getSpacingSymbols(int spacing) {
 		return new String(Character.toChars(688128 + spacing));
 	}
 
@@ -80,7 +81,7 @@ public class SpacingUtil {
 	 * @param offset needed offset
 	 * @return offset Component
 	 */
-	public static @NotNull Component getOffset(int offset, @NotNull Component component) {
+	public static Component getOffset(int offset, Component component) {
 		return getOffset(offset, getWidth(component), component);
 	}
 
@@ -92,7 +93,7 @@ public class SpacingUtil {
 	 * @param component component
 	 * @return offset Component
 	 */
-	public static @NotNull Component getOffset(int offset, int length, @NotNull Component component) {
+	public static Component getOffset(int offset, int length, Component component) {
 		if (offset == 0) return Mini.combined(component, getSpacing(-length));
 		return Mini.combined(getSpacing(offset), component, getSpacing(-(offset + length)));
 	}
@@ -103,7 +104,7 @@ public class SpacingUtil {
 	 * @param spacing needed spacing
 	 * @return spaced Component
 	 */
-	public static @NotNull Component getSpacing(int spacing) {
+	public static Component getSpacing(int spacing) {
 		return Component.text(getSpacingSymbols(spacing)).font(SPACINGS_FONT);
 	}
 
@@ -112,7 +113,7 @@ public class SpacingUtil {
 	 *
 	 * @return component for fixing overlapping layers
 	 */
-	public static @NotNull Component getLayerFixer() {
+	public static Component getLayerFixer() {
 		return getSpacing(4097);
 	}
 
@@ -121,7 +122,7 @@ public class SpacingUtil {
 	 *
 	 * @return component with -1 offset without a font applied
 	 */
-	public static @NotNull Component getNegativePixel() {
+	public static Component getNegativePixel() {
 		return Component.text(NEGATIVE_PIXEL);
 	}
 
@@ -132,7 +133,7 @@ public class SpacingUtil {
 	 * @param messagePath path for message
 	 * @return components list
 	 */
-	public static @NotNull List<Component> iconize(@NotNull Messenger messenger, @NotNull Component icon, @NotNull String messagePath, @NotNull TagResolver... placeholders) {
+	public static List<Component> iconize(Messenger messenger, Component icon, String messagePath, TagResolver... placeholders) {
 		String[] message = messenger.getRawMessage(messagePath);
 		List<Component> components = new ArrayList<>();
 		components.add(combine(Component.space(), icon, Mini.mini(messenger.miniMessage(), message[0], placeholders)));
@@ -147,7 +148,7 @@ public class SpacingUtil {
 	 * @param component component
 	 * @return pixel width of the component
 	 */
-	public static int getWidth(@NotNull Component component) {
+	public static int getWidth(Component component) {
 		String content = ChatUtil.getPlainText(component);
 		boolean bold = component.hasDecoration(TextDecoration.BOLD);
 		int length = content.length();

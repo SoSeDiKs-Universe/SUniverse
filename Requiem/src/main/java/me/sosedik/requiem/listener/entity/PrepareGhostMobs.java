@@ -9,11 +9,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Implements ghost mobs
  */
+@NullMarked
 public class PrepareGhostMobs implements Listener {
 
 	/**
@@ -22,7 +23,7 @@ public class PrepareGhostMobs implements Listener {
 	private static final String GHOST_TEAM_ID = "Ghost";
 
 	@EventHandler(priority = EventPriority.LOWEST)
-	public void onLoad(@NotNull PlayerJoinEvent event) {
+	public void onLoad(PlayerJoinEvent event) {
 		Player player = event.getPlayer();
 
 		Team team = ScoreboardUtil.getPlayerTeam(player);
@@ -36,7 +37,7 @@ public class PrepareGhostMobs implements Listener {
 	 * @param scoreboard scoreboard
 	 * @return ghost team
 	 */
-	private static @NotNull Team getGhostTeam(@NotNull Scoreboard scoreboard) {
+	private static Team getGhostTeam(Scoreboard scoreboard) {
 		Team team = scoreboard.getTeam(GHOST_TEAM_ID);
 		if (team == null) {
 			team = scoreboard.registerNewTeam(GHOST_TEAM_ID);
@@ -51,7 +52,7 @@ public class PrepareGhostMobs implements Listener {
 	 * @param player player
 	 * @param selfVisible whether the player should see themselves as a ghost
 	 */
-	public static void hideVisibility(@NotNull Player player, boolean selfVisible) {
+	public static void hideVisibility(Player player, boolean selfVisible) {
 		Bukkit.getOnlinePlayers().forEach(onlinePlayer -> {
 			Team team = ScoreboardUtil.getPlayerTeam(onlinePlayer);
 			if (onlinePlayer == player) {
@@ -68,7 +69,7 @@ public class PrepareGhostMobs implements Listener {
 	 * @param player player
 	 * @param other player that should be visible
 	 */
-	public static void addVisible(@NotNull Player player, @NotNull Player other) {
+	public static void addVisible(Player player, Player other) {
 		Team team = ScoreboardUtil.getPlayerTeam(player);
 		team.addPlayer(other);
 	}

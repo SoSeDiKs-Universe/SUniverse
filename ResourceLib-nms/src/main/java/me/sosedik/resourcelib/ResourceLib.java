@@ -24,7 +24,7 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,6 +34,7 @@ import java.util.jar.JarFile;
 
 import static java.util.Objects.requireNonNull;
 
+@NullMarked
 public class ResourceLib extends JavaPlugin {
 
 	private static ResourceLib instance;
@@ -88,7 +89,7 @@ public class ResourceLib extends JavaPlugin {
 	 *
 	 * @return the plugin instance
 	 */
-	public static @NotNull ResourceLib instance() {
+	public static ResourceLib instance() {
 		return ResourceLib.instance;
 	}
 
@@ -97,7 +98,7 @@ public class ResourceLib extends JavaPlugin {
 	 *
 	 * @return the plugin's task scheduler
 	 */
-	public static @NotNull Scheduler scheduler() {
+	public static Scheduler scheduler() {
 		return instance().scheduler;
 	}
 
@@ -106,7 +107,7 @@ public class ResourceLib extends JavaPlugin {
 	 *
 	 * @return the plugin's component logger
 	 */
-	public static @NotNull ComponentLogger logger() {
+	public static ComponentLogger logger() {
 		return instance().getComponentLogger();
 	}
 
@@ -115,7 +116,7 @@ public class ResourceLib extends JavaPlugin {
 	 *
 	 * @return the resource pack storage
 	 */
-	public static @NotNull ResourcePackStorage storage() {
+	public static ResourcePackStorage storage() {
 		return instance().storage;
 	}
 
@@ -125,7 +126,7 @@ public class ResourceLib extends JavaPlugin {
 	 * @param value value
 	 * @return namespaced key
 	 */
-	public static @NotNull NamespacedKey resourceLibKey(@NotNull String value) {
+	public static NamespacedKey resourceLibKey(String value) {
 		return new NamespacedKey("resourcelib", value);
 	}
 
@@ -136,7 +137,7 @@ public class ResourceLib extends JavaPlugin {
 	 *
 	 * @param plugin plugin instance
 	 */
-	public static void loadDefaultResources(@NotNull Plugin plugin) {
+	public static void loadDefaultResources(Plugin plugin) {
 		var jarFile = new File(plugin.getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
 		if (!jarFile.isFile()) {
 			logger().error("Couldn't obtain the JAR file for {}", plugin.getName());
@@ -172,7 +173,7 @@ public class ResourceLib extends JavaPlugin {
 		loadItemMappings(plugin);
 	}
 	
-	private static void loadItemMappings(@NotNull Plugin plugin) {
+	private static void loadItemMappings(Plugin plugin) {
 		var datasetsDir = new File(plugin.getDataFolder(), "datasets");
 		for (File datasetDir : requireNonNull(datasetsDir.listFiles())) {
 			if (!datasetDir.isDirectory()) continue;
@@ -185,7 +186,7 @@ public class ResourceLib extends JavaPlugin {
 		}
 	}
 
-	private static void loadItemMappings(@NotNull File itemsDir, @NotNull String namespace) {
+	private static void loadItemMappings(File itemsDir, String namespace) {
 		for (File itemFile : requireNonNull(itemsDir.listFiles())) {
 			if (itemFile.isDirectory()) {
 				loadItemMappings(itemFile, namespace);
@@ -210,7 +211,7 @@ public class ResourceLib extends JavaPlugin {
 	 * @param key font key
 	 * @return font data
 	 */
-	public static @NotNull FontData requireFontData(@NotNull NamespacedKey key) {
+	public static FontData requireFontData(NamespacedKey key) {
 		FontData fontData = storage().getFontData(key);
 		return requireNonNull(fontData, "Couldn't find font mapping: %s".formatted(key));
 	}

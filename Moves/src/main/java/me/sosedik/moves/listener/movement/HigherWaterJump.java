@@ -10,15 +10,16 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.util.Vector;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * You can jump from water into the block above
  */
+@NullMarked
 public class HigherWaterJump implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	public void onMove(@NotNull PlayerMoveEvent event) {
+	public void onMove(PlayerMoveEvent event) {
 		if (!event.hasExplicitlyChangedBlock()) return;
 
 		Player player = event.getPlayer();

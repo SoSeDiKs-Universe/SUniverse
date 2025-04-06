@@ -4,8 +4,8 @@ import org.bukkit.Keyed;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.RecipeChoice;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.Map;
@@ -13,6 +13,7 @@ import java.util.Map;
 /**
  * Represents a custom recipe
  */
+@NullMarked
 public interface CustomRecipe extends Recipe, Keyed {
 
 	/**
@@ -21,14 +22,14 @@ public interface CustomRecipe extends Recipe, Keyed {
 	 * @param items matrix items
 	 * @return whether the item can be crafted
 	 */
-	boolean checkMatrix(@Nullable ItemStack @NotNull [] items);
+	boolean checkMatrix(@Nullable ItemStack[] items);
 
 	/**
 	 * Gets the ingredients used in the recipe
 	 *
 	 * @return the recipe's ingredients
 	 */
-	default @NotNull Map<Character, List<ItemStack>> getIngredients() {
+	default Map<Character, List<ItemStack>> getIngredients() {
 		return Map.of();
 	}
 
@@ -37,12 +38,12 @@ public interface CustomRecipe extends Recipe, Keyed {
 	 *
 	 * @return the recipe's group
 	 */
-	default @NotNull String getGroup() {
+	default String getGroup() {
 		return "";
 	}
 
 	@SuppressWarnings("deprecation")
-	static @NotNull List<ItemStack> getFromChoice(@NotNull RecipeChoice recipeChoice) {
+	static List<ItemStack> getFromChoice(RecipeChoice recipeChoice) {
 		return switch (recipeChoice) {
 			case RecipeChoice.ExactChoice choice -> choice.getChoices();
 			case RecipeChoice.MaterialChoice choice -> choice.getChoices().stream().map(ItemStack::new).toList();

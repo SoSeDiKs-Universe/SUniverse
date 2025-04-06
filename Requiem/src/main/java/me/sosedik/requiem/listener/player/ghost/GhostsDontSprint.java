@@ -8,15 +8,16 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Ghosts can't sprint and always fly
  */
+@NullMarked
 public class GhostsDontSprint implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	public void onSprintToggle(@NotNull PlayerToggleSprintEvent event) {
+	public void onSprintToggle(PlayerToggleSprintEvent event) {
 		Player player = event.getPlayer();
 		if (!GhostyPlayer.isGhost(player)) return;
 
@@ -27,7 +28,7 @@ public class GhostsDontSprint implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onFlyToggle(@NotNull PlayerToggleFlightEvent event) {
+	public void onFlyToggle(PlayerToggleFlightEvent event) {
 		if (event.isFlying()) return;
 
 		Player player = event.getPlayer();
@@ -37,7 +38,7 @@ public class GhostsDontSprint implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
-	public void onWorldChange(@NotNull PlayerChangedWorldEvent event) {
+	public void onWorldChange(PlayerChangedWorldEvent event) {
 		Player player = event.getPlayer();
 		if (!GhostyPlayer.isGhost(player)) return;
 

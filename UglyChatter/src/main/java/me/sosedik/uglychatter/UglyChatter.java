@@ -16,8 +16,9 @@ import me.sosedik.utilizer.util.EventUtil;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public class UglyChatter extends JavaPlugin {
 
 	private static UglyChatter instance;
@@ -62,7 +63,7 @@ public class UglyChatter extends JavaPlugin {
 	 *
 	 * @return the plugin instance
 	 */
-	public static @NotNull UglyChatter instance() {
+	public static UglyChatter instance() {
 		return UglyChatter.instance;
 	}
 
@@ -71,7 +72,7 @@ public class UglyChatter extends JavaPlugin {
 	 *
 	 * @return the plugin's component logger
 	 */
-	public static @NotNull ComponentLogger logger() {
+	public static ComponentLogger logger() {
 		return instance().getComponentLogger();
 	}
 
@@ -81,7 +82,7 @@ public class UglyChatter extends JavaPlugin {
 	 * @param value value
 	 * @return namespaced key
 	 */
-	public static @NotNull NamespacedKey uglyChatterKey(@NotNull String value) {
+	public static NamespacedKey uglyChatterKey(String value) {
 		return new NamespacedKey("ugly_chatter", value);
 	}
 

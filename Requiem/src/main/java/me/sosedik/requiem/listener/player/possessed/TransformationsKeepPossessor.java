@@ -7,15 +7,16 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityTransformEvent;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Entity transformations keep the possessing player
  */
+@NullMarked
 public class TransformationsKeepPossessor implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	public void onTransform(@NotNull EntityTransformEvent event) {
+	public void onTransform(EntityTransformEvent event) {
 		if (!(event.getTransformedEntity() instanceof LivingEntity transformed)) return;
 		if (!(event.getEntity() instanceof LivingEntity entity)) return;
 

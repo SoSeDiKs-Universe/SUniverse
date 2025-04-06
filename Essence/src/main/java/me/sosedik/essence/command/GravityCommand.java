@@ -10,20 +10,21 @@ import org.incendo.cloud.annotations.Argument;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.Flag;
 import org.incendo.cloud.annotations.Permission;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import static me.sosedik.utilizer.api.message.Mini.raw;
 
 /**
  * Toggle player's gravity
  */
+@NullMarked
 @Permission("essence.command.gravity")
 public class GravityCommand {
 
 	@Command("gravity [player] [state]")
 	public void onCommand(
-		@NotNull CommandSourceStack stack,
+		CommandSourceStack stack,
 		@Nullable @Argument(value = "player") Player player,
 		@Nullable @Argument(value = "state") Boolean state,
 		@Flag(value = "silent") boolean silent

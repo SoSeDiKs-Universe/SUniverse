@@ -10,8 +10,8 @@ import me.sosedik.utilizer.util.FileUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.packs.ResourcePack;
 import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,9 +28,10 @@ import java.util.UUID;
 
 import static java.util.Objects.requireNonNull;
 
+@NullMarked
 public class ResourcePackHoster {
 
-	public static void hostResourcePack(@NotNull Plugin plugin) {
+	public static void hostResourcePack(Plugin plugin) {
 		File resourcePackFile = new File(plugin.getDataFolder(), "resource-pack.zip");
 		if (resourcePackFile.exists())
 			FileUtil.deleteFile(resourcePackFile);
@@ -64,7 +65,7 @@ public class ResourcePackHoster {
 		Bukkit.setServerResourcePack(resourcePack);
 	}
 
-	private static @Nullable String resolveRpHash(@NotNull String ip) {
+	private static @Nullable String resolveRpHash(String ip) {
 		try {
 			URL url = new URI(ip).toURL();
 			try (InputStream inputStream = url.openStream()) {
@@ -88,7 +89,7 @@ public class ResourcePackHoster {
 		return null;
 	}
 
-	private static void hostResourcePack(@NotNull File resourcePackFile, int port) {
+	private static void hostResourcePack(File resourcePackFile, int port) {
 		try {
 			var server = HttpServer.create(new InetSocketAddress(port), 0);
 			server.createContext("/", new ResourcePackHandler(Files.readAllBytes(resourcePackFile.toPath())));
@@ -103,7 +104,7 @@ public class ResourcePackHoster {
 	private record ResourcePackHandler(byte[] resourcePack) implements HttpHandler {
 
 		@Override
-		public void handle(@NotNull HttpExchange httpExchange) throws IOException {
+		public void handle(HttpExchange httpExchange) throws IOException {
 			httpExchange.setAttribute("Content-Type", "application/zip");
 			httpExchange.getResponseHeaders().add("Content-Disposition", "attachment; filename=resource_pack.zip");
 			httpExchange.sendResponseHeaders(200, resourcePack.length);

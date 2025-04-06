@@ -22,7 +22,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +32,7 @@ import java.util.List;
  * <br>Saved text can be applied to signs in the world with RMB.
  * <br>Also adds a recipe to reset signs with nbt.
  */
+@NullMarked
 public class SignsRetain implements Listener {
 
 	public SignsRetain() {
@@ -39,7 +40,7 @@ public class SignsRetain implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-	public void onSignBreak(@NotNull BlockDropItemEvent event) {
+	public void onSignBreak(BlockDropItemEvent event) {
 		if (!(event.getBlockState() instanceof Sign sign)) return;
 		if (isEmptySign(sign)) return;
 
@@ -58,12 +59,12 @@ public class SignsRetain implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	public void onSignPlace(@NotNull BlockPlaceEvent event) {
+	public void onSignPlace(BlockPlaceEvent event) {
 		applySign(event.getItemInHand(), event.getBlock(), true);
 	}
 
 	@EventHandler(ignoreCancelled = true)
-	public void onSignClick(@NotNull PlayerInteractEvent event) {
+	public void onSignClick(PlayerInteractEvent event) {
 		if (event.getHand() != EquipmentSlot.HAND) return;
 		if (event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
 		if (event.getItem() == null) return;
@@ -80,7 +81,7 @@ public class SignsRetain implements Listener {
 		}
 	}
 
-	private boolean isEmptySign(@NotNull Sign sign) {
+	private boolean isEmptySign(Sign sign) {
 		for (Side side : Side.values()) {
 			if (sign.getSide(side).getColor() != DyeColor.BLACK) return false;
 			if (sign.getSide(side).isGlowingText()) return false;
@@ -94,7 +95,7 @@ public class SignsRetain implements Listener {
 		return true;
 	}
 
-	private boolean applySign(@NotNull ItemStack item, @NotNull Block block, boolean applyDecorations) {
+	private boolean applySign(ItemStack item, Block block, boolean applyDecorations) {
 		if (!Tag.ALL_SIGNS.isTagged(item.getType())) return false;
 		if (!(block.getState() instanceof Sign sign)) return false;
 		if (!(item.getItemMeta() instanceof BlockStateMeta meta)) return false;

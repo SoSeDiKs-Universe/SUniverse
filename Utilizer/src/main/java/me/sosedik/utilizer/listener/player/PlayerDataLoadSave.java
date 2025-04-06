@@ -15,7 +15,7 @@ import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,13 +26,14 @@ import java.util.UUID;
 /**
  * Controls basic player data flow
  */
+@NullMarked
 public class PlayerDataLoadSave implements Listener {
 
 	private static final Map<UUID, ReadWriteNBT> STORED_DATA = new HashMap<>();
 
 	private static Plugin plugin;
 
-	public PlayerDataLoadSave(@NotNull Plugin plugin) {
+	public PlayerDataLoadSave(Plugin plugin) {
 		PlayerDataLoadSave.plugin = plugin;
 
 		long saveInterval = 5 * 60 * 20L;
@@ -40,7 +41,7 @@ public class PlayerDataLoadSave implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	public void onPreJoin(@NotNull AsyncPlayerPreLoginEvent event) {
+	public void onPreJoin(AsyncPlayerPreLoginEvent event) {
 		if (event.getLoginResult() != AsyncPlayerPreLoginEvent.Result.ALLOWED) return;
 
 		UUID uuid = event.getUniqueId();
@@ -52,7 +53,7 @@ public class PlayerDataLoadSave implements Listener {
 
 	// Leave LOWEST for preparation events that should run before custom data overrides them
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-	public void onJoin(@NotNull PlayerJoinEvent event) {
+	public void onJoin(PlayerJoinEvent event) {
 		Player player = event.getPlayer();
 		ReadWriteNBT data = getOrLoadData(player);
 		var dataLoadedEvent = new PlayerDataLoadedEvent(player, data);
@@ -62,18 +63,18 @@ public class PlayerDataLoadSave implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	public void onQuit(@NotNull PlayerQuitEvent event) {
+	public void onQuit(PlayerQuitEvent event) {
 		saveData(event.getPlayer(), false);
 	}
 
-	private static @NotNull ReadWriteNBT loadData(@NotNull UUID uuid) {
+	private static ReadWriteNBT loadData(UUID uuid) {
 		File dataFile = new File(plugin.getDataFolder(), "players/" + uuid + ".dat");
 		if (!dataFile.exists()) return NBT.createNBTObject();
 
 		return FileUtil.readNbtFile(dataFile);
 	}
 
-	private static synchronized void saveData(@NotNull Player player, boolean keepData) {
+	private static synchronized void saveData(Player player, boolean keepData) {
 		UUID uuid = player.getUniqueId();
 		ReadWriteNBT data = keepData ? STORED_DATA.get(uuid) : STORED_DATA.remove(uuid);
 		if (data == null) return; // Shouldn't happen
@@ -85,7 +86,7 @@ public class PlayerDataLoadSave implements Listener {
 		Utilizer.scheduler().async(() -> saveData(dataFile, saveData));
 	}
 
-	private static synchronized void saveData(@NotNull File file, @NotNull ReadWriteNBT data) {
+	private static synchronized void saveData(File file, ReadWriteNBT data) {
 		try {
 			NBT.writeFile(file, data);
 		} catch (IOException e) {
@@ -99,7 +100,7 @@ public class PlayerDataLoadSave implements Listener {
 	 * @param player player
 	 * @return player nbt data
 	 */
-	private static @NotNull ReadWriteNBT getOrLoadData(@NotNull Player player) {
+	private static ReadWriteNBT getOrLoadData(Player player) {
 		UUID uuid = player.getUniqueId();
 		ReadWriteNBT data = STORED_DATA.get(uuid);
 		return data == null ? loadData(uuid) : data;
@@ -111,7 +112,7 @@ public class PlayerDataLoadSave implements Listener {
 	 * @param uuid uuid
 	 * @return player nbt data
 	 */
-	public static @NotNull ReadWriteNBT getData(@NotNull UUID uuid) {
+	public static ReadWriteNBT getData(UUID uuid) {
 		ReadWriteNBT data = STORED_DATA.get(uuid);
 		return data == null ? NBT.createNBTObject() : data;
 	}

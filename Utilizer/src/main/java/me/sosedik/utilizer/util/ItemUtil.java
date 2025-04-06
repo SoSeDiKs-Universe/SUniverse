@@ -11,7 +11,7 @@ import org.bukkit.block.data.type.Campfire;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.potion.PotionType;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Objects;
 
@@ -19,6 +19,7 @@ import java.util.Objects;
  * General utilities around items
  */
 // MCCheck: 1.21.4, item types
+@NullMarked
 public class ItemUtil {
 
 	private ItemUtil() {
@@ -31,7 +32,7 @@ public class ItemUtil {
 	 * @param key key
 	 * @return items tag
 	 */
-	public static @NotNull Tag<Material> itemTag(@NotNull NamespacedKey key) {
+	public static Tag<Material> itemTag(NamespacedKey key) {
 		return Objects.requireNonNull(Bukkit.getTag(Tag.REGISTRY_ITEMS, key, Material.class));
 	}
 
@@ -41,7 +42,7 @@ public class ItemUtil {
 	 * @param key key
 	 * @return items tag
 	 */
-	public static @NotNull Tag<Material> blockTag(@NotNull NamespacedKey key) {
+	public static Tag<Material> blockTag(NamespacedKey key) {
 		return Objects.requireNonNull(Bukkit.getTag(Tag.REGISTRY_BLOCKS, key, Material.class));
 	}
 
@@ -51,7 +52,7 @@ public class ItemUtil {
 	 * @param item item
 	 * @return whether the item is a water bottle
 	 */
-	public static boolean isWaterBottle(@NotNull ItemStack item) {
+	public static boolean isWaterBottle(ItemStack item) {
 		if (item.getType() != Material.POTION) return false;
 		if (!item.hasData(DataComponentTypes.POTION_CONTENTS)) return false;
 
@@ -66,7 +67,7 @@ public class ItemUtil {
 	 * @param item item
 	 * @return whether item is a light source
 	 */
-	public static boolean isHot(@NotNull ItemStack item) {
+	public static boolean isHot(ItemStack item) {
 		return UtilizerTags.HOT_ITEMS.isTagged(item.getType()) || isLitCampfire(item);
 	}
 
@@ -76,12 +77,12 @@ public class ItemUtil {
 	 * @param item item
 	 * @return whether item is a light source
 	 */
-	public static boolean isLightSource(@NotNull ItemStack item) {
+	public static boolean isLightSource(ItemStack item) {
 		if (item.hasEnchants()) return true;
 		return UtilizerTags.LIGHT_SOURCES.isTagged(item.getType()) || isLitCampfire(item);
 	}
 
-	private static boolean isLitCampfire(@NotNull ItemStack item) {
+	private static boolean isLitCampfire(ItemStack item) {
 		return Tag.CAMPFIRES.isTagged(item.getType())
 				&& item.hasItemMeta()
 				&& item.getItemMeta() instanceof BlockStateMeta meta

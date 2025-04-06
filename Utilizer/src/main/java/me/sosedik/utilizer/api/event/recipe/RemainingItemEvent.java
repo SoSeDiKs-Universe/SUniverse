@@ -8,12 +8,13 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.CraftingRecipe;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Called when picking a leftover item, primary for the items during crafting
  */
+@NullMarked
 public class RemainingItemEvent extends Event {
 
 	private static final HandlerList handlers = new HandlerList();
@@ -27,7 +28,7 @@ public class RemainingItemEvent extends Event {
 	private final int amount;
 	private @Nullable ItemStack result;
 
-	public RemainingItemEvent(@Nullable Event parentEvent, @Nullable Player player, @Nullable Recipe recipe, @NotNull NamespacedKey key, @NotNull ItemStack item, int amount) {
+	public RemainingItemEvent(@Nullable Event parentEvent, @Nullable Player player, @Nullable Recipe recipe, NamespacedKey key, ItemStack item, int amount) {
 		super();
 		this.parentEvent = parentEvent;
 		this.recipe = recipe;
@@ -69,7 +70,7 @@ public class RemainingItemEvent extends Event {
 	 *
 	 * @return the recipe key
 	 */
-	public @NotNull NamespacedKey getKey() {
+	public NamespacedKey getKey() {
 		return this.key;
 	}
 
@@ -87,7 +88,7 @@ public class RemainingItemEvent extends Event {
 	 *
 	 * @return the recipe group
 	 */
-	public @NotNull String getRecipeGroup() {
+	public String getRecipeGroup() {
 		return this.recipeGroup;
 	}
 
@@ -96,7 +97,7 @@ public class RemainingItemEvent extends Event {
 	 *
 	 * @return the used item
 	 */
-	public @NotNull ItemStack getItem() {
+	public ItemStack getItem() {
 		return this.item;
 	}
 
@@ -128,11 +129,11 @@ public class RemainingItemEvent extends Event {
 	}
 
 	@Override
-	public @NotNull HandlerList getHandlers() {
+	public HandlerList getHandlers() {
 		return handlers;
 	}
 
-	public static @NotNull HandlerList getHandlerList() {
+	public static HandlerList getHandlerList() {
 		return handlers;
 	}
 

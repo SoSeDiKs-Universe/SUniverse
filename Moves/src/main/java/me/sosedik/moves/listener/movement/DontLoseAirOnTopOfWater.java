@@ -11,21 +11,22 @@ import org.bukkit.entity.Pose;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityAirChangeEvent;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
 /**
- * don't lose air when head is visually above water
+ * Don't lose air when head is visually above water
  */
+@NullMarked
 public class DontLoseAirOnTopOfWater implements Listener {
 
 	private static final Set<UUID> ON_DELAY = new HashSet<>();
 
 	@EventHandler(ignoreCancelled = true)
-	public void onSwim(@NotNull EntityAirChangeEvent event) {
+	public void onSwim(EntityAirChangeEvent event) {
 		if (!(event.getEntity() instanceof Player player)) return;
 		if (event.getAmount() > player.getRemainingAir()) return;
 		if (!player.isSwimming()) return;
@@ -45,7 +46,7 @@ public class DontLoseAirOnTopOfWater implements Listener {
 	}
 
 	@EventHandler(ignoreCancelled = true)
-	public void onStand(@NotNull EntityAirChangeEvent event) {
+	public void onStand(EntityAirChangeEvent event) {
 		if (!(event.getEntity() instanceof Player player)) return;
 		if (event.getAmount() > player.getRemainingAir()) return;
 		if (player.getPose() != Pose.STANDING) return;

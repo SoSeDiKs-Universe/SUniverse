@@ -14,20 +14,21 @@ import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.potion.PotionEffect;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Possessed have limited physical control in world:
- * - Can't pickup items and exp
+ * - Can't pick up items and experience orbs
  * - Can't be damaged
  * - Can't interact with entities
  * - Can't sleep
  * - Proxy potion effect to the possessed mob
  */
+@NullMarked
 public class PossessedLimitedControl implements Listener {
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onPossessedPickup(@NotNull EntityPickupItemEvent event) {
+	public void onPossessedPickup(EntityPickupItemEvent event) {
 		LivingEntity entity = event.getEntity();
 		Player player = entity.getRider();
 		if (player == null) return;
@@ -37,14 +38,14 @@ public class PossessedLimitedControl implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onPickup(@NotNull PlayerPickupExperienceEvent event) {
+	public void onPickup(PlayerPickupExperienceEvent event) {
 		if (!PossessingPlayer.isPossessing(event.getPlayer())) return;
 
 		event.setCancelled(true);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onDamage(@NotNull EntityDamageEvent event) {
+	public void onDamage(EntityDamageEvent event) {
 		if (!(event.getEntity() instanceof Player player)) return;
 		if (!PossessingPlayer.isPossessing(player)) return;
 
@@ -54,28 +55,28 @@ public class PossessedLimitedControl implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onInteractEntity(@NotNull PlayerInteractEntityEvent event) {
+	public void onInteractEntity(PlayerInteractEntityEvent event) {
 		if (!PossessingPlayer.isPossessing(event.getPlayer())) return;
 
 		event.setCancelled(true);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onInteractEntity(@NotNull PlayerInteractAtEntityEvent event) {
+	public void onInteractEntity(PlayerInteractAtEntityEvent event) {
 		if (!PossessingPlayer.isPossessing(event.getPlayer())) return;
 
 		event.setCancelled(true);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onSleep(@NotNull PlayerBedEnterEvent event) {
+	public void onSleep(PlayerBedEnterEvent event) {
 		if (!PossessingPlayer.isPossessing(event.getPlayer())) return;
 
 		event.setCancelled(true);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onEffect(@NotNull EntityPotionEffectEvent event) {
+	public void onEffect(EntityPotionEffectEvent event) {
 		if (!(event.getEntity() instanceof Player player)) return;
 		if (!PossessingPlayer.isPossessing(player)) return;
 

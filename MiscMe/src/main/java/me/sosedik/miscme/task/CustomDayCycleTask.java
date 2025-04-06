@@ -5,7 +5,7 @@ import me.sosedik.miscme.api.event.world.DayChangeEvent;
 import org.bukkit.GameRule;
 import org.bukkit.World;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,6 +15,7 @@ import java.util.function.Supplier;
 /**
  * Custom day cycling
  */
+@NullMarked
 public class CustomDayCycleTask extends BukkitRunnable {
 
 	private static final Map<UUID, CustomDayCycleTask> TASKS = new HashMap<>();
@@ -23,7 +24,7 @@ public class CustomDayCycleTask extends BukkitRunnable {
 	private final Supplier<Double> timeIncrementRule;
 	private double fakeTime = 0;
 
-	public CustomDayCycleTask(@NotNull World world, @NotNull Supplier<@NotNull Double> timeIncrementRule) {
+	public CustomDayCycleTask(World world, Supplier<Double> timeIncrementRule) {
 		this.world = world;
 		this.timeIncrementRule = timeIncrementRule;
 
@@ -54,7 +55,7 @@ public class CustomDayCycleTask extends BukkitRunnable {
 	 *
 	 * @param world world
 	 */
-	public static void stopDayCycle(@NotNull World world) {
+	public static void stopDayCycle(World world) {
 		CustomDayCycleTask task = TASKS.remove(world.getUID());
 		if (task != null)
 			task.cancel();

@@ -15,11 +15,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Allows ghosts going through walls
  */
+@NullMarked
 public class GoingThroughWallsTask extends BukkitRunnable {
 
 	private static final float NOT_PASSABLE_THRESHOLD = Material.OBSIDIAN.getBlastResistance();
@@ -30,7 +31,7 @@ public class GoingThroughWallsTask extends BukkitRunnable {
 	private Location lastClearLoc;
 	private int tries = 0;
 
-	public GoingThroughWallsTask(@NotNull Player player, @NotNull ItemStack item) {
+	public GoingThroughWallsTask(Player player, ItemStack item) {
 		this.player = player;
 		this.item = item;
 		this.lastClearLoc = player.getLocation();
@@ -100,11 +101,11 @@ public class GoingThroughWallsTask extends BukkitRunnable {
 		player.setCooldown(item, 10);
 	}
 
-	private boolean isEmpty(@NotNull Block block) {
+	private boolean isEmpty(Block block) {
 		return !LocationUtil.isTrulySolid(player, block);
 	}
 
-	private boolean isExempt(@NotNull Material type) {
+	private boolean isExempt(Material type) {
 		return Tag.SAND.isTagged(type)
 				|| type == Material.GRAVEL || type == Material.SUSPICIOUS_GRAVEL
 				|| MaterialTags.GLASS.isTagged(type)
@@ -112,7 +113,7 @@ public class GoingThroughWallsTask extends BukkitRunnable {
 				|| Tag.WALLS.isTagged(type);
 	}
 
-	private boolean isUnpassable(@NotNull Block block) {
+	private boolean isUnpassable(Block block) {
 		return block.getType().getBlastResistance() > NOT_PASSABLE_THRESHOLD;
 	}
 

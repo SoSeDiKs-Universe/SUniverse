@@ -3,10 +3,11 @@ package me.sosedik.utilizer.api.storage.player;
 import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import me.sosedik.utilizer.listener.player.PlayerDataLoadSave;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.UUID;
 
+@NullMarked
 public interface PlayerDataStorage {
 
 	/**
@@ -15,7 +16,7 @@ public interface PlayerDataStorage {
 	 * @param player player
 	 * @return player nbt data
 	 */
-	static @NotNull ReadWriteNBT getData(@NotNull Player player) {
+	static ReadWriteNBT getData(Player player) {
 		return getData(player.getUniqueId());
 	}
 
@@ -25,7 +26,7 @@ public interface PlayerDataStorage {
 	 * @param uuid uuid
 	 * @return player nbt data
 	 */
-	static @NotNull ReadWriteNBT getData(@NotNull UUID uuid) {
+	static ReadWriteNBT getData(UUID uuid) {
 		return PlayerDataLoadSave.getData(uuid);
 	}
 

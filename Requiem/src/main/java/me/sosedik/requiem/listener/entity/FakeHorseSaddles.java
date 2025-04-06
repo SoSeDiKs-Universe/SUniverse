@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,13 +26,14 @@ import java.util.UUID;
  * Fakes saddles for clients to allow controlling horses without actual saddles
  */
 // MCCheck: 1.21.4, abstract horse metadata index for saddles
+@NullMarked
 public class FakeHorseSaddles implements PacketListener, Listener {
 
 	private static final int HORSE_META_INDEX = 17;
 	private static final Map<Integer, List<UUID>> ENTITY_TO_PLAYER_SADDLES = new HashMap<>();
 
 	@Override
-	public void onPacketSend(@NotNull PacketSendEvent event) {
+	public void onPacketSend(PacketSendEvent event) {
 		if (event.getPacketType() != PacketType.Play.Server.ENTITY_METADATA) return;
 
 		var packet = new WrapperPlayServerEntityMetadata(event);
@@ -52,18 +53,18 @@ public class FakeHorseSaddles implements PacketListener, Listener {
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
-	public void onDespawn(@NotNull EntityRemoveFromWorldEvent event) {
+	public void onDespawn(EntityRemoveFromWorldEvent event) {
 		ENTITY_TO_PLAYER_SADDLES.remove(event.getEntity().getEntityId());
 	}
 
 	@EventHandler
-	public void onPossess(@NotNull PlayerStartPossessingEntityEvent event) {
+	public void onPossess(PlayerStartPossessingEntityEvent event) {
 		if (event.getEntity() instanceof AbstractHorse entity)
 			FakeHorseSaddles.startTracking(event.getPlayer(), entity);
 	}
 
 	@EventHandler
-	public void onUnPossess(@NotNull PlayerStopPossessingEntityEvent event) {
+	public void onUnPossess(PlayerStopPossessingEntityEvent event) {
 		if (event.getEntity() instanceof AbstractHorse entity)
 			FakeHorseSaddles.stopTracking(event.getPlayer(), entity);
 	}
@@ -74,7 +75,7 @@ public class FakeHorseSaddles implements PacketListener, Listener {
 	 * @param player player
 	 * @param entity entity
 	 */
-	public static void startTracking(@NotNull Player player, @NotNull Entity entity) {
+	public static void startTracking(Player player, Entity entity) {
 		ENTITY_TO_PLAYER_SADDLES.computeIfAbsent(entity.getEntityId(), k -> new ArrayList<>()).add(player.getUniqueId());
 		entity.resendMetadata(HORSE_META_INDEX);
 	}
@@ -84,7 +85,7 @@ public class FakeHorseSaddles implements PacketListener, Listener {
 	 *
 	 * @param entity entity
 	 */
-	public static void stopTracking(@NotNull Player player, @NotNull Entity entity) {
+	public static void stopTracking(Player player, Entity entity) {
 		List<UUID> playerUuids = ENTITY_TO_PLAYER_SADDLES.get(entity.getEntityId());
 		if (playerUuids == null) return;
 		if (!playerUuids.remove(player.getUniqueId())) return;

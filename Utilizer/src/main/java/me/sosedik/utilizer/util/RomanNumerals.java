@@ -1,9 +1,10 @@
 package me.sosedik.utilizer.util;
 
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.TreeMap;
 
+@NullMarked
 public class RomanNumerals {
 
 	private RomanNumerals() {
@@ -35,7 +36,7 @@ public class RomanNumerals {
 	 * @param number number
 	 * @return roman number
 	 */
-	public static @NotNull String toRoman(int number) {
+	public static String toRoman(int number) {
 		int l = map.floorKey(number);
 		if (number == l)
 			return map.get(number);

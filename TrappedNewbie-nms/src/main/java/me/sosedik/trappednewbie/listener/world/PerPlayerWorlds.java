@@ -19,7 +19,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 import org.spigotmc.event.player.PlayerSpawnLocationEvent;
 
 import java.io.File;
@@ -33,6 +33,7 @@ import static java.util.Objects.requireNonNull;
 /**
  * Creates per-player worlds
  */
+@NullMarked
 public class PerPlayerWorlds implements Listener {
 
 	private static final double DAY_TIME_TICK_INCREASE = 1;
@@ -43,7 +44,7 @@ public class PerPlayerWorlds implements Listener {
 	);
 
 //	@EventHandler(priority = EventPriority.MONITOR)
-	public void onWorldLeave(@NotNull PlayerChangedWorldEvent event) {
+	public void onWorldLeave(PlayerChangedWorldEvent event) {
 		World world = event.getFrom();
 		if (!world.getKey().getKey().endsWith(event.getPlayer().getUniqueId().toString())) return;
 		if (!world.getPlayers().isEmpty()) return;
@@ -52,21 +53,21 @@ public class PerPlayerWorlds implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
-	public void onWorldLeave(@NotNull PlayerQuitEvent event) {
+	public void onWorldLeave(PlayerQuitEvent event) {
 		Player player = event.getPlayer();
 		unloadIfNeeded(getPersonalWorld(player.getUniqueId()));
 		for (World.Environment environment : RESOURCE_ENVIRONMENTS)
 			unloadIfNeeded(getResourceWorld(player.getUniqueId(), environment));
 	}
 
-	private void unloadIfNeeded(@NotNull World world) {
+	private void unloadIfNeeded(World world) {
 		if (!world.getPlayers().isEmpty()) return;
 
 		Bukkit.unloadWorld(world, true);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
-	public void onPreJoin(@NotNull AsyncPlayerPreLoginEvent event) {
+	public void onPreJoin(AsyncPlayerPreLoginEvent event) {
 		TrappedNewbie.scheduler().sync(() -> {
 			getPersonalWorld(event.getUniqueId());
 			for (World.Environment environment : RESOURCE_ENVIRONMENTS)
@@ -75,7 +76,7 @@ public class PerPlayerWorlds implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
-	public void onJoin(@NotNull PlayerSpawnLocationEvent event) {
+	public void onJoin(PlayerSpawnLocationEvent event) {
 		if (!event.isInitiallyInUnloadedWorld()) return;
 
 		NamespacedKey dimensionId = event.getInitialDimensionId();
@@ -111,7 +112,7 @@ public class PerPlayerWorlds implements Listener {
 		}
 	}
 
-	private static void startDayCycleTask(@NotNull World world) {
+	private static void startDayCycleTask(World world) {
 		new CustomDayCycleTask(world, () -> {
 			if (Bukkit.getServerTickManager().isFrozen()) return 0D;
 			if (world.isDayTime()) return DAY_TIME_TICK_INCREASE;
@@ -127,7 +128,7 @@ public class PerPlayerWorlds implements Listener {
 		});
 	}
 
-	private static boolean isSleepCounted(@NotNull Player player) {
+	private static boolean isSleepCounted(Player player) {
 		return !player.isSleepingIgnored()
 				&& !player.getGameMode().isInvulnerable();
 	}
@@ -138,7 +139,7 @@ public class PerPlayerWorlds implements Listener {
 	 * @param playerUuid player uuid
 	 * @return world instance
 	 */
-	public static @NotNull World getPersonalWorld(@NotNull UUID playerUuid) {
+	public static World getPersonalWorld(UUID playerUuid) {
 		return getWorld("worlds-personal/", playerUuid,
 				(levelName, worldKey) -> requireNonNull(
 					new WorldCreator(levelName, worldKey)
@@ -155,7 +156,7 @@ public class PerPlayerWorlds implements Listener {
 	 * @param playerUuid player uuid
 	 * @return world instance
 	 */
-	public static @NotNull World getResourceWorld(@NotNull UUID playerUuid, @NotNull World.Environment environment) {
+	public static World getResourceWorld(UUID playerUuid, World.Environment environment) {
 		if (!RESOURCE_ENVIRONMENTS.contains(environment)) throw new IllegalArgumentException("Invalid resources dimension: %s".formatted(environment.name()));
 		return getWorld("worlds-resources/" + environment.name().toLowerCase(Locale.ENGLISH) + "/", playerUuid,
 				(levelName, worldKey) -> requireNonNull(
@@ -172,7 +173,7 @@ public class PerPlayerWorlds implements Listener {
 	 *
 	 * @param world world
 	 */
-	public static void applyWorldRules(@NotNull World world) {
+	public static void applyWorldRules(World world) {
 		world.setDifficulty(Difficulty.HARD);
 		world.setGameRule(GameRule.NATURAL_REGENERATION, false);
 		world.setGameRule(GameRule.DO_IMMEDIATE_RESPAWN, true);
@@ -181,7 +182,7 @@ public class PerPlayerWorlds implements Listener {
 		world.setGameRule(GameRule.SPAWN_CHUNK_RADIUS, 0);
 	}
 
-	private static @NotNull World getWorld(@NotNull String prefix, @NotNull UUID playerUuid, @NotNull BiFunction<@NotNull String, @NotNull NamespacedKey, @NotNull World> worldCreator) {
+	private static World getWorld(String prefix, UUID playerUuid, BiFunction<String, NamespacedKey, World> worldCreator) {
 		var worldKey = worldKey(prefix, playerUuid);
 		World world = Bukkit.getWorld(worldKey);
 		if (world == null) {
@@ -192,7 +193,7 @@ public class PerPlayerWorlds implements Listener {
 		return world;
 	}
 
-	private static @NotNull NamespacedKey worldKey(@NotNull String prefix, @NotNull UUID uuid) {
+	private static NamespacedKey worldKey(String prefix, UUID uuid) {
 		return TrappedNewbie.trappedNewbieKey(prefix + uuid);
 	}
 

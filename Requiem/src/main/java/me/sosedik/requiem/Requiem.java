@@ -38,8 +38,9 @@ import me.sosedik.utilizer.util.Scheduler;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public final class Requiem extends JavaPlugin {
 
 	private static Requiem instance;
@@ -114,7 +115,7 @@ public final class Requiem extends JavaPlugin {
 	 *
 	 * @return the plugin instance
 	 */
-	public static @NotNull Requiem instance() {
+	public static Requiem instance() {
 		return Requiem.instance;
 	}
 
@@ -123,7 +124,7 @@ public final class Requiem extends JavaPlugin {
 	 *
 	 * @return the plugin's task scheduler
 	 */
-	public static @NotNull Scheduler scheduler() {
+	public static Scheduler scheduler() {
 		return instance().scheduler;
 	}
 
@@ -132,7 +133,7 @@ public final class Requiem extends JavaPlugin {
 	 *
 	 * @return the plugin's component logger
 	 */
-	public static @NotNull ComponentLogger logger() {
+	public static ComponentLogger logger() {
 		return instance().getComponentLogger();
 	}
 
@@ -142,7 +143,7 @@ public final class Requiem extends JavaPlugin {
 	 * @param value value
 	 * @return namespaced key
 	 */
-	public static @NotNull NamespacedKey requiemKey(@NotNull String value) {
+	public static NamespacedKey requiemKey(String value) {
 		return new NamespacedKey("requiem", value);
 	}
 

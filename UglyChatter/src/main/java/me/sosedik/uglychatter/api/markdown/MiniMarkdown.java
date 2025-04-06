@@ -11,7 +11,7 @@ import org.commonmark.renderer.NodeRenderer;
 import org.commonmark.renderer.markdown.MarkdownNodeRendererContext;
 import org.commonmark.renderer.markdown.MarkdownNodeRendererFactory;
 import org.commonmark.renderer.markdown.MarkdownRenderer;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -20,6 +20,7 @@ import java.util.Set;
 /**
  * Parses markdown into minimessage string
  */
+@NullMarked
 public class MiniMarkdown {
 
 	private MiniMarkdown() {
@@ -38,12 +39,12 @@ public class MiniMarkdown {
 	private static final MarkdownRenderer RENDERER = MarkdownRenderer.builder()
 		.nodeRendererFactory(new MarkdownNodeRendererFactory() {
 			@Override
-			public @NotNull NodeRenderer create(@NotNull MarkdownNodeRendererContext context) {
+			public NodeRenderer create(MarkdownNodeRendererContext context) {
 				return new MiniNodeRenderer(context);
 			}
 
 			@Override
-			public @NotNull Set<Character> getSpecialCharacters() {
+			public Set<Character> getSpecialCharacters() {
 				return Set.of();
 			}
 		})
@@ -68,7 +69,7 @@ public class MiniMarkdown {
 	 * @param markdown markdown string
 	 * @return minimessage string
 	 */
-	public static @NotNull String markdownToMini(@NotNull String markdown) {
+	public static String markdownToMini(String markdown) {
 		Node document = PARSER.parse(markdown);
 		return RENDERER.render(document).replace("\n", "<br>");
 	}

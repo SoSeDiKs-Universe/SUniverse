@@ -9,21 +9,22 @@ import org.incendo.cloud.annotations.Argument;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.Flag;
 import org.incendo.cloud.annotations.Permission;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import static me.sosedik.utilizer.api.message.Mini.raw;
 
 /**
  * Teleporting between worlds
  */
+@NullMarked
 @Permission("essence.command.world")
 public class WorldCommand {
 
 	@Command("world <world> [player]")
 	public void onCommand(
-		@NotNull CommandSourceStack stack,
-		@NotNull @Argument(value = "world") World world,
+		CommandSourceStack stack,
+		@Argument(value = "world") World world,
 		@Nullable @Argument(value = "player") Player player,
 		@Flag(value = "silent") boolean silent
 	) {

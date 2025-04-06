@@ -5,20 +5,21 @@ import net.kyori.adventure.text.minimessage.Context;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.ArgumentQueue;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
-public record LocaleResolver(@NotNull Messenger messenger) implements TagResolver {
+@NullMarked
+public record LocaleResolver(Messenger messenger) implements TagResolver {
 
 	@Override
-	public @Nullable Tag resolve(@NotNull String name, @NotNull ArgumentQueue args, @NotNull Context ctx) {
+	public @Nullable Tag resolve(String name, ArgumentQueue args, Context ctx) {
 		if (!has(name)) return null;
 		String messagePath = args.popOr("Missing message path").value();
 		return Tag.selfClosingInserting(messenger.getMessage(messagePath));
 	}
 
 	@Override
-	public boolean has(@NotNull String name) {
+	public boolean has(String name) {
 		return name.equals("locale");
 	}
 
@@ -28,7 +29,7 @@ public record LocaleResolver(@NotNull Messenger messenger) implements TagResolve
 	 * @param key locale key
 	 * @return locale tag
 	 */
-	public static @NotNull String localeTag(@NotNull String key) {
+	public static String localeTag(String key) {
 		return "<locale:" + key + ">";
 	}
 

@@ -7,15 +7,16 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Books inside item frames can be read with RMB
  */
+@NullMarked
 public class ReadableBooksInFrames implements Listener {
 
 	@EventHandler(ignoreCancelled = true)
-	public void onFrameBookOpen(@NotNull PlayerItemFrameChangeEvent event) {
+	public void onFrameBookOpen(PlayerItemFrameChangeEvent event) {
 		if (event.getAction() != PlayerItemFrameChangeEvent.ItemFrameChangeAction.ROTATE) return;
 
 		Player player = event.getPlayer();

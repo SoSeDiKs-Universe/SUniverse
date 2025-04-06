@@ -21,7 +21,8 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.BoundingBox;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.List;
@@ -29,6 +30,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
+@NullMarked
 public class LocationUtil {
 
 	private LocationUtil() {
@@ -63,7 +65,7 @@ public class LocationUtil {
 	 *
 	 * @param player player
 	 */
-	public static @NotNull CompletableFuture<Void> runRtp(@NotNull Player player, @NotNull World world, int range) {
+	public static CompletableFuture<Void> runRtp(Player player, World world, int range) {
 		if (player.getLocation().getBlockY() < 400) {
 			player.teleportAsync(player.getLocation().addY(1600), PlayerTeleportEvent.TeleportCause.PLUGIN, TeleportFlag.Relative.VELOCITY_ROTATION, TeleportFlag.EntityState.RETAIN_VEHICLE, TeleportFlag.EntityState.RETAIN_PASSENGERS);
 		}
@@ -80,7 +82,7 @@ public class LocationUtil {
 		return teleported;
 	}
 
-	private static void findLocation(@NotNull Player player, @NotNull Location loc, int check, int range, @NotNull CompletableFuture<Void> teleported) {
+	private static void findLocation(Player player, Location loc, int check, int range, CompletableFuture<@Nullable Void> teleported) {
 		if (check > 50) {
 			teleported.complete(null);
 			return;
@@ -109,7 +111,7 @@ public class LocationUtil {
 	 * @param block  block to check
 	 * @return true, if block's bounding box is a 1x1x1 cube
 	 */
-	public static boolean isCube(@NotNull Block block) {
+	public static boolean isCube(Block block) {
 		BoundingBox bb = block.getBoundingBox();
 		return bb.getHeight() == 1 && bb.getWidthX() == 1 && bb.getWidthZ() == 1;
 	}
@@ -122,7 +124,7 @@ public class LocationUtil {
 	 * @param height max height to fail
 	 * @return true, if block's bounding box is higher than the provided value
 	 */
-	public static boolean isBlockHigher(@NotNull Block block, float height) {
+	public static boolean isBlockHigher(Block block, float height) {
 		for (BoundingBox boundingBox : block.getCollisionShape().getBoundingBoxes()) {
 			if (boundingBox.getMaxY() > height)
 				return true;
@@ -136,7 +138,7 @@ public class LocationUtil {
 	 * @param block block
 	 * @return the highest Y point
 	 */
-	public static double getMaxYPoint(@NotNull Block block) {
+	public static double getMaxYPoint(Block block) {
 		double maxY = 0;
 		for (BoundingBox boundingBox : block.getCollisionShape().getBoundingBoxes()) {
 			maxY = Math.max(maxY, boundingBox.getMaxY());
@@ -150,7 +152,7 @@ public class LocationUtil {
 	 * @param block block
 	 * @return the lowest Y point
 	 */
-	public static double getMinYPoint(@NotNull Block block) {
+	public static double getMinYPoint(Block block) {
 		double minY = 1;
 		for (BoundingBox boundingBox : block.getCollisionShape().getBoundingBoxes()) {
 			minY = Math.min(minY, boundingBox.getMinY());
@@ -164,7 +166,7 @@ public class LocationUtil {
 	 * @param block block
 	 * @return whether block is watery
 	 */
-	public static boolean isWatery(@NotNull Block block) {
+	public static boolean isWatery(Block block) {
 		if (block.getType() == Material.WATER_CAULDRON) return true;
 
 		FluidData fluidData = block.getWorld().getFluidData(block.getLocation());
@@ -177,7 +179,7 @@ public class LocationUtil {
 	 * @param block block
 	 * @return whether block is fluid
 	 */
-	public static boolean isFluid(@NotNull Block block) {
+	public static boolean isFluid(Block block) {
 		return isWatery(block) || block.getType() == Material.LAVA || block.getType() == Material.LAVA_CAULDRON;
 	}
 
@@ -191,7 +193,7 @@ public class LocationUtil {
 	 * @param block  block
 	 * @return whether block is "truly solid"
 	 */
-	public static boolean isTrulySolid(@NotNull Entity entity, @NotNull Block block) {
+	public static boolean isTrulySolid(Entity entity, Block block) {
 		if (!block.isSolid()) return false;
 		Material blockType = block.getType();
 		if (Tag.LEAVES.isTagged(blockType)) return false;

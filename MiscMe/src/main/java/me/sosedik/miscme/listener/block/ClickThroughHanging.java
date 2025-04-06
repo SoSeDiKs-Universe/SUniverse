@@ -15,15 +15,16 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.EquipmentSlot;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Allow opening containers behind hanging entities
  */
+@NullMarked
 public class ClickThroughHanging implements Listener {
 
 	@EventHandler(ignoreCancelled = true)
-	public void onInteract(@NotNull PlayerInteractEntityEvent event) {
+	public void onInteract(PlayerInteractEntityEvent event) {
 		if (event.getHand() != EquipmentSlot.HAND) return;
 		if (!(event.getRightClicked() instanceof Hanging hanging)) return;
 
@@ -48,7 +49,7 @@ public class ClickThroughHanging implements Listener {
 	 * @param ignoreObstructions whether to open the inventory even if it's blocked (e.g. by a sitting cat on a chest)
 	 * @return whether the inventory was opened
 	 */
-	public static @NotNull TriState openContainer(@NotNull Player player, @NotNull Block container, boolean ignoreObstructions) {
+	public static TriState openContainer(Player player, Block container, boolean ignoreObstructions) {
 		if (container.getState(false) instanceof Container storage) {
 			player.swingMainHand();
 			if (!ignoreObstructions && storage instanceof Chest chest && chest.isBlocked()) return TriState.NOT_SET;

@@ -3,8 +3,8 @@ package me.sosedik.utilizer.api.recipe;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,6 +19,7 @@ import java.util.function.Predicate;
  *
  * @param <T> recipe class
  */
+@NullMarked
 public abstract class CraftingRecipeBuilder<T extends CraftingRecipeBuilder<T>> implements CustomRecipe, ExtraRecipeChecks<T> {
 
 	private static final ItemStack AIR_ITEM = ItemStack.empty();
@@ -30,7 +31,7 @@ public abstract class CraftingRecipeBuilder<T extends CraftingRecipeBuilder<T>> 
 	protected final Map<Character, List<ItemStack>> ingredients = new HashMap<>();
 	protected final Map<Character, Predicate<ItemStack>> validators = new HashMap<>();
 
-	protected CraftingRecipeBuilder(@NotNull ItemStack result, @NotNull NamespacedKey key) {
+	protected CraftingRecipeBuilder(ItemStack result, NamespacedKey key) {
 		this.result = result.clone();
 		this.namespacedKey = key;
 	}
@@ -41,7 +42,7 @@ public abstract class CraftingRecipeBuilder<T extends CraftingRecipeBuilder<T>> 
 	 * @param group the recipe's group
 	 * @return this builder
 	 */
-	public @NotNull T withGroup(@NotNull String group) {
+	public T withGroup(String group) {
 		this.group = group;
 		return builder();
 	}
@@ -60,7 +61,7 @@ public abstract class CraftingRecipeBuilder<T extends CraftingRecipeBuilder<T>> 
 	 *
 	 * @return this builder
 	 */
-	public @NotNull T special() {
+	public T special() {
 		return special(true);
 	}
 
@@ -70,7 +71,7 @@ public abstract class CraftingRecipeBuilder<T extends CraftingRecipeBuilder<T>> 
 	 * @param special whether the recipe is special
 	 * @return this builder
 	 */
-	public @NotNull T special(boolean special) {
+	public T special(boolean special) {
 		this.special = special;
 		return builder();
 	}
@@ -82,7 +83,7 @@ public abstract class CraftingRecipeBuilder<T extends CraftingRecipeBuilder<T>> 
 	 * @param ingredient ingredient
 	 * @return this builder
 	 */
-	public @NotNull T addIngredients(char key, @NotNull Material ingredient) {
+	public T addIngredients(char key, Material ingredient) {
 		return addIngredientItems(key, ItemStack.of(ingredient));
 	}
 
@@ -93,7 +94,7 @@ public abstract class CraftingRecipeBuilder<T extends CraftingRecipeBuilder<T>> 
 	 * @param ingredient ingredient
 	 * @return this builder
 	 */
-	public @NotNull T addIngredientItems(char key, @NotNull ItemStack ingredient) {
+	public T addIngredientItems(char key, ItemStack ingredient) {
 		this.ingredients.computeIfAbsent(key, k -> new ArrayList<>()).add(ingredient);
 		return builder();
 	}
@@ -105,7 +106,7 @@ public abstract class CraftingRecipeBuilder<T extends CraftingRecipeBuilder<T>> 
 	 * @param materials ingredients
 	 * @return this builder
 	 */
-	public @NotNull T addIngredients(char key, @NotNull Material... materials) {
+	public T addIngredients(char key, Material... materials) {
 		return addIngredientItems(key, Arrays.stream(materials).map(ItemStack::of).toList());
 	}
 
@@ -116,7 +117,7 @@ public abstract class CraftingRecipeBuilder<T extends CraftingRecipeBuilder<T>> 
 	 * @param ingredients ingredients
 	 * @return this builder
 	 */
-	public @NotNull T addIngredientItems(char key, @NotNull ItemStack... ingredients) {
+	public T addIngredientItems(char key, ItemStack... ingredients) {
 		return addIngredientItems(key, List.of(ingredients));
 	}
 
@@ -127,7 +128,7 @@ public abstract class CraftingRecipeBuilder<T extends CraftingRecipeBuilder<T>> 
 	 * @param ingredients ingredient
 	 * @return this builder
 	 */
-	public @NotNull T addIngredients(char key, @NotNull Collection<Material> ingredients) {
+	public T addIngredients(char key, Collection<Material> ingredients) {
 		List<ItemStack> ingredientVariants = this.ingredients.computeIfAbsent(key, k -> new ArrayList<>());
 		for (Material ingredient : ingredients)
 			ingredientVariants.add(ItemStack.of(ingredient));
@@ -141,7 +142,7 @@ public abstract class CraftingRecipeBuilder<T extends CraftingRecipeBuilder<T>> 
 	 * @param ingredients ingredient
 	 * @return this builder
 	 */
-	public @NotNull T addIngredientItems(char key, @NotNull Collection<ItemStack> ingredients) {
+	public T addIngredientItems(char key, Collection<ItemStack> ingredients) {
 		List<ItemStack> ingredientVariants = this.ingredients.computeIfAbsent(key, k -> new ArrayList<>());
 		for (ItemStack ingredient : ingredients)
 			ingredientVariants.add(ingredient.clone());
@@ -155,28 +156,28 @@ public abstract class CraftingRecipeBuilder<T extends CraftingRecipeBuilder<T>> 
 	 * @param validator ingredient validator
 	 * @return this builder
 	 */
-	public @NotNull T withValidator(char key, @NotNull Predicate<ItemStack> validator) {
+	public T withValidator(char key, Predicate<ItemStack> validator) {
 		this.validators.put(key, validator);
 		return builder();
 	}
 
 	@Override
-	public @NotNull NamespacedKey getKey() {
+	public NamespacedKey getKey() {
 		return this.namespacedKey;
 	}
 
 	@Override
-	public @NotNull String getGroup() {
+	public String getGroup() {
 		return this.group;
 	}
 
 	@Override
-	public @NotNull ItemStack getResult() {
+	public ItemStack getResult() {
 		return this.result;
 	}
 
 	@Override
-	public @NotNull Map<Character, List<ItemStack>> getIngredients() {
+	public Map<Character, List<ItemStack>> getIngredients() {
 		return this.ingredients;
 	}
 
@@ -208,7 +209,7 @@ public abstract class CraftingRecipeBuilder<T extends CraftingRecipeBuilder<T>> 
 	 *
 	 * @return this builder
 	 */
-	protected abstract @NotNull T register();
+	protected abstract T register();
 
 	/**
 	 * Returns this builder
@@ -216,7 +217,7 @@ public abstract class CraftingRecipeBuilder<T extends CraftingRecipeBuilder<T>> 
 	 * @return this builder
 	 */
 	@SuppressWarnings("unchecked")
-	protected @NotNull T builder() {
+	protected T builder() {
 		return (T) this;
 	}
 

@@ -22,13 +22,16 @@ import org.jspecify.annotations.NullMarked;
 import java.util.List;
 
 /**
- * Burning arrows create fire upon landing
+ * Burning projectiles create fire upon landing
  */
 @NullMarked
-// MCCheck 1.21.4, new burnable blocks
-public class BurningArrowCreatesFire implements Listener {
+// MCCheck 1.21.4, new replaceable by fire blocks
+public class BurningProjectileCreatesFire implements Listener {
 
-	private static final List<Material> burnableBlocks = List.of(Material.SHORT_GRASS, Material.TALL_GRASS, Material.FERN, Material.LARGE_FERN);
+	private static final List<Material> replaceableByFire = List.of(
+		Material.SHORT_GRASS, Material.TALL_GRASS, Material.FERN, Material.LARGE_FERN,
+		Material.DEAD_BUSH
+	);
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onFireProjectileLand(ProjectileHitEvent event) {
@@ -87,7 +90,7 @@ public class BurningArrowCreatesFire implements Listener {
 		if (!(
 			hitBlock.getType().isEmpty()
 			|| Tag.CORAL_PLANTS.isTagged(hitBlock.getType())
-			|| burnableBlocks.contains(hitBlock.getType())
+			|| replaceableByFire.contains(hitBlock.getType())
 		)) return;
 
 		hitBlock.setType(Material.FIRE);

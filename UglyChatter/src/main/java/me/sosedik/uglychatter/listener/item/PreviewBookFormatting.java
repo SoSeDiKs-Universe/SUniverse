@@ -11,17 +11,18 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Preview writable book's final result after applying formatting
  */
+@NullMarked
 public class PreviewBookFormatting implements Listener {
 
 	private static final Component DUMMY_AUTHOR = Component.text(Bukkit.getServerName());
 
 	@EventHandler
-	public void onBookOpen(@NotNull PlayerInteractEvent event) {
+	public void onBookOpen(PlayerInteractEvent event) {
 		if (event.useItemInHand() == Event.Result.DENY) return;
 
 		Player player = event.getPlayer();
@@ -43,7 +44,7 @@ public class PreviewBookFormatting implements Listener {
 	 * @param item book item
 	 * @return whether was able to open the book
 	 */
-	public static boolean tryToOpenBook(@NotNull Player player, @NotNull ItemStack item) {
+	public static boolean tryToOpenBook(Player player, ItemStack item) {
 		if (!(item.getItemMeta() instanceof BookMeta oldMeta)) return false;
 
 		if (item.getType() != Material.WRITTEN_BOOK) {

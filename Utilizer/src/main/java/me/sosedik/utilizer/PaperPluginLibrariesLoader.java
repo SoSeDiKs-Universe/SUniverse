@@ -7,7 +7,7 @@ import io.papermc.paper.plugin.loader.library.impl.MavenLibraryResolver;
 import org.eclipse.aether.artifact.DefaultArtifact;
 import org.eclipse.aether.graph.Dependency;
 import org.eclipse.aether.repository.RemoteRepository;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,10 +17,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
+@NullMarked
 public final class PaperPluginLibrariesLoader implements PluginLoader {
 
 	@Override
-	public void classloader(@NotNull PluginClasspathBuilder classpathBuilder) {
+	public void classloader(PluginClasspathBuilder classpathBuilder) {
 		MavenLibraryResolver resolver = new MavenLibraryResolver();
 		PluginLibraries pluginLibraries = load();
 		pluginLibraries.asDependencies().forEach(resolver::addDependency);
@@ -28,7 +29,7 @@ public final class PaperPluginLibrariesLoader implements PluginLoader {
 		classpathBuilder.addLibrary(resolver);
 	}
 
-	private @NotNull PluginLibraries load() {
+	private PluginLibraries load() {
 		try (InputStream in = getClass().getResourceAsStream("/paper-libraries.json")) {
 			assert in != null;
 			return new Gson().fromJson(new InputStreamReader(in, StandardCharsets.UTF_8), PluginLibraries.class);
@@ -37,14 +38,14 @@ public final class PaperPluginLibrariesLoader implements PluginLoader {
 		}
 	}
 
-	record PluginLibraries(@NotNull Map<@NotNull String, @NotNull String> repositories, @NotNull List<@NotNull String> dependencies) {
+	record PluginLibraries(Map<String, String> repositories, List<String> dependencies) {
 
-		public @NotNull Stream<@NotNull Dependency> asDependencies() {
+		public Stream<Dependency> asDependencies() {
 			return dependencies.stream()
 					.map(d -> new Dependency(new DefaultArtifact(d), null));
 		}
 
-		public @NotNull Stream<@NotNull RemoteRepository> asRepositories() {
+		public Stream<RemoteRepository> asRepositories() {
 			return repositories.entrySet().stream()
 					.map(e -> new RemoteRepository.Builder(e.getKey(), "default", e.getValue()).build());
 		}

@@ -22,6 +22,8 @@ import me.sosedik.miscme.listener.entity.ArmorStandSpawnsWithArms;
 import me.sosedik.miscme.listener.entity.BurningSpreadsWhenAttacking;
 import me.sosedik.miscme.listener.entity.DynamicCreeperExplosion;
 import me.sosedik.miscme.listener.entity.EndermanTeleportsPlayers;
+import me.sosedik.miscme.listener.entity.ItemFrameReverseRotate;
+import me.sosedik.miscme.listener.entity.PrimingExplosiveMinecart;
 import me.sosedik.miscme.listener.entity.RainbowSheepDropRandomWool;
 import me.sosedik.miscme.listener.entity.SheepBurnableWool;
 import me.sosedik.miscme.listener.entity.SheepRegrowNaturalWool;
@@ -34,7 +36,7 @@ import me.sosedik.miscme.listener.misc.WaterAwarePotionReset;
 import me.sosedik.miscme.listener.player.BurningForcesToRun;
 import me.sosedik.miscme.listener.player.HidePlayerNameTags;
 import me.sosedik.miscme.listener.player.JumpingOverFences;
-import me.sosedik.miscme.listener.projectile.BurningArrowCreatesFire;
+import me.sosedik.miscme.listener.projectile.BurningProjectileCreatesFire;
 import me.sosedik.miscme.listener.projectile.BurningLitsProjectiles;
 import me.sosedik.miscme.listener.vehicle.JumpyBoats;
 import me.sosedik.miscme.listener.world.CustomDayCycleCleanup;
@@ -44,8 +46,9 @@ import me.sosedik.utilizer.util.Scheduler;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public final class MiscMe extends JavaPlugin {
 
 	private static MiscMe instance;
@@ -88,6 +91,8 @@ public final class MiscMe extends JavaPlugin {
 			BurningSpreadsWhenAttacking.class,
 			DynamicCreeperExplosion.class,
 			EndermanTeleportsPlayers.class,
+			ItemFrameReverseRotate.class,
+			PrimingExplosiveMinecart.class,
 			RainbowSheepDropRandomWool.class,
 			SheepBurnableWool.class,
 			SheepRegrowNaturalWool.class,
@@ -104,8 +109,8 @@ public final class MiscMe extends JavaPlugin {
 			HidePlayerNameTags.class,
 			JumpingOverFences.class,
 			// projectile
-			BurningArrowCreatesFire.class,
 			BurningLitsProjectiles.class,
+			BurningProjectileCreatesFire.class,
 			// vehicle
 			JumpyBoats.class,
 			// world
@@ -118,7 +123,7 @@ public final class MiscMe extends JavaPlugin {
 	 *
 	 * @return the plugin instance
 	 */
-	public static @NotNull MiscMe instance() {
+	public static MiscMe instance() {
 		return MiscMe.instance;
 	}
 
@@ -127,7 +132,7 @@ public final class MiscMe extends JavaPlugin {
 	 *
 	 * @return the plugin's task scheduler
 	 */
-	public static @NotNull Scheduler scheduler() {
+	public static Scheduler scheduler() {
 		return instance().scheduler;
 	}
 
@@ -136,7 +141,7 @@ public final class MiscMe extends JavaPlugin {
 	 *
 	 * @return the plugin's component logger
 	 */
-	public static @NotNull ComponentLogger logger() {
+	public static ComponentLogger logger() {
 		return instance().getComponentLogger();
 	}
 
@@ -146,7 +151,7 @@ public final class MiscMe extends JavaPlugin {
 	 * @param value value
 	 * @return namespaced key
 	 */
-	public static @NotNull NamespacedKey miscmeKey(@NotNull String value) {
+	public static NamespacedKey miscmeKey(String value) {
 		return new NamespacedKey("miscme", value);
 	}
 

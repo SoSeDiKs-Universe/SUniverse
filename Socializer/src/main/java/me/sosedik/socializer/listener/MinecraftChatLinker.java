@@ -10,19 +10,20 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Sends messages from Minecraft's chat into messenger chats
  */
+@NullMarked
 public class MinecraftChatLinker implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	public void onChat(@NotNull AsyncChatEvent event) {
+	public void onChat(AsyncChatEvent event) {
 		if (DiscordBot.isEnabled()) Socializer.scheduler().async(() -> sendDiscordMessage(event.getPlayer(), FancyMessageRenderer.getRawInput(event.message())));
 	}
 
-	private void sendDiscordMessage(@NotNull Player who, @NotNull String message) {
+	private void sendDiscordMessage(Player who, String message) {
 		message = DiscordUtil.parseMentions(message);
 
 		String nickname = who.getName();

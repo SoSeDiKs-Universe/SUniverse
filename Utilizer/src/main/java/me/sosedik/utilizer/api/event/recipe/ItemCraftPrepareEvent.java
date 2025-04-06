@@ -10,12 +10,13 @@ import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.inventory.CraftingRecipe;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Called when a resulting item is prepared for the craft
  */
+@NullMarked
 public class ItemCraftPrepareEvent extends Event {
 
 	private static final HandlerList handlers = new HandlerList();
@@ -26,12 +27,13 @@ public class ItemCraftPrepareEvent extends Event {
 	private final @Nullable Player player;
 	private final String recipeGroup;
 
-	public ItemCraftPrepareEvent(@NotNull Event parentEvent, @NotNull NamespacedKey key) {
+	public ItemCraftPrepareEvent(Event parentEvent, NamespacedKey key) {
 		super();
 		this.parentEvent = parentEvent;
 		this.key = key;
 
 		if (parentEvent instanceof PrepareItemCraftEvent event) {
+			assert event.getRecipe() != null;
 			this.recipe = event.getRecipe();
 			this.player = event.getViewers().isEmpty() ? null : (Player) event.getViewers().getFirst();
 		} else if (parentEvent instanceof CrafterCraftEvent event) {
@@ -53,7 +55,7 @@ public class ItemCraftPrepareEvent extends Event {
 	 *
 	 * @return the parent event
 	 */
-	public @NotNull Event getParentEvent() {
+	public Event getParentEvent() {
 		return this.parentEvent;
 	}
 
@@ -62,7 +64,7 @@ public class ItemCraftPrepareEvent extends Event {
 	 *
 	 * @return the crafted recipe
 	 */
-	public @NotNull Recipe getRecipe() {
+	public Recipe getRecipe() {
 		return this.recipe;
 	}
 
@@ -71,7 +73,7 @@ public class ItemCraftPrepareEvent extends Event {
 	 *
 	 * @return the recipe key
 	 */
-	public @NotNull NamespacedKey getKey() {
+	public NamespacedKey getKey() {
 		return this.key;
 	}
 
@@ -89,7 +91,7 @@ public class ItemCraftPrepareEvent extends Event {
 	 *
 	 * @return the recipe group
 	 */
-	public @NotNull String getRecipeGroup() {
+	public String getRecipeGroup() {
 		return this.recipeGroup;
 	}
 
@@ -126,7 +128,7 @@ public class ItemCraftPrepareEvent extends Event {
 	 *
 	 * @return the crafting matrix
 	 */
-	public @Nullable ItemStack @NotNull [] getMatrix() {
+	public @Nullable ItemStack [] getMatrix() {
 		if (this.parentEvent instanceof PrepareItemCraftEvent event) {
 			return event.getInventory().getMatrix();
 		} else if (this.parentEvent instanceof CrafterCraftEvent event) {
@@ -138,11 +140,11 @@ public class ItemCraftPrepareEvent extends Event {
 	}
 
 	@Override
-	public @NotNull HandlerList getHandlers() {
+	public HandlerList getHandlers() {
 		return handlers;
 	}
 
-	public static @NotNull HandlerList getHandlerList() {
+	public static HandlerList getHandlerList() {
 		return handlers;
 	}
 

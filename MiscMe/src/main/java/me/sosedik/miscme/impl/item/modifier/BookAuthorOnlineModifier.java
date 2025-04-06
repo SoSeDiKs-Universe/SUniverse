@@ -13,8 +13,8 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.regex.Pattern;
@@ -24,18 +24,19 @@ import static me.sosedik.utilizer.api.message.Mini.combined;
 /**
  * Books show online status of the author in tooltip
  */
+@NullMarked
 public class BookAuthorOnlineModifier extends ItemModifier {
 
 	private static final Pattern VALID_NICKNAME = Pattern.compile("^[a-zA-Z0-9_]{2,16}$");
 	private static final Component ONLINE = Component.text(" ●", NamedTextColor.GREEN);
 	private static final Component OFFLINE = Component.text(" ●", NamedTextColor.RED);
 
-	public BookAuthorOnlineModifier(@NotNull NamespacedKey modifierId) {
+	public BookAuthorOnlineModifier(NamespacedKey modifierId) {
 		super(modifierId);
 	}
 
 	@Override
-	public @NotNull ModificationResult modify(@NotNull ItemContextBox contextBox) {
+	public ModificationResult modify(ItemContextBox contextBox) {
 		if (!contextBox.getContextType().hasVisibleName()) return ModificationResult.PASS;
 
 		Player player = contextBox.getViewer();
@@ -69,7 +70,7 @@ public class BookAuthorOnlineModifier extends ItemModifier {
 	 * @param author player name
 	 * @return online status indicator, or null if unknown/invalid player
 	 */
-	public static @Nullable Component getStatus(@NotNull String author) {
+	public static @Nullable Component getStatus(String author) {
 		if (Bukkit.getPlayerExact(author) != null)
 			return combined(Component.text(author), ONLINE);
 

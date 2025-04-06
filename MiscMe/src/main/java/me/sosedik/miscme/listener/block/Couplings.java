@@ -21,13 +21,14 @@ import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.PlayerInventory;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Map;
 
 /**
  * Open blocks together!
  */
+@NullMarked
 public class Couplings implements Listener {
 
 	private static final Map<BlockFace, BlockFace[]> TALL_DOOR_FACINGS = Map.of(
@@ -38,7 +39,7 @@ public class Couplings implements Listener {
 	);
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	public void onOpen(@NotNull PlayerInteractEvent event) {
+	public void onOpen(PlayerInteractEvent event) {
 		if (event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
 		if (event.getHand() != EquipmentSlot.HAND) return;
 
@@ -103,7 +104,7 @@ public class Couplings implements Listener {
 	}
 
 	@EventHandler
-	public void onRedstone(@NotNull BlockRedstoneEvent event) {
+	public void onRedstone(BlockRedstoneEvent event) {
 		int newCurrent = event.getNewCurrent();
 		int oldCurrent = event.getOldCurrent();
 		if (newCurrent > 7 && oldCurrent > 7) return;
@@ -165,19 +166,19 @@ public class Couplings implements Listener {
 		}
 	}
 
-	private boolean isEmptyHanded(@NotNull Player player) {
+	private boolean isEmptyHanded(Player player) {
 		PlayerInventory inv = player.getInventory();
 		return inv.getItemInMainHand().getType() == Material.AIR && inv.getItemInOffHand().getType() == Material.AIR;
 	}
 
-	private void switchOpenableState(@NotNull Block block, @NotNull Openable openable, @NotNull Sound soundOpened, @NotNull Sound soundClosed) {
+	private void switchOpenableState(Block block, Openable openable, Sound soundOpened, Sound soundClosed) {
 		boolean open = !openable.isOpen();
 		openable.setOpen(open);
 		block.setBlockData(openable);
 		block.emitSound(open ? soundOpened : soundClosed, 1F, 1F);
 	}
 
-	private void openNeighbourDoor(@NotNull Block block, @NotNull Door door) {
+	private void openNeighbourDoor(Block block, Door door) {
 		openTallDoor(block, door);
 		Block neighbourBlock = getDoorNeighbour(block, door);
 		if (!(neighbourBlock.getBlockData() instanceof Door neighbourDoor)) return;
@@ -192,13 +193,13 @@ public class Couplings implements Listener {
 		neighbourBlock.setBlockData(neighbourDoor);
 	}
 
-	private void openTallDoor(@NotNull Block doorBlock, @NotNull Door door) {
+	private void openTallDoor(Block doorBlock, Door door) {
 		Block trapDoorBlock = doorBlock.getRelative(BlockFace.UP, door.getHalf() == Bisected.Half.BOTTOM ? 2 : 1);
 		if (openTallTrapdoor(trapDoorBlock, doorBlock, door))
 			openTallTrapdoor(trapDoorBlock.getRelative(BlockFace.UP), doorBlock, door);
 	}
 
-	private boolean openTallTrapdoor(@NotNull Block trapDoorBlock, @NotNull Block doorBlock, @NotNull Door door) {
+	private boolean openTallTrapdoor(Block trapDoorBlock, Block doorBlock, Door door) {
 		if (!(trapDoorBlock.getBlockData() instanceof TrapDoor trapDoor)) return false;
 		if (!trapDoor.isOpen()) return false;
 		if (!isCompatible(doorBlock, trapDoorBlock)) return false;
@@ -221,14 +222,14 @@ public class Couplings implements Listener {
 		return true;
 	}
 
-	private boolean isCompatible(@NotNull Block door, @NotNull Block trapDoor) {
+	private boolean isCompatible(Block door, Block trapDoor) {
 		if (door.getType() == Material.IRON_DOOR) return trapDoor.getType() == Material.IRON_TRAPDOOR;
 		if (door.getType().name().contains("COPPER")) return trapDoor.getType().name().contains("COPPER");
 		if (Tag.WOODEN_DOORS.isTagged(door.getType())) return Tag.WOODEN_TRAPDOORS.isTagged(trapDoor.getType());
 		return false;
 	}
 
-	private @NotNull Block getDoorNeighbour(@NotNull Block block, @NotNull Door door) {
+	private Block getDoorNeighbour(Block block, Door door) {
 		BlockFace face = door.getFacing();
 		boolean right = door.getHinge() == Door.Hinge.RIGHT;
 		return switch (face) {
@@ -243,7 +244,7 @@ public class Couplings implements Listener {
 		};
 	}
 
-	private void openTrapDoors(@NotNull Block block, @NotNull TrapDoor trapDoor) {
+	private void openTrapDoors(Block block, TrapDoor trapDoor) {
 		boolean opened = !trapDoor.isOpen();
 		BlockFace face = trapDoor.getFacing();
 		BlockFace[] facings = getTrapDoorNeighbourFaces(trapDoor);
@@ -282,7 +283,7 @@ public class Couplings implements Listener {
 		}
 	}
 
-	private boolean openTallDoor(@NotNull Block trapDoorBlock, @NotNull TrapDoor trapDoor) {
+	private boolean openTallDoor(Block trapDoorBlock, TrapDoor trapDoor) {
 		if (!trapDoor.isOpen()) return false;
 
 		Block doorBlock = trapDoorBlock.getRelative(BlockFace.DOWN);
@@ -329,7 +330,7 @@ public class Couplings implements Listener {
 		return true;
 	}
 
-	private boolean openTrapDoor(@NotNull Block block, @NotNull BlockFace facing, boolean opened) {
+	private boolean openTrapDoor(Block block, BlockFace facing, boolean opened) {
 		if (!(block.getBlockData() instanceof TrapDoor trapDoor)) return false;
 		if (trapDoor.isOpen() == opened) return true;
 		if (trapDoor.getFacing() != facing) return false;
@@ -341,7 +342,7 @@ public class Couplings implements Listener {
 		return true;
 	}
 
-	private @NotNull BlockFace[] getTrapDoorNeighbourFaces(@NotNull TrapDoor trapDoor) {
+	private BlockFace[] getTrapDoorNeighbourFaces(TrapDoor trapDoor) {
 		BlockFace face = trapDoor.getFacing();
 		if (face == BlockFace.EAST || face == BlockFace.WEST)
 			return new BlockFace[]{BlockFace.SOUTH, BlockFace.NORTH};
@@ -350,7 +351,7 @@ public class Couplings implements Listener {
 		return new BlockFace[0];
 	}
 
-	private void openGates(@NotNull Block block, @NotNull Gate gate) {
+	private void openGates(Block block, Gate gate) {
 		boolean opened = !gate.isOpen();
 		Block upper = block.getRelative(BlockFace.UP);
 		Block lower = block.getRelative(BlockFace.DOWN);
@@ -378,7 +379,7 @@ public class Couplings implements Listener {
 		}
 	}
 
-	private boolean openGate(@NotNull Block block, @NotNull Gate gate, boolean opened) {
+	private boolean openGate(Block block, Gate gate, boolean opened) {
 		if (!(block.getBlockData() instanceof Gate gateBlock)) return false;
 
 		BlockFace gateFacing = gateBlock.getFacing();

@@ -8,15 +8,16 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityCombustEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Ghosts can't take or deal physical damage
  */
+@NullMarked
 public class NoDamageToOrFromGhosts implements Listener {
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onHurt(@NotNull EntityDamageEvent event) {
+	public void onHurt(EntityDamageEvent event) {
 		if (!(event.getEntity() instanceof Player player)) return;
 		if (!GhostyPlayer.isGhost(player)) return;
 
@@ -26,7 +27,7 @@ public class NoDamageToOrFromGhosts implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onHurt(@NotNull EntityCombustEvent event) {
+	public void onHurt(EntityCombustEvent event) {
 		if (!(event.getEntity() instanceof Player player)) return;
 		if (!GhostyPlayer.isGhost(player)) return;
 
@@ -34,7 +35,7 @@ public class NoDamageToOrFromGhosts implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onDamage(@NotNull PrePlayerAttackEntityEvent event) {
+	public void onDamage(PrePlayerAttackEntityEvent event) {
 		if (!GhostyPlayer.isGhost(event.getPlayer())) return;
 
 		event.setCancelled(true);

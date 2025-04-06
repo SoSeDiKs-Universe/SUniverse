@@ -10,16 +10,17 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public class CustomNameModifier extends ItemModifier {
 
-	public CustomNameModifier(@NotNull NamespacedKey modifierId) {
+	public CustomNameModifier(NamespacedKey modifierId) {
 		super(modifierId);
 	}
 
 	@Override
-	public @NotNull ModificationResult modify(@NotNull ItemContextBox contextBox) {
+	public ModificationResult modify(ItemContextBox contextBox) {
 		if (!contextBox.getContextType().hasVisibleName()) return ModificationResult.PASS;
 
 		Material type = contextBox.getInitialType();

@@ -13,7 +13,7 @@ import org.bukkit.event.block.BlockShearEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerShearEntityEvent;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,12 +21,13 @@ import java.util.List;
 /**
  * Rainbow sheep (named jeb_) drop random wool
  */
+@NullMarked
 public class RainbowSheepDropRandomWool implements Listener {
 
 	private static final String RAINBOW_NAME = "jeb_";
 
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-	public void onShear(@NotNull PlayerShearEntityEvent event) {
+	public void onShear(PlayerShearEntityEvent event) {
 		if (!isRainbowSheep(event.getEntity())) return;
 
 		List<ItemStack> drops = new ArrayList<>(event.getDrops());
@@ -35,7 +36,7 @@ public class RainbowSheepDropRandomWool implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-	public void onShear(@NotNull BlockShearEntityEvent event) {
+	public void onShear(BlockShearEntityEvent event) {
 		if (!isRainbowSheep(event.getEntity())) return;
 
 		List<ItemStack> drops = new ArrayList<>(event.getDrops());
@@ -44,20 +45,20 @@ public class RainbowSheepDropRandomWool implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-	public void onDeath(@NotNull EntityDeathEvent event) {
+	public void onDeath(EntityDeathEvent event) {
 		if (!isRainbowSheep(event.getEntity())) return;
 
 		replaceDrops(event.getDrops());
 	}
 
-	private void replaceDrops(@NotNull List<ItemStack> drops) {
+	private void replaceDrops(List<ItemStack> drops) {
 		drops.replaceAll(item -> {
 			if (!Tag.WOOL.isTagged(item.getType())) return item;
 			return getRandomWool(item.getAmount());
 		});
 	}
 
-	private boolean isRainbowSheep(@NotNull Entity entity) {
+	private boolean isRainbowSheep(Entity entity) {
 		if (!(entity instanceof Sheep)) return false;
 
 		Component name = entity.customName();
@@ -67,7 +68,7 @@ public class RainbowSheepDropRandomWool implements Listener {
 		return RAINBOW_NAME.equals(ChatUtil.getPlainText(name));
 	}
 
-	private @NotNull ItemStack getRandomWool(int amount) {
+	private ItemStack getRandomWool(int amount) {
 		return ItemStack.of(MathUtil.getRandom(Tag.WOOL.getValues()), amount);
 	}
 

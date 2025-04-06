@@ -7,15 +7,16 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityAirChangeEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Ghosts don't starve of hunger or air
  */
+@NullMarked
 public class GhostsDontStarveOrChoke implements Listener {
 
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-	public void onStarve(@NotNull FoodLevelChangeEvent event) {
+	public void onStarve(FoodLevelChangeEvent event) {
 		if (!(event.getEntity() instanceof Player player)) return;
 		if (!GhostyPlayer.isGhost(player)) return;
 
@@ -23,7 +24,7 @@ public class GhostsDontStarveOrChoke implements Listener {
 	}
 
 	@EventHandler(ignoreCancelled = true)
-	public void onAirChange(@NotNull EntityAirChangeEvent event) {
+	public void onAirChange(EntityAirChangeEvent event) {
 		if (!(event.getEntity() instanceof Player player)) return;
 		if (event.getAmount() > player.getRemainingAir()) return;
 		if (!GhostyPlayer.isGhost(player)) return;

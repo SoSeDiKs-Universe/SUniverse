@@ -30,8 +30,8 @@ import org.bukkit.block.BlockType;
 import org.bukkit.inventory.ItemType;
 import org.bukkit.potion.PotionEffectType;
 import org.intellij.lang.annotations.Subst;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -58,14 +58,15 @@ import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
+@NullMarked
 public class ResourceLibBootstrap implements PluginBootstrap {
 
 	@Override
-	public void bootstrap(@NotNull BootstrapContext context) {
+	public void bootstrap(BootstrapContext context) {
 		parseResources(context, null);
 	}
 
-	public static void setupItems(@NotNull BootstrapContext context, @NotNull Class<?> materialsClass, @Nullable BiConsumer<String, ItemRegistryEntity.Builder> modifier, @Nullable BiFunction<String, Object, @Nullable Object> itemsProvider) {
+	public static void setupItems(BootstrapContext context, Class<?> materialsClass, @Nullable BiConsumer<String, ItemRegistryEntity.Builder> modifier, @Nullable BiFunction<String, Object, @Nullable Object> itemsProvider) {
 		goThroughDatasets(context, "item", (namespace, jsonEntries) -> {
 			context.getLifecycleManager().registerEventHandler(RegistryEvents.ITEM.freeze(),
 				event -> jsonEntries.forEach(
@@ -76,7 +77,7 @@ public class ResourceLibBootstrap implements PluginBootstrap {
 		context.getLifecycleManager().registerEventHandler(RegistryEvents.ITEM.freeze(), event -> context.injectMaterials(materialsClass));
 	}
 
-	public static void setupBlocks(@NotNull BootstrapContext context, @Nullable BiConsumer<String, BlockRegistryEntity.Builder> modifier, BiFunction<String, Object, KiterinoBlock> blocksProvider) {
+	public static void setupBlocks(BootstrapContext context, @Nullable BiConsumer<String, BlockRegistryEntity.Builder> modifier, BiFunction<String, Object, KiterinoBlock> blocksProvider) {
 		goThroughDatasets(context, "blockstate", (namespace, jsonEntries) -> {
 			context.getLifecycleManager().registerEventHandler(RegistryEvents.BLOCK.freeze(),
 				event -> jsonEntries.forEach(
@@ -86,7 +87,7 @@ public class ResourceLibBootstrap implements PluginBootstrap {
 		});
 	}
 
-	private static void readBlock(@NotNull RegistryFreezeEvent<BlockType, BlockRegistryEntity.Builder> event, @Nullable BiConsumer<String, BlockRegistryEntity.Builder> modifier, @NotNull Key blockKey, @NotNull JsonObject json, BiFunction<String, Object, KiterinoBlock> blocksProvider) {
+	private static void readBlock(RegistryFreezeEvent<BlockType, BlockRegistryEntity.Builder> event, @Nullable BiConsumer<String, BlockRegistryEntity.Builder> modifier, Key blockKey, JsonObject json, BiFunction<String, Object, KiterinoBlock> blocksProvider) {
 		var typedKey = TypedKey.create(RegistryKey.BLOCK, blockKey);
 		event.registry().register(typedKey, b -> {
 			b.nmsBlock(blocksProvider.apply(blockKey.toString(), applyBlockProperties(json, b.constructBlockProperties())));
@@ -95,13 +96,13 @@ public class ResourceLibBootstrap implements PluginBootstrap {
 		});
 	}
 
-	private static @NotNull BlockBehaviour.Properties applyBlockProperties(@NotNull JsonObject json, @NotNull Object props) {
+	private static BlockBehaviour.Properties applyBlockProperties(JsonObject json, Object props) {
 		BlockBehaviour.Properties properties = (BlockBehaviour.Properties) props;
 		if (json.has("explosion_resistance")) properties.explosionResistance(json.get("explosion_resistance").getAsFloat());
 		return properties;
 	}
 
-	private static void readItem(@NotNull RegistryFreezeEvent<ItemType, ItemRegistryEntity.Builder> event, @Nullable BiConsumer<String, ItemRegistryEntity.Builder> modifier, @NotNull Key itemKey, @NotNull JsonObject json, @Nullable BiFunction<String, Object, @Nullable Object> itemsProvider) {
+	private static void readItem(RegistryFreezeEvent<ItemType, ItemRegistryEntity.Builder> event, @Nullable BiConsumer<String, ItemRegistryEntity.Builder> modifier, Key itemKey, JsonObject json, @Nullable BiFunction<String, Object, @Nullable Object> itemsProvider) {
 		var typedKey = TypedKey.create(RegistryKey.ITEM, itemKey);
 		event.registry().register(typedKey, b -> {
 			Object nmsItem = null;
@@ -138,7 +139,7 @@ public class ResourceLibBootstrap implements PluginBootstrap {
 		});
 	}
 
-	private static @NotNull Item.Properties applyItemProperties(@NotNull JsonObject json, @NotNull Object props) {
+	private static Item.Properties applyItemProperties(JsonObject json, Object props) {
 		Item.Properties properties = (Item.Properties) props;
 		if (json.has("durability")) properties.durability(json.get("durability").getAsInt());
 		if (json.has("stack_size")) properties.stacksTo(json.get("stack_size").getAsInt());
@@ -165,7 +166,7 @@ public class ResourceLibBootstrap implements PluginBootstrap {
 		return properties;
 	}
 
-	private static void goThroughDatasets(@NotNull BootstrapContext context, @NotNull String subdir, @NotNull BiConsumer<String, List<Map.Entry<String, JsonElement>>> consumer) {
+	private static void goThroughDatasets(BootstrapContext context, String subdir, BiConsumer<String, List<Map.Entry<String, JsonElement>>> consumer) {
 		Path jarPath = context.getPluginSource();
 		try (FileSystem fs = FileSystems.newFileSystem(URI.create("jar:" + jarPath.toUri()), new HashMap<>())) {
 			Path datasetsPath = fs.getPath("/datasets");
@@ -200,7 +201,7 @@ public class ResourceLibBootstrap implements PluginBootstrap {
 		}
 	}
 
-	private static @NotNull Map.Entry<String, JsonElement> readJson(@NotNull Path path) {
+	private static Map.Entry<String, JsonElement> readJson(Path path) {
 		try (Reader reader = Files.newBufferedReader(path)) {
 			return Map.entry(path.getFileName().toString().replace(".json", ""), JsonParser.parseReader(reader));
 		} catch (IOException e) {
@@ -208,7 +209,7 @@ public class ResourceLibBootstrap implements PluginBootstrap {
 		}
 	}
 
-	public static void parseResources(@NotNull BootstrapContext context, @Nullable Function<String, KiterinoMobEffectBehaviourWrapper> effectsProvider) {
+	public static void parseResources(BootstrapContext context, @Nullable Function<String, KiterinoMobEffectBehaviourWrapper> effectsProvider) {
 		extractDatapack(context);
 
 		File datasetsDir = new File(context.getDataDirectory().toFile(), "datasets");
@@ -226,7 +227,7 @@ public class ResourceLibBootstrap implements PluginBootstrap {
 	}
 
 	// Yes, ugly; better way?
-	private static void extractDatapack(@NotNull BootstrapContext context) {
+	private static void extractDatapack(BootstrapContext context) {
 		File jarFile = context.getPluginSource().toFile();
 		if (!jarFile.isFile()) {
 			context.getLogger().error("Couldn't obtain the JAR file for {}", context.getPluginMeta().getName());
@@ -269,7 +270,7 @@ public class ResourceLibBootstrap implements PluginBootstrap {
 		}
 	}
 
-	private static void registerMobEffects(@NotNull BootstrapContext context, @NotNull File effectsDir, @NotNull String namespace, @NotNull Function<String, KiterinoMobEffectBehaviourWrapper> provider) {
+	private static void registerMobEffects(BootstrapContext context, File effectsDir, String namespace, Function<String, KiterinoMobEffectBehaviourWrapper> provider) {
 		context.getLifecycleManager().registerEventHandler(RegistryEvents.MOB_EFFECT.freeze(), event -> {
 			for (File effectFile : requireNonNull(effectsDir.listFiles())) {
 				if (!effectFile.getName().endsWith(".json")) continue;
@@ -293,7 +294,7 @@ public class ResourceLibBootstrap implements PluginBootstrap {
 		});
 	}
 
-	private static @NotNull TypedKey<PotionEffectType> potionEffectKey(@Subst("key") @NotNull String namespace, @Subst("key") @NotNull String key) {
+	private static TypedKey<PotionEffectType> potionEffectKey(@Subst("key") String namespace, @Subst("key") String key) {
 		return TypedKey.create(RegistryKey.MOB_EFFECT, new NamespacedKey(namespace, key));
 	}
 

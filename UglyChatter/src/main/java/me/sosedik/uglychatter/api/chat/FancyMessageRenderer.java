@@ -17,8 +17,8 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.text.minimessage.tag.standard.StandardTags;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.List;
@@ -29,13 +29,14 @@ import static me.sosedik.utilizer.api.message.Mini.combined;
 /**
  * Renders messages using default fancies like markdown and replacement placeholders
  */
+@NullMarked
 public class FancyMessageRenderer implements ChatRenderer {
 
 	private final Map<String, String> translations = new HashMap<>();
-	private String cachedRawMessage = null;
+	private @Nullable String cachedRawMessage = null;
 
 	@Override
-	public @NotNull Component render(@NotNull Player source, @NotNull Component sourceDisplayName, @NotNull Component message, @NotNull Audience viewer) {
+	public Component render(Player source, Component sourceDisplayName, Component message, Audience viewer) {
 		if (!(viewer instanceof Player playerViewer)) {
 			Component strippedMessage = ReplacementPlaceholder.stripPlaceholders(message);
 			return combined(sourceDisplayName, Component.text(": "), strippedMessage);
@@ -76,14 +77,14 @@ public class FancyMessageRenderer implements ChatRenderer {
 	 * @param baseStyle parent style to use for the message
 	 * @return rendered message
 	 */
-	public @NotNull Component renderAndTranslate(@NotNull MiniMessage deserializer, @NotNull String rawMessage, @NotNull Player source, @NotNull Player viewer, @NotNull Style baseStyle) {
+	public Component renderAndTranslate(MiniMessage deserializer, String rawMessage, Player source, Player viewer, Style baseStyle) {
 		Component message = renderMessage(deserializer, rawMessage, source, viewer);
 		Component hover = getTranslation(deserializer, rawMessage, source, viewer);
 		hover = Component.text().style(baseStyle).append(hover).build();
 		return Component.text().style(baseStyle).hoverEvent(hover).append(message).build();
 	}
 
-	private @NotNull Component getTranslation(@NotNull MiniMessage deserializer, @NotNull String rawMessage, @NotNull Player source, @NotNull Player viewer) {
+	private Component getTranslation(MiniMessage deserializer, String rawMessage, Player source, Player viewer) {
 		TranslationLanguage translateTo = LangHolder.langHolder(viewer).getTranslationLanguage();
 		String translated = this.translations.computeIfAbsent(translateTo.id(), k -> OnlineTranslator.translate(rawMessage, TranslationLanguage.AUTO, translateTo));
 		return renderMessage(deserializer, translated, source, viewer);
@@ -98,7 +99,7 @@ public class FancyMessageRenderer implements ChatRenderer {
 	 * @param viewer message viewer
 	 * @return rendered message
 	 */
-	public static @NotNull Component renderMessage(@NotNull MiniMessage deserializer, @NotNull String rawMessage, @Nullable Player source, @Nullable Player viewer) {
+	public static Component renderMessage(MiniMessage deserializer, String rawMessage, @Nullable Player source, @Nullable Player viewer) {
 		Component message = deserializer.deserialize(rawMessage);
 		message = ReplacementPlaceholder.parsePlaceholders(message, source, viewer);
 		return message;
@@ -111,7 +112,7 @@ public class FancyMessageRenderer implements ChatRenderer {
 	 * @param tags tags
 	 * @return parsed raw message
 	 */
-	public static @NotNull String getRawInput(@NotNull Component message, @NotNull FancyRendererTag... tags) {
+	public static String getRawInput(Component message, FancyRendererTag... tags) {
 		List<FancyRendererTag> rendererTags = List.of(tags);
 		// Try to preserve initial input decorations
 		// And unescape escaped placeholders to allow parsing them with minimessage

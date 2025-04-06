@@ -8,12 +8,13 @@ import org.incendo.cloud.annotations.AnnotationParser;
 import org.incendo.cloud.execution.ExecutionCoordinator;
 import org.incendo.cloud.meta.CommandMeta;
 import org.incendo.cloud.paper.PaperCommandManager;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 
+@NullMarked
 public class CommandManager {
 
 	private static CommandManager commandManager;
@@ -21,7 +22,7 @@ public class CommandManager {
 	private final PaperCommandManager<CommandSourceStack> paperCommandManager;
 	private final AnnotationParser<CommandSourceStack> annotationParser;
 
-	private CommandManager(@NotNull Plugin plugin) {
+	private CommandManager(Plugin plugin) {
 		paperCommandManager = PaperCommandManager.builder()
 			.executionCoordinator(ExecutionCoordinator.asyncCoordinator())
 			.buildOnEnable(plugin);
@@ -37,7 +38,7 @@ public class CommandManager {
 	 * @param plugin owning plugin instance
 	 * @param commandClasses command classes
 	 */
-	public void registerCommands(@NotNull Plugin plugin, @NotNull Class<?> @NotNull ... commandClasses) {
+	public void registerCommands(Plugin plugin, Class<?> ... commandClasses) {
 		CommandManager commandManager = commandManager();
 		try {
 			for (Class<?> commandClass : commandClasses) {
@@ -77,20 +78,20 @@ public class CommandManager {
 	 * @param instance instance to scan
 	 * @return a parsed command
 	 */
-	public <T> @NotNull Collection<@NotNull Command<@NotNull CommandSourceStack>> registerCommand(@NotNull T instance) {
+	public <T> Collection<Command<CommandSourceStack>> registerCommand(T instance) {
 		return annotationParser.parse(instance);
 	}
 
-	public @NotNull PaperCommandManager<@NotNull CommandSourceStack> manager() {
+	public PaperCommandManager<CommandSourceStack> manager() {
 		return this.paperCommandManager;
 	}
 
-	static void init(@NotNull Plugin plugin) {
+	static void init(Plugin plugin) {
 		if (CommandManager.commandManager != null) return;
 		CommandManager.commandManager = new CommandManager(plugin);
 	}
 
-	public static @NotNull CommandManager commandManager() {
+	public static CommandManager commandManager() {
 		return CommandManager.commandManager;
 	}
 

@@ -7,17 +7,18 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Panda;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Possesed mimik owner's poses
  */
+@NullMarked
 public class PoseMimikingTask extends BukkitRunnable {
 
 	private final Player player;
 	private final LivingEntity entity;
 
-	public PoseMimikingTask(@NotNull Player player, @NotNull LivingEntity entity) {
+	public PoseMimikingTask(Player player, LivingEntity entity) {
 		this.player = player;
 		this.entity = entity;
 		Requiem.scheduler().sync(this, 1L, 1L);

@@ -1,6 +1,6 @@
 package me.sosedik.utilizer.api.language.translator;
 
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * A language used in translation service
@@ -8,10 +8,8 @@ import org.jetbrains.annotations.NotNull;
  * @param id language identifier
  * @param displayName native display name
  */
-public record TranslationLanguage(
-	@NotNull String id,
-	@NotNull String displayName
-) {
+@NullMarked
+public record TranslationLanguage(String id, String displayName) {
 
 	/**
 	 * Auto detect language

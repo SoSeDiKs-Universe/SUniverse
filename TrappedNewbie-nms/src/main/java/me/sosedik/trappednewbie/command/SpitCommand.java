@@ -11,16 +11,17 @@ import org.bukkit.entity.LlamaSpit;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 import org.incendo.cloud.annotations.Command;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Spit on that thing
  */
+@NullMarked
 public class SpitCommand {
 
 	@Command("spit")
 	public void onCommand(
-		@NotNull CommandSourceStack stack
+		CommandSourceStack stack
 	) {
 		if (!(stack.getExecutor() instanceof Player player)) return;
 

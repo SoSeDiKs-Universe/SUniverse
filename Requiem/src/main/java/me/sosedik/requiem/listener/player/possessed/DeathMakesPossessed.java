@@ -18,7 +18,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Some deaths make the player an entity possessor
@@ -29,10 +29,11 @@ import org.jetbrains.annotations.NotNull;
  * <li>Getting eaten by Zombies in darkness makes Zombie</li>
  * </ul>
  */
+@NullMarked
 public class DeathMakesPossessed implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	public void onDrowning(@NotNull PlayerDeathEvent event) {
+	public void onDrowning(PlayerDeathEvent event) {
 		if (event.getDamageSource().getDamageType() != DamageType.DROWN) return;
 
 		Player player = event.getPlayer();
@@ -45,7 +46,7 @@ public class DeathMakesPossessed implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	public void onSuffocation(@NotNull PlayerDeathEvent event) {
+	public void onSuffocation(PlayerDeathEvent event) {
 		if (event.getDamageSource().getDamageType() != DamageType.IN_WALL) return;
 
 		Player player = event.getPlayer();
@@ -56,7 +57,7 @@ public class DeathMakesPossessed implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	public void onLavaDrowning(@NotNull PlayerDeathEvent event) {
+	public void onLavaDrowning(PlayerDeathEvent event) {
 		if (event.getDamageSource().getDamageType() != DamageType.LAVA) return;
 
 		Player player = event.getPlayer();
@@ -67,7 +68,7 @@ public class DeathMakesPossessed implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	public void onDeathByMob(@NotNull PlayerDeathEvent event) {
+	public void onDeathByMob(PlayerDeathEvent event) {
 		if (!(event.getDamageSource().getDirectEntity() instanceof Mob damager)) return;
 
 		Player player = event.getPlayer();
@@ -86,7 +87,7 @@ public class DeathMakesPossessed implements Listener {
 		}
 	}
 
-	private <T extends LivingEntity> void migrateAndPosses(@NotNull Player player, @NotNull Class<T> entityClass) {
+	private <T extends LivingEntity> void migrateAndPosses(Player player, Class<T> entityClass) {
 		LivingEntity possessed = player.getWorld().spawn(player.getLocation(), entityClass, entity -> PossessingPlayer.migrateStatsToEntity(player, entity));
 		EntityUtil.clearTargets(player);
 		PossessingPlayer.startPossessing(player, possessed);

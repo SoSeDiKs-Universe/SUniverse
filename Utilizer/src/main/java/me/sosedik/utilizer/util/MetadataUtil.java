@@ -1,8 +1,8 @@
 package me.sosedik.utilizer.util;
 
 import org.bukkit.entity.Entity;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 import java.util.UUID;
@@ -10,6 +10,7 @@ import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
+@NullMarked
 public class MetadataUtil {
 
 	private MetadataUtil() {
@@ -26,7 +27,7 @@ public class MetadataUtil {
 	 * @param metadataKey   metadata key
 	 * @return true, if player has metadata for provided key
 	 */
-	public static boolean hasMetadata(@NotNull Entity metadataOwner, @NotNull String metadataKey) {
+	public static boolean hasMetadata(Entity metadataOwner, String metadataKey) {
 		Map<String, MetadataValue> metadata = METADATA_VALUES.get(metadataOwner.getUniqueId());
 		return metadata != null && metadata.containsKey(metadataKey);
 	}
@@ -39,7 +40,7 @@ public class MetadataUtil {
 	 * @param metadataKey   metadata key
 	 * @param value         metadata value
 	 */
-	public static void setMetadata(@NotNull Entity metadataOwner, @NotNull String metadataKey, @NotNull Object value) {
+	public static void setMetadata(Entity metadataOwner, String metadataKey, Object value) {
 		Map<String, MetadataValue> metadata = METADATA_VALUES.computeIfAbsent(metadataOwner.getUniqueId(), k -> new WeakHashMap<>(1));
 		metadata.put(metadataKey, new MetadataValue(value));
 	}
@@ -51,7 +52,7 @@ public class MetadataUtil {
 	 * @param metadataKey   metadata key
 	 * @return metadata object or null
 	 */
-	public static @Nullable MetadataValue getMetadata(@NotNull Entity metadataOwner, @NotNull String metadataKey) {
+	public static @Nullable MetadataValue getMetadata(Entity metadataOwner, String metadataKey) {
 		Map<String, MetadataValue> metadata = METADATA_VALUES.get(metadataOwner.getUniqueId());
 		return metadata == null ? null : metadata.get(metadataKey);
 	}
@@ -65,7 +66,7 @@ public class MetadataUtil {
 	 * @param metadataKey   metadata key
 	 * @return metadata object if present, otherwise default value
 	 */
-	public static @NotNull MetadataValue getMetadata(@NotNull Entity metadataOwner, @NotNull String metadataKey, @NotNull Object defaultValue) {
+	public static MetadataValue getMetadata(Entity metadataOwner, String metadataKey, Object defaultValue) {
 		Map<String, MetadataValue> metadata = METADATA_VALUES.get(metadataOwner.getUniqueId());
 		if (metadata == null) {
 			setMetadata(metadataOwner, metadataKey, defaultValue);
@@ -88,7 +89,7 @@ public class MetadataUtil {
 	 * @param metadataKey   metadata key
 	 * @return metadata object if present, otherwise default value
 	 */
-	public static @NotNull MetadataValue getMetadata(@NotNull Entity metadataOwner, @NotNull String metadataKey, @NotNull Supplier<Object> defaultValue) {
+	public static MetadataValue getMetadata(Entity metadataOwner, String metadataKey, Supplier<Object> defaultValue) {
 		Map<String, MetadataValue> metadata = METADATA_VALUES.get(metadataOwner.getUniqueId());
 		if (metadata == null) {
 			Object value = defaultValue.get();
@@ -110,7 +111,7 @@ public class MetadataUtil {
 	 * @param metadataOwner metadata owner
 	 * @param metadataKey   metadata key
 	 */
-	public static @Nullable MetadataValue removeMetadata(@NotNull Entity metadataOwner, @NotNull String metadataKey) {
+	public static @Nullable MetadataValue removeMetadata(Entity metadataOwner, String metadataKey) {
 		Map<String, MetadataValue> metadata = METADATA_VALUES.get(metadataOwner.getUniqueId());
 		if (metadata != null)
 			return metadata.remove(metadataKey);
@@ -122,14 +123,14 @@ public class MetadataUtil {
 	 *
 	 * @param metadataOwner metadata owner
 	 */
-	public static void clearMetadata(@NotNull Entity metadataOwner) {
+	public static void clearMetadata(Entity metadataOwner) {
 		METADATA_VALUES.remove(metadataOwner.getUniqueId());
 	}
 
 	/**
 	 * A wrapper for metadata values
 	 */
-	public record MetadataValue(@NotNull Object metadataValue) {
+	public record MetadataValue(Object metadataValue) {
 
 		/**
 		 * Get value as integer
@@ -172,7 +173,7 @@ public class MetadataUtil {
 		 *
 		 * @return String
 		 */
-		public @NotNull String asString() {
+		public String asString() {
 			return (String) this.metadataValue;
 		}
 
@@ -181,7 +182,7 @@ public class MetadataUtil {
 		 *
 		 * @return metadata object
 		 */
-		public <T> @NotNull T get(@NotNull Class<@NotNull T> clazz) {
+		public <T> T get(Class<T> clazz) {
 			return clazz.cast(this.metadataValue);
 		}
 

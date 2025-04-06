@@ -9,15 +9,16 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Mobs do not target ghosts and possessors
  */
+@NullMarked
 public class MobsDontTargetGhosts implements Listener {
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onTarget(@NotNull EntityTargetLivingEntityEvent event) {
+	public void onTarget(EntityTargetLivingEntityEvent event) {
 		if (!(event.getTarget() instanceof Player player)) return;
 
 		if (GhostyPlayer.isGhost(player)) {

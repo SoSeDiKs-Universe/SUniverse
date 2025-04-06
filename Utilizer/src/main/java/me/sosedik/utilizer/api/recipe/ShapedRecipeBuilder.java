@@ -3,16 +3,17 @@ package me.sosedik.utilizer.api.recipe;
 import com.google.common.base.Preconditions;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
+@NullMarked
 public abstract class ShapedRecipeBuilder<T extends ShapedRecipeBuilder<T>> extends CraftingRecipeBuilder<T> {
 
 	private final String[] shape;
 	private final int matrixSize;
 	private final boolean symmetrical;
 
-	protected ShapedRecipeBuilder(@NotNull ItemStack result, @NotNull NamespacedKey key, @NotNull String... shape) {
+	protected ShapedRecipeBuilder(ItemStack result, NamespacedKey key, String... shape) {
 		super(result, key);
 		Preconditions.checkArgument(shape.length != 0, "Shaped recipes can't have an empty shape");
 
@@ -48,7 +49,7 @@ public abstract class ShapedRecipeBuilder<T extends ShapedRecipeBuilder<T>> exte
 	 *
 	 * @return the recipe shape
 	 */
-	public @NotNull String[] getShape() {
+	public String[] getShape() {
 		return this.shape;
 	}
 
@@ -62,13 +63,13 @@ public abstract class ShapedRecipeBuilder<T extends ShapedRecipeBuilder<T>> exte
 	}
 
 	@Override
-	public boolean checkMatrix(@Nullable ItemStack @NotNull [] items) {
+	public boolean checkMatrix(@Nullable ItemStack[] items) {
 		if (items.length != this.matrixSize) return false;
 
 		return (!symmetrical && matches(items, true)) || matches(items, false);
 	}
 
-	private boolean matches(@Nullable ItemStack @NotNull [] input, boolean mirrored) {
+	private boolean matches(@Nullable ItemStack[] input, boolean mirrored) {
 		int rows = this.shape.length;
 		int columns = this.shape[0].length();
 		for (int i = 0; i < rows; i++) {

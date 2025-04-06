@@ -18,20 +18,21 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.function.Consumer;
 
 /**
  * Taking control of other mobs
  */
+@NullMarked
 public class PossessingOverMobs implements Listener {
 
 	private static final String SOULBOUND_ITEM_TAG = "entity_soulbound";
 	private static final String EQUIPMENT_CHECKED_TAG = "equipment_checked";
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onInteract(@NotNull PlayerInteractEntityEvent event) {
+	public void onInteract(PlayerInteractEntityEvent event) {
 		if (event.getHand() != EquipmentSlot.HAND) return;
 		if (!(event.getRightClicked() instanceof LivingEntity entity)) return;
 		if (entity.hasRider()) return;
@@ -50,7 +51,7 @@ public class PossessingOverMobs implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onSoulboundItemDrop(@NotNull PlayerDropItemEvent event) {
+	public void onSoulboundItemDrop(PlayerDropItemEvent event) {
 		Player player = event.getPlayer();
 		if (!PossessingPlayer.isPossessing(player)) return;
 
@@ -62,7 +63,7 @@ public class PossessingOverMobs implements Listener {
 		player.playSound(player, Sound.PARTICLE_SOUL_ESCAPE, SoundCategory.PLAYERS, 1F, 1F);
 	}
 
-	private void markSoulboundItems(@NotNull LivingEntity entity) {
+	private void markSoulboundItems(LivingEntity entity) {
 		if (NBT.getPersistentData(entity, nbt -> nbt.hasTag(EQUIPMENT_CHECKED_TAG))) return;
 
 		NBT.modifyPersistentData(entity, (Consumer<ReadWriteNBT>) nbt -> nbt.setBoolean(EQUIPMENT_CHECKED_TAG, true));

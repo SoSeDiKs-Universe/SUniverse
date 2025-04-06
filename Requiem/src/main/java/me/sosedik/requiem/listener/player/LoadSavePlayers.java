@@ -13,15 +13,16 @@ import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Loading and saving ghosts
  */
+@NullMarked
 public class LoadSavePlayers implements Listener {
 
 	@EventHandler(priority = EventPriority.LOW)
-	public void onLoad(@NotNull PlayerDataLoadedEvent event) {
+	public void onLoad(PlayerDataLoadedEvent event) {
 		Player player = event.getPlayer();
 		ReadWriteNBT data = event.getData();
 		if (!PossessingPlayer.loadPossessingData(player, data))
@@ -29,7 +30,7 @@ public class LoadSavePlayers implements Listener {
 	}
 
 	@EventHandler
-	public void onSave(@NotNull PlayerDataSaveEvent event) {
+	public void onSave(PlayerDataSaveEvent event) {
 		Player player = event.getPlayer();
 		ReadWriteNBT data = event.getData();
 		boolean quit = event.isQuit();
@@ -37,12 +38,12 @@ public class LoadSavePlayers implements Listener {
 	}
 
 	@EventHandler
-	public void onQuit(@NotNull PlayerQuitEvent event) {
+	public void onQuit(PlayerQuitEvent event) {
 		Player player = event.getPlayer();
 		cleanupGhostState(player);
 	}
 
-	private void cleanupGhostState(@NotNull Player player) {
+	private void cleanupGhostState(Player player) {
 		PotionEffect potionEffect = player.getPotionEffect(PotionEffectType.NIGHT_VISION);
 		if (potionEffect == null) return;
 		if (potionEffect.getDuration() != PotionEffect.INFINITE_DURATION) return;
@@ -51,7 +52,7 @@ public class LoadSavePlayers implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-	public void onGameModeChange(@NotNull PlayerGameModeChangeEvent event) {
+	public void onGameModeChange(PlayerGameModeChangeEvent event) {
 		if (event.getNewGameMode().isInvulnerable()) return;
 
 		Player player = event.getPlayer();

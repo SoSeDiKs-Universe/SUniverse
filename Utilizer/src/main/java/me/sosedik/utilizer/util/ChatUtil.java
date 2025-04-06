@@ -2,8 +2,9 @@ package me.sosedik.utilizer.util;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public class ChatUtil {
 
 	private ChatUtil() {
@@ -21,7 +22,7 @@ public class ChatUtil {
 	 * @param component Component to serialize
 	 * @return plain text of the Component
 	 */
-	public static @NotNull String getPlainText(@NotNull Component component) {
+	public static String getPlainText(Component component) {
 		return PlainTextComponentSerializer.plainText().serialize(component);
 	}
 

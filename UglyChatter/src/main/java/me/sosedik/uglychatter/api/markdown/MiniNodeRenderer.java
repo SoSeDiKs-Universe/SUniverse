@@ -10,57 +10,58 @@ import org.commonmark.node.Text;
 import org.commonmark.renderer.markdown.CoreMarkdownNodeRenderer;
 import org.commonmark.renderer.markdown.MarkdownNodeRendererContext;
 import org.commonmark.renderer.markdown.MarkdownWriter;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Builds on top of markdown renderer to output minimessage
  */
+@NullMarked
 public class MiniNodeRenderer extends CoreMarkdownNodeRenderer {
 
 	private final MarkdownWriter writer;
 
-	public MiniNodeRenderer(@NotNull MarkdownNodeRendererContext context) {
+	public MiniNodeRenderer(MarkdownNodeRendererContext context) {
 		super(context);
 		this.writer = context.getWriter();
 	}
 
 	@Override
-	public void visit(@NotNull Document document) {
+	public void visit(Document document) {
 		visitChildren(document);
 		// Omit newline in the end
 	}
 
 	@Override
-	public void visit(@NotNull Text text) {
+	public void visit(Text text) {
 		writer.raw(text.getLiteral());
 	}
 
 	@Override
-	public void visit(@NotNull HardLineBreak hardLineBreak) {
+	public void visit(HardLineBreak hardLineBreak) {
 		writer.raw("  <br>");
 	}
 
 	@Override
-	public void visit(@NotNull SoftLineBreak softLineBreak) {
+	public void visit(SoftLineBreak softLineBreak) {
 		writer.raw("<br>");
 	}
 
 	@Override
-	public void visit(@NotNull Emphasis emphasis) {
+	public void visit(Emphasis emphasis) {
 		writer.raw("<i>");
 		visitChildren(emphasis);
 		writer.raw("</i>");
 	}
 
 	@Override
-	public void visit(@NotNull StrongEmphasis strongEmphasis) {
+	public void visit(StrongEmphasis strongEmphasis) {
 		writer.raw("<b>");
 		visitChildren(strongEmphasis);
 		writer.raw("</b>");
 	}
 
 	@Override
-	public void visit(@NotNull Link link) {
+	public void visit(Link link) {
 		String destination = link.getDestination();
 		if (destination.startsWith("click:open_url")) {
 			writer.raw("<" + destination + ">");

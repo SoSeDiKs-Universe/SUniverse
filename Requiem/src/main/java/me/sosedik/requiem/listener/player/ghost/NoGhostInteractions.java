@@ -13,71 +13,72 @@ import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerPickupArrowEvent;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Prevent ghosts from interacting with a world
  */
+@NullMarked
 public class NoGhostInteractions implements Listener {
 
 	@EventHandler(priority = EventPriority.LOWEST) // Interact has special cancellation
-	public void onInteractWorld(@NotNull PlayerInteractEvent event) {
+	public void onInteractWorld(PlayerInteractEvent event) {
 		if (!GhostyPlayer.isGhost(event.getPlayer())) return;
 
 		event.setCancelled(true);
 	}
 
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-	public void onInteractEntity(@NotNull PlayerInteractEntityEvent event) {
+	public void onInteractEntity(PlayerInteractEntityEvent event) {
 		if (!GhostyPlayer.isGhost(event.getPlayer())) return;
 
 		event.setCancelled(true);
 	}
 
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-	public void onInteractEntity(@NotNull PlayerInteractAtEntityEvent event) {
+	public void onInteractEntity(PlayerInteractAtEntityEvent event) {
 		if (!GhostyPlayer.isGhost(event.getPlayer())) return;
 
 		event.setCancelled(true);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onInteractWorld(@NotNull BlockBreakEvent event) {
+	public void onInteractWorld(BlockBreakEvent event) {
 		if (!GhostyPlayer.isGhost(event.getPlayer())) return;
 
 		event.setCancelled(true);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onSleep(@NotNull PlayerBedEnterEvent event) {
+	public void onSleep(PlayerBedEnterEvent event) {
 		if (!GhostyPlayer.isGhost(event.getPlayer())) return;
 
 		event.setCancelled(true);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onDrop(@NotNull PlayerDropItemEvent event) {
+	public void onDrop(PlayerDropItemEvent event) {
 		if (!GhostyPlayer.isGhost(event.getPlayer())) return;
 
 		event.setCancelled(true);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onPickup(@NotNull PlayerAttemptPickupItemEvent event) {
+	public void onPickup(PlayerAttemptPickupItemEvent event) {
 		if (!GhostyPlayer.isGhost(event.getPlayer())) return;
 
 		event.setCancelled(true);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onPickup(@NotNull PlayerPickupArrowEvent event) {
+	public void onPickup(PlayerPickupArrowEvent event) {
 		if (!GhostyPlayer.isGhost(event.getPlayer())) return;
 
 		event.setCancelled(true);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onPickup(@NotNull PlayerPickupExperienceEvent event) {
+	public void onPickup(PlayerPickupExperienceEvent event) {
 		if (!GhostyPlayer.isGhost(event.getPlayer())) return;
 
 		event.setCancelled(true);

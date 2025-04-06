@@ -3,8 +3,8 @@ package me.sosedik.uglychatter.api.mini.placeholder;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextReplacementConfig;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -16,6 +16,7 @@ import java.util.regex.Pattern;
 /**
  * Represents a placeholder in a non-minimessage format
  */
+@NullMarked
 public abstract class ReplacementPlaceholder {
 
 	private static final List<ReplacementPlaceholder> REPLACEMENT_PLACEHOLDERS = new ArrayList<>();
@@ -33,7 +34,7 @@ public abstract class ReplacementPlaceholder {
 	 *
 	 * @return the placeholder shortcode
 	 */
-	public @NotNull String getShortcode() {
+	public String getShortcode() {
 		return this.shortcode;
 	}
 
@@ -42,7 +43,7 @@ public abstract class ReplacementPlaceholder {
 	 *
 	 * @return the replacement pattern
 	 */
-	public @NotNull Pattern getReplacementPattern() {
+	public Pattern getReplacementPattern() {
 		return this.replacementPattern;
 	}
 
@@ -51,11 +52,11 @@ public abstract class ReplacementPlaceholder {
 	 *
 	 * @return the text replacement config
 	 */
-	public @NotNull TextReplacementConfig getShortcodeTextReplacementConfig() {
+	public TextReplacementConfig getShortcodeTextReplacementConfig() {
 		return this.shortcodeTextReplacementConfig;
 	}
 
-	protected void setReplacementPattern(@NotNull Pattern replacementPattern) {
+	protected void setReplacementPattern(Pattern replacementPattern) {
 		this.replacementPattern = replacementPattern;
 		this.shortcodeTextReplacementConfig = TextReplacementConfig.builder()
 			.match(replacementPattern)
@@ -63,11 +64,11 @@ public abstract class ReplacementPlaceholder {
 			.build();
 	}
 
-	protected void setReplacementPattern(@NotNull Collection<String> placeholderKeys) {
+	protected void setReplacementPattern(Collection<String> placeholderKeys) {
 		setReplacementPattern(buildPattern(placeholderKeys));
 	}
 
-	private @NotNull Pattern buildPattern(@NotNull Collection<String> placeholderKeys) {
+	private Pattern buildPattern(Collection<String> placeholderKeys) {
 		var regex = new StringBuilder();
 		for (String placeholderKey : placeholderKeys)
 			regex.append('(').append(Pattern.quote(placeholderKey)).append(")|");
@@ -83,7 +84,7 @@ public abstract class ReplacementPlaceholder {
 	 * @param viewer viewer
 	 * @return the placeholder display
 	 */
-	public @NotNull Component getDisplay(@NotNull MatchResult result, @Nullable Player sender, @Nullable Player viewer) {
+	public Component getDisplay(MatchResult result, @Nullable Player sender, @Nullable Player viewer) {
 		return getDisplay(sender, viewer);
 	}
 
@@ -94,7 +95,7 @@ public abstract class ReplacementPlaceholder {
 	 * @param viewer viewer
 	 * @return the placeholder display
 	 */
-	public @NotNull Component getDisplay(@Nullable Player sender, @Nullable Player viewer) {
+	public Component getDisplay(@Nullable Player sender, @Nullable Player viewer) {
 		return getDisplay(viewer);
 	}
 
@@ -104,7 +105,7 @@ public abstract class ReplacementPlaceholder {
 	 * @param viewer viewer
 	 * @return the placeholder display
 	 */
-	public @NotNull Component getDisplay(@Nullable Player viewer) {
+	public Component getDisplay(@Nullable Player viewer) {
 		return getDisplay();
 	}
 
@@ -113,7 +114,7 @@ public abstract class ReplacementPlaceholder {
 	 *
 	 * @return the placeholder display
 	 */
-	public @NotNull Component getDisplay() {
+	public Component getDisplay() {
 		return Component.empty();
 	}
 
@@ -122,7 +123,7 @@ public abstract class ReplacementPlaceholder {
 	 *
 	 * @return the registered replacement placeholders
 	 */
-	public static @NotNull List<ReplacementPlaceholder> replacementPlaceholders() {
+	public static List<ReplacementPlaceholder> replacementPlaceholders() {
 		return REPLACEMENT_PLACEHOLDERS;
 	}
 
@@ -132,7 +133,7 @@ public abstract class ReplacementPlaceholder {
 	 * @param text text
 	 * @return modified text
 	 */
-	public static @NotNull Component parsePlaceholders(@NotNull Component text) {
+	public static Component parsePlaceholders(Component text) {
 		return parsePlaceholders(text, null, null);
 	}
 
@@ -144,7 +145,7 @@ public abstract class ReplacementPlaceholder {
 	 * @param viewer viewer
 	 * @return modified text
 	 */
-	public static @NotNull Component parsePlaceholders(@NotNull Component text, @Nullable Player sender, @Nullable Player viewer) {
+	public static Component parsePlaceholders(Component text, @Nullable Player sender, @Nullable Player viewer) {
 		return parsePlaceholders(replacementPlaceholders(), text, sender, viewer);
 	}
 
@@ -157,7 +158,7 @@ public abstract class ReplacementPlaceholder {
 	 * @param viewer viewer
 	 * @return modified text
 	 */
-	public static <T extends ReplacementPlaceholder> @NotNull Component parsePlaceholders(@NotNull List<T> placeholders, @NotNull Component text, @Nullable Player sender, @Nullable Player viewer) {
+	public static <T extends ReplacementPlaceholder> Component parsePlaceholders(List<T> placeholders, Component text, @Nullable Player sender, @Nullable Player viewer) {
 		for (T placeholder : placeholders) {
 			var placeholderCompound = TextReplacementConfig.builder()
 				.match(placeholder.getReplacementPattern())
@@ -174,7 +175,7 @@ public abstract class ReplacementPlaceholder {
 	 * @param text text
 	 * @return modified text
 	 */
-	public static @NotNull String stripPlaceholders(@NotNull String text) {
+	public static String stripPlaceholders(String text) {
 		return stripPlaceholders(replacementPlaceholders(), text);
 	}
 
@@ -184,7 +185,7 @@ public abstract class ReplacementPlaceholder {
 	 * @param text text
 	 * @return modified text
 	 */
-	public static <T extends ReplacementPlaceholder> @NotNull String stripPlaceholders(@NotNull List<T> placeholders, @NotNull String text) {
+	public static <T extends ReplacementPlaceholder> String stripPlaceholders(List<T> placeholders, String text) {
 		var result = new StringBuffer(text);
 		for (T placeholder : placeholders) {
 			Pattern pattern = placeholder.getReplacementPattern();
@@ -207,7 +208,7 @@ public abstract class ReplacementPlaceholder {
 	 * @param text text
 	 * @return modified text
 	 */
-	public static @NotNull Component stripPlaceholders(@NotNull Component text) {
+	public static Component stripPlaceholders(Component text) {
 		return stripPlaceholders(replacementPlaceholders(), text);
 	}
 
@@ -218,7 +219,7 @@ public abstract class ReplacementPlaceholder {
 	 * @param text text
 	 * @return modified text
 	 */
-	public static <T extends ReplacementPlaceholder> @NotNull Component stripPlaceholders(@NotNull List<T> placeholders, @NotNull Component text) {
+	public static <T extends ReplacementPlaceholder> Component stripPlaceholders(List<T> placeholders, Component text) {
 		for (T placeholder : placeholders)
 			text = text.replaceText(placeholder.getShortcodeTextReplacementConfig());
 		return text;

@@ -1,18 +1,19 @@
 package me.sosedik.utilizer.impl.translator;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Exception produced during translation
  */
+@NullMarked
 public class TranslatorException extends Exception {
 
-	public TranslatorException(@NotNull String message) {
+	public TranslatorException(String message) {
 		super(message);
 	}
 
-	public TranslatorException(@NotNull String message, @Nullable Throwable cause) {
+	public TranslatorException(String message, @Nullable Throwable cause) {
 		super(message, cause);
 	}
 

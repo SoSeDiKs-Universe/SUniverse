@@ -12,15 +12,16 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Standing on a burning campfire is a bad idea
  */
+@NullMarked
 public class CampfireSetsOnFire implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-	public void onCollide(@NotNull EntityInsideBlockEvent event) {
+	public void onCollide(EntityInsideBlockEvent event) {
 		if (!(event.getEntity() instanceof LivingEntity entity)) return;
 		if (isFireExempt(event.getBlock(), entity)) return;
 
@@ -31,10 +32,11 @@ public class CampfireSetsOnFire implements Listener {
 		}, 30L);
 	}
 
-	private boolean isFireExempt(@NotNull Block block, @NotNull LivingEntity entity) {
+	private boolean isFireExempt(Block block, LivingEntity entity) {
 		if (!(block.getBlockData() instanceof Campfire campfire)) return true;
 		if (!campfire.isLit()) return true;
 		if (campfire.isWaterlogged()) return true;
+		if (entity.isImmuneToFire()) return true;
 		if (entity.getFireTicks() > 60) return true;
 		if (entity.hasPotionEffect(PotionEffectType.FIRE_RESISTANCE)) return true;
 

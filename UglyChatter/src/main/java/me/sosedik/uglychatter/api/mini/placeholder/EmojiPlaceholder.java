@@ -7,7 +7,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -24,6 +24,7 @@ import static me.sosedik.utilizer.api.message.Mini.combine;
 /**
  * Handles emoji placeholders, e.g. {@code :sparkles:} to {@code ✨}
  */
+@NullMarked
 public class EmojiPlaceholder extends ReplacementPlaceholder {
 
 	private static final Map<String, String> EMOJI_REPLACEMENTS = new LinkedHashMap<>();
@@ -31,7 +32,7 @@ public class EmojiPlaceholder extends ReplacementPlaceholder {
 
 	private final Component display;
 
-	public EmojiPlaceholder(@NotNull String rawEmoji, @NotNull Set<String> aliases) {
+	public EmojiPlaceholder(String rawEmoji, Set<String> aliases) {
 		// aliases is modified later, hence the copy of the set
 		Iterator<String> aliasesIterator = new HashSet<>(aliases).iterator();
 
@@ -67,7 +68,7 @@ public class EmojiPlaceholder extends ReplacementPlaceholder {
 	}
 
 	@Override
-	public @NotNull Component getDisplay() {
+	public Component getDisplay() {
 		return this.display;
 	}
 
@@ -77,7 +78,7 @@ public class EmojiPlaceholder extends ReplacementPlaceholder {
 	 * @param text text string
 	 * @return remapped text string
 	 */
-	public static @NotNull String applyMappings(@NotNull String text) {
+	public static String applyMappings(String text) {
 		for (Map.Entry<String, String> entry : EMOJI_REPLACEMENTS.entrySet())
 			text = text.replace(entry.getKey(), entry.getValue());
 		return text;
@@ -88,7 +89,7 @@ public class EmojiPlaceholder extends ReplacementPlaceholder {
 	 *
 	 * @param plugin plugin instance
 	 */
-	public static void setupEmoji(@NotNull Plugin plugin) {
+	public static void setupEmoji(Plugin plugin) {
 		var emojiAssetsDir = new File(plugin.getDataFolder(), "emoji/assets");
 		if (!emojiAssetsDir.exists()) {
 			plugin.getLogger().warning("Emoji assets are missing!");

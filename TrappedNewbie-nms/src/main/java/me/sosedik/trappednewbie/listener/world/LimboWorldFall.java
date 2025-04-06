@@ -15,11 +15,12 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Teleport to resource world when falling in limbo world
  */
+@NullMarked
 public class LimboWorldFall implements Listener {
 
 	/**
@@ -29,7 +30,7 @@ public class LimboWorldFall implements Listener {
 	private static final World LIMBO_WORLD = Bukkit.getWorlds().getFirst();
 
 	@EventHandler(priority = EventPriority.LOWEST)
-	public void onFall(@NotNull EntityDamageEvent event) {
+	public void onFall(EntityDamageEvent event) {
 		if (!(event.getEntity() instanceof Player player)) return;
 		if (player.getWorld() != LIMBO_WORLD) return;
 		if (event.getDamageSource().getDamageType() != DamageType.OUT_OF_WORLD) return;
@@ -46,7 +47,7 @@ public class LimboWorldFall implements Listener {
 	 * @param player player
 	 * @param world world
 	 */
-	public static void runRtp(@NotNull Player player, @NotNull World world) {
+	public static void runRtp(Player player, World world) {
 		LocationUtil.runRtp(player, world, RPT_RADIUS)
 			.thenRun(() -> {
 				Entity vehicle = player.getVehicle();

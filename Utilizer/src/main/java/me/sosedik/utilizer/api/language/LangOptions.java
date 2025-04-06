@@ -1,6 +1,6 @@
 package me.sosedik.utilizer.api.language;
 
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Represents a Minecraft language
@@ -8,7 +8,5 @@ import org.jetbrains.annotations.NotNull;
  * @param minecraftId resource pack language id
  * @param displayName language display name
  */
-public record LangOptions(
-		@NotNull String minecraftId,
-		@NotNull String displayName
-) { }
+@NullMarked
+public record LangOptions(String minecraftId, String displayName) { }

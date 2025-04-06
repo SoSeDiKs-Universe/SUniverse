@@ -5,9 +5,10 @@ import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import de.tr7zw.nbtapi.iface.ReadableNBT;
 import me.sosedik.resourcelib.api.font.FontData;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
+@NullMarked
 public class BodyPartState {
 
 	private static final String MAX_HEALTH_TAG = "max_health";
@@ -20,7 +21,7 @@ public class BodyPartState {
 	private boolean bleeding;
 	private int damageTicks = 0;
 
-	public BodyPartState(@NotNull BodyPart bodyPart, @Nullable ReadableNBT nbt) {
+	public BodyPartState(BodyPart bodyPart, @Nullable ReadableNBT nbt) {
 		if (nbt == null) nbt = NBT.createNBTObject();
 		this.bodyPart = bodyPart;
 		this.maxHealth = nbt.getOrDefault(MAX_HEALTH_TAG, bodyPart.getDefaultMaxHealth());
@@ -28,7 +29,7 @@ public class BodyPartState {
 		this.bleeding = nbt.getOrDefault(BLEEDING_TAG, false);
 	}
 
-	public @NotNull BodyPart getBodyPart() {
+	public BodyPart getBodyPart() {
 		return this.bodyPart;
 	}
 
@@ -78,7 +79,7 @@ public class BodyPartState {
 		return this.damageTicks > 0;
 	}
 
-	public @NotNull FontData getFontData(boolean tab) {
+	public FontData getFontData(boolean tab) {
 		if (isBleeding())
 			return this.bodyPart.getFontData(tab, BodyDamage.RED);
 
@@ -91,11 +92,11 @@ public class BodyPartState {
 		return this.bodyPart.getFontData(tab, BodyDamage.RED);
 	}
 
-	public @NotNull FontData getOverlayData(boolean tab) {
+	public FontData getOverlayData(boolean tab) {
 		return getBodyPart().getFontData(tab, BodyDamage.OVERLAY);
 	}
 
-	public void tick(@NotNull Player player) {
+	public void tick(Player player) {
 		if (isDead()) {
 			setHealth(getMaxHealth()); // TODO
 			return;
@@ -112,7 +113,7 @@ public class BodyPartState {
 		this.damageTicks = 40;
 	}
 
-	public void save(@NotNull ReadWriteNBT nbt) {
+	public void save(ReadWriteNBT nbt) {
 		nbt.setInteger(MAX_HEALTH_TAG, getMaxHealth());
 		nbt.setInteger(HEALTH_TAG, getHealth());
 		nbt.setBoolean(BLEEDING_TAG, isBleeding());

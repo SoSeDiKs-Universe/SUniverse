@@ -6,8 +6,8 @@ import me.sosedik.utilizer.Utilizer;
 import me.sosedik.utilizer.api.language.translator.TranslationLanguage;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+@NullMarked
 public class LangOptionsStorage {
 
 	private static final LangOptionsStorage LANG_OPTIONS_STORAGE = new LangOptionsStorage();
@@ -37,7 +38,7 @@ public class LangOptionsStorage {
 	 * @param locale locale
 	 * @return language options
 	 */
-	public static @NotNull LangOptions getByLocale(@NotNull Locale locale) {
+	public static LangOptions getByLocale(Locale locale) {
 		return getLangOptions(locale.getLanguage() + "_" + locale.getCountry().toLowerCase(Locale.US));
 	}
 
@@ -47,7 +48,7 @@ public class LangOptionsStorage {
 	 * @param key Minecraft's minecraftId
 	 * @return language options
 	 */
-	public static @NotNull LangOptions getLangOptions(@Nullable String key) {
+	public static LangOptions getLangOptions(@Nullable String key) {
 		LangOptions langOptions = getLangOptionsIfExist(key);
 		return langOptions == null ? getDefaultLangOptions() : langOptions;
 	}
@@ -68,7 +69,7 @@ public class LangOptionsStorage {
 	 * @param address IP address to parse country from
 	 * @return language options
 	 */
-	public static @NotNull LangOptions getByAddress(@NotNull String address) {
+	public static LangOptions getByAddress(String address) {
 		try (
 			InputStream is = new URI("http://ip-api.com/json/" + address + "?fields=1").toURL().openStream();
 			Reader reader = new InputStreamReader(is)
@@ -88,7 +89,7 @@ public class LangOptionsStorage {
 	 * @param country country to parse language name from
 	 * @return language options
 	 */
-	public static @NotNull LangOptions getByCountry(@NotNull String country) {
+	public static LangOptions getByCountry(String country) {
 		LangOptions langOptions = LANG_OPTIONS_STORAGE.countryToLang.get(country.toLowerCase());
 		return langOptions != null ? langOptions : getDefaultLangOptions();
 	}
@@ -99,7 +100,7 @@ public class LangOptionsStorage {
 	 * @param translatorId translator id to parse language name from
 	 * @return language options
 	 */
-	public static @Nullable TranslationLanguage getTranslator(@NotNull String translatorId) {
+	public static @Nullable TranslationLanguage getTranslator(String translatorId) {
 		return LANG_OPTIONS_STORAGE.keyToTranslator.get(translatorId);
 	}
 
@@ -109,7 +110,7 @@ public class LangOptionsStorage {
 	 * @param minecraftId translator id to parse language name from
 	 * @return language options
 	 */
-	public static @NotNull TranslationLanguage getTranslatorLanguage(@NotNull String minecraftId) {
+	public static TranslationLanguage getTranslatorLanguage(String minecraftId) {
 		TranslationLanguage lang = LANG_OPTIONS_STORAGE.langToTranslator.get(minecraftId);
 		if (lang != null) return lang;
 
@@ -122,7 +123,7 @@ public class LangOptionsStorage {
 	 *
 	 * @return default language options
 	 */
-	public static @NotNull LangOptions getDefaultLangOptions() {
+	public static LangOptions getDefaultLangOptions() {
 		return LANG_OPTIONS_STORAGE.defaultLanguage;
 	}
 
@@ -131,7 +132,7 @@ public class LangOptionsStorage {
 	 *
 	 * @return supported language options
 	 */
-	public static @NotNull Collection<@NotNull LangOptions> getSupportedLanguages() {
+	public static Collection<LangOptions> getSupportedLanguages() {
 		return LANG_OPTIONS_STORAGE.keyToLang.values();
 	}
 
@@ -140,11 +141,11 @@ public class LangOptionsStorage {
 	 *
 	 * @return supported language options
 	 */
-	public static @NotNull Collection<@NotNull TranslationLanguage> getSupportedTranslators() {
+	public static Collection<TranslationLanguage> getSupportedTranslators() {
 		return LANG_OPTIONS_STORAGE.keyToTranslator.values();
 	}
 
-	public static void init(@NotNull Utilizer plugin) {
+	public static void init(Utilizer plugin) {
 		FileConfiguration config = plugin.getConfig();
 
 		if (config.contains("translators")) {

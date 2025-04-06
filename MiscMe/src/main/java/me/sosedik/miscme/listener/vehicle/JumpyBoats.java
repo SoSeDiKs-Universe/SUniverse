@@ -9,7 +9,7 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -19,12 +19,13 @@ import java.util.UUID;
  * Boats are jumpy! :D
  */
 // MCCheck: 1.21.4, player input packet
+@NullMarked
 public class JumpyBoats implements PacketListener {
 
 	private static final Set<UUID> JUMP_DELAYS = new HashSet<>();
 
 	@Override
-	public void onPacketReceive(@NotNull PacketReceiveEvent event) {
+	public void onPacketReceive(PacketReceiveEvent event) {
 		if (event.getPacketType() != PacketType.Play.Client.PLAYER_INPUT) return;
 
 		var packet = new WrapperPlayClientPlayerInput(event);
@@ -48,7 +49,7 @@ public class JumpyBoats implements PacketListener {
 		});
 	}
 
-	private void triggerDelay(@NotNull Player player) {
+	private void triggerDelay(Player player) {
 		JUMP_DELAYS.add(player.getUniqueId());
 		MiscMe.scheduler().async(() -> JUMP_DELAYS.remove(player.getUniqueId()), 5L);
 	}

@@ -5,8 +5,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public class InventoryUtil {
 
 	private InventoryUtil() {
@@ -26,7 +27,7 @@ public class InventoryUtil {
 	 * @param player player
 	 * @param item item
 	 */
-	public static boolean tryToAdd(@NotNull Player player, @NotNull ItemStack item) {
+	public static boolean tryToAdd(Player player, ItemStack item) {
 		PlayerInventory inv = player.getInventory();
 		// Check all slots to see if the item fits into any
 		for (int slot : SHIFT_CLICK_SLOTS_PRIORITY) {
@@ -64,7 +65,7 @@ public class InventoryUtil {
 	 * @param player player
 	 * @param item item
 	 */
-	public static void addOrDrop(@NotNull Player player, @NotNull ItemStack item) {
+	public static void addOrDrop(Player player, ItemStack item) {
 		PlayerInventory inv = player.getInventory();
 		// Check all slots to see if the item fits into any
 		for (int slot : SHIFT_CLICK_SLOTS_PRIORITY) {
@@ -100,7 +101,7 @@ public class InventoryUtil {
 	 * @param slot raw slot
 	 * @return equipment slot
 	 */
-	public static @NotNull EquipmentSlot getBySlot(int slot) {
+	public static EquipmentSlot getBySlot(int slot) {
 		return switch (slot) {
 			case InventorySlotHelper.HEAD_SLOT -> EquipmentSlot.HEAD;
 			case InventorySlotHelper.CHEST_SLOT -> EquipmentSlot.CHEST;
@@ -119,7 +120,7 @@ public class InventoryUtil {
 	 * @return the raw slot
 	 * @throws IllegalArgumentException if the provided slot is not supported by the {@link Player} entity
 	 */
-	public static int getSlot(@NotNull Player player, @NotNull EquipmentSlot slot) {
+	public static int getSlot(Player player, EquipmentSlot slot) {
 		return switch (slot) {
 			case HEAD -> InventorySlotHelper.HEAD_SLOT;
 			case CHEST -> InventorySlotHelper.CHEST_SLOT;

@@ -10,16 +10,17 @@ import me.sosedik.uglychatter.listener.misc.BookBeautifier;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public class BookContentModifier extends ItemModifier {
 
-	public BookContentModifier(@NotNull NamespacedKey modifierId) {
+	public BookContentModifier(NamespacedKey modifierId) {
 		super(modifierId);
 	}
 
 	@Override
-	public @NotNull ModificationResult modify(@NotNull ItemContextBox contextBox) {
+	public ModificationResult modify(ItemContextBox contextBox) {
 		if (!contextBox.getContextType().hasVisibleName()) return ModificationResult.PASS;
 
 		Player player = contextBox.getViewer();

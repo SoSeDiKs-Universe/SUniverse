@@ -8,15 +8,16 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityPotionEffectEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Ghosts have infinite night vision
  */
+@NullMarked
 public class GhostsKeepNightVision implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR)
-	public void onEffectRemove(@NotNull EntityPotionEffectEvent event) {
+	public void onEffectRemove(EntityPotionEffectEvent event) {
 		if (!(event.getEntity() instanceof Player player)) return;
 
 		PotionEffect effect = event.getOldEffect();

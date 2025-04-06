@@ -9,15 +9,16 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Load and save Discorders upon join/quit
  */
+@NullMarked
 public class LoadSaveDiscordersOnJoinLeave implements Listener {
 
 	@EventHandler(priority = EventPriority.LOWEST)
-	public void onJoin(@NotNull PlayerJoinEvent event) {
+	public void onJoin(PlayerJoinEvent event) {
 		Player player = event.getPlayer();
 		var discorder = Discorder.getDiscorder(player);
 		Socializer.scheduler().async(() -> {
@@ -27,7 +28,7 @@ public class LoadSaveDiscordersOnJoinLeave implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
-	public void onLeave(@NotNull PlayerQuitEvent event) {
+	public void onLeave(PlayerQuitEvent event) {
 		Discorder.removePlayer(event.getPlayer());
 	}
 

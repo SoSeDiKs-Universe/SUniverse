@@ -11,15 +11,16 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Milk adds buffs to skeletons
  */
+@NullMarked
 public class MilkHelpsSkeletons implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	public void onConsume(@NotNull PlayerItemConsumeEvent event) {
+	public void onConsume(PlayerItemConsumeEvent event) {
 		if (!RLibItemTags.MILK_DRINKABLES.isTagged(event.getItem().getType())) return;
 
 		LivingEntity possessed = PossessingPlayer.getPossessed(event.getPlayer());
@@ -30,7 +31,7 @@ public class MilkHelpsSkeletons implements Listener {
 		possessed.addPotionEffect(new PotionEffect(PotionEffectType.RESISTANCE, 30 * 20, 0));
 	}
 
-	private boolean isSkeletonEntity(@NotNull LivingEntity entity) {
+	private boolean isSkeletonEntity(LivingEntity entity) {
 		return entity instanceof AbstractSkeleton
 				|| entity.getType() == EntityType.SKELETON_HORSE
 				|| entity.getType() == EntityType.WITHER;

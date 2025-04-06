@@ -12,18 +12,19 @@ import org.incendo.cloud.annotations.Argument;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.Default;
 import org.incendo.cloud.annotations.Permission;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Teleport up X blocks
  */
+@NullMarked
 @Permission("essence.command.up")
 public class UpCommand {
 
 	@Command("up [amount] [player]")
 	public void onCommand(
-		@NotNull CommandSourceStack stack,
+		CommandSourceStack stack,
 		@Argument(value = "amount") @Default(value = "1") int amount,
 		@Nullable @Argument(value = "player") Player player
 	) {

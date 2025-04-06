@@ -1,11 +1,12 @@
 package me.sosedik.utilizer.api.database;
 
 import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 
+@NullMarked
 public interface Database {
 
 	/**
@@ -15,7 +16,7 @@ public interface Database {
 	 * @param databaseName database name
 	 * @return database wrapper
 	 */
-	static @NotNull Database prepareDatabase(@NotNull Plugin plugin, @NotNull String databaseName) {
+	static Database prepareDatabase(Plugin plugin, String databaseName) {
 		if (plugin.getConfig().getBoolean("connection.use-mysql")) {
 			try {
 				return new MySQL(plugin.getConfig());
@@ -32,7 +33,7 @@ public interface Database {
 	 * @return database connection
 	 * @throws SQLException sql exception
 	 */
-	@NotNull Connection openConnection() throws SQLException;
+	Connection openConnection() throws SQLException;
 
 	/**
 	 * Closes the database connection

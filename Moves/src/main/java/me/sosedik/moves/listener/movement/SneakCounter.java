@@ -7,7 +7,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,23 +16,24 @@ import java.util.UUID;
 /**
  * Counts number on player's sneaks
  */
+@NullMarked
 public class SneakCounter implements Listener {
 
 	private static final Map<UUID, Integer> SNEAKS = new HashMap<>();
 	private static final Map<UUID, Long> LAST_SNEAK_TIMES = new HashMap<>();
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onSneak(@NotNull PlayerToggleSneakEvent event) {
+	public void onSneak(PlayerToggleSneakEvent event) {
 		if (event.isSneaking())
 			increaseSneaksCount(event.getPlayer());
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
-	public void onQuit(@NotNull PlayerQuitEvent event) {
+	public void onQuit(PlayerQuitEvent event) {
 		LAST_SNEAK_TIMES.remove(event.getPlayer().getUniqueId());
 	}
 
-	private static void increaseSneaksCount(@NotNull Player player) {
+	private static void increaseSneaksCount(Player player) {
 		UUID uuid = player.getUniqueId();
 		int count = getSneaksCount(player) + 1;
 		SNEAKS.put(uuid, Integer.valueOf(count));
@@ -49,7 +50,7 @@ public class SneakCounter implements Listener {
 	 * @param player player
 	 * @return number of sneaks
 	 */
-	public static int getSneaksCount(@NotNull Player player) {
+	public static int getSneaksCount(Player player) {
 		return SNEAKS.getOrDefault(player.getUniqueId(), 0);
 	}
 
@@ -59,7 +60,7 @@ public class SneakCounter implements Listener {
 	 * @param player player
 	 * @return the time passed (in ticks) since last sneak
 	 */
-	public static int getTimeSinceLastSneak(@NotNull Player player) {
+	public static int getTimeSinceLastSneak(Player player) {
 		Long lastSneakTIme = LAST_SNEAK_TIMES.get(player.getUniqueId());
 		return lastSneakTIme == null
 				? Integer.MAX_VALUE

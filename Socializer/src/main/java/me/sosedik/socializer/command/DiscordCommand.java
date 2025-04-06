@@ -11,8 +11,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.Flag;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,13 +24,14 @@ import static me.sosedik.utilizer.api.message.Mini.raw;
 /**
  * /discord command to show Discord link and display
  */
+@NullMarked
 public class DiscordCommand {
 
 	private static final Map<UUID, Long> verify = new HashMap<>();
 
 	@Command("discord")
 	private void onCommand(
-		@NotNull CommandSourceStack stack,
+		CommandSourceStack stack,
 		@Nullable @Flag(value = "I_discordId") Long discordId,
 		@Flag(value = "unverify") boolean unverify,
 		@Flag(value = "sure") boolean sure
@@ -83,7 +84,7 @@ public class DiscordCommand {
 	 * @param discordTag Discord display tag
 	 * @return whether the suggestion was sent
 	 */
-	public static boolean suggestVerification(@NotNull Player player, long discordId, @NotNull String discordTag) {
+	public static boolean suggestVerification(Player player, long discordId, String discordTag) {
 		if (verify.containsKey(player.getUniqueId())) return false;
 
 		verify.put(player.getUniqueId(), discordId);

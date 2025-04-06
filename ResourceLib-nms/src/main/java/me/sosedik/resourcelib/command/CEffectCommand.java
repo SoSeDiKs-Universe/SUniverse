@@ -17,8 +17,8 @@ import org.incendo.cloud.annotations.Default;
 import org.incendo.cloud.annotations.Flag;
 import org.incendo.cloud.annotations.Permission;
 import org.incendo.cloud.annotations.suggestion.Suggestions;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,13 +30,14 @@ import static me.sosedik.utilizer.api.message.Mini.raw;
 /**
  * Giving custom effects
  */
+@NullMarked
 @Permission("rlib.command.ceffect")
 public class CEffectCommand { // TODO not really needed, should fix vanilla command instead
 
 	@Command("ceffect <effect> [duration] [amplifier] [player]")
 	public void onCommand(
-		@NotNull CommandSourceStack stack,
-		@NotNull @Argument(value = "effect", suggestions = "@ceffectCommandSuggestionEffectGive") NamespacedKey effectKey,
+		CommandSourceStack stack,
+		@Argument(value = "effect", suggestions = "@ceffectCommandSuggestionEffectGive") NamespacedKey effectKey,
 		@Argument(value = "duration") @Default("20") @Range(min = "1") int duration,
 		@Argument(value = "amplifier") @Default("0") @Range(min = "0") int amplifier,
 		@Nullable @Argument(value = "player") Player player,
@@ -64,7 +65,7 @@ public class CEffectCommand { // TODO not really needed, should fix vanilla comm
 
 	@Command("ceffect clear [effect] [player]")
 	public void onCommand(
-		@NotNull CommandSourceStack stack,
+		CommandSourceStack stack,
 		@Nullable @Argument(value = "effect", suggestions = "@ceffectCommandSuggestionEffectClear") NamespacedKey effectKey,
 		@Nullable @Argument(value = "player") Player player,
 		@Flag(value = "silent") boolean silent
@@ -97,14 +98,14 @@ public class CEffectCommand { // TODO not really needed, should fix vanilla comm
 	}
 
 	@Suggestions("@ceffectCommandSuggestionEffectGive")
-	public @NotNull Stream<String> onEffectGiveSuggestion(@NotNull CommandSourceStack stack) {
+	public Stream<String> onEffectGiveSuggestion(CommandSourceStack stack) {
 		return Registry.EFFECT.stream()
 				.filter(effectType -> !NamespacedKey.MINECRAFT.equals(effectType.getKey().getNamespace()))
 				.map(effectType -> effectType.getKey().asString());
 	}
 
 	@Suggestions("@ceffectCommandSuggestionEffectClear")
-	public @NotNull List<String> onEffectClearSuggestion(@NotNull CommandSourceStack stack) {
+	public List<String> onEffectClearSuggestion(CommandSourceStack stack) {
 		List<String> suggestions = new ArrayList<>();
 		suggestions.add("all");
 		if (stack.getSender() instanceof Player player) {

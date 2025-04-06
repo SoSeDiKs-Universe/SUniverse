@@ -15,28 +15,29 @@ import org.incendo.cloud.parser.ArgumentParser;
 import org.incendo.cloud.parser.ParserDescriptor;
 import org.incendo.cloud.suggestion.Suggestion;
 import org.incendo.cloud.suggestion.SuggestionProvider;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 
+@NullMarked
 public final class PlayerWorldParser<C> implements ArgumentParser<C, World>, SuggestionProvider<C> {
 
-	public static <C> @NotNull ParserDescriptor<C, World> playerWorldParser() {
+	public static <C> ParserDescriptor<C, World> playerWorldParser() {
 		return ParserDescriptor.of(new PlayerWorldParser<>(), World.class);
 	}
 
-	public static <C> CommandComponent.@NotNull Builder<C, World> playerWorldComponent() {
+	public static <C> CommandComponent.Builder<C, World> playerWorldComponent() {
 		return CommandComponent.<C, World>builder().parser(playerWorldParser());
 	}
 
 	@Override
-	public @NotNull ArgumentParseResult<@NotNull World> parse(
-		final @NotNull CommandContext<@NotNull C> commandContext,
-		final @NotNull CommandInput commandInput
+	public ArgumentParseResult<World> parse(
+		final CommandContext<C> commandContext,
+		final CommandInput commandInput
 	) {
 		String input = commandInput.readString();
 
@@ -100,7 +101,7 @@ public final class PlayerWorldParser<C> implements ArgumentParser<C, World>, Sug
 		return ArgumentParseResult.success(world);
 	}
 
-	private @Nullable Player resolveTarget(@NotNull CommandContext<C> commandContext) {
+	private @Nullable Player resolveTarget(CommandContext<C> commandContext) {
 		if (commandContext.sender() instanceof CommandSourceStack stack) {
 			if (stack.getExecutor() instanceof Player player) {
 				return player;
@@ -112,9 +113,9 @@ public final class PlayerWorldParser<C> implements ArgumentParser<C, World>, Sug
 	}
 
 	@Override
-	public @NotNull CompletableFuture<? extends @NotNull Iterable<? extends @NotNull Suggestion>> suggestionsFuture(
-		final @NotNull CommandContext<C> commandContext,
-		final @NotNull CommandInput input
+	public CompletableFuture<? extends Iterable<? extends Suggestion>> suggestionsFuture(
+		final CommandContext<C> commandContext,
+		final CommandInput input
 	) {
 		List<Suggestion> completions = new ArrayList<>();
 

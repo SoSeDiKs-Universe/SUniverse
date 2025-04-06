@@ -4,16 +4,17 @@ import com.github.retrooper.packetevents.event.PacketListener;
 import com.github.retrooper.packetevents.event.PacketSendEvent;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerJoinGame;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Makes client always display hardcore hearts
  */
 // MCCheck: 1.21.4, login packet
+@NullMarked
 public class FakeHardcoreHearts implements PacketListener {
 
 	@Override
-	public void onPacketSend(@NotNull PacketSendEvent event) {
+	public void onPacketSend(PacketSendEvent event) {
 		if (event.getPacketType() != PacketType.Play.Server.JOIN_GAME) return;
 
 		var packet = new WrapperPlayServerJoinGame(event);

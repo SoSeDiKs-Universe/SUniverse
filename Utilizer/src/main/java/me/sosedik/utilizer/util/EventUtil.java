@@ -8,11 +8,12 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
+@NullMarked
 public class EventUtil {
 
 	private EventUtil() {
@@ -25,7 +26,7 @@ public class EventUtil {
 	 * @param plugin owning plugin instance
 	 * @param listenerClasses listener classes
 	 */
-	public static void registerListeners(@NotNull Plugin plugin, @NotNull Class<?> @NotNull ... listenerClasses) {
+	public static void registerListeners(Plugin plugin, Class<?> ... listenerClasses) {
 		PluginManager pluginManager = plugin.getServer().getPluginManager();
 		FileConfiguration pluginConfig = plugin.getConfig();
 		try {
@@ -69,7 +70,7 @@ public class EventUtil {
 		}
 	}
 
-	private static boolean isValidListener(@NotNull Class<?> listenerClass) {
+	private static boolean isValidListener(Class<?> listenerClass) {
 		return Listener.class.isAssignableFrom(listenerClass)
 				|| PacketListener.class.isAssignableFrom(listenerClass);
 	}

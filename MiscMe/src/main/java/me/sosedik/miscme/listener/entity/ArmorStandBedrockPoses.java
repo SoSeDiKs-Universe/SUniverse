@@ -16,7 +16,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Map;
 import java.util.function.Consumer;
@@ -24,6 +24,7 @@ import java.util.function.Consumer;
 /**
  * Armor stands can change poses from a redstone signal
  */
+@NullMarked
 public class ArmorStandBedrockPoses implements Listener {
 
 	private static final String STORED_POSE_TAG = "stored_pose";
@@ -46,7 +47,7 @@ public class ArmorStandBedrockPoses implements Listener {
 	);
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-	public void onRedstone(@NotNull BlockRedstoneEvent event) {
+	public void onRedstone(BlockRedstoneEvent event) {
 		Block block = event.getBlock();
 		if (!(block.getBlockData() instanceof AnaloguePowerable)) return;
 
@@ -58,7 +59,7 @@ public class ArmorStandBedrockPoses implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-	public void onArmorStandSpawn(@NotNull EntitySpawnEvent event) {
+	public void onArmorStandSpawn(EntitySpawnEvent event) {
 		if (!(event.getEntity() instanceof ArmorStand armorStand)) return;
 		if (!EntityUtil.isNaturallySpawned(armorStand)) return;
 		if (!shouldBeCounted(armorStand)) return;
@@ -81,22 +82,22 @@ public class ArmorStandBedrockPoses implements Listener {
 			applyPose(maxCurrent, armorStand);
 	}
 
-	private boolean shouldBeCounted(@NotNull ArmorStand armorStand) {
+	private boolean shouldBeCounted(ArmorStand armorStand) {
 		return !armorStand.isMarker() && armorStand.canTick();
 	}
 
-	private int getRedstonePower(@NotNull Block block) {
+	private int getRedstonePower(Block block) {
 		return block.getBlockData() instanceof AnaloguePowerable powerable ? powerable.getPower() : 0;
 	}
 
-	private boolean isFacingTowards(@NotNull Block block, @NotNull BlockFace face) {
+	private boolean isFacingTowards(Block block, BlockFace face) {
 		BlockData blockData = block.getBlockData();
 		if (blockData instanceof RedstoneWire redstoneWire)
 			return redstoneWire.getFace(face) != RedstoneWire.Connection.NONE;
 		return blockData instanceof AnaloguePowerable;
 	}
 
-	private void handleArmorStands(int newCurrent, @NotNull Block block) {
+	private void handleArmorStands(int newCurrent, Block block) {
 		block.getLocation().toCenterLocation().getNearbyEntitiesByType(ArmorStand.class, 0.2, this::shouldBeCounted).forEach(armorStand -> {
 			if (!armorStand.getLocation().isBlockSame(block.getLocation())) return;
 			if (newCurrent == 0) {
@@ -107,13 +108,13 @@ public class ArmorStandBedrockPoses implements Listener {
 		});
 	}
 
-	private void applyPose(int current, @NotNull ArmorStand armorStand) {
+	private void applyPose(int current, ArmorStand armorStand) {
 		storePose(armorStand);
 		ArmorStandPose pose = POSES_BY_CURRENT.getOrDefault(current, MathUtil.getRandom(ArmorStandPose.values()));
 		NBT.modify(armorStand, (Consumer<ReadWriteNBT>) nbt -> nbt.mergeCompound(pose.getPose()));
 	}
 
-	private void restorePose(@NotNull ArmorStand armorStand) {
+	private void restorePose(ArmorStand armorStand) {
 		NBT.modifyPersistentData(armorStand, cnbt -> {
 			NBT.modify(armorStand, nbt -> {
 				ReadWriteNBT pose = nbt.hasTag(STORED_POSE_TAG) ? nbt.getCompound(STORED_POSE_TAG) : ArmorStandPose.DEFAULT_POSE.getPose();
@@ -122,7 +123,7 @@ public class ArmorStandBedrockPoses implements Listener {
 		});
 	}
 
-	private void storePose(@NotNull ArmorStand armorStand) {
+	private void storePose(ArmorStand armorStand) {
 		NBT.get(armorStand, nbt -> {
 			if (!nbt.hasTag(VANILLA_POSE_TAG)) return;
 
@@ -151,11 +152,11 @@ public class ArmorStandBedrockPoses implements Listener {
 
 		private final ReadWriteNBT pose;
 
-		ArmorStandPose(@NotNull String nbt) {
+		ArmorStandPose(String nbt) {
 			this.pose = NBT.parseNBT(nbt);
 		}
 
-		public @NotNull ReadWriteNBT getPose() {
+		public ReadWriteNBT getPose() {
 			return pose;
 		}
 

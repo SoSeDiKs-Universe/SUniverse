@@ -13,36 +13,37 @@ import org.commonmark.renderer.NodeRenderer;
 import org.commonmark.renderer.markdown.MarkdownNodeRendererContext;
 import org.commonmark.renderer.markdown.MarkdownNodeRendererFactory;
 import org.commonmark.renderer.markdown.MarkdownRenderer;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Set;
 
 /**
  * Adds support for parsing {@code ~~strikethrough~~} to {@code <st>strikethrough</st>}.
  */
+@NullMarked
 public class MiniStrikethroughExtension implements Parser.ParserExtension, MarkdownRenderer.MarkdownRendererExtension {
 
 	private MiniStrikethroughExtension() {}
 
-	public static @NotNull MiniStrikethroughExtension create() {
+	public static MiniStrikethroughExtension create() {
 		return new MiniStrikethroughExtension();
 	}
 
 	@Override
-	public void extend(@NotNull Parser.Builder parserBuilder) {
+	public void extend(Parser.Builder parserBuilder) {
 		parserBuilder.customDelimiterProcessor(new MiniUnderlineDelimiterProcessor());
 	}
 
 	@Override
-	public void extend(@NotNull MarkdownRenderer.Builder rendererBuilder) {
+	public void extend(MarkdownRenderer.Builder rendererBuilder) {
 		rendererBuilder.nodeRendererFactory(new MarkdownNodeRendererFactory() {
 			@Override
-			public NodeRenderer create(@NotNull MarkdownNodeRendererContext context) {
+			public NodeRenderer create(MarkdownNodeRendererContext context) {
 				return new MiniUnderlineMarkdownNodeRenderer(context);
 			}
 
 			@Override
-			public @NotNull Set<Character> getSpecialCharacters() {
+			public Set<Character> getSpecialCharacters() {
 				return Set.of('~');
 			}
 		});
@@ -85,7 +86,7 @@ public class MiniStrikethroughExtension implements Parser.ParserExtension, Markd
 		}
 
 		@Override
-		public int process(@NotNull DelimiterRun openingRun, @NotNull DelimiterRun closingRun) {
+		public int process(DelimiterRun openingRun, DelimiterRun closingRun) {
 			if (openingRun.length() >= 2 && closingRun.length() >= 2) {
 				Text opener = openingRun.getOpener();
 
@@ -113,7 +114,7 @@ public class MiniStrikethroughExtension implements Parser.ParserExtension, Markd
 
 	public static class MiniUnderlineMarkdownNodeRenderer extends SimpleMiniMarkdownNodeRenderer {
 
-		public MiniUnderlineMarkdownNodeRenderer(@NotNull MarkdownNodeRendererContext context) {
+		public MiniUnderlineMarkdownNodeRenderer(MarkdownNodeRendererContext context) {
 			super(context);
 		}
 
@@ -123,7 +124,7 @@ public class MiniStrikethroughExtension implements Parser.ParserExtension, Markd
 		}
 
 		@Override
-		public void render(@NotNull Node node) {
+		public void render(Node node) {
 			writer.raw("<st>");
 			renderChildren(node);
 			writer.raw("</st>");

@@ -11,8 +11,9 @@ import me.sosedik.utilizer.util.EventUtil;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public class FancyMotd extends JavaPlugin {
 
 	private static FancyMotd instance;
@@ -53,7 +54,7 @@ public class FancyMotd extends JavaPlugin {
 	 *
 	 * @return the plugin instance
 	 */
-	public static @NotNull FancyMotd instance() {
+	public static FancyMotd instance() {
 		return FancyMotd.instance;
 	}
 
@@ -62,7 +63,7 @@ public class FancyMotd extends JavaPlugin {
 	 *
 	 * @return the plugin's component logger
 	 */
-	public static @NotNull ComponentLogger logger() {
+	public static ComponentLogger logger() {
 		return instance().getComponentLogger();
 	}
 

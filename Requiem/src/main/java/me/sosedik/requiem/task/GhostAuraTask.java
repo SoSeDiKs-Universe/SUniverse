@@ -7,16 +7,17 @@ import org.bukkit.Particle;
 import org.bukkit.entity.Animals;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Ghosts spawn particles and scare nearby mobs
  */
+@NullMarked
 public class GhostAuraTask extends BukkitRunnable {
 
 	private final Player player;
 
-	public GhostAuraTask(@NotNull Player player) {
+	public GhostAuraTask(Player player) {
 		this.player = player;
 		Requiem.scheduler().sync(this, 1L, 5L);
 	}

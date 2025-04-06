@@ -1,10 +1,10 @@
 package me.sosedik.miscme.listener.item;
 
-import com.destroystokyo.paper.MaterialTags;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.DyedItemColor;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
+import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
@@ -29,8 +29,6 @@ public class DyeableItemsInItemFrames implements Listener {
 		if (!(event.getRightClicked() instanceof ItemFrame itemFrame)) return;
 
 		ItemStack item = itemFrame.getItem();
-		if (!Tag.ITEMS_DYEABLE.isTagged(item.getType())) return;
-
 		Player player = event.getPlayer();
 
 		if (!tryToDye(event, itemFrame, item, player, EquipmentSlot.HAND))
@@ -40,6 +38,38 @@ public class DyeableItemsInItemFrames implements Listener {
 	private boolean tryToDye(PlayerInteractEntityEvent event, ItemFrame itemFrame, ItemStack frameItem, Player player, EquipmentSlot hand) {
 		ItemStack handItem = player.getInventory().getItem(hand);
 		if (!ImmersiveDyes.isDyingItem(handItem)) return false;
+
+		Material applied = ImmersiveDyes.getApplied(handItem.getType(), frameItem.getType());
+		if (applied != null) {
+			if (frameItem.getType() == applied) return false;
+
+			event.setCancelled(true);
+			player.swingHand(hand);
+
+			itemFrame.setItem(frameItem.withType(applied));
+
+			ImmersiveDyes.playEffect(player, null, itemFrame.getLocation(), null);
+			if (!player.getGameMode().isInvulnerable() && Math.random() < ImmersiveDyes.DYE_REDUCE_CHANCE)
+				handItem.subtract();
+
+			return true;
+		}
+
+		ItemStack appliedItem = ImmersiveDyes.getDyedFromExtras(frameItem, handItem);
+		if (appliedItem != null) {
+			event.setCancelled(true);
+			player.swingHand(hand);
+
+			itemFrame.setItem(appliedItem);
+
+			ImmersiveDyes.playEffect(player, null, itemFrame.getLocation(), null);
+			if (!player.getGameMode().isInvulnerable() && Math.random() < ImmersiveDyes.DYE_REDUCE_CHANCE)
+				handItem.subtract();
+
+			return true;
+		}
+
+		if (!Tag.ITEMS_DYEABLE.isTagged(frameItem.getType())) return true;
 
 		event.setCancelled(true);
 		player.swingHand(hand);

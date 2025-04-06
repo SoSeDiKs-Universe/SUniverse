@@ -10,12 +10,9 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
-import org.bukkit.Color;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NullMarked;
-
-import java.util.Objects;
 
 /**
  * Makes dyed lore fancier, displays color's hex value
@@ -36,9 +33,12 @@ public class FancierDyedLoreModifier extends ItemModifier {
 		ItemStack item = contextBox.getItem();
 		if (!item.hasData(DataComponentTypes.DYED_COLOR)) return ModificationResult.PASS;
 
-		Color color = Objects.requireNonNull(item.getData(DataComponentTypes.DYED_COLOR)).color();
-		item.setData(DataComponentTypes.DYED_COLOR, DyedItemColor.dyedItemColor(color, false));
-		contextBox.addLore(getDyedLore(color));
+		DyedItemColor dyedItemColor = item.getData(DataComponentTypes.DYED_COLOR);
+		assert dyedItemColor != null;
+		if (!dyedItemColor.showInTooltip()) return ModificationResult.PASS;
+
+		item.setData(DataComponentTypes.DYED_COLOR, dyedItemColor.showInTooltip(false));
+		contextBox.addLore(getDyedLore(dyedItemColor.color()));
 
 		return ModificationResult.OK;
 	}

@@ -1,6 +1,7 @@
 package me.sosedik.miscme;
 
 import me.sosedik.miscme.impl.item.modifier.BookAuthorOnlineModifier;
+import me.sosedik.miscme.impl.item.modifier.ColoredShulkerShellModifier;
 import me.sosedik.miscme.impl.item.modifier.FancierDyedLoreModifier;
 import me.sosedik.miscme.impl.item.modifier.FancierTrimLoreModifier;
 import me.sosedik.miscme.impl.item.modifier.SignsShowTextInLoreModifier;
@@ -31,6 +32,7 @@ import me.sosedik.miscme.listener.entity.SheepBurnableWool;
 import me.sosedik.miscme.listener.entity.SheepRegrowNaturalWool;
 import me.sosedik.miscme.listener.entity.TNTDefuse;
 import me.sosedik.miscme.listener.item.BottledAir;
+import me.sosedik.miscme.listener.item.ColoredShulkerShells;
 import me.sosedik.miscme.listener.item.DyeableItemsInItemFrames;
 import me.sosedik.miscme.listener.item.ImmersiveDyes;
 import me.sosedik.miscme.listener.item.ReadableBooksInFrames;
@@ -70,6 +72,7 @@ public final class MiscMe extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		new BookAuthorOnlineModifier(miscmeKey("book_author_online")).register();
+		new ColoredShulkerShellModifier(miscmeKey("colored_shulker_shell")).register();
 		new FancierDyedLoreModifier(miscmeKey("fancier_dyed_lore")).register();
 		new FancierTrimLoreModifier(miscmeKey("fancier_trim_lore")).register();
 		new SignsShowTextInLoreModifier(miscmeKey("signs_show_text_in_lore")).register();
@@ -105,6 +108,7 @@ public final class MiscMe extends JavaPlugin {
 			TNTDefuse.class,
 			// item
 			BottledAir.class,
+			ColoredShulkerShells.class,
 			DyeableItemsInItemFrames.class,
 			ImmersiveDyes.class,
 			ReadableBooksInFrames.class,

@@ -42,6 +42,7 @@ public abstract class ShapelessRecipeBuilder<T extends ShapelessRecipeBuilder<T>
 	 *
 	 * @param ingredient ingredient
 	 * @param amount the amount of ingredients
+	 * @param validator item validator
 	 * @return this builder
 	 */
 	public T addIngredients(Material ingredient, int amount, @Nullable Predicate<ItemStack> validator) {
@@ -66,6 +67,7 @@ public abstract class ShapelessRecipeBuilder<T extends ShapelessRecipeBuilder<T>
 	 *
 	 * @param ingredient ingredient
 	 * @param amount the amount of ingredients
+	 * @param validator item validator
 	 * @return this builder
 	 */
 	public T addIngredientItems(ItemStack ingredient, int amount, @Nullable Predicate<ItemStack> validator) {
@@ -78,6 +80,7 @@ public abstract class ShapelessRecipeBuilder<T extends ShapelessRecipeBuilder<T>
 	 * Adds recipe ingredient
 	 *
 	 * @param ingredient ingredient
+	 * @param validator item validator
 	 * @return this builder
 	 */
 	public T addIngredients(Material ingredient, @Nullable Predicate<ItemStack> validator) {
@@ -88,6 +91,7 @@ public abstract class ShapelessRecipeBuilder<T extends ShapelessRecipeBuilder<T>
 	 * Adds recipe ingredient
 	 *
 	 * @param ingredient ingredient
+	 * @param validator item validator
 	 * @return this builder
 	 */
 	public T addIngredientItems(ItemStack ingredient, @Nullable Predicate<ItemStack> validator) {
@@ -135,6 +139,7 @@ public abstract class ShapelessRecipeBuilder<T extends ShapelessRecipeBuilder<T>
 	 * Adds recipe ingredient
 	 *
 	 * @param ingredients ingredient
+	 * @param validator item validator
 	 * @return this builder
 	 */
 	public T addIngredients(Collection<Material> ingredients, @Nullable Predicate<ItemStack> validator) {
@@ -158,6 +163,7 @@ public abstract class ShapelessRecipeBuilder<T extends ShapelessRecipeBuilder<T>
 	 * Adds recipe ingredient
 	 *
 	 * @param ingredients ingredient
+	 * @param validator item validator
 	 * @return this builder
 	 */
 	public T addIngredientItems(Collection<ItemStack> ingredients, @Nullable Predicate<ItemStack> validator) {

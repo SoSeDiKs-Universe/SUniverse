@@ -3,7 +3,6 @@ package me.sosedik.miscme.listener.item;
 import com.destroystokyo.paper.MaterialTags;
 import me.sosedik.miscme.MiscMe;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -34,8 +33,10 @@ import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * Dyes can be applied onto blocks immersible.
@@ -47,6 +48,8 @@ public class ImmersiveDyes implements Listener {
 
 	public static final double DYE_REDUCE_CHANCE = 0.08D;
 	public static final Material CLEARING_MATERIAL = Material.PAPER;
+
+	private static final Map<Material, ExtraDyeRule> EXTRA_DYE_RULES = new HashMap<>();
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	private void onDye(PlayerInteractEvent event) {
@@ -193,65 +196,90 @@ public class ImmersiveDyes implements Listener {
 		return true;
 	}
 
-	private @Nullable Material getApplied(Material itemType, Block block) {
+	private @Nullable Material getApplied(Material dyeItem, Block block) {
 		// Piston to slime piston
-		if (itemType == Material.SLIME_BALL) {
+		if (dyeItem == Material.SLIME_BALL) {
 			if (block.getType() == Material.PISTON) return Material.STICKY_PISTON;
 			if (block.getBlockData() instanceof PistonHead pistonHead && pistonHead.getType() == TechnicalPiston.Type.NORMAL) return Material.STICKY_PISTON;
 			return null;
 		}
-
-		// Removing dyes
-		if (itemType == Material.PAPER) {
-			if (MaterialTags.STAINED_GLASS.isTagged(block))
-				return Material.GLASS;
-			if (MaterialTags.STAINED_GLASS_PANES.isTagged(block))
-				return Material.GLASS_PANE;
-			if (MaterialTags.STAINED_TERRACOTTA.isTagged(block))
-				return Material.TERRACOTTA;
-			if (MaterialTags.SHULKER_BOXES.isTagged(block))
-				return Material.SHULKER_BOX;
-			if (Tag.CANDLES.isTagged(block.getType()))
-				return Material.CANDLE;
-			if (Tag.CANDLE_CAKES.isTagged(block.getType()))
-				return Material.CANDLE_CAKE;
+		if (dyeItem == CLEARING_MATERIAL) {
 			if (block.getType() == Material.STICKY_PISTON)
 				return Material.PISTON;
 			if (block.getBlockData() instanceof PistonHead pistonHead && pistonHead.getType() == TechnicalPiston.Type.STICKY)
 				return Material.PISTON;
+		}
+
+		return getApplied(dyeItem, block.getType());
+	}
+
+	/**
+	 * Gets the new type after applying a dye
+	 *
+	 * @param dyeItem dye item
+	 * @param dyingItem dying item
+	 * @return dyed into
+	 */
+	public static @Nullable Material getApplied(Material dyeItem, Material dyingItem) {
+		// Removing dyes
+		if (dyeItem == CLEARING_MATERIAL) {
+			if (MaterialTags.STAINED_GLASS.isTagged(dyingItem))
+				return Material.GLASS;
+			if (MaterialTags.STAINED_GLASS_PANES.isTagged(dyingItem))
+				return Material.GLASS_PANE;
+			if (MaterialTags.STAINED_TERRACOTTA.isTagged(dyingItem))
+				return Material.TERRACOTTA;
+			if (MaterialTags.SHULKER_BOXES.isTagged(dyingItem))
+				return Material.SHULKER_BOX;
+			if (Tag.CANDLES.isTagged(dyingItem))
+				return Material.CANDLE;
+			if (Tag.CANDLE_CAKES.isTagged(dyingItem))
+				return Material.CANDLE_CAKE;
 			return null;
 		}
 
-		if (MaterialTags.GLASS.isTagged(block))
-			return block.getType() == Material.TINTED_GLASS ? null : Material.getMaterial(itemType.name().replace("DYE", "STAINED_GLASS"));
-		if (MaterialTags.GLASS_PANES.isTagged(block))
-			return Material.getMaterial(itemType.name().replace("DYE", "STAINED_GLASS_PANE"));
-		if (MaterialTags.SHULKER_BOXES.isTagged(block))
-			return Material.getMaterial(itemType.name().replace("DYE", "SHULKER_BOX"));
-		if (MaterialTags.CONCRETES.isTagged(block))
-			return Material.getMaterial(itemType.name().replace("DYE", "CONCRETE"));
-		if (MaterialTags.CONCRETE_POWDER.isTagged(block))
-			return Material.getMaterial(itemType.name().replace("DYE", "CONCRETE_POWDER"));
-		if (MaterialTags.GLAZED_TERRACOTTA.isTagged(block))
-			return Material.getMaterial(itemType.name().replace("DYE", "GLAZED_TERRACOTTA"));
-		if (MaterialTags.TERRACOTTA.isTagged(block))
-			return Material.getMaterial(itemType.name().replace("DYE", "TERRACOTTA"));
-		if (Tag.WOOL.isTagged(block.getType()))
-			return Material.getMaterial(itemType.name().replace("DYE", "WOOL"));
-		if (Tag.WOOL_CARPETS.isTagged(block.getType()))
-			return Material.getMaterial(itemType.name().replace("DYE", "CARPET"));
-		if (Tag.BEDS.isTagged(block.getType()))
-			return Material.getMaterial(itemType.name().replace("DYE", "BED"));
-		if (Tag.ITEMS_BANNERS.isTagged(block.getType()))
-			return Material.getMaterial(itemType.name().replace("DYE", "BANNER"));
-		if (Tag.BANNERS.isTagged(block.getType()))
-			return Material.getMaterial(itemType.name().replace("DYE", "WALL_BANNER"));
-		if (Tag.CANDLES.isTagged(block.getType()))
-			return Material.getMaterial(itemType.name().replace("DYE", "CANDLE"));
-		if (Tag.CANDLE_CAKES.isTagged(block.getType()))
-			return Material.getMaterial(itemType.name().replace("DYE", "CANDLE_CAKE"));
+		if (MaterialTags.GLASS.isTagged(dyingItem))
+			return dyingItem == Material.TINTED_GLASS ? null : Material.getMaterial(dyeItem.name().replace("DYE", "STAINED_GLASS"));
+		if (MaterialTags.GLASS_PANES.isTagged(dyingItem))
+			return Material.getMaterial(dyeItem.name().replace("DYE", "STAINED_GLASS_PANE"));
+		if (MaterialTags.SHULKER_BOXES.isTagged(dyingItem))
+			return Material.getMaterial(dyeItem.name().replace("DYE", "SHULKER_BOX"));
+		if (MaterialTags.CONCRETES.isTagged(dyingItem))
+			return Material.getMaterial(dyeItem.name().replace("DYE", "CONCRETE"));
+		if (MaterialTags.CONCRETE_POWDER.isTagged(dyingItem))
+			return Material.getMaterial(dyeItem.name().replace("DYE", "CONCRETE_POWDER"));
+		if (MaterialTags.GLAZED_TERRACOTTA.isTagged(dyingItem))
+			return Material.getMaterial(dyeItem.name().replace("DYE", "GLAZED_TERRACOTTA"));
+		if (MaterialTags.TERRACOTTA.isTagged(dyingItem))
+			return Material.getMaterial(dyeItem.name().replace("DYE", "TERRACOTTA"));
+		if (Tag.WOOL.isTagged(dyingItem))
+			return Material.getMaterial(dyeItem.name().replace("DYE", "WOOL"));
+		if (Tag.WOOL_CARPETS.isTagged(dyingItem))
+			return Material.getMaterial(dyeItem.name().replace("DYE", "CARPET"));
+		if (Tag.BEDS.isTagged(dyingItem))
+			return Material.getMaterial(dyeItem.name().replace("DYE", "BED"));
+		if (Tag.ITEMS_BANNERS.isTagged(dyingItem))
+			return Material.getMaterial(dyeItem.name().replace("DYE", "BANNER"));
+		if (Tag.BANNERS.isTagged(dyingItem))
+			return Material.getMaterial(dyeItem.name().replace("DYE", "WALL_BANNER"));
+		if (Tag.CANDLES.isTagged(dyingItem))
+			return Material.getMaterial(dyeItem.name().replace("DYE", "CANDLE"));
+		if (Tag.CANDLE_CAKES.isTagged(dyingItem))
+			return Material.getMaterial(dyeItem.name().replace("DYE", "CANDLE_CAKE"));
 
 		return null;
+	}
+
+	/**
+	 * Gets the dyed variant of the item from extra dyed rules
+	 *
+	 * @param item item to dye
+	 * @param dye dye to use
+	 * @return dyed item
+	 */
+	public static @Nullable ItemStack getDyedFromExtras(ItemStack item, ItemStack dye) {
+		var dyeRule = EXTRA_DYE_RULES.get(item.getType());
+		return dyeRule == null ? null : dyeRule.processPaint(item, dye);
 	}
 
 	/**
@@ -292,6 +320,23 @@ public class ImmersiveDyes implements Listener {
 		} catch (IllegalArgumentException ignored) {
 			return null;
 		}
+	}
+
+	/**
+	 * Adds an extra dye rule
+	 *
+	 * @param type item type
+	 * @param rule dye rule
+	 */
+	public static void addExtraDyeRule(Material type, ExtraDyeRule rule) {
+		EXTRA_DYE_RULES.put(type, rule);
+	}
+
+	@FunctionalInterface
+	public interface ExtraDyeRule {
+
+		@Nullable ItemStack processPaint(ItemStack item, ItemStack dye);
+
 	}
 
 }

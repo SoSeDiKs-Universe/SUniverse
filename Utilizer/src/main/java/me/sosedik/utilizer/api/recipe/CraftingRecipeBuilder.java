@@ -92,10 +92,35 @@ public abstract class CraftingRecipeBuilder<T extends CraftingRecipeBuilder<T>> 
 	 *
 	 * @param key ingredient key
 	 * @param ingredient ingredient
+	 * @param validator item validator
+	 * @return this builder
+	 */
+	public T addIngredients(char key, Material ingredient, @Nullable Predicate<ItemStack> validator) {
+		return addIngredientItems(key, ItemStack.of(ingredient), validator);
+	}
+
+	/**
+	 * Adds recipe ingredient
+	 *
+	 * @param key ingredient key
+	 * @param ingredient ingredient
 	 * @return this builder
 	 */
 	public T addIngredientItems(char key, ItemStack ingredient) {
+		return addIngredientItems(key, ingredient, null);
+	}
+
+	/**
+	 * Adds recipe ingredient
+	 *
+	 * @param key ingredient key
+	 * @param ingredient ingredient
+	 * @param validator item validator
+	 * @return this builder
+	 */
+	public T addIngredientItems(char key, ItemStack ingredient, @Nullable Predicate<ItemStack> validator) {
 		this.ingredients.computeIfAbsent(key, k -> new ArrayList<>()).add(ingredient);
+		if (validator != null) withValidator(key, validator);
 		return builder();
 	}
 
@@ -196,9 +221,8 @@ public abstract class CraftingRecipeBuilder<T extends CraftingRecipeBuilder<T>> 
 
 		Predicate<ItemStack> validator = this.validators.get(key);
 		for (ItemStack variant : ingredients) {
-			if (variant.getType() == item.getType()) {
+			if (variant.getType() == item.getType())
 				return validator == null || validator.test(item);
-			}
 		}
 
 		return false;

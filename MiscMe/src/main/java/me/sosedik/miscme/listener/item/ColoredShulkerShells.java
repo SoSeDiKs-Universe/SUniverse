@@ -11,6 +11,7 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Shulker;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
@@ -31,7 +32,7 @@ public class ColoredShulkerShells implements Listener {
 		replaceVanillaRecipe();
 	}
 
-	@EventHandler
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onDeath(EntityDeathEvent event) {
 		if (!(event.getEntity() instanceof Shulker shulker)) return;
 

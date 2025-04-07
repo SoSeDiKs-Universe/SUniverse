@@ -32,6 +32,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.incendo.cloud.bukkit.internal.BukkitBrigadierMapper;
+import org.jetbrains.annotations.UnknownNullability;
 import org.jspecify.annotations.NullMarked;
 
 import java.io.File;
@@ -41,9 +42,9 @@ public final class TrappedNewbie extends JavaPlugin {
 
 	public static final String NAMESPACE = "trapped_newbie";
 
-	private static TrappedNewbie instance;
+	private static @UnknownNullability TrappedNewbie instance;
 
-	private Scheduler scheduler;
+	private @UnknownNullability Scheduler scheduler;
 
 	@Override
 	public void onLoad() {

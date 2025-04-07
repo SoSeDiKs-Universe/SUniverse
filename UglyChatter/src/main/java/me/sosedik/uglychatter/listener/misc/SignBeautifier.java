@@ -39,7 +39,7 @@ import java.util.UUID;
 /**
  * Adds fancies support for signs
  */
-// MCCheck 1.21.1, sign block entity data
+// MCCheck: 1.21.4, sign block entity data
 @NullMarked
 public class SignBeautifier implements PacketListener, Listener {
 

@@ -26,7 +26,7 @@ import java.util.List;
  * Burning projectiles create fire upon landing
  */
 @NullMarked
-// MCCheck 1.21.4, new replaceable by fire blocks
+// MCCheck: 1.21.4, new replaceable by fire blocks
 public class BurningProjectileCreatesFire implements Listener {
 
 	private static final List<Material> replaceableByFire = List.of(

@@ -158,7 +158,7 @@ public class PerPlayerWorlds implements Listener {
 	 */
 	public static World getResourceWorld(UUID playerUuid, World.Environment environment) {
 		if (!RESOURCE_ENVIRONMENTS.contains(environment)) throw new IllegalArgumentException("Invalid resources dimension: %s".formatted(environment.name()));
-		return getWorld("worlds-resources/" + environment.name().toLowerCase(Locale.ENGLISH) + "/", playerUuid,
+		return getWorld("worlds-resources/" + environment.name().toLowerCase(Locale.US) + "/", playerUuid,
 				(levelName, worldKey) -> requireNonNull(
 					new WorldCreator(levelName, worldKey)
 						.keepSpawnLoaded(TriState.FALSE)

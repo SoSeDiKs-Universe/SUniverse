@@ -84,7 +84,7 @@ public class BodyPart {
 		}
 
 		private FontData mapping(BodyDamage bodyDamage, String mapping, String suffix) {
-			mapping = "health/" + mapping + "_" + bodyDamage.name().toLowerCase(Locale.ENGLISH) + suffix;
+			mapping = "health/" + mapping + "_" + bodyDamage.name().toLowerCase(Locale.US) + suffix;
 			FontData fontData = ResourceLib.storage().getFontData(requiemKey(mapping));
 			return Objects.requireNonNull(fontData);
 		}

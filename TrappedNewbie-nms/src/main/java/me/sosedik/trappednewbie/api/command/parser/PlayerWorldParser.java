@@ -134,7 +134,7 @@ public final class PlayerWorldParser<C> implements ArgumentParser<C, World>, Sug
 				completions.add(Suggestion.suggestion(playerPrefix));
 				for (World.Environment environment : World.Environment.values()) {
 					if (environment == World.Environment.CUSTOM) continue;
-					completions.add(Suggestion.suggestion(playerPrefix + "#" + environment.name().toLowerCase(Locale.ENGLISH)));
+					completions.add(Suggestion.suggestion(playerPrefix + "#" + environment.name().toLowerCase(Locale.US)));
 				}
 			}
 		}

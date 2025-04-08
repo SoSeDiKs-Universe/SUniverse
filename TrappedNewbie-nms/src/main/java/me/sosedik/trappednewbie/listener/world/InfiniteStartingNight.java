@@ -48,7 +48,7 @@ public class InfiniteStartingNight implements Listener {
 		if (world.getEnvironment() != World.Environment.NORMAL) return false;
 
 		NamespacedKey worldKey = world.getKey();
-		if (!worldKey.getNamespace().equals(TrappedNewbie.instance().getName().toLowerCase(Locale.ENGLISH))) return false;
+		if (!worldKey.getNamespace().equals(TrappedNewbie.instance().getName().toLowerCase(Locale.US))) return false;
 		return worldKey.getKey().startsWith("worlds-resources/");
 	}
 

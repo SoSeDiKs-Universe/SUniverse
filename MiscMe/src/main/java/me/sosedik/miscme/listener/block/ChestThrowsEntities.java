@@ -3,6 +3,7 @@ package me.sosedik.miscme.listener.block;
 import io.papermc.paper.block.LidMode;
 import io.papermc.paper.block.LidState;
 import io.papermc.paper.block.Lidded;
+import io.papermc.paper.event.player.PlayerLiddedOpenEvent;
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
 import io.papermc.paper.world.damagesource.CombatEntry;
@@ -57,13 +58,14 @@ public class ChestThrowsEntities implements Listener {
 		List<HumanEntity> viewers = event.getViewers();
 		if (viewers.size() > 1) return;
 		if (viewers.size() == 1 && viewers.getFirst() != player) return;
-		if (!(event.getInventory().getHolder(false) instanceof TileState tileState)) return;
-		if (!(tileState.getBlockData() instanceof Directional directional)) return;
-		if (!isChest(tileState)) return;
-		if (tileState instanceof Lidded lidded && lidded.getLidMode() == LidMode.FORCED_OPEN) return;
+		if (!(event.getInventory().getHolder(false) instanceof Lidded lidded)) return;
+		if (lidded.getEffectiveLidState() != LidState.OPEN) return;
+		if (!(lidded.getBlockData() instanceof Directional directional)) return;
+		if (!isChest(lidded)) return;
+		if (lidded.getLidMode() == LidMode.FORCED_OPEN) return;
 
 		Vector velocity = directional.getFacing().getDirection().multiply(0.4).setY(0.4);
-		Location loc = tileState.getLocation().toCenterLocation().shiftTowards(BlockFace.UP);
+		Location loc = lidded.getLocation().toCenterLocation().shiftTowards(BlockFace.UP);
 		Collection<LivingEntity> entities = loc.getNearbyLivingEntities(0.4);
 		entities.removeIf(EntityUtil.IGNORE_INTERACTION);
 		entities.forEach(entity -> {
@@ -72,7 +74,7 @@ public class ChestThrowsEntities implements Listener {
 				var damageSource = DamageSource.builder(CHEST_CRUSH)
 					.withCausingEntity(player)
 					.withDirectEntity(player)
-					.withDamageLocation(tileState.getLocation())
+					.withDamageLocation(lidded.getLocation())
 					.build();
 				entity.damage(1, damageSource);
 			}
@@ -89,10 +91,29 @@ public class ChestThrowsEntities implements Listener {
 		if (event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
 
 		Player player = event.getPlayer();
-		if (player.isSneaking() && (player.getInventory().getItemInMainHand().getType().isBlock() || player.getInventory().getItemInOffHand().getType().isBlock())) return;
+		if (player.isSneaking() && (player.getInventory().getItemInMainHand().getType().isBlock() || player.getInventory().getItemInOffHand().getType().isBlock()))
+			return;
 
 		Block block = event.getClickedBlock();
 		if (block == null) return;
+		if (!isChest(block.getType())) return;
+		if (!(block.getBlockData() instanceof Chest)) return;
+		if (block.getRelative(BlockFace.UP).isSolid()) return;
+		if (!(block.getState(false) instanceof Lidded lidded)) return;
+		if (lidded.getEffectiveLidState() == LidState.OPEN) return;
+
+		Collection<LivingEntity> entities = block.getLocation().toCenterLocation().shiftTowards(BlockFace.UP).getNearbyLivingEntities(0.4);
+		entities.removeIf(entity -> entity.getType() != EntityType.CAT);
+		if (entities.isEmpty()) return;
+
+		ClickThroughHanging.openContainer(player, block, true);
+	}
+
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	public void onOpen(PlayerLiddedOpenEvent event) {
+		if (!event.isOpening()) return;
+
+		Block block = event.getBlock();
 		if (!isChest(block.getType())) return;
 		if (!(block.getBlockData() instanceof Directional directional)) return;
 		if (block.getRelative(BlockFace.UP).isSolid()) return;
@@ -102,11 +123,7 @@ public class ChestThrowsEntities implements Listener {
 		Collection<LivingEntity> entities = block.getLocation().toCenterLocation().shiftTowards(BlockFace.UP).getNearbyLivingEntities(0.4);
 		entities.removeIf(EntityUtil.IGNORE_INTERACTION);
 
-		if (directional instanceof Chest && hasCat(entities)) {
-			// Cats block chest opening, open manually
-			ClickThroughHanging.openContainer(player, block, true);
-		}
-
+		Player player = event.getPlayer();
 		boolean damage = block.getRelative(BlockFace.UP).getRelative(directional.getFacing().getOppositeFace()).isSolid();
 
 		var velocity = directional.getFacing().getOppositeFace().getDirection().multiply(0.4).setY(0.4);
@@ -131,14 +148,6 @@ public class ChestThrowsEntities implements Listener {
 				}
 			}
 		});
-	}
-
-	private boolean hasCat(Collection<LivingEntity> entities) {
-		for (LivingEntity entity : entities) {
-			if (entity.getType() == EntityType.CAT)
-				return true;
-		}
-		return false;
 	}
 
 	private boolean isChest(Material type) {

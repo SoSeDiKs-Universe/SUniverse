@@ -3,11 +3,17 @@ package me.sosedik.trappednewbie;
 import io.leangen.geantyref.TypeToken;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import me.sosedik.limboworldgenerator.VoidChunkGenerator;
+import me.sosedik.miscme.task.CustomDayCycleTask;
 import me.sosedik.resourcelib.ResourceLib;
 import me.sosedik.trappednewbie.api.command.parser.PlayerWorldParser;
+import me.sosedik.trappednewbie.command.MigrateCommand;
 import me.sosedik.trappednewbie.command.SpitCommand;
+import me.sosedik.trappednewbie.dataset.TrappedNewbieAdvancements;
 import me.sosedik.trappednewbie.impl.item.modifier.PaperPlaneModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.VisualArmorModifier;
+import me.sosedik.trappednewbie.listener.advancement.AdvancementsLocalizer;
+import me.sosedik.trappednewbie.listener.advancement.LoadSaveAdvancementsOnJoinQuit;
+import me.sosedik.trappednewbie.listener.advancement.dedicated.RequiemWelcome;
 import me.sosedik.trappednewbie.listener.item.PaperPlanes;
 import me.sosedik.trappednewbie.listener.misc.DisableJoinQuitMessages;
 import me.sosedik.trappednewbie.listener.misc.FakeHardcoreHearts;
@@ -16,6 +22,7 @@ import me.sosedik.trappednewbie.listener.player.TeamableLeatherEquipment;
 import me.sosedik.trappednewbie.listener.player.VisualArmorLayer;
 import me.sosedik.trappednewbie.listener.world.InfiniteStartingNight;
 import me.sosedik.trappednewbie.listener.world.LimboWorldFall;
+import me.sosedik.trappednewbie.listener.world.LimitedLimbo;
 import me.sosedik.trappednewbie.listener.world.PerPlayerWorlds;
 import me.sosedik.trappednewbie.misc.TrappedNewbieRecipes;
 import me.sosedik.utilizer.CommandManager;
@@ -25,6 +32,7 @@ import me.sosedik.utilizer.util.FileUtil;
 import me.sosedik.utilizer.util.Scheduler;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.bukkit.Bukkit;
+import org.bukkit.Difficulty;
 import org.bukkit.GameRule;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -69,11 +77,16 @@ public final class TrappedNewbie extends JavaPlugin {
 		registerCommands();
 
 		TrappedNewbieRecipes.addRecipes();
+		TrappedNewbieAdvancements.setupAdvancements();
 
 		new PaperPlaneModifier(trappedNewbieKey("paper_plane")).register();
 		new VisualArmorModifier(trappedNewbieKey("visual_armor")).register();
 
 		EventUtil.registerListeners(this,
+			// advancement
+			AdvancementsLocalizer.class,
+			LoadSaveAdvancementsOnJoinQuit.class,
+			RequiemWelcome.class,
 			// item
 			PaperPlanes.class,
 			// misc
@@ -86,7 +99,10 @@ public final class TrappedNewbie extends JavaPlugin {
 			// world
 			InfiniteStartingNight.class,
 			LimboWorldFall.class,
-			PerPlayerWorlds.class
+			LimitedLimbo.class,
+			PerPlayerWorlds.class,
+			// command
+			MigrateCommand.class
 		);
 	}
 
@@ -97,15 +113,29 @@ public final class TrappedNewbie extends JavaPlugin {
 			return;
 		}
 
-		world.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
 		world.setFullTime(0);
+		world.setDifficulty(Difficulty.PEACEFUL);
+		world.setGameRule(GameRule.DO_INSOMNIA, false);
+		world.setGameRule(GameRule.DO_MOB_SPAWNING, false);
+		world.setGameRule(GameRule.DO_PATROL_SPAWNING, false);
+		world.setGameRule(GameRule.DO_TRADER_SPAWNING, false);
+		world.setGameRule(GameRule.DO_WARDEN_SPAWNING, false);
+		world.setGameRule(GameRule.DO_VINES_SPREAD, false);
+		world.setGameRule(GameRule.RANDOM_TICK_SPEED, 0);
+		world.setGameRule(GameRule.MOB_GRIEFING, false);
+		new CustomDayCycleTask(world, () -> {
+			if (Bukkit.getServerTickManager().isFrozen()) return 0D;
+			return 10D;
+		});
 
 		Block block = world.getHighestBlockAt(0, 0);
 		if (block.getLocation().getBlockY() > world.getMinHeight()) return;
 
 		block = world.getBlockAt(0, 120, 0);
-		block.setType(Material.GLASS);
-		world.setSpawnLocation(0, 121, 0);
+		if (block.isEmpty()) {
+			block.setType(Material.GLASS);
+			world.setSpawnLocation(0, 121, 0);
+		}
 	}
 
 	private void applyWorldRules() {
@@ -125,6 +155,7 @@ public final class TrappedNewbie extends JavaPlugin {
 		mapper.mapSimpleNMS(new TypeToken<PlayerWorldParser<CommandSourceStack>>() {}, "nbt_path", true);
 
 		commandManager.registerCommands(this,
+			MigrateCommand.class,
 			SpitCommand.class
 		);
 	}

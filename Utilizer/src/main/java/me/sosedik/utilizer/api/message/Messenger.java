@@ -115,10 +115,11 @@ public class Messenger {
 	 * Returns parsed message
 	 *
 	 * @param messagePath path for message
+	 * @param resolvers   message tag resolvers
 	 * @return parsed message
 	 */
-	public @Nullable Component getMessageIfExists(String messagePath) {
-		Component[] messages = getMessagesIfExists(messagePath);
+	public @Nullable Component getMessageIfExists(String messagePath, TagResolver... resolvers) {
+		Component[] messages = getMessagesIfExists(messagePath, resolvers);
 		return messages == null ? null : combine(newline(), messages);
 	}
 
@@ -126,16 +127,17 @@ public class Messenger {
 	 * Returns parsed message
 	 *
 	 * @param messagePath path for message
+	 * @param resolvers   message tag resolvers
 	 * @return parsed message
 	 */
-	public Component @Nullable [] getMessagesIfExists(String messagePath) {
+	public Component @Nullable [] getMessagesIfExists(String messagePath, TagResolver ... resolvers) {
 		String[] minis = getRawMessageIfExists(messagePath);
 		if (minis == null) return null;
-		if (minis.length == 1) return new Component[]{mini(this.miniMessage, minis[0])};
+		if (minis.length == 1) return new Component[]{mini(this.miniMessage, minis[0], resolvers)};
 
 		Component[] parsed = new Component[minis.length];
 		for (int i = 0; i < minis.length; i++)
-			parsed[i] = mini(this.miniMessage, minis[i]);
+			parsed[i] = mini(this.miniMessage, minis[i], resolvers);
 		return parsed;
 	}
 
@@ -146,7 +148,7 @@ public class Messenger {
 	 * @param resolvers   message tag resolvers
 	 * @return parsed message
 	 */
-	public Component [] getMessages(String messagePath, TagResolver ... resolvers) {
+	public Component [] getMessages(String messagePath, TagResolver... resolvers) {
 		String[] minis = getRawMessage(messagePath);
 		if (minis.length == 1) return new Component[]{mini(this.miniMessage, minis[0], resolvers)};
 
@@ -173,7 +175,7 @@ public class Messenger {
 	 * @param resolvers   message tag resolvers
 	 * @return parsed message
 	 */
-	public Component getMessage(String messagePath, TagResolver ... resolvers) {
+	public Component getMessage(String messagePath, TagResolver... resolvers) {
 		return combine(newline(), getMessages(messagePath, resolvers));
 	}
 

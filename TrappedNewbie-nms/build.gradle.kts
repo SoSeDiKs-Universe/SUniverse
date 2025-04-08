@@ -8,8 +8,10 @@ dependencies {
     compileOnly(project(":ResourceLib-nms"))
     compileOnly(project(":MiscMe"))
     compileOnly(project(":Moves"))
+    compileOnly(project(":FancyMotd"))
     compileOnly(project(":Requiem"))
 
+    compileOnly("me.sosedik:PacketAdvancements-api:1.0-SNAPSHOT")
     compileOnly("de.tr7zw:item-nbt-api-plugin:${project.property("nbtApiVersion")}")
     compileOnly("com.github.retrooper:packetevents-spigot:${project.property("packeteventsVersion")}")
 
@@ -35,6 +37,10 @@ paper {
             required = true
         }
         register("packetevents") {
+            load = PaperPluginDescription.RelativeLoadOrder.BEFORE
+            required = true
+        }
+        register("PacketAdvancements") {
             load = PaperPluginDescription.RelativeLoadOrder.BEFORE
             required = true
         }

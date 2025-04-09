@@ -11,12 +11,13 @@ import me.sosedik.utilizer.util.EventUtil;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.UnknownNullability;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
 public class FancyMotd extends JavaPlugin {
 
-	private static FancyMotd instance;
+	private static @UnknownNullability FancyMotd instance;
 
 	@Override
 	public void onLoad() {
@@ -31,7 +32,7 @@ public class FancyMotd extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		MotdIconStorage.refreshIcons(this);
-		if (getServer().getPluginManager().getPlugin("Utilizer") == null || !ServerBuildInfo.buildInfo().isBrandCompatible(Key.key("kiterino", "kiterino"))) {
+		if (getServer().getPluginManager().getPlugin("Utilizer") == null || !ServerBuildInfo.buildInfo().isBrandCompatible(Key.key("suniverse", "kiterino"))) {
 			getLogger().warning("Current server software does not support Kiterino API");
 			getServer().getPluginManager().registerEvents(new PaperMotdRandomizer(), this);
 			return;

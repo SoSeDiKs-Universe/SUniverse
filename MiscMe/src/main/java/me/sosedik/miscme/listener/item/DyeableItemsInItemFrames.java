@@ -84,7 +84,7 @@ public class DyeableItemsInItemFrames implements Listener {
 		if (newColor == null)
 			frameItem.resetData(DataComponentTypes.DYED_COLOR);
 		else
-			frameItem.setData(DataComponentTypes.DYED_COLOR, DyedItemColor.dyedItemColor(newColor, true));
+			frameItem.setData(DataComponentTypes.DYED_COLOR, DyedItemColor.dyedItemColor(newColor));
 		itemFrame.setItem(frameItem);
 
 		ImmersiveDyes.playEffect(player, null, itemFrame.getLocation(), null);

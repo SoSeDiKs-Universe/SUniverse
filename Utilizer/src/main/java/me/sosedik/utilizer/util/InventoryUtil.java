@@ -117,7 +117,7 @@ public class InventoryUtil {
 	 *
 	 * @param player player
 	 * @param slot equipment slot
-	 * @return the raw slot
+	 * @return the raw slot, or -1 if not existent
 	 * @throws IllegalArgumentException if the provided slot is not supported by the {@link Player} entity
 	 */
 	public static int getSlot(Player player, EquipmentSlot slot) {
@@ -128,7 +128,7 @@ public class InventoryUtil {
 			case FEET -> InventorySlotHelper.FEET_SLOT;
 			case OFF_HAND -> InventorySlotHelper.OFF_HAND;
 			case HAND -> 36 + player.getInventory().getHeldItemSlot();
-			default -> throw new IllegalArgumentException("Unsupported equipment slot: " + slot.name());
+			default -> -1;
 		};
 	}
 

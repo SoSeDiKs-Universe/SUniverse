@@ -1,5 +1,7 @@
 package me.sosedik.miscme.listener.item;
 
+import de.tr7zw.nbtapi.NBT;
+import de.tr7zw.nbtapi.iface.ReadWriteItemNBT;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.DyedItemColor;
 import me.sosedik.miscme.MiscMe;
@@ -19,11 +21,14 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Locale;
 import java.util.Objects;
+import java.util.function.Consumer;
 
 /**
  * Colored shulkers drop colored shells
  */
 public class ColoredShulkerShells implements Listener {
+
+	public static final String COLOR_TAG = "color";
 
 	private static final NamespacedKey SHULKER_RECIPE_KEY = NamespacedKey.minecraft("shulker_box");
 
@@ -43,7 +48,8 @@ public class ColoredShulkerShells implements Listener {
 			if (item.getType() != Material.SHULKER_SHELL) return item;
 			if (item.hasData(DataComponentTypes.DYED_COLOR)) return item;
 
-			item.setData(DataComponentTypes.DYED_COLOR, DyedItemColor.dyedItemColor(dyeColor.getColor(), false));
+			NBT.modify(item, (Consumer<ReadWriteItemNBT>) nbt -> nbt.setEnum(COLOR_TAG, dyeColor));
+
 			return item;
 		});
 	}
@@ -63,7 +69,7 @@ public class ColoredShulkerShells implements Listener {
 
 			if (!item.hasData(DataComponentTypes.DYED_COLOR)) {
 				item = item.clone();
-				item.setData(DataComponentTypes.DYED_COLOR, DyedItemColor.dyedItemColor(dyeColor.getColor(), false));
+				NBT.modify(item, (Consumer<ReadWriteItemNBT>) nbt -> nbt.setEnum(COLOR_TAG, dyeColor));
 				return item;
 			}
 
@@ -72,8 +78,7 @@ public class ColoredShulkerShells implements Listener {
 			if (dyeColor == DyeColor.getByColor(dyedItemColor.color())) return null;
 
 			item = item.clone();
-			dyedItemColor = DyedItemColor.dyedItemColor(dyeColor.getColor(), dyedItemColor.showInTooltip());
-			item.setData(DataComponentTypes.DYED_COLOR, dyedItemColor);
+			NBT.modify(item, (Consumer<ReadWriteItemNBT>) nbt -> nbt.setEnum(COLOR_TAG, dyeColor));
 
 			return item;
 		});
@@ -136,7 +141,7 @@ public class ColoredShulkerShells implements Listener {
 			});
 		} else {
 			var shell = new ItemStack(Material.SHULKER_SHELL);
-			shell.setData(DataComponentTypes.DYED_COLOR, DyedItemColor.dyedItemColor(dyeColor.getColor(), false));
+			NBT.modify(shell, (Consumer<ReadWriteItemNBT>) nbt -> nbt.setEnum(COLOR_TAG, dyeColor));
 			craft.addIngredientItems('S', shell,
 			item -> item.hasData(DataComponentTypes.DYED_COLOR)
 					&& DyeColor.getByColor(Objects.requireNonNull(item.getData(DataComponentTypes.DYED_COLOR)).color()) == dyeColor

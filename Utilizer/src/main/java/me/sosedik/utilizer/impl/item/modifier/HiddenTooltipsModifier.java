@@ -1,6 +1,7 @@
 package me.sosedik.utilizer.impl.item.modifier;
 
 import io.papermc.paper.datacomponent.DataComponentTypes;
+import io.papermc.paper.datacomponent.item.TooltipDisplay;
 import me.sosedik.kiterino.modifier.item.ItemContextBox;
 import me.sosedik.kiterino.modifier.item.ItemModifier;
 import me.sosedik.kiterino.modifier.item.ModificationResult;
@@ -22,7 +23,7 @@ public class HiddenTooltipsModifier extends ItemModifier {
 		if (!UtilizerTags.NO_TOOLTIP_ITEMS.isTagged(contextBox.getInitialType())) return ModificationResult.PASS;
 
 		ItemStack item = contextBox.getItem();
-		item.setData(DataComponentTypes.HIDE_TOOLTIP);
+		item.setData(DataComponentTypes.TOOLTIP_DISPLAY, TooltipDisplay.tooltipDisplay().hideTooltip(true).build());
 		item.setData(DataComponentTypes.ITEM_NAME, Component.empty());
 
 		return ModificationResult.OK;

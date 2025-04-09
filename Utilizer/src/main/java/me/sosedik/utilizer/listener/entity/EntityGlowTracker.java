@@ -43,6 +43,7 @@ public class EntityGlowTracker implements PacketListener, Listener {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void onPacketSend(PacketSendEvent event) {
 		if (event.getPacketType() != PacketType.Play.Server.ENTITY_METADATA) return;
@@ -53,12 +54,13 @@ public class EntityGlowTracker implements PacketListener, Listener {
 		if (!(event.getPlayer() instanceof Player player)) return;
 		if (!playerUuids.contains(player.getUniqueId())) return;
 
-		for (EntityData entityData : packet.getEntityMetadata()) {
+		for (EntityData<?> entityData : packet.getEntityMetadata()) {
 			if (entityData.getIndex() != GLOWING_METADATA_INDEX) continue;
 
-			byte mask = (byte) entityData.getValue();
+			EntityData<Byte> glowEntityData = (EntityData<Byte>) entityData;
+			byte mask = glowEntityData.getValue();
 			mask |= 0x40; // Glowing
-			entityData.setValue(mask);
+			glowEntityData.setValue(mask);
 			return;
 		}
 	}

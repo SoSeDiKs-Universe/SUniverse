@@ -18,7 +18,7 @@ import java.util.Objects;
 /**
  * General utilities around items
  */
-// MCCheck: 1.21.4, item types
+// MCCheck: 1.21.5, item types
 @NullMarked
 public class ItemUtil {
 

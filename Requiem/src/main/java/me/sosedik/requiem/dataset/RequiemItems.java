@@ -9,6 +9,8 @@ import org.jspecify.annotations.NullMarked;
 @SuppressWarnings("unused")
 public final class RequiemItems {
 
+	public static final Material SADDLE_OUTLINE = byKey("saddle_outline");
+
 	public static final Material GHOST_MOTIVATOR = byKey("ghost_motivator");
 	public static final Material GHOST_RELOCATOR = byKey("ghost_relocator");
 

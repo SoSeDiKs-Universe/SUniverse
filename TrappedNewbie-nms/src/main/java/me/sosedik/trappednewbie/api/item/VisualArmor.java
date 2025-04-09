@@ -26,12 +26,12 @@ public class VisualArmor {
 	private boolean armorPreview;
 
 	public VisualArmor(
-			Player player,
-			@Nullable ItemStack helmet,
-			@Nullable ItemStack chestplate,
-			@Nullable ItemStack leggings,
-			@Nullable ItemStack boots,
-			@Nullable ItemStack gloves
+		Player player,
+		@Nullable ItemStack helmet,
+		@Nullable ItemStack chestplate,
+		@Nullable ItemStack leggings,
+		@Nullable ItemStack boots,
+		@Nullable ItemStack gloves
 	) {
 		this.player = player;
 		this.helmet = helmet;
@@ -144,7 +144,8 @@ public class VisualArmor {
 	private void refreshVisuals(EquipmentSlot slot) {
 		if (!slot.isArmor()) return;
 
-		this.player.sendItem(InventoryUtil.getSlot(this.player, slot), getItem(slot));
+		int invSlot = InventoryUtil.getSlot(this.player, slot);
+		if (invSlot != -1) this.player.sendItem(invSlot, getItem(slot));
 		Bukkit.getOnlinePlayers().forEach(onlinePlayer -> {
 			if (onlinePlayer != player && onlinePlayer.getWorld() == player.getWorld())
 				onlinePlayer.sendEquipmentChange(this.player, slot, getItem(slot));

@@ -18,11 +18,12 @@ import java.util.UUID;
 /**
  * Boats are jumpy! :D
  */
-// MCCheck: 1.21.4, player input packet
 @NullMarked
 public class JumpyBoats implements PacketListener {
 
 	private static final Set<UUID> JUMP_DELAYS = new HashSet<>();
+	private static final Vector WATER_JUMP_VELOCITY = new Vector(0, 0.3, 0);
+	private static final Vector GROUND_JUMP_VELOCITY = new Vector(0, 0.25, 0);
 
 	@Override
 	public void onPacketReceive(PacketReceiveEvent event) {
@@ -40,11 +41,11 @@ public class JumpyBoats implements PacketListener {
 
 			if (boat.isInWater()) {
 				triggerDelay(player);
-				boat.setVelocity(boat.getVelocity().add(new Vector(0, 0.3, 0)));
+				boat.setVelocity(boat.getVelocity().add(WATER_JUMP_VELOCITY));
 				boat.emitSound(Sound.ENTITY_PLAYER_SPLASH, 0.4F, 1F);
 			} else if (boat.isOnGround()) {
 				triggerDelay(player);
-				boat.setVelocity(boat.getVelocity().add(new Vector(0, 0.25, 0)));
+				boat.setVelocity(boat.getVelocity().add(GROUND_JUMP_VELOCITY));
 			}
 		});
 	}

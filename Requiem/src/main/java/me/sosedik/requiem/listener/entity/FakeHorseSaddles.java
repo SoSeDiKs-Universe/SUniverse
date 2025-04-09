@@ -6,6 +6,7 @@ import com.github.retrooper.packetevents.event.PacketSendEvent;
 import com.github.retrooper.packetevents.protocol.entity.data.EntityData;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityMetadata;
+import me.sosedik.requiem.Requiem;
 import me.sosedik.requiem.api.event.player.PlayerStartPossessingEntityEvent;
 import me.sosedik.requiem.api.event.player.PlayerStopPossessingEntityEvent;
 import org.bukkit.entity.AbstractHorse;
@@ -25,13 +26,14 @@ import java.util.UUID;
 /**
  * Fakes saddles for clients to allow controlling horses without actual saddles
  */
-// MCCheck: 1.21.4, abstract horse metadata index for saddles
+// MCCheck: 1.21.5, abstract horse metadata index for saddles // TODO seems to no longer work, instead requires FakeHorseSaddlesModifier?
 @NullMarked
 public class FakeHorseSaddles implements PacketListener, Listener {
 
 	private static final int HORSE_META_INDEX = 17;
 	private static final Map<Integer, List<UUID>> ENTITY_TO_PLAYER_SADDLES = new HashMap<>();
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void onPacketSend(PacketSendEvent event) {
 		if (event.getPacketType() != PacketType.Play.Server.ENTITY_METADATA) return;
@@ -42,10 +44,11 @@ public class FakeHorseSaddles implements PacketListener, Listener {
 		if (!(event.getPlayer() instanceof Player player)) return;
 		if (!playerUuids.contains(player.getUniqueId())) return;
 
-		for (EntityData entityData : packet.getEntityMetadata()) {
-			if (entityData.getIndex() != HORSE_META_INDEX) continue;
+		for (EntityData<?> entityDataRaw : packet.getEntityMetadata()) {
+			if (entityDataRaw.getIndex() != HORSE_META_INDEX) continue;
 
-			byte mask = (byte) entityData.getValue();
+			EntityData<Byte> entityData = (EntityData<Byte>) entityDataRaw;
+			byte mask = (byte) entityDataRaw.getValue();
 			mask |= 0x04; // Is saddled, required to control entity client-side
 			entityData.setValue(mask);
 			break;
@@ -60,13 +63,13 @@ public class FakeHorseSaddles implements PacketListener, Listener {
 	@EventHandler
 	public void onPossess(PlayerStartPossessingEntityEvent event) {
 		if (event.getEntity() instanceof AbstractHorse entity)
-			FakeHorseSaddles.startTracking(event.getPlayer(), entity);
+			startTracking(event.getPlayer(), entity);
 	}
 
 	@EventHandler
 	public void onUnPossess(PlayerStopPossessingEntityEvent event) {
 		if (event.getEntity() instanceof AbstractHorse entity)
-			FakeHorseSaddles.stopTracking(event.getPlayer(), entity);
+			stopTracking(event.getPlayer(), entity);
 	}
 
 	/**
@@ -78,6 +81,7 @@ public class FakeHorseSaddles implements PacketListener, Listener {
 	public static void startTracking(Player player, Entity entity) {
 		ENTITY_TO_PLAYER_SADDLES.computeIfAbsent(entity.getEntityId(), k -> new ArrayList<>()).add(player.getUniqueId());
 		entity.resendMetadata(HORSE_META_INDEX);
+		Requiem.scheduler().sync(player::updateInventory, 3L);
 	}
 
 	/**

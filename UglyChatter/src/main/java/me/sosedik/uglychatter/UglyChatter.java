@@ -16,12 +16,13 @@ import me.sosedik.utilizer.util.EventUtil;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.UnknownNullability;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
 public class UglyChatter extends JavaPlugin {
 
-	private static UglyChatter instance;
+	private static @UnknownNullability UglyChatter instance;
 
 	@Override
 	public void onLoad() {

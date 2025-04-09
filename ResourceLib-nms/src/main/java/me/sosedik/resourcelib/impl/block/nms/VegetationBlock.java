@@ -1,11 +1,9 @@
 package me.sosedik.resourcelib.impl.block.nms;
 
-import com.mojang.serialization.MapCodec;
 import me.sosedik.kiterino.world.block.KiterinoBlock;
 import me.sosedik.resourcelib.ResourceLib;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BushBlock;
-import net.minecraft.world.level.block.TallGrassBlock;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.BlockState;
@@ -30,11 +28,6 @@ public class VegetationBlock extends BushBlock implements KiterinoBlock {
 			this.bukkitState = Bukkit.createBlockData(mapping).createBlockState();
 		}
 		return this.bukkitState;
-	}
-
-	@Override
-	protected MapCodec<? extends BushBlock> codec() {
-		return TallGrassBlock.CODEC;
 	}
 
 }

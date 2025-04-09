@@ -26,12 +26,13 @@ import java.util.List;
  * Burning projectiles create fire upon landing
  */
 @NullMarked
-// MCCheck: 1.21.4, new replaceable by fire blocks
+// MCCheck: 1.21.5, new replaceable by fire blocks
 public class BurningProjectileCreatesFire implements Listener {
 
 	private static final List<Material> replaceableByFire = List.of(
 		Material.SHORT_GRASS, Material.TALL_GRASS, Material.FERN, Material.LARGE_FERN,
-		Material.DEAD_BUSH
+		Material.DEAD_BUSH, Material.BUSH, Material.FIREFLY_BUSH, Material.LEAF_LITTER,
+		Material.SHORT_DRY_GRASS, Material.TALL_DRY_GRASS
 	);
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

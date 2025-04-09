@@ -80,10 +80,11 @@ public class SignBeautifier implements PacketListener, Listener {
 
 	@Override
 	public void onPacketSend(PacketSendEvent event) {
-		if (event.getPacketType() == PacketType.Play.Server.BLOCK_ENTITY_DATA) {
-			handleBlockEntityData(event.getPlayer(), new WrapperPlayServerBlockEntityData(event));
+		if (event.getPacketType() == PacketType.Play.Server.BLOCK_ENTITY_DATA) { // TODO fix with 1.21.5 changes
+			// SoSeDiK lost connection: Internal Exception: io.netty.handler.codec.EncoderException: java.lang.IndexOutOfBoundsException: readerIndex: 0, writerIndex: 292 (expected: 0 <= readerIndex <= writerIndex <= capacity(256))
+//			handleBlockEntityData(event.getPlayer(), new WrapperPlayServerBlockEntityData(event));
 		} else if (event.getPacketType() == PacketType.Play.Server.CHUNK_DATA) {
-			handleChunkData(event.getPlayer(), new WrapperPlayServerChunkData(event));
+//			handleChunkData(event.getPlayer(), new WrapperPlayServerChunkData(event));
 		}
 	}
 
@@ -127,7 +128,7 @@ public class SignBeautifier implements PacketListener, Listener {
 
 		for (int i = 0; i < messages.size(); i++) {
 			String serialized = messages.getTag(i).getValue();
-			if (serialized.equals("\"\"")) continue;
+			if (serialized.isEmpty()) continue;
 
 			Component line;
 			// Raw text is wrapped in "

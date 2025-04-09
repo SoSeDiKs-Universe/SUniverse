@@ -44,8 +44,9 @@ public class PaperMotdRandomizer implements Listener {
 			List<PaperServerListPingEvent.ListedPlayerInfo> listedPlayers = event.getListedPlayers();
 			listedPlayers.clear();
 			listedPlayers.add(MAINTENANCE_INFO);
-			Component motd = Component.textOfChildren(Component.newline(),
+			Component motd = Component.textOfChildren(
 				MINI.deserialize("<#37BBF5>SoSeDiK's <#ECF3FC>Universe <red>♥"),
+				Component.newline(),
 				MINI.deserialize("<red>Have a good day!")
 			);
 			event.motd(motd);
@@ -54,8 +55,9 @@ public class PaperMotdRandomizer implements Listener {
 
 		// Special message for outdated clients
 		if (event.getClient().getProtocolVersion() < event.getProtocolVersion()) {
-			Component motd = Component.textOfChildren(Component.newline(),
+			Component motd = Component.textOfChildren(
 				MINI.deserialize("<#37BBF5>SoSeDiK's <#ECF3FC>Universe <red>♥"),
+				Component.newline(),
 				MINI.deserialize("<red>Your client version is outdated! :(")
 			);
 			event.motd(motd);
@@ -63,8 +65,9 @@ public class PaperMotdRandomizer implements Listener {
 		}
 
 		// Random motd
-		Component motd = Component.textOfChildren(Component.newline(),
+		Component motd = Component.textOfChildren(
 			MINI.deserialize("<#37BBF5>SoSeDiK's <#ECF3FC>Universe <red>♥"),
+			Component.newline(),
 			MINI.deserialize("<gray>Testing random stuff")
 		);
 		event.motd(motd);

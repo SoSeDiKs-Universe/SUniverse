@@ -77,6 +77,7 @@ public class GhostyPlayer {
 		player.setFlyingFallDamage(TriState.FALSE);
 
 		player.getInventory().setItem(0, new ItemStack(RequiemItems.GHOST_MOTIVATOR));
+		player.getInventory().setItem(1, new ItemStack(RequiemItems.GHOST_RELOCATOR));
 
 		new GhostAuraTask(player);
 		new GhostMobVisionTask(player);
@@ -110,6 +111,7 @@ public class GhostyPlayer {
 		player.setFlyingFallDamage(TriState.NOT_SET);
 
 		player.getInventory().remove(RequiemItems.GHOST_MOTIVATOR);
+		player.getInventory().remove(RequiemItems.GHOST_RELOCATOR);
 
 		Requiem.logger().info("Clearing ghost state for {}", player.getName());
 	}

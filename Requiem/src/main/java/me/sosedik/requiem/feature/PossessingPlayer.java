@@ -316,10 +316,10 @@ public class PossessingPlayer {
 			player.leaveVehicle();
 
 		byte[] entityData = Bukkit.getUnsafe().serializeEntity(entity);
-		Location entityLoc = entity.getLocation();
 
 		if (quit) {
 			stopPossessing(player, entity, true);
+			entity.remove();
 		}
 
 		data = data.getOrCreateCompound(POSSESSED_TAG);

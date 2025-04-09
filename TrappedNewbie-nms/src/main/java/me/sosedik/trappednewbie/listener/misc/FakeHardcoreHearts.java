@@ -9,7 +9,6 @@ import org.jspecify.annotations.NullMarked;
 /**
  * Makes client always display hardcore hearts
  */
-// MCCheck: 1.21.4, login packet
 @NullMarked
 public class FakeHardcoreHearts implements PacketListener {
 

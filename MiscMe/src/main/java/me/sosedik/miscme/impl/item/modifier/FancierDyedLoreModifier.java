@@ -2,6 +2,7 @@ package me.sosedik.miscme.impl.item.modifier;
 
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.DyedItemColor;
+import io.papermc.paper.datacomponent.item.TooltipDisplay;
 import me.sosedik.kiterino.modifier.item.ItemContextBox;
 import me.sosedik.kiterino.modifier.item.ItemModifier;
 import me.sosedik.kiterino.modifier.item.ModificationResult;
@@ -33,11 +34,15 @@ public class FancierDyedLoreModifier extends ItemModifier {
 		ItemStack item = contextBox.getItem();
 		if (!item.hasData(DataComponentTypes.DYED_COLOR)) return ModificationResult.PASS;
 
+		TooltipDisplay tooltipDisplay = item.getData(DataComponentTypes.TOOLTIP_DISPLAY);
+		if (tooltipDisplay == null) {
+			item.setData(DataComponentTypes.TOOLTIP_DISPLAY, TooltipDisplay.tooltipDisplay().addHiddenComponents(DataComponentTypes.DYED_COLOR).build());
+		} else if (!tooltipDisplay.hideTooltip()) {
+			item.setData(DataComponentTypes.TOOLTIP_DISPLAY, TooltipDisplay.tooltipDisplay().hiddenComponents(tooltipDisplay.hiddenComponents()).addHiddenComponents(DataComponentTypes.DYED_COLOR).build()); // TODO replace with toBuilder once available
+		}
+
 		DyedItemColor dyedItemColor = item.getData(DataComponentTypes.DYED_COLOR);
 		assert dyedItemColor != null;
-		if (!dyedItemColor.showInTooltip()) return ModificationResult.PASS;
-
-		item.setData(DataComponentTypes.DYED_COLOR, dyedItemColor.showInTooltip(false));
 		contextBox.addLore(getDyedLore(dyedItemColor.color()));
 
 		return ModificationResult.OK;

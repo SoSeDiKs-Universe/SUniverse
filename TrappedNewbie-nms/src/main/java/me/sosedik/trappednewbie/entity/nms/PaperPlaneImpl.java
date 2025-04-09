@@ -10,6 +10,9 @@ import me.sosedik.trappednewbie.entity.api.PaperPlane;
 import me.sosedik.utilizer.impl.item.modifier.GlowingItemModifier;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.Tag;
+import net.minecraft.resources.RegistryOps;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -142,7 +145,7 @@ public class PaperPlaneImpl extends ThrowableItemProjectile {
 			return;
 		}
 
-		if (isInWaterRainOrBubble()) {
+		if (isInWaterOrRain()) {
 			rainTicks++;
 			if (rainTicks > 30) {
 				this.despawn(position(), EntityRemoveEvent.Cause.DEATH);
@@ -209,7 +212,7 @@ public class PaperPlaneImpl extends ThrowableItemProjectile {
 
 		// Tick the usual projectile stuff, but revert movement
 		Vec3 prePosition = position();
-		setDeltaMovement(CraftVector.toNMS(currentVelocity));
+		setDeltaMovement(CraftVector.toVec3(currentVelocity));
 		super.tick();
 		setDeltaMovement(Vec3.ZERO);
 		setPos(prePosition);
@@ -231,7 +234,7 @@ public class PaperPlaneImpl extends ThrowableItemProjectile {
 		// Update position!
 		Location newLocation = getBukkitEntity().getLocation().add(currentVelocity);
 		newLocation.setRotation(currentRotationYaw, currentRotationPitch);
-		setPos(CraftLocation.toVec3D(newLocation));
+		setPos(CraftLocation.toVec3(newLocation));
 		assert this.itemDisplay != null;
 		this.itemDisplay.teleport(newLocation, TeleportFlag.EntityState.RETAIN_PASSENGERS);
 	}
@@ -296,7 +299,7 @@ public class PaperPlaneImpl extends ThrowableItemProjectile {
 	}
 
 	@Override
-	protected Item getDefaultItem() {
+	public Item getDefaultItem() {
 		return FAKE_DISPLAY_ITEM;
 	}
 
@@ -311,7 +314,7 @@ public class PaperPlaneImpl extends ThrowableItemProjectile {
 	private void despawn(Vec3 loc, EntityRemoveEvent.Cause cause) {
 		this.discard(cause);
 		boolean blazed = NBT.get(this.pickupItemStack.asBukkitMirror(), nbt -> (boolean) nbt.getOrDefault(PaperPlane.BLAZIFIED_TAG, false));
-		boolean waterBlazedDeath = blazed && cause == EntityRemoveEvent.Cause.DEATH && isInWaterRainOrBubble();
+		boolean waterBlazedDeath = blazed && cause == EntityRemoveEvent.Cause.DEATH && isInWaterOrRain();
 		if (!isOnFire() && (!blazed || waterBlazedDeath)) {
 			boolean fragile = NBT.get(this.pickupItemStack.asBukkitMirror(), nbt -> (boolean) nbt.getOrDefault(PaperPlane.FRAGILE_TAG, false));
 			getBukkitEntity().getWorld().dropItemNaturally(CraftLocation.toBukkit(loc), fragile ? new org.bukkit.inventory.ItemStack(Material.PAPER) : this.pickupItemStack.asBukkitMirror());
@@ -324,13 +327,15 @@ public class PaperPlaneImpl extends ThrowableItemProjectile {
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
-		compound.put("item", this.pickupItemStack.save(this.registryAccess()));
+		RegistryOps<Tag> registryOps = this.registryAccess().createSerializationContext(NbtOps.INSTANCE);
+		compound.store("item", ItemStack.CODEC, registryOps, this.getItem());
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
-		if (compound.contains("item", 10)) this.pickupItemStack = ItemStack.parse(this.registryAccess(), compound.getCompound("item")).orElse(new ItemStack(DEFAULT_PICKUP_ITEM));
+		RegistryOps<Tag> registryOps = this.registryAccess().createSerializationContext(NbtOps.INSTANCE);
+		this.setItem(compound.read("Item", ItemStack.CODEC, registryOps).orElseGet(() -> new ItemStack(DEFAULT_PICKUP_ITEM)));
 	}
 
 	@Override

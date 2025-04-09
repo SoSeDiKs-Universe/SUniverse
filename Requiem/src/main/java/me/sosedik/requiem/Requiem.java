@@ -3,6 +3,7 @@ package me.sosedik.requiem;
 import me.sosedik.requiem.command.ReviveCommand;
 import me.sosedik.requiem.feature.GhostyPlayer;
 import me.sosedik.requiem.feature.PossessingPlayer;
+import me.sosedik.requiem.impl.item.modifier.FakeHorseSaddlesModifier;
 import me.sosedik.requiem.listener.entity.CreepersDropCreeperHearts;
 import me.sosedik.requiem.listener.entity.FakeHorseSaddles;
 import me.sosedik.requiem.listener.entity.OverwriteControlledPandasGenes;
@@ -38,14 +39,15 @@ import me.sosedik.utilizer.util.Scheduler;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.UnknownNullability;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
 public final class Requiem extends JavaPlugin {
 
-	private static Requiem instance;
+	private static @UnknownNullability Requiem instance;
 
-	private Scheduler scheduler;
+	private @UnknownNullability Scheduler scheduler;
 
 	@Override
 	public void onLoad() {
@@ -94,6 +96,8 @@ public final class Requiem extends JavaPlugin {
 			PossessorMimiksPossessed.class,
 			TransformationsKeepPossessor.class
 		);
+
+		new FakeHorseSaddlesModifier(requiemKey("fake_horse_saddles")).register();
 	}
 
 	private void registerCommands() {

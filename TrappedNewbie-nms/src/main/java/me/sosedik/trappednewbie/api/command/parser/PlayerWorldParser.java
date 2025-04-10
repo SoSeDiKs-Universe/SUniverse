@@ -2,6 +2,8 @@ package me.sosedik.trappednewbie.api.command.parser;
 
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import me.sosedik.trappednewbie.TrappedNewbie;
+import me.sosedik.trappednewbie.listener.world.PerPlayerWorlds;
+import me.sosedik.utilizer.util.MiscUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
@@ -24,7 +26,9 @@ import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 
 @NullMarked
-public final class PlayerWorldParser<C> implements ArgumentParser<C, World>, SuggestionProvider<C> {
+public final class PlayerWorldParser<C> implements ArgumentParser.FutureArgumentParser<C, World>, SuggestionProvider<C> {
+
+	private static final String ENV_SEPARATOR = "#";
 
 	public static <C> ParserDescriptor<C, World> playerWorldParser() {
 		return ParserDescriptor.of(new PlayerWorldParser<>(), World.class);
@@ -35,54 +39,62 @@ public final class PlayerWorldParser<C> implements ArgumentParser<C, World>, Sug
 	}
 
 	@Override
-	public ArgumentParseResult<World> parse(
-		final CommandContext<C> commandContext,
-		final CommandInput commandInput
-	) {
+	public CompletableFuture<ArgumentParseResult<World>> parseFuture(CommandContext<C> commandContext, CommandInput commandInput) {
 		String input = commandInput.readString();
 
 		// Player's own world
 		if ("@s".equals(input)) {
 			Player target = resolveTarget(commandContext);
-			if (target == null) {
-				return ArgumentParseResult.failure(new WorldParser.WorldParseException(input, commandContext));
-			}
-			input = "worlds-personal/" + target.getUniqueId();
+			if (target == null)
+				return ArgumentParseResult.failureFuture(new WorldParser.WorldParseException(input, commandContext));
+
+			CompletableFuture<ArgumentParseResult<World>> future = new CompletableFuture<>();
+			TrappedNewbie.scheduler().sync(() -> future.complete(ArgumentParseResult.success(PerPlayerWorlds.getPersonalWorld(target.getUniqueId()))));
+			return future;
 		}
 
 		// @ + Player nicknames to world names
 		if (input.charAt(0) == '@') {
-			String worldPrefix;
 			String playerName;
-			if (input.contains("#")) {
-				String[] split = input.split("#");
-				worldPrefix = "worlds-resources/" + split[1] + "/";
-				if (input.startsWith("@s#")) {
+			World.Environment environment = null;
+			if (input.contains(ENV_SEPARATOR)) {
+				String[] split = input.split(ENV_SEPARATOR);
+				environment = MiscUtil.parseOrNull(split[1], World.Environment.class);
+				if (environment == null)
+					return ArgumentParseResult.failureFuture(new WorldParser.WorldParseException(input, commandContext));
+
+				if (input.startsWith("@s" + ENV_SEPARATOR)) {
 					Player target = resolveTarget(commandContext);
-					if (target == null) {
-						return ArgumentParseResult.failure(new WorldParser.WorldParseException(input, commandContext));
-					}
-					playerName = target.getName();
+					if (target == null)
+						return ArgumentParseResult.failureFuture(new WorldParser.WorldParseException(input, commandContext));
+
+					CompletableFuture<ArgumentParseResult<World>> future = new CompletableFuture<>();
+					World.Environment finalEnvironment = environment;
+					TrappedNewbie.scheduler().sync(() -> future.complete(ArgumentParseResult.success(PerPlayerWorlds.getResourceWorld(target.getUniqueId(), finalEnvironment))));
+					return future;
 				} else {
 					playerName = split[0].substring(1);
 				}
 			} else {
-				worldPrefix = "worlds-personal/";
-				if (input.startsWith("@s#")) {
-					Player target = resolveTarget(commandContext);
-					if (target == null) {
-						return ArgumentParseResult.failure(new WorldParser.WorldParseException(input, commandContext));
-					}
-					playerName = target.getName();
-				} else {
-					playerName = input.substring(1);
-				}
+				playerName = input.substring(1);
 			}
+
 			Player player = Bukkit.getPlayerExact(playerName);
 			if (player == null)
-				return ArgumentParseResult.failure(new WorldParser.WorldParseException(input, commandContext));
+				return ArgumentParseResult.failureFuture(new WorldParser.WorldParseException(input, commandContext));
 
-			input = worldPrefix + player.getUniqueId();
+			CompletableFuture<ArgumentParseResult<World>> future = new CompletableFuture<>();
+			World.Environment finalEnvironment = environment;
+			TrappedNewbie.scheduler().sync(() -> {
+				World world;
+				if (finalEnvironment == null) {
+					world = PerPlayerWorlds.getPersonalWorld(player.getUniqueId());
+				} else {
+					world = PerPlayerWorlds.getResourceWorld(player.getUniqueId(), finalEnvironment);
+				}
+				future.complete(ArgumentParseResult.success(world));
+			});
+			return future;
 		}
 
 		// Try getting by name first, fallback to namespaced key
@@ -94,11 +106,10 @@ public final class PlayerWorldParser<C> implements ArgumentParser<C, World>, Sug
 			}
 		}
 
-		if (world == null) {
-			return ArgumentParseResult.failure(new WorldParser.WorldParseException(input, commandContext));
-		}
+		if (world == null)
+			return ArgumentParseResult.failureFuture(new WorldParser.WorldParseException(input, commandContext));
 
-		return ArgumentParseResult.success(world);
+		return ArgumentParseResult.successFuture(world);
 	}
 
 	private @Nullable Player resolveTarget(CommandContext<C> commandContext) {
@@ -134,7 +145,7 @@ public final class PlayerWorldParser<C> implements ArgumentParser<C, World>, Sug
 				completions.add(Suggestion.suggestion(playerPrefix));
 				for (World.Environment environment : World.Environment.values()) {
 					if (environment == World.Environment.CUSTOM) continue;
-					completions.add(Suggestion.suggestion(playerPrefix + "#" + environment.name().toLowerCase(Locale.US)));
+					completions.add(Suggestion.suggestion(playerPrefix + ENV_SEPARATOR + environment.name().toLowerCase(Locale.US)));
 				}
 			}
 		}

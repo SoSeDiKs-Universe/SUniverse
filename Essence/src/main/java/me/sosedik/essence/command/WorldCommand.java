@@ -26,6 +26,7 @@ public class WorldCommand {
 		CommandSourceStack stack,
 		@Argument(value = "world") World world,
 		@Nullable @Argument(value = "player") Player player,
+		@Flag(value = "keepPos") boolean keepPos,
 		@Flag(value = "silent") boolean silent
 	) {
 		Player target;
@@ -40,7 +41,7 @@ public class WorldCommand {
 		if (!silent) Messenger.messenger(target).sendMessage("command.world", raw("world", world.getName()));
 		if (stack.getSender() != target)
 			Messenger.messenger(stack.getSender()).sendMessage("command.world.other", raw("world", world.getName()), raw("player", target.displayName()));
-		Essence.scheduler().sync(() -> target.teleportAsync(target.getLocation().world(world)));
+		Essence.scheduler().sync(() -> target.teleportAsync(keepPos ? target.getLocation().world(world) : world.getSpawnLocation()));
 	}
 
 }

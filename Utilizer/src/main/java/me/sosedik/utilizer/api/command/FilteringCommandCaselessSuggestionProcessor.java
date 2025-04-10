@@ -1,9 +1,9 @@
 package me.sosedik.utilizer.api.command;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
 import org.incendo.cloud.execution.preprocessor.CommandPreprocessingContext;
 import org.incendo.cloud.suggestion.Suggestion;
 import org.incendo.cloud.suggestion.SuggestionProcessor;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Locale;
 import java.util.stream.Stream;
@@ -14,10 +14,11 @@ import java.util.stream.Stream;
  *
  * @param <C> command sender type
  */
+@NullMarked
 public class FilteringCommandCaselessSuggestionProcessor<C> implements SuggestionProcessor<C> {
 
 	@Override
-	public @NonNull Stream<@NonNull Suggestion> process(@NonNull CommandPreprocessingContext<C> context, @NonNull Stream<@NonNull Suggestion> suggestions) {
+	public Stream<Suggestion> process(CommandPreprocessingContext<C> context, Stream<Suggestion> suggestions) {
 		String input;
 		if (context.commandInput().isEmpty(true)) {
 			input = "";

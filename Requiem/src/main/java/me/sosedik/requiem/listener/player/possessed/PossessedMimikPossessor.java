@@ -16,7 +16,6 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.EntityEquipment;
-import org.bukkit.inventory.EquipmentSlot;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.HashMap;
@@ -94,7 +93,7 @@ public class PossessedMimikPossessor implements Listener {
 		EntityEquipment entityEquipment = entity.getEquipment();
 		if (entityEquipment == null) return;
 
-		entityEquipment.setItem(EquipmentSlot.valueOf(event.getSlotType().name()), event.getNewItem());
+		entityEquipment.setItem(event.getSlot(), event.getNewItem());
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

@@ -1,5 +1,6 @@
 package me.sosedik.trappednewbie.listener.world;
 
+import io.papermc.paper.event.entity.EntityPortalReadyEvent;
 import me.sosedik.limboworldgenerator.VoidChunkGenerator;
 import me.sosedik.miscme.task.CustomDayCycleTask;
 import me.sosedik.trappednewbie.TrappedNewbie;
@@ -16,13 +17,16 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityPortalEnterEvent;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
-import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 import org.spigotmc.event.player.PlayerSpawnLocationEvent;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
@@ -43,27 +47,10 @@ public class PerPlayerWorlds implements Listener {
 		World.Environment.NORMAL, World.Environment.NETHER, World.Environment.THE_END
 	);
 
-//	@EventHandler(priority = EventPriority.MONITOR)
-	public void onWorldLeave(PlayerChangedWorldEvent event) {
-		World world = event.getFrom();
-		if (!world.getKey().getKey().endsWith(event.getPlayer().getUniqueId().toString())) return;
-		if (!world.getPlayers().isEmpty()) return;
-
-		Bukkit.unloadWorld(world, true); // TODO "breaks" /world command
-	}
-
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onWorldLeave(PlayerQuitEvent event) {
-		Player player = event.getPlayer();
-		unloadIfNeeded(getPersonalWorld(player.getUniqueId()));
-		for (World.Environment environment : RESOURCE_ENVIRONMENTS)
-			unloadIfNeeded(getResourceWorld(player.getUniqueId(), environment));
-	}
-
-	private void unloadIfNeeded(World world) {
-		if (!world.getPlayers().isEmpty()) return;
-
-		Bukkit.unloadWorld(world, true);
+		UUID playerUuid = event.getPlayer().getUniqueId();
+		TrappedNewbie.scheduler().sync(() -> unloadIfEmpty(playerUuid), 1L);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
@@ -112,6 +99,90 @@ public class PerPlayerWorlds implements Listener {
 		}
 	}
 
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+	public void onPortal(EntityPortalEnterEvent event) {
+		World worldFrom = event.getEntity().getWorld();
+		if (NamespacedKey.MINECRAFT.equals(worldFrom.key().namespace())) {
+			event.setCancelled(true);
+			return;
+		}
+
+		if (!TrappedNewbie.NAMESPACE.equals(worldFrom.key().namespace())) return;
+
+		String worldKey = worldFrom.key().value();
+		if (!worldKey.startsWith("worlds-personal/")) return;
+
+		event.setCancelled(true);
+	}
+
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+	public void onPortal(EntityPortalReadyEvent event) {
+		World worldFrom = event.getEntity().getWorld();
+		if (NamespacedKey.MINECRAFT.equals(worldFrom.key().namespace())) {
+			event.setTargetWorld(null);
+			event.setCancelled(true);
+			return;
+		}
+
+		if (!TrappedNewbie.NAMESPACE.equals(worldFrom.key().namespace())) return;
+
+		String worldKey = worldFrom.key().value();
+		if (!worldKey.startsWith("worlds-resources/")) {
+			event.setTargetWorld(null);
+			event.setCancelled(true);
+			return;
+		}
+
+		String[] split = worldKey.split("/");
+		UUID playerUuid;
+		try {
+			playerUuid = UUID.fromString(split[2]);
+		} catch (IndexOutOfBoundsException | IllegalArgumentException e) {
+			event.setTargetWorld(null);
+			event.setCancelled(true);
+			return;
+		}
+
+		switch (event.getPortalType()) {
+			case NETHER -> {
+				World.Environment targetEnv = worldFrom.getEnvironment() == World.Environment.NORMAL ? World.Environment.NETHER : World.Environment.NORMAL;
+				World worldTo = getResourceWorld(playerUuid, targetEnv, true);
+				event.setTargetWorld(worldTo);
+			}
+			case ENDER -> {
+				World.Environment targetEnv = worldFrom.getEnvironment() == World.Environment.NORMAL ? World.Environment.THE_END : World.Environment.NORMAL;
+				World worldTo = getResourceWorld(playerUuid, targetEnv, true);
+				event.setTargetWorld(worldTo);
+			}
+			case END_GATEWAY -> {
+				World worldTo = getResourceWorld(playerUuid, World.Environment.NORMAL, true);
+				event.setTargetWorld(worldTo);
+			}
+			default -> {
+				event.setTargetWorld(null);
+				event.setCancelled(true);
+			}
+		}
+	}
+
+	private void unloadIfEmpty(UUID playerUuid) {
+		List<World> toUnload = new ArrayList<>();
+		if (!unloadIfEmpty(getPersonalWorld(playerUuid, false), toUnload)) return;
+		for (World.Environment environment : RESOURCE_ENVIRONMENTS) {
+			if (!unloadIfEmpty(getResourceWorld(playerUuid, environment, false), toUnload))
+				return;
+		}
+		toUnload.forEach(world -> Bukkit.unloadWorld(world, true));
+	}
+
+	private boolean unloadIfEmpty(@Nullable World world, List<World> toUnload) {
+		if (world == null) return true;
+		if (!world.getPlayers().isEmpty()) return false;
+
+		toUnload.add(world);
+		return true;
+	}
+
 	private static void startDayCycleTask(World world) {
 		new CustomDayCycleTask(world, () -> {
 			if (Bukkit.getServerTickManager().isFrozen()) return 0D;
@@ -140,23 +211,48 @@ public class PerPlayerWorlds implements Listener {
 	 * @return world instance
 	 */
 	public static World getPersonalWorld(UUID playerUuid) {
+		return getPersonalWorld(playerUuid, true);
+	}
+
+	/**
+	 * Gets the player's unique personal world
+	 *
+	 * @param playerUuid player uuid
+	 * @return world instance
+	 */
+	@Contract("_, true -> !null")
+	public static @Nullable World getPersonalWorld(UUID playerUuid, boolean load) {
 		return getWorld("worlds-personal/", playerUuid,
 				(levelName, worldKey) -> requireNonNull(
 					new WorldCreator(levelName, worldKey)
 						.keepSpawnLoaded(TriState.FALSE)
 						.generator(VoidChunkGenerator.GENERATOR)
 						.createWorld()
-				)
-			);
+				), load
+		);
 	}
 
 	/**
 	 * Gets the player's unique resource world
 	 *
 	 * @param playerUuid player uuid
+	 * @param environment environment
 	 * @return world instance
 	 */
 	public static World getResourceWorld(UUID playerUuid, World.Environment environment) {
+		return getResourceWorld(playerUuid, environment, true);
+	}
+
+	/**
+	 * Gets the player's unique resource world
+	 *
+	 * @param playerUuid player uuid
+	 * @param environment environment
+	 * @param load whether to load/create if not found
+	 * @return world instance
+	 */
+	@Contract("_, _, true -> !null")
+	public static @Nullable World getResourceWorld(UUID playerUuid, World.Environment environment, boolean load) {
 		if (!RESOURCE_ENVIRONMENTS.contains(environment)) throw new IllegalArgumentException("Invalid resources dimension: %s".formatted(environment.name()));
 		return getWorld("worlds-resources/" + environment.name().toLowerCase(Locale.US) + "/", playerUuid,
 				(levelName, worldKey) -> requireNonNull(
@@ -164,8 +260,8 @@ public class PerPlayerWorlds implements Listener {
 						.keepSpawnLoaded(TriState.FALSE)
 						.environment(environment)
 						.createWorld()
-				)
-			);
+				), load
+		);
 	}
 
 	/**
@@ -182,10 +278,10 @@ public class PerPlayerWorlds implements Listener {
 		world.setGameRule(GameRule.SPAWN_CHUNK_RADIUS, 0);
 	}
 
-	private static World getWorld(String prefix, UUID playerUuid, BiFunction<String, NamespacedKey, World> worldCreator) {
+	private static @Nullable World getWorld(String prefix, UUID playerUuid, BiFunction<String, NamespacedKey, World> worldCreator, boolean load) {
 		var worldKey = worldKey(prefix, playerUuid);
 		World world = Bukkit.getWorld(worldKey);
-		if (world == null) {
+		if (world == null && load) {
 			world = worldCreator.apply(prefix + playerUuid, worldKey);
 			applyWorldRules(world);
 			startDayCycleTask(world);

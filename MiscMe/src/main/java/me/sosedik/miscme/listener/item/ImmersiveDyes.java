@@ -2,6 +2,7 @@ package me.sosedik.miscme.listener.item;
 
 import com.destroystokyo.paper.MaterialTags;
 import me.sosedik.miscme.MiscMe;
+import me.sosedik.utilizer.util.MiscUtil;
 import net.kyori.adventure.text.Component;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
@@ -315,11 +316,7 @@ public class ImmersiveDyes implements Listener {
 	 * @return dye color
 	 */
 	public static @Nullable DyeColor getDyeColor(ItemStack dye) {
-		try {
-			return DyeColor.valueOf(dye.getType().getKey().getKey().replace("_dye", "").toUpperCase(Locale.US));
-		} catch (IllegalArgumentException ignored) {
-			return null;
-		}
+		return MiscUtil.parseOrNull(dye.getType().getKey().getKey().replace("_dye", ""), DyeColor.class);
 	}
 
 	/**

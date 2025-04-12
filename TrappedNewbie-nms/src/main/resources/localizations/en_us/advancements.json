@@ -10,9 +10,9 @@
 	"adv.trappednewbie.requiem.holder.description.personal": "Your personal habitat",
 	"adv.trappednewbie.requiem.holder.title.personal.guest": "<black><owner>'s Void",
 	"adv.trappednewbie.requiem.holder.description.personal.guest": "You're visiting <owner>'s habitat",
-	"adv.trappednewbie.requiem.holder.title.resource.normal": "<black>Overworld",
+	"adv.trappednewbie.requiem.holder.title.resource.normal": "<white>Overworld",
 	"adv.trappednewbie.requiem.holder.description.resource.normal": "A beautiful yet-to-die planet",
-	"adv.trappednewbie.requiem.holder.title.resource.normal.guest": "<black><owner>'s Overworld",
+	"adv.trappednewbie.requiem.holder.title.resource.normal.guest": "<white><owner>'s Overworld",
 	"adv.trappednewbie.requiem.holder.description.resource.normal.guest": "A beautiful yet-to-die planet",
 	"adv.trappednewbie.requiem.holder.title.resource.nether": "<red>Nether",
 	"adv.trappednewbie.requiem.holder.description.resource.nether": "Planet's chaos source",
@@ -31,5 +31,7 @@
 		"Get and use the friendship letters from the <icon:trapped_newbie:wandering_trader_head> <gold>Wandering Trader</gold>, and fall into the void.",
 		"",
 		"Let's get into it!"
-	]
+	],
+	"adv.trappednewbie.requiem.first_possession.title": "I'll be taking that",
+	"adv.trappednewbie.requiem.first_possession.description": "Take control of some other mob"
 }

@@ -10,9 +10,9 @@
 	"adv.trappednewbie.requiem.holder.description.personal": "Ваше особисте середовище проживання",
 	"adv.trappednewbie.requiem.holder.title.personal.guest": "<black>Порожнеча гравця <owner>",
 	"adv.trappednewbie.requiem.holder.description.personal.guest": "Ви відвідуєте середовище проживання гравця <owner>",
-	"adv.trappednewbie.requiem.holder.title.resource.normal": "<black>Надземний світ",
+	"adv.trappednewbie.requiem.holder.title.resource.normal": "<white>Надземний світ",
 	"adv.trappednewbie.requiem.holder.description.resource.normal": "Прекрасна та ще не вимерла планета",
-	"adv.trappednewbie.requiem.holder.title.resource.normal.guest": "<black>Надземний світ гравця <owner>",
+	"adv.trappednewbie.requiem.holder.title.resource.normal.guest": "<white>Надземний світ гравця <owner>",
 	"adv.trappednewbie.requiem.holder.description.resource.normal.guest": "Прекрасна та ще не вимерла планета",
 	"adv.trappednewbie.requiem.holder.title.resource.nether": "<red>Незер",
 	"adv.trappednewbie.requiem.holder.description.resource.nether": "Джерело хаосу планети",
@@ -31,5 +31,7 @@
 		"Отримайте та використайте листи дружби від <icon:trapped_newbie:wandering_trader_head> <gold>мандрівного крамаря</gold>, а потім стрибніть у порожнечу.",
 		"",
 		"Це лише початок!"
-	]
+	],
+	"adv.trappednewbie.requiem.first_possession.title": "Це тіло мені підходить",
+	"adv.trappednewbie.requiem.first_possession.description": "Оволодійте управлінням над іншою істотою"
 }

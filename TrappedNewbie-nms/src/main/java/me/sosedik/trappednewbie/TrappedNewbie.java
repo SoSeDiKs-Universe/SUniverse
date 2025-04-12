@@ -5,6 +5,7 @@ import io.papermc.paper.command.brigadier.CommandSourceStack;
 import me.sosedik.limboworldgenerator.VoidChunkGenerator;
 import me.sosedik.miscme.task.CustomDayCycleTask;
 import me.sosedik.requiem.feature.GhostyPlayer;
+import me.sosedik.requiem.feature.PossessingPlayer;
 import me.sosedik.resourcelib.ResourceLib;
 import me.sosedik.trappednewbie.api.command.parser.PlayerWorldParser;
 import me.sosedik.trappednewbie.command.MigrateCommand;
@@ -15,7 +16,8 @@ import me.sosedik.trappednewbie.impl.item.modifier.PaperPlaneModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.VisualArmorModifier;
 import me.sosedik.trappednewbie.listener.advancement.AdvancementsLocalizer;
 import me.sosedik.trappednewbie.listener.advancement.LoadSaveAdvancementsOnJoinQuit;
-import me.sosedik.trappednewbie.listener.advancement.dedicated.RequiemWelcome;
+import me.sosedik.trappednewbie.listener.advancement.dedicated.FirstPossessionAdvancement;
+import me.sosedik.trappednewbie.listener.advancement.dedicated.OpeningHolderAdvancement;
 import me.sosedik.trappednewbie.listener.entity.LimboEntities;
 import me.sosedik.trappednewbie.listener.item.PaperPlanes;
 import me.sosedik.trappednewbie.listener.misc.DisableJoinQuitMessages;
@@ -96,7 +98,9 @@ public final class TrappedNewbie extends JavaPlugin {
 			// advancement
 			AdvancementsLocalizer.class,
 			LoadSaveAdvancementsOnJoinQuit.class,
-			RequiemWelcome.class,
+			/// dedicated advancement
+			FirstPossessionAdvancement.class,
+			OpeningHolderAdvancement.class,
 			// entity
 			LimboEntities.class,
 			// item
@@ -123,6 +127,7 @@ public final class TrappedNewbie extends JavaPlugin {
 
 		GhostyPlayer.addFlightDenyRule(player -> player.getWorld() == limboWorld());
 		GhostyPlayer.addItemsDenyRule(player -> player.getWorld() == limboWorld());
+		PossessingPlayer.addItemsDenyRule(player -> player.getWorld() == limboWorld());
 	}
 
 	@Override
@@ -140,6 +145,7 @@ public final class TrappedNewbie extends JavaPlugin {
 		world.setFullTime(0);
 		world.setDifficulty(Difficulty.PEACEFUL);
 		world.setGameRule(GameRule.SPAWN_RADIUS, 0);
+		world.setGameRule(GameRule.SPAWN_CHUNK_RADIUS, 3);
 		world.setGameRule(GameRule.DO_INSOMNIA, false);
 		world.setGameRule(GameRule.DO_MOB_SPAWNING, false);
 		world.setGameRule(GameRule.DO_PATROL_SPAWNING, false);

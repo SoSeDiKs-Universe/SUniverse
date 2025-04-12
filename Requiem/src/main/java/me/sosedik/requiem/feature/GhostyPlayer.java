@@ -176,6 +176,7 @@ public class GhostyPlayer {
 
 		for (Predicate<Player> predicate : FLIGHT_RULES) {
 			if (predicate.test(player)) {
+				player.setAllowFlight(false);
 				player.setFlying(false);
 				return false;
 			}

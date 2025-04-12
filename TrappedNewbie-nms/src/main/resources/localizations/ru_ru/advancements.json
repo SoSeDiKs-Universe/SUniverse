@@ -10,9 +10,9 @@
 	"adv.trappednewbie.requiem.holder.description.personal": "Ваша личная среда обитания",
 	"adv.trappednewbie.requiem.holder.title.personal.guest": "<black>Пустота игрока <owner>",
 	"adv.trappednewbie.requiem.holder.description.personal.guest": "Вы посещаете среду обитания игрока <owner>",
-	"adv.trappednewbie.requiem.holder.title.resource.normal": "<black>Надмирье",
+	"adv.trappednewbie.requiem.holder.title.resource.normal": "<white>Надмирье",
 	"adv.trappednewbie.requiem.holder.description.resource.normal": "Прекрасная и ещё не умершая планета",
-	"adv.trappednewbie.requiem.holder.title.resource.normal.guest": "<black>Надмирье игрока <owner>",
+	"adv.trappednewbie.requiem.holder.title.resource.normal.guest": "<white>Надмирье игрока <owner>",
 	"adv.trappednewbie.requiem.holder.description.resource.normal.guest": "Прекрасная и ещё не умершая планета",
 	"adv.trappednewbie.requiem.holder.title.resource.nether": "<red>Незер",
 	"adv.trappednewbie.requiem.holder.description.resource.nether": "Источник хаоса планеты",
@@ -31,5 +31,7 @@
 		"Получите и используйте письма дружбы от <icon:trapped_newbie:wandering_trader_head> <gold>странствующего торговца</gold>, а затем прыгните в пустоту.",
 		"",
 		"Это лишь начало!"
-	]
+	],
+	"adv.trappednewbie.requiem.first_possession.title": "Это тело мне подходит",
+	"adv.trappednewbie.requiem.first_possession.description": "Захватите управление над другим существом"
 }

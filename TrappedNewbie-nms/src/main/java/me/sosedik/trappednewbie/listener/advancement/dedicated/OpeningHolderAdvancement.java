@@ -24,7 +24,7 @@ import static me.sosedik.utilizer.api.message.Mini.raw;
 /**
  * Per-world welcome message in Requiem Holder
  */
-public class RequiemWelcome implements Listener {
+public class OpeningHolderAdvancement implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onAdvancementSend(AsyncPlayerAdvancementSendEvent event) {

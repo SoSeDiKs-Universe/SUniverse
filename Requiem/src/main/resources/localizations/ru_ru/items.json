@@ -3,5 +3,10 @@
 	"item.requiem.ghost_relocator.lore": "Освободите душу и появитесь снова",
 	"item.requiem.ghost_motivator.name": "Искривитель пространства",
 	"item.requiem.ghost_motivator.lore": "Позволяет проходить сквозь стены",
+	"item.requiem.host_revocator.name": "Отзыв хоста",
+	"item.requiem.host_revocator.lore": [
+		"Используйте, чтобы покинуть тело хоста,",
+		"потенциально убив его"
+	],
 	"item.requiem.creeper_heart.name": "Сердце крипера"
 }

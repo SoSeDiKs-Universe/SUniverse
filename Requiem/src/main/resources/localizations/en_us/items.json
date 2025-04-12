@@ -3,5 +3,10 @@
 	"item.requiem.ghost_relocator.lore": "Free your soul and reappear",
 	"item.requiem.ghost_motivator.name": "Space Warp",
 	"item.requiem.ghost_motivator.lore": "Allows going through walls",
+	"item.requiem.host_revocator.name": "Host Revocator",
+	"item.requiem.host_revocator.lore": [
+		"Use this to leave the possessed host,",
+		"potentially killing it"
+	],
 	"item.requiem.creeper_heart.name": "Creeper Heart"
 }

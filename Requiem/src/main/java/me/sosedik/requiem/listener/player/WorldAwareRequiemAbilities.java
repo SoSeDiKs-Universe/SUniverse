@@ -1,31 +1,20 @@
-package me.sosedik.requiem.listener.player.ghost;
+package me.sosedik.requiem.listener.player;
 
 import me.sosedik.requiem.feature.GhostyPlayer;
+import me.sosedik.requiem.feature.PossessingPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
-import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.jspecify.annotations.NullMarked;
 
 /**
- * Ghosts can't sprint and always (almost!) fly
+ * World-aware ghost/possessed abilities
  */
 @NullMarked
-public class GhostsDontSprintAndWorldAwareAbilities implements Listener {
-
-	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	public void onSprintToggle(PlayerToggleSprintEvent event) {
-		Player player = event.getPlayer();
-		if (!GhostyPlayer.isGhost(player)) return;
-
-		boolean sprinting = event.isSprinting();
-		float speed = sprinting ? 0.1F : 0.2F;
-		player.setWalkSpeed(speed);
-		player.setFlySpeed(speed);
-	}
+public class WorldAwareRequiemAbilities implements Listener {
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onFlyToggle(PlayerToggleFlightEvent event) {
@@ -41,10 +30,12 @@ public class GhostsDontSprintAndWorldAwareAbilities implements Listener {
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onWorldChange(PlayerChangedWorldEvent event) {
 		Player player = event.getPlayer();
-		if (!GhostyPlayer.isGhost(player)) return;
-
-		GhostyPlayer.checkCanGhostFly(player);
-		GhostyPlayer.checkCanHoldGhostItems(player);
+		if (GhostyPlayer.isGhost(player)) {
+			GhostyPlayer.checkCanGhostFly(player);
+			GhostyPlayer.checkCanHoldGhostItems(player);
+		} else if (PossessingPlayer.isPossessing(player)) {
+			PossessingPlayer.checkPossessedExtraItems(player);
+		}
 	}
 
 }

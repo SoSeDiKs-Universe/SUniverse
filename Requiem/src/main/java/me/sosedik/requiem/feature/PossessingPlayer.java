@@ -1,26 +1,25 @@
 package me.sosedik.requiem.feature;
 
 import de.tr7zw.nbtapi.NBT;
+import de.tr7zw.nbtapi.NBTType;
 import de.tr7zw.nbtapi.iface.ReadWriteNBT;
-import io.papermc.paper.datacomponent.DataComponentTypes;
-import io.papermc.paper.datacomponent.item.BlockItemDataProperties;
+import io.papermc.paper.tag.EntityTags;
 import me.sosedik.requiem.Requiem;
 import me.sosedik.requiem.api.event.player.PlayerStartPossessingEntityEvent;
 import me.sosedik.requiem.api.event.player.PlayerStopPossessingEntityEvent;
+import me.sosedik.requiem.dataset.RequiemItems;
 import me.sosedik.requiem.task.DynamicScaleTask;
 import me.sosedik.requiem.task.PoseMimikingTask;
 import me.sosedik.utilizer.api.storage.player.PlayerDataStorage;
 import me.sosedik.utilizer.util.EntityUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.entity.AbstractHorse;
 import org.bukkit.entity.Ageable;
 import org.bukkit.entity.Animals;
 import org.bukkit.entity.Bat;
 import org.bukkit.entity.Enderman;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Fish;
+import org.bukkit.entity.Golem;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
@@ -28,24 +27,28 @@ import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.MainHand;
 import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.inventory.meta.BlockDataMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.Predicate;
 
 // MCCheck: 1.21.5, new mobs carrying items
 @NullMarked
 public class PossessingPlayer {
 
-	private static final Set<UUID> POSSESSING = new HashSet<>();
 	private static final String POSSESSED_TAG = "possessed";
 	private static final String POSSESSED_PERSISTENT_TAG = "persistent";
 	private static final String POSSESSED_ENTITY_DATA = "entity_data";
+
+	private static final Set<UUID> POSSESSING = new HashSet<>();
+	private static final List<Predicate<Player>> ITEM_RULES = new ArrayList<>();
 
 	/**
 	 * Checks whether the player is possessing a mob
@@ -84,8 +87,6 @@ public class PossessingPlayer {
 
 		POSSESSING.add(player.getUniqueId());
 
-//		KittenAdvancements.FIRST_POSSESSION.awardAllCriteria(player); // TODO
-
 		GhostyPlayer.clearGhost(player);
 //		TemperaturedPlayer.of(player).addFlag(TempFlag.GHOST_IMMUNE); // TODO
 
@@ -101,6 +102,13 @@ public class PossessingPlayer {
 		player.setInvisible(true);
 		player.setInvulnerable(false); // Prevents mobs from targeting the player if true
 		player.setRemainingAir(entity.getRemainingAir());
+
+		checkPossessedExtraItems(player);
+
+		if (entity instanceof Bat)
+			player.addPotionEffect(infinitePotionEffect(PotionEffectType.NIGHT_VISION));
+		if (EntityUtil.isFireImmune(entity.getType()))
+			player.addPotionEffect(infinitePotionEffect(PotionEffectType.FIRE_RESISTANCE));
 
 		new PlayerStartPossessingEntityEvent(player, entity).callEvent();
 
@@ -148,6 +156,9 @@ public class PossessingPlayer {
 //		TemperaturedPlayer.of(player).removeFlag(TempFlag.GHOST_IMMUNE); // TODO
 
 		POSSESSING.remove(player.getUniqueId());
+
+		checkPossessedExtraItems(player);
+		player.clearActivePotionEffects();
 
 		if (riding != null) new PlayerStopPossessingEntityEvent(player, riding).callEvent();
 
@@ -221,12 +232,6 @@ public class PossessingPlayer {
 	 */
 	public static void migrateStatsToPlayer(Player player, LivingEntity entity) {
 		migrateInvFromEntity(player, entity);
-//		addExtraControlItems(player); // TODO should also be soulbound and not droppable
-
-		if (entity instanceof Bat)
-			player.addPotionEffect(infinitePotionEffect(PotionEffectType.NIGHT_VISION));
-		if (EntityUtil.isFireImmune(entity.getType()))
-			player.addPotionEffect(infinitePotionEffect(PotionEffectType.FIRE_RESISTANCE));
 	}
 
 	private static void migrateInvFromEntity(Player player, LivingEntity entity) {
@@ -263,20 +268,14 @@ public class PossessingPlayer {
 	 * @param entity entity
 	 * @return whether the entity can be controlled by player
 	 */
-	public static boolean isAllowedForCapture(Player player, Entity entity) {
-		// TODO llamas are not controllable for whatever reason
-		if (true) return true; // TODO no.
-		if (entity instanceof AbstractHorse) return false; // TODO "Horses" dismount player :L ; there's also dolphins and probably others
+	public static boolean isAllowedForCapture(Player player, LivingEntity entity) {
+		if (!isPossessable(entity)) return false;
 		if (entity instanceof Animals) return true;
+		if (entity instanceof Golem) return true;
 		EntityType entityType = entity.getType();
-		return switch (entityType) {
-			case ZOMBIE, HUSK, ZOMBIE_VILLAGER, SKELETON, STRAY, DROWNED, WITHER_SKELETON,
-					SPIDER, CAVE_SPIDER, ZOMBIE_HORSE, SKELETON_HORSE, ZOMBIFIED_PIGLIN, ZOGLIN,
-					IRON_GOLEM, SNOW_GOLEM, SHULKER,
-					SQUID, GLOW_SQUID, TROPICAL_FISH, PUFFERFISH, COD, SALMON,
-					BAT -> true;
-			default -> false;
-		};
+		if (EntityTags.UNDEADS.isTagged(entityType))
+			return entityType != EntityType.PHANTOM;
+		return false;
 	}
 
 	/**
@@ -285,14 +284,11 @@ public class PossessingPlayer {
 	 * @param entity entity
 	 * @return whether the entity has soul
 	 */
-	public static boolean hasSoul(LivingEntity entity) {
-		if (true) return true;
-		if (entity instanceof Animals) return true;
-		if (entity instanceof Fish) return true;
+	public static boolean isPossessable(LivingEntity entity) {
 		EntityType entityType = entity.getType();
 		return switch (entityType) {
-			case SQUID, GLOW_SQUID, BAT -> true;
-			default -> false;
+			case PLAYER, ARMOR_STAND, ENDER_DRAGON, WITHER -> false;
+			default -> true;
 		};
 	}
 
@@ -308,14 +304,15 @@ public class PossessingPlayer {
 
 		data = data.getCompound(POSSESSED_TAG);
 		if (data == null) return false;
-		if (!data.hasTag(POSSESSED_ENTITY_DATA)) return false;
+		if (!data.hasTag(POSSESSED_ENTITY_DATA, NBTType.NBTTagByteArray)) return false;
 
 		byte[] entityData = data.getByteArray(POSSESSED_ENTITY_DATA);
+		assert entityData != null;
 		LivingEntity entity = (LivingEntity) Bukkit.getUnsafe().deserializeEntity(entityData, player.getWorld(), true);
 
 		entity.spawnAt(player.getLocation());
 		startPossessing(player, entity);
-//		addExtraControlItems(player); // ToDo: restore inventory? // TODO
+		checkPossessedExtraItems(player); // ToDo: restore inventory? // TODO
 
 		return true;
 	}
@@ -358,6 +355,40 @@ public class PossessingPlayer {
 			savePossessedData(player, PlayerDataStorage.getData(uuid), true);
 		}
 		POSSESSING.clear();
+	}
+
+	/**
+	 * Adds items rule
+	 *
+	 * @param rule items rule
+	 */
+	public static void addItemsDenyRule(Predicate<Player> rule) {
+		ITEM_RULES.add(rule);
+	}
+
+	/**
+	 * Checks if this ghost can hold ghost items
+	 *
+	 * @param player player
+	 * @return whether the player can hold ghost items
+	 */
+	public static boolean checkPossessedExtraItems(Player player) {
+		if (!isPossessing(player)) return false;
+
+		for (Predicate<Player> predicate : ITEM_RULES) {
+			if (predicate.test(player)) {
+				player.getInventory().remove(RequiemItems.HOST_REVOCATOR);
+				return false;
+			}
+		}
+
+		if (!player.getInventory().contains(RequiemItems.HOST_REVOCATOR)) { // TODO should also be soulbound
+			if (ItemStack.isEmpty(player.getInventory().getItem(8)))
+				player.getInventory().setItem(8, new ItemStack(RequiemItems.HOST_REVOCATOR));
+			else
+				player.getInventory().addItem(new ItemStack(RequiemItems.HOST_REVOCATOR));
+		}
+		return true;
 	}
 
 }

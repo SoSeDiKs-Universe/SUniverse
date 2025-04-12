@@ -12,12 +12,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
-import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NullMarked;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
 
 /**
  * Players turn into ghosts upon death instead of respawning
@@ -42,13 +37,9 @@ public class DeathMakesGhosts implements Listener {
 		if (!GhostyPlayer.isGhost(player)) return;
 
 		EntityUtil.clearTargets(player);
-
-		// TODO hm?
-//		if (MetadataUtil.removeMetadata(player, SuicideCommand.SUICIDE_META) != null) // ToDo: use normal damage API once merged in Paper
-//			BlockUtil.runRtp(player).thenRun(() -> FreeFall.setLeaping(player, true));
 	}
 
-	// Ghosts should never die, but in case they do...
+	// Ghosts should never normally die, but in case they do...
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onDeath(PlayerDeathEvent event) {
 		if (!GhostyPlayer.isGhost(event.getPlayer())) return;

@@ -43,7 +43,7 @@ public class GhostMobVisionTask extends BukkitRunnable {
 
 		new ArrayList<>(glowingMobs.values()).forEach(mob -> {
 			Location mobLoc = mob.getLocation();
-			if (!loc.getWorld().getUID().equals(mobLoc.getWorld().getUID())) {
+			if (loc.getWorld() != mobLoc.getWorld()) {
 				glowingMobs.remove(mob.getUniqueId());
 				return;
 			}
@@ -55,9 +55,9 @@ public class GhostMobVisionTask extends BukkitRunnable {
 		loc.getNearbyLivingEntities(25, entity -> !glowingMobs.containsKey(entity.getUniqueId()) && !shouldSkipGlow(entity)).forEach(entity -> {
 			glowingMobs.put(entity.getUniqueId(), entity);
 			NamedTextColor glowColor;
-			if (PossessingPlayer.hasSoul(entity))
+			if (PossessingPlayer.isAllowedForCapture(player, entity))
 				glowColor = NamedTextColor.GREEN;
-			else if (PossessingPlayer.isAllowedForCapture(player, entity))
+			else if (PossessingPlayer.isPossessable(entity))
 				glowColor = NamedTextColor.YELLOW;
 			else
 				glowColor = NamedTextColor.RED;

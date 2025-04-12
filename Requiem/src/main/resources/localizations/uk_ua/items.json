@@ -3,5 +3,10 @@
 	"item.requiem.ghost_relocator.lore": "Вивільніть душу й з'явіться знову",
 	"item.requiem.ghost_motivator.name": "Викривлювач простору",
 	"item.requiem.ghost_motivator.lore": "Дозволяє проходити крізь стіни",
+	"item.requiem.host_revocator.name": "Відкликання хосту",
+	"item.requiem.host_revocator.lore": [
+		"Використайте, щоб покинути тіло хосту,",
+		"потенційно вбивши його"
+	],
 	"item.requiem.creeper_heart.name": "Серце кріпера"
 }

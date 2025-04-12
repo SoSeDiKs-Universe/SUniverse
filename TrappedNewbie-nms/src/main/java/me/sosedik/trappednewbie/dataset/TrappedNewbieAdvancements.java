@@ -8,6 +8,7 @@ import me.sosedik.packetadvancements.api.tab.AdvancementManager;
 import me.sosedik.packetadvancements.api.tab.AdvancementTab;
 import me.sosedik.packetadvancements.imlp.display.FancyAdvancementDisplay;
 import me.sosedik.packetadvancements.util.storage.JsonStorage;
+import me.sosedik.requiem.dataset.RequiemItems;
 import me.sosedik.trappednewbie.TrappedNewbie;
 import me.sosedik.trappednewbie.impl.item.modifier.LetterModifier;
 import me.sosedik.utilizer.util.ItemUtil;
@@ -33,6 +34,7 @@ public class TrappedNewbieAdvancements {
 	public static final IRootAdvancement REQUIEM_ROOT = buildRoot(REQUIEM_TAB).display(display().icon(Material.SUNFLOWER)).requiredProgress(requirements("interact", "open")).visibilityRule(hidden()).build();
 	public static final IAdvancement OPENING_HOLDER = buildBase(REQUIEM_ROOT, "holder").display(display().x(-1.25F).icon(WANDERING_TRADER_HEAD)).requiredProgress(alwaysDone()).build();
 	public static final IAdvancement BRAVE_NEW_WORLD = buildBase(REQUIEM_ROOT, "brave_new_world").display(display().x(1F).icon(braveNewWorldItem())).requiredProgress(requirements("friendship", "fall")).build();
+	public static final IAdvancement FIRST_POSSESSION = buildBase(BRAVE_NEW_WORLD, "first_possession").display(display().x(1.25F).icon(RequiemItems.HOST_REVOCATOR)).build();
 
 	private static ItemStack braveNewWorldItem() {
 		var item = new ItemStack(TrappedNewbieItems.LETTER);
@@ -53,7 +55,7 @@ public class TrappedNewbieAdvancements {
 		);
 
 		REQUIEM_TAB.registerAdvancements(
-			REQUIEM_ROOT, OPENING_HOLDER, BRAVE_NEW_WORLD
+			REQUIEM_ROOT, OPENING_HOLDER, BRAVE_NEW_WORLD, FIRST_POSSESSION
 		);
 	}
 

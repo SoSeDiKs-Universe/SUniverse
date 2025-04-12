@@ -13,6 +13,7 @@ public final class RequiemItems {
 
 	public static final Material GHOST_MOTIVATOR = byKey("ghost_motivator");
 	public static final Material GHOST_RELOCATOR = byKey("ghost_relocator");
+	public static final Material HOST_REVOCATOR = byKey("host_revocator");
 
 	public static final Material CREEPER_HEART = byKey("creeper_heart");
 

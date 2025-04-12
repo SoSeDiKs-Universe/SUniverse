@@ -9,11 +9,13 @@ import me.sosedik.requiem.listener.entity.FakeHorseSaddles;
 import me.sosedik.requiem.listener.entity.OverwriteControlledPandasGenes;
 import me.sosedik.requiem.listener.entity.PrepareGhostMobs;
 import me.sosedik.requiem.listener.item.ExplodingCreeperHeart;
+import me.sosedik.requiem.listener.item.HostRevocatorBodyLeaving;
 import me.sosedik.requiem.listener.player.LoadSavePlayers;
+import me.sosedik.requiem.listener.player.WorldAwareRequiemAbilities;
 import me.sosedik.requiem.listener.player.damage.DamageFeetOnFall;
 import me.sosedik.requiem.listener.player.damage.DamageModelLoadSave;
 import me.sosedik.requiem.listener.player.ghost.DeathMakesGhosts;
-import me.sosedik.requiem.listener.player.ghost.GhostsDontSprintAndWorldAwareAbilities;
+import me.sosedik.requiem.listener.player.ghost.GhostsDontSprint;
 import me.sosedik.requiem.listener.player.ghost.GhostsDontStarveOrChoke;
 import me.sosedik.requiem.listener.player.ghost.GhostsKeepNightVision;
 import me.sosedik.requiem.listener.player.ghost.GhostsPhaseThroughWalls;
@@ -70,14 +72,16 @@ public final class Requiem extends JavaPlugin {
 			PrepareGhostMobs.class,
 			// item
 			ExplodingCreeperHeart.class,
+			HostRevocatorBodyLeaving.class,
 			// player
 			LoadSavePlayers.class,
+			WorldAwareRequiemAbilities.class,
 			/// damage
 			DamageFeetOnFall.class,
 			DamageModelLoadSave.class,
 			/// ghost
 			DeathMakesGhosts.class,
-			GhostsDontSprintAndWorldAwareAbilities.class,
+			GhostsDontSprint.class,
 			GhostsDontStarveOrChoke.class,
 			GhostsKeepNightVision.class,
 			GhostsPhaseThroughWalls.class,

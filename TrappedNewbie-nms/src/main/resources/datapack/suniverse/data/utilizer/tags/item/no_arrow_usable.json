@@ -1,6 +1,7 @@
 {
   "values": [
     "requiem:ghost_motivator",
-    "requiem:ghost_relocator"
+    "requiem:ghost_relocator",
+    "requiem:host_revocator"
   ]
 }

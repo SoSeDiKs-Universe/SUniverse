@@ -26,7 +26,8 @@ public class RequiemBootstrap implements PluginBootstrap {
 
 		ResourceLibBootstrap.setupItems(context, RequiemItems.class, null, (key, properties) -> switch (key.substring("requiem:".length())) {
 			case "ghost_motivator",
-			     "ghost_relocator" -> ItemCreator.bowItem(properties);
+			     "ghost_relocator",
+			     "host_revocator" -> ItemCreator.bowItem(properties);
 			default -> null;
 		});
 	}

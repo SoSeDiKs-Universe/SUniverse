@@ -31,7 +31,7 @@ public class PossessedDismount implements Listener {
 		if (event.isCancellable()) {
 			if (cooldowns.contains(player.getUniqueId())) {
 				event.setCancelled(true);
-			} else if (PossessingPlayer.hasSoul(vehicle)) {
+			} else if (PossessingPlayer.isPossessable(vehicle)) {
 				event.setCancelled(true);
 				cooldowns.add(player.getUniqueId());
 				Requiem.scheduler().sync(() -> cooldowns.remove(player.getUniqueId()), 20L);
@@ -43,7 +43,7 @@ public class PossessedDismount implements Listener {
 					if (!PossessingPlayer.isPossessingSoft(player)) return;
 
 					LivingEntity possessed = PossessingPlayer.getPossessed(player);
-					if (possessed == vehicle) return;
+					if (possessed == vehicle && possessed.isValid()) return;
 
 					PossessingPlayer.stopPossessing(player, possessed, false);
 					GhostyPlayer.markGhost(player);

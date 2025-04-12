@@ -41,8 +41,8 @@ import me.sosedik.miscme.listener.misc.WaterAwarePotionReset;
 import me.sosedik.miscme.listener.player.BurningForcesToRun;
 import me.sosedik.miscme.listener.player.HidePlayerNameTags;
 import me.sosedik.miscme.listener.player.JumpingOverFences;
-import me.sosedik.miscme.listener.projectile.BurningProjectileCreatesFire;
 import me.sosedik.miscme.listener.projectile.BurningLitsProjectiles;
+import me.sosedik.miscme.listener.projectile.BurningProjectileCreatesFire;
 import me.sosedik.miscme.listener.vehicle.JumpyBoats;
 import me.sosedik.miscme.listener.world.CustomDayCycleCleanup;
 import me.sosedik.utilizer.api.language.TranslationHolder;
@@ -56,6 +56,8 @@ import org.jspecify.annotations.NullMarked;
 
 @NullMarked
 public final class MiscMe extends JavaPlugin {
+
+	public static final String NAMESPACE = "miscme";
 
 	private static @UnknownNullability MiscMe instance;
 
@@ -163,7 +165,7 @@ public final class MiscMe extends JavaPlugin {
 	 * @return namespaced key
 	 */
 	public static NamespacedKey miscmeKey(String value) {
-		return new NamespacedKey("miscme", value);
+		return new NamespacedKey(NAMESPACE, value);
 	}
 
 }

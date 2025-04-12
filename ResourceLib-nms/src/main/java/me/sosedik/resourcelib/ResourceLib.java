@@ -8,6 +8,7 @@ import me.sosedik.resourcelib.dataset.ResourcePackStorage;
 import me.sosedik.resourcelib.feature.TabRenderer;
 import me.sosedik.resourcelib.impl.item.modifier.CustomLoreModifier;
 import me.sosedik.resourcelib.impl.item.modifier.CustomNameModifier;
+import me.sosedik.resourcelib.impl.message.tag.IconTag;
 import me.sosedik.resourcelib.listener.misc.LocalizedDeathMessages;
 import me.sosedik.resourcelib.listener.misc.LocalizedResourcePackMessage;
 import me.sosedik.resourcelib.listener.player.DisplayCustomPotionEffectsOnHud;
@@ -16,6 +17,7 @@ import me.sosedik.resourcelib.listener.player.LoadSaveTabRendererOnJoinLeave;
 import me.sosedik.resourcelib.util.ResourcePackHoster;
 import me.sosedik.utilizer.CommandManager;
 import me.sosedik.utilizer.api.language.TranslationHolder;
+import me.sosedik.utilizer.api.message.Mini;
 import me.sosedik.utilizer.util.EventUtil;
 import me.sosedik.utilizer.util.FileUtil;
 import me.sosedik.utilizer.util.Scheduler;
@@ -57,6 +59,10 @@ public class ResourceLib extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		registerCommands();
+
+		Mini.registerTagResolvers(
+			IconTag.ICON
+		);
 
 		new CustomNameModifier(resourceLibKey("custom_name")).register();
 		new CustomLoreModifier(resourceLibKey("custom_lore")).register();

@@ -35,5 +35,9 @@
 	"item.trapped_newbie.bamboos_stick.name": "Бамбукова палиця",
 	"item.trapped_newbie.crimson_stick.name": "Багряна палиця",
 	"item.trapped_newbie.warped_stick.name": "Химерна палиця",
-	"item.trapped_newbie.paper_plane.name": "Паперовий літачок"
+	"item.trapped_newbie.paper_plane.name": "Паперовий літачок",
+	"item.trapped_newbie.letter.name": "Пустий лист",
+	"item.trapped_newbie.letter_closed.name": "Лист",
+	"item.trapped_newbie.star_letter.name": "Пустий зірковий лист",
+	"item.trapped_newbie.star_letter_closed.name": "Зірковий лист"
 }

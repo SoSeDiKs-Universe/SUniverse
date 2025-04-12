@@ -1,0 +1,15 @@
+{
+	"task.current_goal": "<gold>Поточна мета:",
+	"task.meet_wandering_trader": {
+		"1": "<#FFE0B2>Поспілкуйтесь з <icon:trapped_newbie:wandering_trader_head> <gold>мандрівним крамарем",
+		"2": "<gray>(натисніть <yellow><key:key.use></yellow> по ньому)"
+	},
+	"task.open_advancements": {
+		"1": "<#FFE0B2>Відкрийте <red>досягнення</red> для перегляду наявного етапу розвитку",
+		"2": "<gray>(натисніть <yellow><key:key.advancements></yellow>, щоб швидко переглянути меню досягнень)"
+	},
+	"task.limbo_void_fall": {
+		"1": "<#FFE0B2>Виконайте завдання, вказані у досягненні <red>«<locale:adv.trappednewbie.requiem.brave_new_world.title>»",
+		"2": "<gray>(натисніть <yellow><key:key.advancements></yellow>, щоб швидко переглянути меню досягнень)"
+	}
+}

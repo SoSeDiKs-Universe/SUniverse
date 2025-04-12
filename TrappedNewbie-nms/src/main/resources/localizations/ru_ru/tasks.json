@@ -1,0 +1,15 @@
+{
+	"task.current_goal": "<gold>Текущая цель:",
+	"task.meet_wandering_trader": {
+		"1": "<#FFE0B2>Поговорите со <icon:trapped_newbie:wandering_trader_head> <gold>странствующим торговцем",
+		"2": "<gray>(нажмите <yellow><key:key.use></yellow> по нему)"
+	},
+	"task.open_advancements": {
+		"1": "<#FFE0B2>Загляните в <red>достижения</red> для просмотра текущего этапа развития",
+		"2": "<gray>(нажмите <yellow><key:key.advancements></yellow>, чтобы быстро открыть меню достижений)"
+	},
+	"task.limbo_void_fall": {
+		"1": "<#FFE0B2>Завершите задания, указанные в достижении <red>«<locale:adv.trappednewbie.requiem.brave_new_world.title>»",
+		"2": "<gray>(нажмите <yellow><key:key.advancements></yellow>, чтобы быстро открыть меню достижений)"
+	}
+}

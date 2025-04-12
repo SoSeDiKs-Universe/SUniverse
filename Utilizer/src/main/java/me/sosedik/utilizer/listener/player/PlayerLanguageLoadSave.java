@@ -7,6 +7,7 @@ import me.sosedik.utilizer.api.language.LangHolder;
 import me.sosedik.utilizer.api.language.LangOptions;
 import me.sosedik.utilizer.api.language.LangOptionsStorage;
 import me.sosedik.utilizer.api.language.translator.TranslationLanguage;
+import me.sosedik.utilizer.api.storage.player.PlayerDataStorage;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -44,7 +45,15 @@ public class PlayerLanguageLoadSave implements Listener {
 	}
 
 	public static LangHolder getLangHolder(UUID uuid) {
-		return LANG_HOLDERS.get(uuid);
+		return LANG_HOLDERS.computeIfAbsent(uuid, k -> compute(uuid));
+	}
+
+	private static LangHolder compute(UUID uuid) {
+		ReadWriteNBT data = PlayerDataStorage.getData(uuid);
+		LangOptions langOptions = LangOptionsStorage.getLangOptions(data.getString("server_language"));
+		String translationLanguageId = data.getOrNull("translation_language", String.class);
+		TranslationLanguage translationLanguage = translationLanguageId == null ? null : LangOptionsStorage.getTranslator(translationLanguageId);
+		return new LangHolder(uuid, langOptions, translationLanguage);
 	}
 
 }

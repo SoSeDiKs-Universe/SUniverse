@@ -1,7 +1,7 @@
 {
 	"adv.trappednewbie.requiem.tab.title": "Stillborn",
-	"adv.trappednewbie.requiem.root.title": "Let's get into it",
-	"adv.trappednewbie.requiem.root.description": "The brave new world",
+	"adv.trappednewbie.requiem.root.title": "Meeting on the other side",
+	"adv.trappednewbie.requiem.root.description": "Welcome aboard, wandering soul",
 	"adv.trappednewbie.requiem.holder.title": "<aqua>SoSeDiK's Universe",
 	"adv.trappednewbie.requiem.holder.description": "Happy to see you with us!",
 	"adv.trappednewbie.requiem.holder.title.limbo": "Welcome to the Limbo",
@@ -25,5 +25,11 @@
 	"adv.trappednewbie.requiem.holder.title.resource.dreamland": "<yellow>Dreamland",
 	"adv.trappednewbie.requiem.holder.description.resource.dreamland": "Welcome to a lucid dream",
 	"adv.trappednewbie.requiem.holder.title.resource.dreamland.guest": "<yellow><owner>'s Dreamland",
-	"adv.trappednewbie.requiem.holder.description.resource.dreamland.guest": "Your entire existence depends on <owner>'s lucid dream"
+	"adv.trappednewbie.requiem.holder.description.resource.dreamland.guest": "Your entire existence depends on <owner>'s lucid dream",
+	"adv.trappednewbie.requiem.brave_new_world.title": "The brave new world",
+	"adv.trappednewbie.requiem.brave_new_world.description": [
+		"Get and use the friendship letters from the <icon:trapped_newbie:wandering_trader_head> <gold>Wandering Trader</gold>, and fall into the void.",
+		"",
+		"Let's get into it!"
+	]
 }

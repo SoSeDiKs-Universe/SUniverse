@@ -1,0 +1,15 @@
+{
+	"task.current_goal": "<gold>Current goal:",
+	"task.meet_wandering_trader": {
+		"1": "<#FFE0B2>Speak with the <icon:trapped_newbie:wandering_trader_head> <gold>Wandering Trader",
+		"2": "<gray>(press <yellow><key:key.use></yellow> on it)"
+	},
+	"task.open_advancements": {
+		"1": "<#FFE0B2>Check <red>advancements</red> to view your current progression",
+		"2": "<gray>(press <yellow><key:key.advancements></yellow> to open advancements screen)"
+	},
+	"task.limbo_void_fall": {
+		"1": "<#FFE0B2>Complete <red>«<locale:adv.trappednewbie.requiem.brave_new_world.title>»</red> advancement's instructions",
+		"2": "<gray>(press <yellow><key:key.advancements></yellow> to open advancements screen)"
+	}
+}

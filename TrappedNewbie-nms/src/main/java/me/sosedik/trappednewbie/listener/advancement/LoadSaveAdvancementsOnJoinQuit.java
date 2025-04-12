@@ -1,5 +1,6 @@
 package me.sosedik.trappednewbie.listener.advancement;
 
+import io.papermc.paper.event.player.PlayerClientLoadedWorldEvent;
 import me.sosedik.packetadvancements.api.event.PlayerReadyForAdvancementsEvent;
 import me.sosedik.trappednewbie.TrappedNewbie;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieAdvancements;
@@ -23,6 +24,12 @@ public class LoadSaveAdvancementsOnJoinQuit implements Listener {
 
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onReady(PlayerReadyForAdvancementsEvent event) {
+		Player player = event.getPlayer();
+		TrappedNewbieAdvancements.MANAGER.showTabs(player);
+	}
+
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onReady(PlayerClientLoadedWorldEvent event) {
 		Player player = event.getPlayer();
 		TrappedNewbieAdvancements.MANAGER.showTabs(player);
 	}

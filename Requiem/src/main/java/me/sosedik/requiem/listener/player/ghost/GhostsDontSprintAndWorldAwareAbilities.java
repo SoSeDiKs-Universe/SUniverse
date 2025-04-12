@@ -11,10 +11,10 @@ import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.jspecify.annotations.NullMarked;
 
 /**
- * Ghosts can't sprint and always fly
+ * Ghosts can't sprint and always (almost!) fly
  */
 @NullMarked
-public class GhostsDontSprint implements Listener {
+public class GhostsDontSprintAndWorldAwareAbilities implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onSprintToggle(PlayerToggleSprintEvent event) {
@@ -35,6 +35,7 @@ public class GhostsDontSprint implements Listener {
 		if (!GhostyPlayer.isGhost(player)) return;
 
 		event.setCancelled(true);
+		GhostyPlayer.checkCanGhostFly(player);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
@@ -42,8 +43,8 @@ public class GhostsDontSprint implements Listener {
 		Player player = event.getPlayer();
 		if (!GhostyPlayer.isGhost(player)) return;
 
-		player.setAllowFlight(true);
-		player.setFlying(true);
+		GhostyPlayer.checkCanGhostFly(player);
+		GhostyPlayer.checkCanHoldGhostItems(player);
 	}
 
 }

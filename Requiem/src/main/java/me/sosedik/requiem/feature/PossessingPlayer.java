@@ -10,7 +10,6 @@ import me.sosedik.requiem.task.PoseMimikingTask;
 import me.sosedik.utilizer.api.storage.player.PlayerDataStorage;
 import me.sosedik.utilizer.util.EntityUtil;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.entity.AbstractHorse;
 import org.bukkit.entity.Ageable;
 import org.bukkit.entity.Animals;

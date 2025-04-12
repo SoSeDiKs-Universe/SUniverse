@@ -14,9 +14,12 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jspecify.annotations.NullMarked;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.Predicate;
 
 /**
  * Implements after-life ghost mechanic
@@ -26,6 +29,8 @@ public class GhostyPlayer {
 
 	private static final PotionEffect NIGHT_VISION_EFFECT = new PotionEffect(PotionEffectType.NIGHT_VISION, PotionEffect.INFINITE_DURATION, 0, false, false, false);
 	private static final Set<UUID> GHOSTS = new HashSet<>();
+	private static final List<Predicate<Player>> FLIGHT_RULES = new ArrayList<>();
+	private static final List<Predicate<Player>> ITEM_RULES = new ArrayList<>();
 
 	/**
 	 * Checks whether this player is a ghost
@@ -69,15 +74,13 @@ public class GhostyPlayer {
 
 		// Ghost abilities
 		player.addPotionEffect(NIGHT_VISION_EFFECT);
-		player.setAllowFlight(true);
 		float speed = player.isSprinting() ? 0.1F : 0.2F;
 		player.setWalkSpeed(speed);
 		player.setFlySpeed(speed);
-		player.setFlying(true);
 		player.setFlyingFallDamage(TriState.FALSE);
 
-		player.getInventory().setItem(0, new ItemStack(RequiemItems.GHOST_MOTIVATOR));
-		player.getInventory().setItem(1, new ItemStack(RequiemItems.GHOST_RELOCATOR));
+		checkCanGhostFly(player);
+		checkCanHoldGhostItems(player);
 
 		new GhostAuraTask(player);
 		new GhostMobVisionTask(player);
@@ -106,12 +109,10 @@ public class GhostyPlayer {
 		player.removePotionEffect(PotionEffectType.NIGHT_VISION);
 		player.setWalkSpeed(0.2F);
 		player.setFlySpeed(0F);
-		player.setAllowFlight(false);
-		player.setFlying(false);
 		player.setFlyingFallDamage(TriState.NOT_SET);
 
-		player.getInventory().remove(RequiemItems.GHOST_MOTIVATOR);
-		player.getInventory().remove(RequiemItems.GHOST_RELOCATOR);
+		checkCanGhostFly(player);
+		checkCanHoldGhostItems(player);
 
 		Requiem.logger().info("Clearing ghost state for {}", player.getName());
 	}
@@ -144,6 +145,67 @@ public class GhostyPlayer {
 			player.setInvisible(true);
 		}
 		GHOSTS.clear();
+	}
+
+	/**
+	 * Adds a flight rule
+	 *
+	 * @param rule flight rule
+	 */
+	public static void addFlightDenyRule(Predicate<Player> rule) {
+		FLIGHT_RULES.add(rule);
+	}
+
+	/**
+	 * Adds items rule
+	 *
+	 * @param rule items rule
+	 */
+	public static void addItemsDenyRule(Predicate<Player> rule) {
+		ITEM_RULES.add(rule);
+	}
+
+	/**
+	 * Checks if this ghost can fly
+	 *
+	 * @param player player
+	 * @return whether the player can fly
+	 */
+	public static boolean checkCanGhostFly(Player player) {
+		if (!isGhost(player)) return false;
+
+		for (Predicate<Player> predicate : FLIGHT_RULES) {
+			if (predicate.test(player)) {
+				player.setFlying(false);
+				return false;
+			}
+		}
+
+		player.setAllowFlight(true);
+		player.setFlying(true);
+		return true;
+	}
+
+	/**
+	 * Checks if this ghost can hold ghost items
+	 *
+	 * @param player player
+	 * @return whether the player can hold ghost items
+	 */
+	public static boolean checkCanHoldGhostItems(Player player) {
+		if (!isGhost(player)) return false;
+
+		for (Predicate<Player> predicate : ITEM_RULES) {
+			if (predicate.test(player)) {
+				player.getInventory().remove(RequiemItems.GHOST_MOTIVATOR);
+				player.getInventory().remove(RequiemItems.GHOST_RELOCATOR);
+				return false;
+			}
+		}
+
+		if (!player.getInventory().contains(RequiemItems.GHOST_MOTIVATOR)) player.getInventory().addItem(new ItemStack(RequiemItems.GHOST_MOTIVATOR));
+		if (!player.getInventory().contains(RequiemItems.GHOST_RELOCATOR)) player.getInventory().addItem(new ItemStack(RequiemItems.GHOST_RELOCATOR));
+		return true;
 	}
 
 }

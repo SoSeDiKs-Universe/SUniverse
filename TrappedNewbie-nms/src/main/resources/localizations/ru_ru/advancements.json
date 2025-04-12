@@ -1,7 +1,7 @@
 {
 	"adv.trappednewbie.requiem.tab.title": "Мертворождённый",
-	"adv.trappednewbie.requiem.root.title": "Это лишь начало",
-	"adv.trappednewbie.requiem.root.description": "Совершенно новый мир",
+	"adv.trappednewbie.requiem.root.title": "Встреча по ту сторону",
+	"adv.trappednewbie.requiem.root.description": "Добро пожаловать на борт, странствующая душа",
 	"adv.trappednewbie.requiem.holder.title": "<aqua>Вселенная Соседа",
 	"adv.trappednewbie.requiem.holder.description": "Рады видеть Вас с нами!",
 	"adv.trappednewbie.requiem.holder.title.limbo": "Добро пожаловать в Лимбо",
@@ -25,5 +25,11 @@
 	"adv.trappednewbie.requiem.holder.title.resource.dreamland": "<yellow>Сновидение",
 	"adv.trappednewbie.requiem.holder.description.resource.dreamland": "Добро пожаловать в осознанный сон",
 	"adv.trappednewbie.requiem.holder.title.resource.dreamland.guest": "<yellow>Сновидение игрока <owner>",
-	"adv.trappednewbie.requiem.holder.description.resource.dreamland.guest": "Всё Ваше существование зависит от осознанного сновидения игрока <owner>"
+	"adv.trappednewbie.requiem.holder.description.resource.dreamland.guest": "Всё Ваше существование зависит от осознанного сновидения игрока <owner>",
+	"adv.trappednewbie.requiem.brave_new_world.title": "Совершенно новый мир",
+	"adv.trappednewbie.requiem.brave_new_world.description": [
+		"Получите и используйте письма дружбы от <icon:trapped_newbie:wandering_trader_head> <gold>странствующего торговца</gold>, а затем прыгните в пустоту.",
+		"",
+		"Это лишь начало!"
+	]
 }

@@ -69,14 +69,16 @@ public class LocationUtil {
 		if (player.getLocation().getBlockY() < 400) {
 			player.teleportAsync(player.getLocation().addY(1600), PlayerTeleportEvent.TeleportCause.PLUGIN, TeleportFlag.Relative.VELOCITY_ROTATION, TeleportFlag.EntityState.RETAIN_VEHICLE, TeleportFlag.EntityState.RETAIN_PASSENGERS);
 		}
-		Utilizer.scheduler().sync(() -> player.addPotionEffect(new PotionEffect(PotionEffectType.RESISTANCE, 25 * 20, 10)));
-		Utilizer.scheduler().sync(task -> {
-			if (!player.isOnline()) return true;
-			if (player.isDead()) return true;
+		if (!player.isFlying()) {
+			Utilizer.scheduler().sync(() -> player.addPotionEffect(new PotionEffect(PotionEffectType.RESISTANCE, 25 * 20, 10)));
+			Utilizer.scheduler().sync(task -> {
+				if (!player.isOnline()) return true;
+				if (player.isDead()) return true;
 
-			player.addPotionEffect(new PotionEffect(PotionEffectType.RESISTANCE, 25 * 20, 10));
-			return player.isOnGround() || player.isInWater();
-		}, 20L, 20L);
+				player.addPotionEffect(new PotionEffect(PotionEffectType.RESISTANCE, 25 * 20, 10));
+				return player.isOnGround() || player.isInWater() || player.isFlying();
+			}, 20L, 20L);
+		}
 		var teleported = new CompletableFuture<Void>();
 		Utilizer.scheduler().async(() -> findLocation(player, new Location(world, 0, 600, 0), 0, range, teleported));
 		return teleported;

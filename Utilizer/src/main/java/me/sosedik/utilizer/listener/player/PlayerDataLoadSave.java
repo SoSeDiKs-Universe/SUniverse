@@ -40,7 +40,7 @@ public class PlayerDataLoadSave implements Listener {
 		Utilizer.scheduler().sync(() -> Bukkit.getOnlinePlayers().forEach(player -> saveData(player, true)), saveInterval, saveInterval);
 	}
 
-	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPreJoin(AsyncPlayerPreLoginEvent event) {
 		if (event.getLoginResult() != AsyncPlayerPreLoginEvent.Result.ALLOWED) return;
 

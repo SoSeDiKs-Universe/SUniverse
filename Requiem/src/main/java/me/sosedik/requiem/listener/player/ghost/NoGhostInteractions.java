@@ -23,6 +23,7 @@ public class NoGhostInteractions implements Listener {
 
 	@EventHandler(priority = EventPriority.LOWEST) // Interact has special cancellation
 	public void onInteractWorld(PlayerInteractEvent event) {
+		if (event.getPlayer().getGameMode().isInvulnerable()) return;
 		if (!GhostyPlayer.isGhost(event.getPlayer())) return;
 
 		event.setCancelled(true);
@@ -44,6 +45,7 @@ public class NoGhostInteractions implements Listener {
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onInteractWorld(BlockBreakEvent event) {
+		if (event.getPlayer().getGameMode().isInvulnerable()) return;
 		if (!GhostyPlayer.isGhost(event.getPlayer())) return;
 
 		event.setCancelled(true);

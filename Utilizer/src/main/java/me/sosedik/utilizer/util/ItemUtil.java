@@ -1,7 +1,10 @@
 package me.sosedik.utilizer.util;
 
+import com.destroystokyo.paper.profile.PlayerProfile;
+import com.destroystokyo.paper.profile.ProfileProperty;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.PotionContents;
+import io.papermc.paper.datacomponent.item.ResolvableProfile;
 import me.sosedik.utilizer.dataset.UtilizerTags;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -14,6 +17,7 @@ import org.bukkit.potion.PotionType;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * General utilities around items
@@ -89,6 +93,20 @@ public class ItemUtil {
 				&& meta.hasBlockState()
 				&& meta.getBlockState().getBlockData() instanceof Campfire campfire
 				&& campfire.isLit();
+	}
+
+	/**
+	 * Created player head with a texture
+	 *
+	 * @param texture texture value
+	 * @return textured head item
+	 */
+	public static ItemStack texturedHead(String texture) {
+		var item = new ItemStack(Material.PLAYER_HEAD);
+		PlayerProfile playerProfile = Bukkit.createProfile(UUID.randomUUID());
+		playerProfile.setProperty(new ProfileProperty("textures", texture));
+		item.setData(DataComponentTypes.PROFILE, ResolvableProfile.resolvableProfile(playerProfile));
+		return item;
 	}
 
 }

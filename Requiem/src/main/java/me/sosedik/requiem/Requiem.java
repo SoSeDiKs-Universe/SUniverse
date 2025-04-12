@@ -13,7 +13,7 @@ import me.sosedik.requiem.listener.player.LoadSavePlayers;
 import me.sosedik.requiem.listener.player.damage.DamageFeetOnFall;
 import me.sosedik.requiem.listener.player.damage.DamageModelLoadSave;
 import me.sosedik.requiem.listener.player.ghost.DeathMakesGhosts;
-import me.sosedik.requiem.listener.player.ghost.GhostsDontSprint;
+import me.sosedik.requiem.listener.player.ghost.GhostsDontSprintAndWorldAwareAbilities;
 import me.sosedik.requiem.listener.player.ghost.GhostsDontStarveOrChoke;
 import me.sosedik.requiem.listener.player.ghost.GhostsKeepNightVision;
 import me.sosedik.requiem.listener.player.ghost.GhostsPhaseThroughWalls;
@@ -76,7 +76,7 @@ public final class Requiem extends JavaPlugin {
 			DamageModelLoadSave.class,
 			/// ghost
 			DeathMakesGhosts.class,
-			GhostsDontSprint.class,
+			GhostsDontSprintAndWorldAwareAbilities.class,
 			GhostsDontStarveOrChoke.class,
 			GhostsKeepNightVision.class,
 			GhostsPhaseThroughWalls.class,

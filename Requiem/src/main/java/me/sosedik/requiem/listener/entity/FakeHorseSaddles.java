@@ -9,6 +9,7 @@ import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEn
 import me.sosedik.requiem.Requiem;
 import me.sosedik.requiem.api.event.player.PlayerStartPossessingEntityEvent;
 import me.sosedik.requiem.api.event.player.PlayerStopPossessingEntityEvent;
+import me.sosedik.requiem.impl.item.modifier.FakeHorseSaddlesModifier;
 import org.bukkit.entity.AbstractHorse;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -24,9 +25,10 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * Fakes saddles for clients to allow controlling horses without actual saddles
+ * Fakes saddles for clients to allow controlling horses without actual saddles.
+ * <br>This only allows access to the inventory, the riding itself requires {@link FakeHorseSaddlesModifier}.
  */
-// MCCheck: 1.21.5, abstract horse metadata index for saddles // TODO seems to no longer work, instead requires FakeHorseSaddlesModifier?
+// MCCheck: 1.21.5, abstract horse metadata index for saddles
 @NullMarked
 public class FakeHorseSaddles implements PacketListener, Listener {
 

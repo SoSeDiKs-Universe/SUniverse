@@ -4,20 +4,26 @@ import io.leangen.geantyref.TypeToken;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import me.sosedik.limboworldgenerator.VoidChunkGenerator;
 import me.sosedik.miscme.task.CustomDayCycleTask;
+import me.sosedik.requiem.feature.GhostyPlayer;
 import me.sosedik.resourcelib.ResourceLib;
 import me.sosedik.trappednewbie.api.command.parser.PlayerWorldParser;
 import me.sosedik.trappednewbie.command.MigrateCommand;
 import me.sosedik.trappednewbie.command.SpitCommand;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieAdvancements;
+import me.sosedik.trappednewbie.impl.item.modifier.LetterModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.PaperPlaneModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.VisualArmorModifier;
 import me.sosedik.trappednewbie.listener.advancement.AdvancementsLocalizer;
 import me.sosedik.trappednewbie.listener.advancement.LoadSaveAdvancementsOnJoinQuit;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.RequiemWelcome;
+import me.sosedik.trappednewbie.listener.entity.LimboEntities;
 import me.sosedik.trappednewbie.listener.item.PaperPlanes;
 import me.sosedik.trappednewbie.listener.misc.DisableJoinQuitMessages;
 import me.sosedik.trappednewbie.listener.misc.FakeHardcoreHearts;
 import me.sosedik.trappednewbie.listener.misc.TabHeaderFooterBeautifier;
+import me.sosedik.trappednewbie.listener.player.NewbieWelcome;
+import me.sosedik.trappednewbie.listener.player.StartAsGhost;
+import me.sosedik.trappednewbie.listener.player.TaskManagement;
 import me.sosedik.trappednewbie.listener.player.TeamableLeatherEquipment;
 import me.sosedik.trappednewbie.listener.player.VisualArmorLayer;
 import me.sosedik.trappednewbie.listener.world.InfiniteStartingNight;
@@ -40,6 +46,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.incendo.cloud.bukkit.internal.BukkitBrigadierMapper;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 import org.jspecify.annotations.NullMarked;
 
@@ -51,6 +58,7 @@ public final class TrappedNewbie extends JavaPlugin {
 	public static final String NAMESPACE = "trapped_newbie";
 
 	private static @UnknownNullability TrappedNewbie instance;
+	private static @Nullable World limboWorld;
 
 	private @UnknownNullability Scheduler scheduler;
 
@@ -79,6 +87,7 @@ public final class TrappedNewbie extends JavaPlugin {
 		TrappedNewbieRecipes.addRecipes();
 		TrappedNewbieAdvancements.setupAdvancements();
 
+		new LetterModifier(trappedNewbieKey("letter")).register();
 		new PaperPlaneModifier(trappedNewbieKey("paper_plane")).register();
 		new VisualArmorModifier(trappedNewbieKey("visual_armor")).register();
 
@@ -87,6 +96,8 @@ public final class TrappedNewbie extends JavaPlugin {
 			AdvancementsLocalizer.class,
 			LoadSaveAdvancementsOnJoinQuit.class,
 			RequiemWelcome.class,
+			// entity
+			LimboEntities.class,
 			// item
 			PaperPlanes.class,
 			// misc
@@ -94,6 +105,9 @@ public final class TrappedNewbie extends JavaPlugin {
 			FakeHardcoreHearts.class,
 			TabHeaderFooterBeautifier.class,
 			// player
+			NewbieWelcome.class,
+			StartAsGhost.class,
+			TaskManagement.class,
 			TeamableLeatherEquipment.class,
 			VisualArmorLayer.class,
 			// world
@@ -104,6 +118,14 @@ public final class TrappedNewbie extends JavaPlugin {
 			// command
 			MigrateCommand.class
 		);
+
+		GhostyPlayer.addFlightDenyRule(player -> player.getWorld() == limboWorld());
+		GhostyPlayer.addItemsDenyRule(player -> player.getWorld() == limboWorld());
+	}
+
+	@Override
+	public void onDisable() {
+		TrappedNewbieAdvancements.MANAGER.saveProgresses();
 	}
 
 	private void setupLimboWorld() {
@@ -115,6 +137,7 @@ public final class TrappedNewbie extends JavaPlugin {
 
 		world.setFullTime(0);
 		world.setDifficulty(Difficulty.PEACEFUL);
+		world.setGameRule(GameRule.SPAWN_RADIUS, 0);
 		world.setGameRule(GameRule.DO_INSOMNIA, false);
 		world.setGameRule(GameRule.DO_MOB_SPAWNING, false);
 		world.setGameRule(GameRule.DO_PATROL_SPAWNING, false);
@@ -195,6 +218,17 @@ public final class TrappedNewbie extends JavaPlugin {
 	 */
 	public static NamespacedKey trappedNewbieKey(String value) {
 		return new NamespacedKey(NAMESPACE, value);
+	}
+
+	/**
+	 * Gets the Limbo world
+	 *
+	 * @return limbo world
+	 */
+	public static World limboWorld() {
+		if (limboWorld == null)
+			limboWorld = Bukkit.getWorlds().getFirst();
+		return limboWorld;
 	}
 
 }

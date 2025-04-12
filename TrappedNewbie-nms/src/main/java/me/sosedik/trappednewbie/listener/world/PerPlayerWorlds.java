@@ -4,6 +4,7 @@ import io.papermc.paper.event.entity.EntityPortalReadyEvent;
 import me.sosedik.limboworldgenerator.VoidChunkGenerator;
 import me.sosedik.miscme.task.CustomDayCycleTask;
 import me.sosedik.trappednewbie.TrappedNewbie;
+import me.sosedik.utilizer.util.FileUtil;
 import me.sosedik.utilizer.util.MiscUtil;
 import net.kyori.adventure.util.TriState;
 import org.bukkit.Bukkit;
@@ -53,12 +54,15 @@ public class PerPlayerWorlds implements Listener {
 		TrappedNewbie.scheduler().sync(() -> unloadIfEmpty(playerUuid), 1L);
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST)
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPreJoin(AsyncPlayerPreLoginEvent event) {
+		if (event.getLoginResult() != AsyncPlayerPreLoginEvent.Result.ALLOWED) return;
+
+		UUID playerUuid = event.getUniqueId();
 		TrappedNewbie.scheduler().sync(() -> {
-			getPersonalWorld(event.getUniqueId());
+			getPersonalWorld(playerUuid);
 			for (World.Environment environment : RESOURCE_ENVIRONMENTS)
-				getResourceWorld(event.getUniqueId(), environment);
+				getResourceWorld(playerUuid, environment);
 		});
 	}
 
@@ -255,12 +259,26 @@ public class PerPlayerWorlds implements Listener {
 	public static @Nullable World getResourceWorld(UUID playerUuid, World.Environment environment, boolean load) {
 		if (!RESOURCE_ENVIRONMENTS.contains(environment)) throw new IllegalArgumentException("Invalid resources dimension: %s".formatted(environment.name()));
 		return getWorld("worlds-resources/" + environment.name().toLowerCase(Locale.US) + "/", playerUuid,
-				(levelName, worldKey) -> requireNonNull(
-					new WorldCreator(levelName, worldKey)
-						.keepSpawnLoaded(TriState.FALSE)
-						.environment(environment)
-						.createWorld()
-				), load
+				(levelName, worldKey) -> {
+					File mainWorldFile = Bukkit.getWorlds().getFirst().getWorldFolder();
+					File settingsFile = null;
+					switch (environment) {
+						case NORMAL -> settingsFile = new File(mainWorldFile, "paper-world.yml");
+						case NETHER -> settingsFile = new File(mainWorldFile.getParentFile(), mainWorldFile.getName() + "_nether/paper-world.yml");
+						case THE_END -> settingsFile = new File(mainWorldFile.getParentFile(), mainWorldFile.getName() + "_the_end/paper-world.yml");
+					}
+					if (settingsFile != null && settingsFile.exists()) {
+						var destinationFile = new File(mainWorldFile.getParentFile(), "worlds-resources" + File.separator + environment.name().toLowerCase(Locale.US) + File.separator + playerUuid + "/paper-world.yml");
+						FileUtil.deleteFile(destinationFile);
+						FileUtil.copyFile(settingsFile, destinationFile);
+					}
+					return requireNonNull(
+						new WorldCreator(levelName, worldKey)
+							.keepSpawnLoaded(TriState.FALSE)
+							.environment(environment)
+							.createWorld()
+					);
+				}, load
 		);
 	}
 
@@ -274,7 +292,7 @@ public class PerPlayerWorlds implements Listener {
 		world.setGameRule(GameRule.NATURAL_REGENERATION, false);
 		world.setGameRule(GameRule.DO_IMMEDIATE_RESPAWN, true);
 		world.setGameRule(GameRule.DO_LIMITED_CRAFTING, true);
-		world.setGameRule(GameRule.REDUCED_DEBUG_INFO, true);
+		world.setGameRule(GameRule.REDUCED_DEBUG_INFO, false);
 		world.setGameRule(GameRule.SPAWN_CHUNK_RADIUS, 0);
 	}
 

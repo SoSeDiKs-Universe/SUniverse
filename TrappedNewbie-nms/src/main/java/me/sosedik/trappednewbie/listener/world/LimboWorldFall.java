@@ -2,9 +2,13 @@ package me.sosedik.trappednewbie.listener.world;
 
 import io.papermc.paper.entity.TeleportFlag;
 import me.sosedik.moves.listener.movement.FreeFall;
-import me.sosedik.requiem.feature.GhostyPlayer;
+import me.sosedik.trappednewbie.TrappedNewbie;
+import me.sosedik.trappednewbie.dataset.TrappedNewbieAdvancements;
+import me.sosedik.trappednewbie.dataset.TrappedNewbieFonts;
+import me.sosedik.utilizer.api.message.Messenger;
+import me.sosedik.utilizer.api.message.Mini;
 import me.sosedik.utilizer.util.LocationUtil;
-import org.bukkit.Bukkit;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.damage.DamageType;
@@ -27,18 +31,22 @@ public class LimboWorldFall implements Listener {
 	 * Vanilla's soft limit is ~30 mil
 	 */
 	private static final int RPT_RADIUS = 15_000_000;
-	private static final World LIMBO_WORLD = Bukkit.getWorlds().getFirst();
 
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onFall(EntityDamageEvent event) {
 		if (!(event.getEntity() instanceof Player player)) return;
-		if (player.getWorld() != LIMBO_WORLD) return;
+		if (player.getWorld() != TrappedNewbie.limboWorld()) return;
 		if (event.getDamageSource().getDamageType() != DamageType.OUT_OF_WORLD) return;
 
 		event.setCancelled(true);
-		GhostyPlayer.markGhost(player);
-		World world = PerPlayerWorlds.getResourceWorld(player.getUniqueId(), World.Environment.NORMAL);
-		runRtp(player, world);
+		if (TrappedNewbieAdvancements.BRAVE_NEW_WORLD.hasCriteria(player, "friendship")) {
+			TrappedNewbieAdvancements.BRAVE_NEW_WORLD.awardCriteria(player, "fall");
+			World world = PerPlayerWorlds.getResourceWorld(player.getUniqueId(), World.Environment.NORMAL);
+			runRtp(player, world);
+		} else {
+			player.teleportAsync(TrappedNewbie.limboWorld().getSpawnLocation());
+			player.sendMessage(Mini.combine(Component.space(), TrappedNewbieFonts.WANDERING_TRADER_HEAD.mapping(), Messenger.messenger(player).getMessage("limbo.welcome.ignored")));
+		}
 	}
 
 	/**

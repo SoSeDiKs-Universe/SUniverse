@@ -7,6 +7,7 @@ import me.sosedik.moves.listener.movement.CrawlingMechanics;
 import me.sosedik.utilizer.util.LocationUtil;
 import me.sosedik.utilizer.util.MathUtil;
 import org.bukkit.Location;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.ArmorStand;
@@ -23,6 +24,7 @@ import org.jspecify.annotations.NullMarked;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -84,11 +86,12 @@ public class ShulkerCrawlerHandler implements Listener {
 			shulker.setInvulnerable(true);
 			shulker.setRemoveWhenFarAway(true);
 			shulker.setVisibleByDefault(false);
+			Objects.requireNonNull(shulker.getAttribute(Attribute.SCALE)).setBaseValue(1.2);
 			stand.addPassenger(shulker);
 			player.showEntity(INSTANCE, shulker);
 		});
 	}
-	
+
 	private record Crawlers(
 		Player player,
 		ArmorStand holder,

@@ -1,4 +1,8 @@
 {
 	"item.modifier.blazified": "<gray><i>Блазифікований",
-	"item.modifier.fragile": "<gray><i>Крихкий"
+	"item.modifier.fragile": "<gray><i>Крихкий",
+	"item.modifier.letter.friendship": "<red><i>Містить силу дружби",
+	"limbo.welcome": "Гм, ще один?",
+	"limbo.welcome.ignored": "Збираєтесь мене ось так ігнорувати, дійсно?",
+	"limbo.friendship": "Тепер Ви друзі з <gold>мандрівним крамарем</gold>!"
 }

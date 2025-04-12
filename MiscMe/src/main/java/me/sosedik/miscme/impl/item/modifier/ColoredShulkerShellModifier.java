@@ -47,7 +47,7 @@ public class ColoredShulkerShellModifier extends ItemModifier {
 		}
 
 		Messenger messenger = Messenger.messenger(LangOptionsStorage.getByLocale(contextBox.getLocale()));
-		String localeKey = "item.miscme." + dyeColor.name().toLowerCase(Locale.US) + "_shulker_shell.name";
+		String localeKey = "item." + MiscMe.NAMESPACE + "." + dyeColor.name().toLowerCase(Locale.US) + "_shulker_shell.name";
 		item.setData(DataComponentTypes.ITEM_NAME, messenger.getMessage(localeKey));
 		item.setData(DataComponentTypes.ITEM_MODEL, MODEL_KEY);
 

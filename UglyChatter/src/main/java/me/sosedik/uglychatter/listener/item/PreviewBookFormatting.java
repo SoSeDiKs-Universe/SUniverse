@@ -45,7 +45,7 @@ public class PreviewBookFormatting implements Listener {
 	 * @return whether was able to open the book
 	 */
 	public static boolean tryToOpenBook(Player player, ItemStack item) {
-		if (!(item.getItemMeta() instanceof BookMeta oldMeta)) return false;
+		if (!(item.getItemMeta() instanceof BookMeta oldMeta)) return false; // TODO yeet ItemMeta
 
 		if (item.getType() != Material.WRITTEN_BOOK) {
 			item = new ItemStack(Material.WRITTEN_BOOK);

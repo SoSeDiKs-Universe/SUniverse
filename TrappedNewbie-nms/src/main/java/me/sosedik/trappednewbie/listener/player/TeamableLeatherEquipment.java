@@ -1,7 +1,9 @@
 package me.sosedik.trappednewbie.listener.player;
 
+import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.event.player.PrePlayerAttackEntityEvent;
 import me.sosedik.trappednewbie.api.item.VisualArmor;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -12,8 +14,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.jspecify.annotations.NullMarked;
+
+import java.util.Objects;
 
 /**
  * Wearing the same leather chestplate or helmet will cancel the dealt damage
@@ -53,10 +56,13 @@ public class TeamableLeatherEquipment implements Listener {
 		ItemStack item2 = getVisualItem(player2, slot);
 		if (item2.getType() != type) return false;
 
-		if (!(item1.getItemMeta() instanceof LeatherArmorMeta meta1)) return false;
-		if (!(item2.getItemMeta() instanceof LeatherArmorMeta meta2)) return false;
+		if (!item1.hasData(DataComponentTypes.DYED_COLOR)) return false;
+		if (!item2.hasData(DataComponentTypes.DYED_COLOR)) return false;
 
-		return meta1.getColor().equals(meta2.getColor());
+		Color color1 = Objects.requireNonNull(item1.getData(DataComponentTypes.DYED_COLOR)).color();
+		Color color2 = Objects.requireNonNull(item2.getData(DataComponentTypes.DYED_COLOR)).color();
+
+		return color1.equals(color2);
 	}
 
 	private ItemStack getVisualItem(Player player, EquipmentSlot slot) {

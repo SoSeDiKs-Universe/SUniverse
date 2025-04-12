@@ -2,6 +2,8 @@ package me.sosedik.requiem.feature;
 
 import de.tr7zw.nbtapi.NBT;
 import de.tr7zw.nbtapi.iface.ReadWriteNBT;
+import io.papermc.paper.datacomponent.DataComponentTypes;
+import io.papermc.paper.datacomponent.item.BlockItemDataProperties;
 import me.sosedik.requiem.Requiem;
 import me.sosedik.requiem.api.event.player.PlayerStartPossessingEntityEvent;
 import me.sosedik.requiem.api.event.player.PlayerStopPossessingEntityEvent;
@@ -10,10 +12,12 @@ import me.sosedik.requiem.task.PoseMimikingTask;
 import me.sosedik.utilizer.api.storage.player.PlayerDataStorage;
 import me.sosedik.utilizer.util.EntityUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.AbstractHorse;
 import org.bukkit.entity.Ageable;
 import org.bukkit.entity.Animals;
 import org.bukkit.entity.Bat;
+import org.bukkit.entity.Enderman;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Fish;
@@ -21,8 +25,10 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EntityEquipment;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.MainHand;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.BlockDataMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jspecify.annotations.NullMarked;
@@ -32,6 +38,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+// MCCheck: 1.21.5, new mobs carrying items
 @NullMarked
 public class PossessingPlayer {
 
@@ -140,9 +147,6 @@ public class PossessingPlayer {
 
 //		TemperaturedPlayer.of(player).removeFlag(TempFlag.GHOST_IMMUNE); // TODO
 
-//		PlayerInventory playerInventory = player.getInventory();
-//		playerInventory.clear();
-
 		POSSESSING.remove(player.getUniqueId());
 
 		if (riding != null) new PlayerStopPossessingEntityEvent(player, riding).callEvent();
@@ -198,6 +202,15 @@ public class PossessingPlayer {
 		entityEquipment.setChestplate(playerInventory.getChestplate());
 		entityEquipment.setLeggings(playerInventory.getLeggings());
 		entityEquipment.setBoots(playerInventory.getBoots());
+
+		if (entity instanceof Enderman enderman) {
+			ItemStack item = playerInventory.getItemInMainHand();
+			if (item.getType().isBlock()) {
+				enderman.setCarriedBlock(item.hasBlockData() ? item.getBlockData(item.getType()) : item.getType().createBlockData());
+			} else {
+				enderman.setCarriedBlock(null);
+			}
+		}
 	}
 
 	/**
@@ -228,6 +241,15 @@ public class PossessingPlayer {
 		playerInventory.setChestplate(entityEquipment.getChestplate());
 		playerInventory.setLeggings(entityEquipment.getLeggings());
 		playerInventory.setBoots(entityEquipment.getBoots());
+
+		if (entity instanceof Enderman enderman) {
+			BlockData blockData = enderman.getCarriedBlock();
+			if (blockData != null) {
+				var item = new ItemStack(blockData.getMaterial());
+				item.setBlockData(blockData);
+				playerInventory.setItemInMainHand(item);
+			}
+		}
 	}
 
 	private static PotionEffect infinitePotionEffect(PotionEffectType type) {

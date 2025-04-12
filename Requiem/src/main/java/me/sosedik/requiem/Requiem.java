@@ -25,6 +25,7 @@ import me.sosedik.requiem.listener.player.possessed.MilkHelpsSkeletons;
 import me.sosedik.requiem.listener.player.possessed.NoAirForWaterPossessing;
 import me.sosedik.requiem.listener.player.possessed.NoExpFromPossessedKill;
 import me.sosedik.requiem.listener.player.possessed.PossessedDismount;
+import me.sosedik.requiem.listener.player.possessed.PossessedDropOwnerItems;
 import me.sosedik.requiem.listener.player.possessed.PossessedInfiniteProjectiles;
 import me.sosedik.requiem.listener.player.possessed.PossessedLimitedControl;
 import me.sosedik.requiem.listener.player.possessed.PossessedMimikPossessor;
@@ -89,6 +90,7 @@ public final class Requiem extends JavaPlugin {
 			NoAirForWaterPossessing.class,
 			NoExpFromPossessedKill.class,
 			PossessedDismount.class,
+			PossessedDropOwnerItems.class,
 			PossessedInfiniteProjectiles.class,
 			PossessedLimitedControl.class,
 			PossessedMimikPossessor.class,

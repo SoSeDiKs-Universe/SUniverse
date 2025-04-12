@@ -29,7 +29,7 @@ public class LoadSaveAdvancementsOnJoinQuit implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
-	public void onReady(PlayerClientLoadedWorldEvent event) {
+	public void onReady(PlayerClientLoadedWorldEvent event) { // TODO this is a dirty workaround, remove
 		Player player = event.getPlayer();
 		TrappedNewbieAdvancements.MANAGER.showTabs(player);
 	}

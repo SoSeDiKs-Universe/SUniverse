@@ -12,7 +12,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NullMarked;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * Players turn into ghosts upon death instead of respawning
@@ -61,6 +66,7 @@ public class DeathMakesGhosts implements Listener {
 		if (PossessingPlayer.getPossessed(rider) != entity) return;
 
 		PossessingPlayer.stopPossessing(rider, entity, false);
+		rider.getInventory().clear();
 		GhostyPlayer.markGhost(rider);
 	}
 

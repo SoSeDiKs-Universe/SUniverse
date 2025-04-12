@@ -5,6 +5,7 @@ import com.google.common.base.Function;
 import io.papermc.paper.event.player.PlayerArmSwingEvent;
 import io.papermc.paper.event.player.PlayerInventorySlotChangeEvent;
 import me.sosedik.requiem.feature.PossessingPlayer;
+import org.bukkit.entity.Enderman;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -16,7 +17,9 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.EntityEquipment;
+import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,6 +27,7 @@ import java.util.Map;
 /**
  * Possessed mimik actions of their possessor
  */
+// MCCheck: 1.21.5, new mobs carrying items
 @NullMarked
 public class PossessedMimikPossessor implements Listener {
 
@@ -49,7 +53,9 @@ public class PossessedMimikPossessor implements Listener {
 		EntityEquipment entityEquipment = entity.getEquipment();
 		if (entityEquipment == null) return;
 
-		entityEquipment.setItemInMainHand(player.getInventory().getItem(event.getNewSlot()));
+		ItemStack mainHandItem = player.getInventory().getItem(event.getNewSlot());
+		entityEquipment.setItemInMainHand(mainHandItem);
+		updateMainHandVisuals(entity, mainHandItem);
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -63,11 +69,13 @@ public class PossessedMimikPossessor implements Listener {
 		EntityEquipment entityEquipment = entity.getEquipment();
 		if (entityEquipment == null) return;
 
-		entityEquipment.setItemInMainHand(event.getMainHandItem());
+		ItemStack mainHandItem = event.getMainHandItem();
+		entityEquipment.setItemInMainHand(mainHandItem);
+		updateMainHandVisuals(entity, mainHandItem);
 		entityEquipment.setItemInOffHand(event.getOffHandItem());
 	}
 
-	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onHeldItemChange(PlayerInventorySlotChangeEvent event) {
 		Player player = event.getPlayer();
 		if (event.getSlot() != player.getInventory().getHeldItemSlot()) return;
@@ -79,7 +87,19 @@ public class PossessedMimikPossessor implements Listener {
 		EntityEquipment entityEquipment = entity.getEquipment();
 		if (entityEquipment == null) return;
 
-		entityEquipment.setItemInMainHand(player.getInventory().getItemInMainHand());
+		ItemStack mainHandItem = player.getInventory().getItemInMainHand();
+		entityEquipment.setItemInMainHand(mainHandItem);
+		updateMainHandVisuals(entity, mainHandItem);
+	}
+
+	private void updateMainHandVisuals(LivingEntity entity, @Nullable ItemStack item) {
+		if (entity instanceof Enderman enderman) {
+			if (item != null && item.getType().isBlock()) {
+				enderman.setCarriedBlock(item.hasBlockData() ? item.getBlockData(item.getType()) : item.getType().createBlockData());
+			} else {
+				enderman.setCarriedBlock(null);
+			}
+		}
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

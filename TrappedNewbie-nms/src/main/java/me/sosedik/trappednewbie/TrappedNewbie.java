@@ -21,6 +21,7 @@ import me.sosedik.trappednewbie.listener.item.PaperPlanes;
 import me.sosedik.trappednewbie.listener.misc.DisableJoinQuitMessages;
 import me.sosedik.trappednewbie.listener.misc.FakeHardcoreHearts;
 import me.sosedik.trappednewbie.listener.misc.TabHeaderFooterBeautifier;
+import me.sosedik.trappednewbie.listener.player.ExtraPossessedDrops;
 import me.sosedik.trappednewbie.listener.player.NewbieWelcome;
 import me.sosedik.trappednewbie.listener.player.StartAsGhost;
 import me.sosedik.trappednewbie.listener.player.TaskManagement;
@@ -105,6 +106,7 @@ public final class TrappedNewbie extends JavaPlugin {
 			FakeHardcoreHearts.class,
 			TabHeaderFooterBeautifier.class,
 			// player
+			ExtraPossessedDrops.class,
 			NewbieWelcome.class,
 			StartAsGhost.class,
 			TaskManagement.class,

@@ -18,6 +18,7 @@ import me.sosedik.trappednewbie.listener.advancement.AdvancementsLocalizer;
 import me.sosedik.trappednewbie.listener.advancement.LoadSaveAdvancementsOnJoinQuit;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.FirstPossessionAdvancement;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.OpeningHolderAdvancement;
+import me.sosedik.trappednewbie.listener.entity.AngryAnimals;
 import me.sosedik.trappednewbie.listener.entity.LimboEntities;
 import me.sosedik.trappednewbie.listener.item.PaperPlanes;
 import me.sosedik.trappednewbie.listener.misc.DisableJoinQuitMessages;
@@ -102,6 +103,7 @@ public final class TrappedNewbie extends JavaPlugin {
 			FirstPossessionAdvancement.class,
 			OpeningHolderAdvancement.class,
 			// entity
+			AngryAnimals.class,
 			LimboEntities.class,
 			// item
 			PaperPlanes.class,

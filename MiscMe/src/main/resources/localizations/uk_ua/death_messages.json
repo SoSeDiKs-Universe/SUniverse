@@ -1,4 +1,7 @@
 {
 	"death.attack.chest_crush": "<entity> був роздавлений кришкою скрині через <attacker>",
-	"death.attack.chest_crush.item": "<entity> був роздавлений кришкою скрині через <attacker>, тримаючого <item>"
+	"death.attack.chest_crush.item": "<entity> був роздавлений кришкою скрині через <attacker>, тримаючого <item>",
+	"death.attack.coal_explosion": "<entity> потрапив під вибух вугілля",
+	"death.attack.coal_explosion.player": "<entity> потрапив під вибух вугілля через <attacker>",
+	"death.attack.coal_explosion.player.item": "<entity> потрапив під вибух вугілля через <attacker>, тримаючого <item>"
 }

@@ -8,6 +8,7 @@ import me.sosedik.requiem.listener.entity.CreepersDropCreeperHearts;
 import me.sosedik.requiem.listener.entity.FakeHorseSaddles;
 import me.sosedik.requiem.listener.entity.OverwriteControlledPandasGenes;
 import me.sosedik.requiem.listener.entity.PrepareGhostMobs;
+import me.sosedik.requiem.listener.entity.UndeadConsecration;
 import me.sosedik.requiem.listener.item.ExplodingCreeperHeart;
 import me.sosedik.requiem.listener.item.HostRevocatorBodyLeaving;
 import me.sosedik.requiem.listener.player.LoadSavePlayers;
@@ -70,6 +71,7 @@ public final class Requiem extends JavaPlugin {
 			FakeHorseSaddles.class,
 			OverwriteControlledPandasGenes.class,
 			PrepareGhostMobs.class,
+			UndeadConsecration.class,
 			// item
 			ExplodingCreeperHeart.class,
 			HostRevocatorBodyLeaving.class,

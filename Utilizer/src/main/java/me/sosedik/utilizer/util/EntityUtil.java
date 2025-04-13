@@ -130,7 +130,7 @@ public class EntityUtil {
 	}
 
 	/**
-	 * Tries to find entity's player damager
+	 * Tries to find entity's last direct damager
 	 *
 	 * @param entity damaged entity
 	 * @return player damager

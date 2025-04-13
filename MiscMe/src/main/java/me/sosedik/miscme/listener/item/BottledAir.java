@@ -26,7 +26,7 @@ public class BottledAir implements Listener {
 		if (!ItemUtil.isWaterBottle(event.getResultItem())) return;
 
 		Player player = event.getPlayer();
-		if (!player.isInWaterOrBubbleColumn()) return;
+		if (!player.isInWaterOrRain()) return;
 
 		int maxAir = player.getMaximumAir() - 1;
 		int currentAir = player.getRemainingAir();

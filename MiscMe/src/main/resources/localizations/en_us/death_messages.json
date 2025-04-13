@@ -1,4 +1,7 @@
 {
 	"death.attack.chest_crush": "<entity> was crushed with a chest lid by <attacker>",
-	"death.attack.chest_crush.item": "<entity> was crushed with a chest lid by <attacker> wielding <item>"
+	"death.attack.chest_crush.item": "<entity> was crushed with a chest lid by <attacker> wielding <item>",
+	"death.attack.coal_explosion": "<entity> got caught in a coal explosion",
+	"death.attack.coal_explosion.player": "<entity> got caught in a coal explosion by <attacker>",
+	"death.attack.coal_explosion.player.item": "<entity> got caught in a coal explosion by <attacker> using <item>"
 }

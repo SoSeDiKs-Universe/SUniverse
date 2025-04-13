@@ -39,7 +39,7 @@ import java.util.UUID;
 /**
  * Adds fancies support for signs
  */
-// MCCheck: 1.21.4, sign block entity data
+// MCCheck: 1.21.4, sign block entity data // TODO fix with 1.21.5 changes
 @NullMarked
 public class SignBeautifier implements PacketListener, Listener {
 
@@ -80,7 +80,7 @@ public class SignBeautifier implements PacketListener, Listener {
 
 	@Override
 	public void onPacketSend(PacketSendEvent event) {
-		if (event.getPacketType() == PacketType.Play.Server.BLOCK_ENTITY_DATA) { // TODO fix with 1.21.5 changes
+		if (event.getPacketType() == PacketType.Play.Server.BLOCK_ENTITY_DATA) {
 			// SoSeDiK lost connection: Internal Exception: io.netty.handler.codec.EncoderException: java.lang.IndexOutOfBoundsException: readerIndex: 0, writerIndex: 292 (expected: 0 <= readerIndex <= writerIndex <= capacity(256))
 //			handleBlockEntityData(event.getPlayer(), new WrapperPlayServerBlockEntityData(event));
 		} else if (event.getPacketType() == PacketType.Play.Server.CHUNK_DATA) {

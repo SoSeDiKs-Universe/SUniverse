@@ -172,7 +172,11 @@ public class GhostyPlayer {
 	 * @return whether the player can fly
 	 */
 	public static boolean checkCanGhostFly(Player player) {
-		if (!isGhost(player)) return false;
+		if (!isGhost(player)) {
+			player.setAllowFlight(false);
+			player.setFlying(false);
+			return false;
+		}
 
 		for (Predicate<Player> predicate : FLIGHT_RULES) {
 			if (predicate.test(player)) {
@@ -194,7 +198,11 @@ public class GhostyPlayer {
 	 * @return whether the player can hold ghost items
 	 */
 	public static boolean checkCanHoldGhostItems(Player player) {
-		if (!isGhost(player)) return false;
+		if (!isGhost(player)) {
+			player.getInventory().remove(RequiemItems.GHOST_MOTIVATOR);
+			player.getInventory().remove(RequiemItems.GHOST_RELOCATOR);
+			return false;
+		}
 
 		for (Predicate<Player> predicate : ITEM_RULES) {
 			if (predicate.test(player)) {

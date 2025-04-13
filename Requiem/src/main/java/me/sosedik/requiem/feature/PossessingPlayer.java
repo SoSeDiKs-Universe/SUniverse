@@ -19,10 +19,12 @@ import org.bukkit.entity.Animals;
 import org.bukkit.entity.Bat;
 import org.bukkit.entity.Enderman;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Fish;
 import org.bukkit.entity.Golem;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Squid;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.MainHand;
@@ -270,12 +272,16 @@ public class PossessingPlayer {
 	 */
 	public static boolean isAllowedForCapture(Player player, LivingEntity entity) {
 		if (!isPossessable(entity)) return false;
-		if (entity instanceof Animals) return true;
-		if (entity instanceof Golem) return true;
-		EntityType entityType = entity.getType();
-		if (EntityTags.UNDEADS.isTagged(entityType))
-			return entityType != EntityType.PHANTOM;
-		return false;
+		return switch (entity) {
+			case Animals animals -> true;
+			case Fish fish -> true;
+			case Squid squid -> true;
+			case Golem golem -> true;
+			default -> {
+				EntityType entityType = entity.getType();
+				yield EntityTags.UNDEADS.isTagged(entityType);
+			}
+		};
 	}
 
 	/**
@@ -373,7 +379,10 @@ public class PossessingPlayer {
 	 * @return whether the player can hold ghost items
 	 */
 	public static boolean checkPossessedExtraItems(Player player) {
-		if (!isPossessing(player)) return false;
+		if (!isPossessing(player)) {
+			player.getInventory().remove(RequiemItems.HOST_REVOCATOR);
+			return false;
+		}
 
 		for (Predicate<Player> predicate : ITEM_RULES) {
 			if (predicate.test(player)) {

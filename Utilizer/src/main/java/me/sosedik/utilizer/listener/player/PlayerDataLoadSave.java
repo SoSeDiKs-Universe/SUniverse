@@ -15,6 +15,7 @@ import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.UnknownNullability;
 import org.jspecify.annotations.NullMarked;
 
 import java.io.File;
@@ -31,7 +32,7 @@ public class PlayerDataLoadSave implements Listener {
 
 	private static final Map<UUID, ReadWriteNBT> STORED_DATA = new HashMap<>();
 
-	private static Plugin plugin;
+	private static @UnknownNullability Plugin plugin;
 
 	public PlayerDataLoadSave(Plugin plugin) {
 		PlayerDataLoadSave.plugin = plugin;
@@ -41,7 +42,7 @@ public class PlayerDataLoadSave implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
-	public void onPreJoin(AsyncPlayerPreLoginEvent event) {
+	public void onPreJoin(AsyncPlayerPreLoginEvent event) { // TODO cleanup in case the player didn't join
 		if (event.getLoginResult() != AsyncPlayerPreLoginEvent.Result.ALLOWED) return;
 
 		UUID uuid = event.getUniqueId();

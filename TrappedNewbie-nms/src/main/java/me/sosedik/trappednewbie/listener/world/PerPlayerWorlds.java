@@ -19,7 +19,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityPortalEnterEvent;
-import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
+import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NullMarked;
@@ -55,15 +55,13 @@ public class PerPlayerWorlds implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
-	public void onPreJoin(AsyncPlayerPreLoginEvent event) {
-		if (event.getLoginResult() != AsyncPlayerPreLoginEvent.Result.ALLOWED) return;
+	public void onJoin(PlayerLoginEvent event) { // TODO cleanup in case the player didn't join
+		if (event.getResult() != PlayerLoginEvent.Result.ALLOWED) return;
 
-		UUID playerUuid = event.getUniqueId();
-		TrappedNewbie.scheduler().sync(() -> {
-			getPersonalWorld(playerUuid);
-			for (World.Environment environment : RESOURCE_ENVIRONMENTS)
-				getResourceWorld(playerUuid, environment);
-		});
+		UUID playerUuid = event.getPlayer().getUniqueId();
+		getPersonalWorld(playerUuid);
+		for (World.Environment environment : RESOURCE_ENVIRONMENTS)
+			getResourceWorld(playerUuid, environment);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)

@@ -14,6 +14,7 @@ import me.sosedik.miscme.listener.block.ContainersInLiquidsReleaseContents;
 import me.sosedik.miscme.listener.block.Couplings;
 import me.sosedik.miscme.listener.block.DontEditSignsOnPlace;
 import me.sosedik.miscme.listener.block.DoorBells;
+import me.sosedik.miscme.listener.block.ExplosiveCoal;
 import me.sosedik.miscme.listener.block.MelonPumpkinBlowing;
 import me.sosedik.miscme.listener.block.NoIceInNether;
 import me.sosedik.miscme.listener.block.NoteBlockShowsNotes;
@@ -26,6 +27,7 @@ import me.sosedik.miscme.listener.entity.DyeableShulkers;
 import me.sosedik.miscme.listener.entity.DynamicCreeperExplosion;
 import me.sosedik.miscme.listener.entity.EndermanTeleportsPlayers;
 import me.sosedik.miscme.listener.entity.ItemFrameReverseRotate;
+import me.sosedik.miscme.listener.entity.MoreBabyMobs;
 import me.sosedik.miscme.listener.entity.PrimingExplosiveMinecart;
 import me.sosedik.miscme.listener.entity.RainbowSheepDropRandomWool;
 import me.sosedik.miscme.listener.entity.SheepBurnableWool;
@@ -90,6 +92,7 @@ public final class MiscMe extends JavaPlugin {
 			Couplings.class,
 			DontEditSignsOnPlace.class,
 			DoorBells.class,
+			ExplosiveCoal.class,
 			MelonPumpkinBlowing.class,
 			NoIceInNether.class,
 			NoteBlockShowsNotes.class,
@@ -103,6 +106,7 @@ public final class MiscMe extends JavaPlugin {
 			DynamicCreeperExplosion.class,
 			EndermanTeleportsPlayers.class,
 			ItemFrameReverseRotate.class,
+			MoreBabyMobs.class,
 			PrimingExplosiveMinecart.class,
 			RainbowSheepDropRandomWool.class,
 			SheepBurnableWool.class,

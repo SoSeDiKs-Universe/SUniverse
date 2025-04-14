@@ -13,6 +13,7 @@ import me.sosedik.trappednewbie.TrappedNewbie;
 import me.sosedik.trappednewbie.api.item.VisualArmor;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieItems;
 import me.sosedik.utilizer.api.message.Messenger;
+import me.sosedik.utilizer.dataset.UtilizerTags;
 import me.sosedik.utilizer.util.InventoryUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -133,22 +134,13 @@ public class VisualArmorModifier extends ItemModifier {
 		return item;
 	}
 
-	private boolean isGhost(Material type) { // TODO make tag?
-		return type == TrappedNewbieItems.MATERIAL_AIR
-			|| type == TrappedNewbieItems.HELMET_OUTLINE
-			|| type == TrappedNewbieItems.CHESTPLATE_OUTLINE
-			|| type == TrappedNewbieItems.LEGGINGS_OUTLINE
-			|| type == TrappedNewbieItems.BOOTS_OUTLINE
-			|| type == TrappedNewbieItems.GLOVES_OUTLINE;
-	}
-
 	private ItemStack getLored(Messenger messenger, Locale locale, Player player, Player target, ItemStack item, EquipmentSlot slot, boolean armorPreview, boolean realItem) {
 		if (ItemStack.isEmpty(item)) return item;
 
 		// Show real armor if not wearing visual
 		if (!armorPreview && !realItem) {
 			ItemStack underwear = target.getInventory().getItem(slot);
-			if (!ItemStack.isEmpty(underwear) && !isGhost(underwear.getType())) {
+			if (!ItemStack.isEmpty(underwear) && !UtilizerTags.MATERIAL_AIR.isTagged(underwear.getType())) {
 				return parseUnderwear(messenger, player, locale, underwear);
 			}
 		}

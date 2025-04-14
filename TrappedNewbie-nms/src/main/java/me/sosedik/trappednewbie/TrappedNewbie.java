@@ -17,6 +17,8 @@ import me.sosedik.trappednewbie.impl.item.modifier.VisualArmorModifier;
 import me.sosedik.trappednewbie.listener.advancement.AdvancementsLocalizer;
 import me.sosedik.trappednewbie.listener.advancement.LoadSaveAdvancementsOnJoinQuit;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.FirstPossessionAdvancement;
+import me.sosedik.trappednewbie.listener.advancement.dedicated.IHateSandAdvancement;
+import me.sosedik.trappednewbie.listener.advancement.dedicated.KungFuPandaAdvancement;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.OpeningHolderAdvancement;
 import me.sosedik.trappednewbie.listener.entity.AngryAnimals;
 import me.sosedik.trappednewbie.listener.entity.LimboEntities;
@@ -101,6 +103,8 @@ public final class TrappedNewbie extends JavaPlugin {
 			LoadSaveAdvancementsOnJoinQuit.class,
 			/// dedicated advancement
 			FirstPossessionAdvancement.class,
+			IHateSandAdvancement.class,
+			KungFuPandaAdvancement.class,
 			OpeningHolderAdvancement.class,
 			// entity
 			AngryAnimals.class,

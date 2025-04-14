@@ -2,8 +2,10 @@ package me.sosedik.requiem.listener.player.possessed;
 
 import com.destroystokyo.paper.event.player.PlayerPickupExperienceEvent;
 import me.sosedik.requiem.feature.PossessingPlayer;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Villager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -20,12 +22,24 @@ import org.jspecify.annotations.NullMarked;
  * Possessed have limited physical control in world:
  * - Can't pick up items and experience orbs
  * - Can't be damaged
- * - Can't interact with entities
+ * - Can't interact with some entities
  * - Can't sleep
  * - Proxy potion effect to the possessed mob
  */
 @NullMarked
 public class PossessedLimitedControl implements Listener {
+
+	private boolean allowInteract(LivingEntity possessed, Entity target) {
+		if (target instanceof Villager) {
+			return switch (possessed.getType()) {
+				case VILLAGER, WANDERING_TRADER,
+				     ZOMBIE_VILLAGER, WITCH, ENDERMAN,
+				     PIGLIN, PIGLIN_BRUTE, ZOMBIFIED_PIGLIN -> true;
+				default -> false;
+			};
+		}
+		return true;
+	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onPossessedPickup(EntityPickupItemEvent event) {
@@ -56,14 +70,22 @@ public class PossessedLimitedControl implements Listener {
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onInteractEntity(PlayerInteractEntityEvent event) {
-		if (!PossessingPlayer.isPossessing(event.getPlayer())) return;
+		Player player = event.getPlayer();
+		if (!PossessingPlayer.isPossessing(player)) return;
+
+		LivingEntity possessed = PossessingPlayer.getPossessed(player);
+		if (possessed != null && allowInteract(possessed, event.getRightClicked())) return;
 
 		event.setCancelled(true);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onInteractEntity(PlayerInteractAtEntityEvent event) {
-		if (!PossessingPlayer.isPossessing(event.getPlayer())) return;
+		Player player = event.getPlayer();
+		if (!PossessingPlayer.isPossessing(player)) return;
+
+		LivingEntity possessed = PossessingPlayer.getPossessed(player);
+		if (possessed != null && allowInteract(possessed, event.getRightClicked())) return;
 
 		event.setCancelled(true);
 	}

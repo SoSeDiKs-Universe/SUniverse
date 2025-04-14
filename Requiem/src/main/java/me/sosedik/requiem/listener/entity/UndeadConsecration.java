@@ -77,6 +77,7 @@ public class UndeadConsecration implements Listener {
 			}
 			return;
 		}
+		if (isExplosionDamageCause(event.getCause())) return;
 
 		if (event instanceof EntityDamageByEntityEvent damageEvent) {
 			if (damageEvent.getDamager() instanceof Golem) return;
@@ -114,6 +115,11 @@ public class UndeadConsecration implements Listener {
 				|| cause == EntityDamageEvent.DamageCause.FIRE_TICK
 				|| cause == EntityDamageEvent.DamageCause.LAVA
 				|| cause == EntityDamageEvent.DamageCause.HOT_FLOOR;
+	}
+
+	private boolean isExplosionDamageCause(EntityDamageEvent.DamageCause cause) {
+		return cause == EntityDamageEvent.DamageCause.BLOCK_EXPLOSION
+				|| cause == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION;
 	}
 
 	private static class HealTask extends BukkitRunnable {

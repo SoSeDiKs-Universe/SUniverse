@@ -33,16 +33,22 @@ import me.sosedik.miscme.listener.entity.RainbowSheepDropRandomWool;
 import me.sosedik.miscme.listener.entity.SheepBurnableWool;
 import me.sosedik.miscme.listener.entity.SheepRegrowNaturalWool;
 import me.sosedik.miscme.listener.entity.TNTDefuse;
+import me.sosedik.miscme.listener.entity.WololoChangesNaturalSheepWool;
 import me.sosedik.miscme.listener.item.BottledAir;
 import me.sosedik.miscme.listener.item.ColoredShulkerShells;
 import me.sosedik.miscme.listener.item.DyeableItemsInItemFrames;
+import me.sosedik.miscme.listener.item.EasierShovelPathCreation;
+import me.sosedik.miscme.listener.item.FireAspectIsFlintAndSteel;
+import me.sosedik.miscme.listener.item.FlintAndSteelIgnitesEntities;
 import me.sosedik.miscme.listener.item.ImmersiveDyes;
 import me.sosedik.miscme.listener.item.ReadableBooksInFrames;
+import me.sosedik.miscme.listener.item.ShovelsConvertAdditionalBlocks;
 import me.sosedik.miscme.listener.misc.BetterTimeSetCommand;
 import me.sosedik.miscme.listener.misc.WaterAwarePotionReset;
 import me.sosedik.miscme.listener.player.BurningForcesToRun;
 import me.sosedik.miscme.listener.player.HidePlayerNameTags;
 import me.sosedik.miscme.listener.player.JumpingOverFences;
+import me.sosedik.miscme.listener.player.SwapHalfStack;
 import me.sosedik.miscme.listener.projectile.BurningLitsProjectiles;
 import me.sosedik.miscme.listener.projectile.BurningProjectileCreatesFire;
 import me.sosedik.miscme.listener.vehicle.JumpyBoats;
@@ -112,12 +118,17 @@ public final class MiscMe extends JavaPlugin {
 			SheepBurnableWool.class,
 			SheepRegrowNaturalWool.class,
 			TNTDefuse.class,
+			WololoChangesNaturalSheepWool.class,
 			// item
 			BottledAir.class,
 			ColoredShulkerShells.class,
 			DyeableItemsInItemFrames.class,
+			EasierShovelPathCreation.class,
+			FireAspectIsFlintAndSteel.class,
+			FlintAndSteelIgnitesEntities.class,
 			ImmersiveDyes.class,
 			ReadableBooksInFrames.class,
+			ShovelsConvertAdditionalBlocks.class,
 			// misc
 			BetterTimeSetCommand.class,
 			WaterAwarePotionReset.class,
@@ -125,6 +136,7 @@ public final class MiscMe extends JavaPlugin {
 			BurningForcesToRun.class,
 			HidePlayerNameTags.class,
 			JumpingOverFences.class,
+			SwapHalfStack.class,
 			// projectile
 			BurningLitsProjectiles.class,
 			BurningProjectileCreatesFire.class,

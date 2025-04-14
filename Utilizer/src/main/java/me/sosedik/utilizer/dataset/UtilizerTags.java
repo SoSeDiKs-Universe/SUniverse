@@ -10,6 +10,8 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public class UtilizerTags {
 
+	// MCCheck: 1.21.5, new flattenables (hardcoded in ShovelItem)
+	public static final Tag<Material> FLATTENABLES = itemTag("flattenables");
 	/**
 	 * @see ItemUtil#isHot(ItemStack)
 	 */
@@ -19,6 +21,7 @@ public class UtilizerTags {
 	 */
 	public static final Tag<Material> LIGHT_SOURCES = itemTag("light_sources");
 	public static final Tag<Material> NO_TOOLTIP_ITEMS = itemTag("no_tooltip_items");
+	public static final Tag<Material> MATERIAL_AIR = itemTag("material_air");
 	public static final Tag<Material> NOT_DROPPABLE = itemTag("not_droppable");
 	public static final Tag<Material> NO_ARROW_USABLE = itemTag("no_arrow_usable");
 	public static final Tag<Material> FLINT_AND_STEEL = itemTag("flint_and_steel");

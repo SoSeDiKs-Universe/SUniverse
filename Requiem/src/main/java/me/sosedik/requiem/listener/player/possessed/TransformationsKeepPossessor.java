@@ -1,5 +1,6 @@
 package me.sosedik.requiem.listener.player.possessed;
 
+import me.sosedik.requiem.api.event.player.PlayerPossessedTransformEvent;
 import me.sosedik.requiem.feature.PossessingPlayer;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -24,8 +25,13 @@ public class TransformationsKeepPossessor implements Listener {
 		if (rider == null) return;
 		if (!PossessingPlayer.isPossessing(rider)) return;
 
+		if (PossessingPlayer.isResurrected(entity))
+			PossessingPlayer.markResurrected(transformed);
+
 		PossessingPlayer.migrateStatsToEntity(rider, transformed);
 		PossessingPlayer.startPossessing(rider, transformed);
+
+		new PlayerPossessedTransformEvent(rider, transformed, entity).callEvent();
 	}
 
 }

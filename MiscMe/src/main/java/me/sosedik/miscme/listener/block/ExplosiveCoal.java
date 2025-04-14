@@ -26,6 +26,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.block.BlockSpreadEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -92,14 +93,23 @@ public class ExplosiveCoal implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onFirePlace(BlockIgniteEvent event) {
-		Block block = event.getBlock();
+		checkAroundFire(event.getBlock(), event.getPlayer());
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onFireSpread(BlockSpreadEvent event) {
+		if (!Tag.FIRE.isTagged(event.getNewState().getType())) return;
+
+		checkAroundFire(event.getBlock(), null);
+	}
+
+	private void checkAroundFire(Block block, @Nullable Player player) {
 		List<BlockFace> blockFaces = new ArrayList<>(LocationUtil.SURROUNDING_BLOCKS_UD);
 		Collections.shuffle(blockFaces);
 		for (BlockFace blockFace : blockFaces) {
 			Block relativeBlock = block.getRelative(blockFace);
 			if (!isCoalOre(relativeBlock.getType())) continue;
 
-			Player player = event.getPlayer();
 			ItemStack item = player == null ? null : player.getInventory().getItemInMainHand().clone(); // Preserve item a tick later
 			MiscMe.scheduler().sync(() -> triggerExplosion(relativeBlock, player, item), 1L);
 			return;

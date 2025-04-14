@@ -33,5 +33,9 @@
 		"Let's get into it!"
 	],
 	"adv.trappednewbie.requiem.first_possession.title": "I'll be taking that",
-	"adv.trappednewbie.requiem.first_possession.description": "Take control of some other mob"
+	"adv.trappednewbie.requiem.first_possession.description": "Take control of some other mob",
+	"adv.trappednewbie.requiem.i_hate_sand.title": "I hate sand.",
+	"adv.trappednewbie.requiem.i_hate_sand.description": "Resurrect as a husk",
+	"adv.trappednewbie.requiem.kung_fu_panda.title": "Kung Fu Panda",
+	"adv.trappednewbie.requiem.kung_fu_panda.description": "As a panda, hit something with a wooden sword"
 }

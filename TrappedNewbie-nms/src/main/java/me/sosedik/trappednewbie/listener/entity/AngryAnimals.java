@@ -62,7 +62,7 @@ public class AngryAnimals implements Listener {
 	}
 
 	private void applyAggroTraits(Mob mob) {
-		if (!shouldAggro(mob)) return;
+		if (!shouldAggro(mob, mob)) return;
 		if (!(((CraftMob) mob).getHandle() instanceof PathfinderMob nms)) return;
 
 		setAttribute(mob, Attribute.ATTACK_DAMAGE, getAttackDamage(mob));
@@ -114,14 +114,15 @@ public class AngryAnimals implements Listener {
 	private void aggro(Mob entity) {
 		if (!(EntityUtil.getCausingDamager(entity) instanceof LivingEntity damager)) return;
 
-		entity.getWorld().getNearbyEntitiesByType(Mob.class, entity.getLocation(), 20, this::shouldAggro).forEach(mob -> {
+		entity.getWorld().getNearbyEntitiesByType(Mob.class, entity.getLocation(), 20, mob -> shouldAggro(entity, mob)).forEach(mob -> {
 			if (mob.getTarget() == null)
 				mob.setTarget(damager);
 		});
 	}
 
-	private boolean shouldAggro(Mob mob) {
-		return mob instanceof Animals || mob instanceof WaterMob;
+	private boolean shouldAggro(Mob entity, Mob mob) {
+		return (entity instanceof Animals && mob instanceof Animals)
+			|| (entity instanceof WaterMob && mob instanceof WaterMob);
 	}
 
 }

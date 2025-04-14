@@ -39,15 +39,17 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-// MCCheck: 1.21.5, new mobs carrying items
+// MCCheck: 1.21.5, new mobs visually carrying items outside entity equipment
 @NullMarked
 public class PossessingPlayer {
 
 	private static final String POSSESSED_TAG = "possessed";
 	private static final String POSSESSED_PERSISTENT_TAG = "persistent";
 	private static final String POSSESSED_ENTITY_DATA = "entity_data";
+	private static final String RESURRECTED_ENTITY_TAG = "resurrected";
 
 	private static final Set<UUID> POSSESSING = new HashSet<>();
 	private static final List<Predicate<Player>> ITEM_RULES = new ArrayList<>();
@@ -398,6 +400,25 @@ public class PossessingPlayer {
 				player.getInventory().addItem(new ItemStack(RequiemItems.HOST_REVOCATOR));
 		}
 		return true;
+	}
+
+	/**
+	 * Marks the entity as a resurrected one
+	 *
+	 * @param entity entity
+	 */
+	public static void markResurrected(LivingEntity entity) {
+		NBT.modifyPersistentData(entity, (Consumer<ReadWriteNBT>) nbt -> nbt.setBoolean(RESURRECTED_ENTITY_TAG, true));
+	}
+
+	/**
+	 * Checks if this entity is a resurrected one
+	 *
+	 * @param entity entity
+	 * @return whether this entity is a resurrected one
+	 */
+	public static boolean isResurrected(LivingEntity entity) {
+		return NBT.getPersistentData(entity, nbt -> nbt.getOrDefault(RESURRECTED_ENTITY_TAG, false));
 	}
 
 }

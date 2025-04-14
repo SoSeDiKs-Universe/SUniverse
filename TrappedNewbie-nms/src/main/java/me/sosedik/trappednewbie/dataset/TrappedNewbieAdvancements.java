@@ -35,6 +35,8 @@ public class TrappedNewbieAdvancements {
 	public static final IAdvancement OPENING_HOLDER = buildBase(REQUIEM_ROOT, "holder").display(display().x(-1.25F).icon(WANDERING_TRADER_HEAD)).requiredProgress(alwaysDone()).build();
 	public static final IAdvancement BRAVE_NEW_WORLD = buildBase(REQUIEM_ROOT, "brave_new_world").display(display().x(1F).icon(braveNewWorldItem())).requiredProgress(requirements("friendship", "fall")).build();
 	public static final IAdvancement FIRST_POSSESSION = buildBase(BRAVE_NEW_WORLD, "first_possession").display(display().x(1.25F).icon(RequiemItems.HOST_REVOCATOR)).build();
+	public static final IAdvancement I_HATE_SAND = buildBase(FIRST_POSSESSION, "i_hate_sand").display(display().xy(1F, 1F).icon(Material.SAND).goalFrame()).build();
+	public static final IAdvancement KUNG_FU_PANDA = buildBase(FIRST_POSSESSION, "kung_fu_panda").display(display().xy(1F, -1F).icon(Material.BAMBOO).goalFrame()).build();
 
 	private static ItemStack braveNewWorldItem() {
 		var item = new ItemStack(TrappedNewbieItems.LETTER);
@@ -55,7 +57,7 @@ public class TrappedNewbieAdvancements {
 		);
 
 		REQUIEM_TAB.registerAdvancements(
-			REQUIEM_ROOT, OPENING_HOLDER, BRAVE_NEW_WORLD, FIRST_POSSESSION
+			REQUIEM_ROOT, OPENING_HOLDER, BRAVE_NEW_WORLD, FIRST_POSSESSION, I_HATE_SAND, KUNG_FU_PANDA
 		);
 	}
 

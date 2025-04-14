@@ -1,5 +1,6 @@
 package me.sosedik.requiem.listener.player.possessed;
 
+import me.sosedik.requiem.api.event.player.PlayerResurrectEvent;
 import me.sosedik.requiem.feature.PossessingPlayer;
 import me.sosedik.utilizer.util.BiomeTags;
 import me.sosedik.utilizer.util.EntityUtil;
@@ -88,9 +89,13 @@ public class DeathMakesPossessed implements Listener {
 	}
 
 	private <T extends LivingEntity> void migrateAndPosses(Player player, Class<T> entityClass) {
-		LivingEntity possessed = player.getWorld().spawn(player.getLocation(), entityClass, entity -> PossessingPlayer.migrateStatsToEntity(player, entity));
+		LivingEntity possessed = player.getWorld().spawn(player.getLocation(), entityClass, entity -> {
+			PossessingPlayer.migrateStatsToEntity(player, entity);
+			PossessingPlayer.markResurrected(entity);
+		});
 		EntityUtil.clearTargets(player);
 		PossessingPlayer.startPossessing(player, possessed);
+		new PlayerResurrectEvent(player, possessed).callEvent();
 	}
 
 }

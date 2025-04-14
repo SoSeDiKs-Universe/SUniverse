@@ -61,4 +61,19 @@ public class DurabilityUtil {
 		return durability;
 	}
 
+	/**
+	 * Returns damage done to this item
+	 * <br>Returns -1 if unbreakable or has no durability
+	 *
+	 * @param item item
+	 * @return durability value
+	 */
+	public static int getDamage(@Nullable ItemStack item) {
+		if (item == null) return -1;
+		if (item.isUnbreakable()) return -1;
+		if (!item.hasData(DataComponentTypes.DAMAGE)) return -1;
+
+		return Objects.requireNonNull(item.getData(DataComponentTypes.DAMAGE));
+	}
+
 }

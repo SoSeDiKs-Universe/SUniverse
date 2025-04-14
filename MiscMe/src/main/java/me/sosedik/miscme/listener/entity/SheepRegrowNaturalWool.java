@@ -8,6 +8,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.SheepRegrowWoolEvent;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Sheep regrow their natural wool
@@ -15,7 +16,7 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public class SheepRegrowNaturalWool implements Listener {
 
-	private static final String NATURAL_WOOL_COLOR_TAG = "natural_wool_color";
+	public static final String NATURAL_WOOL_COLOR_TAG = "natural_wool_color";
 
 	@EventHandler(ignoreCancelled = true)
 	public void onWoolRegrow(SheepRegrowWoolEvent event) {
@@ -30,9 +31,23 @@ public class SheepRegrowNaturalWool implements Listener {
 	public void onSpawn(CreatureSpawnEvent event) {
 		if (!(event.getEntity() instanceof Sheep sheep)) return;
 
+		DyeColor woolColor = sheep.getColor();
+		if (woolColor == null) return;
+
+		setNaturalWool(sheep, woolColor);
+	}
+
+	/**
+	 * Sets the sheep's natural wool color
+	 *
+	 * @param sheep sheep
+	 * @param woolColor wool color
+	 */
+	public static void setNaturalWool(Sheep sheep, @Nullable DyeColor woolColor) {
 		NBT.modifyPersistentData(sheep, nbt -> {
-			DyeColor woolColor = sheep.getColor();
-			if (woolColor != null)
+			if (woolColor == null)
+				nbt.removeKey(NATURAL_WOOL_COLOR_TAG);
+			else
 				nbt.setEnum(NATURAL_WOOL_COLOR_TAG, woolColor);
 		});
 	}

@@ -1,10 +1,12 @@
 package me.sosedik.utilizer.listener.item;
 
 import me.sosedik.utilizer.dataset.UtilizerTags;
+import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.EntityDropItemEvent;
 import org.bukkit.event.entity.ItemSpawnEvent;
 import org.jspecify.annotations.NullMarked;
 
@@ -13,6 +15,13 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 public class NotDroppableItems implements Listener {
+
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onDrop(EntityDropItemEvent event) {
+		Material type = event.getItemDrop().getItemStack().getType();
+		if (UtilizerTags.NOT_DROPPABLE.isTagged(type) && !UtilizerTags.MATERIAL_AIR.isTagged(type))
+			event.setCancelled(true);
+	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onPickup(ItemSpawnEvent event) {

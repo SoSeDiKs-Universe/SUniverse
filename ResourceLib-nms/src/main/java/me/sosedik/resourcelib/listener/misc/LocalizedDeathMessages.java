@@ -35,6 +35,12 @@ public class LocalizedDeathMessages implements Listener {
 		String locale = component.key();
 		if (!TranslationHolder.translationHolder().hasMessage(locale)) return;
 
+		if (!locale.endsWith(".item") && !locale.endsWith(".player")) {
+			int placeholders = component.arguments().size();
+			if (placeholders > 1 && TranslationHolder.translationHolder().hasMessage(locale + ".killer"))
+				locale += ".killer";
+		}
+
 		Player player = event.getPlayer();
 		var messenger = Messenger.messenger(player);
 		Component newMessage = messenger.getMessage(locale, tagResolvers(component));
@@ -55,6 +61,12 @@ public class LocalizedDeathMessages implements Listener {
 
 		Player player = Bukkit.getPlayer(ownerId);
 		if (player == null) return;
+
+		if (!locale.endsWith(".item") && !locale.endsWith(".player")) {
+			int placeholders = component.arguments().size();
+			if (placeholders > 1 && TranslationHolder.translationHolder().hasMessage(locale + ".killer"))
+				locale += ".killer";
+		}
 
 		var messenger = Messenger.messenger(player);
 		Component newMessage = messenger.getMessage(locale, tagResolvers(component));

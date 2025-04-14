@@ -3,5 +3,9 @@
 	"death.attack.chest_crush.item": "<entity> was crushed with a chest lid by <attacker> wielding <item>",
 	"death.attack.coal_explosion": "<entity> got caught in a coal explosion",
 	"death.attack.coal_explosion.player": "<entity> got caught in a coal explosion by <attacker>",
-	"death.attack.coal_explosion.player.item": "<entity> got caught in a coal explosion by <attacker> using <item>"
+	"death.attack.coal_explosion.player.item": "<entity> got caught in a coal explosion by <attacker> using <item>",
+	"death.attack.moving_minecart": "<entity> was crushed by a moving minecart",
+	"death.attack.moving_minecart.player": "<entity> was pushed onto a moving minecart due to <attacker>",
+	"death.attack.moving_minecart.player.item": "<entity> was pushed onto a moving minecart due to <attacker> wielding <item>",
+	"death.attack.moving_minecart.killer": "<entity> was crushed by a moving minecart with <attacker> in it"
 }

@@ -27,7 +27,9 @@ import me.sosedik.miscme.listener.entity.DyeableShulkers;
 import me.sosedik.miscme.listener.entity.DynamicCreeperExplosion;
 import me.sosedik.miscme.listener.entity.EndermanTeleportsPlayers;
 import me.sosedik.miscme.listener.entity.ItemFrameReverseRotate;
+import me.sosedik.miscme.listener.entity.MinecartSlimeBoost;
 import me.sosedik.miscme.listener.entity.MoreBabyMobs;
+import me.sosedik.miscme.listener.entity.MovingMinecartsHurtEntities;
 import me.sosedik.miscme.listener.entity.PrimingExplosiveMinecart;
 import me.sosedik.miscme.listener.entity.RainbowSheepDropRandomWool;
 import me.sosedik.miscme.listener.entity.SheepBurnableWool;
@@ -112,7 +114,9 @@ public final class MiscMe extends JavaPlugin {
 			DynamicCreeperExplosion.class,
 			EndermanTeleportsPlayers.class,
 			ItemFrameReverseRotate.class,
+			MinecartSlimeBoost.class,
 			MoreBabyMobs.class,
+			MovingMinecartsHurtEntities.class,
 			PrimingExplosiveMinecart.class,
 			RainbowSheepDropRandomWool.class,
 			SheepBurnableWool.class,

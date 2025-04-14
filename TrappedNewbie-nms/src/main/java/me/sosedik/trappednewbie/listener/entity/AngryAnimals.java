@@ -1,6 +1,7 @@
 package me.sosedik.trappednewbie.listener.entity;
 
 import com.destroystokyo.paper.entity.ai.PaperGoal;
+import com.destroystokyo.paper.entity.ai.VanillaGoal;
 import me.sosedik.trappednewbie.TrappedNewbie;
 import me.sosedik.utilizer.util.EntityUtil;
 import net.minecraft.world.entity.PathfinderMob;
@@ -16,6 +17,7 @@ import org.bukkit.entity.AbstractHorse;
 import org.bukkit.entity.Animals;
 import org.bukkit.entity.Bee;
 import org.bukkit.entity.Chicken;
+import org.bukkit.entity.Creature;
 import org.bukkit.entity.Dolphin;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Fox;
@@ -26,6 +28,7 @@ import org.bukkit.entity.Pig;
 import org.bukkit.entity.PolarBear;
 import org.bukkit.entity.Rabbit;
 import org.bukkit.entity.Sheep;
+import org.bukkit.entity.Tameable;
 import org.bukkit.entity.WaterMob;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -75,7 +78,7 @@ public class AngryAnimals implements Listener {
 			&& !(mob instanceof PolarBear)
 		) {
 			Bukkit.getMobGoals().addGoal(mob, 1, new PaperGoal<>(new HurtByTargetGoal(nms)));
-			if (!(mob instanceof Fox)) {
+			if (!(mob instanceof Fox) && !(!(mob instanceof Creature creature) || Bukkit.getMobGoals().hasGoal(creature, VanillaGoal.MELEE_ATTACK))) {
 				Bukkit.getMobGoals().addGoal(mob, 1, new PaperGoal<>(new MeleeAttackGoal(nms, getAttackSpeed(mob), shouldFollowTarget(mob))));
 			}
 		}
@@ -113,6 +116,7 @@ public class AngryAnimals implements Listener {
 
 	private void aggro(Mob entity) {
 		if (!(EntityUtil.getCausingDamager(entity) instanceof LivingEntity damager)) return;
+		if (entity instanceof Tameable tameable && tameable.isTamed() && damager.getUniqueId().equals(tameable.getOwnerUniqueId())) return;
 
 		entity.getWorld().getNearbyEntitiesByType(Mob.class, entity.getLocation(), 20, mob -> shouldAggro(entity, mob)).forEach(mob -> {
 			if (mob.getTarget() == null)
@@ -120,9 +124,9 @@ public class AngryAnimals implements Listener {
 		});
 	}
 
-	private boolean shouldAggro(Mob entity, Mob mob) {
-		return (entity instanceof Animals && mob instanceof Animals)
-			|| (entity instanceof WaterMob && mob instanceof WaterMob);
+	private boolean shouldAggro(Mob attackedMob, Mob friendlyMob) {
+		return (attackedMob instanceof Animals && friendlyMob instanceof Animals)
+			|| (attackedMob instanceof WaterMob && friendlyMob instanceof WaterMob);
 	}
 
 }

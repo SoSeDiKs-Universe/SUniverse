@@ -182,13 +182,29 @@ public class VisualArmorLayer implements Listener {
 			};
 		}
 
-		if (action == InventoryAction.DROP_ONE_SLOT || action == InventoryAction.DROP_ALL_SLOT) {
+		if (action == InventoryAction.DROP_ONE_SLOT) {
 			if (rawSlot != InventorySlotHelper.OFF_HAND) getVisualArmor(player).toggleArmorPreview();
 			player.updateInventory();
 			return;
 		}
 
 		VisualArmor visualArmor = getVisualArmor(player);
+
+		if (action == InventoryAction.DROP_ALL_SLOT) {
+			if (visualArmor.isArmorPreview()) {
+				event.setCancelled(false);
+			} else {
+				EquipmentSlot equipmentSlot = InventoryUtil.getBySlot(rawSlot);
+				if (visualArmor.hasItem(equipmentSlot)) {
+					ItemStack item = visualArmor.getItem(equipmentSlot);
+					visualArmor.setItem(equipmentSlot, null);
+					player.dropItem(item);
+				}
+			}
+			player.updateInventory();
+			return;
+		}
+
 		if (rawSlot == InventorySlotHelper.OFF_HAND) {
 			if (!visualArmor.isArmorPreview()) {
 				event.setCancelled(false);

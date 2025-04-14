@@ -13,7 +13,6 @@ import me.sosedik.trappednewbie.TrappedNewbie;
 import me.sosedik.trappednewbie.api.item.VisualArmor;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieItems;
 import me.sosedik.utilizer.api.message.Messenger;
-import me.sosedik.utilizer.dataset.UtilizerTags;
 import me.sosedik.utilizer.util.InventoryUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -140,7 +139,7 @@ public class VisualArmorModifier extends ItemModifier {
 		// Show real armor if not wearing visual
 		if (!armorPreview && !realItem) {
 			ItemStack underwear = target.getInventory().getItem(slot);
-			if (!ItemStack.isEmpty(underwear) && !UtilizerTags.MATERIAL_AIR.isTagged(underwear.getType())) {
+			if (!ItemStack.isEmpty(underwear)) {
 				return parseUnderwear(messenger, player, locale, underwear);
 			}
 		}

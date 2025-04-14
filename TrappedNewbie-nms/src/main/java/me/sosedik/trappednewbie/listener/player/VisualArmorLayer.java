@@ -1,18 +1,16 @@
 package me.sosedik.trappednewbie.listener.player;
 
 import com.destroystokyo.paper.MaterialTags;
-import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
-import com.destroystokyo.paper.event.player.PlayerPostRespawnEvent;
 import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import de.tr7zw.nbtapi.iface.ReadableNBT;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.Equippable;
+import io.papermc.paper.datacomponent.item.ItemEnchantments;
 import io.papermc.paper.registry.RegistryKey;
 import io.papermc.paper.registry.TypedKey;
 import io.papermc.paper.registry.set.RegistryKeySet;
 import me.sosedik.kiterino.inventory.InventorySlotHelper;
 import me.sosedik.trappednewbie.api.item.VisualArmor;
-import me.sosedik.trappednewbie.dataset.TrappedNewbieItems;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieTags;
 import me.sosedik.utilizer.api.event.player.PlayerDataLoadedEvent;
 import me.sosedik.utilizer.api.event.player.PlayerDataSaveEvent;
@@ -36,13 +34,10 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffectType;
 import org.jspecify.annotations.NullMarked;
-import org.jspecify.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.List;
@@ -76,21 +71,6 @@ public class VisualArmorLayer implements Listener {
 		});
 	}
 
-	@EventHandler
-	public void onJoin(PlayerJoinEvent event) {
-		applyVisualArmor(event.getPlayer());
-	}
-
-	@EventHandler
-	public void onRespawn(PlayerPostRespawnEvent event) {
-		applyVisualArmor(event.getPlayer());
-	}
-
-	@EventHandler
-	public void onArmorChange(PlayerArmorChangeEvent event) {
-		applyVisualArmor(event.getPlayer());
-	}
-
 	// Shift + LMB with empty equipment slot
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onShiftEquip(InventoryClickEvent event) {
@@ -104,6 +84,7 @@ public class VisualArmorLayer implements Listener {
 
 		ItemStack item = event.getCurrentItem();
 		if (item == null) return;
+		if (!TrappedNewbieTags.COSMETIC_ARMOR.isTagged(item.getType())) return;
 
 		if (MaterialTags.HELMETS.isTagged(item) || isEquipable(item, EquipmentSlot.HEAD, false)) {
 			if (tryToEquip(player, item, EquipmentSlot.HEAD)) {
@@ -140,7 +121,7 @@ public class VisualArmorLayer implements Listener {
 		VisualArmor visualArmor = getVisualArmor(player);
 		if (visualArmor.isArmorPreview()) {
 			ItemStack currentItem = player.getInventory().getItem(slot);
-			if (isEmpty(currentItem)) {
+			if (ItemStack.isEmpty(currentItem)) {
 				player.getInventory().setItem(slot, item);
 				return true;
 			}
@@ -174,7 +155,7 @@ public class VisualArmorLayer implements Listener {
 
 	// Toggling visual layer with Q
 	// Swapping visual gloves with F
-	// Manually handling all remaining click types to account for fake air in armor slots
+	// Manually handling all remaining click types to account for air in armor slots
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onArmorSwap(InventoryClickEvent event) {
 		if (!(event.getWhoClicked() instanceof Player player)) return;
@@ -185,11 +166,24 @@ public class VisualArmorLayer implements Listener {
 		if (rawSlot > 8 && rawSlot != InventorySlotHelper.OFF_HAND) return;
 
 		event.setCancelled(true);
+		ClickType clickType = event.getClick();
 		InventoryAction action = event.getAction();
-		if (action == InventoryAction.DROP_ONE_SLOT || action == InventoryAction.DROP_ALL_SLOT || (action == InventoryAction.NOTHING && isMissingArmor(player, rawSlot))) {
-			if (rawSlot == InventorySlotHelper.OFF_HAND) return;
 
-			getVisualArmor(player).toggleArmorPreview();
+		// Oof, empty equipment slot click, calculate action manually
+		if (action == InventoryAction.NOTHING && isMissingArmor(player, rawSlot)) {
+			action = switch (clickType) {
+				case LEFT -> InventoryAction.PICKUP_ALL;
+				case RIGHT -> InventoryAction.PICKUP_HALF;
+				case SHIFT_LEFT, SHIFT_RIGHT -> InventoryAction.MOVE_TO_OTHER_INVENTORY;
+				case DROP -> InventoryAction.DROP_ONE_SLOT;
+				case CONTROL_DROP -> InventoryAction.DROP_ALL_SLOT;
+				case SWAP_OFFHAND, NUMBER_KEY -> InventoryAction.HOTBAR_SWAP;
+				default -> action;
+			};
+		}
+
+		if (action == InventoryAction.DROP_ONE_SLOT || action == InventoryAction.DROP_ALL_SLOT) {
+			if (rawSlot != InventorySlotHelper.OFF_HAND) getVisualArmor(player).toggleArmorPreview();
 			player.updateInventory();
 			return;
 		}
@@ -206,7 +200,6 @@ public class VisualArmorLayer implements Listener {
 				if (visualArmor.hasGloves() && visualArmor.getGloves().containsEnchantment(Enchantment.BINDING_CURSE)) return;
 			}
 
-			ClickType clickType = event.getClick();
 			if (clickType.isShiftClick()) {
 				if (!InventoryUtil.tryToAdd(player, visualArmor.getGloves())) return;
 				visualArmor.setGloves(null);
@@ -238,7 +231,15 @@ public class VisualArmorLayer implements Listener {
 				ItemStack item = event.getCurrentItem();
 				if (item != null && item.containsEnchantment(Enchantment.BINDING_CURSE)) return;
 			} else {
-				if (visualArmor.hasItem(equipmentSlot) && visualArmor.getItem(equipmentSlot).containsEnchantment(Enchantment.BINDING_CURSE)) return;
+				if (visualArmor.hasItem(equipmentSlot)) {
+					ItemStack item = visualArmor.getItem(equipmentSlot);
+					if (item.containsEnchantment(Enchantment.BINDING_CURSE)) return;
+					if (item.getType() == Material.ENCHANTED_BOOK && item.hasData(DataComponentTypes.STORED_ENCHANTMENTS)) {
+						ItemEnchantments data = item.getData(DataComponentTypes.STORED_ENCHANTMENTS);
+						assert data != null;
+						if (data.enchantments().containsKey(Enchantment.BINDING_CURSE)) return; // Well, you did this to yourself
+					}
+				}
 			}
 		}
 
@@ -255,7 +256,7 @@ public class VisualArmorLayer implements Listener {
 			if (!canEquip) return;
 
 			if (visualArmor.isArmorPreview()) {
-				player.setItemOnCursor(isEmpty(event.getCurrentItem()) ? null : event.getCurrentItem());
+				player.setItemOnCursor(event.getCurrentItem());
 				player.getInventory().setItem(equipmentSlot, cursor);
 			} else {
 				player.setItemOnCursor(visualArmor.getItem(equipmentSlot));
@@ -265,13 +266,15 @@ public class VisualArmorLayer implements Listener {
 			return;
 		}
 
-		if (visualArmor.isArmorPreview() ? isEmpty(event.getCurrentItem()) : !visualArmor.hasItem(equipmentSlot)) return;
+		if (visualArmor.isArmorPreview() ? ItemStack.isEmpty(event.getCurrentItem()) : !visualArmor.hasItem(equipmentSlot)) {
+			player.updateInventory();
+			return;
+		}
 
-		ClickType clickType = event.getClick();
 		if (clickType.isShiftClick()) {
 			if (visualArmor.isArmorPreview()) {
 				if (!InventoryUtil.tryToAdd(player, Objects.requireNonNull(event.getCurrentItem()))) return;
-				player.getInventory().setItem(equipmentSlot, ItemStack.of(TrappedNewbieItems.MATERIAL_AIR));
+				player.getInventory().setItem(equipmentSlot, ItemStack.empty());
 			} else {
 				if (!InventoryUtil.tryToAdd(player, visualArmor.getItem(equipmentSlot))) return;
 				visualArmor.setItem(equipmentSlot, null);
@@ -292,7 +295,7 @@ public class VisualArmorLayer implements Listener {
 			if (!ItemStack.isEmpty(current)) return;
 			if (visualArmor.isArmorPreview()) {
 				player.getInventory().setItem(slot, event.getCurrentItem());
-				player.getInventory().setItem(equipmentSlot, ItemStack.of(TrappedNewbieItems.MATERIAL_AIR));
+				player.getInventory().setItem(equipmentSlot, ItemStack.empty());
 			} else {
 				player.getInventory().setItem(slot, visualArmor.getItem(equipmentSlot));
 				visualArmor.setItem(equipmentSlot, null);
@@ -300,7 +303,7 @@ public class VisualArmorLayer implements Listener {
 		} else if (clickType == ClickType.LEFT || clickType == ClickType.RIGHT) {
 			if (visualArmor.isArmorPreview()) {
 				player.setItemOnCursor(event.getCurrentItem());
-				player.getInventory().setItem(equipmentSlot, ItemStack.of(TrappedNewbieItems.MATERIAL_AIR));
+				player.getInventory().setItem(equipmentSlot, ItemStack.empty());
 			} else {
 				player.setItemOnCursor(visualArmor.getItem(equipmentSlot));
 				visualArmor.setItem(equipmentSlot, null);
@@ -311,9 +314,8 @@ public class VisualArmorLayer implements Listener {
 	}
 
 	private boolean isMissingArmor(Player player, int slot) {
-		boolean missing = ItemStack.isEmpty(player.getOpenInventory().getItem(slot));
-		if (missing) applyVisualArmor(player);
-		return missing;
+		if (player.getOpenInventory().getTopInventory().getType() != InventoryType.CRAFTING) return false;
+		return ItemStack.isEmpty(player.getOpenInventory().getItem(slot));
 	}
 
 	@EventHandler
@@ -384,7 +386,7 @@ public class VisualArmorLayer implements Listener {
 				visualArmor.setItem(slot, hand);
 			} else {
 				ItemStack currentItem = player.getInventory().getItem(slot);
-				player.getInventory().setItemInMainHand(currentItem.getType() == TrappedNewbieItems.MATERIAL_AIR ? null : currentItem);
+				player.getInventory().setItemInMainHand(currentItem);
 				player.getInventory().setItem(slot, hand);
 			}
 		}
@@ -436,24 +438,6 @@ public class VisualArmorLayer implements Listener {
 		if (visualArmor.hasLeggings()) nbt.setItemStack(LEGGINGS_TAG, visualArmor.getLeggings());
 		if (visualArmor.hasBoots()) nbt.setItemStack(BOOTS_TAG, visualArmor.getBoots());
 		if (visualArmor.hasGloves()) nbt.setItemStack(GLOVES_TAG, visualArmor.getGloves());
-	}
-
-	private boolean isEmpty(@Nullable ItemStack item) {
-		return ItemStack.isEmpty(item) || item.getType() == TrappedNewbieItems.MATERIAL_AIR;
-	}
-
-	/**
-	 * Apply ghost items in empty armor slots
-	 * to allow drop action as well as show extra lore
-	 *
-	 * @param player player
-	 */
-	public static void applyVisualArmor(Player player) {
-		PlayerInventory inv = player.getInventory();
-		if (ItemStack.isEmpty(inv.getHelmet())) inv.setHelmet(ItemStack.of(TrappedNewbieItems.MATERIAL_AIR));
-		if (ItemStack.isEmpty(inv.getChestplate())) inv.setChestplate(ItemStack.of(TrappedNewbieItems.MATERIAL_AIR));
-		if (ItemStack.isEmpty(inv.getLeggings())) inv.setLeggings(ItemStack.of(TrappedNewbieItems.MATERIAL_AIR));
-		if (ItemStack.isEmpty(inv.getBoots())) inv.setBoots(ItemStack.of(TrappedNewbieItems.MATERIAL_AIR));
 	}
 
 	private static VisualArmor empty(Player player) {

@@ -1,5 +1,5 @@
 {
-	"equipment.cosmetic": "<dark_gray><i>Cosmetic",
+	"equipment.cosmetic": "<yellow><i>Cosmetic",
 	"equipment.underwear": "<dark_gray><i>Underwear (armor)",
 	"equipment.layer_switch.underwear": "Press <yellow><key:key.drop></yellow> to switch to cosmetic layer",
 	"equipment.layer_switch.cosmetic": "Press <yellow><key:key.drop></yellow> to switch to armor layer",

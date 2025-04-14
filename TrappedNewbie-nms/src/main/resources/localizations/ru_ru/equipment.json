@@ -1,5 +1,5 @@
 {
-	"equipment.cosmetic": "<dark_gray><i>Косметический предмет",
+	"equipment.cosmetic": "<yellow><i>Косметический предмет",
 	"equipment.underwear": "<dark_gray><i>Нижний слой брони",
 	"equipment.layer_switch.underwear": "Нажмите <yellow><key:key.drop></yellow> для просмотра косметической брони",
 	"equipment.layer_switch.cosmetic": "Нажмите <yellow><key:key.drop></yellow> для просмотра брони",

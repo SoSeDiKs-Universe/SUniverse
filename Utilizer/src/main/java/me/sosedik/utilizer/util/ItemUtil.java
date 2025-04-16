@@ -107,6 +107,23 @@ public class ItemUtil {
 	}
 
 	/**
+	 * Checks whether the item is as melee weapon
+	 *
+	 * @param item item
+	 * @return whether the item is as melee weapon
+	 */
+	public static boolean isMeleeWeapon(ItemStack item) {
+		Material type = item.getType();
+		if (Tag.ITEMS_SWORDS.isTagged(type)) return true;
+		if (Tag.ITEMS_AXES.isTagged(type)) return true;
+
+		return switch (type) {
+			case TRIDENT, MACE -> true;
+			default -> false;
+		};
+	}
+
+	/**
 	 * Created player head with a texture
 	 *
 	 * @param texture texture value

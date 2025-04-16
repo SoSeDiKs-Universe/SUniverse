@@ -74,7 +74,7 @@ public class ResourcePackStorage {
 				} else {
 					for (int i = 0; i < rawMapping.length; i++) {
 						Component mapping = Component.text(rawMapping[i]).font(fontKey);
-						if (i == rawMapping.length - 1 && compensationPixels > 0)
+						if (compensationPixels > 0)
 							mapping = combined(mapping, Component.text(SpacingUtil.POSITIVE_PIXEL.repeat(compensationPixels)));
 						var extraKey = new NamespacedKey(key.namespace(), key.value() + "-" + (i + 1));
 						this.fontMappings.put(extraKey, new FontData(mapping, width));

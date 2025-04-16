@@ -175,12 +175,12 @@ public class ArmorRenderer extends SimpleHudRenderer {
 						durabilityBar = DURABILITY_BAR[up ? 1 : 0][1];
 					else if (percentage > 0.2)
 						durabilityBar = DURABILITY_BAR[up ? 1 : 0][2];
-					else if (percentage > 0.05 || durability > 10)
+					else if (percentage > 0.05 && (durability > 10 || maxDurability < 11))
 						durabilityBar = DURABILITY_BAR[up ? 1 : 0][3];
 					else
 						durabilityBar = DURABILITY_BAR[up ? 1 : 0][4];
 
-					render = combine(SpacingUtil.getNegativePixel(), render, SpacingUtil.getOffset(-ARMOR_WIDTH + 1, ARMOR_WIDTH - 2, durabilityBar));
+					render = combine(SpacingUtil.getNegativePixel(), render, SpacingUtil.getOffset(-ARMOR_WIDTH + 1, ARMOR_WIDTH - 1, durabilityBar));
 				}
 			}
 		}

@@ -46,8 +46,11 @@ import me.sosedik.miscme.listener.item.EasierShovelPathCreation;
 import me.sosedik.miscme.listener.item.FireAspectIsFlintAndSteel;
 import me.sosedik.miscme.listener.item.FlintAndSteelIgnitesEntities;
 import me.sosedik.miscme.listener.item.ImmersiveDyes;
+import me.sosedik.miscme.listener.item.NoSwordInstaBreak;
 import me.sosedik.miscme.listener.item.ReadableBooksInFrames;
 import me.sosedik.miscme.listener.item.ShovelsConvertAdditionalBlocks;
+import me.sosedik.miscme.listener.item.ShovelsRemoveSnow;
+import me.sosedik.miscme.listener.item.SwordsSwingThroughGrass;
 import me.sosedik.miscme.listener.misc.BetterTimeSetCommand;
 import me.sosedik.miscme.listener.misc.WaterAwarePotionReset;
 import me.sosedik.miscme.listener.player.BurningForcesToRun;
@@ -137,8 +140,11 @@ public final class MiscMe extends JavaPlugin {
 			FireAspectIsFlintAndSteel.class,
 			FlintAndSteelIgnitesEntities.class,
 			ImmersiveDyes.class,
+			NoSwordInstaBreak.class,
 			ReadableBooksInFrames.class,
 			ShovelsConvertAdditionalBlocks.class,
+			ShovelsRemoveSnow.class,
+			SwordsSwingThroughGrass.class,
 			// misc
 			BetterTimeSetCommand.class,
 			WaterAwarePotionReset.class,

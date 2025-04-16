@@ -33,6 +33,11 @@ public class EntityUtil {
 	}
 
 	/**
+	 * How far the player's hand can reach
+	 */
+	public static final int PLAYER_REACH = 5;
+
+	/**
 	 * Covers entities that should be excluded from interactions
 	 */
 	public static Predicate<LivingEntity> IGNORE_INTERACTION = (entity) -> entity instanceof ArmorStand armorStand && armorStand.isMarker();

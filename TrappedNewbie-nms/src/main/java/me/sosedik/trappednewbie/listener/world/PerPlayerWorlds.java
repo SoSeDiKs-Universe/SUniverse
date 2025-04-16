@@ -290,7 +290,7 @@ public class PerPlayerWorlds implements Listener {
 		world.setGameRule(GameRule.NATURAL_REGENERATION, false);
 		world.setGameRule(GameRule.DO_IMMEDIATE_RESPAWN, true);
 		world.setGameRule(GameRule.DO_LIMITED_CRAFTING, true);
-		world.setGameRule(GameRule.REDUCED_DEBUG_INFO, false);
+		world.setGameRule(GameRule.REDUCED_DEBUG_INFO, true);
 		world.setGameRule(GameRule.SPAWN_CHUNK_RADIUS, 0);
 	}
 

@@ -98,7 +98,7 @@ public class ColoredShulkerShells implements Listener {
 		if (shulkerBox == null) return;
 
 		String prefix = dyeColor == null ? "" : dyeColor.name().toLowerCase(Locale.US) + "_";
-		var craft = new ShapedCraft(new ItemStack(shulkerBox), MiscMe.miscmeKey(prefix + "shulker_box"), "S", "C", "S")
+		var craft = new ShapedCraft(new ItemStack(shulkerBox), MiscMe.miscMeKey(prefix + "shulker_box"), "S", "C", "S")
 			.withGroup("shulker_box")
 			.addIngredients('C', Material.CHEST, Material.TRAPPED_CHEST);
 

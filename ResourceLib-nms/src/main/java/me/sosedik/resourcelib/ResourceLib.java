@@ -9,6 +9,7 @@ import me.sosedik.resourcelib.feature.TabRenderer;
 import me.sosedik.resourcelib.impl.item.modifier.CustomLoreModifier;
 import me.sosedik.resourcelib.impl.item.modifier.CustomNameModifier;
 import me.sosedik.resourcelib.impl.message.tag.IconTag;
+import me.sosedik.resourcelib.listener.misc.ActionBarCatcher;
 import me.sosedik.resourcelib.listener.misc.LocalizedDeathMessages;
 import me.sosedik.resourcelib.listener.misc.LocalizedResourcePackMessage;
 import me.sosedik.resourcelib.listener.player.DisplayCustomPotionEffectsOnHud;
@@ -69,6 +70,7 @@ public class ResourceLib extends JavaPlugin {
 
 		EventUtil.registerListeners(this,
 			// misc
+			ActionBarCatcher.class,
 			LocalizedDeathMessages.class,
 			// player
 			DisplayCustomPotionEffectsOnHud.class,

@@ -1,5 +1,6 @@
 package me.sosedik.utilizer.util;
 
+import com.google.common.math.DoubleMath;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.jspecify.annotations.NullMarked;
@@ -24,6 +25,16 @@ public class ChatUtil {
 	 */
 	public static String getPlainText(Component component) {
 		return PlainTextComponentSerializer.plainText().serialize(component);
+	}
+
+	/**
+	 * Formats double value
+	 *
+	 * @param value value
+	 * @return formatted number
+	 */
+	public static String formatDouble(double value) {
+		return DoubleMath.isMathematicalInteger(value) ? String.valueOf((int) value) : String.valueOf(value);
 	}
 
 }

@@ -17,12 +17,15 @@ import me.sosedik.trappednewbie.impl.item.modifier.VisualArmorModifier;
 import me.sosedik.trappednewbie.listener.advancement.AdvancementsLocalizer;
 import me.sosedik.trappednewbie.listener.advancement.LoadSaveAdvancementsOnJoinQuit;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.FirstPossessionAdvancement;
+import me.sosedik.trappednewbie.listener.advancement.dedicated.GoodAsNewAdvancement;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.IHateSandAdvancement;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.KungFuPandaAdvancement;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.OpeningHolderAdvancement;
 import me.sosedik.trappednewbie.listener.entity.AngryAnimals;
 import me.sosedik.trappednewbie.listener.entity.LimboEntities;
 import me.sosedik.trappednewbie.listener.item.PaperPlanes;
+import me.sosedik.trappednewbie.listener.item.VisualPumpkin;
+import me.sosedik.trappednewbie.listener.misc.CustomHudRenderer;
 import me.sosedik.trappednewbie.listener.misc.DisableJoinQuitMessages;
 import me.sosedik.trappednewbie.listener.misc.FakeHardcoreHearts;
 import me.sosedik.trappednewbie.listener.misc.TabHeaderFooterBeautifier;
@@ -32,7 +35,6 @@ import me.sosedik.trappednewbie.listener.player.StartAsGhost;
 import me.sosedik.trappednewbie.listener.player.TaskManagement;
 import me.sosedik.trappednewbie.listener.player.TeamableLeatherEquipment;
 import me.sosedik.trappednewbie.listener.player.VisualArmorLayer;
-import me.sosedik.trappednewbie.listener.world.InfiniteStartingNight;
 import me.sosedik.trappednewbie.listener.world.LimboWorldFall;
 import me.sosedik.trappednewbie.listener.world.LimitedLimbo;
 import me.sosedik.trappednewbie.listener.world.PerPlayerWorlds;
@@ -86,8 +88,8 @@ public final class TrappedNewbie extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
-		setupLimboWorld();
 		applyWorldRules();
+		setupLimboWorld();
 		registerCommands();
 
 		TrappedNewbieRecipes.addRecipes();
@@ -103,6 +105,7 @@ public final class TrappedNewbie extends JavaPlugin {
 			LoadSaveAdvancementsOnJoinQuit.class,
 			/// dedicated advancement
 			FirstPossessionAdvancement.class,
+			GoodAsNewAdvancement.class,
 			IHateSandAdvancement.class,
 			KungFuPandaAdvancement.class,
 			OpeningHolderAdvancement.class,
@@ -111,7 +114,9 @@ public final class TrappedNewbie extends JavaPlugin {
 			LimboEntities.class,
 			// item
 			PaperPlanes.class,
+			VisualPumpkin.class,
 			// misc
+			CustomHudRenderer.class,
 			DisableJoinQuitMessages.class,
 			FakeHardcoreHearts.class,
 			TabHeaderFooterBeautifier.class,
@@ -123,7 +128,6 @@ public final class TrappedNewbie extends JavaPlugin {
 			TeamableLeatherEquipment.class,
 			VisualArmorLayer.class,
 			// world
-			InfiniteStartingNight.class,
 			LimboWorldFall.class,
 			LimitedLimbo.class,
 			PerPlayerWorlds.class,
@@ -162,7 +166,8 @@ public final class TrappedNewbie extends JavaPlugin {
 		world.setGameRule(GameRule.MOB_GRIEFING, false);
 		new CustomDayCycleTask(world, () -> {
 			if (Bukkit.getServerTickManager().isFrozen()) return 0D;
-			return 10D;
+			if (limboWorld().getPlayers().isEmpty()) return 0D;
+			return Bukkit.getServerTickManager().getTickRate() / 2D;
 		});
 
 		Block block = world.getHighestBlockAt(0, 0);

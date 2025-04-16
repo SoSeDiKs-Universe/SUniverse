@@ -79,8 +79,8 @@ public class WaterAwarePotionReset implements Listener {
 	}
 
 	private void addPotionResetRecipe() {
-		Set<Material> potions = Objects.requireNonNull(Bukkit.getTag(Tag.REGISTRY_ITEMS, MiscMe.miscmeKey("resettable_bottled_items"), Material.class)).getValues();
-		new ShapelessCraft(ItemStack.of(Material.GLASS_BOTTLE), MiscMe.miscmeKey("potion_reset"))
+		Set<Material> potions = Objects.requireNonNull(Bukkit.getTag(Tag.REGISTRY_ITEMS, MiscMe.miscMeKey("resettable_bottled_items"), Material.class)).getValues();
+		new ShapelessCraft(ItemStack.of(Material.GLASS_BOTTLE), MiscMe.miscMeKey("potion_reset"))
 			.special()
 			.withExemptLeftovers()
 			.addIngredients(potions)

@@ -130,7 +130,7 @@ public class SignsRetain implements Listener {
 
 	private void addSignResetRecipe() {
 		List<Material> signs = new ArrayList<>(Tag.ALL_SIGNS.getValues()).stream().filter(Material::isItem).toList();
-		new ShapelessCraft(ItemStack.of(Material.OAK_SIGN), MiscMe.miscmeKey("sign_reset"))
+		new ShapelessCraft(ItemStack.of(Material.OAK_SIGN), MiscMe.miscMeKey("sign_reset"))
 			.special()
 			.withExemptLeftovers()
 			.addIngredients(signs, item -> {

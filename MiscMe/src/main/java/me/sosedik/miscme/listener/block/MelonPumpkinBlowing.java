@@ -34,8 +34,8 @@ import static java.util.Objects.requireNonNull;
 public class MelonPumpkinBlowing implements Listener {
 
 	private static final Random RANDOM = new Random();
-	private static final LootTable MELON_SMASH_LOOT_TABLE = requireNonNull(Bukkit.getLootTable(MiscMe.miscmeKey("custom/melon_smash")));
-	private static final LootTable PUMPKIN_SMASH_LOOT_TABLE = requireNonNull(Bukkit.getLootTable(MiscMe.miscmeKey("custom/pumpkin_smash")));
+	private static final LootTable MELON_SMASH_LOOT_TABLE = requireNonNull(Bukkit.getLootTable(MiscMe.miscMeKey("custom/melon_smash")));
+	private static final LootTable PUMPKIN_SMASH_LOOT_TABLE = requireNonNull(Bukkit.getLootTable(MiscMe.miscMeKey("custom/pumpkin_smash")));
 
 	@EventHandler
 	public void onHit(ProjectileHitEvent event) {

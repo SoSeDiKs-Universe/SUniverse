@@ -76,7 +76,7 @@ public class ResourcePackStorage {
 						Component mapping = Component.text(rawMapping[i]).font(fontKey);
 						if (i == rawMapping.length - 1 && compensationPixels > 0)
 							mapping = combined(mapping, Component.text(SpacingUtil.POSITIVE_PIXEL.repeat(compensationPixels)));
-						var extraKey = new NamespacedKey(key.namespace(), key.value() + "$" + (i + 1));
+						var extraKey = new NamespacedKey(key.namespace(), key.value() + "-" + (i + 1));
 						this.fontMappings.put(extraKey, new FontData(mapping, width));
 					}
 				}

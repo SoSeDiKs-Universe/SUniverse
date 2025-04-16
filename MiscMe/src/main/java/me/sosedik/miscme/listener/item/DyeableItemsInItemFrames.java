@@ -26,6 +26,7 @@ public class DyeableItemsInItemFrames implements Listener {
 
 	@EventHandler(ignoreCancelled = true)
 	public void onInteract(PlayerInteractEntityEvent event) {
+		if (event.getHand() != EquipmentSlot.HAND) return;
 		if (!(event.getRightClicked() instanceof ItemFrame itemFrame)) return;
 
 		ItemStack item = itemFrame.getItem();

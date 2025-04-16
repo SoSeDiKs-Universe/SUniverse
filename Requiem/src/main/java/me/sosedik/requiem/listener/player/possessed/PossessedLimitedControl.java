@@ -110,7 +110,6 @@ public class PossessedLimitedControl implements Listener {
 
 		if (event.getCause() == EntityPotionEffectEvent.Cause.PLUGIN && possessed.hasPotionEffect(potionEffect.getType())) return;
 
-		event.setCancelled(true);
 		if (event.getCause() != EntityPotionEffectEvent.Cause.PLUGIN)
 			possessed.addPotionEffect(potionEffect);
 	}

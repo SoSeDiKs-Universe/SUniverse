@@ -25,7 +25,6 @@ public class PossessorMimiksPossessed implements Listener {
 		Player rider = entity.getRider();
 		if (rider == null) return;
 		if (!PossessingPlayer.isPossessing(rider)) return;
-		if (PossessingPlayer.getPossessed(rider) != entity) return;
 
 		rider.setFireTicks((int) (event.getDuration() * 20));
 	}
@@ -37,7 +36,6 @@ public class PossessorMimiksPossessed implements Listener {
 		Player rider = entity.getRider();
 		if (rider == null) return;
 		if (!PossessingPlayer.isPossessing(rider)) return;
-		if (PossessingPlayer.getPossessed(rider) != entity) return;
 
 		PotionEffect newEffect = event.getNewEffect();
 		if (newEffect == null) {

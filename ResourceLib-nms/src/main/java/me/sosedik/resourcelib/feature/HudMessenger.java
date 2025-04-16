@@ -21,7 +21,7 @@ import static me.sosedik.utilizer.api.message.Mini.combined;
 @NullMarked
 public class HudMessenger extends BukkitRunnable {
 
-	private static final long ACTION_BAR_MESSAGE_DURATION = 50L;
+	private static final long ACTION_BAR_MESSAGE_DURATION = 30L;
 	private static final Map<UUID, HudMessenger> STORED_HUDS = new HashMap<>();
 
 	private final Map<NamespacedKey, HudProvider> hudProviders = new HashMap<>();
@@ -56,7 +56,7 @@ public class HudMessenger extends BukkitRunnable {
 	 * @param hudElementId hud element id
 	 * @param hudElement   hud element
 	 */
-	public void addHudElement(NamespacedKey hudElementId, Supplier<Component> hudElement) {
+	public void addHudElement(NamespacedKey hudElementId, Supplier<@Nullable Component> hudElement) {
 		this.hudProviders.put(hudElementId, new HudProvider(hudElementId, hudElement));
 	}
 

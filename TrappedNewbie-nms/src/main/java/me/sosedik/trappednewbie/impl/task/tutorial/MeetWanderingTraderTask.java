@@ -9,6 +9,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
@@ -25,6 +26,7 @@ public class MeetWanderingTraderTask extends Task implements Listener {
 
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onInteract(PlayerInteractEntityEvent event) {
+		if (event.getHand() != EquipmentSlot.HAND) return;
 		if (!(event.getRightClicked() instanceof WanderingTrader)) return;
 
 		Player player = event.getPlayer();

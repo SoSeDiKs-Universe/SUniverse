@@ -45,11 +45,11 @@ public class ChestThrowsEntities implements Listener {
 	/**
 	 * Fall damage caused by the player opening a chest with the entity on its lid
 	 */
-	public static final DamageType CHEST_THROW = RegistryAccess.registryAccess().getRegistry(RegistryKey.DAMAGE_TYPE).getOrThrow(MiscMe.miscmeKey("chest_throw"));
+	public static final DamageType CHEST_THROW = RegistryAccess.registryAccess().getRegistry(RegistryKey.DAMAGE_TYPE).getOrThrow(MiscMe.miscMeKey("chest_throw"));
 	/**
 	 * Damage caused by the player closing a chest with the entity under its lid
 	 */
-	public static final DamageType CHEST_CRUSH = RegistryAccess.registryAccess().getRegistry(RegistryKey.DAMAGE_TYPE).getOrThrow(MiscMe.miscmeKey("chest_crush"));
+	public static final DamageType CHEST_CRUSH = RegistryAccess.registryAccess().getRegistry(RegistryKey.DAMAGE_TYPE).getOrThrow(MiscMe.miscMeKey("chest_crush"));
 
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onClose(InventoryCloseEvent event) {

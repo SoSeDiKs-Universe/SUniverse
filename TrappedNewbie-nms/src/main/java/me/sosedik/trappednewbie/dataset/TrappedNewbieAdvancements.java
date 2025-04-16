@@ -10,8 +10,10 @@ import me.sosedik.packetadvancements.imlp.display.FancyAdvancementDisplay;
 import me.sosedik.packetadvancements.util.storage.JsonStorage;
 import me.sosedik.requiem.dataset.RequiemItems;
 import me.sosedik.trappednewbie.TrappedNewbie;
+import me.sosedik.trappednewbie.impl.advancement.MereMortalAdvancement;
 import me.sosedik.trappednewbie.impl.item.modifier.LetterModifier;
 import me.sosedik.utilizer.util.ItemUtil;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NullMarked;
@@ -27,6 +29,7 @@ import static me.sosedik.packetadvancements.imlp.display.AdvancementVisibilities
 public class TrappedNewbieAdvancements {
 
 	public static final ItemStack WANDERING_TRADER_HEAD = ItemUtil.texturedHead(MoreMobHeads.WANDERING_TRADER);
+	public static final ItemStack ZOMBIE_VILLAGER_HEAD = ItemUtil.texturedHead(MoreMobHeads.ZOMBIE_VILLAGER);
 
 	public static final AdvancementManager MANAGER = new AdvancementManager(new JsonStorage(TrappedNewbie.instance()));
 
@@ -35,6 +38,8 @@ public class TrappedNewbieAdvancements {
 	public static final IAdvancement OPENING_HOLDER = buildBase(REQUIEM_ROOT, "holder").display(display().x(-1.25F).icon(WANDERING_TRADER_HEAD)).requiredProgress(alwaysDone()).build();
 	public static final IAdvancement BRAVE_NEW_WORLD = buildBase(REQUIEM_ROOT, "brave_new_world").display(display().x(1F).icon(braveNewWorldItem())).requiredProgress(requirements("friendship", "fall")).build();
 	public static final IAdvancement FIRST_POSSESSION = buildBase(BRAVE_NEW_WORLD, "first_possession").display(display().x(1.25F).icon(RequiemItems.HOST_REVOCATOR)).build();
+	public static final IAdvancement GOOD_AS_NEW = buildBase(FIRST_POSSESSION, "good_as_new").display(display().x(1F).icon(ZOMBIE_VILLAGER_HEAD)).build();
+	public static final IAdvancement MERE_MORTAL = new MereMortalAdvancement(buildBase(GOOD_AS_NEW, "mere_mortal").display(display().x(1F).icon(Material.PLAYER_HEAD)).visibilityRule(hidden())); // TODO
 	public static final IAdvancement I_HATE_SAND = buildBase(FIRST_POSSESSION, "i_hate_sand").display(display().xy(1F, 1F).icon(Material.SAND).goalFrame()).build();
 	public static final IAdvancement KUNG_FU_PANDA = buildBase(FIRST_POSSESSION, "kung_fu_panda").display(display().xy(1F, -1F).icon(Material.BAMBOO).goalFrame()).build();
 
@@ -48,7 +53,7 @@ public class TrappedNewbieAdvancements {
 	}
 
 	private static FancyAdvancementDisplay.FancyAdvancementDisplayImpl display() {
-		return FancyAdvancementDisplay.fancyDisplay().noAnnounceChat();
+		return FancyAdvancementDisplay.fancyDisplay().noAnnounceChat().fancyDescriptionParent(NamedTextColor.GRAY);
 	}
 
 	public static void setupAdvancements() {
@@ -57,7 +62,7 @@ public class TrappedNewbieAdvancements {
 		);
 
 		REQUIEM_TAB.registerAdvancements(
-			REQUIEM_ROOT, OPENING_HOLDER, BRAVE_NEW_WORLD, FIRST_POSSESSION, I_HATE_SAND, KUNG_FU_PANDA
+			REQUIEM_ROOT, OPENING_HOLDER, BRAVE_NEW_WORLD, FIRST_POSSESSION, GOOD_AS_NEW, MERE_MORTAL, I_HATE_SAND, KUNG_FU_PANDA
 		);
 	}
 

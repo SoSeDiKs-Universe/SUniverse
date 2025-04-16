@@ -7,26 +7,15 @@ import org.bukkit.event.player.PlayerEvent;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
-public class PlayerPossessedTransformEvent extends PlayerEvent {
+public class PlayerPossessedCuredEvent extends PlayerEvent {
 
 	private static final HandlerList HANDLERS = new HandlerList();
 
-	private final LivingEntity transformed;
 	private final LivingEntity entity;
 
-	public PlayerPossessedTransformEvent(Player player, LivingEntity transformed, LivingEntity entity) {
+	public PlayerPossessedCuredEvent(Player player, LivingEntity entity) {
 		super(player);
-		this.transformed = transformed;
 		this.entity = entity;
-	}
-
-	/**
-	 * Gets the transformed entity
-	 *
-	 * @return the transformed entity
-	 */
-	public LivingEntity getTransformed() {
-		return this.transformed;
 	}
 
 	/**

@@ -30,6 +30,10 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public class LimboEntities implements Listener {
 
+	public LimboEntities() {
+		TrappedNewbie.limboWorld().getEntities().forEach(this::applyEntityRules);
+	}
+
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onSpawn(EntitiesLoadEvent event) {
 		if (event.getWorld() != TrappedNewbie.limboWorld()) return;

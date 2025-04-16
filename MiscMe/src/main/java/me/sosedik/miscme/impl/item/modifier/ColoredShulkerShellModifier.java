@@ -21,7 +21,7 @@ import java.util.Locale;
 
 public class ColoredShulkerShellModifier extends ItemModifier {
 
-	private static final Key MODEL_KEY = MiscMe.miscmeKey("colored_shulker_shell");
+	private static final Key MODEL_KEY = MiscMe.miscMeKey("colored_shulker_shell");
 
 	public ColoredShulkerShellModifier(NamespacedKey modifierId) {
 		super(modifierId);
@@ -42,7 +42,7 @@ public class ColoredShulkerShellModifier extends ItemModifier {
 		TooltipDisplay tooltipDisplay = item.getData(DataComponentTypes.TOOLTIP_DISPLAY);
 		if (tooltipDisplay == null) {
 			item.setData(DataComponentTypes.TOOLTIP_DISPLAY, TooltipDisplay.tooltipDisplay().addHiddenComponents(DataComponentTypes.DYED_COLOR).build());
-		} else if (!tooltipDisplay.hideTooltip()) {
+		} else if (!tooltipDisplay.hideTooltip() && !tooltipDisplay.hiddenComponents().contains(DataComponentTypes.DYED_COLOR)) {
 			item.setData(DataComponentTypes.TOOLTIP_DISPLAY, TooltipDisplay.tooltipDisplay().hiddenComponents(tooltipDisplay.hiddenComponents()).addHiddenComponents(DataComponentTypes.DYED_COLOR).build()); // TODO replace with toBuilder once available
 		}
 

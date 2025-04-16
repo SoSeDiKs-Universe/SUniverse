@@ -16,14 +16,10 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.vehicle.VehicleEntityCollisionEvent;
 import org.bukkit.event.vehicle.VehicleExitEvent;
-import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -35,7 +31,7 @@ public class MovingMinecartsHurtEntities implements Listener {
 	/**
 	 * Fall damage caused by the player opening a chest with the entity on its lid
 	 */
-	public static final DamageType MOVING_MINECART = RegistryAccess.registryAccess().getRegistry(RegistryKey.DAMAGE_TYPE).getOrThrow(MiscMe.miscmeKey("moving_minecart"));
+	public static final DamageType MOVING_MINECART = RegistryAccess.registryAccess().getRegistry(RegistryKey.DAMAGE_TYPE).getOrThrow(MiscMe.miscMeKey("moving_minecart"));
 
 	private static final List<UUID> IMMUNE = new ArrayList<>();
 

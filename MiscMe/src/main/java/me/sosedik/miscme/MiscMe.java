@@ -1,10 +1,13 @@
 package me.sosedik.miscme;
 
+import me.sosedik.miscme.impl.item.modifier.ArmorTooltipModifier;
 import me.sosedik.miscme.impl.item.modifier.BookAuthorOnlineModifier;
 import me.sosedik.miscme.impl.item.modifier.ColoredShulkerShellModifier;
+import me.sosedik.miscme.impl.item.modifier.DurabilityTooltipModifier;
 import me.sosedik.miscme.impl.item.modifier.FancierDyedLoreModifier;
 import me.sosedik.miscme.impl.item.modifier.FancierTrimLoreModifier;
 import me.sosedik.miscme.impl.item.modifier.SignsShowTextInLoreModifier;
+import me.sosedik.miscme.impl.item.modifier.ToolTooltipModifier;
 import me.sosedik.miscme.listener.block.BlockKnocking;
 import me.sosedik.miscme.listener.block.CampfireSetsOnFire;
 import me.sosedik.miscme.listener.block.ChestThrowsEntities;
@@ -83,11 +86,14 @@ public final class MiscMe extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
-		new BookAuthorOnlineModifier(miscmeKey("book_author_online")).register();
-		new ColoredShulkerShellModifier(miscmeKey("colored_shulker_shell")).register();
-		new FancierDyedLoreModifier(miscmeKey("fancier_dyed_lore")).register();
-		new FancierTrimLoreModifier(miscmeKey("fancier_trim_lore")).register();
-		new SignsShowTextInLoreModifier(miscmeKey("signs_show_text_in_lore")).register();
+		new ArmorTooltipModifier(miscMeKey("armor_tooltip")).register();
+		new BookAuthorOnlineModifier(miscMeKey("book_author_online")).register();
+		new ColoredShulkerShellModifier(miscMeKey("colored_shulker_shell")).register();
+		new DurabilityTooltipModifier(miscMeKey("durability_tooltip")).register();
+		new FancierDyedLoreModifier(miscMeKey("fancier_dyed_lore")).register();
+		new FancierTrimLoreModifier(miscMeKey("fancier_trim_lore")).register();
+		new SignsShowTextInLoreModifier(miscMeKey("signs_show_text_in_lore")).register();
+		new ToolTooltipModifier(miscMeKey("tool_tooltip")).register();
 
 		EventUtil.registerListeners(this,
 			// block
@@ -184,7 +190,7 @@ public final class MiscMe extends JavaPlugin {
 	 * @param value value
 	 * @return namespaced key
 	 */
-	public static NamespacedKey miscmeKey(String value) {
+	public static NamespacedKey miscMeKey(String value) {
 		return new NamespacedKey(NAMESPACE, value);
 	}
 

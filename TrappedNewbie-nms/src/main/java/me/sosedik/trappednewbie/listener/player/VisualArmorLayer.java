@@ -10,6 +10,7 @@ import io.papermc.paper.registry.RegistryKey;
 import io.papermc.paper.registry.TypedKey;
 import io.papermc.paper.registry.set.RegistryKeySet;
 import me.sosedik.kiterino.inventory.InventorySlotHelper;
+import me.sosedik.trappednewbie.TrappedNewbie;
 import me.sosedik.trappednewbie.api.item.VisualArmor;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieTags;
 import me.sosedik.utilizer.api.event.player.PlayerDataLoadedEvent;
@@ -48,7 +49,7 @@ import java.util.UUID;
 /**
  * Players have a visual second armor layer
  */
-// MCCheck: 1.21.5, new equipable items
+// MCCheck: 1.21.5, new equipable items (& equip sounds)
 @NullMarked
 public class VisualArmorLayer implements Listener {
 
@@ -358,20 +359,20 @@ public class VisualArmorLayer implements Listener {
 		if (item.getAmount() > 1) return;
 
 		if (MaterialTags.HEAD_EQUIPPABLE.isTagged(item) || isEquipable(item, EquipmentSlot.HEAD, true)) {
-			swapItems(player, item, EquipmentSlot.HEAD);
-			event.setCancelled(true);
+			if (swapItems(player, item, EquipmentSlot.HEAD))
+				event.setCancelled(true);
 		} else if (MaterialTags.CHEST_EQUIPPABLE.isTagged(item) || isEquipable(item, EquipmentSlot.CHEST, true)) {
-			swapItems(player, item, EquipmentSlot.CHEST);
-			event.setCancelled(true);
+			if (swapItems(player, item, EquipmentSlot.CHEST))
+				event.setCancelled(true);
 		} else if (MaterialTags.LEGGINGS.isTagged(item) || isEquipable(item, EquipmentSlot.LEGS, true)) {
-			swapItems(player, item, EquipmentSlot.LEGS);
-			event.setCancelled(true);
+			if (swapItems(player, item, EquipmentSlot.LEGS))
+				event.setCancelled(true);
 		} else if (MaterialTags.BOOTS.isTagged(item) || isEquipable(item, EquipmentSlot.FEET, true)) {
-			swapItems(player, item, EquipmentSlot.FEET);
-			event.setCancelled(true);
+			if (swapItems(player, item, EquipmentSlot.FEET))
+				event.setCancelled(true);
 		} else if (TrappedNewbieTags.GLOVES.isTagged(item.getType())) {
-			swapItems(player, item, EquipmentSlot.OFF_HAND);
-			event.setCancelled(true);
+			if (swapItems(player, item, EquipmentSlot.OFF_HAND))
+				event.setCancelled(true);
 		}
 	}
 
@@ -387,29 +388,57 @@ public class VisualArmorLayer implements Listener {
 		return allowedEntities == null || allowedEntities.contains(PLAYER_TYPED_KEY);
 	}
 
-	private void swapItems(Player player, ItemStack hand, EquipmentSlot slot) {
-		hand = hand.clone();
+	private boolean swapItems(Player player, ItemStack item, EquipmentSlot slot) {
+		boolean cosmetic = TrappedNewbieTags.COSMETIC_ARMOR.isTagged(item.getType());
+		boolean bundle = cosmetic != player.isSneaking();
 
-		VisualArmor visualArmor = getVisualArmor(player);
-		if (slot == EquipmentSlot.OFF_HAND) {
-			player.getInventory().setItemInMainHand(visualArmor.getGloves());
-			visualArmor.setGloves(hand);
-		} else {
-			boolean cosmetic = TrappedNewbieTags.COSMETIC_ARMOR.isTagged(hand.getType());
-			boolean bundle = cosmetic != player.isSneaking();
-			if (bundle) {
-				player.getInventory().setItemInMainHand(visualArmor.getItem(slot));
-				visualArmor.setItem(slot, hand);
+		if (!bundle && MaterialTags.ARMOR.isTagged(item.getType())) return false;
+
+		ItemStack oldItem = item.clone();
+
+		// Without delay RMB on a block triggers interact event for the second time
+		TrappedNewbie.scheduler().sync(() -> {
+			if (!player.isValid()) return;
+
+			ItemStack hand = player.getInventory().getItemInMainHand();
+			if (hand.getAmount() > 1) return;
+			if (!hand.equals(oldItem)) return;
+
+			VisualArmor visualArmor = getVisualArmor(player);
+			if (slot == EquipmentSlot.OFF_HAND) {
+				player.getInventory().setItemInMainHand(visualArmor.getGloves());
+				visualArmor.setGloves(hand);
 			} else {
-				ItemStack currentItem = player.getInventory().getItem(slot);
-				player.getInventory().setItemInMainHand(currentItem);
-				player.getInventory().setItem(slot, hand);
+				if (bundle) {
+					player.getInventory().setItemInMainHand(visualArmor.getItem(slot));
+					visualArmor.setItem(slot, hand);
+				} else {
+					ItemStack currentItem = player.getInventory().getItem(slot);
+					player.getInventory().setItemInMainHand(currentItem);
+					player.getInventory().setItem(slot, hand);
+				}
 			}
-		}
 
-		player.swingMainHand();
-		player.emitSound(Sound.ITEM_ARMOR_EQUIP_GENERIC, 2F, 0.3F);
-		player.updateInventory();
+			player.swingMainHand();
+			player.emitSound(getEquipSound(hand), 2F, 0.3F);
+			player.updateInventory();
+		}, 1L);
+
+		return true;
+	}
+
+	private Sound getEquipSound(ItemStack item) {
+		return switch (item.getType()) {
+			case ELYTRA -> Sound.ITEM_ARMOR_EQUIP_ELYTRA;
+			case TURTLE_HELMET -> Sound.ITEM_ARMOR_EQUIP_TURTLE;
+			case LEATHER_HELMET, LEATHER_CHESTPLATE, LEATHER_LEGGINGS, LEATHER_BOOTS -> Sound.ITEM_ARMOR_EQUIP_LEATHER;
+			case CHAINMAIL_HELMET, CHAINMAIL_CHESTPLATE, CHAINMAIL_LEGGINGS, CHAINMAIL_BOOTS -> Sound.ITEM_ARMOR_EQUIP_CHAIN;
+			case IRON_HELMET, IRON_CHESTPLATE, IRON_LEGGINGS, IRON_BOOTS -> Sound.ITEM_ARMOR_EQUIP_IRON;
+			case GOLDEN_HELMET, GOLDEN_CHESTPLATE, GOLDEN_LEGGINGS, GOLDEN_BOOTS -> Sound.ITEM_ARMOR_EQUIP_GOLD;
+			case DIAMOND_HELMET, DIAMOND_CHESTPLATE, DIAMOND_LEGGINGS, DIAMOND_BOOTS -> Sound.ITEM_ARMOR_EQUIP_DIAMOND;
+			case NETHERITE_HELMET, NETHERITE_CHESTPLATE, NETHERITE_LEGGINGS, NETHERITE_BOOTS -> Sound.ITEM_ARMOR_EQUIP_NETHERITE;
+			default -> Sound.ITEM_ARMOR_EQUIP_GENERIC;
+		};
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

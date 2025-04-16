@@ -48,7 +48,7 @@ public class ExplosiveCoal implements Listener {
 	private static final String EXPLODER_TAG = "exploder";
 	private static final String USED_ITEM_TAG = "used_item";
 
-	private static final Tag<Material> EXTRA_TOOL_TRIGGERS = Objects.requireNonNull(Bukkit.getTag(Tag.REGISTRY_ITEMS, MiscMe.miscmeKey("coal_explosion_extra_tool_triggers"), Material.class));
+	private static final Tag<Material> EXTRA_TOOL_TRIGGERS = Objects.requireNonNull(Bukkit.getTag(Tag.REGISTRY_ITEMS, MiscMe.miscMeKey("coal_explosion_extra_tool_triggers"), Material.class));
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onInteract(PlayerInteractEvent event) {

@@ -1,7 +1,11 @@
 package me.sosedik.miscme.dataset;
 
+import org.jspecify.annotations.NullMarked;
+
+@NullMarked
 public class MoreMobHeads {
 
 	public static final String WANDERING_TRADER = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNWYxMzc5YTgyMjkwZDdhYmUxZWZhYWJiYzcwNzEwZmYyZWMwMmRkMzRhZGUzODZiYzAwYzkzMGM0NjFjZjkzMiJ9fX0=";
+	public static final String ZOMBIE_VILLAGER = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYmIwNzg2YWM0NWE1YmQ2MDE3NDFlY2UwYjJhZGJlY2I2MWM0ZTllZDJhMTM3ZGI0OWRkNDM4YTA4Yjg3OGJhMSJ9fX0=";
 
 }

@@ -41,6 +41,18 @@ public class MathUtil {
 	}
 
 	/**
+	 * Rounds value to the specified precision
+	 *
+	 * @param value value
+	 * @param precision precision
+	 * @return rounded value
+	 */
+	public static double round(double value, int precision) {
+		int scale = (int) Math.pow(10, precision);
+		return (double) Math.round(value * scale) / scale;
+	}
+
+	/**
 	 * Returns random value from provided array
 	 *
 	 * @param values values array

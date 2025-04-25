@@ -36,6 +36,7 @@ public class EntityUtil {
 	 * How far the player's hand can reach
 	 */
 	public static final int PLAYER_REACH = 5;
+	public static final int DARKNESS_LIGHT_LEVEL = 3;
 
 	/**
 	 * Covers entities that should be excluded from interactions
@@ -60,7 +61,7 @@ public class EntityUtil {
 	 * @return whether the entity is in darkness
 	 */
 	public static boolean isInDarkness(LivingEntity entity) {
-		if (entity.getEyeLocation().getBlock().getLightLevel() > 3) return false;
+		if (entity.getEyeLocation().getBlock().getLightLevel() > DARKNESS_LIGHT_LEVEL) return false;
 		if (isInOpenEnd(entity)) return false;
 		if (isHoldingALightSource(entity, EquipmentSlot.HAND)) return false;
 		if (isHoldingALightSource(entity, EquipmentSlot.OFF_HAND)) return false;

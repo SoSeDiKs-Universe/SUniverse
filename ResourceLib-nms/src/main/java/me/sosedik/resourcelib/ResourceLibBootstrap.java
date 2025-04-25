@@ -63,6 +63,15 @@ public class ResourceLibBootstrap implements PluginBootstrap {
 
 	@Override
 	public void bootstrap(BootstrapContext context) {
+		var datapacksDir = new File(context.getDataDirectory().toAbsolutePath().getParent().getParent().toFile(), "world/datapacks");
+		if (datapacksDir.exists()) {
+			for (File datapackDir : requireNonNull(datapacksDir.listFiles())) {
+				if (!datapackDir.isDirectory()) continue;
+				if (datapackDir.getName().charAt(0) != '_') continue;
+
+				FileUtil.deleteFolder(datapackDir);
+			}
+		}
 		parseResources(context, null);
 	}
 
@@ -70,7 +79,14 @@ public class ResourceLibBootstrap implements PluginBootstrap {
 		goThroughDatasets(context, "item", (namespace, jsonEntries) -> {
 			context.getLifecycleManager().registerEventHandler(RegistryEvents.ITEM.freeze(),
 				event -> jsonEntries.forEach(
-					entry -> readItem(event, modifier, Key.key(namespace, entry.getKey()), entry.getValue().getAsJsonObject(), itemsProvider)
+					entry -> readItem(context, event, modifier, Key.key(namespace, entry.getKey()), entry.getValue().getAsJsonObject(), itemsProvider)
+				)
+			);
+		});
+		goThroughDatasets(context, "block", (namespace, jsonEntries) -> {
+			context.getLifecycleManager().registerEventHandler(RegistryEvents.ITEM.freeze(),
+				event -> jsonEntries.forEach(
+					entry -> readItem(context, event, modifier, Key.key(namespace, entry.getKey()), entry.getValue().getAsJsonObject(), itemsProvider)
 				)
 			);
 		});
@@ -78,6 +94,13 @@ public class ResourceLibBootstrap implements PluginBootstrap {
 	}
 
 	public static void setupBlocks(BootstrapContext context, @Nullable BiConsumer<String, BlockRegistryEntity.Builder> modifier, BiFunction<String, Object, KiterinoBlock> blocksProvider) {
+		goThroughDatasets(context, "block", (namespace, jsonEntries) -> {
+			context.getLifecycleManager().registerEventHandler(RegistryEvents.BLOCK.freeze(),
+				event -> jsonEntries.forEach(
+					entry -> readBlock(event, modifier, Key.key(namespace, entry.getKey()), entry.getValue().getAsJsonObject(), blocksProvider)
+				)
+			);
+		});
 		goThroughDatasets(context, "blockstate", (namespace, jsonEntries) -> {
 			context.getLifecycleManager().registerEventHandler(RegistryEvents.BLOCK.freeze(),
 				event -> jsonEntries.forEach(
@@ -102,7 +125,7 @@ public class ResourceLibBootstrap implements PluginBootstrap {
 		return properties;
 	}
 
-	private static void readItem(RegistryFreezeEvent<ItemType, ItemRegistryEntity.Builder> event, @Nullable BiConsumer<String, ItemRegistryEntity.Builder> modifier, Key itemKey, JsonObject json, @Nullable BiFunction<String, Object, @Nullable Object> itemsProvider) {
+	private static void readItem(BootstrapContext context, RegistryFreezeEvent<ItemType, ItemRegistryEntity.Builder> event, @Nullable BiConsumer<String, ItemRegistryEntity.Builder> modifier, Key itemKey, JsonObject json, @Nullable BiFunction<String, Object, @Nullable Object> itemsProvider) {
 		var typedKey = TypedKey.create(RegistryKey.ITEM, itemKey);
 		event.registry().register(typedKey, b -> {
 			Object nmsItem = null;
@@ -133,6 +156,8 @@ public class ResourceLibBootstrap implements PluginBootstrap {
 						if (model != null) box.getItem().setData(DataComponentTypes.ITEM_MODEL, model);
 					}
 				});
+			} else {
+				context.getLogger().warn("Missing client type for item {}", itemKey);
 			}
 
 			if (modifier != null) modifier.accept(itemKey.toString(), b);
@@ -236,14 +261,6 @@ public class ResourceLibBootstrap implements PluginBootstrap {
 		}
 
 		var datapacksDir = new File(context.getDataDirectory().toAbsolutePath().getParent().getParent().toFile(), "world/datapacks");
-		if (datapacksDir.exists()) {
-			for (File datapackDir : requireNonNull(datapacksDir.listFiles())) {
-				if (!datapacksDir.isDirectory()) continue;
-				if (datapacksDir.getName().charAt(0) != '_') continue;
-
-				FileUtil.deleteFolder(datapackDir);
-			}
-		}
 		try (var jar = new JarFile(jarFile)) {
 			Enumeration<JarEntry> entries = jar.entries();
 			while (entries.hasMoreElements()) {

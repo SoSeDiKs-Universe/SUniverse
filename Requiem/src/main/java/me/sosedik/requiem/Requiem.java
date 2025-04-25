@@ -1,9 +1,12 @@
 package me.sosedik.requiem;
 
 import me.sosedik.requiem.command.ReviveCommand;
+import me.sosedik.requiem.dataset.RequiemTags;
 import me.sosedik.requiem.feature.GhostyPlayer;
 import me.sosedik.requiem.feature.PossessingPlayer;
+import me.sosedik.requiem.impl.block.TombstoneBlockStorage;
 import me.sosedik.requiem.impl.item.modifier.FakeHorseSaddlesModifier;
+import me.sosedik.requiem.impl.item.modifier.TombstoneDeathMessageModifier;
 import me.sosedik.requiem.listener.entity.CreepersDropCreeperHearts;
 import me.sosedik.requiem.listener.entity.FakeHorseSaddles;
 import me.sosedik.requiem.listener.entity.OverwriteControlledPandasGenes;
@@ -12,6 +15,7 @@ import me.sosedik.requiem.listener.entity.UndeadConsecration;
 import me.sosedik.requiem.listener.item.ExplodingCreeperHeart;
 import me.sosedik.requiem.listener.item.HostRevocatorBodyLeaving;
 import me.sosedik.requiem.listener.player.LoadSavePlayers;
+import me.sosedik.requiem.listener.player.PlayerTombstones;
 import me.sosedik.requiem.listener.player.WorldAwareRequiemAbilities;
 import me.sosedik.requiem.listener.player.damage.DamageFeetOnFall;
 import me.sosedik.requiem.listener.player.damage.DamageModelLoadSave;
@@ -39,6 +43,7 @@ import me.sosedik.requiem.listener.player.possessed.TransformationsKeepPossessor
 import me.sosedik.resourcelib.ResourceLib;
 import me.sosedik.utilizer.CommandManager;
 import me.sosedik.utilizer.api.language.TranslationHolder;
+import me.sosedik.utilizer.listener.BlockStorage;
 import me.sosedik.utilizer.util.EventUtil;
 import me.sosedik.utilizer.util.Scheduler;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
@@ -61,6 +66,8 @@ public final class Requiem extends JavaPlugin {
 
 		TranslationHolder.extractLocales(this);
 		ResourceLib.loadDefaultResources(this);
+
+		RequiemTags.TOMBSTONES.getValues().forEach(tombstone -> BlockStorage.addMapping(tombstone.getKey(), TombstoneBlockStorage.class));
 	}
 
 	@Override
@@ -78,6 +85,7 @@ public final class Requiem extends JavaPlugin {
 			HostRevocatorBodyLeaving.class,
 			// player
 			LoadSavePlayers.class,
+			PlayerTombstones.class,
 			WorldAwareRequiemAbilities.class,
 			/// damage
 			DamageFeetOnFall.class,
@@ -108,6 +116,7 @@ public final class Requiem extends JavaPlugin {
 		);
 
 		new FakeHorseSaddlesModifier(requiemKey("fake_horse_saddles")).register();
+		new TombstoneDeathMessageModifier(requiemKey("tombstone_death_message")).register();
 	}
 
 	private void registerCommands() {

@@ -15,8 +15,6 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.block.data.type.Campfire;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.EntityCategory;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -26,7 +24,6 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
-import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -203,8 +200,8 @@ public class ItemUtil {
 
 		// Calculate enchantment bonuses
 		double enchantBonus = 0;
-		for (Map.Entry<Enchantment, Integer> entry : item.getEnchantments().entrySet())
-			enchantBonus += entry.getKey().getDamageIncrease(entry.getValue(), EntityCategory.NONE);
+//		for (Map.Entry<Enchantment, Integer> entry : item.getEnchantments().entrySet()) // TODO enchant bonuses :F
+//			enchantBonus += entry.getKey().getDamageIncrease(entry.getValue(), EntityCategory.NONE);
 
 		double combined = defaultValue + entityValue + enchantBonus;
 

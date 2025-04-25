@@ -25,6 +25,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Mob;
 import org.bukkit.entity.Panda;
 import org.bukkit.entity.Pig;
+import org.bukkit.entity.Player;
 import org.bukkit.entity.PolarBear;
 import org.bukkit.entity.Rabbit;
 import org.bukkit.entity.Sheep;
@@ -61,6 +62,7 @@ public class AngryAnimals implements Listener {
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onAttack(EntityDamageByEntityEvent event) {
 		if (!(event.getEntity() instanceof Mob entity)) return;
+
 		TrappedNewbie.scheduler().sync(() -> aggro(entity), 1L);
 	}
 
@@ -116,6 +118,8 @@ public class AngryAnimals implements Listener {
 
 	private void aggro(Mob entity) {
 		if (!(EntityUtil.getCausingDamager(entity) instanceof LivingEntity damager)) return;
+		if (damager.isInvulnerable()) return;
+		if (damager instanceof Player player && player.getGameMode().isInvulnerable()) return;
 		if (entity instanceof Tameable tameable && tameable.isTamed() && damager.getUniqueId().equals(tameable.getOwnerUniqueId())) return;
 
 		entity.getWorld().getNearbyEntitiesByType(Mob.class, entity.getLocation(), 20, mob -> shouldAggro(entity, mob)).forEach(mob -> {

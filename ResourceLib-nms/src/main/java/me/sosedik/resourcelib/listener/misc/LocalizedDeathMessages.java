@@ -1,6 +1,7 @@
 package me.sosedik.resourcelib.listener.misc;
 
 import io.papermc.paper.event.entity.TameableDeathMessageEvent;
+import me.sosedik.utilizer.api.language.LangOptionsStorage;
 import me.sosedik.utilizer.api.language.TranslationHolder;
 import me.sosedik.utilizer.api.message.Messenger;
 import me.sosedik.utilizer.api.message.Mini;
@@ -19,6 +20,7 @@ import org.intellij.lang.annotations.Subst;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 /**
@@ -32,28 +34,19 @@ public class LocalizedDeathMessages implements Listener {
 	public void onDeath(PlayerDeathEvent event) {
 		if (!(event.deathMessage() instanceof TranslatableComponent component)) return;
 
-		String locale = component.key();
-		if (!TranslationHolder.translationHolder().hasMessage(locale)) return;
+		String localeKey = component.key();
+		if (!TranslationHolder.translationHolder().hasMessage(localeKey)) return;
 
-		if (!locale.endsWith(".item") && !locale.endsWith(".player")) {
-			int placeholders = component.arguments().size();
-			if (placeholders > 1 && TranslationHolder.translationHolder().hasMessage(locale + ".killer"))
-				locale += ".killer";
-		}
-
-		Player player = event.getPlayer();
-		var messenger = Messenger.messenger(player);
-		Component newMessage = messenger.getMessage(locale, tagResolvers(component));
-
-		event.deathMessage(newMessage);
+		event.deathMessage(null);
+		localeKey = getLocaleKey(component);
+		TagResolver[] tagResolvers = tagResolvers(component);
+		for (Player player : Bukkit.getOnlinePlayers())
+			Messenger.messenger(player).sendMessage(localeKey, tagResolvers);
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onTamedDeath(TameableDeathMessageEvent event) {
 		if (!(event.deathMessage() instanceof TranslatableComponent component)) return;
-
-		String locale = component.key();
-		if (!TranslationHolder.translationHolder().hasMessage(locale)) return;
 
 		Tameable entity = event.getEntity();
 		UUID ownerId = entity.getOwnerUniqueId();
@@ -62,19 +55,30 @@ public class LocalizedDeathMessages implements Listener {
 		Player player = Bukkit.getPlayer(ownerId);
 		if (player == null) return;
 
-		if (!locale.endsWith(".item") && !locale.endsWith(".player")) {
-			int placeholders = component.arguments().size();
-			if (placeholders > 1 && TranslationHolder.translationHolder().hasMessage(locale + ".killer"))
-				locale += ".killer";
-		}
-
-		var messenger = Messenger.messenger(player);
-		Component newMessage = messenger.getMessage(locale, tagResolvers(component));
-
-		event.deathMessage(newMessage);
+		event.deathMessage(formatDeathMessage(player.locale(), component));
 	}
 
-	private TagResolver[] tagResolvers(TranslatableComponent component) {
+	public static Component formatDeathMessage(Locale locale, Component message) {
+		if (!(message instanceof TranslatableComponent component)) return message;
+
+		String localeKey = component.key();
+		if (!TranslationHolder.translationHolder().hasMessage(localeKey)) return message;
+
+		localeKey = getLocaleKey(component);
+		return Messenger.messenger(LangOptionsStorage.getByLocale(locale)).getMessage(localeKey, tagResolvers(component));
+	}
+
+	private static String getLocaleKey(TranslatableComponent component) {
+		String localeKey = component.key();
+		if (!localeKey.endsWith(".item") && !localeKey.endsWith(".player")) {
+			int placeholders = component.arguments().size();
+			if (placeholders > 1 && TranslationHolder.translationHolder().hasMessage(localeKey + ".killer"))
+				localeKey += ".killer";
+		}
+		return localeKey;
+	}
+
+	private static TagResolver[] tagResolvers(TranslatableComponent component) {
 		List<TranslationArgument> arguments = component.arguments();
 		TagResolver[] tagResolvers = new TagResolver[arguments.size()];
 		for (int i = 0; i < arguments.size(); i++) {

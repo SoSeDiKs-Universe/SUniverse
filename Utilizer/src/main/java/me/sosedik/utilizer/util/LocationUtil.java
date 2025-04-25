@@ -190,7 +190,11 @@ public class LocationUtil {
 	 * @return whether block is fluid
 	 */
 	public static boolean isFluid(Block block) {
-		return isWatery(block) || block.getType() == Material.LAVA || block.getType() == Material.LAVA_CAULDRON;
+		if (block.getType() == Material.WATER_CAULDRON) return true;
+		if (block.getType() == Material.LAVA_CAULDRON) return true;
+
+		FluidData fluidData = block.getWorld().getFluidData(block.getLocation());
+		return fluidData.getFluidType() != Fluid.EMPTY;
 	}
 
 	/**

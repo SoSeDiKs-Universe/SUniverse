@@ -80,29 +80,34 @@ public class UndeadConsecration implements Listener {
 		if (isExplosionDamageCause(event.getCause())) return;
 
 		if (event instanceof EntityDamageByEntityEvent damageEvent) {
-			if (damageEvent.getDamager() instanceof Golem) return;
-
-			if (damageEvent.getDamager() instanceof Projectile projectile) {
-				if (projectile.getFireTicks() > 0 || projectile.isVisualFire()) {
-					if (event.getEntity().isImmuneToFire()) {
-						event.setCancelled(true);
-					} else {
-						healTask.updateVulnerabilityTime(20);
-					}
+			switch (damageEvent.getDamager()) {
+				case Golem golem -> {
 					return;
 				}
-				if (projectile instanceof ThrownPotion thrownPotion) {
-					if (thrownPotion.getEffects().stream().anyMatch(potionEffect -> potionEffect.getType() == PotionEffectType.INSTANT_HEALTH)) {
-						healTask.updateVulnerabilityTime(20);
+				case Projectile projectile -> {
+					if (projectile.getFireTicks() > 0 || projectile.isVisualFire()) {
+						if (event.getEntity().isImmuneToFire()) {
+							event.setCancelled(true);
+						} else {
+							healTask.updateVulnerabilityTime(20);
+						}
+						return;
+					}
+					if (projectile instanceof ThrownPotion thrownPotion) {
+						if (thrownPotion.getEffects().stream().anyMatch(potionEffect -> potionEffect.getType() == PotionEffectType.INSTANT_HEALTH)) {
+							healTask.updateVulnerabilityTime(20);
+							return;
+						}
+					}
+				}
+				case LivingEntity damager when damager.getEquipment() != null -> {
+					ItemStack weapon = damager.getEquipment().getItemInMainHand();
+					if (weapon.containsEnchantment(Enchantment.SMITE)) {
+						healTask.updateVulnerabilityTime(2);
 						return;
 					}
 				}
-			} else if (damageEvent.getDamager() instanceof LivingEntity damager && damager.getEquipment() != null) {
-				ItemStack weapon = damager.getEquipment().getItemInMainHand();
-				if (weapon.containsEnchantment(Enchantment.SMITE)) {
-					healTask.updateVulnerabilityTime(2);
-					return;
-				}
+				default -> {}
 			}
 
 		}

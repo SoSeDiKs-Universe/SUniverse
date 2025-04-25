@@ -64,7 +64,7 @@ public class CustomRecipeLeftovers implements Listener {
 					craftable = i;
 					break; // Something cancelled crafts, don't try further and process only already crafted
 				}
-				InventoryUtil.addOrDrop(player, drop);
+				InventoryUtil.addOrDrop(player, drop, true);
 			}
 
 			updateMatrix(event, keyed.getKey(), player, craftable);

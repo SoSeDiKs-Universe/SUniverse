@@ -10,6 +10,8 @@ import io.papermc.paper.registry.RegistryKey;
 import io.papermc.paper.registry.TypedKey;
 import io.papermc.paper.registry.set.RegistryKeySet;
 import me.sosedik.kiterino.inventory.InventorySlotHelper;
+import me.sosedik.requiem.api.event.player.PlayerTombstoneCreateEvent;
+import me.sosedik.requiem.api.event.player.TombstoneDestroyEvent;
 import me.sosedik.trappednewbie.TrappedNewbie;
 import me.sosedik.trappednewbie.api.item.VisualArmor;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieTags;
@@ -441,6 +443,44 @@ public class VisualArmorLayer implements Listener {
 		};
 	}
 
+	@EventHandler
+	public void onTombstone(TombstoneDestroyEvent event) {
+		Player player = event.getPlayer();
+		VisualArmor visualArmor = player == null ? null : getVisualArmor(player);
+		for (ReadWriteNBT data : event.getStorages()) {
+			if (!data.hasTag(ARMOR_BUNDLE_TAG)) continue;
+
+			ReadWriteNBT bundle = data.getCompound(ARMOR_BUNDLE_TAG);
+			if (bundle == null) continue;
+			for (EquipmentSlot equipmentSlot : EquipmentSlot.values()) {
+				if (!bundle.hasTag(equipmentSlot.name())) continue;
+
+				ItemStack item = bundle.getItemStack(equipmentSlot.name());
+				if (item == null) continue;
+
+				if (visualArmor == null || !player.canUseEquipmentSlot(equipmentSlot) || visualArmor.hasItem(equipmentSlot)) {
+					event.getToDrop().add(item);
+				} else {
+					visualArmor.setItem(equipmentSlot, item);
+				}
+			}
+		}
+	}
+
+	@EventHandler
+	public void onDeath(PlayerTombstoneCreateEvent event) {
+		Player player = event.getPlayer();
+		ReadWriteNBT data = event.getData();
+		VisualArmor visualArmor = getVisualArmor(player);
+		for (EquipmentSlot equipmentSlot : EquipmentSlot.values()) {
+			if (!player.canUseEquipmentSlot(equipmentSlot)) continue;
+			if (!visualArmor.hasItem(equipmentSlot)) continue;
+
+			data.getOrCreateCompound(ARMOR_BUNDLE_TAG).setItemStack(equipmentSlot.name(), visualArmor.getItem(equipmentSlot));
+			visualArmor.setItem(equipmentSlot, null);
+		}
+	}
+
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onDeath(PlayerDeathEvent event) {
 		Player player = event.getPlayer();
@@ -448,11 +488,10 @@ public class VisualArmorLayer implements Listener {
 		VisualArmor visualArmor = getVisualArmor(player);
 		for (EquipmentSlot equipmentSlot : EquipmentSlot.values()) {
 			if (!player.canUseEquipmentSlot(equipmentSlot)) continue;
+			if (!visualArmor.hasItem(equipmentSlot)) continue;
 
-			if (visualArmor.hasItem(equipmentSlot)) {
-				drops.add(visualArmor.getItem(equipmentSlot));
-				visualArmor.setItem(equipmentSlot, null);
-			}
+			drops.add(visualArmor.getItem(equipmentSlot));
+			visualArmor.setItem(equipmentSlot, null);
 		}
 	}
 

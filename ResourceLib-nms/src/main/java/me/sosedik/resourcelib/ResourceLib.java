@@ -187,10 +187,11 @@ public class ResourceLib extends JavaPlugin {
 			if (!datasetDir.isDirectory()) continue;
 
 			var itemsDir = new File(datasetDir, "item");
-			if (!itemsDir.exists()) continue;
-			if (!itemsDir.isDirectory()) continue;
-
-			loadItemMappings(itemsDir, datasetDir.getName());
+			if (itemsDir.exists() && itemsDir.isDirectory())
+				loadItemMappings(itemsDir, datasetDir.getName());
+			itemsDir = new File(datasetDir, "block");
+			if (itemsDir.exists() && itemsDir.isDirectory())
+				loadItemMappings(itemsDir, datasetDir.getName());
 		}
 	}
 

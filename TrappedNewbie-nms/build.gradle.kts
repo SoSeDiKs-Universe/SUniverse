@@ -1,3 +1,4 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import net.minecrell.pluginyml.paper.PaperPluginDescription
 
 description = "Once you're in, there's no way out"
@@ -17,6 +18,13 @@ dependencies {
 
     compileOnly("org.incendo:cloud-paper:${project.property("cloudImplVersion")}")
     compileOnly("org.incendo:cloud-annotations:${project.property("cloudVersion")}")
+}
+
+tasks.withType<ShadowJar> {
+    val rpDir = "${projectDir.parentFile.parentFile.path}/ResourcePacker/output"
+    from("$rpDir/data-pack") {
+        into("datapack")
+    }
 }
 
 paper {

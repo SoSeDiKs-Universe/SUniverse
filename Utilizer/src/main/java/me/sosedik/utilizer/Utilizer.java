@@ -14,6 +14,8 @@ import me.sosedik.utilizer.impl.message.tag.DiscordResolver;
 import me.sosedik.utilizer.impl.message.tag.KaomojiTag;
 import me.sosedik.utilizer.impl.message.tag.LocaleResolver;
 import me.sosedik.utilizer.impl.message.tag.RandomColorTag;
+import me.sosedik.utilizer.listener.BlockStorage;
+import me.sosedik.utilizer.listener.block.CustomBlockStorageLoadSave;
 import me.sosedik.utilizer.listener.entity.EntityGlowTracker;
 import me.sosedik.utilizer.listener.entity.EntityMetadataClearer;
 import me.sosedik.utilizer.listener.item.BowUsableWithoutArrows;
@@ -77,6 +79,8 @@ public final class Utilizer extends JavaPlugin {
 		registerCommands();
 
 		EventUtil.registerListeners(this,
+			// block
+			CustomBlockStorageLoadSave.class,
 			// entity
 			EntityGlowTracker.class,
 			EntityMetadataClearer.class,
@@ -125,6 +129,7 @@ public final class Utilizer extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		PlayerDataLoadSave.saveAllData();
+		BlockStorage.saveAllData();
 		EntityGlowTracker.unregisterTeams();
 	}
 

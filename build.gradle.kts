@@ -28,7 +28,7 @@ subprojects {
 
     tasks {
         build {
-            if (project.name == "ResourceLib-nms") {
+            if (project.name == "ResourceLib-nms" || project.name == "TrappedNewbie-nms") {
                 dependsOn(shadowJar)
             }
 

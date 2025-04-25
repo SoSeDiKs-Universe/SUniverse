@@ -18,6 +18,14 @@ public class BiomeTags {
 	public static final Set<Biome> OCEAN = builder()
 			.addTag(DEEP_OCEAN).add(Biome.FROZEN_OCEAN).add(Biome.OCEAN).add(Biome.COLD_OCEAN).add(Biome.LUKEWARM_OCEAN).add(Biome.WARM_OCEAN).build();
 
+	public static final Set<Biome> EXTRA_WARM = builder()
+			.add(Biome.DESERT)
+			.add(Biome.SAVANNA, Biome.SAVANNA_PLATEAU, Biome.WINDSWEPT_SAVANNA)
+			.add(Biome.BADLANDS, Biome.ERODED_BADLANDS, Biome.WOODED_BADLANDS).build();
+
+	public static final Set<Biome> SNOWY = builder()
+			.add(Biome.FROZEN_PEAKS, Biome.GROVE, Biome.JAGGED_PEAKS, Biome.SNOWY_PLAINS, Biome.ICE_SPIKES, Biome.SNOWY_SLOPES, Biome.SNOWY_TAIGA, Biome.SNOWY_BEACH).build();
+
 	public static TagBuilder builder() {
 		return new TagBuilder();
 	}

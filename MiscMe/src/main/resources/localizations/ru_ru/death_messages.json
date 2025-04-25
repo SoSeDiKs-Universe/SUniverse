@@ -5,6 +5,7 @@
 	"death.attack.coal_explosion.player": "<entity> попал под взрыв угля из-за <attacker>",
 	"death.attack.coal_explosion.player.item": "<entity> попал под взрыв угля из-за <attacker>, держащего <item>",
 	"death.attack.moving_minecart": "<entity> был раздавлен движущейся вагонеткой",
+	"death.attack.moving_minecart.item": "<entity> был раздавлен движущейся вагонеткой с <attacker> в ней, держащего <item>",
 	"death.attack.moving_minecart.player": "<entity> был брошен под движущуюся вагонетку из-за <attacker>",
 	"death.attack.moving_minecart.player.item": "<entity> был брошен под движущуюся вагонетку из-за <attacker>, держащего <item>",
 	"death.attack.moving_minecart.killer": "<entity> был раздавлен движущейся вагонеткой с <attacker> в ней"

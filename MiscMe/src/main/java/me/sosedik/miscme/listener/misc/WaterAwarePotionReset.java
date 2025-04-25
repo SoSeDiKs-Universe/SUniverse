@@ -58,7 +58,7 @@ public class WaterAwarePotionReset implements Listener {
 		if (item.getAmount() == amount) {
 			event.setResult(getWaterBottle(amount));
 		} else {
-			InventoryUtil.addOrDrop(player, getWaterBottle(amount));
+			InventoryUtil.addOrDrop(player, getWaterBottle(amount), true);
 			item.subtract(amount);
 		}
 	}

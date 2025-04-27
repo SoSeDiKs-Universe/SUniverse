@@ -47,6 +47,7 @@ public class DurabilityTooltipModifier extends ItemModifier {
 		if (player == null) return ModificationResult.PASS;
 
 		ItemStack item = contextBox.getItem();
+		if (contextBox.getInitialType() != item.getType()) item = item.withType(contextBox.getInitialType());
 		if (!item.hasData(DataComponentTypes.DAMAGE)) return ModificationResult.PASS;
 		if (!item.hasData(DataComponentTypes.MAX_DAMAGE)) return ModificationResult.PASS;
 

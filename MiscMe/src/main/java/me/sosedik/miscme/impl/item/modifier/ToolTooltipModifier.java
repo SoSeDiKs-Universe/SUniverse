@@ -43,7 +43,7 @@ public class ToolTooltipModifier extends ItemModifier {
 		if (player == null) return ModificationResult.PASS;
 
 		ItemStack item = contextBox.getItem();
-		if (!DurabilityUtil.hasDurability(item)) return ModificationResult.PASS;
+		if (contextBox.getInitialType() != item.getType()) item = item.withType(contextBox.getInitialType());
 
 		double damage = ItemUtil.getAttributeValue(item, Attribute.ATTACK_DAMAGE, player);
 		if (damage <= 0) return ModificationResult.PASS;
@@ -51,7 +51,13 @@ public class ToolTooltipModifier extends ItemModifier {
 		double speed = ItemUtil.getAttributeValue(item, Attribute.ATTACK_SPEED, player);
 		if (speed <= 0) return ModificationResult.PASS;
 
-		if (damage == 1 && speed == 4 && !item.isDataOverridden(DataComponentTypes.ATTRIBUTE_MODIFIERS)) return ModificationResult.PASS;
+		if (damage == 1 && speed == 4 && !item.isDataOverridden(DataComponentTypes.ATTRIBUTE_MODIFIERS)) {
+			if (contextBox.getInitialType() != contextBox.getItem().getType()) {
+				hideStats(contextBox.getItem());
+				return ModificationResult.OK;
+			}
+			return ModificationResult.PASS;
+		}
 
 		Component text = combined(
 			combined(DAMAGE_ICON, Component.space(), Component.text(ChatUtil.formatDouble(damage))),
@@ -61,14 +67,18 @@ public class ToolTooltipModifier extends ItemModifier {
 
 		contextBox.addLore(text);
 
+		hideStats(contextBox.getItem());
+
+		return ModificationResult.OK;
+	}
+
+	private void hideStats(ItemStack item) {
 		TooltipDisplay tooltipDisplay = item.getData(DataComponentTypes.TOOLTIP_DISPLAY);
 		if (tooltipDisplay == null) {
 			item.setData(DataComponentTypes.TOOLTIP_DISPLAY, TooltipDisplay.tooltipDisplay().addHiddenComponents(DataComponentTypes.ATTRIBUTE_MODIFIERS).build());
 		} else if (!tooltipDisplay.hideTooltip() && !tooltipDisplay.hiddenComponents().contains(DataComponentTypes.ATTRIBUTE_MODIFIERS)) {
 			item.setData(DataComponentTypes.TOOLTIP_DISPLAY, TooltipDisplay.tooltipDisplay().hiddenComponents(tooltipDisplay.hiddenComponents()).addHiddenComponents(DataComponentTypes.ATTRIBUTE_MODIFIERS).build()); // TODO replace with toBuilder once available
 		}
-
-		return ModificationResult.OK;
 	}
 
 }

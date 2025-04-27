@@ -18,8 +18,8 @@ public class BlockCreator {
 		return new SimpleNMSBlock((BlockBehaviour.Properties) properties, requireNonNull(NamespacedKey.fromString(key)));
 	}
 
-	public static KiterinoBlock barrier(Object properties) {
-		return new BarrierNMSBlock(((BlockBehaviour.Properties) properties).strength(0.3F).pushReaction(PushReaction.BLOCK));
+	public static KiterinoBlock barrier(Object properties, String key) {
+		return new BarrierNMSBlock(((BlockBehaviour.Properties) properties).strength(0.3F).pushReaction(PushReaction.BLOCK), requireNonNull(NamespacedKey.fromString(key)));
 	}
 
 	public static KiterinoBlock vegetation(Object properties, String key) {

@@ -18,6 +18,7 @@ import me.sosedik.utilizer.listener.BlockStorage;
 import me.sosedik.utilizer.listener.block.CustomBlockStorageLoadSave;
 import me.sosedik.utilizer.listener.entity.EntityGlowTracker;
 import me.sosedik.utilizer.listener.entity.EntityMetadataClearer;
+import me.sosedik.utilizer.listener.item.AutoReleasingItems;
 import me.sosedik.utilizer.listener.item.BowUsableWithoutArrows;
 import me.sosedik.utilizer.listener.item.NotDroppableItems;
 import me.sosedik.utilizer.listener.misc.CustomRecipeLeftovers;
@@ -85,6 +86,7 @@ public final class Utilizer extends JavaPlugin {
 			EntityGlowTracker.class,
 			EntityMetadataClearer.class,
 			// item
+			AutoReleasingItems.class,
 			BowUsableWithoutArrows.class,
 			NotDroppableItems.class,
 			// misc

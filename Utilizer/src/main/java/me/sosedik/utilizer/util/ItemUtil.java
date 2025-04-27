@@ -15,6 +15,7 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.block.data.type.Campfire;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -90,8 +91,9 @@ public class ItemUtil {
 	 * @return whether item is a light source
 	 */
 	public static boolean isLightSource(ItemStack item) {
-		if (item.hasEnchants()) return true;
-		return UtilizerTags.LIGHT_SOURCES.isTagged(item.getType()) || isLitCampfire(item);
+		return UtilizerTags.LIGHT_SOURCES.isTagged(item.getType())
+				|| item.hasEnchant(Enchantment.FIRE_ASPECT)
+				|| isLitCampfire(item);
 	}
 
 	private static boolean isLitCampfire(ItemStack item) {

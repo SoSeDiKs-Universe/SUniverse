@@ -21,14 +21,18 @@ import me.sosedik.trappednewbie.listener.advancement.dedicated.GoodAsNewAdvancem
 import me.sosedik.trappednewbie.listener.advancement.dedicated.IHateSandAdvancement;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.KungFuPandaAdvancement;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.OpeningHolderAdvancement;
+import me.sosedik.trappednewbie.listener.block.CustomBlockBreaking;
 import me.sosedik.trappednewbie.listener.entity.AngryAnimals;
+import me.sosedik.trappednewbie.listener.entity.BabierBabyMobs;
 import me.sosedik.trappednewbie.listener.entity.LimboEntities;
 import me.sosedik.trappednewbie.listener.item.PaperPlanes;
+import me.sosedik.trappednewbie.listener.item.TrumpetScare;
 import me.sosedik.trappednewbie.listener.item.VisualPumpkin;
 import me.sosedik.trappednewbie.listener.misc.CustomHudRenderer;
 import me.sosedik.trappednewbie.listener.misc.DisableJoinQuitMessages;
 import me.sosedik.trappednewbie.listener.misc.FakeHardcoreHearts;
 import me.sosedik.trappednewbie.listener.misc.TabHeaderFooterBeautifier;
+import me.sosedik.trappednewbie.listener.player.DynamicGameMode;
 import me.sosedik.trappednewbie.listener.player.ExtraPossessedDrops;
 import me.sosedik.trappednewbie.listener.player.NewbieWelcome;
 import me.sosedik.trappednewbie.listener.player.StartAsGhost;
@@ -109,11 +113,15 @@ public final class TrappedNewbie extends JavaPlugin {
 			IHateSandAdvancement.class,
 			KungFuPandaAdvancement.class,
 			OpeningHolderAdvancement.class,
+			// block
+			CustomBlockBreaking.class,
 			// entity
 			AngryAnimals.class,
+			BabierBabyMobs.class,
 			LimboEntities.class,
 			// item
 			PaperPlanes.class,
+			TrumpetScare.class,
 			VisualPumpkin.class,
 			// misc
 			CustomHudRenderer.class,
@@ -121,6 +129,7 @@ public final class TrappedNewbie extends JavaPlugin {
 			FakeHardcoreHearts.class,
 			TabHeaderFooterBeautifier.class,
 			// player
+			DynamicGameMode.class,
 			ExtraPossessedDrops.class,
 			NewbieWelcome.class,
 			StartAsGhost.class,

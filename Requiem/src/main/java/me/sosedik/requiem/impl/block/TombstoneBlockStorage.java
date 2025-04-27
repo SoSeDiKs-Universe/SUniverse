@@ -178,7 +178,7 @@ public class TombstoneBlockStorage extends BlockDataStorageHolder {
 		if (this.storedData.hasTag(STORAGES_KEY)) {
 			ReadWriteNBT storage = this.storedData.getOrCreateCompound(STORAGES_KEY).getCompound("0");
 			if (storage != null && storage.hasTag(DEATH_MESSAGE_KEY))
-				NBT.modify(item, (Consumer<ReadWriteItemNBT>) nbt -> nbt.setString(DEATH_MESSAGE_KEY, storage.getString(DEATH_MESSAGE_KEY)));
+				NBT.modify(item, (Consumer<ReadWriteItemNBT>) nbt -> nbt.getOrCreateCompound(DEATH_MESSAGE_KEY).mergeCompound(storage.getCompound(DEATH_MESSAGE_KEY)));
 		}
 
 		this.block.getWorld().dropItemNaturally(loc, item);

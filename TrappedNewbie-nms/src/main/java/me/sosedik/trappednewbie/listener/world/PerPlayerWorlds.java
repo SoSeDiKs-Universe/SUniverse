@@ -72,10 +72,7 @@ public class PerPlayerWorlds implements Listener {
 		if (dimensionId == null) return;
 		if (!TrappedNewbie.NAMESPACE.equals(dimensionId.getNamespace())) return;
 
-		UUID uuid = event.getPlayer().getUniqueId();
 		String worldKey = dimensionId.getKey();
-		if (!dimensionId.getKey().endsWith(uuid.toString())) return;
-
 		World world = Bukkit.getWorld(worldKey);
 		if (world != null) {
 			event.setSpawnLocation(event.getInitialLocation().world(world));
@@ -83,8 +80,15 @@ public class PerPlayerWorlds implements Listener {
 		}
 
 		if (worldKey.startsWith("worlds-resources/")) {
+			String[] split = worldKey.split("/");
+			UUID uuid;
+			try {
+				uuid = UUID.fromString(split[split.length - 1]);
+			} catch (IllegalArgumentException ignored) {
+				return;
+			}
 			boolean rtp = !new File(Bukkit.getWorldContainer(), worldKey).exists();
-			World.Environment environment = MiscUtil.parseOr(worldKey.split("/")[1], World.Environment.NORMAL);
+			World.Environment environment = MiscUtil.parseOr(split[1], World.Environment.NORMAL);
 			world = getResourceWorld(uuid, environment);
 			if (!rtp) {
 				event.setSpawnLocation(event.getInitialLocation().world(world));
@@ -96,6 +100,13 @@ public class PerPlayerWorlds implements Listener {
 		} else if (worldKey.startsWith("worlds-personal/")) {
 			if (!new File(Bukkit.getWorldContainer(), worldKey).exists()) return;
 
+			String[] split = worldKey.split("/");
+			UUID uuid;
+			try {
+				uuid = UUID.fromString(split[split.length - 1]);
+			} catch (IllegalArgumentException ignored) {
+				return;
+			}
 			world = getPersonalWorld(uuid);
 			event.setSpawnLocation(event.getInitialLocation().world(world));
 		}

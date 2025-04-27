@@ -39,5 +39,19 @@
 	"item.trapped_newbie.letter.name": "Пустое письмо",
 	"item.trapped_newbie.letter_closed.name": "Письмо",
 	"item.trapped_newbie.star_letter.name": "Пустое звёздное письмо",
-	"item.trapped_newbie.star_letter_closed.name": "Звёздное письмо"
+	"item.trapped_newbie.star_letter_closed.name": "Звёздное письмо",
+	"item.trapped_newbie.destroy_stage_0.name": "Стадия разрушения 0",
+	"item.trapped_newbie.destroy_stage_1.name": "Стадия разрушения 1",
+	"item.trapped_newbie.destroy_stage_2.name": "Стадия разрушения 2",
+	"item.trapped_newbie.destroy_stage_3.name": "Стадия разрушения 3",
+	"item.trapped_newbie.destroy_stage_4.name": "Стадия разрушения 4",
+	"item.trapped_newbie.destroy_stage_5.name": "Стадия разрушения 5",
+	"item.trapped_newbie.destroy_stage_6.name": "Стадия разрушения 6",
+	"item.trapped_newbie.destroy_stage_7.name": "Стадия разрушения 7",
+	"item.trapped_newbie.destroy_stage_8.name": "Стадия разрушения 8",
+	"item.trapped_newbie.destroy_stage_9.name": "Стадия разрушения 9",
+	"item.trapped_newbie.cobblestone_hammer.name": "Каменный молоток",
+	"item.trapped_newbie.sandstone_hammer.name": "Песчаниковый молоток",
+	"item.trapped_newbie.red_sandstone_hammer.name": "Краснопесчаниковый молоток",
+	"item.trapped_newbie.trumpet.name": "Труба"
 }

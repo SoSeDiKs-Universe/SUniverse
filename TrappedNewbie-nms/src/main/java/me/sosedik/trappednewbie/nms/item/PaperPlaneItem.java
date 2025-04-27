@@ -17,7 +17,7 @@ import org.jspecify.annotations.NullMarked;
 public class PaperPlaneItem extends TridentItem implements ProjectileItem {
 
 	public PaperPlaneItem(Object properties) {
-		super(((Properties) properties).stacksTo(16));
+		super(((Properties) properties));
 	}
 
 	@Override

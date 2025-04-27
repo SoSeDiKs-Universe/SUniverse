@@ -8,9 +8,6 @@ import io.papermc.paper.math.Position;
 import me.sosedik.utilizer.Utilizer;
 import me.sosedik.utilizer.api.math.WorldChunkPosition;
 import me.sosedik.utilizer.api.storage.block.BlockDataStorage;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.event.ClickEvent;
-import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
@@ -71,7 +68,6 @@ public class BlockStorage {
 		if (storageClass == null) return null;
 		if (getByLoc(loc) != null) return null;
 
-		Bukkit.broadcast(Component.text("Yay: %s %s %s - %s".formatted(loc.blockX(), loc.blockY(), loc.blockZ(), key)).clickEvent(ClickEvent.suggestCommand("/tp @s %s %s %s".formatted(loc.blockX(), loc.blockY() + 1, loc.blockZ()))));
 		try {
 			ReadWriteNBT nbt = NBT.createNBTObject();
 			nbt.setString(BlockDataStorage.ID_TAG, key.asString());

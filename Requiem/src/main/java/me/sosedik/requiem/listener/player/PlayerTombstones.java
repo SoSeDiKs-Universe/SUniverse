@@ -263,7 +263,7 @@ public class PlayerTombstones implements Listener {
 		Component message = event.deathMessage();
 		if (message == null) message = event.originalDeathMessage();
 		if (message != null)
-			tombstoneCreateEvent.getData().setString(TombstoneBlockStorage.DEATH_MESSAGE_KEY, JSONComponentSerializer.json().serialize(message));
+			tombstoneCreateEvent.getData().getOrCreateCompound(TombstoneBlockStorage.DEATH_MESSAGE_KEY).mergeCompound(NBT.parseNBT(JSONComponentSerializer.json().serialize(message)));
 
 		int slot = -1;
 		for (ItemStack item : event.getDrops()) {
@@ -363,7 +363,7 @@ public class PlayerTombstones implements Listener {
 			ReadWriteNBT data;
 			if (nbt.hasTag(TombstoneBlockStorage.DEATH_MESSAGE_KEY)) {
 				data = NBT.createNBTObject();
-				data.setString(TombstoneBlockStorage.DEATH_MESSAGE_KEY, nbt.getString(TombstoneBlockStorage.DEATH_MESSAGE_KEY));
+				data.getOrCreateCompound(TombstoneBlockStorage.DEATH_MESSAGE_KEY).mergeCompound(nbt.getCompound(TombstoneBlockStorage.DEATH_MESSAGE_KEY));
 			} else {
 				data = null;
 			}

@@ -28,6 +28,7 @@ import static me.sosedik.utilizer.api.message.Mini.combined;
 public class ResourcePackStorage {
 
 	private final Map<NamespacedKey, FontData> fontMappings = new HashMap<>();
+	private final Map<NamespacedKey, NamespacedKey> soundMappings = new HashMap<>();
 	private final Map<NamespacedKey, NamespacedKey> itemMappings = new HashMap<>();
 	private final Map<NamespacedKey, String> tripwireMappings = new HashMap<>();
 	private final Map<NamespacedKey, ItemData> itemOptions = new HashMap<>();
@@ -41,6 +42,7 @@ public class ResourcePackStorage {
 		plugin.saveResource("mappings/tripwire.json", true);
 
 		loadFontMappings(new File(mappingsDir, "fonts.json"));
+		loadSoundMappings(new File(mappingsDir, "sounds.json"));
 		loadItemMappings(new File(mappingsDir, "items.json"));
 		loadTripwireMappings(new File(mappingsDir, "tripwire.json"));
 	}
@@ -89,6 +91,15 @@ public class ResourcePackStorage {
 		});
 	}
 
+	private void loadSoundMappings(File mappingsFile) {
+		JsonObject fontMappings = FileUtil.readJsonObject(mappingsFile);
+		fontMappings.entrySet().forEach(entry -> {
+			var from = requireNonNull(NamespacedKey.fromString(entry.getKey()));
+			var to = requireNonNull(NamespacedKey.fromString(entry.getValue().getAsString()));
+			this.soundMappings.put(from, to);
+		});
+	}
+
 	private void loadItemMappings(File mappingsFile) {
 		JsonObject fontMappings = FileUtil.readJsonObject(mappingsFile);
 		fontMappings.entrySet().forEach(entry -> {
@@ -109,6 +120,10 @@ public class ResourcePackStorage {
 
 	public @Nullable FontData getFontData(NamespacedKey key) {
 		return this.fontMappings.get(key);
+	}
+
+	public NamespacedKey getSoundMapping(NamespacedKey key) {
+		return this.soundMappings.getOrDefault(key, key);
 	}
 
 	public NamespacedKey getItemModelMapping(NamespacedKey key) {

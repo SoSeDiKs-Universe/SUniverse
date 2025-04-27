@@ -80,11 +80,11 @@ public class SignBeautifier implements PacketListener, Listener {
 
 	@Override
 	public void onPacketSend(PacketSendEvent event) {
+		if (true) // TODO fix with 1.21.5 changes
 		if (event.getPacketType() == PacketType.Play.Server.BLOCK_ENTITY_DATA) {
-			// SoSeDiK lost connection: Internal Exception: io.netty.handler.codec.EncoderException: java.lang.IndexOutOfBoundsException: readerIndex: 0, writerIndex: 292 (expected: 0 <= readerIndex <= writerIndex <= capacity(256))
-//			handleBlockEntityData(event.getPlayer(), new WrapperPlayServerBlockEntityData(event));
+			handleBlockEntityData(event.getPlayer(), new WrapperPlayServerBlockEntityData(event));
 		} else if (event.getPacketType() == PacketType.Play.Server.CHUNK_DATA) {
-//			handleChunkData(event.getPlayer(), new WrapperPlayServerChunkData(event));
+			handleChunkData(event.getPlayer(), new WrapperPlayServerChunkData(event));
 		}
 	}
 

@@ -39,5 +39,19 @@
 	"item.trapped_newbie.letter.name": "Blank Letter",
 	"item.trapped_newbie.letter_closed.name": "Letter",
 	"item.trapped_newbie.star_letter.name": "Blank Star Letter",
-	"item.trapped_newbie.star_letter_closed.name": "Star Letter"
+	"item.trapped_newbie.star_letter_closed.name": "Star Letter",
+	"item.trapped_newbie.destroy_stage_0.name": "Destroy Stage 0",
+	"item.trapped_newbie.destroy_stage_1.name": "Destroy Stage 1",
+	"item.trapped_newbie.destroy_stage_2.name": "Destroy Stage 2",
+	"item.trapped_newbie.destroy_stage_3.name": "Destroy Stage 3",
+	"item.trapped_newbie.destroy_stage_4.name": "Destroy Stage 4",
+	"item.trapped_newbie.destroy_stage_5.name": "Destroy Stage 5",
+	"item.trapped_newbie.destroy_stage_6.name": "Destroy Stage 6",
+	"item.trapped_newbie.destroy_stage_7.name": "Destroy Stage 7",
+	"item.trapped_newbie.destroy_stage_8.name": "Destroy Stage 8",
+	"item.trapped_newbie.destroy_stage_9.name": "Destroy Stage 9",
+	"item.trapped_newbie.cobblestone_hammer.name": "Cobblestone Hammer",
+	"item.trapped_newbie.sandstone_hammer.name": "Sandstone Hammer",
+	"item.trapped_newbie.red_sandstone_hammer.name": "Red Sandstone Hammer",
+	"item.trapped_newbie.trumpet.name": "Trumpet"
 }

@@ -31,13 +31,15 @@ public class SpitCommand {
 		Location loc = spitter.getEyeLocation()
 				.add(spitter.getLocation().getDirection().multiply(0.8));
 		Vector velocity = spitter.getEyeLocation().getDirection();
+
+		LivingEntity finalSpitter = spitter;
 		TrappedNewbie.scheduler().sync(() -> {
 			if (GhostyPlayer.isGhost(player)) {
-				player.emitSound(Sound.ENTITY_GHAST_AMBIENT, 0.8F, 2F);
+				finalSpitter.emitSound(Sound.ENTITY_GHAST_AMBIENT, 0.8F, 2F);
 				return;
 			}
 
-			player.emitSound(Sound.ENTITY_LLAMA_SPIT, 0.8F, 1F);
+			finalSpitter.emitSound(Sound.ENTITY_LLAMA_SPIT, 0.8F, 1F);
 			loc.getWorld().spawn(loc, LlamaSpit.class, entity -> entity.setVelocity(velocity));
 		});
 	}

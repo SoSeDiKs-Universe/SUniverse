@@ -4,5 +4,6 @@
 	"item.modifier.letter.friendship": "<red><i>Содержит силу дружбы",
 	"limbo.welcome": "Хм, ещё один?",
 	"limbo.welcome.ignored": "Собираетесь меня вот так игнорировать, правда?",
-	"limbo.friendship": "Теперь Вы друзья со <gold>странствующим торговцем</gold>!"
+	"limbo.friendship": "Теперь Вы друзья со <gold>странствующим торговцем</gold>!",
+	"break.light": "Здесь слишком темно, чтобы ломать блоки"
 }

@@ -39,5 +39,19 @@
 	"item.trapped_newbie.letter.name": "Пустий лист",
 	"item.trapped_newbie.letter_closed.name": "Лист",
 	"item.trapped_newbie.star_letter.name": "Пустий зірковий лист",
-	"item.trapped_newbie.star_letter_closed.name": "Зірковий лист"
+	"item.trapped_newbie.star_letter_closed.name": "Зірковий лист",
+	"item.trapped_newbie.destroy_stage_0.name": "Стадія поломки 0",
+	"item.trapped_newbie.destroy_stage_1.name": "Стадія поломки 1",
+	"item.trapped_newbie.destroy_stage_2.name": "Стадія поломки 2",
+	"item.trapped_newbie.destroy_stage_3.name": "Стадія поломки 3",
+	"item.trapped_newbie.destroy_stage_4.name": "Стадія поломки 4",
+	"item.trapped_newbie.destroy_stage_5.name": "Стадія поломки 5",
+	"item.trapped_newbie.destroy_stage_6.name": "Стадія поломки 6",
+	"item.trapped_newbie.destroy_stage_7.name": "Стадія поломки 7",
+	"item.trapped_newbie.destroy_stage_8.name": "Стадія поломки 8",
+	"item.trapped_newbie.destroy_stage_9.name": "Стадія поломки 9",
+	"item.trapped_newbie.cobblestone_hammer.name": "Кам’яний молоток",
+	"item.trapped_newbie.sandstone_hammer.name": "Пісковиковий молоток",
+	"item.trapped_newbie.red_sandstone_hammer.name": "Червонопісковиковий молоток",
+	"item.trapped_newbie.trumpet.name": "Труба"
 }

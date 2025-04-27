@@ -61,6 +61,22 @@ public class TrappedNewbieItems {
 	public static final Material LETTER = byKey("letter");
 	public static final Material PAPER_PLANE = byKey("paper_plane");
 
+	public static final Material COBBLESTONE_HAMMER = byKey("cobblestone_hammer");
+	public static final Material SANDSTONE_HAMMER = byKey("sandstone_hammer");
+	public static final Material RED_SANDSTONE_HAMMER = byKey("red_sandstone_hammer");
+	public static final Material TRUMPET = byKey("trumpet");
+
+	public static final Material DESTROY_STAGE_0 = byKey("destroy_stage_0");
+	public static final Material DESTROY_STAGE_1 = byKey("destroy_stage_1");
+	public static final Material DESTROY_STAGE_2 = byKey("destroy_stage_2");
+	public static final Material DESTROY_STAGE_3 = byKey("destroy_stage_3");
+	public static final Material DESTROY_STAGE_4 = byKey("destroy_stage_4");
+	public static final Material DESTROY_STAGE_5 = byKey("destroy_stage_5");
+	public static final Material DESTROY_STAGE_6 = byKey("destroy_stage_6");
+	public static final Material DESTROY_STAGE_7 = byKey("destroy_stage_7");
+	public static final Material DESTROY_STAGE_8 = byKey("destroy_stage_8");
+	public static final Material DESTROY_STAGE_9 = byKey("destroy_stage_9");
+
 	private static Material byKey(String value) {
 		return KiterinoBootstrapMaterialInjector.injectMaterial(TrappedNewbie.trappedNewbieKey(value));
 	}

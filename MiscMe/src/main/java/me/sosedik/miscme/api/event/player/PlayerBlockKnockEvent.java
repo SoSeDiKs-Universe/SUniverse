@@ -34,15 +34,6 @@ public class PlayerBlockKnockEvent extends PlayerEvent implements Cancellable {
 	}
 
 	@Override
-	public HandlerList getHandlers() {
-		return HANDLERS;
-	}
-
-	public static HandlerList getHandlerList() {
-		return HANDLERS;
-	}
-
-	@Override
 	public boolean isCancelled() {
 		return this.cancelled;
 	}
@@ -50,6 +41,15 @@ public class PlayerBlockKnockEvent extends PlayerEvent implements Cancellable {
 	@Override
 	public void setCancelled(boolean cancel) {
 		this.cancelled = cancel;
+	}
+
+	@Override
+	public HandlerList getHandlers() {
+		return HANDLERS;
+	}
+
+	public static HandlerList getHandlerList() {
+		return HANDLERS;
 	}
 
 }

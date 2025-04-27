@@ -18,6 +18,10 @@ import me.sosedik.utilizer.util.FileUtil;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -167,6 +171,13 @@ public class ResourceLibBootstrap implements PluginBootstrap {
 	private static Item.Properties applyItemProperties(JsonObject json, Object props) {
 		Item.Properties properties = (Item.Properties) props;
 		if (json.has("durability")) properties.durability(json.get("durability").getAsInt());
+		if (json.has("repairable")) {
+			String tag = json.get("repairable").getAsString();
+			if (tag.charAt(0) == '#')
+				properties.repairable(TagKey.create(Registries.ITEM, ResourceLocation.parse(tag.substring(1))));
+			else
+				properties.repairable(BuiltInRegistries.ITEM.getValue(ResourceLocation.parse(tag)));
+		}
 		if (json.has("stack_size")) properties.stacksTo(json.get("stack_size").getAsInt());
 		if (json.has("fire_resistance") && json.get("fire_resistance").getAsBoolean()) properties.fireResistant();
 		if (json.has("rarity")) properties.rarity(Rarity.valueOf(json.get("rarity").getAsString().toUpperCase(Locale.ROOT)));

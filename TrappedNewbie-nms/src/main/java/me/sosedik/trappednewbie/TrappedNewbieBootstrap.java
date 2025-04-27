@@ -5,13 +5,17 @@ import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
 import me.sosedik.kiterino.util.KiterinoBootstrapEntityTypeInjectorImpl;
 import me.sosedik.resourcelib.ResourceLibBootstrap;
 import me.sosedik.resourcelib.util.BlockCreator;
+import me.sosedik.resourcelib.util.ItemCreator;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieEntities;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieEntityTypes;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieItems;
 import me.sosedik.trappednewbie.entity.api.PaperPlane;
 import me.sosedik.trappednewbie.entity.craft.CraftPaperPlane;
 import me.sosedik.trappednewbie.nms.item.PaperPlaneItem;
+import net.kyori.adventure.sound.Sound;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.DispenserBlock;
 import org.bukkit.craftbukkit.entity.CraftEntityTypes;
 import org.jspecify.annotations.NullMarked;
@@ -24,9 +28,10 @@ public class TrappedNewbieBootstrap implements PluginBootstrap {
 	@Override
 	public void bootstrap(BootstrapContext context) {
 		ResourceLibBootstrap.parseResources(context, null);
-		ResourceLibBootstrap.setupBlocks(context, null, (key, properties) -> {
-			if (key.endsWith("_twig")) return BlockCreator.vegetation(properties, key);
-			throw new IllegalArgumentException("Unknown blockstate: %s".formatted(key));
+		ResourceLibBootstrap.setupBlocks(context, null, (key, properties) -> switch (key.substring("trapped_newbie:".length())) {
+			case String k when k.endsWith("_twig") -> BlockCreator.vegetation(properties, key);
+			case String k when k.startsWith("destroy_stage_") -> BlockCreator.barrier(properties, key);
+			default -> throw new IllegalArgumentException("Unknown blockstate: %s".formatted(key));
 		});
 		ResourceLibBootstrap.setupItems(context, TrappedNewbieItems.class, null, (key, properties) -> switch (key.substring("trapped_newbie:".length())) {
 			case "paper_plane" -> {
@@ -34,6 +39,7 @@ public class TrappedNewbieBootstrap implements PluginBootstrap {
 				DispenserBlock.registerProjectileBehavior(item);
 				yield item;
 			}
+			case "trumpet" -> ItemCreator.crossbowItem(properties, (item, entity, timeLeft) -> true);
 			default -> null;
 		});
 

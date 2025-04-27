@@ -22,6 +22,7 @@ import me.sosedik.utilizer.api.message.Mini;
 import me.sosedik.utilizer.util.EventUtil;
 import me.sosedik.utilizer.util.FileUtil;
 import me.sosedik.utilizer.util.Scheduler;
+import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -223,6 +224,16 @@ public class ResourceLib extends JavaPlugin {
 	public static FontData requireFontData(NamespacedKey key) {
 		FontData fontData = storage().getFontData(key);
 		return requireNonNull(fontData, "Couldn't find font mapping: %s".formatted(key));
+	}
+
+	/**
+	 * Gets the mapped sound key
+	 *
+	 * @param key sound key
+	 * @return mapped sound key
+	 */
+	public static NamespacedKey getSound(NamespacedKey key) {
+		return storage().getSoundMapping(key);
 	}
 
 }

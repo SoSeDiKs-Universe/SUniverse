@@ -1,6 +1,7 @@
 package me.sosedik.requiem.impl.item.modifier;
 
 import de.tr7zw.nbtapi.NBT;
+import de.tr7zw.nbtapi.NBTType;
 import me.sosedik.kiterino.modifier.item.ItemContextBox;
 import me.sosedik.kiterino.modifier.item.ItemModifier;
 import me.sosedik.kiterino.modifier.item.ModificationResult;
@@ -19,6 +20,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
+import java.util.Objects;
 
 @NullMarked
 public class TombstoneDeathMessageModifier extends ItemModifier {
@@ -41,9 +43,9 @@ public class TombstoneDeathMessageModifier extends ItemModifier {
 
 		ItemStack item = contextBox.getItem();
 		boolean changed = NBT.get(item, nbt -> {
-			if (!nbt.hasTag(TombstoneBlockStorage.DEATH_MESSAGE_KEY)) return false;
+			if (!nbt.hasTag(TombstoneBlockStorage.DEATH_MESSAGE_KEY, NBTType.NBTTagCompound)) return false;
 
-			Component message = JSONComponentSerializer.json().deserialize(nbt.getString(TombstoneBlockStorage.DEATH_MESSAGE_KEY));
+			Component message = JSONComponentSerializer.json().deserialize(Objects.requireNonNull(nbt.getCompound(TombstoneBlockStorage.DEATH_MESSAGE_KEY)).toString());
 			message = LocalizedDeathMessages.formatDeathMessage(contextBox.getLocale(), message);
 			List<Component> lines = ChatUtil.wrapComponent(message, 35);
 			if (lines.isEmpty()) return false; // Huh?

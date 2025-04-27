@@ -1,0 +1,10 @@
+{
+	"client_type": "minecraft:barrier",
+	"no_texture": true,
+	"model": {
+		"parent": "minecraft:block/cube_all",
+		"textures": {
+			"all": "minecraft:block/destroy_stage_3"
+		}
+	}
+}

@@ -1,7 +1,6 @@
 package me.sosedik.miscme.api.event.entity;
 
 import me.sosedik.miscme.listener.entity.MoreBabyMobs;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;

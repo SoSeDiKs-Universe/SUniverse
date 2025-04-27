@@ -8,7 +8,6 @@ import me.sosedik.kiterino.modifier.item.ModificationResult;
 import me.sosedik.resourcelib.ResourceLib;
 import me.sosedik.utilizer.api.message.Mini;
 import me.sosedik.utilizer.util.ChatUtil;
-import me.sosedik.utilizer.util.DurabilityUtil;
 import me.sosedik.utilizer.util.ItemUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;

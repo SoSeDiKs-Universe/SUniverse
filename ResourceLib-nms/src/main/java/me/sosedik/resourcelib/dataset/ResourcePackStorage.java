@@ -38,6 +38,7 @@ public class ResourcePackStorage {
 		FileUtil.deleteFolder(mappingsDir);
 
 		plugin.saveResource("mappings/fonts.json", true);
+		plugin.saveResource("mappings/sounds.json", true);
 		plugin.saveResource("mappings/items.json", true);
 		plugin.saveResource("mappings/tripwire.json", true);
 

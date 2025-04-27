@@ -4,6 +4,7 @@ import com.destroystokyo.paper.event.block.BlockDestroyEvent;
 import me.sosedik.utilizer.api.math.WorldChunkPosition;
 import me.sosedik.utilizer.api.storage.block.BlockDataStorage;
 import me.sosedik.utilizer.listener.BlockStorage;
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.event.Event;
@@ -19,6 +20,7 @@ import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
+import org.bukkit.event.world.WorldUnloadEvent;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
@@ -39,6 +41,12 @@ public class CustomBlockStorageLoadSave implements Listener {
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onChunkUnload(ChunkUnloadEvent event) {
 		BlockStorage.saveChunk(WorldChunkPosition.of(event.getChunk()), true);
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onWorldUnload(WorldUnloadEvent event) {
+		for (Chunk chunk : event.getWorld().getLoadedChunks())
+			BlockStorage.saveChunk(WorldChunkPosition.of(chunk), true);
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

@@ -174,7 +174,7 @@ public class BlockBreakTask extends BukkitRunnable {
 			return;
 		}
 
-		// Can't break with broken tool :(
+		// Can't break with a broken tool :(
 		if (this.brokenTool) {
 			this.failures++;
 			if (this.failures == 25) {
@@ -203,7 +203,7 @@ public class BlockBreakTask extends BukkitRunnable {
 		if (this.destroyState.tick(next)) {
 			if (this.destroyState.crack()) {
 				abort();
-				if (this.destroyState.crack <= 10) // No need to break twice in case multiple users are breaking
+				if (this.destroyState.crack <= 10) // No need to break twice in case multiple players are breaking
 					breakBlock();
 				return;
 			}
@@ -279,9 +279,9 @@ public class BlockBreakTask extends BukkitRunnable {
 	}
 
 	private void abort() {
-		if (isScheduled()) {
+		if (isScheduled())
 			cancel();
-		}
+
 		Map<BlockPosition, BlockBreakState> breakTaskMap = DESTROYS.get(WorldChunkPosition.of(this.block.getChunk()));
 		if (breakTaskMap != null) {
 			BlockBreakState blockBreakState = breakTaskMap.get(Position.block(this.block.getLocation()));
@@ -316,7 +316,7 @@ public class BlockBreakTask extends BukkitRunnable {
 		}
 
 		if (this.hammer != null) {
-			if (this.player.getInventory().getItemInOffHand().getType() == Material.AIR) return;
+			if (this.player.getInventory().getItemInOffHand().isEmpty()) return;
 			if (!this.player.placeBlock(EquipmentSlot.OFF_HAND, this.block.getLocation(), BlockFace.UP, true)) return;
 
 			migrateBlockData(blockData);

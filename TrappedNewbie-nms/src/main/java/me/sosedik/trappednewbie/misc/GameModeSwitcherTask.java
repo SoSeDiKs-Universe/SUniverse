@@ -114,6 +114,11 @@ public class GameModeSwitcherTask extends BukkitRunnable {
 	public static boolean isApplicableTool(Material type, ItemStack tool) {
 		if (TrappedNewbieTags.MINEABLE_BY_HAND.isTagged(type)) return true;
 
+		if (tool.isEmpty()) {
+			if (Tag.WOODEN_BUTTONS.isTagged(type)) return true;
+			if (Tag.WOODEN_PRESSURE_PLATES.isTagged(type)) return true;
+		}
+
 		Material toolType = tool.getType();
 		if (Tag.MINEABLE_AXE.isTagged(type)) return Tag.ITEMS_AXES.isTagged(toolType);
 		if (Tag.MINEABLE_PICKAXE.isTagged(type)) return Tag.ITEMS_PICKAXES.isTagged(toolType);

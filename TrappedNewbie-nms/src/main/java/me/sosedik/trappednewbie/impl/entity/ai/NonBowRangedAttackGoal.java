@@ -4,11 +4,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.ai.goal.RangedBowAttackGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.RangedAttackMob;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import org.jspecify.annotations.NullMarked;
-
-import java.util.function.Predicate;
 
 @NullMarked
 public class NonBowRangedAttackGoal<T extends Monster & RangedAttackMob> extends RangedBowAttackGoal<T> {

@@ -3,6 +3,7 @@ package me.sosedik.trappednewbie.listener.block;
 import com.destroystokyo.paper.event.block.BlockDestroyEvent;
 import me.sosedik.trappednewbie.TrappedNewbie;
 import me.sosedik.trappednewbie.misc.BlockBreakTask;
+import org.bukkit.Chunk;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.attribute.AttributeModifier;
@@ -21,6 +22,7 @@ import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
+import org.bukkit.event.world.WorldUnloadEvent;
 import org.jspecify.annotations.NullMarked;
 
 /**
@@ -90,6 +92,12 @@ public class CustomBlockBreaking implements Listener {
 	@EventHandler
 	public void onChunkUnload(ChunkUnloadEvent event) {
 		BlockBreakTask.clearChunk(event.getChunk());
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onWorldUnload(WorldUnloadEvent event) {
+		for (Chunk chunk : event.getWorld().getLoadedChunks())
+			BlockBreakTask.clearChunk(chunk);
 	}
 
 }

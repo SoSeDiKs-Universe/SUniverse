@@ -14,5 +14,8 @@
 	"item.miscme.blue_shulker_shell.name": "Синій панцир шалкера",
 	"item.miscme.purple_shulker_shell.name": "Фіолетовий панцир шалкера",
 	"item.miscme.magenta_shulker_shell.name": "Пурпуровий панцир шалкера",
-	"item.miscme.pink_shulker_shell.name": "Рожевий панцир шалкера"
+	"item.miscme.pink_shulker_shell.name": "Рожевий панцир шалкера",
+	"item.miscme.depth_meter.name": "Глибиномір",
+	"item.miscme.lunar_clock.name": "Місячний годинник",
+	"item.miscme.speedometer.name": "Спідометр"
 }

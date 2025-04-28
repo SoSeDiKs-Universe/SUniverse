@@ -14,5 +14,8 @@
 	"item.miscme.blue_shulker_shell.name": "Blue Shulker Shell",
 	"item.miscme.purple_shulker_shell.name": "Purple Shulker Shell",
 	"item.miscme.magenta_shulker_shell.name": "Magenta Shulker Shell",
-	"item.miscme.pink_shulker_shell.name": "Pink Shulker Shell"
+	"item.miscme.pink_shulker_shell.name": "Pink Shulker Shell",
+	"item.miscme.depth_meter.name": "Depth Meter",
+	"item.miscme.lunar_clock.name": "Lunar Clock",
+	"item.miscme.speedometer.name": "Speedometer"
 }

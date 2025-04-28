@@ -13,6 +13,7 @@ import me.sosedik.utilizer.impl.item.modifier.HiddenTooltipsModifier;
 import me.sosedik.utilizer.impl.message.tag.DiscordResolver;
 import me.sosedik.utilizer.impl.message.tag.KaomojiTag;
 import me.sosedik.utilizer.impl.message.tag.LocaleResolver;
+import me.sosedik.utilizer.impl.message.tag.PluralTag;
 import me.sosedik.utilizer.impl.message.tag.RandomColorTag;
 import me.sosedik.utilizer.listener.BlockStorage;
 import me.sosedik.utilizer.listener.block.CustomBlockStorageLoadSave;
@@ -40,14 +41,15 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.incendo.cloud.bukkit.internal.BukkitBrigadierMapper;
 import org.incendo.cloud.parser.ParserDescriptor;
+import org.jetbrains.annotations.UnknownNullability;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
 public final class Utilizer extends JavaPlugin {
 
-	private static Utilizer instance;
+	private static @UnknownNullability Utilizer instance;
 
-	private Scheduler scheduler;
+	private @UnknownNullability Scheduler scheduler;
 
 	@Override
 	public void onLoad() {
@@ -67,7 +69,8 @@ public final class Utilizer extends JavaPlugin {
 
 		Mini.registerTagResolvers(
 			KaomojiTag.KAOMOJI,
-			RandomColorTag.RANDOM_COLOR
+			RandomColorTag.RANDOM_COLOR,
+			PluralTag.PLURALS
 		);
 		Mini.registerViewerAwareTagResolvers(
 			DiscordResolver::new,

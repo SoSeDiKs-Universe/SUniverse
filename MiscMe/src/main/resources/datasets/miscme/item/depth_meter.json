@@ -1,0 +1,10 @@
+{
+	"client_type": "minecraft:iron_nugget",
+	"definitions": {
+		"depth_meter/depth_cave": {},
+		"depth_meter/depth_lava": {},
+		"depth_meter/depth_sky": {},
+		"depth_meter/depth_surface": {},
+		"depth_meter/depth_void": {}
+	}
+}

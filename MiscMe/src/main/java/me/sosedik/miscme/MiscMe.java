@@ -1,12 +1,18 @@
 package me.sosedik.miscme;
 
+import me.sosedik.miscme.dataset.MiscMeRecipes;
 import me.sosedik.miscme.impl.item.modifier.ArmorTooltipModifier;
 import me.sosedik.miscme.impl.item.modifier.BookAuthorOnlineModifier;
+import me.sosedik.miscme.impl.item.modifier.ClockModifier;
 import me.sosedik.miscme.impl.item.modifier.ColoredShulkerShellModifier;
+import me.sosedik.miscme.impl.item.modifier.CompassModifier;
+import me.sosedik.miscme.impl.item.modifier.DepthMeterModifier;
 import me.sosedik.miscme.impl.item.modifier.DurabilityTooltipModifier;
 import me.sosedik.miscme.impl.item.modifier.FancierDyedLoreModifier;
 import me.sosedik.miscme.impl.item.modifier.FancierTrimLoreModifier;
+import me.sosedik.miscme.impl.item.modifier.LunarClockModifier;
 import me.sosedik.miscme.impl.item.modifier.SignsShowTextInLoreModifier;
+import me.sosedik.miscme.impl.item.modifier.SpeedometerModifier;
 import me.sosedik.miscme.impl.item.modifier.ToolTooltipModifier;
 import me.sosedik.miscme.listener.block.BlockKnocking;
 import me.sosedik.miscme.listener.block.CampfireSetsOnFire;
@@ -46,6 +52,7 @@ import me.sosedik.miscme.listener.item.EasierShovelPathCreation;
 import me.sosedik.miscme.listener.item.FireAspectIsFlintAndSteel;
 import me.sosedik.miscme.listener.item.FlintAndSteelIgnitesEntities;
 import me.sosedik.miscme.listener.item.ImmersiveDyes;
+import me.sosedik.miscme.listener.item.ItemsVisualUpdater;
 import me.sosedik.miscme.listener.item.NoSwordInstaBreak;
 import me.sosedik.miscme.listener.item.ReadableBooksInFrames;
 import me.sosedik.miscme.listener.item.ShovelsConvertAdditionalBlocks;
@@ -61,6 +68,7 @@ import me.sosedik.miscme.listener.projectile.BurningLitsProjectiles;
 import me.sosedik.miscme.listener.projectile.BurningProjectileCreatesFire;
 import me.sosedik.miscme.listener.vehicle.JumpyBoats;
 import me.sosedik.miscme.listener.world.CustomDayCycleCleanup;
+import me.sosedik.resourcelib.ResourceLib;
 import me.sosedik.utilizer.api.language.TranslationHolder;
 import me.sosedik.utilizer.util.EventUtil;
 import me.sosedik.utilizer.util.Scheduler;
@@ -85,18 +93,26 @@ public final class MiscMe extends JavaPlugin {
 		this.scheduler = new Scheduler(this);
 
 		TranslationHolder.extractLocales(this);
+		ResourceLib.loadDefaultResources(this);
 	}
 
 	@Override
 	public void onEnable() {
 		new ArmorTooltipModifier(miscMeKey("armor_tooltip")).register();
 		new BookAuthorOnlineModifier(miscMeKey("book_author_online")).register();
+		new ClockModifier(miscMeKey("clock")).register();
 		new ColoredShulkerShellModifier(miscMeKey("colored_shulker_shell")).register();
+		new CompassModifier(miscMeKey("compass")).register();
+		new DepthMeterModifier(miscMeKey("depth_meter")).register();
 		new DurabilityTooltipModifier(miscMeKey("durability_tooltip")).register();
 		new FancierDyedLoreModifier(miscMeKey("fancier_dyed_lore")).register();
 		new FancierTrimLoreModifier(miscMeKey("fancier_trim_lore")).register();
+		new LunarClockModifier(miscMeKey("lunar_clock")).register();
 		new SignsShowTextInLoreModifier(miscMeKey("signs_show_text_in_lore")).register();
+		new SpeedometerModifier(miscMeKey("speedometer")).register();
 		new ToolTooltipModifier(miscMeKey("tool_tooltip")).register();
+
+		MiscMeRecipes.addRecipes();
 
 		EventUtil.registerListeners(this,
 			// block
@@ -140,6 +156,7 @@ public final class MiscMe extends JavaPlugin {
 			FireAspectIsFlintAndSteel.class,
 			FlintAndSteelIgnitesEntities.class,
 			ImmersiveDyes.class,
+			ItemsVisualUpdater.class,
 			NoSwordInstaBreak.class,
 			ReadableBooksInFrames.class,
 			ShovelsConvertAdditionalBlocks.class,

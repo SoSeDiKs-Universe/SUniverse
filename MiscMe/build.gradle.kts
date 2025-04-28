@@ -14,6 +14,14 @@ dependencies {
 paper {
     name = "MiscMe"
     main = "me.sosedik.miscme.MiscMe"
+    bootstrapper = "me.sosedik.miscme.MiscMeBootstrap"
+
+    bootstrapDependencies {
+        register("ResourceLib") {
+            load = PaperPluginDescription.RelativeLoadOrder.BEFORE
+            required = true
+        }
+    }
 
     serverDependencies {
         register("NBTAPI") {

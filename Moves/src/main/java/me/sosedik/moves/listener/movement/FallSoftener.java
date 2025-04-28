@@ -15,7 +15,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
  */
 public class FallSoftener implements Listener {
 
-	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onFall(EntityDamageEvent event) {
 		if (event.getDamageSource().getDamageType() != DamageType.FALL) return;
 
@@ -39,7 +39,7 @@ public class FallSoftener implements Listener {
 			event.setDamage(event.getFinalDamage() / 2);
 		} else if (MovesTags.FRAGILE_BLOCKS.isTagged(blockType)) {
 			event.setDamage(event.getFinalDamage() / 1.25);
-			if (event.getEntity().getFallDistance() > 12 || Math.random() > 0.4) {
+			if (event.getEntity().getFallDistance() > 12 || (Math.random() > 0.4 && event.getFinalDamage() >= 2)) {
 				block.breakNaturally(true, true);
 			}
 		}

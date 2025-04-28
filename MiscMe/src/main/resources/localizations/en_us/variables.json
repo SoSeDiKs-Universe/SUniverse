@@ -1,0 +1,4 @@
+{
+	"clock.time": "<hour>:<minute>",
+	"clock.time.ampm": "<hour>:<minute> <am_pm>"
+}

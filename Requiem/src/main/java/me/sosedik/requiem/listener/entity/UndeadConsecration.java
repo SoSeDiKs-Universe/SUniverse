@@ -153,7 +153,7 @@ public class UndeadConsecration implements Listener {
 			}
 
 			if (this.vulnerabilityTime > 0) {
-				if (this.entity.isInWaterOrRain()) {
+				if (this.entity.isWet()) {
 					this.vulnerabilityTime = 0;
 				} else {
 					this.vulnerabilityTime--;

@@ -57,6 +57,10 @@ public class Mini {
 		return Placeholder.unparsed(key, String.valueOf(value));
 	}
 
+	public static TagResolver.Single raw(@TagPattern String key, long value) {
+		return Placeholder.unparsed(key, String.valueOf(value));
+	}
+
 	public static TagResolver.Single raw(@TagPattern String key, double value) {
 		return Placeholder.unparsed(key, String.valueOf(value));
 	}

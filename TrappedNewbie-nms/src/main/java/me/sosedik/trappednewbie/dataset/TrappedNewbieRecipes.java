@@ -1,6 +1,5 @@
-package me.sosedik.trappednewbie.misc;
+package me.sosedik.trappednewbie.dataset;
 
-import me.sosedik.trappednewbie.dataset.TrappedNewbieItems;
 import me.sosedik.utilizer.impl.recipe.ShapedCraft;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;

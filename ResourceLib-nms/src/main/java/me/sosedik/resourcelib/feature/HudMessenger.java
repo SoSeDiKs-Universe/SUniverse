@@ -30,7 +30,7 @@ public class HudMessenger extends BukkitRunnable {
 
 	private HudMessenger(Player player) {
 		this.player = player;
-		ResourceLib.scheduler().async(this, 0L, 1L);
+		ResourceLib.scheduler().sync(this, 0L, 1L);
 	}
 
 	/**

@@ -1,0 +1,6 @@
+{
+	"parent_model": "handheld",
+	"client_type": "minecraft:iron_nugget",
+	"durability": 40,
+	"repairable": "trapped_newbie:flaked_flint"
+}

@@ -137,8 +137,8 @@ public class TombstoneBlockStorage extends BlockDataStorageHolder {
 
 	private boolean dropLoot(@Nullable Player player) {
 		if (isPlayerTombstone()) {
-			dropStorage(player);
 			dropIfSilkTouch(player);
+			dropStorage(player);
 			return true;
 		}
 
@@ -277,7 +277,7 @@ public class TombstoneBlockStorage extends BlockDataStorageHolder {
 			display.setItemStack(new ItemStack(type == null ? RequiemItems.BASIC_SKELETON_TOMBSTONE : type));
 			display.setPersistent(false);
 			Transformation transformation = display.getTransformation();
-			transformation.getScale().set(1.01);
+			transformation.getScale().set(0.99);
 			display.setTransformation(transformation);
 		});
 	}

@@ -2,6 +2,7 @@ package me.sosedik.resourcelib.util;
 
 import me.sosedik.resourcelib.impl.item.nms.AbstractBowItem;
 import me.sosedik.resourcelib.impl.item.nms.AbstractCrossbowItem;
+import me.sosedik.resourcelib.impl.item.nms.AbstractShearstItem;
 import me.sosedik.resourcelib.impl.item.nms.AbstractTridentItem;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -31,6 +32,10 @@ public class ItemCreator {
 
 	public static Object tridentItem(Object properties, AbstractTridentItem.@Nullable TridentReleaseLogic tridentReleaseLogic) {
 		return new AbstractTridentItem(properties, tridentReleaseLogic);
+	}
+
+	public static Object shearsItem(Object properties) {
+		return new AbstractShearstItem(properties);
 	}
 
 }

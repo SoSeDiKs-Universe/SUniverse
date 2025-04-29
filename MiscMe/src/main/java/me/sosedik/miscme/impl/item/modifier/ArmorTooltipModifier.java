@@ -43,6 +43,8 @@ public class ArmorTooltipModifier extends ItemModifier {
 		if (player == null) return ModificationResult.PASS;
 
 		ItemStack item = contextBox.getItem();
+		if (item.isDataOverridden(DataComponentTypes.ATTRIBUTE_MODIFIERS) && !item.hasData(DataComponentTypes.ATTRIBUTE_MODIFIERS)) return ModificationResult.PASS;
+
 		double armor = ItemUtil.getAttributeValue(item, Attribute.ARMOR, player);
 		if (armor <= 0) return ModificationResult.PASS;
 

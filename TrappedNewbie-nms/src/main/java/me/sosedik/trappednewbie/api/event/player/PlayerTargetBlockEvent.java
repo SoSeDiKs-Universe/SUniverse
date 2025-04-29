@@ -24,18 +24,28 @@ public class PlayerTargetBlockEvent extends PlayerEvent implements Cancellable {
 	}
 
 	public Block getBlock() {
-		return block;
+		return this.block;
 	}
 
 	public BlockFace getBlockFace() {
-		return blockFace;
+		return this.blockFace;
 	}
 
+	/**
+	 * Checks whether targeting is allowed
+	 *
+	 * @return whether targeting is allowed
+	 */
 	@Override
 	public boolean isCancelled() {
-		return cancelled;
+		return this.cancelled;
 	}
 
+	/**
+	 * Sets whether targeting is allowed
+	 *
+	 * @param cancel {@code true} if you wish allow targeting
+	 */
 	@Override
 	public void setCancelled(boolean cancel) {
 		this.cancelled = cancel;

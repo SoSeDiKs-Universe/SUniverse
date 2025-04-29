@@ -1,0 +1,22 @@
+{
+  "values": [
+    "#minecraft:base_stone_overworld",
+    "#minecraft:terracotta",
+    "#minecraft:stone_bricks",
+    "#minecraft:coal_ores",
+    "#minecraft:copper_ores",
+    "#minecraft:iron_ores",
+    "#minecraft:gold_ores",
+    "#minecraft:lapis_ores",
+    "#minecraft:redstone_ores",
+    "#minecraft:diamond_ores",
+    "#minecraft:emerald_ores",
+    "minecraft:bedrock",
+    "minecraft:cobblestone",
+    "minecraft:mossy_cobblestone",
+    "minecraft:obsidian",
+    "minecraft:sandstone",
+    "minecraft:red_sandstone",
+    "minecraft:ancient_debris"
+  ]
+}

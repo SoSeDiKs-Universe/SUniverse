@@ -1,4 +1,10 @@
 {
+	"item.trapped_newbie.fiber.name": "Трав’яне волокно",
+	"item.trapped_newbie.twine.name": "Трав’яна мотузка",
+	"item.trapped_newbie.flaked_flint.name": "Кремнієвий уламок",
+	"item.trapped_newbie.rough_stick.name": "Необроблена палиця",
+	"item.trapped_newbie.flint_knife.name": "Кремнієвий ніж",
+	"item.trapped_newbie.flint_shears.name": "Кремнієві ножиці",
 	"item.trapped_newbie.acacia_branch.name": "Акацієва гілка",
 	"item.trapped_newbie.birch_branch.name": "Березова гілка",
 	"item.trapped_newbie.cherry_branch.name": "Вишнева гілка",

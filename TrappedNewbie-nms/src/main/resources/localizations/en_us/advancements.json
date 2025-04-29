@@ -41,5 +41,26 @@
 	"adv.trappednewbie.requiem.i_hate_sand.title": "I hate sand.",
 	"adv.trappednewbie.requiem.i_hate_sand.description": "Resurrect as a husk",
 	"adv.trappednewbie.requiem.kung_fu_panda.title": "Kung Fu Panda",
-	"adv.trappednewbie.requiem.kung_fu_panda.description": "As a panda, hit something with a wooden sword"
+	"adv.trappednewbie.requiem.kung_fu_panda.description": "As a panda, hit something with a wooden sword",
+
+	"adv.trappednewbie.basics.root.title": "Back to the roots",
+	"adv.trappednewbie.basics.root.description": "Gotta do the dirty work!",
+	"adv.trappednewbie.basics.get_a_branch.title": "Going further",
+	"adv.trappednewbie.basics.get_a_branch.description": "Get some Branches from the Leaves or a Deadbush",
+	"adv.trappednewbie.basics.get_a_fiber.title": "Feeling green",
+	"adv.trappednewbie.basics.get_a_fiber.description": "Get a Fiber from grass",
+	"adv.trappednewbie.basics.make_a_twine.title": "Twine",
+	"adv.trappednewbie.basics.make_a_twine.description": "Create a Twine using three Fibers",
+	"adv.trappednewbie.basics.find_gravel.title": "First serious step",
+	"adv.trappednewbie.basics.find_gravel.description": "Find some Gravel (you can form it by continuously walking over a grass block)",
+	"adv.trappednewbie.basics.get_a_flint.title": "Flintstone Age",
+	"adv.trappednewbie.basics.get_a_flint.description": "Get a Flint from a Gravel",
+	"adv.trappednewbie.basics.get_a_flaked_flint.title": "Something broke",
+	"adv.trappednewbie.basics.get_a_flaked_flint.description": "Create a Flaked Flint by tapping with Flint on any kind of stone",
+	"adv.trappednewbie.basics.make_flint_shears.title": "Sharpening",
+	"adv.trappednewbie.basics.make_flint_shears.description": "Make Flint Shears using a Twine and three Flaked Flints",
+	"adv.trappednewbie.basics.make_rough_sticks.title": "Bad Stick",
+	"adv.trappednewbie.basics.make_rough_sticks.description": "Make Rough Sticks by cutting a Branch with Shears",
+	"adv.trappednewbie.basics.make_a_fire.title": "Fire miracle",
+	"adv.trappednewbie.basics.make_a_fire.description": "Make a fire by using Rough Sticks (alternately clicking <key:key.attack> - <key:key.use>) in both hands"
 }

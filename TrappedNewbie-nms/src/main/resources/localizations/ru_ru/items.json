@@ -1,4 +1,10 @@
 {
+	"item.trapped_newbie.fiber.name": "Травяное волокно",
+	"item.trapped_newbie.twine.name": "Травяная бечёвка",
+	"item.trapped_newbie.flaked_flint.name": "Кремнёвый осколок",
+	"item.trapped_newbie.rough_stick.name": "Необработанная палка",
+	"item.trapped_newbie.flint_knife.name": "Кремнёвый нож",
+	"item.trapped_newbie.flint_shears.name": "Кремнёвые ножницы",
 	"item.trapped_newbie.acacia_branch.name": "Акациевая ветка",
 	"item.trapped_newbie.birch_branch.name": "Берёзовая ветка",
 	"item.trapped_newbie.cherry_branch.name": "Вишнёвая ветка",

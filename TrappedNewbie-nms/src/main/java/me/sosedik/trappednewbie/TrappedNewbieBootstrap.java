@@ -37,6 +37,7 @@ public class TrappedNewbieBootstrap implements PluginBootstrap {
 				yield item;
 			}
 			case "trumpet" -> ItemCreator.crossbowItem(properties, (item, entity, timeLeft) -> true);
+			case "flint_shears" -> ItemCreator.shearsItem(properties);
 			default -> null;
 		});
 

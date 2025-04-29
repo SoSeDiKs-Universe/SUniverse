@@ -15,6 +15,7 @@ public class TrappedNewbieItems {
 	public static final Material LEGGINGS_OUTLINE = byKey("leggings_outline");
 	public static final Material BOOTS_OUTLINE = byKey("boots_outline");
 	public static final Material GLOVES_OUTLINE = byKey("gloves_outline");
+	public static final Material INVENTORY_FIRE = byKey("inventory_fire");
 
 	// Branches
 	public static final Material ACACIA_BRANCH = byKey("acacia_branch");
@@ -42,6 +43,14 @@ public class TrappedNewbieItems {
 	public static final Material BAMBOO_TWIG = byKey("bamboo_twig");
 	public static final Material CRIMSON_TWIG = byKey("crimson_twig");
 	public static final Material WARPED_TWIG = byKey("warped_twig");
+
+	public static final Material FIBER = byKey("fiber");
+	public static final Material TWINE = byKey("twine");
+	public static final Material ROUGH_STICK = byKey("rough_stick");
+	public static final Material FLAKED_FLINT = byKey("flaked_flint");
+
+	public static final Material FLINT_KNIFE = byKey("flint_knife");
+	public static final Material FLINT_SHEARS = byKey("flint_shears");
 
 	// Sticks
 	public static final Material ACACIA_STICK = byKey("acacia_stick");

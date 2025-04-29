@@ -1,4 +1,10 @@
 {
+	"item.trapped_newbie.fiber.name": "Plant Fiber",
+	"item.trapped_newbie.twine.name": "Plant Twine",
+	"item.trapped_newbie.flaked_flint.name": "Flaked Flint",
+	"item.trapped_newbie.rough_stick.name": "Rough Stick",
+	"item.trapped_newbie.flint_knife.name": "Flint Knife",
+	"item.trapped_newbie.flint_shears.name": "Flint Shears",
 	"item.trapped_newbie.acacia_branch.name": "Acacia Branch",
 	"item.trapped_newbie.birch_branch.name": "Birch Branch",
 	"item.trapped_newbie.cherry_branch.name": "Cherry Branch",

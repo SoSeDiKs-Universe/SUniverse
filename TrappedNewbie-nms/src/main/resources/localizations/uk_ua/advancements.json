@@ -41,5 +41,26 @@
 	"adv.trappednewbie.requiem.i_hate_sand.title": "Ненависний пісок.",
 	"adv.trappednewbie.requiem.i_hate_sand.description": "Воскресніть у висушня",
 	"adv.trappednewbie.requiem.kung_fu_panda.title": "Кунг-фу панда",
-	"adv.trappednewbie.requiem.kung_fu_panda.description": "Будучи пандою, вдарте когось дерев'яним мечем"
+	"adv.trappednewbie.requiem.kung_fu_panda.description": "Будучи пандою, вдарте когось дерев'яним мечем",
+
+	"adv.trappednewbie.basics.root.title": "Повернення до витоків",
+	"adv.trappednewbie.basics.root.description": "Знову до брудної роботи!",
+	"adv.trappednewbie.basics.get_a_branch.title": "Просуваємось",
+	"adv.trappednewbie.basics.get_a_branch.description": "Отримайте гілки з листви або мертвого куща",
+	"adv.trappednewbie.basics.get_a_fiber.title": "Озеленення",
+	"adv.trappednewbie.basics.get_a_fiber.description": "Отримайте трав’яне волокно",
+	"adv.trappednewbie.basics.make_a_twine.title": "Намотай собі на вус",
+	"adv.trappednewbie.basics.make_a_twine.description": "Створіть трав’яну мотузку з трьох трав’яних волокон",
+	"adv.trappednewbie.basics.find_gravel.title": "Перший серйозний крок",
+	"adv.trappednewbie.basics.find_gravel.description": "Знайдіть гравій (його можна сформувати, якщо добре розтоптати блок трави)",
+	"adv.trappednewbie.basics.get_a_flint.title": "Кремнієва ера",
+	"adv.trappednewbie.basics.get_a_flint.description": "Отримайте кремінь із гравію",
+	"adv.trappednewbie.basics.get_a_flaked_flint.title": "Упс! Щось відкололось",
+	"adv.trappednewbie.basics.get_a_flaked_flint.description": "Сформуйте кремнієвий уламок, постукавши кремнем об будь-який тип камню",
+	"adv.trappednewbie.basics.make_flint_shears.title": "Загострення обстановки",
+	"adv.trappednewbie.basics.make_flint_shears.description": "Створіть кремнієві ножиці з трав’яної мотузки та трьох кремнієвих уламків",
+	"adv.trappednewbie.basics.make_rough_sticks.title": "Палки в колесах",
+	"adv.trappednewbie.basics.make_rough_sticks.description": "Створіть необроблені палки, обрізавши гілки ножицями",
+	"adv.trappednewbie.basics.make_a_fire.title": "Вогняне чудо",
+	"adv.trappednewbie.basics.make_a_fire.description": "Розведіть вогонь, почергово клацаючи (<key:key.attack> - <key:key.use>) необробленими палками в обох руках"
 }

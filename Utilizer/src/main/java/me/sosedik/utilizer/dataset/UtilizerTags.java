@@ -31,6 +31,7 @@ public class UtilizerTags {
 	public static final Tag<Material> FLINT_AND_STEEL = itemTag("flint_and_steel");
 	public static final Tag<Material> SHEARS = itemTag("shears");
 	public static final Tag<Material> BOWS = itemTag("bows");
+	public static final Tag<Material> KNIFES = itemTag("knifes");
 
 	private static Tag<Material> itemTag(String key) {
 		return ItemUtil.itemTag(Utilizer.utilizerKey(key));

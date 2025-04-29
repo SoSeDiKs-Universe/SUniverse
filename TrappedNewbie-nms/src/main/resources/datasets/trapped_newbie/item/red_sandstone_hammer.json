@@ -1,4 +1,5 @@
 {
+  "parent_model": "handheld",
   "client_type": "minecraft:wooden_sword",
   "stack_size": 1,
   "durability": 120

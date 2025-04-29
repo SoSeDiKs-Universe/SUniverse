@@ -1,5 +1,5 @@
 {
-  "parent_model": "generated",
+  "parent_model": "handheld",
   "model_extras": {
     "display": {
       "thirdperson_righthand": {

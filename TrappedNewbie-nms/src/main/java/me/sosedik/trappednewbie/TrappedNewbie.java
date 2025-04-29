@@ -17,6 +17,7 @@ import me.sosedik.trappednewbie.impl.item.modifier.PaperPlaneModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.VisualArmorModifier;
 import me.sosedik.trappednewbie.listener.advancement.AdvancementsLocalizer;
 import me.sosedik.trappednewbie.listener.advancement.LoadSaveAdvancementsOnJoinQuit;
+import me.sosedik.trappednewbie.listener.advancement.dedicated.FindGravelAdvancement;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.FirstPossessionAdvancement;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.GoodAsNewAdvancement;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.IHateSandAdvancement;
@@ -26,7 +27,9 @@ import me.sosedik.trappednewbie.listener.block.CustomBlockBreaking;
 import me.sosedik.trappednewbie.listener.entity.AngryAnimals;
 import me.sosedik.trappednewbie.listener.entity.BabierBabyMobs;
 import me.sosedik.trappednewbie.listener.entity.LimboEntities;
+import me.sosedik.trappednewbie.listener.item.FlintToFlakedFlint;
 import me.sosedik.trappednewbie.listener.item.PaperPlanes;
+import me.sosedik.trappednewbie.listener.item.RoughSticksCreateFire;
 import me.sosedik.trappednewbie.listener.item.TrumpetScare;
 import me.sosedik.trappednewbie.listener.item.VisualPumpkin;
 import me.sosedik.trappednewbie.listener.misc.CustomHudRenderer;
@@ -108,6 +111,7 @@ public final class TrappedNewbie extends JavaPlugin {
 			AdvancementsLocalizer.class,
 			LoadSaveAdvancementsOnJoinQuit.class,
 			/// dedicated advancement
+			FindGravelAdvancement.class,
 			FirstPossessionAdvancement.class,
 			GoodAsNewAdvancement.class,
 			IHateSandAdvancement.class,
@@ -120,7 +124,9 @@ public final class TrappedNewbie extends JavaPlugin {
 			BabierBabyMobs.class,
 			LimboEntities.class,
 			// item
+			FlintToFlakedFlint.class,
 			PaperPlanes.class,
+			RoughSticksCreateFire.class,
 			TrumpetScare.class,
 			VisualPumpkin.class,
 			// misc

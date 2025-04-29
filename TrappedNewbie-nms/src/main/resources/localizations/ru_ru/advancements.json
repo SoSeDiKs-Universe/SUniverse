@@ -41,5 +41,26 @@
 	"adv.trappednewbie.requiem.i_hate_sand.title": "Ненавистный песок.",
 	"adv.trappednewbie.requiem.i_hate_sand.description": "Воскресните в кадавра",
 	"adv.trappednewbie.requiem.kung_fu_panda.title": "Кунг-фу панда",
-	"adv.trappednewbie.requiem.kung_fu_panda.description": "Будучи пандой, ударьте кого-нибудь деревянным мечом"
+	"adv.trappednewbie.requiem.kung_fu_panda.description": "Будучи пандой, ударьте кого-нибудь деревянным мечом",
+
+	"adv.trappednewbie.basics.root.title": "Возвращение к истокам",
+	"adv.trappednewbie.basics.root.description": "Опять за грязную работу!",
+	"adv.trappednewbie.basics.get_a_branch.title": "Продвигаемся",
+	"adv.trappednewbie.basics.get_a_branch.description": "Добудьте ветки из листвы или мёртвого куста",
+	"adv.trappednewbie.basics.get_a_fiber.title": "Озеленение",
+	"adv.trappednewbie.basics.get_a_fiber.description": "Выбейте травяное волокно из травы или кустов",
+	"adv.trappednewbie.basics.make_a_twine.title": "Намотай себе на ус",
+	"adv.trappednewbie.basics.make_a_twine.description": "Создайте бечёвку из трёх травяных волокон",
+	"adv.trappednewbie.basics.find_gravel.title": "Первый серьёзный шаг",
+	"adv.trappednewbie.basics.find_gravel.description": "Найдите гравий (его можно сформировать, если хорошенько растоптать блок травы)",
+	"adv.trappednewbie.basics.get_a_flint.title": "Кремнёвая эра",
+	"adv.trappednewbie.basics.get_a_flint.description": "Добудьте кремень из гравия",
+	"adv.trappednewbie.basics.get_a_flaked_flint.title": "Что-то откололось",
+	"adv.trappednewbie.basics.get_a_flaked_flint.description": "Создайте осколок кремня, постучав кремнем по любому виду камня",
+	"adv.trappednewbie.basics.make_flint_shears.title": "Обострение",
+	"adv.trappednewbie.basics.make_flint_shears.description": "Создайте кремнёвые ножницы из бечёвки и трёх осколков кремня",
+	"adv.trappednewbie.basics.make_rough_sticks.title": "Палки в колёсах",
+	"adv.trappednewbie.basics.make_rough_sticks.description": "Создайте необработанные палки, обрезав ветки ножницами",
+	"adv.trappednewbie.basics.make_a_fire.title": "Огненное чудо",
+	"adv.trappednewbie.basics.make_a_fire.description": "Зажгите огонь, поочерёдно кликая (<key:key.attack> - <key:key.use>) необработанными палками в обеих руках"
 }

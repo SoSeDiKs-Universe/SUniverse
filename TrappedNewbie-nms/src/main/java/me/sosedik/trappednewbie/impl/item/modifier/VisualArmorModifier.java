@@ -1,6 +1,7 @@
 package me.sosedik.trappednewbie.impl.item.modifier;
 
 import io.papermc.paper.datacomponent.DataComponentTypes;
+import io.papermc.paper.datacomponent.item.ItemAttributeModifiers;
 import me.sosedik.kiterino.inventory.InventorySlotHelper;
 import me.sosedik.kiterino.modifier.item.ItemContextBox;
 import me.sosedik.kiterino.modifier.item.ItemModifier;
@@ -20,6 +21,8 @@ import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.EquipmentSlot;
@@ -45,7 +48,8 @@ public class VisualArmorModifier extends ItemModifier {
 	@Override
 	public ModificationResult modify(ItemContextBox contextBox) {
 		Player target;
-		if (contextBox.getContext() instanceof EntityEquipmentPacketContext ctx && ctx.getEntity() instanceof Player other) {
+		if (contextBox.getContext() instanceof EntityEquipmentPacketContext ctx) {
+			if (!(ctx.getEntity() instanceof Player other)) return ModificationResult.PASS;
 			target = other;
 		} else {
 			target = contextBox.getViewer();
@@ -83,11 +87,14 @@ public class VisualArmorModifier extends ItemModifier {
 		if (!equipmentSlot.isArmor())
 			return ModificationResult.PASS;
 
-		contextBox.setItem(
-			visualArmor.hasItem(equipmentSlot)
-				? getLored(messenger, contextBox.getLocale(), player, target, parseItem(player, contextBox.getLocale(), visualArmor.getItem(equipmentSlot)), equipmentSlot, false, true)
-				: getEmpty(messenger, contextBox.getLocale(), player, target, equipmentSlot, false)
-		);
+		if (visualArmor.hasItem(equipmentSlot)) {
+			ItemStack item = visualArmor.getItem(equipmentSlot).clone();
+			item.unsetData(DataComponentTypes.ATTRIBUTE_MODIFIERS);
+			item = getLored(messenger, contextBox.getLocale(), player, target, parseItem(player, contextBox.getLocale(), item), equipmentSlot, false, true);
+			contextBox.setItem(item);
+		} else  {
+			contextBox.setItem(getEmpty(messenger, contextBox.getLocale(), player, target, equipmentSlot, false));
+		}
 
 		return ModificationResult.RETURN;
 	}

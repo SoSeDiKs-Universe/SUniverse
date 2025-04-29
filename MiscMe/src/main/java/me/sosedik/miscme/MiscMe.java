@@ -61,6 +61,7 @@ import me.sosedik.miscme.listener.item.SwordsSwingThroughGrass;
 import me.sosedik.miscme.listener.misc.BetterTimeSetCommand;
 import me.sosedik.miscme.listener.misc.WaterAwarePotionReset;
 import me.sosedik.miscme.listener.player.BurningForcesToRun;
+import me.sosedik.miscme.listener.player.FireExtinguishByHand;
 import me.sosedik.miscme.listener.player.HidePlayerNameTags;
 import me.sosedik.miscme.listener.player.JumpingOverFences;
 import me.sosedik.miscme.listener.player.SwapHalfStack;
@@ -68,6 +69,7 @@ import me.sosedik.miscme.listener.projectile.BurningLitsProjectiles;
 import me.sosedik.miscme.listener.projectile.BurningProjectileCreatesFire;
 import me.sosedik.miscme.listener.vehicle.JumpyBoats;
 import me.sosedik.miscme.listener.world.CustomDayCycleCleanup;
+import me.sosedik.miscme.task.TrailPaths;
 import me.sosedik.resourcelib.ResourceLib;
 import me.sosedik.utilizer.api.language.TranslationHolder;
 import me.sosedik.utilizer.util.EventUtil;
@@ -167,6 +169,7 @@ public final class MiscMe extends JavaPlugin {
 			WaterAwarePotionReset.class,
 			// player
 			BurningForcesToRun.class,
+			FireExtinguishByHand.class,
 			HidePlayerNameTags.class,
 			JumpingOverFences.class,
 			SwapHalfStack.class,
@@ -178,6 +181,8 @@ public final class MiscMe extends JavaPlugin {
 			// world
 			CustomDayCycleCleanup.class
 		);
+
+		new TrailPaths();
 	}
 
 	/**

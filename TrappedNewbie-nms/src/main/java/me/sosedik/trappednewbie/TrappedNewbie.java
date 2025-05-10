@@ -19,10 +19,16 @@ import me.sosedik.trappednewbie.listener.advancement.AdvancementsLocalizer;
 import me.sosedik.trappednewbie.listener.advancement.LoadSaveAdvancementsOnJoinQuit;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.FindGravelAdvancement;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.FirstPossessionAdvancement;
+import me.sosedik.trappednewbie.listener.advancement.dedicated.FoodConsumingAdvancement;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.GoodAsNewAdvancement;
+import me.sosedik.trappednewbie.listener.advancement.dedicated.HorseStatsAdvancements;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.IHateSandAdvancement;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.KungFuPandaAdvancement;
+import me.sosedik.trappednewbie.listener.advancement.dedicated.LevelAdvancements;
+import me.sosedik.trappednewbie.listener.advancement.dedicated.LootOpensAdvancements;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.OpeningHolderAdvancement;
+import me.sosedik.trappednewbie.listener.advancement.dedicated.StatisticAdvancements;
+import me.sosedik.trappednewbie.listener.advancement.dedicated.WashAdvancements;
 import me.sosedik.trappednewbie.listener.block.CustomBlockBreaking;
 import me.sosedik.trappednewbie.listener.entity.AngryAnimals;
 import me.sosedik.trappednewbie.listener.entity.BabierBabyMobs;
@@ -113,10 +119,16 @@ public final class TrappedNewbie extends JavaPlugin {
 			/// dedicated advancement
 			FindGravelAdvancement.class,
 			FirstPossessionAdvancement.class,
+			FoodConsumingAdvancement.class,
 			GoodAsNewAdvancement.class,
+			HorseStatsAdvancements.class,
 			IHateSandAdvancement.class,
 			KungFuPandaAdvancement.class,
+			LevelAdvancements.class,
+			LootOpensAdvancements.class,
 			OpeningHolderAdvancement.class,
+			StatisticAdvancements.class,
+			WashAdvancements.class,
 			// block
 			CustomBlockBreaking.class,
 			// entity

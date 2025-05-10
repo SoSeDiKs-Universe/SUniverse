@@ -1,11 +1,13 @@
 package me.sosedik.trappednewbie.impl.task.tutorial;
 
 import io.papermc.paper.event.player.PrePlayerAttackEntityEvent;
+import me.sosedik.miscme.dataset.MoreMobHeads;
 import me.sosedik.packetadvancements.util.ToastMessage;
 import me.sosedik.trappednewbie.TrappedNewbie;
 import me.sosedik.trappednewbie.api.task.ObtainAdvancementTask;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieAdvancements;
 import me.sosedik.utilizer.api.message.Messenger;
+import me.sosedik.utilizer.util.ItemUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.WanderingTrader;
 import org.bukkit.event.EventHandler;
@@ -26,7 +28,7 @@ public class LimboWorldFallTask extends ObtainAdvancementTask {
 		if (player.getWorld() != TrappedNewbie.limboWorld()) return;
 
 		TrappedNewbieAdvancements.BRAVE_NEW_WORLD.awardCriteria(player, "friendship");
-		ToastMessage.showToast(player, TrappedNewbieAdvancements.WANDERING_TRADER_HEAD, Messenger.messenger(player).getMessage("limbo.friendship"));
+		ToastMessage.showToast(player, ItemUtil.texturedHead(MoreMobHeads.WANDERING_TRADER), Messenger.messenger(player).getMessage("limbo.friendship"));
 	}
 
 }

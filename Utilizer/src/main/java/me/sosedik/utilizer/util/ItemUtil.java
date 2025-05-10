@@ -236,4 +236,28 @@ public class ItemUtil {
 		return y;
 	}
 
+	/**
+	 * Adds enchantment glint to the item
+	 *
+	 * @param item item type
+	 * @return item with enchantment glint
+	 */
+	public static ItemStack glint(Material item) {
+		return glint(new ItemStack(item));
+	}
+
+	/**
+	 * Adds enchantment glint to the item
+	 *
+	 * @param item item
+	 * @return item with enchantment glint
+	 */
+	public static ItemStack glint(ItemStack item) {
+		if (ItemStack.isEmpty(item)) return item;
+
+		item = item.clone();
+		item.setData(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+		return item;
+	}
+
 }

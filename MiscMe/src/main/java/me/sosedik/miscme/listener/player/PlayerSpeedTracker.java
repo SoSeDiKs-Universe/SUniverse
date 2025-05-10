@@ -1,4 +1,4 @@
-package me.sosedik.miscme.listener.item;
+package me.sosedik.miscme.listener.player;
 
 import me.sosedik.miscme.MiscMe;
 import me.sosedik.utilizer.api.message.Messenger;
@@ -7,24 +7,26 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jspecify.annotations.NullMarked;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import static me.sosedik.utilizer.api.message.Mini.raw;
 
 /**
- * Constantly updates player's inventory to update items in it.
- * <p>
- * This is useful for items like clock that constantly need updates.
+ * Tracks player's movement speed
  */
 @NullMarked
-public class ItemsVisualUpdater implements Listener {
+public class PlayerSpeedTracker implements Listener {
 
 	private static final Map<UUID, SpeedometerTracker> TRACKERS = new HashMap<>();
 
@@ -32,17 +34,11 @@ public class ItemsVisualUpdater implements Listener {
 	public void onJoin(PlayerJoinEvent event) {
 		Player player = event.getPlayer();
 		getSpeedometerTracker(player);
-		startUpdateInventoryTask(player);
 	}
 
-	private void startUpdateInventoryTask(Player player) {
-		MiscMe.scheduler().sync(task -> {
-			if (!player.isOnline()) return true;
-			if (player.isDead()) return false;
-
-			player.updateInventory();
-			return false;
-		}, 10L, 10L);
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onTeleport(PlayerTeleportEvent event) {
+		getSpeedometerTracker(event.getPlayer()).setImmuneTicks(2);
 	}
 
 	/**
@@ -62,8 +58,10 @@ public class ItemsVisualUpdater implements Listener {
 	private static class SpeedometerTracker extends BukkitRunnable {
 
 		private final Player player;
+		private final List<Double> speeds = new ArrayList<>();
+		private double speed = 0;
 		private Location lastLoc;
-		private double speed = 0D;
+		private int immuneTicks = 0;
 
 		public SpeedometerTracker(Player player) {
 			this.player = player;
@@ -79,7 +77,26 @@ public class ItemsVisualUpdater implements Listener {
 				return;
 			}
 
-			this.speed = this.lastLoc.getWorld() == this.player.getWorld() ? this.lastLoc.distance(this.player.getLocation()) * 20D : 0D;
+			if (this.speeds.size() > 30)
+				this.speeds.removeFirst();
+
+			if (this.immuneTicks > 0) {
+				this.immuneTicks--;
+			} else {
+				if (this.lastLoc.getWorld() == this.player.getWorld()) {
+					double speed = this.lastLoc.distance(this.player.getLocation()) * 20D;
+					this.speeds.add(speed);
+				}
+			}
+
+			double speed = 0;
+			if (!this.speeds.isEmpty()) {
+				for (double s : this.speeds)
+					speed += s;
+				speed = speed / this.speeds.size();
+			}
+
+			this.speed = speed;
 			this.lastLoc = this.player.getLocation();
 		}
 
@@ -89,8 +106,13 @@ public class ItemsVisualUpdater implements Listener {
 			TRACKERS.remove(this.player.getUniqueId());
 		}
 
+		public void setImmuneTicks(int ticks) {
+			this.immuneTicks = ticks;
+		}
+
 		public double getSpeed() {
-			return MathUtil.round(this.speed, 3);
+			if (this.speeds.size() < 10) return 0;
+			return MathUtil.round(speed, 3);
 		}
 
 		private Component getSpeed(Player player) {

@@ -8,7 +8,7 @@ import me.sosedik.kiterino.modifier.item.context.packet.EntityDataPacketContext;
 import me.sosedik.kiterino.modifier.item.context.packet.EntityEquipmentPacketContext;
 import me.sosedik.miscme.MiscMe;
 import me.sosedik.miscme.dataset.MiscMeItems;
-import me.sosedik.miscme.listener.item.ItemsVisualUpdater;
+import me.sosedik.miscme.listener.player.PlayerSpeedTracker;
 import me.sosedik.utilizer.api.language.LangOptionsStorage;
 import me.sosedik.utilizer.api.message.Messenger;
 import org.bukkit.NamespacedKey;
@@ -59,7 +59,7 @@ public class SpeedometerModifier extends ItemModifier {
 		}
 		if (!(target instanceof Player player)) return ModificationResult.OK;
 
-		double speed = ItemsVisualUpdater.getSpeed(player);
+		double speed = PlayerSpeedTracker.getSpeed(player);
 		int model = Math.min(12, (int) ((12 * speed) / MAX_SPEED));
 		if (model == 0 && speed > 0) model++;
 

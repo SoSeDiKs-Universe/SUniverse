@@ -67,6 +67,8 @@ public class TrappedNewbieItems {
 	public static final Material CRIMSON_STICK = byKey("crimson_stick");
 	public static final Material WARPED_STICK = byKey("warped_stick");
 
+	public static final Material ASH = byKey("ash");
+
 	public static final Material LETTER = byKey("letter");
 	public static final Material PAPER_PLANE = byKey("paper_plane");
 

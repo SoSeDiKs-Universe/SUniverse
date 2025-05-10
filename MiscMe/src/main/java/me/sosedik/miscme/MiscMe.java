@@ -52,7 +52,7 @@ import me.sosedik.miscme.listener.item.EasierShovelPathCreation;
 import me.sosedik.miscme.listener.item.FireAspectIsFlintAndSteel;
 import me.sosedik.miscme.listener.item.FlintAndSteelIgnitesEntities;
 import me.sosedik.miscme.listener.item.ImmersiveDyes;
-import me.sosedik.miscme.listener.item.ItemsVisualUpdater;
+import me.sosedik.miscme.listener.item.InventoryRefresher;
 import me.sosedik.miscme.listener.item.NoSwordInstaBreak;
 import me.sosedik.miscme.listener.item.ReadableBooksInFrames;
 import me.sosedik.miscme.listener.item.ShovelsConvertAdditionalBlocks;
@@ -64,6 +64,7 @@ import me.sosedik.miscme.listener.player.BurningForcesToRun;
 import me.sosedik.miscme.listener.player.FireExtinguishByHand;
 import me.sosedik.miscme.listener.player.HidePlayerNameTags;
 import me.sosedik.miscme.listener.player.JumpingOverFences;
+import me.sosedik.miscme.listener.player.PlayerSpeedTracker;
 import me.sosedik.miscme.listener.player.SwapHalfStack;
 import me.sosedik.miscme.listener.projectile.BurningLitsProjectiles;
 import me.sosedik.miscme.listener.projectile.BurningProjectileCreatesFire;
@@ -158,7 +159,7 @@ public final class MiscMe extends JavaPlugin {
 			FireAspectIsFlintAndSteel.class,
 			FlintAndSteelIgnitesEntities.class,
 			ImmersiveDyes.class,
-			ItemsVisualUpdater.class,
+			InventoryRefresher.class,
 			NoSwordInstaBreak.class,
 			ReadableBooksInFrames.class,
 			ShovelsConvertAdditionalBlocks.class,
@@ -172,6 +173,7 @@ public final class MiscMe extends JavaPlugin {
 			FireExtinguishByHand.class,
 			HidePlayerNameTags.class,
 			JumpingOverFences.class,
+			PlayerSpeedTracker.class,
 			SwapHalfStack.class,
 			// projectile
 			BurningLitsProjectiles.class,

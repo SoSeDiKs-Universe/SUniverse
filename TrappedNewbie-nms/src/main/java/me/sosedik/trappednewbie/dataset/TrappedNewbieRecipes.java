@@ -19,8 +19,11 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.Predicate;
 
 import static me.sosedik.trappednewbie.TrappedNewbie.trappedNewbieKey;
 
@@ -48,6 +51,13 @@ public class TrappedNewbieRecipes {
 			.addIngredients('F', TrappedNewbieItems.FLAKED_FLINT)
 			.register();
 
+		new ShapedCraft(new ItemStack(TrappedNewbieItems.FLINT_AXE), trappedNewbieKey("flint_axe"), "FF", "ST")
+			.withCategory(CraftingBookCategory.EQUIPMENT)
+			.addIngredients('S', Material.STICK, TrappedNewbieItems.ROUGH_STICK)
+			.addIngredients('T', Material.STRING, TrappedNewbieItems.TWINE) // HORSEHAIR
+			.addIngredients('F', TrappedNewbieItems.FLAKED_FLINT)
+			.register();
+
 		new ShapedCraft(new ItemStack(TrappedNewbieItems.FLINT_SHEARS), trappedNewbieKey("flint_shears"), "FT", "FF")
 			.withCategory(CraftingBookCategory.EQUIPMENT)
 			.addIngredients('T', Material.STRING, TrappedNewbieItems.TWINE) // HORSEHAIR
@@ -60,7 +70,22 @@ public class TrappedNewbieRecipes {
 			.addIngredients('S', UtilizerTags.KNIFES.getValues())
 			.register();
 
+		TrappedNewbieTags.CHOPPING_BLOCKS.getValues().forEach(type -> {
+			Material logType = Material.matchMaterial(type.key().value().replace("chopping_block", "log"));
+			if (logType == null) logType = Material.matchMaterial(type.key().value().replace("chopping_block", "stem"));
+			if (logType == null && type == TrappedNewbieItems.BAMBOO_CHOPPING_BLOCK) logType = Material.BAMBOO_BLOCK;
+			if (logType == null) throw new IllegalArgumentException("Couldn't find log item for " + type.key());
+
+			new ShapelessCraft(new ItemStack(type), type.getKey())
+				.withGroup("chopping_block")
+				.addIngredients(logType)
+				.addIngredients(Tag.ITEMS_AXES.getValues())
+				.register();
+		});
+
 		Bukkit.addFuel(TrappedNewbieItems.ROUGH_STICK, 100);
+		TrappedNewbieTags.BRANCHES.getValues().forEach(material -> Bukkit.addFuel(material, 100));
+		TrappedNewbieTags.STICKS.getValues().forEach(material -> Bukkit.addFuel(material, 100));
 
 		Map<Material, List<ItemStack>> replacements = new HashMap<>();
 
@@ -113,7 +138,8 @@ public class TrappedNewbieRecipes {
 	}
 
 	private static @Nullable RecipeChoice updateChoice(Map<Material, List<ItemStack>> map, RecipeChoice recipeChoice) {
-		List<ItemStack> items = new ArrayList<>();
+		Set<ItemStack> items = new HashSet<>(); // Avoid duplicates if recipes already account for replacements
+		Predicate<ItemStack> predicate = null;
 		boolean modified = false;
 		if (recipeChoice instanceof RecipeChoice.MaterialChoice materialChoice) {
 			for (Material material : materialChoice.getChoices()) {
@@ -126,6 +152,7 @@ public class TrappedNewbieRecipes {
 				}
 			}
 		} else if (recipeChoice instanceof RecipeChoice.ExactChoice exactChoice) {
+			predicate = exactChoice.getPredicate();
 			for (ItemStack item : exactChoice.getChoices()) {
 				List<ItemStack> replacements = map.get(item.getType());
 				if (replacements == null) {
@@ -139,7 +166,9 @@ public class TrappedNewbieRecipes {
 
 		if (!modified) return null;
 
-		return new RecipeChoice.ExactChoice(items.toArray(ItemStack[]::new));
+		var updatedChoice = new RecipeChoice.ExactChoice(items.toArray(ItemStack[]::new));
+		if (predicate != null) updatedChoice.setPredicate(predicate);
+		return updatedChoice;
 	}
 
 }

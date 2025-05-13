@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import me.sosedik.resourcelib.ResourceLib;
 import me.sosedik.resourcelib.api.font.FontData;
 import me.sosedik.resourcelib.api.item.FakeItemData;
 import me.sosedik.resourcelib.util.SpacingUtil;
@@ -31,6 +32,7 @@ public class ResourcePackStorage {
 	private final Map<NamespacedKey, NamespacedKey> soundMappings = new HashMap<>();
 	private final Map<NamespacedKey, NamespacedKey> itemMappings = new HashMap<>();
 	private final Map<NamespacedKey, String> tripwireMappings = new HashMap<>();
+	private final Map<NamespacedKey, JsonObject> sculkMappings = new HashMap<>();
 	private final Map<NamespacedKey, ItemData> itemOptions = new HashMap<>();
 
 	public ResourcePackStorage(Plugin plugin) {
@@ -41,11 +43,13 @@ public class ResourcePackStorage {
 		plugin.saveResource("mappings/sounds.json", true);
 		plugin.saveResource("mappings/items.json", true);
 		plugin.saveResource("mappings/tripwire.json", true);
+		plugin.saveResource("mappings/sculk_sensor.json", true);
 
 		loadFontMappings(new File(mappingsDir, "fonts.json"));
 		loadSoundMappings(new File(mappingsDir, "sounds.json"));
 		loadItemMappings(new File(mappingsDir, "items.json"));
 		loadTripwireMappings(new File(mappingsDir, "tripwire.json"));
+		loadSculkMappings(new File(mappingsDir, "sculk_sensor.json"));
 	}
 
 	private void loadFontMappings(File mappingsFile) {
@@ -119,12 +123,26 @@ public class ResourcePackStorage {
 		});
 	}
 
+	private void loadSculkMappings(File mappingsFile) {
+		JsonObject sculkMappings = FileUtil.readJsonObject(mappingsFile);
+		sculkMappings.entrySet().forEach(entry -> {
+			var from = requireNonNull(NamespacedKey.fromString(entry.getKey()));
+			JsonObject props = entry.getValue().getAsJsonObject();
+			this.sculkMappings.put(from, props);
+		});
+	}
+
 	public @Nullable FontData getFontData(NamespacedKey key) {
 		return this.fontMappings.get(key);
 	}
 
 	public NamespacedKey getSoundMapping(NamespacedKey key) {
-		return this.soundMappings.getOrDefault(key, key);
+		NamespacedKey mappedKey = this.soundMappings.get(key);
+		if (mappedKey == null) {
+			ResourceLib.logger().warn("Couldn't find sound mapping: {}", key);
+			return key;
+		}
+		return mappedKey;
 	}
 
 	public NamespacedKey getItemModelMapping(NamespacedKey key) {
@@ -133,6 +151,10 @@ public class ResourcePackStorage {
 
 	public @Nullable String getTripwireMapping(NamespacedKey key) {
 		return this.tripwireMappings.get(key);
+	}
+
+	public @Nullable JsonObject getSculkMapping(NamespacedKey key) {
+		return this.sculkMappings.get(key);
 	}
 
 	public void addItemOption(NamespacedKey key, JsonObject resourceData, FakeItemData fakeItemData) {

@@ -9,6 +9,8 @@ import org.bukkit.block.Block;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockBurnEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
@@ -25,6 +27,20 @@ public interface BlockDataStorage {
 	 * Called when the block is unloaded
 	 */
 	void onUnload();
+
+	/**
+	 * Called when the block is placed by a player
+	 *
+	 * @param event event
+	 */
+	void onPlace(BlockPlaceEvent event);
+
+	/**
+	 * Called when player interacts with a block
+	 *
+	 * @param event event
+	 */
+	void onInteract(PlayerInteractEvent event);
 
 	/**
 	 * Called when the block is moved

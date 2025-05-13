@@ -7,13 +7,15 @@ import net.minecraft.world.level.block.BushBlock;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.BlockState;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import static java.util.Objects.requireNonNull;
 
+@NullMarked
 public class VegetationBlock extends BushBlock implements KiterinoBlock {
 
-	private BlockState bukkitState;
+	private @Nullable BlockState bukkitState;
 	private final NamespacedKey blockId;
 
 	public VegetationBlock(Properties settings, NamespacedKey blockId) {
@@ -22,7 +24,7 @@ public class VegetationBlock extends BushBlock implements KiterinoBlock {
 	}
 
 	@Override
-	public @Nullable BlockState serializeBlockToClient() {
+	public @Nullable BlockState serializeBlockToClient(Object currentState) {
 		if (this.bukkitState == null) {
 			String mapping = requireNonNull(ResourceLib.storage().getTripwireMapping(this.blockId));
 			this.bukkitState = Bukkit.createBlockData(mapping).createBlockState();

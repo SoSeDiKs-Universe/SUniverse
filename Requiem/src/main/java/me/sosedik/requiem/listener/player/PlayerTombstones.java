@@ -1,7 +1,6 @@
 package me.sosedik.requiem.listener.player;
 
 import de.tr7zw.nbtapi.NBT;
-import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import me.sosedik.requiem.api.event.player.PlayerTombstoneCreateEvent;
 import me.sosedik.requiem.dataset.RequiemItems;
 import me.sosedik.requiem.dataset.RequiemTags;
@@ -33,7 +32,6 @@ import org.bukkit.entity.Trident;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -351,24 +349,6 @@ public class PlayerTombstones implements Listener {
 			}
 		}
 		return locBlock;
-	}
-
-	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	public void onPlace(BlockPlaceEvent event) {
-		Block block = event.getBlockPlaced();
-		if (!RequiemTags.TOMBSTONES.isTagged(block.getType())) return;
-
-		ItemStack item = event.getItemInHand();
-		NBT.get(item, nbt -> {
-			ReadWriteNBT data;
-			if (nbt.hasTag(TombstoneBlockStorage.DEATH_MESSAGE_KEY)) {
-				data = NBT.createNBTObject();
-				data.getOrCreateCompound(TombstoneBlockStorage.DEATH_MESSAGE_KEY).mergeCompound(nbt.getCompound(TombstoneBlockStorage.DEATH_MESSAGE_KEY));
-			} else {
-				data = null;
-			}
-			BlockStorage.saveInfo(block, TombstoneBlockStorage.construct(block, block.getType(), event.getPlayer().getFacing().getOppositeFace(), data));
-		});
 	}
 
 }

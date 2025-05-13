@@ -9,6 +9,8 @@ import org.bukkit.block.Block;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockBurnEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -41,6 +43,12 @@ public abstract class BlockDataStorageHolder implements BlockDataStorage {
 	public void onMove(Location from, Location to) {
 		this.block = to.getBlock();
 	}
+
+	@Override
+	public void onPlace(BlockPlaceEvent event) {}
+
+	@Override
+	public void onInteract(PlayerInteractEvent event) {}
 
 	@Override
 	public void onBreak(BlockBreakEvent event) {

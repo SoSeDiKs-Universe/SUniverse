@@ -8,6 +8,7 @@ import me.sosedik.trappednewbie.dataset.TrappedNewbieEntities;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieItems;
 import me.sosedik.trappednewbie.entity.api.PaperPlane;
 import me.sosedik.utilizer.impl.item.modifier.GlowingItemModifier;
+import net.kyori.adventure.util.TriState;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
@@ -269,7 +270,7 @@ public class PaperPlaneImpl extends ThrowableItemProjectile {
 		org.bukkit.inventory.ItemStack itemStack = this.pickupItemStack.asBukkitCopy();
 		display.setItemStack(itemStack);
 		display.setGlowing(NBT.get(itemStack, nbt -> (boolean) nbt.getOrDefault(GlowingItemModifier.GLOW_MODIFIER_KEY, false)));
-		display.setVisualFire(NBT.get(itemStack, nbt -> (boolean) nbt.getOrDefault(PaperPlane.BLAZIFIED_TAG, false))); // TODO does not render......
+		display.setVisualFire(TriState.byBoolean(NBT.get(itemStack, nbt -> (boolean) nbt.getOrDefault(PaperPlane.BLAZIFIED_TAG, false)))); // TODO does not render......
 		if (itemStack.hasData(DataComponentTypes.DYED_COLOR)) {
 			Color color = Objects.requireNonNull(itemStack.getData(DataComponentTypes.DYED_COLOR)).color();
 			display.setGlowColorOverride(color);

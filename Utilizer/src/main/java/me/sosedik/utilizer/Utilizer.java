@@ -16,7 +16,7 @@ import me.sosedik.utilizer.impl.message.tag.LocaleResolver;
 import me.sosedik.utilizer.impl.message.tag.PluralTag;
 import me.sosedik.utilizer.impl.message.tag.RandomColorTag;
 import me.sosedik.utilizer.listener.BlockStorage;
-import me.sosedik.utilizer.listener.block.CustomBlockStorageLoadSave;
+import me.sosedik.utilizer.listener.block.CustomBlockStorageLoadSaveInteract;
 import me.sosedik.utilizer.listener.entity.EntityGlowTracker;
 import me.sosedik.utilizer.listener.entity.EntityMetadataClearer;
 import me.sosedik.utilizer.listener.item.AutoReleasingItems;
@@ -84,7 +84,7 @@ public final class Utilizer extends JavaPlugin {
 
 		EventUtil.registerListeners(this,
 			// block
-			CustomBlockStorageLoadSave.class,
+			CustomBlockStorageLoadSaveInteract.class,
 			// entity
 			EntityGlowTracker.class,
 			EntityMetadataClearer.class,

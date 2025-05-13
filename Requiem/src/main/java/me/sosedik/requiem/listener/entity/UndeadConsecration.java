@@ -85,7 +85,7 @@ public class UndeadConsecration implements Listener {
 					return;
 				}
 				case Projectile projectile -> {
-					if (projectile.getFireTicks() > 0 || projectile.isVisualFire()) {
+					if (projectile.getFireTicks() > 0 || projectile.getVisualFire().toBooleanOrElse(false)) {
 						if (event.getEntity().isImmuneToFire()) {
 							event.setCancelled(true);
 						} else {
@@ -148,7 +148,7 @@ public class UndeadConsecration implements Listener {
 				return;
 			}
 
-			if ((this.entity.getFireTicks() > 0 || this.entity.isVisualFire()) && !this.entity.isImmuneToFire()) {
+			if ((this.entity.getFireTicks() > 0 || this.entity.getVisualFire().toBooleanOrElse(false)) && !this.entity.isImmuneToFire()) {
 				updateVulnerabilityTime(20);
 			}
 

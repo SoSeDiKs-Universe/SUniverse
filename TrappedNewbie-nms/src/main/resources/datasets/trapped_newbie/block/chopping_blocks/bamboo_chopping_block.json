@@ -1,0 +1,11 @@
+{
+	"destroy_time": 2,
+	"explosion_resistance": 3,
+	"ignited_by_lava": true,
+	"sound_type": "bamboo_wood",
+	"map_color": "color_yellow",
+	"client_type": "minecraft:barrier",
+	"state_parser": "sculk_sensor",
+	"parser": "chopping_block",
+	"log_type": "bamboo_block"
+}

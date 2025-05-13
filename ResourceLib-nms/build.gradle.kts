@@ -17,7 +17,7 @@ dependencies {
 tasks.withType<ShadowJar> {
     val rpDir = "${projectDir.parentFile.parentFile.path}/ResourcePacker/output"
     from("$rpDir/mappings") {
-        include("fonts.json", "items.json", "sounds.json", "tripwire.json")
+        include("fonts.json", "items.json", "sounds.json", "tripwire.json", "sculk_sensor.json")
         into("mappings")
     }
     from(rpDir) {

@@ -29,8 +29,8 @@ import java.util.UUID;
  */
 public class FlintToFlakedFlint implements Listener {
 
-	private static final NamespacedKey SUCCESS_SOUND = ResourceLib.getSound(TrappedNewbie.trappedNewbieKey("craft_flake_success"));
-	private static final NamespacedKey FAIL_SOUND = ResourceLib.getSound(TrappedNewbie.trappedNewbieKey("craft_flake_fail"));
+	private static final NamespacedKey SUCCESS_SOUND = ResourceLib.getSound(TrappedNewbie.trappedNewbieKey("item/craft_flake_success"));
+	private static final NamespacedKey FAIL_SOUND = ResourceLib.getSound(TrappedNewbie.trappedNewbieKey("item/craft_flake_fail"));
 
 	private final Map<UUID, Integer> usesMap = new HashMap<>();
 	private final Set<UUID> onCooldown = new HashSet<>();

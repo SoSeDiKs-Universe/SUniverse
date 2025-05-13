@@ -17,7 +17,9 @@ import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.BlockPistonEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.event.world.WorldUnloadEvent;
@@ -31,7 +33,7 @@ import java.util.List;
  * Handling custom block storage
  */
 @NullMarked
-public class CustomBlockStorageLoadSave implements Listener {
+public class CustomBlockStorageLoadSaveInteract implements Listener {
 
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onChunkLoad(ChunkLoadEvent event) {
@@ -116,6 +118,26 @@ public class CustomBlockStorageLoadSave implements Listener {
 		if (storage == null) return;
 
 		storage.onDestroy(event);
+	}
+
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	public void onPlace(BlockPlaceEvent event) {
+		Block block = event.getBlockPlaced();
+		BlockDataStorage storage = BlockStorage.getByLoc(block);
+		if (storage != null) return;
+
+		BlockStorage.initBlock(block, event);
+	}
+
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+	public void onInteract(PlayerInteractEvent event) {
+		Block block = event.getClickedBlock();
+		if (block == null) return;
+
+		BlockDataStorage storage = BlockStorage.getByLoc(block);
+		if (storage == null) return;
+
+		storage.onInteract(event);
 	}
 
 }

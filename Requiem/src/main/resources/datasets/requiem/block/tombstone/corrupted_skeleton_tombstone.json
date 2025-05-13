@@ -1,5 +1,6 @@
 {
 	"client_type": "minecraft:barrier",
+	"state_parser": "none",
 	"rarity": "uncommon",
 	"no_texture": true,
 	"model": "block/tombstone/corrupted_skeleton"

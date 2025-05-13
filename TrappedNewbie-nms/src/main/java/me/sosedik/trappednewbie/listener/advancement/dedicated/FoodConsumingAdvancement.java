@@ -35,13 +35,13 @@ public class FoodConsumingAdvancement implements Listener {
 	}
 
 	private void increaseStats(Player player) {
-		TrappedNewbieAdvancements.LOOT_10.awardNextCriterion(player);
-		TrappedNewbieAdvancements.LOOT_100.awardNextCriterion(player);
-		TrappedNewbieAdvancements.LOOT_500.awardNextCriterion(player);
-		TrappedNewbieAdvancements.LOOT_1000.awardNextCriterion(player);
-		TrappedNewbieAdvancements.LOOT_2500.awardNextCriterion(player);
-		TrappedNewbieAdvancements.LOOT_5000.awardNextCriterion(player);
-		TrappedNewbieAdvancements.LOOT_10000.awardNextCriterion(player);
+		TrappedNewbieAdvancements.EAT_200.awardNextCriterion(player);
+		TrappedNewbieAdvancements.EAT_1K.awardNextCriterion(player);
+		TrappedNewbieAdvancements.EAT_2500.awardNextCriterion(player);
+		TrappedNewbieAdvancements.EAT_5K.awardNextCriterion(player);
+		TrappedNewbieAdvancements.EAT_10K.awardNextCriterion(player);
+		TrappedNewbieAdvancements.EAT_25K.awardNextCriterion(player);
+		TrappedNewbieAdvancements.EAT_50K.awardNextCriterion(player);
 	}
 
 	private boolean isFood(ItemStack item) {

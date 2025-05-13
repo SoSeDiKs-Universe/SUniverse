@@ -22,7 +22,7 @@ import org.bukkit.util.Vector;
  */
 public class TrumpetScare implements Listener {
 
-	private static final NamespacedKey SOUND = ResourceLib.getSound(TrappedNewbie.trappedNewbieKey("doot_doot"));
+	private static final NamespacedKey SOUND = ResourceLib.getSound(TrappedNewbie.trappedNewbieKey("item/doot_doot"));
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onUse(PlayerItemConsumeEvent event) {

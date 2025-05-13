@@ -24,6 +24,7 @@ import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.loot.LootContext;
 import org.bukkit.loot.LootTable;
@@ -57,10 +58,33 @@ public class TombstoneBlockStorage extends BlockDataStorageHolder {
 		this.display = createDisplay();
 	}
 
+	public TombstoneBlockStorage(BlockPlaceEvent event, ReadWriteNBT nbt) {
+		super(event.getBlockPlaced(), nbt);
+		this.storedData = nbt;
+
+		ItemStack item = event.getItemInHand();
+		NBT.get(item, itemNbt -> {
+			if (itemNbt.hasTag(DEATH_MESSAGE_KEY)) {
+				ReadWriteNBT data = NBT.createNBTObject();
+				data.getOrCreateCompound(STORAGES_KEY)
+					.getOrCreateCompound("0")
+					.getOrCreateCompound(DEATH_MESSAGE_KEY)
+					.mergeCompound(itemNbt.getCompound(DEATH_MESSAGE_KEY));
+				this.storedData.mergeCompound(data);
+			}
+		});
+
+		BlockFace facing = event.getPlayer().getFacing().getOppositeFace();
+		this.display = createDisplay(block, facing, getBlock().getType());
+
+		updateBlockType();
+	}
+
 	public TombstoneBlockStorage(Block block, NamespacedKey storageId, ItemDisplay display, ReadWriteNBT storedData) {
 		super(block, storageId);
 		this.storedData = storedData;
 		this.display = display;
+
 		updateBlockType();
 	}
 

@@ -22,6 +22,7 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.Tag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionType;
 import org.jspecify.annotations.NullMarked;
@@ -75,21 +76,30 @@ public class TrappedNewbieAdvancements {
 	public static final IAdvancement KUNG_FU_PANDA = buildBase(FIRST_POSSESSION, "kung_fu_panda").display(display().xy(1F, -1F).icon(Material.BAMBOO).goalFrame()).build();
 
 	public static final AdvancementTab BASICS_TAB = buildTab("basics", MANAGER).inverseY().backgroundPathBlock(Material.GRAVEL).build();
-	public static final IRootAdvancement BASICS_ROOT = buildRoot(BASICS_TAB).display(display().icon(Material.ROOTED_DIRT)).visibilityRule(ifDone(false, GOOD_AS_NEW)).requiredProgress(alwaysDone()).build();
+	public static final IRootAdvancement BASICS_ROOT = buildRoot(BASICS_TAB).display(display().icon(Material.ROOTED_DIRT))
+			.visibilityRule(ifDone(false, GOOD_AS_NEW))
+			.requiredProgress(alwaysDone())
+			.build();
 	public static final IAdvancement GET_A_FIBER = buildBase(BASICS_ROOT, "get_a_fiber").display(display().x(1.5F).icon(TrappedNewbieItems.FIBER))
 			.requiredProgress(vanilla(VanillaTriggerData.inventoryChanged().withItems(ItemTriggerCondition.of(TrappedNewbieItems.FIBER))))
 			.build();
-	public static final IAdvancement MAKE_A_TWINE = buildBase(GET_A_FIBER, "make_a_twine").display(display().x(1F).icon(TrappedNewbieItems.TWINE)).visibilityRule(parentGranted())
+	public static final IAdvancement MAKE_A_TWINE = buildBase(GET_A_FIBER, "make_a_twine").display(display().x(1F).icon(TrappedNewbieItems.TWINE))
+			.visibilityRule(parentGranted())
 			.requiredProgress(vanilla(VanillaTriggerData.inventoryChanged().withItems(ItemTriggerCondition.of(TrappedNewbieItems.TWINE))))
 			.build();
-	public static final IAdvancement FIND_GRAVEL = buildBase(BASICS_ROOT, "find_gravel").display(display().xy(1F, -1F).icon(Material.GRAVEL)).visibilityRule(ifDone(MAKE_A_TWINE)).build();
-	public static final IAdvancement GET_A_FLINT = buildBase(FIND_GRAVEL, "get_a_flint").display(display().x(1F).icon(Material.FLINT)).visibilityRule(parentGranted())
+	public static final IAdvancement FIND_GRAVEL = buildBase(BASICS_ROOT, "find_gravel").display(display().xy(1F, -1F).icon(Material.GRAVEL))
+			.visibilityRule(ifDone(MAKE_A_TWINE))
+			.build();
+	public static final IAdvancement GET_A_FLINT = buildBase(FIND_GRAVEL, "get_a_flint").display(display().x(1F).icon(Material.FLINT))
+			.visibilityRule(parentGranted())
 			.requiredProgress(vanilla(VanillaTriggerData.inventoryChanged().withItems(ItemTriggerCondition.of(Material.FLINT))))
 			.build();
-	public static final IAdvancement GET_A_FLAKED_FLINT = buildBase(GET_A_FLINT, "get_a_flaked_flint").display(display().x(1F).icon(TrappedNewbieItems.FLAKED_FLINT)).visibilityRule(parentGranted())
+	public static final IAdvancement GET_A_FLAKED_FLINT = buildBase(GET_A_FLINT, "get_a_flaked_flint").display(display().x(1F).icon(TrappedNewbieItems.FLAKED_FLINT))
+			.visibilityRule(parentGranted())
 			.requiredProgress(vanilla(VanillaTriggerData.inventoryChanged().withItems(ItemTriggerCondition.of(TrappedNewbieItems.FLAKED_FLINT))))
 			.build();
-	public static final IAdvancement MAKE_FLINT_SHEARS = buildMulti(GET_A_FLAKED_FLINT, "make_flint_shears", MAKE_A_TWINE).linkingToAll(false).display(display().xy(1F, 0.5F).icon(TrappedNewbieItems.FLINT_SHEARS).goalFrame()).visibilityRule(parentGranted())
+	public static final IAdvancement MAKE_FLINT_SHEARS = buildMulti(GET_A_FLAKED_FLINT, "make_flint_shears", MAKE_A_TWINE).linkingToAll(false).display(display().xy(1F, 0.5F).goalFrame().icon(TrappedNewbieItems.FLINT_SHEARS))
+			.visibilityRule(parentGranted())
 			.requiredProgress(vanilla(VanillaTriggerData.inventoryChanged().withItems(ItemTriggerCondition.of(TrappedNewbieItems.FLINT_SHEARS))))
 			.build();
 	public static final IAdvancement GET_A_BRANCH = buildBase(BASICS_ROOT, "get_a_branch").display(display().xy(2F, 1F).icon(TrappedNewbieItems.OAK_BRANCH))
@@ -99,8 +109,26 @@ public class TrappedNewbieAdvancements {
 	public static final IAdvancement MAKE_ROUGH_STICKS = buildBase(MAKE_FLINT_SHEARS, "make_rough_sticks").display(display().xy(1F, 0.75F).icon(TrappedNewbieItems.ROUGH_STICK))
 			.requiredProgress(vanilla(VanillaTriggerData.inventoryChanged().withItems(ItemTriggerCondition.of(TrappedNewbieItems.ROUGH_STICK))))
 			.build();
+	public static final IAdvancement MAKE_A_FLINT_AXE = buildBase(MAKE_ROUGH_STICKS, "make_a_flint_axe").display(display().y(2F).goalFrame().icon(TrappedNewbieItems.FLINT_AXE))
+			.visibilityRule(grandParentGranted())
+			.requiredProgress(vanilla(VanillaTriggerData.inventoryChanged().withItems(ItemTriggerCondition.of(TrappedNewbieItems.FLINT_AXE))))
+			.build();
+	public static final IAdvancement GET_A_LOG = buildBase(MAKE_A_FLINT_AXE, "get_a_log").display(display().x(-1F).icon(Material.OAK_LOG))
+			.visibilityRule(grandParentGranted())
+			.requiredProgress(vanilla(VanillaTriggerData.inventoryChanged().withItems(ItemTriggerCondition.of(Tag.LOGS))))
+			.build();
+	public static final IAdvancement MAKE_A_CHOPPING_BLOCK = buildBase(GET_A_LOG, "make_a_chopping_block").display(display().x(-1F).icon(TrappedNewbieItems.OAK_CHOPPING_BLOCK))
+			.visibilityRule(parentGranted())
+			.requiredProgress(vanilla(VanillaTriggerData.inventoryChanged().withItems(ItemTriggerCondition.of(TrappedNewbieTags.ITEM_CHOPPING_BLOCKS))))
+			.build();
+	public static final IAdvancement MAKE_PLANKS = buildBase(MAKE_A_CHOPPING_BLOCK, "make_planks").display(display().x(-1F).icon(Material.OAK_PLANKS))
+			.requiredProgress(vanilla(VanillaTriggerData.inventoryChanged().withItems(ItemTriggerCondition.of(Tag.PLANKS))))
+			.build();
+	public static final IAdvancement MAKE_STICKS = buildBase(MAKE_PLANKS, "make_sticks").display(display().x(-1.05F).icon(TrappedNewbieItems.OAK_STICK))
+			.requiredProgress(vanilla(VanillaTriggerData.inventoryChanged().withItems(ItemTriggerCondition.of(TrappedNewbieTags.STICKS))))
+			.build();
 
-	public static final IAdvancement MAKE_A_FIRE = buildBase(MAKE_ROUGH_STICKS, "make_a_fire").display(display().xy(1.5F, -0.9F).icon(TrappedNewbieItems.INVENTORY_FIRE).goalFrame()).visibilityRule(grandParentGranted()).build();
+	public static final IAdvancement MAKE_A_FIRE = buildBase(MAKE_ROUGH_STICKS, "make_a_fire").display(display().xy(1.5F, -0.9F).goalFrame().icon(TrappedNewbieItems.INVENTORY_FIRE)).visibilityRule(grandParentGranted()).build();
 	public static final IAdvancement MAKE_A_FIRE_FILLER = buildFake(MAKE_A_FIRE).display(display().x(0.5F).isHidden(true)).visibilityRule(parentGranted()).build();
 
 	private static final IAdvancement MAKE_FLINT_SHEARS_TO_GET_A_BRANCH_MIMIC = buildLinking(MAKE_FLINT_SHEARS, GET_A_BRANCH).build();
@@ -355,7 +383,7 @@ public class TrappedNewbieAdvancements {
 			MAKE_FLINT_SHEARS, //GET_LEAVES, GET_A_DEAD_BUSH,
 			GET_A_BRANCH, MAKE_ROUGH_STICKS,
 //			EXPELLIARMUS,// SLAPFISH, DIEMONDS, INSPECTOR_GADGET, ITS_TIME_CONSUMING, ROCK_PAPER_SHEARS, // ToDo
-//			MAKE_A_FLINT_AXE, GET_A_LOG, MAKE_A_CHOPPING_BLOCK, MAKE_PLANKS, MAKE_STICKS,
+			MAKE_A_FLINT_AXE, GET_A_LOG, MAKE_A_CHOPPING_BLOCK, MAKE_PLANKS, MAKE_STICKS,
 			/*MAKE_A_GRASS_MESH, TREASURE_HUNT, MEET_THE_FLINTSTONES, */MAKE_A_FIRE, MAKE_A_FIRE_FILLER,
 //			GET_A_CHARCOAL, MAKE_A_FIRESTRIKER, CAMPING_OUT, SPAWN_CAMPING,
 //			MAKE_A_FLINT_KNIFE, GET_A_STRING, MAKE_A_CARPET,

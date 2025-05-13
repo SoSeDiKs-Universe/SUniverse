@@ -28,6 +28,7 @@ public class TrappedNewbieBootstrap implements PluginBootstrap {
 		ResourceLibBootstrap.setupBlocks(context, null, (key, properties) -> switch (key.substring("trapped_newbie:".length())) {
 			case String k when k.endsWith("_twig") -> BlockCreator.vegetation(properties, key);
 			case String k when k.startsWith("destroy_stage_") -> BlockCreator.barrier(properties, key);
+			case String k when k.endsWith("_chopping_block") -> BlockCreator.fakeSculk(properties, key);
 			default -> throw new IllegalArgumentException("Unknown blockstate: %s".formatted(key));
 		});
 		ResourceLibBootstrap.setupItems(context, TrappedNewbieItems.class, null, (key, properties) -> switch (key.substring("trapped_newbie:".length())) {

@@ -1,5 +1,5 @@
 {
-  "parser": "tripwire",
+  "state_parser": "tripwire",
   "dummy": true,
   "variations": [
     {},

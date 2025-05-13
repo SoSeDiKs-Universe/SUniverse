@@ -13,9 +13,11 @@ import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.HashMap;
@@ -59,11 +61,11 @@ public class BlockStorage {
 		return BlockPositions == null ? null : BlockPositions.get(Position.block(loc));
 	}
 
-	public static synchronized @Nullable BlockDataStorage initBlock(Block block) {
-		return createInfo(block.getLocation(), block.getType().getKey());
+	public static synchronized @Nullable BlockDataStorage initBlock(Block block, @Nullable BlockPlaceEvent event) {
+		return createInfo(block.getLocation(), block.getType().getKey(), event);
 	}
 
-	public static synchronized @Nullable BlockDataStorage createInfo(Location loc, NamespacedKey key) {
+	public static synchronized @Nullable BlockDataStorage createInfo(Location loc, NamespacedKey key, @Nullable BlockPlaceEvent event) {
 		Class<? extends BlockDataStorage> storageClass = MAPPINGS.get(key);
 		if (storageClass == null) return null;
 		if (getByLoc(loc) != null) return null;
@@ -71,11 +73,25 @@ public class BlockStorage {
 		try {
 			ReadWriteNBT nbt = NBT.createNBTObject();
 			nbt.setString(BlockDataStorage.ID_TAG, key.asString());
-			BlockDataStorage storage = storageClass
-				.getConstructor(Block.class, ReadWriteNBT.class)
-				.newInstance(loc.getBlock(), nbt);
+			BlockDataStorage storage = null;
+			if (event != null) {
+				for (Constructor<?> constructor : storageClass.getDeclaredConstructors()) {
+					if (constructor.getParameterCount() != 2) continue;
+					if (constructor.getParameterTypes()[0] != BlockPlaceEvent.class) continue;
+					if (constructor.getParameterTypes()[1] != ReadWriteNBT.class) continue;
+
+					storage = (BlockDataStorage) constructor.newInstance(event, nbt);
+					break;
+				}
+			}
+			if (storage == null) {
+				storage = storageClass
+					.getConstructor(Block.class, ReadWriteNBT.class)
+					.newInstance(loc.getBlock(), nbt);
+			}
 			saveInfo(loc, storage);
 			storage.onLoad();
+			if (event != null) storage.onPlace(event);
 			return storage;
 		} catch (InvocationTargetException | InstantiationException | IllegalAccessException |
 		         NoSuchMethodException e) {
@@ -154,7 +170,7 @@ public class BlockStorage {
 				for (int z = 0; z < 16; z++) {
 					for (int y = loadedChunk.getWorld().getMinHeight(); y < loadedChunk.getWorld().getMaxHeight(); y++) {
 						Block block = loadedChunk.getBlock(x, y, z);
-						initBlock(block);
+						initBlock(block, null);
 					}
 				}
 			}

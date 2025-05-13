@@ -4,6 +4,7 @@
 	"item.trapped_newbie.flaked_flint.name": "Кремнієвий уламок",
 	"item.trapped_newbie.rough_stick.name": "Необроблена палиця",
 	"item.trapped_newbie.flint_knife.name": "Кремнієвий ніж",
+	"item.trapped_newbie.flint_axe.name": "Кремнієва сокира",
 	"item.trapped_newbie.flint_shears.name": "Кремнієві ножиці",
 	"item.trapped_newbie.acacia_branch.name": "Акацієва гілка",
 	"item.trapped_newbie.birch_branch.name": "Березова гілка",
@@ -59,5 +60,17 @@
 	"item.trapped_newbie.cobblestone_hammer.name": "Кам’яний молоток",
 	"item.trapped_newbie.sandstone_hammer.name": "Пісковиковий молоток",
 	"item.trapped_newbie.red_sandstone_hammer.name": "Червонопісковиковий молоток",
-	"item.trapped_newbie.trumpet.name": "Труба"
+	"item.trapped_newbie.trumpet.name": "Труба",
+	"item.trapped_newbie.oak_chopping_block.name": "Дубовий обробний пеньок",
+	"item.trapped_newbie.bamboo_chopping_block.name": "Бамбуковий обробний пеньок",
+	"item.trapped_newbie.pale_oak_chopping_block.name": "Блідо-дубовий обробний пеньок",
+	"item.trapped_newbie.spruce_chopping_block.name": "Ялинковий обробний пеньок",
+	"item.trapped_newbie.birch_chopping_block.name": "Березовий обробний пеньок",
+	"item.trapped_newbie.jungle_chopping_block.name": "Тропічний обробний пеньок",
+	"item.trapped_newbie.acacia_chopping_block.name": "Акацієвий обробний пеньок",
+	"item.trapped_newbie.dark_oak_chopping_block.name": "Темно-дубовий обробний пеньок",
+	"item.trapped_newbie.cherry_chopping_block.name": "Вишневий обробний пеньок",
+	"item.trapped_newbie.mangrove_chopping_block.name": "Мангровий обробний пеньок",
+	"item.trapped_newbie.crimson_chopping_block.name": "Багряний обробний пеньок",
+	"item.trapped_newbie.warped_chopping_block.name": "Химерний обробний пеньок"
 }

@@ -29,7 +29,7 @@ public class HorseStatsAdvancements implements Listener {
 		double movingBps = PlayerSpeedTracker.getSpeed(player);
 		if (movingBps == 0) return;
 
-		double statBps = attribute.getValue() * 42.16;
+		double statBps = attribute.getValue() * 42.16; // TODO horse stats advancements
 //		if (statBps >= 9 && movingBps >= 9) TrappedNewbieAdvancements.HORSE_SPEED_1.awardAllCriteria(player);
 //		if (statBps >= 11 && movingBps >= 11) TrappedNewbieAdvancements.HORSE_SPEED_2.awardAllCriteria(player);
 //		if (statBps >= 13 && movingBps >= 13) TrappedNewbieAdvancements.HORSE_SPEED_3.awardAllCriteria(player);

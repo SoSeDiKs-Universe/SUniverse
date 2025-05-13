@@ -1,0 +1,6 @@
+{
+	"parent_model": "handheld",
+	"client_type": "minecraft:wooden_axe",
+	"durability": 16,
+	"repairable": "trapped_newbie:flaked_flint"
+}

@@ -24,7 +24,7 @@ public class BarrierNMSBlock extends Block implements KiterinoBlock {
 	}
 
 	@Override
-	public @Nullable BlockState serializeBlockToClient() {
+	public @Nullable BlockState serializeBlockToClient(Object currentState) {
 		if (bukkitState == null)
 			bukkitState = Material.BARRIER.createBlockData().createBlockState();
 		return bukkitState;

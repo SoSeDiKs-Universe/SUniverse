@@ -50,6 +50,7 @@ public class TrappedNewbieItems {
 	public static final Material FLAKED_FLINT = byKey("flaked_flint");
 
 	public static final Material FLINT_KNIFE = byKey("flint_knife");
+	public static final Material FLINT_AXE = byKey("flint_axe");
 	public static final Material FLINT_SHEARS = byKey("flint_shears");
 
 	// Sticks
@@ -66,6 +67,20 @@ public class TrappedNewbieItems {
 	public static final Material BAMBOOS_STICK = byKey("bamboos_stick");
 	public static final Material CRIMSON_STICK = byKey("crimson_stick");
 	public static final Material WARPED_STICK = byKey("warped_stick");
+
+	// Chopping blocks
+	public static final Material ACACIA_CHOPPING_BLOCK = byKey("acacia_chopping_block");
+	public static final Material BIRCH_CHOPPING_BLOCK = byKey("birch_chopping_block");
+	public static final Material CHERRY_CHOPPING_BLOCK = byKey("cherry_chopping_block");
+	public static final Material DARK_OAK_CHOPPING_BLOCK = byKey("dark_oak_chopping_block");
+	public static final Material JUNGLE_CHOPPING_BLOCK = byKey("jungle_chopping_block");
+	public static final Material MANGROVE_CHOPPING_BLOCK = byKey("mangrove_chopping_block");
+	public static final Material OAK_CHOPPING_BLOCK = byKey("oak_chopping_block");
+	public static final Material PALE_OAK_CHOPPING_BLOCK = byKey("pale_oak_chopping_block");
+	public static final Material SPRUCE_CHOPPING_BLOCK = byKey("spruce_chopping_block");
+	public static final Material BAMBOO_CHOPPING_BLOCK = byKey("bamboo_chopping_block");
+	public static final Material CRIMSON_CHOPPING_BLOCK = byKey("crimson_chopping_block");
+	public static final Material WARPED_CHOPPING_BLOCK = byKey("warped_chopping_block");
 
 	public static final Material ASH = byKey("ash");
 

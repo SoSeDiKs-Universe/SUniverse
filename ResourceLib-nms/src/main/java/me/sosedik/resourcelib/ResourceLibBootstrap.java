@@ -27,7 +27,9 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.material.MapColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.BlockType;
@@ -101,31 +103,39 @@ public class ResourceLibBootstrap implements PluginBootstrap {
 		goThroughDatasets(context, "block", (namespace, jsonEntries) -> {
 			context.getLifecycleManager().registerEventHandler(RegistryEvents.BLOCK.freeze(),
 				event -> jsonEntries.forEach(
-					entry -> readBlock(event, modifier, Key.key(namespace, entry.getKey()), entry.getValue().getAsJsonObject(), blocksProvider)
+					entry -> readBlock(context, event, modifier, Key.key(namespace, entry.getKey()), entry.getValue().getAsJsonObject(), blocksProvider)
 				)
 			);
 		});
 		goThroughDatasets(context, "blockstate", (namespace, jsonEntries) -> {
 			context.getLifecycleManager().registerEventHandler(RegistryEvents.BLOCK.freeze(),
 				event -> jsonEntries.forEach(
-					entry -> readBlock(event, modifier, Key.key(namespace, entry.getKey()), entry.getValue().getAsJsonObject(), blocksProvider)
+					entry -> readBlock(context, event, modifier, Key.key(namespace, entry.getKey()), entry.getValue().getAsJsonObject(), blocksProvider)
 				)
 			);
 		});
 	}
 
-	private static void readBlock(RegistryFreezeEvent<BlockType, BlockRegistryEntity.Builder> event, @Nullable BiConsumer<String, BlockRegistryEntity.Builder> modifier, Key blockKey, JsonObject json, BiFunction<String, Object, KiterinoBlock> blocksProvider) {
+	private static void readBlock(BootstrapContext context, RegistryFreezeEvent<BlockType, BlockRegistryEntity.Builder> event, @Nullable BiConsumer<String, BlockRegistryEntity.Builder> modifier, Key blockKey, JsonObject json, BiFunction<String, Object, KiterinoBlock> blocksProvider) {
 		var typedKey = TypedKey.create(RegistryKey.BLOCK, blockKey);
 		event.registry().register(typedKey, b -> {
-			b.nmsBlock(blocksProvider.apply(blockKey.toString(), applyBlockProperties(json, b.constructBlockProperties())));
+			try {
+				b.nmsBlock(blocksProvider.apply(blockKey.toString(), applyBlockProperties(json, b.constructBlockProperties())));
+			} catch (Exception e) {
+				context.getLogger().error("Couldn't inject custom block", e);
+			}
 
 			if (modifier != null) modifier.accept(blockKey.value(), b);
 		});
 	}
 
-	private static BlockBehaviour.Properties applyBlockProperties(JsonObject json, Object props) {
+	private static BlockBehaviour.Properties applyBlockProperties(JsonObject json, Object props) throws Exception {
 		BlockBehaviour.Properties properties = (BlockBehaviour.Properties) props;
+		if (json.has("destroy_time")) properties.destroyTime(json.get("destroy_time").getAsFloat());
 		if (json.has("explosion_resistance")) properties.explosionResistance(json.get("explosion_resistance").getAsFloat());
+		if (json.has("ignited_by_lava") && json.get("ignited_by_lava").getAsBoolean()) properties.ignitedByLava();
+		if (json.has("sound_type")) properties.sound((SoundType) SoundType.class.getDeclaredField(json.get("sound_type").getAsString().toUpperCase(Locale.US)).get(null));
+		if (json.has("map_color")) properties.mapColor((MapColor) MapColor.class.getDeclaredField(json.get("map_color").getAsString().toUpperCase(Locale.US)).get(null));
 		return properties;
 	}
 

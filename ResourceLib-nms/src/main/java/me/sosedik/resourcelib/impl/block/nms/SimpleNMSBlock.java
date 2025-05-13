@@ -23,7 +23,7 @@ public class SimpleNMSBlock extends Block implements KiterinoBlock {
 	}
 
 	@Override
-	public @Nullable BlockState serializeBlockToClient() {
+	public @Nullable BlockState serializeBlockToClient(Object currentState) {
 		if (this.bukkitState == null) {
 			String mapping = requireNonNull(ResourceLib.storage().getTripwireMapping(this.blockId));
 			this.bukkitState = Bukkit.createBlockData(mapping).createBlockState();

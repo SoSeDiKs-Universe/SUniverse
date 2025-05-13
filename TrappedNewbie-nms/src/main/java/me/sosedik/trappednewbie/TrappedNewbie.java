@@ -12,9 +12,12 @@ import me.sosedik.trappednewbie.command.MigrateCommand;
 import me.sosedik.trappednewbie.command.SpitCommand;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieAdvancements;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieRecipes;
+import me.sosedik.trappednewbie.dataset.TrappedNewbieTags;
+import me.sosedik.trappednewbie.impl.blockstorage.ChoppingBlockStorage;
 import me.sosedik.trappednewbie.impl.item.modifier.LetterModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.PaperPlaneModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.VisualArmorModifier;
+import me.sosedik.trappednewbie.impl.recipe.ChoppingBlockCrafting;
 import me.sosedik.trappednewbie.listener.advancement.AdvancementsLocalizer;
 import me.sosedik.trappednewbie.listener.advancement.LoadSaveAdvancementsOnJoinQuit;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.FindGravelAdvancement;
@@ -29,6 +32,7 @@ import me.sosedik.trappednewbie.listener.advancement.dedicated.LootOpensAdvancem
 import me.sosedik.trappednewbie.listener.advancement.dedicated.OpeningHolderAdvancement;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.StatisticAdvancements;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.WashAdvancements;
+import me.sosedik.trappednewbie.listener.block.BlockChoppingViaSwing;
 import me.sosedik.trappednewbie.listener.block.CustomBlockBreaking;
 import me.sosedik.trappednewbie.listener.entity.AngryAnimals;
 import me.sosedik.trappednewbie.listener.entity.BabierBabyMobs;
@@ -54,6 +58,7 @@ import me.sosedik.trappednewbie.listener.world.LimitedLimbo;
 import me.sosedik.trappednewbie.listener.world.PerPlayerWorlds;
 import me.sosedik.utilizer.CommandManager;
 import me.sosedik.utilizer.api.language.TranslationHolder;
+import me.sosedik.utilizer.listener.BlockStorage;
 import me.sosedik.utilizer.util.EventUtil;
 import me.sosedik.utilizer.util.FileUtil;
 import me.sosedik.utilizer.util.Scheduler;
@@ -92,6 +97,8 @@ public final class TrappedNewbie extends JavaPlugin {
 
 		TranslationHolder.extractLocales(this);
 		ResourceLib.loadDefaultResources(this);
+
+		TrappedNewbieTags.CHOPPING_BLOCKS.getValues().forEach(material -> BlockStorage.addMapping(material.getKey(), ChoppingBlockStorage.class));
 	}
 
 	private void cleanupTemporaryWorlds() {
@@ -106,6 +113,7 @@ public final class TrappedNewbie extends JavaPlugin {
 		registerCommands();
 
 		TrappedNewbieRecipes.addRecipes();
+		ChoppingBlockCrafting.registerRecipes();
 		TrappedNewbieAdvancements.setupAdvancements();
 
 		new LetterModifier(trappedNewbieKey("letter")).register();
@@ -130,6 +138,7 @@ public final class TrappedNewbie extends JavaPlugin {
 			StatisticAdvancements.class,
 			WashAdvancements.class,
 			// block
+			BlockChoppingViaSwing.class,
 			CustomBlockBreaking.class,
 			// entity
 			AngryAnimals.class,

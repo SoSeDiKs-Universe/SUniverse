@@ -84,5 +84,22 @@
 	"item.trapped_newbie.mangrove_chopping_block.name": "Mangrove Chopping Block",
 	"item.trapped_newbie.crimson_chopping_block.name": "Crimson Chopping Block",
 	"item.trapped_newbie.warped_chopping_block.name": "Warped Chopping Block",
-	"item.trapped_newbie.ice_cube.name": "Ice Cube"
+	"item.trapped_newbie.ice_cube.name": "Ice Cube",
+	"item.trapped_newbie.glass_shard.name": "Glass Shard",
+	"item.trapped_newbie.black_glass_shard.name": "Black Glass Shard",
+	"item.trapped_newbie.blue_glass_shard.name": "Blue Glass Shard",
+	"item.trapped_newbie.brown_glass_shard.name": "Brown Glass Shard",
+	"item.trapped_newbie.cyan_glass_shard.name": "Cyan Glass Shard",
+	"item.trapped_newbie.gray_glass_shard.name": "Gray Glass Shard",
+	"item.trapped_newbie.green_glass_shard.name": "Green Glass Shard",
+	"item.trapped_newbie.light_blue_glass_shard.name": "Light Blue Glass Shard",
+	"item.trapped_newbie.lime_glass_shard.name": "Lime Glass Shard",
+	"item.trapped_newbie.magenta_glass_shard.name": "Magenta Glass Shard",
+	"item.trapped_newbie.orange_glass_shard.name": "Orange Glass Shard",
+	"item.trapped_newbie.pink_glass_shard.name": "Pink Glass Shard",
+	"item.trapped_newbie.purple_glass_shard.name": "Purple Glass Shard",
+	"item.trapped_newbie.red_glass_shard.name": "Red Glass Shard",
+	"item.trapped_newbie.light_gray_glass_shard.name": "Light Gray Glass Shard",
+	"item.trapped_newbie.white_glass_shard.name": "White Glass Shard",
+	"item.trapped_newbie.yellow_glass_shard.name": "Yellow Glass Shard"
 }

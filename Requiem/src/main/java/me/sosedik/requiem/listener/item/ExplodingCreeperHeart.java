@@ -88,10 +88,10 @@ public class ExplodingCreeperHeart implements Listener {
 			if (!locHolder.isInvulnerable()) {
 				locHolder.setHealth(0.1);
 				var damageSource = DamageSource.builder(CREEPER_HEART)
-						.withDamageLocation(locHolder.getLocation())
-						.withCausingEntity(locHolder)
-						.withDirectEntity(locHolder)
-						.build();
+					.withDamageLocation(locHolder.getLocation())
+					.withCausingEntity(locHolder)
+					.withDirectEntity(locHolder)
+					.build();
 				locHolder.damage(Double.MAX_VALUE, damageSource);
 			}
 			// KittenAdvancements.GREEN_FOOL.awardAllCriteria(this.player); // TODO advancement

@@ -84,5 +84,22 @@
 	"item.trapped_newbie.mangrove_chopping_block.name": "Мангровый разделочный пенёк",
 	"item.trapped_newbie.crimson_chopping_block.name": "Багровый разделочный пенёк",
 	"item.trapped_newbie.warped_chopping_block.name": "Искажённый разделочный пенёк",
-	"item.trapped_newbie.ice_cube.name": "Кубик льда"
+	"item.trapped_newbie.ice_cube.name": "Кубик льда",
+	"item.trapped_newbie.glass_shard.name": "Осколок стекла",
+	"item.trapped_newbie.black_glass_shard.name": "Осколок чёрного стекла",
+	"item.trapped_newbie.blue_glass_shard.name": "Осколок синего стекла",
+	"item.trapped_newbie.brown_glass_shard.name": "Осколок коричневого стекла",
+	"item.trapped_newbie.cyan_glass_shard.name": "Осколок бирюзового стекла",
+	"item.trapped_newbie.gray_glass_shard.name": "Осколок серого стекла",
+	"item.trapped_newbie.green_glass_shard.name": "Осколок зелёного стекла",
+	"item.trapped_newbie.light_blue_glass_shard.name": "Осколок голубого стекла",
+	"item.trapped_newbie.lime_glass_shard.name": "Осколок лаймового стекла",
+	"item.trapped_newbie.magenta_glass_shard.name": "Осколок пурпурного стекла",
+	"item.trapped_newbie.orange_glass_shard.name": "Осколок оранжевого стекла",
+	"item.trapped_newbie.pink_glass_shard.name": "Осколок розового стекла",
+	"item.trapped_newbie.purple_glass_shard.name": "Осколок фиолетового стекла",
+	"item.trapped_newbie.red_glass_shard.name": "Осколок красного стекла",
+	"item.trapped_newbie.light_gray_glass_shard.name": "Осколок светло-серого стекла",
+	"item.trapped_newbie.white_glass_shard.name": "Осколок белого стекла",
+	"item.trapped_newbie.yellow_glass_shard.name": "Осколок жёлтого стекла"
 }

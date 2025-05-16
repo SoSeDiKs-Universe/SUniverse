@@ -84,5 +84,22 @@
 	"item.trapped_newbie.mangrove_chopping_block.name": "Мангровий обробний пеньок",
 	"item.trapped_newbie.crimson_chopping_block.name": "Багряний обробний пеньок",
 	"item.trapped_newbie.warped_chopping_block.name": "Химерний обробний пеньок",
-	"item.trapped_newbie.ice_cube.name": "Кубик льоду"
+	"item.trapped_newbie.ice_cube.name": "Кубик льоду",
+	"item.trapped_newbie.glass_shard.name": "Уламок скла",
+	"item.trapped_newbie.black_glass_shard.name": "Уламок чорного скла",
+	"item.trapped_newbie.blue_glass_shard.name": "Уламок синього скла",
+	"item.trapped_newbie.brown_glass_shard.name": "Уламок коричневого скла",
+	"item.trapped_newbie.cyan_glass_shard.name": "Уламок бірюзового скла",
+	"item.trapped_newbie.gray_glass_shard.name": "Уламок сірого скла",
+	"item.trapped_newbie.green_glass_shard.name": "Уламок зеленого скла",
+	"item.trapped_newbie.light_blue_glass_shard.name": "Уламок блакитного скла",
+	"item.trapped_newbie.lime_glass_shard.name": "Уламок лаймового скла",
+	"item.trapped_newbie.magenta_glass_shard.name": "Уламок пурпурного скла",
+	"item.trapped_newbie.orange_glass_shard.name": "Уламок помаранчевого скла",
+	"item.trapped_newbie.pink_glass_shard.name": "Уламок рожевого скла",
+	"item.trapped_newbie.purple_glass_shard.name": "Уламок фіолетового скла",
+	"item.trapped_newbie.red_glass_shard.name": "Уламок червоного скла",
+	"item.trapped_newbie.light_gray_glass_shard.name": "Уламок світло-сірого скла",
+	"item.trapped_newbie.white_glass_shard.name": "Уламок білого скла",
+	"item.trapped_newbie.yellow_glass_shard.name": "Уламок жовтого скла"
 }

@@ -48,7 +48,7 @@ public class TranslationHolder {
 	 */
 	public boolean hasMessage(String path) {
 		JsonObject locale = this.locales.get(LangOptionsStorage.getDefaultLangOptions().minecraftId());
-		return locale.has(path);
+		return locale.has(path) || locale.has(path + ".r");
 	}
 
 	/**
@@ -76,6 +76,12 @@ public class TranslationHolder {
 	public String @Nullable [] getMessage(LangOptions langOptions, String path, boolean scream) {
 		JsonObject langJson = this.locales.get(langOptions.minecraftId());
 		if (langJson == null || !langJson.has(path)) {
+			// Simple randomized message
+			if (langJson != null && langJson.has(path + ".r") && langJson.get(path + ".r") instanceof JsonArray jsonArray) {
+				String message = jsonArray.get(RANDOM.nextInt(jsonArray.size())).getAsString();
+				return new String[]{message};
+			}
+
 			// Retry for default language
 			LangOptions defaultLangOptions = LangOptionsStorage.getDefaultLangOptions();
 			if (defaultLangOptions != langOptions)
@@ -102,14 +108,6 @@ public class TranslationHolder {
 		}
 
 		langJson = jsonElement.getAsJsonObject();
-
-		// Multi-lined message
-		if (langJson.has("1"))
-			return parseMultiLined(langJson);
-
-		// Simple randomized message
-		if (langJson.has("1r"))
-			return parseRandomized(langJson);
 
 		// Complicated randomized message
 		if (langJson.has("0r"))

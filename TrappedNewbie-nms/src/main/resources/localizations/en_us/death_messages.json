@@ -1,0 +1,9 @@
+{
+	"death.attack.glass_shard": "<entity> met their end at the hands of a glass shard",
+	"death.attack.pricky_block.r": [
+		"<entity>'s hands were no match for the thorns",
+		"<entity>'s curiosity was met with sharp consequences",
+		"<entity>'s reckless breaking led to a painful end",
+		"<entity> was caught off guard by the sharp edges of their surroundings"
+	]
+}

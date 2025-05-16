@@ -95,6 +95,25 @@ public class TrappedNewbieItems {
 	public static final Material CRIMSON_CHOPPING_BLOCK = byKey("crimson_chopping_block");
 	public static final Material WARPED_CHOPPING_BLOCK = byKey("warped_chopping_block");
 
+	// Glass Shards
+	public static final Material GLASS_SHARD = byKey("glass_shard");
+	public static final Material BLACK_GLASS_SHARD = byKey("black_glass_shard");
+	public static final Material BLUE_GLASS_SHARD = byKey("blue_glass_shard");
+	public static final Material BROWN_GLASS_SHARD = byKey("brown_glass_shard");
+	public static final Material CYAN_GLASS_SHARD = byKey("cyan_glass_shard");
+	public static final Material GRAY_GLASS_SHARD = byKey("gray_glass_shard");
+	public static final Material GREEN_GLASS_SHARD = byKey("green_glass_shard");
+	public static final Material LIGHT_BLUE_GLASS_SHARD = byKey("light_blue_glass_shard");
+	public static final Material LIME_GLASS_SHARD = byKey("lime_glass_shard");
+	public static final Material MAGENTA_GLASS_SHARD = byKey("magenta_glass_shard");
+	public static final Material ORANGE_GLASS_SHARD = byKey("orange_glass_shard");
+	public static final Material PINK_GLASS_SHARD = byKey("pink_glass_shard");
+	public static final Material PURPLE_GLASS_SHARD = byKey("purple_glass_shard");
+	public static final Material RED_GLASS_SHARD = byKey("red_glass_shard");
+	public static final Material LIGHT_GRAY_GLASS_SHARD = byKey("light_gray_glass_shard");
+	public static final Material WHITE_GLASS_SHARD = byKey("white_glass_shard");
+	public static final Material YELLOW_GLASS_SHARD = byKey("yellow_glass_shard");
+
 	public static final Material ASH = byKey("ash");
 	public static final Material BALL_OF_MUD = byKey("ball_of_mud");
 	public static final Material ICE_CUBE = byKey("ice_cube");

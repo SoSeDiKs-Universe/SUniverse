@@ -14,6 +14,7 @@ public class TrappedNewbieTags {
 	// items
 	public static final Tag<Material> STICKS = ItemUtil.itemTag(trappedNewbieKey("sticks"));
 	public static final Tag<Material> BRANCHES = ItemUtil.itemTag(trappedNewbieKey("branches"));
+	public static final Tag<Material> ROCKS = ItemUtil.itemTag(trappedNewbieKey("rocks"));
 	public static final Tag<Material> GLOVES = ItemUtil.itemTag(trappedNewbieKey("gloves"));
 	public static final Tag<Material> HAMMERS = ItemUtil.itemTag(trappedNewbieKey("hammers"));
 	public static final Tag<Material> COSMETIC_ARMOR = ItemUtil.itemTag(trappedNewbieKey("cosmetic_armor"));

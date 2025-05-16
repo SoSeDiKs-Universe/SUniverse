@@ -1,0 +1,29 @@
+{
+	"values": [
+		"requiem:acrobat_skeleton_tombstone",
+		"requiem:arrows_skeleton_tombstone",
+		"requiem:basic_skeleton_tombstone",
+		"requiem:bow_skeleton_tombstone",
+		"requiem:burnt_skeleton_tombstone",
+		"requiem:cactus_skeleton_tombstone",
+		"requiem:chorus_skeleton_tombstone",
+		"requiem:chorus_tangled_skeleton_tombstone",
+		"requiem:common_skeleton_tombstone",
+		"requiem:crimson_tangled_skeleton_tombstone",
+		"requiem:crystal_skeleton_tombstone",
+		"requiem:explorer_skeleton_tombstone",
+		"requiem:frozen_waterdrop_skeleton_tombstone",
+		"requiem:headache_skeleton_tombstone",
+		"requiem:hunted_skeleton_tombstone",
+		"requiem:lucky_skeleton_tombstone",
+		"requiem:shot_skeleton_tombstone",
+		"requiem:shroom_skeleton_tombstone",
+		"requiem:skeleton_from_the_sky_tombstone",
+		"requiem:slain_skeleton_tombstone",
+		"requiem:stalactite_skeleton_tombstone",
+		"requiem:trident_skeleton_tombstone",
+		"requiem:unsaved_skeleton_tombstone",
+		"requiem:vines_tangled_skeleton_tombstone",
+		"requiem:winter_skeleton_tombstone"
+	]
+}

@@ -1,0 +1,70 @@
+{
+  "sound_type": "stone",
+  "no_collision": true,
+  "replaceable": true,
+  "client_type": "minecraft:barrier",
+  "mimik": "trapped_newbie:rock",
+  "state_parser": "tripwire",
+  "variations": [
+    {
+      "model": "tiny_pebble"
+    },
+    {
+      "model": "tiny_pebble",
+      "y": 90
+    },
+    {
+      "model": "tiny_pebble",
+      "y": 180
+    },
+    {
+      "model": "tiny_pebble",
+      "y": 270
+    },
+    {
+      "model": "small_pebble"
+    },
+    {
+      "model": "small_pebble",
+      "y": 90
+    },
+    {
+      "model": "small_pebble",
+      "y": 180
+    },
+    {
+      "model": "small_pebble",
+      "y": 270
+    },
+    {
+      "model": "medium_pebble"
+    },
+    {
+      "model": "medium_pebble",
+      "y": 90
+    },
+    {
+      "model": "medium_pebble",
+      "y": 180
+    },
+    {
+      "model": "medium_pebble",
+      "y": 270
+    },
+    {
+      "model": "large_pebble"
+    },
+    {
+      "model": "large_pebble",
+      "y": 90
+    },
+    {
+      "model": "large_pebble",
+      "y": 180
+    },
+    {
+      "model": "large_pebble",
+      "y": 270
+    }
+  ]
+}

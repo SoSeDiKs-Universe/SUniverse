@@ -1,0 +1,55 @@
+{
+  "sound_type": "grass",
+  "no_collision": true,
+  "replaceable": true,
+  "client_type": "minecraft:barrier",
+  "parent_model": "handheld",
+  "state_parser": "tripwire",
+  "variations": [
+    {
+      "model": "small_jungle_branch"
+    },
+    {
+      "model": "small_jungle_branch",
+      "y": 90
+    },
+    {
+      "model": "small_jungle_branch",
+      "y": 180
+    },
+    {
+      "model": "small_jungle_branch",
+      "y": 270
+    },
+    {
+      "model": "medium_jungle_branch"
+    },
+    {
+      "model": "medium_jungle_branch",
+      "y": 90
+    },
+    {
+      "model": "medium_jungle_branch",
+      "y": 180
+    },
+    {
+      "model": "medium_jungle_branch",
+      "y": 270
+    },
+    {
+      "model": "large_jungle_branch"
+    },
+    {
+      "model": "large_jungle_branch",
+      "y": 90
+    },
+    {
+      "model": "large_jungle_branch",
+      "y": 180
+    },
+    {
+      "model": "large_jungle_branch",
+      "y": 270
+    }
+  ]
+}

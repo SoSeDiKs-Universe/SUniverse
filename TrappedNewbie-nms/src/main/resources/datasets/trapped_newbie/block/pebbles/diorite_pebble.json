@@ -1,0 +1,70 @@
+{
+  "sound_type": "stone",
+  "no_collision": true,
+  "replaceable": true,
+  "client_type": "minecraft:barrier",
+  "mimik": "trapped_newbie:diorite_rock",
+  "state_parser": "tripwire",
+  "variations": [
+    {
+      "model": "tiny_diorite_pebble"
+    },
+    {
+      "model": "tiny_diorite_pebble",
+      "y": 90
+    },
+    {
+      "model": "tiny_diorite_pebble",
+      "y": 180
+    },
+    {
+      "model": "tiny_diorite_pebble",
+      "y": 270
+    },
+    {
+      "model": "small_diorite_pebble"
+    },
+    {
+      "model": "small_diorite_pebble",
+      "y": 90
+    },
+    {
+      "model": "small_diorite_pebble",
+      "y": 180
+    },
+    {
+      "model": "small_diorite_pebble",
+      "y": 270
+    },
+    {
+      "model": "medium_diorite_pebble"
+    },
+    {
+      "model": "medium_diorite_pebble",
+      "y": 90
+    },
+    {
+      "model": "medium_diorite_pebble",
+      "y": 180
+    },
+    {
+      "model": "medium_diorite_pebble",
+      "y": 270
+    },
+    {
+      "model": "large_diorite_pebble"
+    },
+    {
+      "model": "large_diorite_pebble",
+      "y": 90
+    },
+    {
+      "model": "large_diorite_pebble",
+      "y": 180
+    },
+    {
+      "model": "large_diorite_pebble",
+      "y": 270
+    }
+  ]
+}

@@ -92,7 +92,11 @@ public class ResourceLibBootstrap implements PluginBootstrap {
 		goThroughDatasets(context, "block", (namespace, jsonEntries) -> {
 			context.getLifecycleManager().registerEventHandler(RegistryEvents.ITEM.freeze(),
 				event -> jsonEntries.forEach(
-					entry -> readItem(context, event, modifier, Key.key(namespace, entry.getKey()), entry.getValue().getAsJsonObject(), itemsProvider)
+					entry -> readItem(context, event, modifier, Key.key(namespace, entry.getKey()), entry.getValue().getAsJsonObject(), itemsProvider == null ? null : (key, props) -> {
+						Object blockItem = itemsProvider.apply(key, props);
+						if (blockItem != null && !(blockItem instanceof BlockItem)) context.getLogger().error("Block item is not an instance of BlockItem: {}", key);
+						return blockItem;
+					})
 				)
 			);
 		});
@@ -134,6 +138,8 @@ public class ResourceLibBootstrap implements PluginBootstrap {
 		if (json.has("destroy_time")) properties.destroyTime(json.get("destroy_time").getAsFloat());
 		if (json.has("explosion_resistance")) properties.explosionResistance(json.get("explosion_resistance").getAsFloat());
 		if (json.has("ignited_by_lava") && json.get("ignited_by_lava").getAsBoolean()) properties.ignitedByLava();
+		if (json.has("no_collision") && json.get("no_collision").getAsBoolean()) properties.noCollission();
+		if (json.has("replaceable") && json.get("replaceable").getAsBoolean()) properties.replaceable();
 		if (json.has("sound_type")) properties.sound((SoundType) SoundType.class.getDeclaredField(json.get("sound_type").getAsString().toUpperCase(Locale.US)).get(null));
 		if (json.has("map_color")) properties.mapColor((MapColor) MapColor.class.getDeclaredField(json.get("map_color").getAsString().toUpperCase(Locale.US)).get(null));
 		return properties;

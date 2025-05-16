@@ -70,6 +70,43 @@ public class TrappedNewbieRecipes {
 			.addIngredients('S', UtilizerTags.KNIFES.getValues())
 			.register();
 
+		new ShapedCraft(new ItemStack(TrappedNewbieItems.GRASS_MESH), trappedNewbieKey("grass_mesh"), "TS", "ST")
+			.addIngredients('S', Material.STICK, TrappedNewbieItems.ROUGH_STICK)
+			.addIngredients('T', Material.STRING, TrappedNewbieItems.TWINE) // HORSEHAIR
+			.register();
+
+		addBranchRecipe(TrappedNewbieItems.ACACIA_BRANCH, Material.ACACIA_SAPLING);
+		addBranchRecipe(TrappedNewbieItems.BIRCH_BRANCH, Material.BIRCH_SAPLING);
+		addBranchRecipe(TrappedNewbieItems.CHERRY_BRANCH, Material.CHERRY_SAPLING);
+		addBranchRecipe(TrappedNewbieItems.DARK_OAK_BRANCH, Material.DARK_OAK_SAPLING);
+		addBranchRecipe(TrappedNewbieItems.JUNGLE_BRANCH, Material.JUNGLE_SAPLING);
+		addBranchRecipe(TrappedNewbieItems.MANGROVE_BRANCH, Material.MANGROVE_PROPAGULE);
+		addBranchRecipe(TrappedNewbieItems.OAK_BRANCH, Material.OAK_SAPLING);
+		addBranchRecipe(TrappedNewbieItems.PALE_OAK_BRANCH, Material.PALE_OAK_SAPLING);
+		addBranchRecipe(TrappedNewbieItems.SPRUCE_BRANCH, Material.SPRUCE_SAPLING);
+		addBranchRecipe(TrappedNewbieItems.DEAD_BRANCH, Material.DEAD_BUSH);
+
+		addRockRecipe(TrappedNewbieItems.ROCK, Material.COBBLESTONE);
+		addRockRecipe(TrappedNewbieItems.PEBBLE, Material.COBBLESTONE);
+		addRockRecipe(TrappedNewbieItems.ANDESITE_ROCK, Material.ANDESITE);
+		addRockRecipe(TrappedNewbieItems.ANDESITE_PEBBLE, Material.ANDESITE);
+		addRockRecipe(TrappedNewbieItems.DIORITE_ROCK, Material.DIORITE);
+		addRockRecipe(TrappedNewbieItems.DIORITE_PEBBLE, Material.DIORITE);
+		addRockRecipe(TrappedNewbieItems.GRANITE_ROCK, Material.GRANITE);
+		addRockRecipe(TrappedNewbieItems.GRANITE_PEBBLE, Material.GRANITE);
+		addRockRecipe(TrappedNewbieItems.SANDSTONE_ROCK, Material.SANDSTONE);
+		addRockRecipe(TrappedNewbieItems.SANDSTONE_PEBBLE, Material.SANDSTONE);
+		addRockRecipe(TrappedNewbieItems.RED_SANDSTONE_ROCK, Material.RED_SANDSTONE);
+		addRockRecipe(TrappedNewbieItems.RED_SANDSTONE_PEBBLE, Material.RED_SANDSTONE);
+		addRockRecipe(TrappedNewbieItems.END_STONE_ROCK, Material.END_STONE);
+		addRockRecipe(TrappedNewbieItems.END_STONE_PEBBLE, Material.END_STONE);
+		addRockRecipe(TrappedNewbieItems.NETHERRACK_ROCK, Material.NETHERRACK);
+		addRockRecipe(TrappedNewbieItems.NETHERRACK_PEBBLE, Material.NETHERRACK);
+		addRockRecipe(TrappedNewbieItems.BALL_OF_MUD, Material.MUD);
+		addRockRecipe(TrappedNewbieItems.SOUL_SOIL_PEBBLE, Material.SOUL_SOIL);
+		addRockRecipe(TrappedNewbieItems.ICE_CUBE, Material.ICE);
+		addRockRecipe(TrappedNewbieItems.ICE_PEBBLE, Material.ICE);
+
 		TrappedNewbieTags.CHOPPING_BLOCKS.getValues().forEach(type -> {
 			Material logType = Material.matchMaterial(type.key().value().replace("chopping_block", "log"));
 			if (logType == null) logType = Material.matchMaterial(type.key().value().replace("chopping_block", "stem"));
@@ -105,6 +142,20 @@ public class TrappedNewbieRecipes {
 				Bukkit.addRecipe(recipe, false);
 			});
 		}, 1L);
+	}
+
+	private static void addBranchRecipe(Material branch, Material sapling) {
+		new ShapelessCraft(new ItemStack(branch), trappedNewbieKey(sapling.key().value() + "_to_" + branch.key().value()))
+			.withGroup("sapling_to_branches")
+			.addIngredients(sapling)
+			.register();
+	}
+
+	private static void addRockRecipe(Material rock, Material stone) {
+		new ShapedCraft(new ItemStack(stone), trappedNewbieKey(rock.key().value() + "_to_" + stone.key().value()), "RR", "RR")
+			.withGroup("shards_to_block")
+			.addIngredients('R', rock)
+			.register();
 	}
 
 	private static void addReplacements(Map<Material, List<ItemStack>> map, Material type, Tag<Material> replacements) {

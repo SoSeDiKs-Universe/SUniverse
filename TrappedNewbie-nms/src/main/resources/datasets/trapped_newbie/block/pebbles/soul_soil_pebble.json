@@ -1,0 +1,70 @@
+{
+  "sound_type": "soul_soil",
+  "no_collision": true,
+  "replaceable": true,
+  "client_type": "minecraft:barrier",
+  "mimik": "trapped_newbie:ball_of_mud",
+  "state_parser": "tripwire",
+  "variations": [
+    {
+      "model": "tiny_soul_soil_pebble"
+    },
+    {
+      "model": "tiny_soul_soil_pebble",
+      "y": 90
+    },
+    {
+      "model": "tiny_soul_soil_pebble",
+      "y": 180
+    },
+    {
+      "model": "tiny_soul_soil_pebble",
+      "y": 270
+    },
+    {
+      "model": "small_soul_soil_pebble"
+    },
+    {
+      "model": "small_soul_soil_pebble",
+      "y": 90
+    },
+    {
+      "model": "small_soul_soil_pebble",
+      "y": 180
+    },
+    {
+      "model": "small_soul_soil_pebble",
+      "y": 270
+    },
+    {
+      "model": "medium_soul_soil_pebble"
+    },
+    {
+      "model": "medium_soul_soil_pebble",
+      "y": 90
+    },
+    {
+      "model": "medium_soul_soil_pebble",
+      "y": 180
+    },
+    {
+      "model": "medium_soul_soil_pebble",
+      "y": 270
+    },
+    {
+      "model": "large_soul_soil_pebble"
+    },
+    {
+      "model": "large_soul_soil_pebble",
+      "y": 90
+    },
+    {
+      "model": "large_soul_soil_pebble",
+      "y": 180
+    },
+    {
+      "model": "large_soul_soil_pebble",
+      "y": 270
+    }
+  ]
+}

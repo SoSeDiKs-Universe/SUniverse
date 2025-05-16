@@ -1,0 +1,20 @@
+{
+  "sound_type": "grass",
+  "no_collision": true,
+  "replaceable": true,
+  "client_type": "minecraft:barrier",
+  "parent_model": "handheld",
+  "state_parser": "tripwire",
+  "variations": [
+    {},
+    {
+      "y": 90
+    },
+    {
+      "y": 180
+    },
+    {
+      "y": 270
+    }
+  ]
+}

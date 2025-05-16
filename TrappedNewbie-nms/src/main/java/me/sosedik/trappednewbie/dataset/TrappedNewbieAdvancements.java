@@ -96,7 +96,6 @@ public class TrappedNewbieAdvancements {
 			.build();
 	public static final IAdvancement GET_A_FLAKED_FLINT = buildBase(GET_A_FLINT, "get_a_flaked_flint").display(display().x(1F).icon(TrappedNewbieItems.FLAKED_FLINT))
 			.visibilityRule(parentGranted())
-			.requiredProgress(vanilla(VanillaTriggerData.inventoryChanged().withItems(ItemTriggerCondition.of(TrappedNewbieItems.FLAKED_FLINT))))
 			.build();
 	public static final IAdvancement MAKE_FLINT_SHEARS = buildMulti(GET_A_FLAKED_FLINT, "make_flint_shears", MAKE_A_TWINE).linkingToAll(false).display(display().xy(1F, 0.5F).goalFrame().icon(TrappedNewbieItems.FLINT_SHEARS))
 			.visibilityRule(parentGranted())
@@ -127,7 +126,14 @@ public class TrappedNewbieAdvancements {
 	public static final IAdvancement MAKE_STICKS = buildBase(MAKE_PLANKS, "make_sticks").display(display().x(-1.05F).icon(TrappedNewbieItems.OAK_STICK))
 			.requiredProgress(vanilla(VanillaTriggerData.inventoryChanged().withItems(ItemTriggerCondition.of(TrappedNewbieTags.STICKS))))
 			.build();
-
+	public static final IAdvancement MAKE_A_GRASS_MESH = buildBase(BASICS_ROOT, "make_a_grass_mesh").display(display().xy(1F, -2.5F).goalFrame().icon(TrappedNewbieItems.GRASS_MESH))
+			.visibilityRule(ifDone(MAKE_ROUGH_STICKS))
+			.requiredProgress(vanilla(VanillaTriggerData.inventoryChanged().withItems(ItemTriggerCondition.of(TrappedNewbieItems.GRASS_MESH))))
+			.build();
+	public static final IAdvancement TREASURE_HUNT = buildBase(MAKE_A_GRASS_MESH, "treasure_hunt").display(display().x(1F).icon(Material.BOWL)).build();
+	public static final IAdvancement MEET_THE_FLINTSTONES = buildBase(TREASURE_HUNT, "meet_the_flintstones").display(display().x(1F).challengeFrame().icon(Material.FLINT))
+			.requiredProgress(vanilla(VanillaTriggerData.inventoryChanged().withItems(ItemTriggerCondition.of(Material.FLINT).withMinAmount(64))))
+			.build();
 	public static final IAdvancement MAKE_A_FIRE = buildBase(MAKE_ROUGH_STICKS, "make_a_fire").display(display().xy(1.5F, -0.9F).goalFrame().icon(TrappedNewbieItems.INVENTORY_FIRE)).visibilityRule(grandParentGranted()).build();
 	public static final IAdvancement MAKE_A_FIRE_FILLER = buildFake(MAKE_A_FIRE).display(display().x(0.5F).isHidden(true)).visibilityRule(parentGranted()).build();
 
@@ -384,7 +390,7 @@ public class TrappedNewbieAdvancements {
 			GET_A_BRANCH, MAKE_ROUGH_STICKS,
 //			EXPELLIARMUS,// SLAPFISH, DIEMONDS, INSPECTOR_GADGET, ITS_TIME_CONSUMING, ROCK_PAPER_SHEARS, // ToDo
 			MAKE_A_FLINT_AXE, GET_A_LOG, MAKE_A_CHOPPING_BLOCK, MAKE_PLANKS, MAKE_STICKS,
-			/*MAKE_A_GRASS_MESH, TREASURE_HUNT, MEET_THE_FLINTSTONES, */MAKE_A_FIRE, MAKE_A_FIRE_FILLER,
+			MAKE_A_GRASS_MESH, TREASURE_HUNT, MEET_THE_FLINTSTONES, MAKE_A_FIRE, MAKE_A_FIRE_FILLER,
 //			GET_A_CHARCOAL, MAKE_A_FIRESTRIKER, CAMPING_OUT, SPAWN_CAMPING,
 //			MAKE_A_FLINT_KNIFE, GET_A_STRING, MAKE_A_CARPET,
 //			GET_A_WOOL,

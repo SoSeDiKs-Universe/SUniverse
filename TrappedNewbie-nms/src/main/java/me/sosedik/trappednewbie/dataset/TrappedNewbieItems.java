@@ -28,21 +28,33 @@ public class TrappedNewbieItems {
 	public static final Material PALE_OAK_BRANCH = byKey("pale_oak_branch");
 	public static final Material SPRUCE_BRANCH = byKey("spruce_branch");
 	public static final Material DEAD_BRANCH = byKey("dead_branch");
+	// Unobtainable branches
+	public static final Material BAMBOO_BRANCH = byKey("bamboo_branch");
+	public static final Material CRIMSON_BRANCH = byKey("crimson_branch");
+	public static final Material WARPED_BRANCH = byKey("warped_branch");
 
-	// Block versions of branches
-	public static final Material ACACIA_TWIG = byKey("acacia_twig");
-	public static final Material BIRCH_TWIG = byKey("birch_twig");
-	public static final Material CHERRY_TWIG = byKey("cherry_twig");
-	public static final Material DARK_OAK_TWIG = byKey("dark_oak_twig");
-	public static final Material JUNGLE_TWIG = byKey("jungle_twig");
-	public static final Material MANGROVE_TWIG = byKey("mangrove_twig");
-	public static final Material OAK_TWIG = byKey("oak_twig");
-	public static final Material PALE_OAK_TWIG = byKey("pale_oak_twig");
-	public static final Material SPRUCE_TWIG = byKey("spruce_twig");
-	public static final Material DEAD_TWIG = byKey("dead_twig");
-	public static final Material BAMBOO_TWIG = byKey("bamboo_twig");
-	public static final Material CRIMSON_TWIG = byKey("crimson_twig");
-	public static final Material WARPED_TWIG = byKey("warped_twig");
+	// Rocks
+	public static final Material ROCK = byKey("rock");
+	public static final Material ANDESITE_ROCK = byKey("andesite_rock");
+	public static final Material DIORITE_ROCK = byKey("diorite_rock");
+	public static final Material GRANITE_ROCK = byKey("granite_rock");
+	public static final Material SANDSTONE_ROCK = byKey("sandstone_rock");
+	public static final Material RED_SANDSTONE_ROCK = byKey("red_sandstone_rock");
+	public static final Material END_STONE_ROCK = byKey("end_stone_rock");
+	public static final Material NETHERRACK_ROCK = byKey("netherrack_rock");
+
+	// Block versions of rocks
+	public static final Material PEBBLE = byKey("pebble");
+	public static final Material ANDESITE_PEBBLE = byKey("andesite_pebble");
+	public static final Material DIORITE_PEBBLE = byKey("diorite_pebble");
+	public static final Material GRANITE_PEBBLE = byKey("granite_pebble");
+	public static final Material SANDSTONE_PEBBLE = byKey("sandstone_pebble");
+	public static final Material RED_SANDSTONE_PEBBLE = byKey("red_sandstone_pebble");
+	public static final Material END_STONE_PEBBLE = byKey("end_stone_pebble");
+	public static final Material NETHERRACK_PEBBLE = byKey("netherrack_pebble");
+	public static final Material ICE_PEBBLE = byKey("ice_pebble");
+	public static final Material GRAVEL_PEBBLE = byKey("gravel_pebble");
+	public static final Material SOUL_SOIL_PEBBLE = byKey("soul_soil_pebble");
 
 	public static final Material FIBER = byKey("fiber");
 	public static final Material TWINE = byKey("twine");
@@ -52,6 +64,7 @@ public class TrappedNewbieItems {
 	public static final Material FLINT_KNIFE = byKey("flint_knife");
 	public static final Material FLINT_AXE = byKey("flint_axe");
 	public static final Material FLINT_SHEARS = byKey("flint_shears");
+	public static final Material GRASS_MESH = byKey("grass_mesh");
 
 	// Sticks
 	public static final Material ACACIA_STICK = byKey("acacia_stick");
@@ -83,6 +96,8 @@ public class TrappedNewbieItems {
 	public static final Material WARPED_CHOPPING_BLOCK = byKey("warped_chopping_block");
 
 	public static final Material ASH = byKey("ash");
+	public static final Material BALL_OF_MUD = byKey("ball_of_mud");
+	public static final Material ICE_CUBE = byKey("ice_cube");
 
 	public static final Material LETTER = byKey("letter");
 	public static final Material PAPER_PLANE = byKey("paper_plane");

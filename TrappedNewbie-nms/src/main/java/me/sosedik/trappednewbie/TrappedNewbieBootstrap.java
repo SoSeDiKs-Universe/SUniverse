@@ -11,9 +11,11 @@ import me.sosedik.trappednewbie.dataset.TrappedNewbieEntityTypes;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieItems;
 import me.sosedik.trappednewbie.entity.api.PaperPlane;
 import me.sosedik.trappednewbie.entity.craft.CraftPaperPlane;
-import me.sosedik.trappednewbie.nms.item.PaperPlaneItem;
+import me.sosedik.trappednewbie.impl.item.nms.PaperPlaneItem;
+import me.sosedik.trappednewbie.impl.item.nms.ThrowableRockItem;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.DispenserBlock;
+import org.bukkit.Material;
 import org.bukkit.craftbukkit.entity.CraftEntityTypes;
 import org.jspecify.annotations.NullMarked;
 
@@ -26,7 +28,8 @@ public class TrappedNewbieBootstrap implements PluginBootstrap {
 	public void bootstrap(BootstrapContext context) {
 		ResourceLibBootstrap.parseResources(context, null);
 		ResourceLibBootstrap.setupBlocks(context, null, (key, properties) -> switch (key.substring("trapped_newbie:".length())) {
-			case String k when k.endsWith("_twig") -> BlockCreator.vegetation(properties, key);
+			case String k when k.endsWith("_branch") -> BlockCreator.vegetation(properties, key, Material::isSolid);
+			case String k when k.equals("pebble") || k.endsWith("_pebble") -> BlockCreator.vegetation(properties, key, Material::isSolid);
 			case String k when k.startsWith("destroy_stage_") -> BlockCreator.barrier(properties, key);
 			case String k when k.endsWith("_chopping_block") -> BlockCreator.fakeSculk(properties, key);
 			default -> throw new IllegalArgumentException("Unknown blockstate: %s".formatted(key));
@@ -34,6 +37,11 @@ public class TrappedNewbieBootstrap implements PluginBootstrap {
 		ResourceLibBootstrap.setupItems(context, TrappedNewbieItems.class, null, (key, properties) -> switch (key.substring("trapped_newbie:".length())) {
 			case "paper_plane" -> {
 				var item = new PaperPlaneItem(properties);
+				DispenserBlock.registerProjectileBehavior(item);
+				yield item;
+			}
+			case String k when k.equals("rock") || k.equals("ball_of_mud") || k.endsWith("_rock") -> {
+				var item = new ThrowableRockItem(properties);
 				DispenserBlock.registerProjectileBehavior(item);
 				yield item;
 			}

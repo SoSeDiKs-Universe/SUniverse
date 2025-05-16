@@ -45,9 +45,9 @@
               "conditions": [
                 {
                   "chances": [
+                    0.3,
                     0.5,
                     0.8,
-                    0.9,
                     1.0
                   ],
                   "condition": "minecraft:table_bonus",
@@ -58,6 +58,15 @@
                 }
               ],
               "name": "minecraft:flint"
+            },
+            {
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "condition": "minecraft:survives_explosion"
+                }
+              ],
+              "name": "trapped_newbie:flaked_flint"
             }
           ]
         }

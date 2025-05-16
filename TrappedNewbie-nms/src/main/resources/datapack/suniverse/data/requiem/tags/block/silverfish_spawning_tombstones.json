@@ -1,0 +1,22 @@
+{
+	"values": [
+		"requiem:devastated_skeleton_tombstone",
+		"requiem:dripstone_skeleton_tombstone",
+		"requiem:duelist_skeleton_tombstone",
+		"requiem:dungeon_crawler_skeleton_tombstone",
+		"requiem:dusty_skeleton_tombstone",
+		"requiem:fungus_gatherer_skeleton_tombstone",
+		"requiem:headless_skeleton_tombstone",
+		"requiem:mossy_skeleton_tombstone",
+		"requiem:mushroomer_skeleton_tombstone",
+		"requiem:neutralized_skeleton_tombstone",
+		"requiem:pierced_skeleton_tombstone",
+		"requiem:quicksand_skeleton_tombstone",
+		"requiem:rookie_skeleton_tombstone",
+		"requiem:snow_skeleton_tombstone",
+		"requiem:spider_victim_skeleton_tombstone",
+		"requiem:thief_skeleton_tombstone",
+		"requiem:waterdrop_skeleton_tombstone",
+		"requiem:webbed_skeleton_tombstone"
+	]
+}

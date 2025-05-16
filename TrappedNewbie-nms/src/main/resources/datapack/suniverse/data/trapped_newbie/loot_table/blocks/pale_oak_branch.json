@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "trapped_newbie:pale_oak_branch"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "trapped_newbie:blocks/pale_oak_branch"
+}

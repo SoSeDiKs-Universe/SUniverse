@@ -4,6 +4,7 @@ import io.papermc.paper.event.player.PlayerArmSwingEvent;
 import me.sosedik.resourcelib.ResourceLib;
 import me.sosedik.trappednewbie.TrappedNewbie;
 import me.sosedik.trappednewbie.api.event.player.PlayerTargetBlockEvent;
+import me.sosedik.trappednewbie.dataset.TrappedNewbieAdvancements;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieItems;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieTags;
 import net.kyori.adventure.sound.Sound;
@@ -64,6 +65,7 @@ public class FlintToFlakedFlint implements Listener {
 			BlockFace face = player.getTargetBlockFace(4, FluidCollisionMode.ALWAYS);
 			if (face == null) return;
 
+			TrappedNewbieAdvancements.GET_A_FLAKED_FLINT.awardAllCriteria(player);
 			this.usesMap.remove(player.getUniqueId());
 			item.subtract();
 			player.emitSound(Sound.sound(SUCCESS_SOUND, Sound.Source.PLAYER, 1F, 0.9F + (float) Math.random() * 0.2F));

@@ -5,6 +5,7 @@ import me.sosedik.requiem.feature.GhostyPlayer;
 import me.sosedik.trappednewbie.TrappedNewbie;
 import me.sosedik.trappednewbie.api.event.player.PlayerTargetBlockEvent;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieTags;
+import me.sosedik.trappednewbie.listener.block.SoftBlockHandBreaking;
 import me.sosedik.utilizer.dataset.UtilizerTags;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -103,6 +104,7 @@ public class GameModeSwitcherTask extends BukkitRunnable {
 		if (Tag.ITEMS_BOATS.isTagged(itemType)) return true;
 		if (MaterialTags.FISH_BUCKETS.isTagged(itemType)) return true;
 		if (Tag.ITEMS_EGGS.isTagged(itemType)) return true;
+		if (TrappedNewbieTags.ROCKS.isTagged(itemType)) return true;
 		return switch (itemType) {
 			case ARMOR_STAND, ITEM_FRAME, GLOW_ITEM_FRAME, PAINTING, REDSTONE, STRING,
 			     BUCKET, WATER_BUCKET, LAVA_BUCKET, POWDER_SNOW_BUCKET, AXOLOTL_BUCKET, TADPOLE_BUCKET,
@@ -120,6 +122,8 @@ public class GameModeSwitcherTask extends BukkitRunnable {
 		}
 
 		Material toolType = tool.getType();
+		if (TrappedNewbieTags.ROCKS.isTagged(toolType) && SoftBlockHandBreaking.getConverted(type) != null) return true;
+
 		if (Tag.MINEABLE_AXE.isTagged(type)) return Tag.ITEMS_AXES.isTagged(toolType);
 		if (Tag.MINEABLE_PICKAXE.isTagged(type)) return Tag.ITEMS_PICKAXES.isTagged(toolType);
 		if (Tag.MINEABLE_SHOVEL.isTagged(type)) return Tag.ITEMS_SHOVELS.isTagged(toolType);

@@ -59,6 +59,7 @@ public class PlayerSpeedTracker implements Listener {
 
 		private final Player player;
 		private final List<Double> speeds = new ArrayList<>();
+		private double lastSpeed = 0;
 		private double speed = 0;
 		private Location lastLoc;
 		private int immuneTicks = 0;
@@ -85,6 +86,7 @@ public class PlayerSpeedTracker implements Listener {
 			} else {
 				if (this.lastLoc.getWorld() == this.player.getWorld()) {
 					double speed = this.lastLoc.distance(this.player.getLocation()) * 20D;
+					this.lastSpeed = speed;
 					this.speeds.add(speed);
 				}
 			}
@@ -111,6 +113,7 @@ public class PlayerSpeedTracker implements Listener {
 		}
 
 		public double getSpeed() {
+			if (this.lastSpeed == 0) return 0;
 			if (this.speeds.size() < 10) return 0;
 			return MathUtil.round(speed, 3);
 		}

@@ -1,0 +1,55 @@
+{
+  "sound_type": "grass",
+  "no_collision": true,
+  "replaceable": true,
+  "client_type": "minecraft:barrier",
+  "mimik": "trapped_newbie:crimson_stick",
+  "state_parser": "tripwire",
+  "variations": [
+    {
+      "model": "small_crimson_branch"
+    },
+    {
+      "model": "small_crimson_branch",
+      "y": 90
+    },
+    {
+      "model": "small_crimson_branch",
+      "y": 180
+    },
+    {
+      "model": "small_crimson_branch",
+      "y": 270
+    },
+    {
+      "model": "medium_crimson_branch"
+    },
+    {
+      "model": "medium_crimson_branch",
+      "y": 90
+    },
+    {
+      "model": "medium_crimson_branch",
+      "y": 180
+    },
+    {
+      "model": "medium_crimson_branch",
+      "y": 270
+    },
+    {
+      "model": "large_crimson_branch"
+    },
+    {
+      "model": "large_crimson_branch",
+      "y": 90
+    },
+    {
+      "model": "large_crimson_branch",
+      "y": 180
+    },
+    {
+      "model": "large_crimson_branch",
+      "y": 270
+    }
+  ]
+}

@@ -10,6 +10,7 @@ import me.sosedik.utilizer.api.math.WorldChunkPosition;
 import me.sosedik.utilizer.api.storage.block.BlockDataStorage;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -62,6 +63,7 @@ public class BlockStorage {
 	}
 
 	public static synchronized @Nullable BlockDataStorage initBlock(Block block, @Nullable BlockPlaceEvent event) {
+		Material blockType = block.getType();
 		return createInfo(block.getLocation(), block.getType().getKey(), event);
 	}
 

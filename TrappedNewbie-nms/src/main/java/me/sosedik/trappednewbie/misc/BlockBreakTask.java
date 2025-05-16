@@ -41,14 +41,18 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.BiFunction;
 
 @NullMarked
 public class BlockBreakTask extends BukkitRunnable {
 
 	private static final Map<WorldChunkPosition, Map<BlockPosition, BlockBreakState>> DESTROYS = new HashMap<>();
+	private static final List<BiFunction<BlockBreakTask, Float, @Nullable Float>> BREAKING_RULES = new ArrayList<>();
 	private static final int REFRESH_DELAY = 2 * 20;
 	private static final int DECAY_DELAY = 3 * 60 * 20;
 	private static final int DECAY_RATE = 5 * 20;
@@ -128,6 +132,33 @@ public class BlockBreakTask extends BukkitRunnable {
 		runTaskTimer(TrappedNewbie.instance(), 5L, 1L);
 
 		blockBreakState.blockBreakers().put(player.getUniqueId(), this);
+	}
+
+	/**
+	 * Gets the block being broken
+	 *
+	 * @return block
+	 */
+	public Block getBlock() {
+		return this.block;
+	}
+
+	/**
+	 * Gets the player breaking the block
+	 *
+	 * @return player
+	 */
+	public Player getPlayer() {
+		return this.player;
+	}
+
+	/**
+	 * Gets the tool used to break the block
+	 *
+	 * @return the tool used to break the block
+	 */
+	public ItemStack getTool() {
+		return this.tool;
 	}
 
 	private boolean canHammerBreak() {
@@ -266,6 +297,13 @@ public class BlockBreakTask extends BukkitRunnable {
 			seconds *= 5F;
 
 		seconds = (float) (Math.ceil(seconds * 20) / 20D);
+
+		for (var rule : BREAKING_RULES) {
+			Float s = rule.apply(this, seconds);
+			if (s != null)
+				return s;
+		}
+
 		return seconds;
 	}
 
@@ -274,7 +312,7 @@ public class BlockBreakTask extends BukkitRunnable {
 	}
 
 	private boolean isPlayerTargetingThisBlock() {
-		Block targetBlock = player.getTargetBlockExact(5);
+		Block targetBlock = this.player.getTargetBlockExact(5);
 		return this.block.equals(targetBlock);
 	}
 
@@ -615,6 +653,10 @@ public class BlockBreakTask extends BukkitRunnable {
 		breakTask.abort();
 
 		return true;
+	}
+
+	public static void addBreakingRule(BiFunction<BlockBreakTask, Float, @Nullable Float> rule) {
+		BREAKING_RULES.add(rule);
 	}
 
 }

@@ -1,0 +1,55 @@
+{
+  "sound_type": "grass",
+  "no_collision": true,
+  "replaceable": true,
+  "client_type": "minecraft:barrier",
+  "mimik": "trapped_newbie:bamboo_stick",
+  "state_parser": "tripwire",
+  "variations": [
+    {
+      "model": "small_bamboo_branch"
+    },
+    {
+      "model": "small_bamboo_branch",
+      "y": 90
+    },
+    {
+      "model": "small_bamboo_branch",
+      "y": 180
+    },
+    {
+      "model": "small_bamboo_branch",
+      "y": 270
+    },
+    {
+      "model": "medium_bamboo_branch"
+    },
+    {
+      "model": "medium_bamboo_branch",
+      "y": 90
+    },
+    {
+      "model": "medium_bamboo_branch",
+      "y": 180
+    },
+    {
+      "model": "medium_bamboo_branch",
+      "y": 270
+    },
+    {
+      "model": "large_bamboo_branch"
+    },
+    {
+      "model": "large_bamboo_branch",
+      "y": 90
+    },
+    {
+      "model": "large_bamboo_branch",
+      "y": 180
+    },
+    {
+      "model": "large_bamboo_branch",
+      "y": 270
+    }
+  ]
+}

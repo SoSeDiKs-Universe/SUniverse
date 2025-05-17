@@ -1,18 +1,18 @@
 package me.sosedik.trappednewbie.listener.item;
 
 import me.sosedik.miscme.listener.player.FireExtinguishByHand;
+import me.sosedik.miscme.listener.projectile.BurningProjectileCreatesFire;
 import me.sosedik.trappednewbie.TrappedNewbie;
 import me.sosedik.trappednewbie.api.event.player.PlayerTargetBlockEvent;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieAdvancements;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieItems;
-import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.jspecify.annotations.NullMarked;
 
@@ -38,6 +38,7 @@ public class RoughSticksCreateFire implements Listener {
 
 		Player player = event.getPlayer();
 		if (player.getGameMode().isInvulnerable()) return;
+		if (player.getInventory().getItemInMainHand().getType() != TrappedNewbieItems.ROUGH_STICK) return;
 		if (player.getInventory().getItemInOffHand().getType() != TrappedNewbieItems.ROUGH_STICK) return;
 
 		if (!this.usesMap.containsKey(player.getUniqueId())) {
@@ -56,11 +57,10 @@ public class RoughSticksCreateFire implements Listener {
 		} else if (currentUse % 2 != 0) return;
 
 		if (currentUse >= this.random.nextInt(3) + 4) {
-			Block block = Objects.requireNonNull(event.getClickedBlock()).getRelative(BlockFace.UP);
-			if (block.getType().isAir()) {
+			Block block = Objects.requireNonNull(event.getClickedBlock());
+			if (BurningProjectileCreatesFire.createFireOrIgnite(block, event.getBlockFace(), player, BlockIgniteEvent.IgniteCause.FLINT_AND_STEEL)) {
 				this.usesMap.remove(player.getUniqueId());
 				FireExtinguishByHand.addFireImmunity(player, 10);
-				block.setType(Material.FIRE);
 				player.getInventory().getItemInMainHand().subtract();
 				player.getInventory().getItemInOffHand().subtract();
 				block.emitSound(Sound.ITEM_FIRECHARGE_USE, 1F, 1F);

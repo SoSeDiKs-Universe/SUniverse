@@ -9,6 +9,7 @@ import me.sosedik.utilizer.impl.recipe.ShapelessCraft;
 import org.bukkit.Bukkit;
 import org.bukkit.Keyed;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Tag;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.entity.minecart.ExplosiveMinecart;
@@ -77,6 +78,13 @@ public class TrappedNewbieRecipes {
 		new ShapedCraft(new ItemStack(TrappedNewbieItems.GRASS_MESH), trappedNewbieKey("grass_mesh"), "TS", "ST")
 			.addIngredients('S', Material.STICK, TrappedNewbieItems.ROUGH_STICK)
 			.addIngredients('T', Material.STRING, TrappedNewbieItems.TWINE) // HORSEHAIR
+			.register();
+
+		new ShapedCraft(new ItemStack(TrappedNewbieItems.COBBLESTONE_HAMMER), trappedNewbieKey("cobblestone_hammer"), "CT", "SC")
+			.withCategory(CraftingBookCategory.EQUIPMENT)
+			.addIngredients('T', Material.STRING, TrappedNewbieItems.TWINE) // HORSEHAIR
+			.addIngredients('S', Material.STICK, TrappedNewbieItems.ROUGH_STICK)
+			.addIngredients('C', Material.COBBLESTONE)
 			.register();
 
 		addBranchRecipe(TrappedNewbieItems.ACACIA_BRANCH, Material.ACACIA_SAPLING);
@@ -164,7 +172,14 @@ public class TrappedNewbieRecipes {
 			.addIngredients(RequiemItems.CREEPER_HEART)
 			.register();
 
+		// Tweaked vanilla crafts
+		new ShapedCraft(ItemStack.of(Material.CAMPFIRE), trappedNewbieKey("campfire"), "SS", "LL")
+			.addIngredients('S', Material.STICK, TrappedNewbieItems.ROUGH_STICK)
+			.addIngredients('L', Tag.LOGS.getValues())
+			.register();
+
 		addFuels();
+		removeRecipes();
 		makeIngredientReplacements();
 	}
 
@@ -172,6 +187,17 @@ public class TrappedNewbieRecipes {
 		Bukkit.addFuel(TrappedNewbieItems.ROUGH_STICK, 100);
 		TrappedNewbieTags.BRANCHES.getValues().forEach(material -> Bukkit.addFuel(material, 100));
 		TrappedNewbieTags.STICKS.getValues().forEach(material -> Bukkit.addFuel(material, 100));
+	}
+
+	private static void removeRecipes() {
+		for (String recipe : new String[]{
+			// Tweaked
+			"stick", "stick_from_bamboo_item", "campfire"//, "soul_campfire"
+		}) {
+			removeRecipe(recipe);
+		}
+
+		Tag.PLANKS.getValues().forEach(r -> removeRecipe(r.key().value()));
 	}
 
 	private static void makeIngredientReplacements() {
@@ -271,6 +297,17 @@ public class TrappedNewbieRecipes {
 		var updatedChoice = new RecipeChoice.ExactChoice(items.toArray(ItemStack[]::new));
 		if (predicate != null) updatedChoice.setPredicate(predicate);
 		return updatedChoice;
+	}
+
+	private static void removeRecipe(String key, String... exempts) {
+		for (String ignored : exempts) {
+			if (!key.equals(ignored)) continue;
+			if (Bukkit.getRecipe(NamespacedKey.minecraft(key)) != null)
+				TrappedNewbie.logger().error("Ignored recipe now exists: {}", key);
+			return;
+		}
+		if (!Bukkit.removeRecipe(NamespacedKey.minecraft(key)))
+			TrappedNewbie.logger().error("Could not find vanilla recipe with key {}", key);
 	}
 
 }

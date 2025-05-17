@@ -1,15 +1,14 @@
 package me.sosedik.miscme.listener.item;
 
+import me.sosedik.miscme.listener.projectile.BurningProjectileCreatesFire;
 import me.sosedik.utilizer.dataset.UtilizerTags;
 import me.sosedik.utilizer.util.DurabilityUtil;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
-import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Lightable;
-import org.bukkit.block.data.type.Fire;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -124,17 +123,7 @@ public class FireAspectIsFlintAndSteel implements Listener {
 			return true;
 		}
 
-		if (block.getBlockData() instanceof Lightable lightable && !lightable.isLit()) {
-			player.getInventory().setItem(hand, item);
-			if (!player.isSneaking()) {
-				var igniteEvent = new BlockIgniteEvent(block, BlockIgniteEvent.IgniteCause.FLINT_AND_STEEL, player);
-				if (!igniteEvent.callEvent()) return true;
-				lightable.setLit(true);
-				block.setBlockData(lightable);
-			} else if (!applyFire(player, block, blockFace)) {
-				return false;
-			}
-		} else if (!applyFire(player, block, blockFace)) {
+		if (!BurningProjectileCreatesFire.createFireOrIgnite(block, blockFace, player, BlockIgniteEvent.IgniteCause.FLINT_AND_STEEL)) {
 			player.getInventory().setItem(hand, item);
 			return false;
 		}
@@ -145,34 +134,6 @@ public class FireAspectIsFlintAndSteel implements Listener {
 		player.swingHand(hand);
 
 		return true;
-	}
-
-	private static boolean applyFire(Player player, Block block, BlockFace blockFace) {
-		Block relative = block.getRelative(blockFace);
-		if (!relative.isEmpty()) return false;
-
-		boolean flammable = block.getType().isFlammable();
-		Block below = relative.getRelative(BlockFace.DOWN);
-		if (!flammable && below.isEmpty()) return false;
-
-		Material fireType = Tag.SOUL_FIRE_BASE_BLOCKS.isTagged(below.getType()) ? Material.SOUL_FIRE : Material.FIRE;
-
-		var igniteEvent = new BlockIgniteEvent(relative, BlockIgniteEvent.IgniteCause.FLINT_AND_STEEL, player);
-		if (!igniteEvent.callEvent()) return true;
-
-		relative.setType(fireType);
-		if (relative.getBlockData() instanceof Fire fire) { // Note: soul fire is not Fire
-			if (blockFace != BlockFace.UP) {
-				for (BlockFace face : fire.getAllowedFaces()) {
-					if (relative.getRelative(face).getType().isBurnable())
-						fire.setFace(face, true);
-				}
-				relative.setBlockData(fire);
-			}
-			return true;
-		}
-
-		return relative.getType() == Material.SOUL_FIRE;
 	}
 
 }

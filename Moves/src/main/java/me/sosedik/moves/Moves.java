@@ -1,5 +1,6 @@
 package me.sosedik.moves;
 
+import me.sosedik.moves.listener.block.FallThroughLeaves;
 import me.sosedik.moves.listener.block.WaterPuddleHurts;
 import me.sosedik.moves.listener.entity.ShulkerCrawlerHandler;
 import me.sosedik.moves.listener.movement.CrawlingMechanics;
@@ -39,6 +40,7 @@ public final class Moves extends JavaPlugin {
 	public void onEnable() {
 		EventUtil.registerListeners(this,
 			// block
+			FallThroughLeaves.class,
 			WaterPuddleHurts.class,
 			// entity
 			ShulkerCrawlerHandler.class,

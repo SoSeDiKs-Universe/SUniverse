@@ -16,6 +16,7 @@ import me.sosedik.trappednewbie.dataset.TrappedNewbieTags;
 import me.sosedik.trappednewbie.impl.blockstorage.ChoppingBlockStorage;
 import me.sosedik.trappednewbie.impl.item.modifier.LetterModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.PaperPlaneModifier;
+import me.sosedik.trappednewbie.impl.item.modifier.UnlitCampfireModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.VisualArmorModifier;
 import me.sosedik.trappednewbie.impl.recipe.ChoppingBlockCrafting;
 import me.sosedik.trappednewbie.listener.advancement.AdvancementsLocalizer;
@@ -36,6 +37,7 @@ import me.sosedik.trappednewbie.listener.block.BlockBreakHurts;
 import me.sosedik.trappednewbie.listener.block.BlockChoppingViaSwing;
 import me.sosedik.trappednewbie.listener.block.CustomBlockBreaking;
 import me.sosedik.trappednewbie.listener.block.SoftBlockHandBreaking;
+import me.sosedik.trappednewbie.listener.block.UnlitCampfireByDefault;
 import me.sosedik.trappednewbie.listener.entity.AngryAnimals;
 import me.sosedik.trappednewbie.listener.entity.BabierBabyMobs;
 import me.sosedik.trappednewbie.listener.entity.LimboEntities;
@@ -124,6 +126,7 @@ public final class TrappedNewbie extends JavaPlugin {
 
 		new LetterModifier(trappedNewbieKey("letter")).register();
 		new PaperPlaneModifier(trappedNewbieKey("paper_plane")).register();
+		new UnlitCampfireModifier(trappedNewbieKey("unlit_campfire")).register();
 		new VisualArmorModifier(trappedNewbieKey("visual_armor")).register();
 
 		EventUtil.registerListeners(this,
@@ -148,6 +151,7 @@ public final class TrappedNewbie extends JavaPlugin {
 			BlockChoppingViaSwing.class,
 			CustomBlockBreaking.class,
 			SoftBlockHandBreaking.class,
+			UnlitCampfireByDefault.class,
 			// entity
 			AngryAnimals.class,
 			BabierBabyMobs.class,

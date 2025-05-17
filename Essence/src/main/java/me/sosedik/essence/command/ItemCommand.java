@@ -1,6 +1,8 @@
 package me.sosedik.essence.command;
 
 import io.papermc.paper.command.brigadier.CommandSourceStack;
+import io.papermc.paper.registry.RegistryAccess;
+import io.papermc.paper.registry.RegistryKey;
 import me.sosedik.essence.Essence;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -16,7 +18,6 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
-import java.util.stream.Stream;
 
 /**
  * Giving items
@@ -28,10 +29,7 @@ public class ItemCommand {
 	private final List<String> suggestions;
 
 	public ItemCommand() {
-		this.suggestions = Stream.of(Material.values())
-			.filter(Material::isItem)
-			.filter(type -> !type.isLegacy())
-			.map(Material::getKey)
+		this.suggestions = RegistryAccess.registryAccess().getRegistry(RegistryKey.ITEM).keyStream()
 			.map(NamespacedKey::asString)
 			.toList();
 	}

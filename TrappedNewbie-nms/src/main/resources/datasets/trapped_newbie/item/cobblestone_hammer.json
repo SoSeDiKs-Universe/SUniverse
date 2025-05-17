@@ -1,6 +1,7 @@
 {
   "parent_model": "handheld",
-  "client_type": "minecraft:wooden_sword",
+  "client_type": "minecraft:iron_nugget",
   "stack_size": 1,
-  "durability": 50
+  "durability": 50,
+  "repairable": "trapped_newbie:rock"
 }

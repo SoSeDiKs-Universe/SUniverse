@@ -23,6 +23,7 @@ public class BurningForcesToRun implements Listener {
 		MiscMe.scheduler().sync(task -> {
 			if (!player.isValid()) return true;
 			if (player.getFireTicks() <= 0) return true;
+			if (player.isInvulnerable()) return false;
 			if (player.isSprinting()) return false;
 			if (!player.isOnGround()) return false;
 			if (player.isInsideVehicle()) return false;

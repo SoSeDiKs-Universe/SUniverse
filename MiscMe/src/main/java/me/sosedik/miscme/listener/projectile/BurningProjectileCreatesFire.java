@@ -1,5 +1,6 @@
 package me.sosedik.miscme.listener.projectile;
 
+import me.sosedik.miscme.MiscMe;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.block.Block;
@@ -17,8 +18,10 @@ import org.bukkit.entity.minecart.ExplosiveMinecart;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
@@ -58,7 +61,7 @@ public class BurningProjectileCreatesFire implements Listener {
 		var hitBlockFace = event.getHitBlockFace();
 		if (hitBlock == null || hitBlockFace == null) return;
 
-		createFire(hitBlock, hitBlockFace);
+		createFireOrIgnite(hitBlock, hitBlockFace, projectile, BlockIgniteEvent.IgniteCause.ARROW);
 	}
 
 	/**
@@ -67,35 +70,50 @@ public class BurningProjectileCreatesFire implements Listener {
 	 * @param hitBlock hit block
 	 * @param hitBlockFace git block face
 	 */
-	public static void createFire(Block hitBlock, BlockFace hitBlockFace) {
-		if (!hitBlock.getType().isBurnable() && !hitBlock.getRelative(hitBlockFace).getRelative(BlockFace.DOWN).getType().isSolid())
-			return;
+	public static boolean createFireOrIgnite(Block hitBlock, BlockFace hitBlockFace, @Nullable Entity ignitingEntity, BlockIgniteEvent.IgniteCause cause) {
+		if (!hitBlock.isBurnable() && !hitBlock.isReplaceable() && !hitBlock.getRelative(hitBlockFace).getRelative(BlockFace.DOWN).getType().isSolid())
+			return false;
 
 		if (hitBlock.getType() == Material.TNT) {
 			hitBlock.setType(Material.AIR);
 			hitBlock.getWorld().spawn(hitBlock.getLocation().center(), TNTPrimed.class);
-			return;
+			return true;
 		}
-		if (tryToLit(hitBlock)) return;
+		if (tryToLit(hitBlock)) return true;
+
+		if (hitBlock.isReplaceable()) {
+			var igniteEvent = new BlockIgniteEvent(hitBlock, cause, ignitingEntity);
+			if (!igniteEvent.callEvent()) return false;
+
+			Material fireType = Tag.SOUL_FIRE_BASE_BLOCKS.isTagged(hitBlock.getRelative(BlockFace.DOWN).getType()) ? Material.SOUL_FIRE : Material.FIRE;
+			hitBlock.setType(fireType);
+			return true;
+		}
 
 		hitBlock = hitBlock.getRelative(hitBlockFace);
-		if (tryToLit(hitBlock)) return;
+		if (tryToLit(hitBlock)) return true;
 
 		if (!(
-			hitBlock.getType().isEmpty()
+			hitBlock.isEmpty()
 			|| Tag.CORAL_PLANTS.isTagged(hitBlock.getType())
 			|| replaceableByFire.contains(hitBlock.getType())
-		)) return;
+		)) return false;
 
-		hitBlock.setType(Material.FIRE);
-		if (hitBlockFace == BlockFace.UP) return;
-		if (!(hitBlock.getBlockData() instanceof Fire fire)) return;
+		var igniteEvent = new BlockIgniteEvent(hitBlock, cause, ignitingEntity);
+		if (!igniteEvent.callEvent()) return false;
+
+		Material fireType = Tag.SOUL_FIRE_BASE_BLOCKS.isTagged(hitBlock.getRelative(BlockFace.DOWN).getType()) ? Material.SOUL_FIRE : Material.FIRE;
+		hitBlock.setType(fireType);
+		if (hitBlockFace == BlockFace.UP) return true;
+		if (hitBlock.getRelative(BlockFace.DOWN).isSolid()) return true;
+		if (!(hitBlock.getBlockData() instanceof Fire fire)) return true; // Note: soul fire is not Fire
 
 		for (BlockFace face : fire.getAllowedFaces()) {
 			if (hitBlock.getRelative(face).getType().isBurnable())
 				fire.setFace(face, true);
 		}
 		hitBlock.setBlockData(fire);
+		return true;
 	}
 
 	private static boolean tryToLit(Block block) {
@@ -108,11 +126,21 @@ public class BurningProjectileCreatesFire implements Listener {
 		if (blockData instanceof Candle candle && !candle.isLit()) {
 			candle.setLit(true);
 			block.setBlockData(blockData);
+			// Workaround candles getting unlit
+			MiscMe.scheduler().sync(() -> {
+				if (block.getType() == blockData.getMaterial())
+					block.setBlockData(blockData);
+			}, 1L);
 			return true;
 		}
 		if (Tag.CANDLE_CAKES.isTagged(block.getType()) && blockData instanceof Lightable lightable && !lightable.isLit()) {
 			lightable.setLit(true);
 			block.setBlockData(blockData);
+			// Workaround candles getting unlit
+			MiscMe.scheduler().sync(() -> {
+				if (block.getType() == blockData.getMaterial())
+					block.setBlockData(blockData);
+			}, 1L);
 			return true;
 		}
 		return false;

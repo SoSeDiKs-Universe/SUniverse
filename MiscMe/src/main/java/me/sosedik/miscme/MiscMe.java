@@ -30,6 +30,7 @@ import me.sosedik.miscme.listener.block.NoteBlockShowsNotes;
 import me.sosedik.miscme.listener.block.SignsRetain;
 import me.sosedik.miscme.listener.entity.ArmorStandBedrockPoses;
 import me.sosedik.miscme.listener.entity.ArmorStandSpawnsWithArms;
+import me.sosedik.miscme.listener.entity.BetterEntitySuffocation;
 import me.sosedik.miscme.listener.entity.BurningSpreadsWhenAttacking;
 import me.sosedik.miscme.listener.entity.ColoredShulkerUponSpawn;
 import me.sosedik.miscme.listener.entity.DyeableShulkers;
@@ -136,6 +137,7 @@ public final class MiscMe extends JavaPlugin {
 			// entity
 			ArmorStandBedrockPoses.class,
 			ArmorStandSpawnsWithArms.class,
+			BetterEntitySuffocation.class,
 			BurningSpreadsWhenAttacking.class,
 			ColoredShulkerUponSpawn.class,
 			DyeableShulkers.class,

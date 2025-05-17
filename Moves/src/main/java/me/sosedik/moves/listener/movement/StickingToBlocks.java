@@ -1,6 +1,7 @@
 package me.sosedik.moves.listener.movement;
 
 import me.sosedik.moves.Moves;
+import me.sosedik.moves.dataset.MovesTags;
 import me.sosedik.utilizer.util.EntityUtil;
 import me.sosedik.utilizer.util.LocationUtil;
 import org.bukkit.Location;
@@ -65,6 +66,7 @@ public class StickingToBlocks implements Listener {
 
 		block = block.getRelative(player.getFacing());
 		if (!block.getType().isSolid()) return;
+		if (MovesTags.FALL_THROUGH_BLOCKS.isTagged(block.getType())) return;
 		if (LocationUtil.isTrulySolid(player, block.getRelative(BlockFace.UP))) return;
 
 		STICKING_PLAYERS.add(player.getUniqueId());
@@ -98,7 +100,7 @@ public class StickingToBlocks implements Listener {
 		if (!isSticking(player)) return;
 
 		Block block = player.getLocation().getBlock().getRelative(player.getFacing());
-		if (block.getType().isSolid() && !LocationUtil.isTrulySolid(player, block.getRelative(BlockFace.UP))) return;
+		if (block.getType().isSolid() && !MovesTags.FALL_THROUGH_BLOCKS.isTagged(block.getType()) && !LocationUtil.isTrulySolid(player, block.getRelative(BlockFace.UP))) return;
 
 		STICKING_PLAYERS.remove(player.getUniqueId());
 		player.setGravity(true);

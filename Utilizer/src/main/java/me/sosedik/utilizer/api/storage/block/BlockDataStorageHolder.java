@@ -81,6 +81,10 @@ public abstract class BlockDataStorageHolder implements BlockDataStorage {
 		return this.storageId;
 	}
 
+	public Material requireMatchingMaterial() {
+		return Objects.requireNonNull(getMatchingMaterial());
+	}
+
 	public @Nullable Material getMatchingMaterial() {
 		return this.material;
 	}

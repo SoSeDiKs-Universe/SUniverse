@@ -1,13 +1,17 @@
 package me.sosedik.trappednewbie.dataset;
 
+import me.sosedik.requiem.dataset.RequiemItems;
 import me.sosedik.trappednewbie.TrappedNewbie;
 import me.sosedik.utilizer.dataset.UtilizerTags;
+import me.sosedik.utilizer.impl.recipe.FireCraft;
 import me.sosedik.utilizer.impl.recipe.ShapedCraft;
 import me.sosedik.utilizer.impl.recipe.ShapelessCraft;
 import org.bukkit.Bukkit;
 import org.bukkit.Keyed;
 import org.bukkit.Material;
 import org.bukkit.Tag;
+import org.bukkit.entity.TNTPrimed;
+import org.bukkit.entity.minecart.ExplosiveMinecart;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.RecipeChoice;
@@ -120,10 +124,57 @@ public class TrappedNewbieRecipes {
 				.register();
 		});
 
+		TrappedNewbieTags.GLASS_SHARDS.getValues().forEach(type -> {
+			Material base = type == TrappedNewbieItems.GLASS_SHARD ? Material.GLASS : Material.getMaterial(type.name().replace("_GLASS_SHARD", "_STAINED_GLASS"));
+			if (base == null) return;
+
+			new ShapelessCraft(new ItemStack(base), trappedNewbieKey(base.key().value() + "_from_shards"))
+				.withGroup("glass_from_shards")
+				.addIngredients(type, 4)
+				.register();
+			new ShapelessCraft(new ItemStack(type, 4), trappedNewbieKey(base.key().value() + "_to_shards"))
+				.withGroup("glass_to_shards")
+				.addIngredients(base)
+				.addIngredients(TrappedNewbieTags.HAMMERS.getValues())
+				.register();
+		});
+
+		new FireCraft(new ItemStack(Material.BRICK), trappedNewbieKey("clay_ball_to_brick"))
+			.withBurnChance(0.1)
+			.addIngredients(Material.CLAY_BALL)
+			.register();
+		new FireCraft(new ItemStack(Material.BAKED_POTATO), trappedNewbieKey("potato_to_baked_potato"))
+			.withBurnChance(0.2)
+			.addIngredients(Material.POTATO)
+			.register();
+		new FireCraft(new ItemStack(Material.CHARCOAL), trappedNewbieKey("logs_to_charcoal"))
+			.withBurnChance(0.2)
+			.addIngredients(Tag.LOGS.getValues())
+			.register();
+		new FireCraft(ItemStack.empty(), trappedNewbieKey("tnt_exploding"))
+			.withAction((player, loc) -> loc.getWorld().spawn(loc, TNTPrimed.class))
+			.addIngredients(Material.TNT)
+			.register();
+		new FireCraft(ItemStack.empty(), trappedNewbieKey("tnt_minecart_exploding"))
+			.withAction((player, loc) -> loc.getWorld().spawn(loc, ExplosiveMinecart.class, ExplosiveMinecart::explode))
+			.addIngredients(Material.TNT_MINECART)
+			.register();
+		new FireCraft(ItemStack.empty(), trappedNewbieKey("creeper_heart_exploding"))
+			.withAction((player, loc) -> loc.getWorld().createExplosion(loc, 7, true, true))
+			.addIngredients(RequiemItems.CREEPER_HEART)
+			.register();
+
+		addFuels();
+		makeIngredientReplacements();
+	}
+
+	private static void addFuels() {
 		Bukkit.addFuel(TrappedNewbieItems.ROUGH_STICK, 100);
 		TrappedNewbieTags.BRANCHES.getValues().forEach(material -> Bukkit.addFuel(material, 100));
 		TrappedNewbieTags.STICKS.getValues().forEach(material -> Bukkit.addFuel(material, 100));
+	}
 
+	private static void makeIngredientReplacements() {
 		Map<Material, List<ItemStack>> replacements = new HashMap<>();
 
 		addReplacements(replacements, Material.STICK, TrappedNewbieTags.STICKS);

@@ -43,7 +43,6 @@ import me.sosedik.trappednewbie.listener.item.FlintToFlakedFlint;
 import me.sosedik.trappednewbie.listener.item.GlassShardCuts;
 import me.sosedik.trappednewbie.listener.item.MeshSifting;
 import me.sosedik.trappednewbie.listener.item.PaperPlanes;
-import me.sosedik.trappednewbie.listener.item.PlaceableRocks;
 import me.sosedik.trappednewbie.listener.item.RoughSticksCreateFire;
 import me.sosedik.trappednewbie.listener.item.ThrowableRockBehavior;
 import me.sosedik.trappednewbie.listener.item.TrumpetScare;
@@ -65,6 +64,7 @@ import me.sosedik.trappednewbie.listener.world.PerPlayerWorlds;
 import me.sosedik.utilizer.CommandManager;
 import me.sosedik.utilizer.api.language.TranslationHolder;
 import me.sosedik.utilizer.listener.BlockStorage;
+import me.sosedik.utilizer.listener.item.PlaceableBlockItems;
 import me.sosedik.utilizer.util.EventUtil;
 import me.sosedik.utilizer.util.FileUtil;
 import me.sosedik.utilizer.util.Scheduler;
@@ -104,7 +104,7 @@ public final class TrappedNewbie extends JavaPlugin {
 		TranslationHolder.extractLocales(this);
 		ResourceLib.loadDefaultResources(this);
 
-		TrappedNewbieTags.CHOPPING_BLOCKS.getValues().forEach(material -> BlockStorage.addMapping(material.getKey(), ChoppingBlockStorage.class));
+		TrappedNewbieTags.CHOPPING_BLOCKS.getValues().forEach(material -> BlockStorage.addMapping(material, ChoppingBlockStorage.class));
 	}
 
 	private void cleanupTemporaryWorlds() {
@@ -157,7 +157,6 @@ public final class TrappedNewbie extends JavaPlugin {
 			GlassShardCuts.class,
 			MeshSifting.class,
 			PaperPlanes.class,
-			PlaceableRocks.class,
 			RoughSticksCreateFire.class,
 			ThrowableRockBehavior.class,
 			TrumpetScare.class,
@@ -182,6 +181,12 @@ public final class TrappedNewbie extends JavaPlugin {
 			// command
 			MigrateCommand.class
 		);
+
+		TrappedNewbieTags.ROCKS.getValues().forEach(rock -> {
+			Material pebble = Material.getMaterial(rock.name().replace("ROCK", "PEBBLE"));
+			if (pebble != null)
+				PlaceableBlockItems.addMapping(rock, pebble);
+		});
 
 		GhostyPlayer.addFlightDenyRule(player -> player.getWorld() == limboWorld());
 		GhostyPlayer.addItemsDenyRule(player -> player.getWorld() == limboWorld());

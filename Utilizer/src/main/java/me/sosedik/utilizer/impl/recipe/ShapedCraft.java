@@ -57,7 +57,7 @@ public final class ShapedCraft extends ShapedRecipeBuilder<ShapedCraft> {
 	 */
 	public ShapedCraft withCategory(CraftingBookCategory category) {
 		this.category = category;
-		return this;
+		return builder();
 	}
 
 }

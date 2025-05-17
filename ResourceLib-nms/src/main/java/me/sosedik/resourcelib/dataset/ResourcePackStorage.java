@@ -33,6 +33,7 @@ public class ResourcePackStorage {
 	private final Map<NamespacedKey, NamespacedKey> itemMappings = new HashMap<>();
 	private final Map<NamespacedKey, String> tripwireMappings = new HashMap<>();
 	private final Map<NamespacedKey, JsonObject> sculkMappings = new HashMap<>();
+	private final Map<NamespacedKey, JsonObject> weepingVinesMappings = new HashMap<>();
 	private final Map<NamespacedKey, ItemData> itemOptions = new HashMap<>();
 
 	public ResourcePackStorage(Plugin plugin) {
@@ -44,12 +45,14 @@ public class ResourcePackStorage {
 		plugin.saveResource("mappings/items.json", true);
 		plugin.saveResource("mappings/tripwire.json", true);
 		plugin.saveResource("mappings/sculk_sensor.json", true);
+		plugin.saveResource("mappings/weeping_vines.json", true);
 
 		loadFontMappings(new File(mappingsDir, "fonts.json"));
 		loadSoundMappings(new File(mappingsDir, "sounds.json"));
 		loadItemMappings(new File(mappingsDir, "items.json"));
 		loadTripwireMappings(new File(mappingsDir, "tripwire.json"));
 		loadSculkMappings(new File(mappingsDir, "sculk_sensor.json"));
+		loadWeepingVinesMappings(new File(mappingsDir, "weeping_vines.json"));
 	}
 
 	private void loadFontMappings(File mappingsFile) {
@@ -132,6 +135,15 @@ public class ResourcePackStorage {
 		});
 	}
 
+	private void loadWeepingVinesMappings(File mappingsFile) {
+		JsonObject weepingVinesMappings = FileUtil.readJsonObject(mappingsFile);
+		weepingVinesMappings.entrySet().forEach(entry -> {
+			var from = requireNonNull(NamespacedKey.fromString(entry.getKey()));
+			JsonObject props = entry.getValue().getAsJsonObject();
+			this.weepingVinesMappings.put(from, props);
+		});
+	}
+
 	public @Nullable FontData getFontData(NamespacedKey key) {
 		return this.fontMappings.get(key);
 	}
@@ -155,6 +167,10 @@ public class ResourcePackStorage {
 
 	public @Nullable JsonObject getSculkMapping(NamespacedKey key) {
 		return this.sculkMappings.get(key);
+	}
+
+	public @Nullable JsonObject getWeepingVinesMapping(NamespacedKey key) {
+		return this.weepingVinesMappings.get(key);
 	}
 
 	public void addItemOption(NamespacedKey key, JsonObject resourceData, FakeItemData fakeItemData) {

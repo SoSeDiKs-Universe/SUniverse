@@ -5,7 +5,9 @@ import me.sosedik.essence.command.GravityCommand;
 import me.sosedik.essence.command.HealCommand;
 import me.sosedik.essence.command.HealthCommand;
 import me.sosedik.essence.command.HungerCommand;
+import me.sosedik.essence.command.ItemCommand;
 import me.sosedik.essence.command.MoreCommand;
+import me.sosedik.essence.command.TopCommand;
 import me.sosedik.essence.command.UpCommand;
 import me.sosedik.essence.command.WorldCommand;
 import me.sosedik.utilizer.CommandManager;
@@ -13,14 +15,15 @@ import me.sosedik.utilizer.api.language.TranslationHolder;
 import me.sosedik.utilizer.util.Scheduler;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.UnknownNullability;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
 public final class Essence extends JavaPlugin {
 
-	private static Essence instance;
+	private static @UnknownNullability Essence instance;
 
-	private Scheduler scheduler;
+	private @UnknownNullability Scheduler scheduler;
 
 	@Override
 	public void onLoad() {
@@ -42,7 +45,9 @@ public final class Essence extends JavaPlugin {
 			HealCommand.class,
 			HealthCommand.class,
 			HungerCommand.class,
+			ItemCommand.class,
 			MoreCommand.class,
+			TopCommand.class,
 			UpCommand.class,
 			WorldCommand.class
 		);

@@ -57,7 +57,7 @@ public final class ShapelessCraft extends ShapelessRecipeBuilder<ShapelessCraft>
 	 */
 	public ShapelessCraft withCategory(CraftingBookCategory category) {
 		this.category = category;
-		return this;
+		return builder();
 	}
 
 }

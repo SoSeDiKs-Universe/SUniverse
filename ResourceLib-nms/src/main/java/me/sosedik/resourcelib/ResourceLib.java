@@ -9,6 +9,7 @@ import me.sosedik.resourcelib.feature.TabRenderer;
 import me.sosedik.resourcelib.impl.item.modifier.CustomLoreModifier;
 import me.sosedik.resourcelib.impl.item.modifier.CustomNameModifier;
 import me.sosedik.resourcelib.impl.message.tag.IconTag;
+import me.sosedik.resourcelib.listener.block.RefreshCustomBlockLightning;
 import me.sosedik.resourcelib.listener.misc.ActionBarCatcher;
 import me.sosedik.resourcelib.listener.misc.LocalizedDeathMessages;
 import me.sosedik.resourcelib.listener.misc.LocalizedResourcePackMessage;
@@ -69,6 +70,8 @@ public class ResourceLib extends JavaPlugin {
 		new CustomLoreModifier(resourceLibKey("custom_lore")).register();
 
 		EventUtil.registerListeners(this,
+			// block
+			RefreshCustomBlockLightning.class,
 			// misc
 			ActionBarCatcher.class,
 			LocalizedDeathMessages.class,

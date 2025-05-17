@@ -22,6 +22,7 @@ import me.sosedik.utilizer.listener.entity.EntityMetadataClearer;
 import me.sosedik.utilizer.listener.item.AutoReleasingItems;
 import me.sosedik.utilizer.listener.item.BowUsableWithoutArrows;
 import me.sosedik.utilizer.listener.item.NotDroppableItems;
+import me.sosedik.utilizer.listener.item.PlaceableBlockItems;
 import me.sosedik.utilizer.listener.misc.CustomRecipeLeftovers;
 import me.sosedik.utilizer.listener.misc.DelayedActions;
 import me.sosedik.utilizer.listener.misc.DurabilityRecipeLeftovers;
@@ -33,6 +34,7 @@ import me.sosedik.utilizer.listener.player.PlayerDataLoadSave;
 import me.sosedik.utilizer.listener.player.PlayerLanguageLoadSave;
 import me.sosedik.utilizer.listener.player.SetupPlayerScoreboards;
 import me.sosedik.utilizer.listener.player.UpdateInventoryOnLocaleChange;
+import me.sosedik.utilizer.listener.recipe.FireCrafting;
 import me.sosedik.utilizer.util.EventUtil;
 import me.sosedik.utilizer.util.Scheduler;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
@@ -92,6 +94,7 @@ public final class Utilizer extends JavaPlugin {
 			AutoReleasingItems.class,
 			BowUsableWithoutArrows.class,
 			NotDroppableItems.class,
+			PlaceableBlockItems.class,
 			// misc
 			CustomRecipeLeftovers.class,
 			DelayedActions.class,
@@ -104,7 +107,9 @@ public final class Utilizer extends JavaPlugin {
 			PlayerDataLoadSave.class,
 			PlayerLanguageLoadSave.class,
 			SetupPlayerScoreboards.class,
-			UpdateInventoryOnLocaleChange.class
+			UpdateInventoryOnLocaleChange.class,
+			// recipe
+			FireCrafting.class
 		);
 		saveConfig();
 	}

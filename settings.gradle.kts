@@ -1,6 +1,6 @@
 rootProject.name = "SUniverse"
 
-include("DelightfulFarming")
+include("DelightfulFarming-nms")
 include("Essence")
 include("FancyMotd")
 include("LimboWorldGenerator")

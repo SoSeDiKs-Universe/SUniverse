@@ -32,7 +32,7 @@ public class TranslatorCommand {
 	public TranslatorCommand() {
 		for (TranslationLanguage translationLanguage : LangOptionsStorage.getSupportedTranslators()) {
 			String key = translationLanguage.id() + "_" + translationLanguage.displayName().replace(" ", ChatUtil.SPACE_REPLACER);
-			translators.put(key, translationLanguage);
+			this.translators.put(key, translationLanguage);
 		}
 	}
 
@@ -53,7 +53,7 @@ public class TranslatorCommand {
 			target = player;
 		}
 
-		TranslationLanguage translationLanguage = translators.get(translatorKey);
+		TranslationLanguage translationLanguage = this.translators.get(translatorKey);
 		if (translationLanguage == null) {
 			Messenger.messenger(stack.getSender()).sendMessage("command.translator.unsupported", raw("translation", translatorKey));
 			return;
@@ -67,7 +67,7 @@ public class TranslatorCommand {
 
 	@Suggestions("@translatorCommandSuggestionTranslators")
 	public Set<String> onTranslatorSuggestion(CommandSourceStack stack) {
-		return translators.keySet();
+		return this.translators.keySet();
 	}
 
 }

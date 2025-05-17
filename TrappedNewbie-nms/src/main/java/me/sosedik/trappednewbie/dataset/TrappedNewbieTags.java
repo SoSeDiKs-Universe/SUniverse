@@ -20,6 +20,7 @@ public class TrappedNewbieTags {
 	public static final Tag<Material> COSMETIC_ARMOR = ItemUtil.itemTag(trappedNewbieKey("cosmetic_armor"));
 	public static final Tag<Material> ITEM_CHOPPING_BLOCKS = ItemUtil.itemTag(trappedNewbieKey("chopping_blocks"));
 	public static final Tag<Material> GLASS_SHARDS = ItemUtil.itemTag(trappedNewbieKey("glass_shards"));
+	public static final Tag<Material> PLACEABLE_ITEMS = ItemUtil.itemTag(trappedNewbieKey("placeable_items"));
 
 	// blocks
 	public static final Tag<Material> MINEABLE_BY_HAND = ItemUtil.blockTag(trappedNewbieKey("mineable/hand"));

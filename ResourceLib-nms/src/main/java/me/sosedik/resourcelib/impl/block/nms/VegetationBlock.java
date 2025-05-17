@@ -3,8 +3,10 @@ package me.sosedik.resourcelib.impl.block.nms;
 import me.sosedik.kiterino.world.block.KiterinoBlock;
 import me.sosedik.resourcelib.ResourceLib;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.block.BushBlock;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.DryVegetationBlock;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -15,7 +17,7 @@ import org.jspecify.annotations.Nullable;
 import static java.util.Objects.requireNonNull;
 
 @NullMarked
-public class VegetationBlock extends BushBlock implements KiterinoBlock {
+public class VegetationBlock extends DryVegetationBlock implements KiterinoBlock {
 
 	private @Nullable BlockState bukkitState;
 	private final PlacementRule placementRule;
@@ -39,6 +41,10 @@ public class VegetationBlock extends BushBlock implements KiterinoBlock {
 	@Override
 	protected boolean mayPlaceOn(net.minecraft.world.level.block.state.BlockState state, BlockGetter level, BlockPos pos) {
 		return this.placementRule.mayPlaceOn(state.getBukkitMaterial());
+	}
+
+	@Override
+	public void animateTick(net.minecraft.world.level.block.state.BlockState state, Level level, BlockPos pos, RandomSource random) {
 	}
 
 	@FunctionalInterface

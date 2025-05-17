@@ -101,16 +101,7 @@ public class GameModeSwitcherTask extends BukkitRunnable {
 		Material itemType = item.getType();
 		if (itemType == Material.AIR) return false;
 		if (itemType.isBlock()) return true;
-		if (Tag.ITEMS_BOATS.isTagged(itemType)) return true;
-		if (MaterialTags.FISH_BUCKETS.isTagged(itemType)) return true;
-		if (Tag.ITEMS_EGGS.isTagged(itemType)) return true;
-		if (TrappedNewbieTags.ROCKS.isTagged(itemType)) return true;
-		return switch (itemType) {
-			case ARMOR_STAND, ITEM_FRAME, GLOW_ITEM_FRAME, PAINTING, REDSTONE, STRING,
-			     BUCKET, WATER_BUCKET, LAVA_BUCKET, POWDER_SNOW_BUCKET, AXOLOTL_BUCKET, TADPOLE_BUCKET,
-			     FLINT_AND_STEEL, FIRE_CHARGE, FIREWORK_ROCKET -> true;
-			default -> false;
-		};
+		return TrappedNewbieTags.PLACEABLE_ITEMS.isTagged(itemType);
 	}
 
 	public static boolean isApplicableTool(Material type, ItemStack tool) {

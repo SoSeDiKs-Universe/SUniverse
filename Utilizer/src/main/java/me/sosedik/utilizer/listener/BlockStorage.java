@@ -237,6 +237,10 @@ public class BlockStorage {
 		});
 	}
 
+	public static void addMapping(Material key, Class<? extends BlockDataStorage> dataClass) {
+		addMapping(key.getKey(), dataClass);
+	}
+
 	public static void addMapping(NamespacedKey key, Class<? extends BlockDataStorage> dataClass) {
 		MAPPINGS.put(key, dataClass);
 	}

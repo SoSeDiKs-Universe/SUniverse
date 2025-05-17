@@ -69,7 +69,7 @@ public final class Requiem extends JavaPlugin {
 		TranslationHolder.extractLocales(this);
 		ResourceLib.loadDefaultResources(this);
 
-		RequiemTags.TOMBSTONES.getValues().forEach(material -> BlockStorage.addMapping(material.getKey(), TombstoneBlockStorage.class));
+		RequiemTags.TOMBSTONES.getValues().forEach(material -> BlockStorage.addMapping(material, TombstoneBlockStorage.class));
 	}
 
 	@Override

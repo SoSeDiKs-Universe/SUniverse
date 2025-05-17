@@ -1,0 +1,8 @@
+{
+	"sound_type": "cave_vines",
+	"map_color": "plant",
+	"no_collision": true,
+	"replaceable": true,
+	"client_type": "minecraft:barrier",
+	"state_parser": "none"
+}

@@ -1,11 +1,13 @@
 package me.sosedik.resourcelib;
 
+import com.google.common.collect.Lists;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
+import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
 import io.papermc.paper.registry.TypedKey;
 import io.papermc.paper.registry.event.RegistryEvents;
@@ -26,6 +28,8 @@ import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.component.Consumable;
+import net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -33,7 +37,9 @@ import net.minecraft.world.level.material.MapColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.BlockType;
+import org.bukkit.craftbukkit.potion.CraftPotionUtil;
 import org.bukkit.inventory.ItemType;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.intellij.lang.annotations.Subst;
 import org.jspecify.annotations.NullMarked;
@@ -49,6 +55,7 @@ import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
@@ -137,6 +144,10 @@ public class ResourceLibBootstrap implements PluginBootstrap {
 		BlockBehaviour.Properties properties = (BlockBehaviour.Properties) props;
 		if (json.has("destroy_time")) properties.destroyTime(json.get("destroy_time").getAsFloat());
 		if (json.has("explosion_resistance")) properties.explosionResistance(json.get("explosion_resistance").getAsFloat());
+		if (json.has("light_level")) {
+			int lightLevel = json.get("light_level").getAsInt();
+			properties.lightLevel(state -> lightLevel);
+		}
 		if (json.has("ignited_by_lava") && json.get("ignited_by_lava").getAsBoolean()) properties.ignitedByLava();
 		if (json.has("no_collision") && json.get("no_collision").getAsBoolean()) properties.noCollission();
 		if (json.has("replaceable") && json.get("replaceable").getAsBoolean()) properties.replaceable();
@@ -208,8 +219,28 @@ public class ResourceLibBootstrap implements PluginBootstrap {
 
 			if (foodJson.has("consumable")) {
 				JsonObject consumableJson = foodJson.getAsJsonObject("consumable");
-				// TODO consumable
-				properties.food(foodProperties.build());
+				var consumable = Consumable.builder();
+				if (consumableJson.has("effects")) {
+					for (JsonElement effectElement : consumableJson.getAsJsonArray("effects")) {
+						JsonObject effectJson = effectElement.getAsJsonObject();
+						String type = effectJson.get("type").getAsString();
+						if ("apply_status_effects".equals(type)) {
+							float probability = effectJson.has("probability") ? effectJson.get("probability").getAsFloat() : 1F;
+							List<PotionEffect> effectList = effectJson.getAsJsonArray("effects").asList().stream().map(e -> {
+								String effectKey = e.getAsJsonObject().get("type").getAsString();
+								int duration = e.getAsJsonObject().get("duration").getAsInt();
+								int amplifier = e.getAsJsonObject().get("amplifier").getAsInt();
+								PotionEffectType potionEffectType = RegistryAccess.registryAccess().getRegistry(RegistryKey.MOB_EFFECT).get(Key.key(effectKey));
+								return new PotionEffect(potionEffectType, duration, amplifier);
+							}).toList();
+							consumable.onConsume(new ApplyStatusEffectsConsumeEffect(
+								new ArrayList<>(Lists.transform(effectList, CraftPotionUtil::fromBukkit)),
+								probability
+							));
+						}
+					}
+				}
+				properties.food(foodProperties.build(), consumable.build());
 			} else {
 				properties.food(foodProperties.build());
 			}

@@ -1,0 +1,7 @@
+{
+  "values": [
+    "minecraft:bucket",
+    "minecraft:milk_bucket",
+    "#minecraft:placeable_buckets"
+  ]
+}

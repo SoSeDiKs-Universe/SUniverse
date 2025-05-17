@@ -1,0 +1,20 @@
+{
+	"values": [
+		"#minecraft:boats",
+		"#minecraft:eggs",
+		"#minecraft:placeable_buckets",
+		"minecraft:bucket",
+		"minecraft:armor_stand",
+		"minecraft:item_frame",
+		"minecraft:glow_item_frame",
+		"minecraft:painting",
+		"minecraft:redstone",
+		"minecraft:string",
+		"minecraft:flint_and_steel",
+		"minecraft:fire_charge",
+		"minecraft:firework_rocket",
+		"#trapped_newbie:rocks",
+		"delightful_farming:sweet_berry_pips",
+		"delightful_farming:glow_berry_pips"
+	]
+}

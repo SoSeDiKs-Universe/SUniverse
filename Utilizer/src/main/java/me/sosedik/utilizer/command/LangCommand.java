@@ -32,14 +32,14 @@ public class LangCommand {
 	public LangCommand() {
 		for (LangOptions langOptions : LangOptionsStorage.getSupportedLanguages()) {
 			String key = langOptions.displayName().replace(" ", ChatUtil.SPACE_REPLACER);
-			languages.put(key, langOptions);
+			this.languages.put(key, langOptions);
 		}
 	}
 
 	@Command("lang <language> [player]")
 	public void onCommand(
 		CommandSourceStack stack,
-		@Argument(value = "language", suggestions = "@translatorCommandSuggestionTranslators") AnyString languageKeyS,
+		@Argument(value = "language", suggestions = "@langCommandSuggestionLanguages") AnyString languageKeyS,
 		@Nullable @Argument(value = "player") Player player,
 		@Flag(value = "silent") boolean silent
 	) {
@@ -53,7 +53,7 @@ public class LangCommand {
 			target = player;
 		}
 
-		LangOptions langOptions = languages.get(languageKey);
+		LangOptions langOptions = this.languages.get(languageKey);
 		if (langOptions == null) {
 			Messenger.messenger(stack.getSender()).sendMessage("command.lang.unsupported", raw("language", langOptions.displayName()));
 			return;
@@ -65,9 +65,9 @@ public class LangCommand {
 		if (stack.getSender() != target) Messenger.messenger(stack.getSender()).sendMessage("command.lang.set.other", raw("language", langOptions.displayName()), raw("player", target.displayName()));
 	}
 
-	@Suggestions("@translatorCommandSuggestionTranslators")
+	@Suggestions("@langCommandSuggestionLanguages")
 	public Set<String> onTranslatorSuggestion(CommandSourceStack stack) {
-		return languages.keySet();
+		return this.languages.keySet();
 	}
 
 }

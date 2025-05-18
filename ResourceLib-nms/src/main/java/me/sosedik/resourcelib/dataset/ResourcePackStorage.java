@@ -31,6 +31,7 @@ public class ResourcePackStorage {
 	private final Map<NamespacedKey, FontData> fontMappings = new HashMap<>();
 	private final Map<NamespacedKey, NamespacedKey> soundMappings = new HashMap<>();
 	private final Map<NamespacedKey, NamespacedKey> itemMappings = new HashMap<>();
+	private final Map<NamespacedKey, String> noteBlockMappings = new HashMap<>();
 	private final Map<NamespacedKey, String> tripwireMappings = new HashMap<>();
 	private final Map<NamespacedKey, JsonObject> sculkMappings = new HashMap<>();
 	private final Map<NamespacedKey, JsonObject> weepingVinesMappings = new HashMap<>();
@@ -43,6 +44,7 @@ public class ResourcePackStorage {
 		plugin.saveResource("mappings/fonts.json", true);
 		plugin.saveResource("mappings/sounds.json", true);
 		plugin.saveResource("mappings/items.json", true);
+		plugin.saveResource("mappings/note_block.json", true);
 		plugin.saveResource("mappings/tripwire.json", true);
 		plugin.saveResource("mappings/sculk_sensor.json", true);
 		plugin.saveResource("mappings/weeping_vines.json", true);
@@ -50,6 +52,7 @@ public class ResourcePackStorage {
 		loadFontMappings(new File(mappingsDir, "fonts.json"));
 		loadSoundMappings(new File(mappingsDir, "sounds.json"));
 		loadItemMappings(new File(mappingsDir, "items.json"));
+		loadNoteBlockMappings(new File(mappingsDir, "note_block.json"));
 		loadTripwireMappings(new File(mappingsDir, "tripwire.json"));
 		loadSculkMappings(new File(mappingsDir, "sculk_sensor.json"));
 		loadWeepingVinesMappings(new File(mappingsDir, "weeping_vines.json"));
@@ -117,6 +120,15 @@ public class ResourcePackStorage {
 		});
 	}
 
+	private void loadNoteBlockMappings(File mappingsFile) {
+		JsonObject noteBlockMappings = FileUtil.readJsonObject(mappingsFile);
+		noteBlockMappings.entrySet().forEach(entry -> {
+			var from = requireNonNull(NamespacedKey.fromString(entry.getKey()));
+			String to = Material.NOTE_BLOCK.key() + "[" + entry.getValue().getAsJsonObject().get("state").getAsString() + "]";
+			this.noteBlockMappings.put(from, to);
+		});
+	}
+
 	private void loadTripwireMappings(File mappingsFile) {
 		JsonObject tripwireMappings = FileUtil.readJsonObject(mappingsFile);
 		tripwireMappings.entrySet().forEach(entry -> {
@@ -159,6 +171,10 @@ public class ResourcePackStorage {
 
 	public NamespacedKey getItemModelMapping(NamespacedKey key) {
 		return this.itemMappings.getOrDefault(key, key);
+	}
+
+	public @Nullable String getNoteBlockMapping(NamespacedKey key) {
+		return this.noteBlockMappings.get(key);
 	}
 
 	public @Nullable String getTripwireMapping(NamespacedKey key) {

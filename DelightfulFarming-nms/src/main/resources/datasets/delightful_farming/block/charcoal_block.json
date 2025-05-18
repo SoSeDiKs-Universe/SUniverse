@@ -1,0 +1,10 @@
+{
+	"map_color": "color_black",
+	"destroy_time": 5,
+	"explosion_resistance": 5,
+	"require_correct_tool": true,
+	"note_block_instrument": "basedrum",
+	"client_type": "minecraft:barrier",
+	"parser": "block",
+	"state_parser": "note_block"
+}

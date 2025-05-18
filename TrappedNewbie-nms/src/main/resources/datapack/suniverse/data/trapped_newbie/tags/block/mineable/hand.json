@@ -8,6 +8,7 @@
 		"#minecraft:leaves",
 		"minecraft:lantern",
 		"minecraft:soul_lantern",
-		"#requiem:tombstones"
+		"#requiem:tombstones",
+		"#delightful_farming:baskets"
 	]
 }

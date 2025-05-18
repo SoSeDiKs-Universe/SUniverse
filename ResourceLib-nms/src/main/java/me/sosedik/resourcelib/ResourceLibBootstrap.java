@@ -33,6 +33,7 @@ import net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -151,7 +152,9 @@ public class ResourceLibBootstrap implements PluginBootstrap {
 		if (json.has("ignited_by_lava") && json.get("ignited_by_lava").getAsBoolean()) properties.ignitedByLava();
 		if (json.has("no_collision") && json.get("no_collision").getAsBoolean()) properties.noCollission();
 		if (json.has("replaceable") && json.get("replaceable").getAsBoolean()) properties.replaceable();
+		if (json.has("require_correct_tool") && json.get("require_correct_tool").getAsBoolean()) properties.requiresCorrectToolForDrops();
 		if (json.has("sound_type")) properties.sound((SoundType) SoundType.class.getDeclaredField(json.get("sound_type").getAsString().toUpperCase(Locale.US)).get(null));
+		if (json.has("note_block_instrument")) properties.instrument(NoteBlockInstrument.valueOf(json.get("note_block_instrument").getAsString().toUpperCase(Locale.US)));
 		if (json.has("map_color")) properties.mapColor((MapColor) MapColor.class.getDeclaredField(json.get("map_color").getAsString().toUpperCase(Locale.US)).get(null));
 		return properties;
 	}

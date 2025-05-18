@@ -4,6 +4,7 @@
 	"ignited_by_lava": true,
 	"sound_type": "cherry_wood",
 	"map_color": "terracotta_white",
+	"note_block_instrument": "bass",
 	"client_type": "minecraft:barrier",
 	"state_parser": "sculk_sensor",
 	"parser": "chopping_block",

@@ -3,6 +3,7 @@ package me.sosedik.delightfulfarming.dataset;
 import me.sosedik.utilizer.impl.recipe.CampfireCraft;
 import me.sosedik.utilizer.impl.recipe.ShapelessCraft;
 import me.sosedik.utilizer.impl.recipe.SmokingCraft;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NullMarked;
@@ -50,6 +51,15 @@ public class DelightfulFarmingRecipes {
 		new SmokingCraft(new ItemStack(DelightfulFarmingItems.SWEET_BERRY_MEATBALLS), 10 * 20, delightfulFarmingKey("sweet_berry_mince_to_sweet_berry_meatballs"))
 			.addIngredients(DelightfulFarmingItems.SWEET_BERRY_MINCE)
 			.register();
+
+		new ShapelessCraft(new ItemStack(DelightfulFarmingItems.CHARCOAL_BLOCK), delightfulFarmingKey("charcoal_block"))
+			.addIngredients(Material.CHARCOAL, 9)
+			.register();
+		new ShapelessCraft(new ItemStack(Material.CHARCOAL, 9), delightfulFarmingKey("charcoal"))
+			.addIngredients(DelightfulFarmingItems.CHARCOAL_BLOCK)
+			.register();
+
+		Bukkit.addFuel(DelightfulFarmingItems.CHARCOAL_BLOCK, 80 * 200);
 	}
 
 }

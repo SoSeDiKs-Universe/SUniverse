@@ -5,6 +5,5 @@
 	"replaceable": true,
 	"client_type": "minecraft:barrier",
 	"mimik": "delightful_farming:sweet_berry_pips",
-	"state_parser": "tripwire",
-	"model": "block/glow_berry_pips_bush"
+	"state_parser": "tripwire"
 }

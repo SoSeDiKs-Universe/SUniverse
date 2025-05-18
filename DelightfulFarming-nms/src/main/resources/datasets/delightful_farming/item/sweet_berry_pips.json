@@ -1,8 +1,3 @@
 {
-	"sound_type": "sweet_berry_bush",
-	"map_color": "plant",
-	"no_collision": true,
-	"replaceable": true,
-	"client_type": "minecraft:barrier",
-	"state_parser": "none"
+	"client_type": "minecraft:barrier"
 }

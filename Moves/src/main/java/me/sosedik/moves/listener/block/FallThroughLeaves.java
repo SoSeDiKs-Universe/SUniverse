@@ -40,11 +40,12 @@ public class FallThroughLeaves implements Listener {
 	public void onMove(PlayerMoveEvent event) {
 		if (!event.hasExplicitlyChangedPosition()) return;
 
+		Location from = event.getFrom();
 		Location to = event.getTo();
-		if (MathUtil.getDecimalPartAbs(to.getY()) > 0.1) return;
+		if (to.getY() > from.getY()) return;
+		if (MathUtil.getDecimalPartAbs(to.getY()) > 0.05) return;
 
 		Player player = event.getPlayer();
-		if (!player.isOnGround()) return;
 		if (player.isInsideVehicle()) return;
 		if (player.isFlying() && !player.isSneaking()) return;
 
@@ -75,7 +76,7 @@ public class FallThroughLeaves implements Listener {
 		player.emitSound(Sound.BLOCK_GRASS_STEP, 1F, 1F);
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onBlockMove(PlayerMoveEvent event) {
 		if (!event.hasExplicitlyChangedPosition()) return;
 
@@ -129,7 +130,6 @@ public class FallThroughLeaves implements Listener {
 
 		// Deny jump if jumping from leaves
 		if (MovesTags.FALL_THROUGH_BLOCKS.isTagged(block.getType())) {
-			event.setCancelled(true);
 			player.teleport(from.clone().addY(-0.1), TeleportFlag.Relative.VELOCITY_ROTATION, TeleportFlag.EntityState.RETAIN_VEHICLE, TeleportFlag.EntityState.RETAIN_PASSENGERS);
 			player.emitSound(Sound.BLOCK_GRASS_STEP, 1F, 1F);
 			return;

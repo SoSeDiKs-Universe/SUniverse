@@ -23,6 +23,7 @@ public class DelightfulFarmingBootstrap implements PluginBootstrap {
 			case "glow_berry_pips_bush" -> new GlowBerryPipsBushBlock((BlockBehaviour.Properties) properties, requireNonNull(NamespacedKey.fromString(key)));
 			case "sweet_berry_pips_bush" -> new SweetBerryPipsBushBlock((BlockBehaviour.Properties) properties, requireNonNull(NamespacedKey.fromString(key)));
 			case String k when k.endsWith("_basket") -> BlockCreator.barrier(properties, key);
+			case "charcoal_block" -> BlockCreator.simpleBlock(properties, key);
 			default -> throw new IllegalArgumentException("Unknown blockstate: %s".formatted(key));
 		});
 		ResourceLibBootstrap.setupItems(context, DelightfulFarmingItems.class, null, null);

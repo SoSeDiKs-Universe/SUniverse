@@ -22,6 +22,8 @@ public class DelightfulFarmingItems {
 	public static final Material SWEET_BERRY_PIPS_BUSH = byKey("sweet_berry_pips_bush");
 	public static final Material GLOW_BERRY_PIPS_BUSH = byKey("glow_berry_pips_bush");
 
+	public static final Material CHARCOAL_BLOCK = byKey("charcoal_block");
+
 	private static Material byKey(String value) {
 		return KiterinoBootstrapMaterialInjector.injectMaterial(DelightfulFarming.delightfulFarmingKey(value));
 	}

@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "delightful_farming:charcoal_block"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "delightful_farming:blocks/charcoal_block"
+}

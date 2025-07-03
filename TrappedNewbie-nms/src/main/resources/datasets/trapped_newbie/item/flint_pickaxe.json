@@ -1,0 +1,6 @@
+{
+	"parent_model": "handheld",
+	"client_type": "minecraft:wooden_pickaxe",
+	"durability": 45,
+	"repairable": "minecraft:flint"
+}

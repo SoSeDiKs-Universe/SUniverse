@@ -5,6 +5,9 @@ description = "Shake your booty"
 dependencies {
     compileOnly(project(":Utilizer"))
 
+    compileOnly("org.incendo:cloud-paper:${project.property("cloudImplVersion")}")
+    compileOnly("org.incendo:cloud-annotations:${project.property("cloudVersion")}")
+
     compileOnly("de.tr7zw:item-nbt-api-plugin:${project.property("nbtApiVersion")}")
 }
 

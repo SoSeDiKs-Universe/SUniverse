@@ -260,4 +260,15 @@ public class ItemUtil {
 		return item;
 	}
 
+	/**
+	 * Checks whether the block item should render as a block
+	 *
+	 * @param item item
+	 * @return whether the block item should render as a block
+	 */
+	public static boolean shouldRenderAsBlock(ItemStack item) {
+		Material type = item.getType();
+		return type.isBlock() && !UtilizerTags.FLAT_BLOCK_RENDER.isTagged(type);
+	}
+
 }

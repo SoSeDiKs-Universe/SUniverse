@@ -1,5 +1,6 @@
 package me.sosedik.utilizer.listener.player;
 
+import com.destroystokyo.paper.event.player.PlayerConnectionCloseEvent;
 import de.tr7zw.nbtapi.NBT;
 import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import me.sosedik.utilizer.Utilizer;
@@ -42,7 +43,7 @@ public class PlayerDataLoadSave implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
-	public void onPreJoin(AsyncPlayerPreLoginEvent event) { // TODO cleanup in case the player didn't join
+	public void onPreJoin(AsyncPlayerPreLoginEvent event) {
 		if (event.getLoginResult() != AsyncPlayerPreLoginEvent.Result.ALLOWED) return;
 
 		UUID uuid = event.getUniqueId();
@@ -61,6 +62,16 @@ public class PlayerDataLoadSave implements Listener {
 		dataLoadedEvent.callEvent();
 		data.clearNBT();
 		data.mergeCompound(dataLoadedEvent.getBackupData());
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onQuit(PlayerConnectionCloseEvent event) {
+		UUID uuid = event.getPlayerUniqueId();
+		ReadWriteNBT data = STORED_DATA.remove(uuid);
+		if (data == null) return;
+
+		File dataFile = new File(plugin.getDataFolder(), "players/" + uuid + ".dat");
+		Utilizer.scheduler().async(() -> saveData(dataFile, data));
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

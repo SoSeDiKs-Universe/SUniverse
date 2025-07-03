@@ -1,0 +1,41 @@
+{
+	"destroy_time": 0.2,
+	"explosion_resistance": 0.2,
+	"sound_type": "wool",
+	"map_color": "snow",
+	"no_collision": true,
+	"client_type": "minecraft:barrier",
+	"state_parser": "none",
+	"dyeable": -1,
+	"no_texture": true,
+	"model": {
+		"textures": {
+			"layer0": "trapped_newbie:item/furniture/sleeping_bag"
+		},
+		"elements": [
+			{
+				"from": [1, 0, 25],
+				"to": [15, 2, 31],
+				"faces": {
+					"north": {"uv": [0.5, 4, 7.5, 5], "texture": "#layer0"},
+					"east": {"uv": [0.5, 4, 3.5, 5], "texture": "#layer0"},
+					"south": {"uv": [0.5, 4, 7.5, 5], "texture": "#layer0"},
+					"west": {"uv": [7.5, 4, 4.5, 5], "texture": "#layer0"},
+					"up": {"uv": [0.5, 4.5, 7.5, 0.5], "texture": "#layer0"},
+					"down": {"uv": [0.5, 16, 7.5, 13], "texture": "#layer0", "tintindex": 0}
+				}
+			},
+			{
+				"from": [1, 0, 1],
+				"to": [15, 1, 25],
+				"faces": {
+					"north": {"uv": [0.5, 15.5, 7.5, 16], "texture": "#layer0", "tintindex": 0},
+					"east": {"uv": [0, 4.5, 0.5, 15.5], "texture": "#layer0", "tintindex": 0},
+					"west": {"uv": [8, 4.5, 7.5, 15.5], "texture": "#layer0", "tintindex": 0},
+					"up": {"uv": [0.5, 4.5, 7.5, 15.5], "rotation": 180, "texture": "#layer0", "tintindex": 0},
+					"down": {"uv": [0.5, 4.5, 7.5, 15.5], "texture": "#layer0", "tintindex": 0}
+				}
+			}
+		]
+	}
+}

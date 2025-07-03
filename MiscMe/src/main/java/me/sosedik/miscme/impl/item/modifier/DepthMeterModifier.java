@@ -8,6 +8,7 @@ import me.sosedik.kiterino.modifier.item.context.packet.EntityDataPacketContext;
 import me.sosedik.kiterino.modifier.item.context.packet.EntityEquipmentPacketContext;
 import me.sosedik.miscme.MiscMe;
 import me.sosedik.miscme.dataset.MiscMeItems;
+import me.sosedik.resourcelib.ResourceLib;
 import me.sosedik.utilizer.api.language.LangOptionsStorage;
 import me.sosedik.utilizer.api.message.Messenger;
 import org.bukkit.NamespacedKey;
@@ -23,11 +24,11 @@ import static me.sosedik.utilizer.api.message.Mini.raw;
 @NullMarked
 public class DepthMeterModifier extends ItemModifier {
 
-	private static final NamespacedKey DEPTH_SURFACE = MiscMe.miscMeKey("depth_meter/depth_surface");
-	private static final NamespacedKey DEPTH_CAVE = MiscMe.miscMeKey("depth_meter/depth_cave");
-	private static final NamespacedKey DEPTH_SKY = MiscMe.miscMeKey("depth_meter/depth_sky");
-	private static final NamespacedKey DEPTH_LAVA = MiscMe.miscMeKey("depth_meter/depth_lava");
-	private static final NamespacedKey DEPTH_VOID = MiscMe.miscMeKey("depth_meter/depth_void");
+	private static final NamespacedKey DEPTH_SURFACE = ResourceLib.storage().getItemModelMapping(MiscMe.miscMeKey("depth_meter/depth_surface"));
+	private static final NamespacedKey DEPTH_CAVE = ResourceLib.storage().getItemModelMapping(MiscMe.miscMeKey("depth_meter/depth_cave"));
+	private static final NamespacedKey DEPTH_SKY = ResourceLib.storage().getItemModelMapping(MiscMe.miscMeKey("depth_meter/depth_sky"));
+	private static final NamespacedKey DEPTH_LAVA = ResourceLib.storage().getItemModelMapping(MiscMe.miscMeKey("depth_meter/depth_lava"));
+	private static final NamespacedKey DEPTH_VOID = ResourceLib.storage().getItemModelMapping(MiscMe.miscMeKey("depth_meter/depth_void"));
 
 	public DepthMeterModifier(NamespacedKey modifierId) {
 		super(modifierId);

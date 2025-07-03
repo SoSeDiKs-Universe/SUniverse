@@ -7,6 +7,7 @@ import me.sosedik.kiterino.modifier.item.ModificationResult;
 import me.sosedik.kiterino.modifier.item.context.ItemModifierContextType;
 import me.sosedik.kiterino.modifier.item.context.SlottedItemModifierContext;
 import me.sosedik.miscme.MiscMe;
+import me.sosedik.resourcelib.ResourceLib;
 import me.sosedik.utilizer.api.language.LangOptionsStorage;
 import me.sosedik.utilizer.api.message.Messenger;
 import net.kyori.adventure.text.Component;
@@ -29,8 +30,8 @@ import static me.sosedik.utilizer.api.message.Mini.raw;
 @NullMarked
 public class ClockModifier extends ItemModifier {
 
-	private static final NamespacedKey STILL_CLOCK = MiscMe.miscMeKey("clock_00");
-	private static final NamespacedKey CLOCK_MIMIK = MiscMe.miscMeKey("clock");
+	private static final NamespacedKey STILL_CLOCK = ResourceLib.storage().getItemModelMapping(MiscMe.miscMeKey("clock_00"));
+	private static final NamespacedKey CLOCK_MIMIK = ResourceLib.storage().getItemModelMapping(MiscMe.miscMeKey("clock"));
 
 	public ClockModifier(NamespacedKey modifierId) {
 		super(modifierId);

@@ -7,7 +7,7 @@ import org.jspecify.annotations.NullMarked;
 
 import static me.sosedik.trappednewbie.TrappedNewbie.trappedNewbieKey;
 
-// MCCheck: 1.21.5, new branches, hardened
+// MCCheck: 1.21.5, new branches (chopping blocks, work stations), hardened
 @NullMarked
 public class TrappedNewbieTags {
 
@@ -19,12 +19,14 @@ public class TrappedNewbieTags {
 	public static final Tag<Material> HAMMERS = ItemUtil.itemTag(trappedNewbieKey("hammers"));
 	public static final Tag<Material> COSMETIC_ARMOR = ItemUtil.itemTag(trappedNewbieKey("cosmetic_armor"));
 	public static final Tag<Material> ITEM_CHOPPING_BLOCKS = ItemUtil.itemTag(trappedNewbieKey("chopping_blocks"));
+	public static final Tag<Material> ITEM_WORK_STATIONS = ItemUtil.itemTag(trappedNewbieKey("work_stations"));
 	public static final Tag<Material> GLASS_SHARDS = ItemUtil.itemTag(trappedNewbieKey("glass_shards"));
 	public static final Tag<Material> PLACEABLE_ITEMS = ItemUtil.itemTag(trappedNewbieKey("placeable_items"));
 
 	// blocks
 	public static final Tag<Material> MINEABLE_BY_HAND = ItemUtil.blockTag(trappedNewbieKey("mineable/hand"));
 	public static final Tag<Material> CHOPPING_BLOCKS = ItemUtil.blockTag(trappedNewbieKey("chopping_blocks"));
+	public static final Tag<Material> WORK_STATIONS = ItemUtil.blockTag(trappedNewbieKey("work_stations"));
 	public static final Tag<Material> HARDENED = ItemUtil.blockTag(trappedNewbieKey("hardened"));
 	public static final Tag<Material> PRICKY_BLOCKS = ItemUtil.blockTag(trappedNewbieKey("pricky_blocks"));
 

@@ -26,15 +26,15 @@ public class TrumpetScare implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onUse(PlayerItemConsumeEvent event) {
-		tryToUseTrumpet(event);
+		tryToUse(event);
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onUse(EntityItemConsumeEvent event) {
-		tryToUseTrumpet(event);
+		tryToUse(event);
 	}
 
-	public void tryToUseTrumpet(ItemConsumeEvent event) {
+	public void tryToUse(ItemConsumeEvent event) {
 		if (!ItemStack.isType(event.getItem(), TrappedNewbieItems.TRUMPET)) return;
 
 		LivingEntity livingEntity = event.getEntity();

@@ -1,0 +1,12 @@
+{
+	"destroy_time": 2,
+	"explosion_resistance": 3,
+	"ignited_by_lava": true,
+	"sound_type": "cherry_wood",
+	"map_color": "terracotta_white",
+	"note_block_instrument": "bass",
+	"client_type": "minecraft:barrier",
+	"state_parser": "none",
+	"parser": "work_station",
+	"log_type": "cherry_log"
+}

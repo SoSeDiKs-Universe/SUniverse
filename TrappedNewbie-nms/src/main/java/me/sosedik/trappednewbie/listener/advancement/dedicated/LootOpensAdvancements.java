@@ -22,8 +22,8 @@ public class LootOpensAdvancements implements Listener {
 		TrappedNewbieAdvancements.LOOT_500.awardNextCriterion(player);
 		TrappedNewbieAdvancements.LOOT_1000.awardNextCriterion(player);
 		TrappedNewbieAdvancements.LOOT_2500.awardNextCriterion(player);
-		TrappedNewbieAdvancements.LOOT_5000.awardNextCriterion(player);
-		TrappedNewbieAdvancements.LOOT_10000.awardNextCriterion(player);
+		TrappedNewbieAdvancements.LOOT_5K.awardNextCriterion(player);
+		TrappedNewbieAdvancements.LOOT_10K.awardNextCriterion(player);
 	}
 
 }

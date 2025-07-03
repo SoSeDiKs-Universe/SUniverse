@@ -1,0 +1,38 @@
+{
+	"type": "minecraft:block",
+	"pools": [
+		{
+			"bonus_rolls": 0.0,
+			"entries": [
+				{
+					"type": "minecraft:item",
+					"name": "trapped_newbie:clay_kiln",
+					"functions": [
+						{
+							"function": "minecraft:copy_state",
+							"block": "trapped_newbie:clay_kiln",
+							"properties": [
+								"burned"
+							]
+						}
+					],
+					"conditions": [
+						{
+							"condition": "minecraft:block_state_property",
+							"block": "trapped_newbie:clay_kiln",
+							"properties": {
+								"burned": "true"
+							}
+						}
+					]
+				},
+				{
+					"type": "minecraft:item",
+					"name": "trapped_newbie:clay_kiln"
+				}
+			],
+			"rolls": 1.0
+		}
+	],
+	"random_sequence": "trapped_newbie:clay_kiln"
+}

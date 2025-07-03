@@ -2,10 +2,12 @@ package me.sosedik.trappednewbie.dataset;
 
 import me.sosedik.requiem.dataset.RequiemItems;
 import me.sosedik.trappednewbie.TrappedNewbie;
+import me.sosedik.utilizer.api.event.recipe.ItemCraftPrepareEvent;
 import me.sosedik.utilizer.dataset.UtilizerTags;
 import me.sosedik.utilizer.impl.recipe.FireCraft;
 import me.sosedik.utilizer.impl.recipe.ShapedCraft;
 import me.sosedik.utilizer.impl.recipe.ShapelessCraft;
+import me.sosedik.utilizer.util.MiscUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Keyed;
 import org.bukkit.Material;
@@ -28,6 +30,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 import static me.sosedik.trappednewbie.TrappedNewbie.trappedNewbieKey;
@@ -74,6 +77,10 @@ public class TrappedNewbieRecipes {
 			.addIngredients('S', UtilizerTags.SHEARS.getValues())
 			.addIngredients('S', UtilizerTags.KNIFES.getValues())
 			.register();
+		new ShapelessCraft(new ItemStack(Material.STICK), trappedNewbieKey("stick"))
+			.addIngredients(TrappedNewbieItems.ROUGH_STICK)
+			.addIngredients(UtilizerTags.KNIFES.getValues())
+			.register();
 
 		new ShapedCraft(new ItemStack(TrappedNewbieItems.GRASS_MESH), trappedNewbieKey("grass_mesh"), "TS", "ST")
 			.addIngredients('S', Material.STICK, TrappedNewbieItems.ROUGH_STICK)
@@ -86,6 +93,76 @@ public class TrappedNewbieRecipes {
 			.addIngredients('S', Material.STICK, TrappedNewbieItems.ROUGH_STICK)
 			.addIngredients('C', Material.COBBLESTONE)
 			.register();
+
+		new ShapedCraft(new ItemStack(TrappedNewbieItems.FLINT_SHOVEL), trappedNewbieKey("flint_shovel_1"), "FT", "S ")
+			.withGroup("flint_shovel")
+			.withCategory(CraftingBookCategory.EQUIPMENT)
+			.addIngredients('S', Material.STICK, TrappedNewbieItems.ROUGH_STICK)
+			.addIngredients('T', Material.STRING, TrappedNewbieItems.TWINE) // HORSEHAIR
+			.addIngredients('F', TrappedNewbieItems.FLAKED_FLINT)
+			.register();
+
+		new ShapedCraft(new ItemStack(TrappedNewbieItems.FLINT_SHOVEL), trappedNewbieKey("flint_shovel_2"), "F ", "ST")
+			.withGroup("flint_shovel")
+			.withCategory(CraftingBookCategory.EQUIPMENT)
+			.addIngredients('S', Material.STICK, TrappedNewbieItems.ROUGH_STICK)
+			.addIngredients('T', Material.STRING, TrappedNewbieItems.TWINE) // HORSEHAIR
+			.addIngredients('F', TrappedNewbieItems.FLAKED_FLINT)
+			.register();
+
+		new ShapedCraft(new ItemStack(TrappedNewbieItems.FLINT_PICKAXE), trappedNewbieKey("flint_pickaxe"), "FP", "SF")
+			.withCategory(CraftingBookCategory.EQUIPMENT)
+			.addIngredients('S', Material.STICK, TrappedNewbieItems.ROUGH_STICK)
+			.addIngredients('F', Material.FLINT)
+			.addIngredients('P', Tag.PLANKS.getValues())
+			.register();
+
+		new ShapedCraft(new ItemStack(TrappedNewbieItems.FIRESTRIKER), trappedNewbieKey("firestriker"), "CS", "SF")
+			.withCategory(CraftingBookCategory.EQUIPMENT)
+			.addIngredients('F', Material.FLINT)
+			.addIngredients('C', Tag.ITEMS_COALS.getValues())
+			.addIngredients('S', Material.STICK, TrappedNewbieItems.ROUGH_STICK)
+			.register();
+
+		new ShapedCraft(new ItemStack(TrappedNewbieItems.CLAY_KILN), trappedNewbieKey("clay_kiln"), "CCC", "C C", "CCC")
+			.addIngredients('C', Material.CLAY_BALL)
+			.register();
+
+		new ShapelessCraft(new ItemStack(TrappedNewbieItems.SLEEPING_BAG), trappedNewbieKey("sleeping_bag"))
+			.addIngredients('T', Material.STRING, TrappedNewbieItems.TWINE) // HORSEHAIR
+			.addIngredients(Tag.WOOL_CARPETS.getValues(), 3)
+			.withPreCheck(event -> {
+				Material carpet1 = null;
+				Material carpet2 = null;
+				for (ItemStack item : event.getMatrix()) {
+					if (ItemStack.isEmpty(item)) continue;
+
+					Material type = item.getType();
+					if (!Tag.WOOL_CARPETS.isTagged(type)) continue;
+
+					if (carpet1 == null) {
+						carpet1 = type;
+						continue;
+					}
+					if (carpet1 == type) {
+						event.setResult(new ItemStack(TrappedNewbieItems.SLEEPING_BAG).withColor(MiscUtil.getDyeColor(type, "CARPET")));
+						return;
+					}
+					if (carpet2 == null) {
+						carpet2 = type;
+						continue;
+					}
+					if (carpet2 == type) {
+						event.setResult(new ItemStack(TrappedNewbieItems.SLEEPING_BAG).withColor(MiscUtil.getDyeColor(type, "CARPET")));
+						return;
+					}
+				}
+				if (carpet1 != null)
+					event.setResult(new ItemStack(TrappedNewbieItems.SLEEPING_BAG).withColor(MiscUtil.getDyeColor(carpet1, "CARPET")));
+			})
+			.register();
+
+		addFlowerBouquetRecipe();
 
 		addBranchRecipe(TrappedNewbieItems.ACACIA_BRANCH, Material.ACACIA_SAPLING);
 		addBranchRecipe(TrappedNewbieItems.BIRCH_BRANCH, Material.BIRCH_SAPLING);
@@ -129,6 +206,18 @@ public class TrappedNewbieRecipes {
 				.withGroup("chopping_block")
 				.addIngredients(logType)
 				.addIngredients(Tag.ITEMS_AXES.getValues())
+				.register();
+		});
+
+		TrappedNewbieTags.WORK_STATIONS.getValues().forEach(type -> {
+			Material logType = Material.matchMaterial(type.key().value().replace("work_station", "log"));
+			if (logType == null) logType = Material.matchMaterial(type.key().value().replace("work_station", "stem"));
+			if (logType == null && type == TrappedNewbieItems.BAMBOO_WORK_STATION) logType = Material.BAMBOO_BLOCK;
+			if (logType == null) throw new IllegalArgumentException("Couldn't find log item for " + type.key());
+
+			new ShapelessCraft(new ItemStack(type), type.getKey())
+				.withGroup("work_station")
+				.addIngredients(logType)
 				.register();
 		});
 
@@ -181,6 +270,28 @@ public class TrappedNewbieRecipes {
 		addFuels();
 		removeRecipes();
 		makeIngredientReplacements();
+	}
+
+	private static void addFlowerBouquetRecipe() {
+		var recipe = new ShapelessCraft(new ItemStack(TrappedNewbieItems.FLOWER_BOUQUET), trappedNewbieKey("flower_bouquet"))
+			.addIngredients('S', Material.STRING, TrappedNewbieItems.TWINE); // HORSEHAIR
+		for (int i = 0; i < 7; i++)
+			recipe.addIngredients(MiscUtil.rotate(i, Tag.ITEMS_FLOWERS.getValues()));
+		recipe.withPreCheck(uniqueIngredientsCheck(4));
+		recipe.register();
+	}
+
+	private static Consumer<ItemCraftPrepareEvent> uniqueIngredientsCheck(int minCount) {
+		return event -> {
+			Set<Material> ingredients = new HashSet<>();
+			for (ItemStack item : event.getMatrix()) {
+				if (ItemStack.isEmpty(item)) continue;
+				if (ingredients.add(item.getType()) && ingredients.size() >= minCount)
+					return;
+			}
+			if (minCount > ingredients.size())
+				event.setResult(null);
+		};
 	}
 
 	private static void addFuels() {

@@ -1,3 +1,4 @@
 {
-	"client_type": "minecraft:iron_nugget"
+	"client_type": "minecraft:iron_nugget",
+	"compost_chance": 0.1
 }

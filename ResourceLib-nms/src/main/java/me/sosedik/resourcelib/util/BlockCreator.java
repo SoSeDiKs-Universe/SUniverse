@@ -2,6 +2,7 @@ package me.sosedik.resourcelib.util;
 
 import me.sosedik.kiterino.world.block.KiterinoBlock;
 import me.sosedik.resourcelib.impl.block.nms.BarrierNMSBlock;
+import me.sosedik.resourcelib.impl.block.nms.DirectionalBarrierNMSBlock;
 import me.sosedik.resourcelib.impl.block.nms.SimpleFakeSculkNMSBlock;
 import me.sosedik.resourcelib.impl.block.nms.SimpleNMSBlock;
 import me.sosedik.resourcelib.impl.block.nms.VegetationBlock;
@@ -24,7 +25,11 @@ public class BlockCreator {
 	}
 
 	public static KiterinoBlock barrier(Object properties, String key) {
-		return new BarrierNMSBlock(((BlockBehaviour.Properties) properties).strength(0.3F).pushReaction(PushReaction.BLOCK), requireNonNull(NamespacedKey.fromString(key)));
+		return new BarrierNMSBlock(((BlockBehaviour.Properties) properties), requireNonNull(NamespacedKey.fromString(key)));
+	}
+
+	public static KiterinoBlock directionalBarrier(Object properties, String key) {
+		return new DirectionalBarrierNMSBlock(((BlockBehaviour.Properties) properties), requireNonNull(NamespacedKey.fromString(key)));
 	}
 
 	public static KiterinoBlock vegetation(Object properties, String key, VegetationBlock.PlacementRule placementRule) {

@@ -11,9 +11,15 @@ import me.sosedik.trappednewbie.api.command.parser.PlayerWorldParser;
 import me.sosedik.trappednewbie.command.MigrateCommand;
 import me.sosedik.trappednewbie.command.SpitCommand;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieAdvancements;
+import me.sosedik.trappednewbie.dataset.TrappedNewbieItems;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieRecipes;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieTags;
+import me.sosedik.trappednewbie.impl.block.nms.ClayKilnBlock;
 import me.sosedik.trappednewbie.impl.blockstorage.ChoppingBlockStorage;
+import me.sosedik.trappednewbie.impl.blockstorage.ClayKilnBlockStorage;
+import me.sosedik.trappednewbie.impl.blockstorage.SleepingBagBlockStorage;
+import me.sosedik.trappednewbie.impl.blockstorage.WorkStationBlockStorage;
+import me.sosedik.trappednewbie.impl.item.modifier.ItemModelModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.LetterModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.PaperPlaneModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.UnlitCampfireModifier;
@@ -21,6 +27,7 @@ import me.sosedik.trappednewbie.impl.item.modifier.VisualArmorModifier;
 import me.sosedik.trappednewbie.impl.recipe.ChoppingBlockCrafting;
 import me.sosedik.trappednewbie.listener.advancement.AdvancementsLocalizer;
 import me.sosedik.trappednewbie.listener.advancement.LoadSaveAdvancementsOnJoinQuit;
+import me.sosedik.trappednewbie.listener.advancement.dedicated.CampfirePlacingAdvancements;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.FindGravelAdvancement;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.FirstPossessionAdvancement;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.FoodConsumingAdvancement;
@@ -31,6 +38,7 @@ import me.sosedik.trappednewbie.listener.advancement.dedicated.KungFuPandaAdvanc
 import me.sosedik.trappednewbie.listener.advancement.dedicated.LevelAdvancements;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.LootOpensAdvancements;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.OpeningHolderAdvancement;
+import me.sosedik.trappednewbie.listener.advancement.dedicated.PathwaysAdvancement;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.StatisticAdvancements;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.WashAdvancements;
 import me.sosedik.trappednewbie.listener.block.BlockBreakHurts;
@@ -41,7 +49,9 @@ import me.sosedik.trappednewbie.listener.block.UnlitCampfireByDefault;
 import me.sosedik.trappednewbie.listener.entity.AngryAnimals;
 import me.sosedik.trappednewbie.listener.entity.BabierBabyMobs;
 import me.sosedik.trappednewbie.listener.entity.LimboEntities;
+import me.sosedik.trappednewbie.listener.item.FirestrikerFire;
 import me.sosedik.trappednewbie.listener.item.FlintToFlakedFlint;
+import me.sosedik.trappednewbie.listener.item.FlowerBouquetAttackEffects;
 import me.sosedik.trappednewbie.listener.item.GlassShardCuts;
 import me.sosedik.trappednewbie.listener.item.MeshSifting;
 import me.sosedik.trappednewbie.listener.item.PaperPlanes;
@@ -53,6 +63,7 @@ import me.sosedik.trappednewbie.listener.misc.CustomHudRenderer;
 import me.sosedik.trappednewbie.listener.misc.DisableJoinQuitMessages;
 import me.sosedik.trappednewbie.listener.misc.FakeHardcoreHearts;
 import me.sosedik.trappednewbie.listener.misc.TabHeaderFooterBeautifier;
+import me.sosedik.trappednewbie.listener.player.DisableNaturalRespawn;
 import me.sosedik.trappednewbie.listener.player.DynamicGameMode;
 import me.sosedik.trappednewbie.listener.player.ExtraPossessedDrops;
 import me.sosedik.trappednewbie.listener.player.NewbieWelcome;
@@ -107,6 +118,9 @@ public final class TrappedNewbie extends JavaPlugin {
 		ResourceLib.loadDefaultResources(this);
 
 		TrappedNewbieTags.CHOPPING_BLOCKS.getValues().forEach(material -> BlockStorage.addMapping(material, ChoppingBlockStorage.class));
+		TrappedNewbieTags.WORK_STATIONS.getValues().forEach(material -> BlockStorage.addMapping(material, WorkStationBlockStorage.class));
+		BlockStorage.addMapping(TrappedNewbieItems.CLAY_KILN, ClayKilnBlockStorage.class);
+		BlockStorage.addMapping(TrappedNewbieItems.SLEEPING_BAG, SleepingBagBlockStorage.class);
 	}
 
 	private void cleanupTemporaryWorlds() {
@@ -124,6 +138,15 @@ public final class TrappedNewbie extends JavaPlugin {
 		ChoppingBlockCrafting.registerRecipes();
 		TrappedNewbieAdvancements.setupAdvancements();
 
+		new ItemModelModifier(trappedNewbieKey("item_model")).register();
+		ItemModelModifier.addReplacement(TrappedNewbieItems.SLEEPING_BAG, ResourceLib.storage().getItemModelMapping(trappedNewbieKey("sleeping_bag_item")));
+		ItemModelModifier.addReplacement(TrappedNewbieItems.CLAY_KILN, contextBox -> {
+			if (!contextBox.getItem().hasBlockData()) return null;
+			if (!(contextBox.getItem().getBlockData(contextBox.getInitialType()) instanceof ClayKilnBlock.ClayKiln clayKiln)) return null;
+			if (!clayKiln.isBurned()) return null;
+			return ResourceLib.storage().getItemModelMapping(trappedNewbieKey("brick_kiln"));
+		});
+
 		new LetterModifier(trappedNewbieKey("letter")).register();
 		new PaperPlaneModifier(trappedNewbieKey("paper_plane")).register();
 		new UnlitCampfireModifier(trappedNewbieKey("unlit_campfire")).register();
@@ -134,6 +157,7 @@ public final class TrappedNewbie extends JavaPlugin {
 			AdvancementsLocalizer.class,
 			LoadSaveAdvancementsOnJoinQuit.class,
 			/// dedicated advancement
+			CampfirePlacingAdvancements.class,
 			FindGravelAdvancement.class,
 			FirstPossessionAdvancement.class,
 			FoodConsumingAdvancement.class,
@@ -144,6 +168,7 @@ public final class TrappedNewbie extends JavaPlugin {
 			LevelAdvancements.class,
 			LootOpensAdvancements.class,
 			OpeningHolderAdvancement.class,
+			PathwaysAdvancement.class,
 			StatisticAdvancements.class,
 			WashAdvancements.class,
 			// block
@@ -157,7 +182,9 @@ public final class TrappedNewbie extends JavaPlugin {
 			BabierBabyMobs.class,
 			LimboEntities.class,
 			// item
+			FirestrikerFire.class,
 			FlintToFlakedFlint.class,
+			FlowerBouquetAttackEffects.class,
 			GlassShardCuts.class,
 			MeshSifting.class,
 			PaperPlanes.class,
@@ -171,6 +198,7 @@ public final class TrappedNewbie extends JavaPlugin {
 			FakeHardcoreHearts.class,
 			TabHeaderFooterBeautifier.class,
 			// player
+			DisableNaturalRespawn.class,
 			DynamicGameMode.class,
 			ExtraPossessedDrops.class,
 			NewbieWelcome.class,

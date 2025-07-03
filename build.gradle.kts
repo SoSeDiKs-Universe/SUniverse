@@ -1,8 +1,8 @@
 plugins {
     `java-library`
-    id("io.papermc.paperweight.userdev") version "2.0.0-beta.16" // Accessing NMS
+    id("io.papermc.paperweight.userdev") version "2.0.0-beta.17" // Accessing NMS
     id("de.eldoria.plugin-yml.paper") version "0.7.0" // Generates paper-plugin.yml
-    id("com.gradleup.shadow") version "9.0.0-beta7" // Shading
+    id("com.gradleup.shadow") version "9.0.0-rc1" // Shading
 }
 
 val mcVersion: String = project.property("mcVersion").toString()

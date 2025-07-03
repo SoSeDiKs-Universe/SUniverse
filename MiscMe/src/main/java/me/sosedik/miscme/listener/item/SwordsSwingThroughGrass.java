@@ -1,6 +1,8 @@
 package me.sosedik.miscme.listener.item;
 
 import me.sosedik.utilizer.util.EntityUtil;
+import me.sosedik.utilizer.util.LocationUtil;
+import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -11,9 +13,8 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.util.RayTraceResult;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Swords (/items in general) swing through grass
@@ -32,10 +33,18 @@ public class SwordsSwingThroughGrass implements Listener {
 			player.attack(entity);
 	}
 
-	public static @Nullable LivingEntity getEntityThoughGrass(@NotNull Player player) {
+	/**
+	 * Gets the targeted entity, ignoring the grass on the way
+	 *
+	 * @param player player
+	 * @return targeted entity
+	 */
+	public static @Nullable LivingEntity getEntityThoughGrass(Player player) {
 		Block block = player.getTargetBlockExact(EntityUtil.PLAYER_REACH);
 		if (block == null) return null;
-		if (block.getType().getHardness() > 0) return null;
+		if (block.getType().getHardness() > 0 && !block.getType().isCollidable()) {
+			if (LocationUtil.isCube(block) && !Tag.ITEMS_ENCHANTABLE_WEAPON.isTagged(player.getInventory().getItemInMainHand().getType())) return null;
+		}
 
 		RayTraceResult rayTraceResult = player.getWorld().rayTraceEntities(player.getEyeLocation(),
 				player.getEyeLocation().getDirection(), EntityUtil.PLAYER_REACH, entity -> entity != player);

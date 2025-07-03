@@ -42,13 +42,13 @@ public class CustomBlockStorageLoadSaveInteract implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onChunkUnload(ChunkUnloadEvent event) {
-		BlockStorage.saveChunk(WorldChunkPosition.of(event.getChunk()), true);
+		BlockStorage.saveChunk(WorldChunkPosition.of(event.getChunk()), true, true);
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onWorldUnload(WorldUnloadEvent event) {
 		for (Chunk chunk : event.getWorld().getLoadedChunks())
-			BlockStorage.saveChunk(WorldChunkPosition.of(chunk), true);
+			BlockStorage.saveChunk(WorldChunkPosition.of(chunk), true, true);
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

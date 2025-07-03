@@ -39,7 +39,7 @@ import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.world.EntitiesLoadEvent;
 
 /**
- * Well, only you are to blame, really
+ * Well, you are the only one to blame, really
  */
 // MCCheck: 1.21.5, new animals
 public class AngryAnimals implements Listener {

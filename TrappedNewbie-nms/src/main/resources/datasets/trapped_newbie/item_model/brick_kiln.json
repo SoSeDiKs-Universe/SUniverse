@@ -1,0 +1,10 @@
+{
+	"client_type": "minecraft:barrier",
+	"parent_model": "trapped_newbie:block/kiln",
+	"no_texture": true,
+	"model_extras": {
+		"textures": {
+			"0": "minecraft:block/terracotta"
+		}
+	}
+}

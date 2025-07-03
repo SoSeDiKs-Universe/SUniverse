@@ -32,6 +32,7 @@ public class UtilizerTags {
 	public static final Tag<Material> SHEARS = itemTag("shears");
 	public static final Tag<Material> BOWS = itemTag("bows");
 	public static final Tag<Material> KNIFES = itemTag("knifes");
+	public static final Tag<Material> FLAT_BLOCK_RENDER = itemTag("flat_block_render");
 
 	private static Tag<Material> itemTag(String key) {
 		return ItemUtil.itemTag(Utilizer.utilizerKey(key));

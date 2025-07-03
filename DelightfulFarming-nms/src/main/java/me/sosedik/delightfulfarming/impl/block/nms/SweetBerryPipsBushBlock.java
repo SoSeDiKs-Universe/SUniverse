@@ -25,7 +25,7 @@ import org.jspecify.annotations.NullMarked;
 public class SweetBerryPipsBushBlock extends VegetationBlock implements KiterinoBlock, BonemealableBlock {
 
 	public SweetBerryPipsBushBlock(Properties settings, NamespacedKey blockId) {
-		super(settings.randomTicks(), blockId, (type) -> true);
+		super(settings.noOcclusion().randomTicks(), blockId, (type) -> true);
 	}
 
 	@Override

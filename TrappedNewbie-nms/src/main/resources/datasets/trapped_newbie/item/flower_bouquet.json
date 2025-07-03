@@ -1,0 +1,10 @@
+{
+	"parent_model": "handheld",
+	"client_type": "minecraft:iron_nugget",
+	"durability": 80,
+	"repairable": "#minecraft:flowers",
+	"attributes": {
+		"attack_damage": -1,
+		"attack_speed": -3
+	}
+}

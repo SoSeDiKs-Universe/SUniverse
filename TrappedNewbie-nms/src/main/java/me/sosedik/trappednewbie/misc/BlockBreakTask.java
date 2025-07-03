@@ -368,7 +368,7 @@ public class BlockBreakTask extends BukkitRunnable {
 	}
 
 	private boolean checkBlockExistence() {
-		if (this.block.getType().isAir()) {
+		if (this.block.isEmpty()) {
 			this.destroyState.crack = -1;
 			this.destroyState.updateDisplay();
 			return false;

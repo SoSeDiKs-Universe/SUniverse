@@ -4,6 +4,7 @@ import io.papermc.paper.datacomponent.DataComponentTypes;
 import me.sosedik.kiterino.modifier.item.ItemContextBox;
 import me.sosedik.kiterino.modifier.item.ItemModifier;
 import me.sosedik.kiterino.modifier.item.ModificationResult;
+import me.sosedik.resourcelib.ResourceLib;
 import me.sosedik.trappednewbie.TrappedNewbie;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
@@ -20,7 +21,7 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public class UnlitCampfireModifier extends ItemModifier {
 
-	private static final NamespacedKey MODEL = TrappedNewbie.trappedNewbieKey("unlit_campfire");
+	private static final NamespacedKey MODEL = ResourceLib.storage().getItemModelMapping(TrappedNewbie.trappedNewbieKey("unlit_campfire"));
 
 	public UnlitCampfireModifier(NamespacedKey modifierId) {
 		super(modifierId);

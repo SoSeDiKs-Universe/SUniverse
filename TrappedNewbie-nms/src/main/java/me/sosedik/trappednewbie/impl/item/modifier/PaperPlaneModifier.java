@@ -33,7 +33,7 @@ public class PaperPlaneModifier extends ItemModifier {
 		boolean fragile = NBT.get(item, nbt -> (boolean) nbt.getOrDefault(PaperPlane.FRAGILE_TAG, false));
 		if (!blazified && !fragile) return ModificationResult.PASS;
 
-		Messenger messenger = Messenger.messenger(LangOptionsStorage.getByLocale(contextBox.getLocale()));
+		var messenger = Messenger.messenger(LangOptionsStorage.getByLocale(contextBox.getLocale()));
 		if (blazified) {
 			contextBox.addLore(messenger.getMessage("item.modifier.blazified"));
 			item.setData(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);

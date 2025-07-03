@@ -27,6 +27,29 @@
                   "count": {
                     "type": "minecraft:uniform",
                     "max": 2.0,
+                    "min": 1.0
+                  },
+                  "function": "minecraft:set_count"
+                }
+              ],
+              "conditions": [
+                {
+                  "condition": "minecraft:match_tool",
+                  "predicate": {
+                    "items": "#utilizer:knifes"
+                  }
+                }
+              ],
+              "name": "trapped_newbie:dead_branch"
+            },
+            {
+              "type": "minecraft:item",
+              "functions": [
+                {
+                  "add": false,
+                  "count": {
+                    "type": "minecraft:uniform",
+                    "max": 2.0,
                     "min": 0.0
                   },
                   "function": "minecraft:set_count"

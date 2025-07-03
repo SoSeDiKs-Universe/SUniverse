@@ -1,0 +1,6 @@
+{
+	"parent_model": "handheld",
+	"client_type": "minecraft:crossbow",
+	"durability": 24,
+	"repairable": "#minecraft:coals"
+}

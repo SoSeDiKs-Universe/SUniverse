@@ -8,6 +8,7 @@ import io.papermc.paper.math.Position;
 import me.sosedik.utilizer.Utilizer;
 import me.sosedik.utilizer.api.math.WorldChunkPosition;
 import me.sosedik.utilizer.api.storage.block.BlockDataStorage;
+import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -154,12 +155,9 @@ public class BlockStorage {
 	}
 
 	public static synchronized void saveAllData() {
-		Iterator<WorldChunkPosition> iterator = BLOCKS.keySet().iterator();
-		while (iterator.hasNext()) {
-			WorldChunkPosition loc = iterator.next();
-			saveChunk(loc, true);
-			iterator.remove();
-		}
+		for (WorldChunkPosition loc : BLOCKS.keySet())
+			saveChunk(loc, true, false);
+		BLOCKS.clear();
 	}
 
 	public static synchronized void loadInfo(Chunk loadedChunk, boolean scan) {
@@ -222,13 +220,15 @@ public class BlockStorage {
 		chunkNbt.removeKey("blocks");
 	}
 
-	public static synchronized void saveChunk(WorldChunkPosition chunk, boolean remove) {
+	public static synchronized void saveChunk(WorldChunkPosition chunk, boolean unload, boolean remove) {
 		Map<BlockPosition, BlockDataStorage> blockPositions = remove ? BLOCKS.remove(chunk) : BLOCKS.get(chunk);
 		if (blockPositions == null) return;
 
 		blockPositions.forEach((loc, storage) -> {
-			if (remove)
+			if (unload) {
 				storage.onUnload();
+				storage.cleanUp();
+			}
 
 			new NBTChunk(chunk.getChunk()).getPersistentDataContainer()
 				.getOrCreateCompound("blocks")

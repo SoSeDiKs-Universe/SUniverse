@@ -80,7 +80,7 @@ public class SignBeautifier implements PacketListener, Listener {
 
 	@Override
 	public void onPacketSend(PacketSendEvent event) {
-		if (true) // TODO fix with 1.21.5 changes
+		if (true) return; // TODO fix with 1.21.5 changes
 		if (event.getPacketType() == PacketType.Play.Server.BLOCK_ENTITY_DATA) {
 			handleBlockEntityData(event.getPlayer(), new WrapperPlayServerBlockEntityData(event));
 		} else if (event.getPacketType() == PacketType.Play.Server.CHUNK_DATA) {

@@ -202,7 +202,7 @@ public class PerPlayerWorlds implements Listener {
 			if (world.isDayTime()) return DAY_TIME_TICK_INCREASE;
 
 			double incrementTimeBy = NIGHT_TIME_TICK_INCREASE;
-			int sleepers = (int) Bukkit.getOnlinePlayers().stream().filter(Player::isSleeping).count();
+			int sleepers = (int) Bukkit.getOnlinePlayers().stream().filter(Player::isDeeplySleeping).filter(Player::bedExists).count();
 			if (sleepers > 0) {
 				int players = (int) Bukkit.getOnlinePlayers().stream().filter(PerPlayerWorlds::isSleepCounted).count();
 				if (players > 0)

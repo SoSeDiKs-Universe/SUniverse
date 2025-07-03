@@ -1,0 +1,12 @@
+{
+	"destroy_time": 2,
+	"explosion_resistance": 3,
+	"ignited_by_lava": false,
+	"sound_type": "nether_wood",
+	"map_color": "crimson_stem",
+	"note_block_instrument": "bass",
+	"client_type": "minecraft:barrier",
+	"state_parser": "none",
+	"parser": "work_station",
+	"log_type": "crimson_stem"
+}

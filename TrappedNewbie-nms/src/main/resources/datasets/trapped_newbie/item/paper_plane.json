@@ -3,8 +3,7 @@
 	"dyeable": -1,
 	"model": {
 		"textures": {
-			"layer0": "trapped_newbie:item/paper_plane",
-			"particle": "#layer0"
+			"layer0": "trapped_newbie:item/paper_plane"
 		},
 		"elements": [
 			{

@@ -54,7 +54,7 @@ public class GlowingItemModifier extends ItemModifier {
 		}
 
 		if (contextBox.getContextType().hasVisibleLore()) {
-			Messenger messenger = Messenger.messenger(LangOptionsStorage.getByLocale(contextBox.getLocale()));
+			var messenger = Messenger.messenger(LangOptionsStorage.getByLocale(contextBox.getLocale()));
 			contextBox.addLore(messenger.getMessage("item.modifier.glowy"));
 			modified = true;
 		}

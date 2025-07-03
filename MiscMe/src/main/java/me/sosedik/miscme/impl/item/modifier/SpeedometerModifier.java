@@ -9,6 +9,7 @@ import me.sosedik.kiterino.modifier.item.context.packet.EntityEquipmentPacketCon
 import me.sosedik.miscme.MiscMe;
 import me.sosedik.miscme.dataset.MiscMeItems;
 import me.sosedik.miscme.listener.player.PlayerSpeedTracker;
+import me.sosedik.resourcelib.ResourceLib;
 import me.sosedik.utilizer.api.language.LangOptionsStorage;
 import me.sosedik.utilizer.api.message.Messenger;
 import org.bukkit.NamespacedKey;
@@ -30,7 +31,7 @@ public class SpeedometerModifier extends ItemModifier {
 
 	static {
 		for (int i = 0; i < MODELS.length; i++) {
-			MODELS[i] = MiscMe.miscMeKey("speedometer/speedometer_" + String.format("%02d", i));
+			MODELS[i] = ResourceLib.storage().getItemModelMapping(MiscMe.miscMeKey("speedometer/speedometer_" + String.format("%02d", i)));
 		}
 	}
 

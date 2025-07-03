@@ -11,6 +11,7 @@ dependencies {
     compileOnly(project(":Moves"))
     compileOnly(project(":FancyMotd"))
     compileOnly(project(":Requiem"))
+    compileOnly(project(":DelightfulFarming-nms"))
 
     compileOnly("me.sosedik:PacketAdvancements-api:1.0-SNAPSHOT")
     compileOnly("de.tr7zw:item-nbt-api-plugin:${project.property("nbtApiVersion")}")
@@ -73,6 +74,10 @@ paper {
             required = true
         }
         register("Requiem") {
+            load = PaperPluginDescription.RelativeLoadOrder.BEFORE
+            required = true
+        }
+        register("DelightfulFarming") {
             load = PaperPluginDescription.RelativeLoadOrder.BEFORE
             required = true
         }

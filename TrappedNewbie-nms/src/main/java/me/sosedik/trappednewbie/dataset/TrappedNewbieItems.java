@@ -63,8 +63,11 @@ public class TrappedNewbieItems {
 
 	public static final Material FLINT_KNIFE = byKey("flint_knife");
 	public static final Material FLINT_AXE = byKey("flint_axe");
+	public static final Material FLINT_SHOVEL = byKey("flint_shovel");
+	public static final Material FLINT_PICKAXE = byKey("flint_pickaxe");
 	public static final Material FLINT_SHEARS = byKey("flint_shears");
 	public static final Material GRASS_MESH = byKey("grass_mesh");
+	public static final Material FIRESTRIKER = byKey("firestriker");
 
 	// Sticks
 	public static final Material ACACIA_STICK = byKey("acacia_stick");
@@ -81,7 +84,7 @@ public class TrappedNewbieItems {
 	public static final Material CRIMSON_STICK = byKey("crimson_stick");
 	public static final Material WARPED_STICK = byKey("warped_stick");
 
-	// Chopping blocks
+	// Chopping Blocks
 	public static final Material ACACIA_CHOPPING_BLOCK = byKey("acacia_chopping_block");
 	public static final Material BIRCH_CHOPPING_BLOCK = byKey("birch_chopping_block");
 	public static final Material CHERRY_CHOPPING_BLOCK = byKey("cherry_chopping_block");
@@ -94,6 +97,20 @@ public class TrappedNewbieItems {
 	public static final Material BAMBOO_CHOPPING_BLOCK = byKey("bamboo_chopping_block");
 	public static final Material CRIMSON_CHOPPING_BLOCK = byKey("crimson_chopping_block");
 	public static final Material WARPED_CHOPPING_BLOCK = byKey("warped_chopping_block");
+
+	// Work Stations
+	public static final Material ACACIA_WORK_STATION = byKey("acacia_work_station");
+	public static final Material BIRCH_WORK_STATION = byKey("birch_work_station");
+	public static final Material CHERRY_WORK_STATION = byKey("cherry_work_station");
+	public static final Material DARK_OAK_WORK_STATION = byKey("dark_oak_work_station");
+	public static final Material JUNGLE_WORK_STATION = byKey("jungle_work_station");
+	public static final Material MANGROVE_WORK_STATION = byKey("mangrove_work_station");
+	public static final Material OAK_WORK_STATION = byKey("oak_work_station");
+	public static final Material PALE_OAK_WORK_STATION = byKey("pale_oak_work_station");
+	public static final Material SPRUCE_WORK_STATION = byKey("spruce_work_station");
+	public static final Material BAMBOO_WORK_STATION = byKey("bamboo_work_station");
+	public static final Material CRIMSON_WORK_STATION = byKey("crimson_work_station");
+	public static final Material WARPED_WORK_STATION = byKey("warped_work_station");
 
 	// Glass Shards
 	public static final Material GLASS_SHARD = byKey("glass_shard");
@@ -114,6 +131,9 @@ public class TrappedNewbieItems {
 	public static final Material WHITE_GLASS_SHARD = byKey("white_glass_shard");
 	public static final Material YELLOW_GLASS_SHARD = byKey("yellow_glass_shard");
 
+	public static final Material CLAY_KILN = byKey("clay_kiln");
+	public static final Material SLEEPING_BAG = byKey("sleeping_bag");
+
 	public static final Material ASH = byKey("ash");
 	public static final Material BALL_OF_MUD = byKey("ball_of_mud");
 	public static final Material ICE_CUBE = byKey("ice_cube");
@@ -125,6 +145,7 @@ public class TrappedNewbieItems {
 	public static final Material SANDSTONE_HAMMER = byKey("sandstone_hammer");
 	public static final Material RED_SANDSTONE_HAMMER = byKey("red_sandstone_hammer");
 	public static final Material TRUMPET = byKey("trumpet");
+	public static final Material FLOWER_BOUQUET = byKey("flower_bouquet");
 
 	public static final Material DESTROY_STAGE_0 = byKey("destroy_stage_0");
 	public static final Material DESTROY_STAGE_1 = byKey("destroy_stage_1");

@@ -37,6 +37,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -49,6 +50,7 @@ import java.util.Set;
 /**
  * Players leave tombstones on death
  */
+@NullMarked
 public class PlayerTombstones implements Listener {
 
 	private static final Map<PlayerDeathEvent, PlayerTombstoneCreateEvent> EVENT_CACHE = new HashMap<>();
@@ -332,8 +334,11 @@ public class PlayerTombstones implements Listener {
 	}
 
 	private Block getDamageBlock(Player player) {
-		if (player.getLastDamageCause() instanceof EntityDamageByBlockEvent event)
-			return event.getDamager();
+		if (player.getLastDamageCause() instanceof EntityDamageByBlockEvent event) {
+			Block block = event.getDamager();
+			if (block != null)
+				return block;
+		}
 		Block locBlock = player.getLocation().getBlock();
 		if (locBlock.isEmpty()) {
 			Block supportingBlock = player.getSupportingBlock();

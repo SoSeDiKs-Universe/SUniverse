@@ -7,6 +7,7 @@ import me.sosedik.kiterino.modifier.item.ModificationResult;
 import me.sosedik.kiterino.modifier.item.context.SlottedItemModifierContext;
 import me.sosedik.miscme.MiscMe;
 import me.sosedik.miscme.dataset.MiscMeItems;
+import me.sosedik.resourcelib.ResourceLib;
 import me.sosedik.utilizer.api.language.LangOptionsStorage;
 import me.sosedik.utilizer.api.message.Messenger;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -24,9 +25,9 @@ import java.util.Locale;
 @NullMarked
 public class LunarClockModifier extends ItemModifier {
 
-	private static final NamespacedKey STILL_LUNAR_CLOCK = MiscMe.miscMeKey("lunar_clock_00");
-	private static final NamespacedKey NO_MOON_LUNAR_CLOCK = MiscMe.miscMeKey("lunar_clock_00");
-	private static final NamespacedKey LUNAR_CLOCK = MiscMe.miscMeKey("lunar_clock");
+	private static final NamespacedKey STILL_LUNAR_CLOCK = ResourceLib.storage().getItemModelMapping(MiscMe.miscMeKey("lunar_clock_00"));
+	private static final NamespacedKey NO_MOON_LUNAR_CLOCK = ResourceLib.storage().getItemModelMapping(MiscMe.miscMeKey("lunar_clock_00"));
+	private static final NamespacedKey LUNAR_CLOCK = ResourceLib.storage().getItemModelMapping(MiscMe.miscMeKey("lunar_clock"));
 
 	public LunarClockModifier(NamespacedKey modifierId) {
 		super(modifierId);

@@ -9,6 +9,7 @@ import me.sosedik.kiterino.modifier.item.ItemModifier;
 import me.sosedik.kiterino.modifier.item.ModificationResult;
 import me.sosedik.miscme.MiscMe;
 import me.sosedik.miscme.listener.item.ColoredShulkerShells;
+import me.sosedik.resourcelib.ResourceLib;
 import me.sosedik.utilizer.api.language.LangOptionsStorage;
 import me.sosedik.utilizer.api.message.Messenger;
 import net.kyori.adventure.key.Key;
@@ -21,7 +22,7 @@ import java.util.Locale;
 
 public class ColoredShulkerShellModifier extends ItemModifier {
 
-	private static final Key MODEL_KEY = MiscMe.miscMeKey("colored_shulker_shell");
+	private static final Key MODEL_KEY = ResourceLib.storage().getItemModelMapping(MiscMe.miscMeKey("colored_shulker_shell"));
 
 	public ColoredShulkerShellModifier(NamespacedKey modifierId) {
 		super(modifierId);
@@ -46,7 +47,7 @@ public class ColoredShulkerShellModifier extends ItemModifier {
 			item.setData(DataComponentTypes.TOOLTIP_DISPLAY, TooltipDisplay.tooltipDisplay().hiddenComponents(tooltipDisplay.hiddenComponents()).addHiddenComponents(DataComponentTypes.DYED_COLOR).build()); // TODO replace with toBuilder once available
 		}
 
-		Messenger messenger = Messenger.messenger(LangOptionsStorage.getByLocale(contextBox.getLocale()));
+		var messenger = Messenger.messenger(LangOptionsStorage.getByLocale(contextBox.getLocale()));
 		String localeKey = "item." + MiscMe.NAMESPACE + "." + dyeColor.name().toLowerCase(Locale.US) + "_shulker_shell.name";
 		item.setData(DataComponentTypes.ITEM_NAME, messenger.getMessage(localeKey));
 		item.setData(DataComponentTypes.ITEM_MODEL, MODEL_KEY);

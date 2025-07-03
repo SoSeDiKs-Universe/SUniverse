@@ -46,10 +46,7 @@ public class ToolTooltipModifier extends ItemModifier {
 		if (contextBox.getInitialType() != item.getType()) item = item.withType(contextBox.getInitialType());
 
 		double damage = ItemUtil.getAttributeValue(item, Attribute.ATTACK_DAMAGE, player);
-		if (damage <= 0) return ModificationResult.PASS;
-
 		double speed = ItemUtil.getAttributeValue(item, Attribute.ATTACK_SPEED, player);
-		if (speed <= 0) return ModificationResult.PASS;
 
 		if (damage == 1 && speed == 4 && !item.isDataOverridden(DataComponentTypes.ATTRIBUTE_MODIFIERS)) {
 			if (contextBox.getInitialType() != contextBox.getItem().getType()) {

@@ -8,6 +8,7 @@ import me.sosedik.utilizer.api.language.TranslationHolder;
 import me.sosedik.utilizer.api.message.Mini;
 import me.sosedik.utilizer.command.LangCommand;
 import me.sosedik.utilizer.command.TranslatorCommand;
+import me.sosedik.utilizer.impl.item.modifier.DyedItemNamesModifier;
 import me.sosedik.utilizer.impl.item.modifier.GlowingItemModifier;
 import me.sosedik.utilizer.impl.item.modifier.HiddenTooltipsModifier;
 import me.sosedik.utilizer.impl.message.tag.DiscordResolver;
@@ -19,6 +20,7 @@ import me.sosedik.utilizer.listener.BlockStorage;
 import me.sosedik.utilizer.listener.block.CustomBlockStorageLoadSaveInteract;
 import me.sosedik.utilizer.listener.entity.EntityGlowTracker;
 import me.sosedik.utilizer.listener.entity.EntityMetadataClearer;
+import me.sosedik.utilizer.listener.entity.SprayItemDrops;
 import me.sosedik.utilizer.listener.item.AutoReleasingItems;
 import me.sosedik.utilizer.listener.item.BowUsableWithoutArrows;
 import me.sosedik.utilizer.listener.item.NotDroppableItems;
@@ -28,6 +30,7 @@ import me.sosedik.utilizer.listener.misc.DelayedActions;
 import me.sosedik.utilizer.listener.misc.DurabilityRecipeLeftovers;
 import me.sosedik.utilizer.listener.misc.ExtraChatTabSuggestions;
 import me.sosedik.utilizer.listener.misc.ExtraRecipeHandlers;
+import me.sosedik.utilizer.listener.misc.FixLeftAirClickWhenRightClickingEntity;
 import me.sosedik.utilizer.listener.misc.MilkImmuneEffects;
 import me.sosedik.utilizer.listener.player.CleanupPlayerScoreboards;
 import me.sosedik.utilizer.listener.player.PlayerDataLoadSave;
@@ -79,6 +82,7 @@ public final class Utilizer extends JavaPlugin {
 			LocaleResolver::new
 		);
 
+		new DyedItemNamesModifier(utilizerKey("dyed_item_name")).register();
 		new GlowingItemModifier(utilizerKey("glowing_item")).register();
 		new HiddenTooltipsModifier(utilizerKey("hidden_tooltips")).register();
 
@@ -90,6 +94,7 @@ public final class Utilizer extends JavaPlugin {
 			// entity
 			EntityGlowTracker.class,
 			EntityMetadataClearer.class,
+			SprayItemDrops.class,
 			// item
 			AutoReleasingItems.class,
 			BowUsableWithoutArrows.class,
@@ -99,8 +104,9 @@ public final class Utilizer extends JavaPlugin {
 			CustomRecipeLeftovers.class,
 			DelayedActions.class,
 			DurabilityRecipeLeftovers.class,
-			ExtraRecipeHandlers.class,
 			ExtraChatTabSuggestions.class,
+			ExtraRecipeHandlers.class,
+			FixLeftAirClickWhenRightClickingEntity.class,
 			MilkImmuneEffects.class,
 			// player
 			CleanupPlayerScoreboards.class,

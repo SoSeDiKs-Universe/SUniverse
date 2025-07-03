@@ -18,6 +18,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -28,8 +29,8 @@ import org.jspecify.annotations.Nullable;
 @NullMarked
 public class ChoppingBlockStorage extends BlockDataStorageHolder {
 
-	private static final NamespacedKey SUCCESS_SOUND = ResourceLib.getSound(TrappedNewbie.trappedNewbieKey("block/wood_chop"));
-	private static final NamespacedKey FAIL_SOUND = ResourceLib.getSound(TrappedNewbie.trappedNewbieKey("block/wood_chop_fail"));
+	public static final NamespacedKey SUCCESS_SOUND = ResourceLib.getSound(TrappedNewbie.trappedNewbieKey("block/wood_chop"));
+	public static final NamespacedKey FAIL_SOUND = ResourceLib.getSound(TrappedNewbie.trappedNewbieKey("block/wood_chop_fail"));
 
 	private static final String STORED_ITEM_KEY = "item";
 
@@ -151,11 +152,6 @@ public class ChoppingBlockStorage extends BlockDataStorageHolder {
 	}
 
 	@Override
-	public void onLoad() {
-		super.onLoad();
-	}
-
-	@Override
 	public void onMove(Location from, Location to) {
 		super.onMove(from, to);
 		this.display.teleportAsync(calcDisplayLocation());
@@ -182,9 +178,16 @@ public class ChoppingBlockStorage extends BlockDataStorageHolder {
 	}
 
 	@Override
-	public void cleanUp() {
+	public void onBreak(BlockBreakEvent event) { // TODO block drops API
+		if (!event.isDropItems()) return;
+
 		if (this.currentItem != null)
 			getBlock().getWorld().dropItemNaturally(calcDisplayLocation(), this.currentItem);
+	}
+
+	@Override
+	public void cleanUp() {
+		super.cleanUp();
 		this.display.remove();
 	}
 

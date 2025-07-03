@@ -25,7 +25,7 @@ public class GlowBerryPipsBushBlock extends BushBlock implements KiterinoBlock {
 	private final NamespacedKey blockId;
 
 	public GlowBerryPipsBushBlock(Properties settings, NamespacedKey blockId) {
-		super(settings.randomTicks());
+		super(settings.noOcclusion().randomTicks());
 		this.blockId = blockId;
 	}
 

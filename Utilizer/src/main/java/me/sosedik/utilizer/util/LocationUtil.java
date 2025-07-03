@@ -12,6 +12,8 @@ import org.bukkit.World;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.Levelled;
+import org.bukkit.block.data.type.Campfire;
 import org.bukkit.block.data.type.Door;
 import org.bukkit.block.data.type.Gate;
 import org.bukkit.block.data.type.TrapDoor;
@@ -195,6 +197,18 @@ public class LocationUtil {
 
 		FluidData fluidData = block.getWorld().getFluidData(block.getLocation());
 		return fluidData.getFluidType() != Fluid.EMPTY;
+	}
+
+	/**
+	 * Checks whether this block is fire, lit campfire, or lava
+	 *
+	 * @param block block
+	 * @return whether this block is a fire source
+	 */
+	public static boolean isFireSource(Block block) {
+		return Tag.FIRE.isTagged(block.getType())
+			|| (block.getType() == Material.LAVA && block.getBlockData() instanceof Levelled levelled && levelled.getLevel() == 0) // Source lava block
+			|| (Tag.CAMPFIRES.isTagged(block.getType()) && block.getBlockData() instanceof Campfire campfire && campfire.isLit());
 	}
 
 	/**

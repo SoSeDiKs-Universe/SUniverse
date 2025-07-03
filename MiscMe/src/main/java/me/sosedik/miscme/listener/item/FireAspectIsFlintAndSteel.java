@@ -11,6 +11,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Lightable;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -105,33 +106,38 @@ public class FireAspectIsFlintAndSteel implements Listener {
 		return mimikFlintAndSteel(player, action, block, blockFace, hand);
 	}
 
-	public static boolean mimikFlintAndSteel(Player player, Action action, Block block, BlockFace blockFace, EquipmentSlot hand) {
-		ItemStack item = player.getInventory().getItem(hand);
-		ItemStack flintAndSteel = new ItemStack(Material.FLINT_AND_STEEL);
-		player.getInventory().setItem(hand, flintAndSteel);
-		var interactEvent = new PlayerInteractEvent(player, action, flintAndSteel, block, blockFace, hand, null);
-		interactEvent.callEvent();
-		flintAndSteel = player.getInventory().getItem(hand);
+	public static boolean mimikFlintAndSteel(LivingEntity livingEntity, Action action, Block block, BlockFace blockFace, EquipmentSlot hand) {
+		if (livingEntity.getEquipment() == null) return false;
 
-		boolean actionApplied = interactEvent.useItemInHand() == Event.Result.DENY;
+		ItemStack item = livingEntity.getEquipment().getItem(hand);
+		ItemStack flintAndSteel = new ItemStack(Material.FLINT_AND_STEEL);
+		livingEntity.getEquipment().setItem(hand, flintAndSteel);
+		boolean actionApplied = false;
+		if (livingEntity instanceof Player player) {
+			var interactEvent = new PlayerInteractEvent(player, action, flintAndSteel, block, blockFace, hand, null);
+			interactEvent.callEvent();
+			actionApplied = interactEvent.useItemInHand() == Event.Result.DENY;
+		}
+		flintAndSteel = livingEntity.getEquipment().getItem(hand);
+
 		if (actionApplied) {
 			int damage = DurabilityUtil.getDamage(flintAndSteel);
 			if (damage < 0) damage = 1;
-			item.damage(damage, player);
-			player.getInventory().setItem(hand, item);
-			player.swingHand(hand);
+			item.damage(damage, livingEntity);
+			livingEntity.getEquipment().setItem(hand, item);
+			livingEntity.swingHand(hand);
 			return true;
 		}
 
-		if (!BurningProjectileCreatesFire.createFireOrIgnite(block, blockFace, player, BlockIgniteEvent.IgniteCause.FLINT_AND_STEEL)) {
-			player.getInventory().setItem(hand, item);
+		if (!BurningProjectileCreatesFire.createFireOrIgnite(block, blockFace, livingEntity, BlockIgniteEvent.IgniteCause.FLINT_AND_STEEL)) {
+			livingEntity.getEquipment().setItem(hand, item);
 			return false;
 		}
 
 		block.emitSound(Sound.ITEM_FLINTANDSTEEL_USE, SoundCategory.BLOCKS, 1F, 1.2F);
-		item.damage(1, player);
-		player.getInventory().setItem(hand, item);
-		player.swingHand(hand);
+		item.damage(1, livingEntity);
+		livingEntity.getEquipment().setItem(hand, item);
+		livingEntity.swingHand(hand);
 
 		return true;
 	}

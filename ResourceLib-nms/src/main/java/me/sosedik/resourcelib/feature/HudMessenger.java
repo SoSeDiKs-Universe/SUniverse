@@ -10,6 +10,7 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +26,7 @@ public class HudMessenger extends BukkitRunnable {
 	private static final Map<UUID, HudMessenger> STORED_HUDS = new HashMap<>();
 
 	private final Map<NamespacedKey, HudProvider> hudProviders = new HashMap<>();
+	private final List<Component> huds = new ArrayList<>();
 	private final Player player;
 	private @Nullable Component actionBarMessage = null;
 
@@ -62,16 +64,19 @@ public class HudMessenger extends BukkitRunnable {
 
 	@Override
 	public void run() {
-		List<Component> huds = new ArrayList<>();
+		this.player.sendActionBar(getHudMessage());
+	}
+
+	public synchronized Component getHudMessage() {
+		this.huds.clear();
 		for (HudProvider hudProvider : this.hudProviders.values()) {
 			Component hudElement = hudProvider.getHud();
 			if (hudElement != null)
-				huds.add(hudElement);
+				this.huds.add(hudElement);
 		}
 		if (this.actionBarMessage != null)
-			huds.add(this.actionBarMessage);
-		Component hud = combined(huds);
-		this.player.sendActionBar(hud);
+			this.huds.add(this.actionBarMessage);
+		return combined(this.huds);
 	}
 
 	public static HudMessenger of(Player player) {

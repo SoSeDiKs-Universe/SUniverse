@@ -24,11 +24,15 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.component.Consumable;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
@@ -187,7 +191,8 @@ public class ResourceLibBootstrap implements PluginBootstrap {
 					var data = ResourceLib.storage().getFakeItemData(namespacedKey);
 					if (data != null) {
 						NamespacedKey model = data.model();
-						if (model != null) box.getItem().setData(DataComponentTypes.ITEM_MODEL, model);
+						if (model != null && !box.getItem().isDataOverridden(DataComponentTypes.ITEM_MODEL))
+							box.getItem().setData(DataComponentTypes.ITEM_MODEL, model);
 					}
 				});
 			} else {
@@ -211,6 +216,26 @@ public class ResourceLibBootstrap implements PluginBootstrap {
 		if (json.has("stack_size")) properties.stacksTo(json.get("stack_size").getAsInt());
 		if (json.has("fire_resistance") && json.get("fire_resistance").getAsBoolean()) properties.fireResistant();
 		if (json.has("rarity")) properties.rarity(Rarity.valueOf(json.get("rarity").getAsString().toUpperCase(Locale.ROOT)));
+
+		if (json.has("attributes")) {
+			JsonObject attributesJson = json.getAsJsonObject("attributes");
+			ItemAttributeModifiers.Builder builder = ItemAttributeModifiers.builder();
+			if (attributesJson.has("attack_damage")) {
+				builder.add(
+					Attributes.ATTACK_DAMAGE,
+					new AttributeModifier(Item.BASE_ATTACK_DAMAGE_ID, attributesJson.get("attack_damage").getAsDouble(), AttributeModifier.Operation.ADD_VALUE),
+					EquipmentSlotGroup.MAINHAND
+				);
+			}
+			if (attributesJson.has("attack_speed")) {
+				builder.add(
+					Attributes.ATTACK_SPEED,
+					new AttributeModifier(Item.BASE_ATTACK_SPEED_ID, attributesJson.get("attack_speed").getAsDouble(), AttributeModifier.Operation.ADD_VALUE),
+					EquipmentSlotGroup.MAINHAND
+				);
+			}
+			properties.attributes(builder.build());
+		}
 
 		if (json.has("food")) {
 			JsonObject foodJson = json.getAsJsonObject("food");

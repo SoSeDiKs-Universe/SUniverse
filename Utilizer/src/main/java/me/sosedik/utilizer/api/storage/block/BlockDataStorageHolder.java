@@ -1,16 +1,10 @@
 package me.sosedik.utilizer.api.storage.block;
 
-import com.destroystokyo.paper.event.block.BlockDestroyEvent;
 import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
-import org.bukkit.event.Event;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockBurnEvent;
-import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -34,41 +28,8 @@ public abstract class BlockDataStorageHolder implements BlockDataStorage {
 	}
 
 	@Override
-	public void onLoad() {}
-
-	@Override
-	public void onUnload() {}
-
-	@Override
 	public void onMove(Location from, Location to) {
 		this.block = to.getBlock();
-	}
-
-	@Override
-	public void onPlace(BlockPlaceEvent event) {}
-
-	@Override
-	public void onInteract(PlayerInteractEvent event) {}
-
-	@Override
-	public void onBreak(BlockBreakEvent event) {
-		cleanUp();
-	}
-
-	@Override
-	public void onBurn(BlockBurnEvent event) {
-		cleanUp();
-	}
-
-	@Override
-	public boolean onExplode(Event event) {
-		cleanUp();
-		return false;
-	}
-
-	@Override
-	public void onDestroy(BlockDestroyEvent event) {
-		cleanUp();
 	}
 
 	@Override

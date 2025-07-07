@@ -32,7 +32,7 @@ import static java.util.Map.entry;
 /**
  * Makes trim lore fancier with icons and shorter displays
  */
-// MCCheck: 1.21.5, armor trim materials
+// MCCheck: 1.21.7, armor trim materials
 // https://minecraft.wiki/w/Smithing#List_of_tooltip_text_colors_for_all_materials
 @NullMarked
 public class FancierTrimLoreModifier extends ItemModifier {
@@ -91,8 +91,8 @@ public class FancierTrimLoreModifier extends ItemModifier {
 	}
 
 	private static Map.Entry<Key, Map.Entry<Component, TextColor>> vanillaTrim(Material icon, @Subst("key") String key, TextColor color) {
-		Component iconText = ResourceLib.requireFontData(NamespacedKey.minecraft("item/" + icon.key().value())).mapping();
-		return entry(Key.key(key), entry(Mini.asIcon(iconText), color));
+		Component iconText = ResourceLib.requireFontData(NamespacedKey.minecraft("item/" + icon.key().value())).icon();
+		return entry(Key.key(key), entry(iconText, color));
 	}
 
 	public static void addTrimMaterialMapping(Key materialKey, Component icon, TextColor color) {

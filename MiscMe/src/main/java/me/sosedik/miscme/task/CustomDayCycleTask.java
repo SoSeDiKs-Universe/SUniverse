@@ -36,18 +36,18 @@ public class CustomDayCycleTask extends BukkitRunnable {
 
 	@Override
 	public void run() {
-		double incrementTimeBy = timeIncrementRule.get();
+		double incrementTimeBy = this.timeIncrementRule.get();
 
-		fakeTime += incrementTimeBy;
-		long adding = (long) fakeTime;
+		this.fakeTime += incrementTimeBy;
+		long adding = (long) this.fakeTime;
 		if (adding == 0) return;
 
-		fakeTime -= adding;
+		this.fakeTime -= adding;
 
-		long preDay = world.getFullTime() / 24_000;
-		world.setFullTime(world.getFullTime() + adding);
-		long afterDay = world.getFullTime() / 24_000;
-		if (preDay != afterDay) new DayChangeEvent(world).callEvent();
+		long preDay = this.world.getFullTime() / 24_000;
+		this.world.setFullTime(this.world.getFullTime() + adding);
+		long afterDay = this.world.getFullTime() / 24_000;
+		if (preDay != afterDay) new DayChangeEvent(this.world).callEvent();
 	}
 
 	/**

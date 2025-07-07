@@ -2,14 +2,10 @@ package me.sosedik.trappednewbie.impl.block.nms;
 
 import com.google.common.base.Preconditions;
 import it.unimi.dsi.fastutil.Pair;
-import me.sosedik.resourcelib.impl.block.nms.BarrierNMSBlock;
 import me.sosedik.resourcelib.impl.block.nms.DirectionalBarrierNMSBlock;
 import net.minecraft.core.Direction;
-import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
-import net.minecraft.world.level.block.Mirror;
-import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;

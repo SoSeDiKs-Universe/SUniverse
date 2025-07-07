@@ -6,7 +6,6 @@ import me.sosedik.socializer.util.MinecraftChatRenderer;
 import me.sosedik.uglychatter.api.chat.FancyMessageRenderer;
 import me.sosedik.uglychatter.api.chat.PlayerDisplayFormatter;
 import me.sosedik.utilizer.api.message.Messenger;
-import me.sosedik.utilizer.api.message.Mini;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -27,8 +26,8 @@ import static me.sosedik.utilizer.api.message.Mini.combined;
 @NullMarked
 public class DiscordChatRenderer implements MinecraftChatRenderer {
 
-	private static final Component DISCORD_ICON = Mini.asIcon(ResourceLib.requireFontData(socializerKey("discord")).mapping());
-	private static final Component DISCORD_HOVER = combined(Component.space(), Mini.asIcon(ResourceLib.requireFontData(socializerKey("discord")).mapping()), Component.space())
+	private static final Component DISCORD_ICON = ResourceLib.requireFontData(socializerKey("discord")).icon();
+	private static final Component DISCORD_HOVER = combined(Component.space(), ResourceLib.requireFontData(socializerKey("discord")).icon(), Component.space())
 			.hoverEvent(Component.text("Discord"));
 	private static final Component SPACED_NEW_LINE = combined(Component.newline(), SpacingUtil.getSpacing(8));
 	private static final Style BASE_STYLE = Style.style(TextColor.fromHexString("#9fb2f4"));

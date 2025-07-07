@@ -32,7 +32,7 @@ public class PlayerDataSaveEvent extends PlayerEvent {
 	 * @return player data
 	 */
 	public ReadWriteNBT getPreData() {
-		return preData;
+		return this.preData;
 	}
 
 	/**
@@ -41,7 +41,7 @@ public class PlayerDataSaveEvent extends PlayerEvent {
 	 * @return player data
 	 */
 	public ReadWriteNBT getData() {
-		return data;
+		return this.data;
 	}
 
 	/**
@@ -50,7 +50,7 @@ public class PlayerDataSaveEvent extends PlayerEvent {
 	 * @return whether called upon the player quitting
 	 */
 	public boolean isQuit() {
-		return quit;
+		return this.quit;
 	}
 
 	@Override

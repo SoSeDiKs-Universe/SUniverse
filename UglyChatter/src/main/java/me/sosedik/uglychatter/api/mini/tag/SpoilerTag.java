@@ -2,7 +2,6 @@ package me.sosedik.uglychatter.api.mini.tag;
 
 import me.sosedik.resourcelib.ResourceLib;
 import me.sosedik.resourcelib.util.SpacingUtil;
-import me.sosedik.utilizer.api.message.Mini;
 import me.sosedik.utilizer.util.ChatUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
@@ -17,7 +16,7 @@ import static me.sosedik.utilizer.api.message.Mini.combined;
 @NullMarked
 public record SpoilerTag(boolean withCopy) implements Modifying {
 
-	public static final Component SPOILER_ICON = Mini.asIcon(ResourceLib.requireFontData(uglyChatterKey("spoiler")).mapping());
+	public static final Component SPOILER_ICON = ResourceLib.requireFontData(uglyChatterKey("spoiler")).icon();
 
 	private static final SpoilerTag SPOILER_TAG = new SpoilerTag(false);
 	private static final SpoilerTag SPOILER_WITH_COPY_TAG = new SpoilerTag(true);

@@ -9,7 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.jspecify.annotations.NullMarked;
 
-// MCCheck: 1.21.5, new zombie types
+// MCCheck: 1.21.7, new zombie types
 @NullMarked
 public class InspectorGadgetAdvancement extends BaseAdvancement {
 
@@ -30,8 +30,8 @@ public class InspectorGadgetAdvancement extends BaseAdvancement {
 		return VanillaTriggerData.playerKilledEntity(entityType.key().value())
 				.withPlayer(player -> player.withEquipment(equipment -> equipment.withMainHand(Material.SPYGLASS)))
 				.withEntity(entity ->
-						entity.withEntityType(entityType)
-								.withDistanceToPlayer(distance -> distance.maxAbsolute(5D))
+					entity.withEntityType(entityType)
+						.withDistanceToPlayer(distance -> distance.maxAbsolute(5D))
 				);
 	}
 

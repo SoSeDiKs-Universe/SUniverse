@@ -218,7 +218,7 @@ public class CrawlingMechanics implements Listener {
 		if (!CRAWLERS.add(uuid)) return false;
 
 		player.emitSound(Sound.BLOCK_GRASS_STEP, 1F, 0F);
-		player.emitSound(Sound.ENTITY_LEASH_KNOT_BREAK, 1F, 1F);
+		player.emitSound(Sound.ITEM_LEAD_BREAK, 1F, 1F);
 
 		player.setSneaking(false);
 		player.setPose(Pose.SWIMMING, true);

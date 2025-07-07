@@ -1,0 +1,14 @@
+{
+	"client_type": "minecraft:iron_nugget",
+	"definitions": {
+		"barometer/barometer_clear": {},
+		"barometer/barometer_end": {},
+		"barometer/barometer_nether": {},
+		"barometer/barometer_rain": {},
+		"barometer/barometer_snow": {},
+		"barometer/barometer_snow_thunder": {},
+		"barometer/barometer_sandstorm": {},
+		"barometer/barometer_sandstorm_thunder": {},
+		"barometer/barometer_thunder": {}
+	}
+}

@@ -10,10 +10,6 @@ import me.sosedik.trappednewbie.entity.api.PaperPlane;
 import me.sosedik.utilizer.impl.item.modifier.GlowingItemModifier;
 import net.kyori.adventure.util.TriState;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtOps;
-import net.minecraft.nbt.Tag;
-import net.minecraft.resources.RegistryOps;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -22,6 +18,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.CampfireBlock;
+import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.bukkit.Color;
@@ -326,10 +323,9 @@ public class PaperPlaneImpl extends ThrowableItemProjectile {
 	}
 
 	@Override
-	public void readAdditionalSaveData(CompoundTag compound) {
-		super.readAdditionalSaveData(compound);
-		RegistryOps<Tag> registryOps = this.registryAccess().createSerializationContext(NbtOps.INSTANCE);
-		this.setItem(compound.read("Item", ItemStack.CODEC, registryOps).orElseGet(() -> new ItemStack(DEFAULT_PICKUP_ITEM)));
+	public void readAdditionalSaveData(ValueInput input) {
+		super.readAdditionalSaveData(input);
+		this.setItem(input.read("Item", ItemStack.CODEC).orElseGet(() -> new ItemStack(DEFAULT_PICKUP_ITEM)));
 	}
 
 	@Override

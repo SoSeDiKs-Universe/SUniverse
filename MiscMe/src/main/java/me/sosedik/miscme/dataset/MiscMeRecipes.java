@@ -34,6 +34,11 @@ public class MiscMeRecipes {
 			.addIngredients('R', Material.REDSTONE)
 			.addIngredients('S', Material.STICK)
 			.register();
+		new ShapedCraft(new ItemStack(MiscMeItems.BAROMETER), miscMeKey("barometer"), " C ", "CRC", " C ")
+			.withCategory(CraftingBookCategory.EQUIPMENT)
+			.addIngredients('C', Material.COPPER_INGOT)
+			.addIngredients('R', Material.REDSTONE_TORCH)
+			.register();
 	}
 
 }

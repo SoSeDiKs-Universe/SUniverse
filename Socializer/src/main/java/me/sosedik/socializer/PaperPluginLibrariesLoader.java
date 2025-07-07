@@ -20,12 +20,27 @@ import java.util.stream.Stream;
 @NullMarked
 public final class PaperPluginLibrariesLoader implements PluginLoader {
 
+	private static final List<String> MAVEN_CENTRAL_URLS = List.of(
+		"https://repo1.maven.org/maven2/",
+		"http://repo1.maven.org/maven2/",
+		"https://repo.maven.apache.org/maven2/",
+		"http://repo.maven.apache.org/maven2/"
+	);
+
 	@Override
 	public void classloader(PluginClasspathBuilder classpathBuilder) {
 		MavenLibraryResolver resolver = new MavenLibraryResolver();
 		PluginLibraries pluginLibraries = load();
 		pluginLibraries.asDependencies().forEach(resolver::addDependency);
-		pluginLibraries.asRepositories().forEach(resolver::addRepository);
+		pluginLibraries.asRepositories().forEach(repo -> {
+			if (MAVEN_CENTRAL_URLS.contains(repo.getUrl())) {
+				resolver.addRepository(new RemoteRepository.Builder(
+					"central", "default", MavenLibraryResolver.MAVEN_CENTRAL_DEFAULT_MIRROR
+				).build());
+			} else {
+				resolver.addRepository(repo);
+			}
+		});
 		classpathBuilder.addLibrary(resolver);
 	}
 

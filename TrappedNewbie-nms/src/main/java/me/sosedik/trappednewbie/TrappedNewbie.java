@@ -20,6 +20,7 @@ import me.sosedik.trappednewbie.impl.blockstorage.ClayKilnBlockStorage;
 import me.sosedik.trappednewbie.impl.blockstorage.SleepingBagBlockStorage;
 import me.sosedik.trappednewbie.impl.blockstorage.WorkStationBlockStorage;
 import me.sosedik.trappednewbie.impl.item.modifier.ItemModelModifier;
+import me.sosedik.trappednewbie.impl.item.modifier.ItemOverlayToggleModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.LetterModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.PaperPlaneModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.UnlitCampfireModifier;
@@ -32,13 +33,16 @@ import me.sosedik.trappednewbie.listener.advancement.dedicated.FindGravelAdvance
 import me.sosedik.trappednewbie.listener.advancement.dedicated.FirstPossessionAdvancement;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.FoodConsumingAdvancement;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.GoodAsNewAdvancement;
+import me.sosedik.trappednewbie.listener.advancement.dedicated.HalfAHeartAdvancements;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.HorseStatsAdvancements;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.IHateSandAdvancement;
+import me.sosedik.trappednewbie.listener.advancement.dedicated.InventoryAdvancements;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.KungFuPandaAdvancement;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.LevelAdvancements;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.LootOpensAdvancements;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.OpeningHolderAdvancement;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.PathwaysAdvancement;
+import me.sosedik.trappednewbie.listener.advancement.dedicated.QuickDeathAdvancements;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.StatisticAdvancements;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.WashAdvancements;
 import me.sosedik.trappednewbie.listener.block.BlockBreakHurts;
@@ -61,6 +65,8 @@ import me.sosedik.trappednewbie.listener.item.TrumpetScare;
 import me.sosedik.trappednewbie.listener.item.VisualPumpkin;
 import me.sosedik.trappednewbie.listener.misc.CustomHudRenderer;
 import me.sosedik.trappednewbie.listener.misc.DisableJoinQuitMessages;
+import me.sosedik.trappednewbie.listener.misc.DynamicInventoryInfoGatherer;
+import me.sosedik.trappednewbie.listener.misc.DynamicReducedF3DebugInfo;
 import me.sosedik.trappednewbie.listener.misc.FakeHardcoreHearts;
 import me.sosedik.trappednewbie.listener.misc.TabHeaderFooterBeautifier;
 import me.sosedik.trappednewbie.listener.player.DisableNaturalRespawn;
@@ -73,6 +79,7 @@ import me.sosedik.trappednewbie.listener.player.TeamableLeatherEquipment;
 import me.sosedik.trappednewbie.listener.player.VisualArmorLayer;
 import me.sosedik.trappednewbie.listener.world.LimboWorldFall;
 import me.sosedik.trappednewbie.listener.world.LimitedLimbo;
+import me.sosedik.trappednewbie.listener.world.NoDayChangeInLimbo;
 import me.sosedik.trappednewbie.listener.world.PerPlayerWorlds;
 import me.sosedik.utilizer.CommandManager;
 import me.sosedik.utilizer.api.language.TranslationHolder;
@@ -101,6 +108,7 @@ import java.io.File;
 public final class TrappedNewbie extends JavaPlugin {
 
 	public static final String NAMESPACE = "trapped_newbie";
+	private static final int CHUNK_RADIUS = 2;
 
 	private static @UnknownNullability TrappedNewbie instance;
 	private static @Nullable World limboWorld;
@@ -147,6 +155,7 @@ public final class TrappedNewbie extends JavaPlugin {
 			return ResourceLib.storage().getItemModelMapping(trappedNewbieKey("brick_kiln"));
 		});
 
+		new ItemOverlayToggleModifier(trappedNewbieKey("overlay_toggle")).register();
 		new LetterModifier(trappedNewbieKey("letter")).register();
 		new PaperPlaneModifier(trappedNewbieKey("paper_plane")).register();
 		new UnlitCampfireModifier(trappedNewbieKey("unlit_campfire")).register();
@@ -162,13 +171,16 @@ public final class TrappedNewbie extends JavaPlugin {
 			FirstPossessionAdvancement.class,
 			FoodConsumingAdvancement.class,
 			GoodAsNewAdvancement.class,
+			HalfAHeartAdvancements.class,
 			HorseStatsAdvancements.class,
 			IHateSandAdvancement.class,
+			InventoryAdvancements.class,
 			KungFuPandaAdvancement.class,
 			LevelAdvancements.class,
 			LootOpensAdvancements.class,
 			OpeningHolderAdvancement.class,
 			PathwaysAdvancement.class,
+			QuickDeathAdvancements.class,
 			StatisticAdvancements.class,
 			WashAdvancements.class,
 			// block
@@ -195,6 +207,8 @@ public final class TrappedNewbie extends JavaPlugin {
 			// misc
 			CustomHudRenderer.class,
 			DisableJoinQuitMessages.class,
+			DynamicInventoryInfoGatherer.class,
+			DynamicReducedF3DebugInfo.class,
 			FakeHardcoreHearts.class,
 			TabHeaderFooterBeautifier.class,
 			// player
@@ -209,6 +223,7 @@ public final class TrappedNewbie extends JavaPlugin {
 			// world
 			LimboWorldFall.class,
 			LimitedLimbo.class,
+			NoDayChangeInLimbo.class,
 			PerPlayerWorlds.class,
 			// command
 			MigrateCommand.class
@@ -228,6 +243,12 @@ public final class TrappedNewbie extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		TrappedNewbieAdvancements.MANAGER.saveProgresses();
+
+		for (int x = -CHUNK_RADIUS; x < CHUNK_RADIUS; x++) {
+			for (int y = -CHUNK_RADIUS; y < CHUNK_RADIUS; y++) {
+				limboWorld().setChunkForceLoaded(x, y, false);
+			}
+		}
 	}
 
 	private void setupLimboWorld() {
@@ -254,6 +275,13 @@ public final class TrappedNewbie extends JavaPlugin {
 			if (limboWorld().getPlayers().isEmpty()) return 0D;
 			return Bukkit.getServerTickManager().getTickRate() / 2D;
 		});
+
+		// Spawn chunks are disabled, force them for limbo
+		for (int x = -CHUNK_RADIUS; x < CHUNK_RADIUS; x++) {
+			for (int y = -CHUNK_RADIUS; y < CHUNK_RADIUS; y++) {
+				world.setChunkForceLoaded(x, y, true);
+			}
+		}
 
 		Block block = world.getHighestBlockAt(0, 0);
 		if (block.getLocation().getBlockY() > world.getMinHeight()) return;

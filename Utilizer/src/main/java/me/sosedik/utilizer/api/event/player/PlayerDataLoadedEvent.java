@@ -30,7 +30,7 @@ public class PlayerDataLoadedEvent extends PlayerEvent {
 	 * @return player data
 	 */
 	public ReadWriteNBT getData() {
-		return data;
+		return this.data;
 	}
 
 	/**
@@ -40,7 +40,7 @@ public class PlayerDataLoadedEvent extends PlayerEvent {
 	 * @return player data
 	 */
 	public ReadWriteNBT getBackupData() {
-		return backupData;
+		return this.backupData;
 	}
 
 	@Override

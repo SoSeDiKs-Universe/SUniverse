@@ -3,7 +3,6 @@ package me.sosedik.uglychatter.api.mini.tag;
 import me.sosedik.resourcelib.ResourceLib;
 import me.sosedik.resourcelib.util.SpacingUtil;
 import me.sosedik.utilizer.api.message.Messenger;
-import me.sosedik.utilizer.api.message.Mini;
 import me.sosedik.utilizer.util.ChatUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
@@ -22,7 +21,7 @@ import static net.kyori.adventure.text.Component.newline;
 @NullMarked
 public record CopyTag(Messenger messenger) implements TagResolver {
 
-	public static final Component COPY_ICON = Mini.asIcon(ResourceLib.requireFontData(uglyChatterKey("copy")).mapping());
+	public static final Component COPY_ICON = ResourceLib.requireFontData(uglyChatterKey("copy")).icon();
 
 	@Override
 	public @Nullable Tag resolve(String name, ArgumentQueue arguments, Context ctx) {

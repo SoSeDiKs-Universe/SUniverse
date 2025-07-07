@@ -10,7 +10,8 @@
 	"no_texture": true,
 	"model": {
 		"textures": {
-			"layer0": "trapped_newbie:item/furniture/sleeping_bag"
+			"layer0": "trapped_newbie:item/furniture/sleeping_bag",
+			"particle": "#layer0"
 		},
 		"elements": [
 			{

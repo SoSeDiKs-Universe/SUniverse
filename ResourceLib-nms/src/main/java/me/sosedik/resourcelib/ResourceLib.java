@@ -5,6 +5,7 @@ import me.sosedik.resourcelib.api.font.FontData;
 import me.sosedik.resourcelib.api.item.FakeItemData;
 import me.sosedik.resourcelib.command.CEffectCommand;
 import me.sosedik.resourcelib.dataset.ResourcePackStorage;
+import me.sosedik.resourcelib.feature.ScoreboardRenderer;
 import me.sosedik.resourcelib.feature.TabRenderer;
 import me.sosedik.resourcelib.impl.item.modifier.CustomLoreModifier;
 import me.sosedik.resourcelib.impl.item.modifier.CustomNameModifier;
@@ -15,7 +16,7 @@ import me.sosedik.resourcelib.listener.misc.LocalizedDeathMessages;
 import me.sosedik.resourcelib.listener.misc.LocalizedResourcePackMessage;
 import me.sosedik.resourcelib.listener.player.DisplayCustomPotionEffectsOnHud;
 import me.sosedik.resourcelib.listener.player.LoadSaveHudMessengerOnJoinLeave;
-import me.sosedik.resourcelib.listener.player.LoadSaveTabRendererOnJoinLeave;
+import me.sosedik.resourcelib.listener.player.LoadSaveTabAndScoreboardRenderersOnJoinLeave;
 import me.sosedik.resourcelib.util.ResourcePackHoster;
 import me.sosedik.utilizer.CommandManager;
 import me.sosedik.utilizer.api.language.TranslationHolder;
@@ -28,6 +29,7 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.UnknownNullability;
 import org.jspecify.annotations.NullMarked;
 
 import java.io.File;
@@ -41,10 +43,10 @@ import static java.util.Objects.requireNonNull;
 @NullMarked
 public class ResourceLib extends JavaPlugin {
 
-	private static ResourceLib instance;
+	private static @UnknownNullability ResourceLib instance;
 
-	private Scheduler scheduler;
-	private ResourcePackStorage storage;
+	private @UnknownNullability Scheduler scheduler;
+	private @UnknownNullability ResourcePackStorage storage;
 
 	@Override
 	public void onLoad() {
@@ -55,6 +57,7 @@ public class ResourceLib extends JavaPlugin {
 		TranslationHolder.extractLocales(this);
 		ResourcePackHoster.hostResourcePack(this);
 
+		ScoreboardRenderer.init(this);
 		TabRenderer.init(this);
 	}
 
@@ -78,7 +81,7 @@ public class ResourceLib extends JavaPlugin {
 			// player
 			DisplayCustomPotionEffectsOnHud.class,
 			LoadSaveHudMessengerOnJoinLeave.class,
-			LoadSaveTabRendererOnJoinLeave.class
+			LoadSaveTabAndScoreboardRenderersOnJoinLeave.class
 		);
 
 		// RP message depends on FancyMotd Pinger's locale

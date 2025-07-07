@@ -7,7 +7,6 @@ import me.sosedik.resourcelib.impl.block.nms.SimpleFakeSculkNMSBlock;
 import me.sosedik.resourcelib.impl.block.nms.SimpleNMSBlock;
 import me.sosedik.resourcelib.impl.block.nms.VegetationBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.material.PushReaction;
 import org.bukkit.NamespacedKey;
 import org.jspecify.annotations.NullMarked;
 

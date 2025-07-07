@@ -1,0 +1,24 @@
+{
+  "type": "block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:honeycomb",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 2,
+                "max": 7
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "random_sequence": "miscme:custom/bee_nest_fall"
+}

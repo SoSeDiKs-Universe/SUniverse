@@ -37,7 +37,7 @@ public class MelonPumpkinBlowing implements Listener {
 	private static final LootTable MELON_SMASH_LOOT_TABLE = requireNonNull(Bukkit.getLootTable(MiscMe.miscMeKey("custom/melon_smash")));
 	private static final LootTable PUMPKIN_SMASH_LOOT_TABLE = requireNonNull(Bukkit.getLootTable(MiscMe.miscMeKey("custom/pumpkin_smash")));
 
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	public void onHit(ProjectileHitEvent event) {
 		if (event.getHitBlock() == null) return;
 		if (!(event.getEntity() instanceof AbstractArrow arrow)) return;
@@ -84,7 +84,7 @@ public class MelonPumpkinBlowing implements Listener {
 		MiscMe.scheduler().sync(() -> {
 			if (arrow.isValid())
 				arrow.startFalling();
-		});
+		}, 1L);
 		event.setCancelled(true);
 	}
 

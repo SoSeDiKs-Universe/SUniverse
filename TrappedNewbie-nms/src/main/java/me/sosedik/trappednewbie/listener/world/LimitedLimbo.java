@@ -2,6 +2,7 @@ package me.sosedik.trappednewbie.listener.world;
 
 import me.sosedik.trappednewbie.TrappedNewbie;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -34,7 +35,7 @@ public class LimitedLimbo implements Listener {
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onInteract(PlayerInteractEvent event) {
 		if (shouldDeny(event.getPlayer()))
-			event.setCancelled(true);
+			event.setUseInteractedBlock(Event.Result.DENY);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)

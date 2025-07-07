@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * Loads and saved player damage models
+ * Loads and saves player damage models
  */
 @NullMarked
 public class DamageModelLoadSave implements Listener {

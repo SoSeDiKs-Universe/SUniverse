@@ -14,7 +14,7 @@ import org.jspecify.annotations.NullMarked;
 import java.util.ArrayList;
 import java.util.List;
 
-// MCCheck: 1.21.5, new zombie types
+// MCCheck: 1.21.7, new zombie types
 @NullMarked
 public class RockPaperShearsAdvancement extends BaseAdvancement {
 
@@ -32,9 +32,9 @@ public class RockPaperShearsAdvancement extends BaseAdvancement {
 		String drowned = EntityType.DROWNED.key().value();
 		String husk = EntityType.HUSK.key().value();
 		List<List<String>> requirements = List.of(
-				List.of(PAPER_BEATS_ROCK + "_" + zombie, PAPER_BEATS_ROCK + "_" + zombieVillager, PAPER_BEATS_ROCK + "_" + drowned, PAPER_BEATS_ROCK + "_" + husk),
-				List.of(ROCK_BEATS_SHEARS + "_" + zombie, ROCK_BEATS_SHEARS + "_" + zombieVillager, ROCK_BEATS_SHEARS + "_" + drowned, ROCK_BEATS_SHEARS + "_" + husk),
-				List.of(SHEARS_BEATS_PAPER + "_" + zombie, SHEARS_BEATS_PAPER + "_" + zombieVillager, SHEARS_BEATS_PAPER + "_" + drowned, SHEARS_BEATS_PAPER + "_" + husk)
+			List.of(PAPER_BEATS_ROCK + "_" + zombie, PAPER_BEATS_ROCK + "_" + zombieVillager, PAPER_BEATS_ROCK + "_" + drowned, PAPER_BEATS_ROCK + "_" + husk),
+			List.of(ROCK_BEATS_SHEARS + "_" + zombie, ROCK_BEATS_SHEARS + "_" + zombieVillager, ROCK_BEATS_SHEARS + "_" + drowned, ROCK_BEATS_SHEARS + "_" + husk),
+			List.of(SHEARS_BEATS_PAPER + "_" + zombie, SHEARS_BEATS_PAPER + "_" + zombieVillager, SHEARS_BEATS_PAPER + "_" + drowned, SHEARS_BEATS_PAPER + "_" + husk)
 		);
 		Material[] shearsArray = UtilizerTags.SHEARS.getValues().toArray(new Material[0]);
 		List<Material> rocks = new ArrayList<>();
@@ -43,29 +43,29 @@ public class RockPaperShearsAdvancement extends BaseAdvancement {
 		Material[] rocksArray = rocks.toArray(new Material[0]);
 		Material[] papersArray = new Material[]{Material.PAPER, Material.MAP, Material.FILLED_MAP};
 		return RequiredAdvancementProgress.vanilla(requirements,
-				playerKilledEntity(PAPER_BEATS_ROCK, EntityType.ZOMBIE, papersArray, rocksArray),
-				playerKilledEntity(PAPER_BEATS_ROCK, EntityType.ZOMBIE_VILLAGER, papersArray, rocksArray),
-				playerKilledEntity(PAPER_BEATS_ROCK, EntityType.DROWNED, papersArray, rocksArray),
-				playerKilledEntity(PAPER_BEATS_ROCK, EntityType.HUSK, papersArray, rocksArray),
-				playerKilledEntity(ROCK_BEATS_SHEARS, EntityType.ZOMBIE, rocksArray, shearsArray),
-				playerKilledEntity(ROCK_BEATS_SHEARS, EntityType.ZOMBIE_VILLAGER, rocksArray, shearsArray),
-				playerKilledEntity(ROCK_BEATS_SHEARS, EntityType.DROWNED, rocksArray, shearsArray),
-				playerKilledEntity(ROCK_BEATS_SHEARS, EntityType.HUSK, rocksArray, shearsArray),
-				playerKilledEntity(SHEARS_BEATS_PAPER, EntityType.ZOMBIE, shearsArray, papersArray),
-				playerKilledEntity(SHEARS_BEATS_PAPER, EntityType.ZOMBIE_VILLAGER, shearsArray, papersArray),
-				playerKilledEntity(SHEARS_BEATS_PAPER, EntityType.DROWNED, shearsArray, papersArray),
-				playerKilledEntity(SHEARS_BEATS_PAPER, EntityType.HUSK, shearsArray, papersArray)
+			playerKilledEntity(PAPER_BEATS_ROCK, EntityType.ZOMBIE, papersArray, rocksArray),
+			playerKilledEntity(PAPER_BEATS_ROCK, EntityType.ZOMBIE_VILLAGER, papersArray, rocksArray),
+			playerKilledEntity(PAPER_BEATS_ROCK, EntityType.DROWNED, papersArray, rocksArray),
+			playerKilledEntity(PAPER_BEATS_ROCK, EntityType.HUSK, papersArray, rocksArray),
+			playerKilledEntity(ROCK_BEATS_SHEARS, EntityType.ZOMBIE, rocksArray, shearsArray),
+			playerKilledEntity(ROCK_BEATS_SHEARS, EntityType.ZOMBIE_VILLAGER, rocksArray, shearsArray),
+			playerKilledEntity(ROCK_BEATS_SHEARS, EntityType.DROWNED, rocksArray, shearsArray),
+			playerKilledEntity(ROCK_BEATS_SHEARS, EntityType.HUSK, rocksArray, shearsArray),
+			playerKilledEntity(SHEARS_BEATS_PAPER, EntityType.ZOMBIE, shearsArray, papersArray),
+			playerKilledEntity(SHEARS_BEATS_PAPER, EntityType.ZOMBIE_VILLAGER, shearsArray, papersArray),
+			playerKilledEntity(SHEARS_BEATS_PAPER, EntityType.DROWNED, shearsArray, papersArray),
+			playerKilledEntity(SHEARS_BEATS_PAPER, EntityType.HUSK, shearsArray, papersArray)
 		);
 	}
 
 	private static PlayerKilledEntityTriggerData playerKilledEntity(String criterion, EntityType entityType, Material[] playerItems, Material[] entityItems) {
 		return VanillaTriggerData.playerKilledEntity(criterion + "_" + entityType.key().value())
-				.withPlayer(player -> player.withEquipment(equipment -> equipment.withMainHand(playerItems)))
-				.withEntity(entity ->
-						entity.withEntityType(entityType)
-								.withEquipment(equipment -> equipment.withMainHand(entityItems))
-								.withDistanceToPlayer(distance -> distance.maxAbsolute(5D))
-				);
+			.withPlayer(player -> player.withEquipment(equipment -> equipment.withMainHand(playerItems)))
+			.withEntity(entity ->
+				entity.withEntityType(entityType)
+					.withEquipment(equipment -> equipment.withMainHand(entityItems))
+					.withDistanceToPlayer(distance -> distance.maxAbsolute(5D))
+			);
 	}
 
 }

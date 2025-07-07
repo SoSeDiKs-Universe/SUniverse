@@ -6,7 +6,6 @@ import me.sosedik.kiterino.modifier.item.ItemContextBox;
 import me.sosedik.kiterino.modifier.item.ItemModifier;
 import me.sosedik.kiterino.modifier.item.ModificationResult;
 import me.sosedik.resourcelib.ResourceLib;
-import me.sosedik.utilizer.api.message.Mini;
 import me.sosedik.utilizer.util.ChatUtil;
 import me.sosedik.utilizer.util.ItemUtil;
 import net.kyori.adventure.text.Component;
@@ -27,9 +26,9 @@ import static me.sosedik.utilizer.api.message.Mini.combined;
 @NullMarked
 public class ArmorTooltipModifier extends ItemModifier {
 
-	public static final Component ARMOR_ICON = Mini.asIcon(ResourceLib.requireFontData(miscMeKey("armor")).mapping());
-	public static final Component ARMOR_TOUGHNESS_ICON = Mini.asIcon(ResourceLib.requireFontData(miscMeKey("armor_toughness")).mapping());
-	public static final Component KNOCKBACK_RESISTANCE_ICON = Mini.asIcon(ResourceLib.requireFontData(miscMeKey("knockback_resistance")).mapping());
+	public static final Component ARMOR_ICON = ResourceLib.requireFontData(miscMeKey("armor")).icon();
+	public static final Component ARMOR_TOUGHNESS_ICON = ResourceLib.requireFontData(miscMeKey("armor_toughness")).icon();
+	public static final Component KNOCKBACK_RESISTANCE_ICON = ResourceLib.requireFontData(miscMeKey("knockback_resistance")).icon();
 
 	public ArmorTooltipModifier(NamespacedKey modifierId) {
 		super(modifierId);

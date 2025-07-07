@@ -1,6 +1,8 @@
 package me.sosedik.resourcelib.listener.player;
 
+import me.sosedik.resourcelib.feature.ScoreboardRenderer;
 import me.sosedik.resourcelib.feature.TabRenderer;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -9,19 +11,23 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.jspecify.annotations.NullMarked;
 
 /**
- * Loads and saved hud messenger
+ * Loads and saves tab and scoreboard renderers
  */
 @NullMarked
-public class LoadSaveTabRendererOnJoinLeave implements Listener {
+public class LoadSaveTabAndScoreboardRenderersOnJoinLeave implements Listener {
 
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onJoin(PlayerJoinEvent event) {
-		TabRenderer.of(event.getPlayer()).run();
+		Player player = event.getPlayer();
+		TabRenderer.of(player).run();
+		ScoreboardRenderer.of(player).run();
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onLeave(PlayerQuitEvent event) {
-		TabRenderer.removePlayer(event.getPlayer());
+		Player player = event.getPlayer();
+		TabRenderer.removePlayer(player);
+		ScoreboardRenderer.removePlayer(player);
 	}
 
 }

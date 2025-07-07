@@ -10,9 +10,9 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public class UtilizerTags {
 
-	// MCCheck: 1.21.5, new flattenables (hardcoded in ShovelItem)
+	// MCCheck: 1.21.7, new flattenables (hardcoded in ShovelItem)
 	public static final Tag<Material> FLATTENABLES = itemTag("flattenables");
-	// MCCheck: 1.21.5, new tillables (hardcoded in HoeItem)
+	// MCCheck: 1.21.7, new tillables (hardcoded in HoeItem)
 	public static final Tag<Material> TILLABLES = itemTag("tillables");
 	/**
 	 * @see ItemUtil#isHot(ItemStack)

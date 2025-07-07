@@ -10,7 +10,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.jspecify.annotations.NullMarked;
 
 /**
- * Loads and saved hud messenger
+ * Loads and saves hud messenger
  */
 @NullMarked
 public class LoadSaveHudMessengerOnJoinLeave implements Listener {

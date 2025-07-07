@@ -7,7 +7,7 @@ import org.jspecify.annotations.NullMarked;
 
 import static me.sosedik.trappednewbie.TrappedNewbie.trappedNewbieKey;
 
-// MCCheck: 1.21.5, new branches (chopping blocks, work stations), hardened
+// MCCheck: 1.21.7, new branches (chopping blocks, work stations), hardened
 @NullMarked
 public class TrappedNewbieTags {
 

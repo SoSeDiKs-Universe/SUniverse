@@ -57,20 +57,20 @@ public class DepthMeterModifier extends ItemModifier {
 		var messenger = Messenger.messenger(LangOptionsStorage.getByLocale(contextBox.getLocale()));
 		boolean addLore = contextBox.getContextType().hasVisibleLore();
 
+		int playerY = target.getLocation().getBlockY();
+
 		World world = target.getWorld();
 		if (world.getEnvironment() == World.Environment.NETHER) {
 			contextBox.getItem().setData(DataComponentTypes.ITEM_MODEL, DEPTH_LAVA);
-			if (addLore) contextBox.addLore(messenger.getMessage("item.depth_meter.depth.nether"));
+			if (addLore) contextBox.addLore(messenger.getMessage("item.depth_meter.depth.nether", raw("y", playerY)));
 			return ModificationResult.OK;
 		}
 
 		if (world.getEnvironment() == World.Environment.THE_END) {
 			contextBox.getItem().setData(DataComponentTypes.ITEM_MODEL, DEPTH_VOID);
-			if (addLore) contextBox.addLore(messenger.getMessage("item.depth_meter.depth.the_end"));
+			if (addLore) contextBox.addLore(messenger.getMessage("item.depth_meter.depth.the_end", raw("y", playerY)));
 			return ModificationResult.OK;
 		}
-
-		int playerY = target.getLocation().getBlockY();
 
 		if (playerY < world.getMinHeight()) contextBox.getItem().setData(DataComponentTypes.ITEM_MODEL, DEPTH_VOID);
 		else if (playerY >= 190) contextBox.getItem().setData(DataComponentTypes.ITEM_MODEL, DEPTH_SKY);

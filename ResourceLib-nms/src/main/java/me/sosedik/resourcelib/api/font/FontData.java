@@ -1,6 +1,7 @@
 package me.sosedik.resourcelib.api.font;
 
 import me.sosedik.resourcelib.util.SpacingUtil;
+import me.sosedik.utilizer.api.message.Mini;
 import me.sosedik.utilizer.util.ChatUtil;
 import net.kyori.adventure.text.Component;
 import org.jspecify.annotations.NullMarked;
@@ -9,6 +10,7 @@ import org.jspecify.annotations.NullMarked;
 public record FontData(
 	Component mapping,
 	Component offsetMapping,
+	Component icon,
 	int width
 ) {
 
@@ -16,7 +18,7 @@ public record FontData(
 		Component mapping,
 		int width
 	) {
-		this(mapping, SpacingUtil.getOffset(0, width + 1, mapping), width);
+		this(mapping, SpacingUtil.getOffset(0, width + 1, mapping), Mini.asIcon(mapping), width);
 	}
 
 	public Component offsetMapping(int offset) {

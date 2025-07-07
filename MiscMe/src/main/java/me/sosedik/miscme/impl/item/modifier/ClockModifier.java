@@ -81,6 +81,17 @@ public class ClockModifier extends ItemModifier {
 		if (world.getEnvironment() == World.Environment.THE_END) return messenger.getMessage("item.clock.time.the_end");
 
 		long day = world.getFullTime() / 24_000;
+		Component time = formatTime(world, messenger, locale);
+
+		long t = world.getTime();
+		int h = (int) (t / 1000) + 6;
+		if (h > 23) h -= 24;
+		String clock = getClockEmoji(h);
+
+		return messenger.getMessage("item.clock.time", raw("emoji", clock), raw("day", day), component("time", time));
+	}
+
+	public static Component formatTime(World world, Messenger messenger, Locale locale) {
 		long t = world.getTime();
 		int h = (int) (t / 1000) + 6;
 		if (h > 23) h -= 24;
@@ -94,13 +105,11 @@ public class ClockModifier extends ItemModifier {
 			} else amPm = "AM";
 		} else amPm = "";
 
-		Component time = messenger.getMessage(useAmPm ? "clock.time.ampm" : "clock.time",
+		return messenger.getMessage(useAmPm ? "clock.time.ampm" : "clock.time",
 			raw("hour", (!useAmPm && h < 10) ? "0" + h : String.valueOf(h)),
 			raw("minute", m < 10 ? "0" + m : String.valueOf(m)),
 			raw("am_pm", amPm)
 		);
-
-		return messenger.getMessage("item.clock.time", raw("emoji", getClockEmoji(h)), raw("day", day), component("time", time));
 	}
 
 	/**

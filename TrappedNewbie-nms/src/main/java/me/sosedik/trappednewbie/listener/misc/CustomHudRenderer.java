@@ -41,8 +41,8 @@ public class CustomHudRenderer implements Listener {
 			new ArmorRenderer(player),
 			new HealthRenderer(player),
 			new HungerRenderer(player)
-//			new ThirstRenderer(player),
-//			new TemperatureRenderer(player)
+//			new ThirstRenderer(player), // TODO thirst
+//			new TemperatureRenderer(player) // TODO temperature
 		);
 		for (HudRenderer hud : huds) {
 			renderers.put(hud.getClass(), hud);

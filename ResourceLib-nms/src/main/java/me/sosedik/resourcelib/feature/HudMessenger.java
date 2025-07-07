@@ -1,5 +1,6 @@
 package me.sosedik.resourcelib.feature;
 
+import com.google.common.base.Preconditions;
 import me.sosedik.resourcelib.ResourceLib;
 import me.sosedik.resourcelib.util.SpacingUtil;
 import net.kyori.adventure.text.Component;
@@ -10,7 +11,6 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -80,6 +80,7 @@ public class HudMessenger extends BukkitRunnable {
 	}
 
 	public static HudMessenger of(Player player) {
+		Preconditions.checkArgument(player.isOnline(), "Player must be online");
 		return STORED_HUDS.computeIfAbsent(player.getUniqueId(), k -> new HudMessenger(player));
 	}
 

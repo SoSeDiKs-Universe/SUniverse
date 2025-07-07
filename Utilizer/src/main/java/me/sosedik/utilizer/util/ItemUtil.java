@@ -31,7 +31,7 @@ import java.util.UUID;
 /**
  * General utilities around items
  */
-// MCCheck: 1.21.5, item types
+// MCCheck: 1.21.7, item types
 @NullMarked
 public class ItemUtil {
 
@@ -96,7 +96,25 @@ public class ItemUtil {
 				|| isLitCampfire(item);
 	}
 
-	private static boolean isLitCampfire(ItemStack item) {
+	/**
+	 * Checks whether item is a burning item
+	 *
+	 * @param item item
+	 * @return whether item is a burning item
+	 */
+	public static boolean isBurningItem(ItemStack item) {
+		return item.getType() == Material.TORCH
+			|| item.getType() == Material.SOUL_TORCH
+			|| isLitCampfire(item);
+	}
+
+	/**
+	 * Checks whether this item is a lit campfire
+	 *
+	 * @param item item
+	 * @return whether this item is a lit campfire
+	 */
+	public static boolean isLitCampfire(ItemStack item) {
 		return Tag.CAMPFIRES.isTagged(item.getType())
 				&& item.hasItemMeta()
 				&& item.getItemMeta() instanceof BlockStateMeta meta

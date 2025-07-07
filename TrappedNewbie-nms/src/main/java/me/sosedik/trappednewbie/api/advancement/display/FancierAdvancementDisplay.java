@@ -6,7 +6,9 @@ import me.sosedik.packetadvancements.api.advancement.IAdvancement;
 import me.sosedik.packetadvancements.api.advancement.IAdvancementLike;
 import me.sosedik.packetadvancements.api.display.IAdvancementDisplay;
 import me.sosedik.packetadvancements.imlp.advancement.linking.LinkingAdvancement;
+import me.sosedik.packetadvancements.imlp.advancement.mimic.MimicAdvancement;
 import me.sosedik.packetadvancements.imlp.display.FancyAdvancementDisplay;
+import me.sosedik.packetadvancements.imlp.display.coordinatemodes.OffsetCoordinateMode;
 import me.sosedik.resourcelib.api.font.FontData;
 import me.sosedik.trappednewbie.api.advancement.AdvancementFrame;
 import me.sosedik.trappednewbie.api.advancement.ToastBackgroundAdvancement;
@@ -38,7 +40,13 @@ public abstract class FancierAdvancementDisplay<T extends FancierAdvancementDisp
 			fancierDisplay.withReal(true);
 			AdvancementFrame advancementFrame = fancierDisplay.getAdvancementFrame();
 			if (advancementFrame.getItemModelKey(false) != null) {
-				advancement.getAdvancementTab().registerAdvancements(new ToastBackgroundAdvancement(LinkingAdvancement.buildLinking(advancement, advancement), advancementFrame));
+				ToastBackgroundAdvancement toastBackgroundAdvancement = new ToastBackgroundAdvancement(LinkingAdvancement.buildLinking(advancement, advancement), advancementFrame);
+				advancement.getAdvancementTab().registerAdvancements(toastBackgroundAdvancement);
+				MimicAdvancement.buildMimic(advancement) // TODO this is a huge hack, also kinda broken since 1.21.6
+					.advancementMimic(advancement)
+					.displayMimic(() -> FancyAdvancementDisplay.fancyDisplay().copyFrom(advancement.getDisplay()))
+					.coordMimic(new OffsetCoordinateMode(0F, 0F))
+					.buildAndRegister();
 			}
 		}
 	};

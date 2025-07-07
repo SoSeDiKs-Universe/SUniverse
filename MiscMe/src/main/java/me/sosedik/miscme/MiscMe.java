@@ -2,6 +2,7 @@ package me.sosedik.miscme;
 
 import me.sosedik.miscme.dataset.MiscMeRecipes;
 import me.sosedik.miscme.impl.item.modifier.ArmorTooltipModifier;
+import me.sosedik.miscme.impl.item.modifier.BarometerModifier;
 import me.sosedik.miscme.impl.item.modifier.BookAuthorOnlineModifier;
 import me.sosedik.miscme.impl.item.modifier.ClockModifier;
 import me.sosedik.miscme.impl.item.modifier.ColoredShulkerShellModifier;
@@ -24,10 +25,12 @@ import me.sosedik.miscme.listener.block.Couplings;
 import me.sosedik.miscme.listener.block.DontEditSignsOnPlace;
 import me.sosedik.miscme.listener.block.DoorBells;
 import me.sosedik.miscme.listener.block.ExplosiveCoal;
+import me.sosedik.miscme.listener.block.FallingBeeNests;
 import me.sosedik.miscme.listener.block.MelonPumpkinBlowing;
 import me.sosedik.miscme.listener.block.NoIceInNether;
 import me.sosedik.miscme.listener.block.NoteBlockShowsNotes;
 import me.sosedik.miscme.listener.block.SignsRetain;
+import me.sosedik.miscme.listener.entity.AnimalAgeLocking;
 import me.sosedik.miscme.listener.entity.ArmorStandBedrockPoses;
 import me.sosedik.miscme.listener.entity.ArmorStandSpawnsWithArms;
 import me.sosedik.miscme.listener.entity.BetterEntitySuffocation;
@@ -51,9 +54,11 @@ import me.sosedik.miscme.listener.item.ColoredShulkerShells;
 import me.sosedik.miscme.listener.item.DyeableItemsInItemFrames;
 import me.sosedik.miscme.listener.item.EasierShovelPathCreation;
 import me.sosedik.miscme.listener.item.FireAspectIsFlintAndSteel;
+import me.sosedik.miscme.listener.item.FireHitLitsEntities;
 import me.sosedik.miscme.listener.item.FlintAndSteelIgnitesEntities;
 import me.sosedik.miscme.listener.item.ImmersiveDyes;
 import me.sosedik.miscme.listener.item.InventoryRefresher;
+import me.sosedik.miscme.listener.item.ItemRightClickMessages;
 import me.sosedik.miscme.listener.item.NoSwordInstaBreak;
 import me.sosedik.miscme.listener.item.ReadableBooksInFrames;
 import me.sosedik.miscme.listener.item.ShovelsConvertAdditionalBlocks;
@@ -103,6 +108,7 @@ public final class MiscMe extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		new ArmorTooltipModifier(miscMeKey("armor_tooltip")).register();
+		new BarometerModifier(miscMeKey("barometer")).register();
 		new BookAuthorOnlineModifier(miscMeKey("book_author_online")).register();
 		new ClockModifier(miscMeKey("clock")).register();
 		new ColoredShulkerShellModifier(miscMeKey("colored_shulker_shell")).register();
@@ -130,11 +136,13 @@ public final class MiscMe extends JavaPlugin {
 			DontEditSignsOnPlace.class,
 			DoorBells.class,
 			ExplosiveCoal.class,
+			FallingBeeNests.class,
 			MelonPumpkinBlowing.class,
 			NoIceInNether.class,
 			NoteBlockShowsNotes.class,
 			SignsRetain.class,
 			// entity
+			AnimalAgeLocking.class,
 			ArmorStandBedrockPoses.class,
 			ArmorStandSpawnsWithArms.class,
 			BetterEntitySuffocation.class,
@@ -159,9 +167,11 @@ public final class MiscMe extends JavaPlugin {
 			DyeableItemsInItemFrames.class,
 			EasierShovelPathCreation.class,
 			FireAspectIsFlintAndSteel.class,
+			FireHitLitsEntities.class,
 			FlintAndSteelIgnitesEntities.class,
 			ImmersiveDyes.class,
 			InventoryRefresher.class,
+			ItemRightClickMessages.class,
 			NoSwordInstaBreak.class,
 			ReadableBooksInFrames.class,
 			ShovelsConvertAdditionalBlocks.class,

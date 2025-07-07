@@ -3,7 +3,6 @@ package me.sosedik.uglychatter.api.mini.tag;
 import me.sosedik.resourcelib.ResourceLib;
 import me.sosedik.resourcelib.util.SpacingUtil;
 import me.sosedik.utilizer.api.message.Messenger;
-import me.sosedik.utilizer.api.message.Mini;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -21,7 +20,7 @@ import static net.kyori.adventure.text.Component.newline;
 @NullMarked
 public record ExecuteTag(Messenger messenger) implements TagResolver {
 
-	public static final Component COMMAND_ICON = Mini.asIcon(ResourceLib.requireFontData(uglyChatterKey("command")).mapping());
+	public static final Component COMMAND_ICON = ResourceLib.requireFontData(uglyChatterKey("command")).icon();
 
 	@Override
 	public @Nullable Tag resolve(String name, ArgumentQueue arguments, Context ctx) {

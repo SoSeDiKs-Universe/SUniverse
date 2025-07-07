@@ -2,7 +2,6 @@ package me.sosedik.resourcelib.impl.message.tag;
 
 import me.sosedik.resourcelib.ResourceLib;
 import me.sosedik.resourcelib.api.font.FontData;
-import me.sosedik.utilizer.api.message.Mini;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.Context;
 import net.kyori.adventure.text.minimessage.tag.Tag;
@@ -29,7 +28,7 @@ public class IconTag {
 		String value = args.pop().lowerValue();
 
 		FontData data = ResourceLib.storage().getFontData(new NamespacedKey(namespace, value));
-		return Tag.selfClosingInserting(data == null ? Component.text("#") : Mini.asIcon(data.mapping()));
+		return Tag.selfClosingInserting(data == null ? Component.text("#") : data.icon());
 	}
 
 }

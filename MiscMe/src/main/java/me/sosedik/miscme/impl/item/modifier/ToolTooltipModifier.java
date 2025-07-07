@@ -6,7 +6,6 @@ import me.sosedik.kiterino.modifier.item.ItemContextBox;
 import me.sosedik.kiterino.modifier.item.ItemModifier;
 import me.sosedik.kiterino.modifier.item.ModificationResult;
 import me.sosedik.resourcelib.ResourceLib;
-import me.sosedik.utilizer.api.message.Mini;
 import me.sosedik.utilizer.util.ChatUtil;
 import me.sosedik.utilizer.util.ItemUtil;
 import net.kyori.adventure.text.Component;
@@ -27,8 +26,8 @@ import static me.sosedik.utilizer.api.message.Mini.combined;
 @NullMarked
 public class ToolTooltipModifier extends ItemModifier {
 
-	public static final Component DAMAGE_ICON = Mini.asIcon(ResourceLib.requireFontData(miscMeKey("attack_damage")).mapping());
-	public static final Component SPEED_ICON = Mini.asIcon(ResourceLib.requireFontData(miscMeKey("attack_speed")).mapping());
+	public static final Component DAMAGE_ICON = ResourceLib.requireFontData(miscMeKey("attack_damage")).icon();
+	public static final Component SPEED_ICON = ResourceLib.requireFontData(miscMeKey("attack_speed")).icon();
 
 	public ToolTooltipModifier(NamespacedKey modifierId) {
 		super(modifierId);
@@ -57,9 +56,9 @@ public class ToolTooltipModifier extends ItemModifier {
 		}
 
 		Component text = combined(
-			combined(DAMAGE_ICON, Component.space(), Component.text(ChatUtil.formatDouble(damage))),
-			Component.space(),
-			combined(SPEED_ICON, Component.space(), Component.text(ChatUtil.formatDouble(speed)))
+			combined(SPEED_ICON, Component.space(), Component.text(ChatUtil.formatDouble(speed))),
+			Component.text("  "),
+			combined(DAMAGE_ICON, Component.space(), Component.text(ChatUtil.formatDouble(damage)))
 		).color(NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE);
 
 		contextBox.addLore(text);

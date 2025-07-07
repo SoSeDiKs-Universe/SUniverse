@@ -141,6 +141,10 @@ public class VisualArmor {
 		this.gloves = ItemStack.isEmpty(gloves) ? null : gloves;
 	}
 
+	public ItemStack[] getArmorContents() {
+		return new ItemStack[] {getHelmet(), getChestplate(), getLeggings(), getBoots()};
+	}
+
 	private void refreshVisuals(EquipmentSlot slot) {
 		if (!slot.isArmor()) return;
 

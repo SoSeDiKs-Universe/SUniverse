@@ -63,6 +63,7 @@ public class ResourcePackHoster {
 		ip = "http://" + (ip.isEmpty() ? "localhost" : ip) + ":" + port;
 		ResourcePack resourcePack = Bukkit.createResourcePack(resourcePackId, ip, resolveRpHash(ip), true, Messenger.messenger(LangOptionsStorage.getDefaultLangOptions()).getMessage("resource_pack.prompt"));
 		Bukkit.setServerResourcePack(resourcePack);
+		plugin.getComponentLogger().info("Started hosting server resource pack");
 	}
 
 	private static @Nullable String resolveRpHash(String ip) {

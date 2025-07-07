@@ -173,7 +173,7 @@ public class BabierBabyMobs implements Listener {
 			skeleton.getEquipment().setItemInMainHand(new ItemStack(TrappedNewbieItems.TRUMPET));
 			skeleton.getEquipment().setItemInMainHandDropChance(0.085F);
 			Bukkit.getMobGoals().removeGoal(skeleton, VanillaGoal.RANGED_BOW_ATTACK);
-			Bukkit.getMobGoals().removeGoal(skeleton, VanillaGoal.ABSTRACT_SKELETON_MELEE);
+			Bukkit.getMobGoals().removeGoal(skeleton, VanillaGoal.SKELETON_MELEE);
 			Bukkit.getMobGoals().addGoal(skeleton, 1, new PaperGoal<>(new TrumpetAttackGoal<>(nms, 1, 40, 6F)));
 		}
 	}

@@ -7,7 +7,6 @@ import me.sosedik.trappednewbie.dataset.TrappedNewbieAdvancements;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieFonts;
 import me.sosedik.utilizer.api.message.Messenger;
 import me.sosedik.utilizer.api.message.Mini;
-import me.sosedik.utilizer.util.LocationUtil;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -27,11 +26,6 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public class LimboWorldFall implements Listener {
 
-	/**
-	 * Vanilla's soft limit is ~30 mil
-	 */
-	private static final int RPT_RADIUS = 15_000_000;
-
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onFall(EntityDamageEvent event) {
 		if (!(event.getEntity() instanceof Player player)) return;
@@ -42,7 +36,7 @@ public class LimboWorldFall implements Listener {
 		if (TrappedNewbieAdvancements.BRAVE_NEW_WORLD.hasCriteria(player, "friendship")) {
 			TrappedNewbieAdvancements.BRAVE_NEW_WORLD.awardCriteria(player, "fall");
 			World world = PerPlayerWorlds.getResourceWorld(player.getUniqueId(), World.Environment.NORMAL);
-			runRtp(player, world);
+			spawnTeleport(player, world);
 		} else {
 			player.teleportAsync(TrappedNewbie.limboWorld().getSpawnLocation());
 			player.sendMessage(Mini.combine(Component.space(), TrappedNewbieFonts.WANDERING_TRADER_HEAD.mapping(), Messenger.messenger(player).getMessage("limbo.welcome.ignored")));
@@ -50,13 +44,13 @@ public class LimboWorldFall implements Listener {
 	}
 
 	/**
-	 * Teleports the player to a random location in the world
+	 * Teleports the player to a spawn location in the world
 	 *
 	 * @param player player
 	 * @param world world
 	 */
-	public static void runRtp(Player player, World world) {
-		LocationUtil.runRtp(player, world, RPT_RADIUS)
+	public static void spawnTeleport(Player player, World world) {
+		player.teleportAsync(world.getSpawnLocation().y(world.getMaxHeight() + 50))
 			.thenRun(() -> {
 				Entity vehicle = player.getVehicle();
 				if (vehicle == null) {

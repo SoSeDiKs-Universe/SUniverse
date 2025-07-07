@@ -121,7 +121,7 @@ public class FreeFall implements Listener {
 		float distance = player.getFallDistance();
 
 		block.emitSound(Sound.BLOCK_GRASS_STEP, 1F, 0F);
-		block.emitSound(Sound.ENTITY_LEASH_KNOT_BREAK, 1F, 1F);
+		block.emitSound(Sound.ITEM_LEAD_BREAK, 1F, 1F);
 
 		if (!feltOnSide && Tag.LEAVES.isTagged(block.getType())) {
 			int leavesBelow = 1;

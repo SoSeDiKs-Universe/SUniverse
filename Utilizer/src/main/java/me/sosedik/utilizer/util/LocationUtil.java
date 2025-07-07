@@ -4,6 +4,7 @@ import io.papermc.paper.block.fluid.FluidData;
 import io.papermc.paper.entity.TeleportFlag;
 import me.sosedik.utilizer.Utilizer;
 import org.bukkit.Fluid;
+import org.bukkit.HeightMap;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -26,11 +27,13 @@ import org.bukkit.util.BoundingBox;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Predicate;
 
 @NullMarked
 public class LocationUtil {
@@ -242,6 +245,61 @@ public class LocationUtil {
 		if (Tag.BANNERS.isTagged(blockType)) return false;
 		return !Tag.ALL_SIGNS.isTagged(blockType);
 		// Truly solid, congrats!
+	}
+
+	/**
+	 * Checks whether it rains at the provided location
+	 *
+	 * @param loc location
+	 * @return whether it rains at the provided location
+	 */
+	public static boolean isRainingAt(Location loc) {
+		return isRainingAt(loc, false);
+	}
+
+	/**
+	 * Checks whether it rains at the provided location
+	 *
+	 * @param loc location
+	 * @param leavesObstruct whether leaves are considered as roof
+	 * @return whether it rains at the provided location
+	 */
+	public static boolean isRainingAt(Location loc, boolean leavesObstruct) {
+		World world = loc.getWorld();
+		if (!world.hasStorm()) return false;
+
+		Block block = loc.getBlock();
+		double blockTemperature = block.getTemperature();
+		if (blockTemperature > 0.95) return false; // Too hot
+		if (blockTemperature < 0.15) return false; // Snowy
+
+		return leavesObstruct
+				? world.getHighestBlockAt(loc).getY() < loc.getBlockY()
+				: world.getHighestBlockAt(loc, HeightMap.MOTION_BLOCKING_NO_LEAVES).getY() < loc.getBlockY();
+	}
+
+	/**
+	 * Finds the closest entity
+	 *
+	 * @param loc loc
+	 * @param radius radius
+	 * @param filter filter
+	 * @return the closest entity, if found
+	 */
+	public static @Nullable Entity findClosestEntity(Location loc, double radius, Predicate<? super Entity> filter) {
+		Collection<Entity> nearbyEntities = loc.getWorld().getNearbyEntities(loc, radius, radius, radius, filter);
+
+		Entity closestEntity = null;
+		double closestDistance = Double.MAX_VALUE;
+		for (Entity entity : nearbyEntities) {
+			double distance = entity.getLocation().distanceSquared(loc);
+			if (distance < closestDistance) {
+				closestDistance = distance;
+				closestEntity = entity;
+			}
+		}
+
+		return closestEntity;
 	}
 
 }

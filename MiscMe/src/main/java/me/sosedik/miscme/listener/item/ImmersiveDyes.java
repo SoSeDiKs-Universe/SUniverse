@@ -42,7 +42,7 @@ import java.util.Map;
  * Dyes can be applied onto blocks immersible.
  * Also allows applying/removing sticky state from pistons.
  */
-// MCCheck: 1.21.5, new colored blocks
+// MCCheck: 1.21.7, new colored blocks / items
 @NullMarked
 public class ImmersiveDyes implements Listener {
 
@@ -77,6 +77,7 @@ public class ImmersiveDyes implements Listener {
 			if (!(block.getBlockData() instanceof Directional oldData)) return true;
 			if (!(apply.createBlockData() instanceof Directional newData)) return true;
 			if (!(block.getState() instanceof ShulkerBox oldState)) return true;
+
 			newData.setFacing(oldData.getFacing());
 			ItemStack[] contents = oldState.getInventory().getStorageContents();
 			Component customName = oldState.customName();
@@ -92,6 +93,7 @@ public class ImmersiveDyes implements Listener {
 		if (Tag.BEDS.isTagged(apply)) {
 			if (!(block.getBlockData() instanceof Bed oldData)) return true;
 			if (!(apply.createBlockData() instanceof Bed newData)) return true;
+
 			newData.setPart(oldData.getPart());
 			newData.setFacing(oldData.getFacing());
 			newData.setOccupied(oldData.isOccupied());
@@ -148,6 +150,7 @@ public class ImmersiveDyes implements Listener {
 		if (Tag.CANDLE_CAKES.isTagged(block.getType())) {
 			if (!(block.getBlockData() instanceof Lightable oldData)) return false;
 			if (!(apply.createBlockData() instanceof Lightable newData)) return false;
+
 			newData.setLit(oldData.isLit());
 			block.setBlockData(newData, false);
 			// Workaround candles getting unlit
@@ -266,6 +269,8 @@ public class ImmersiveDyes implements Listener {
 			return Material.getMaterial(dyeItem.name().replace("DYE", "CANDLE"));
 		if (Tag.CANDLE_CAKES.isTagged(dyingItem))
 			return Material.getMaterial(dyeItem.name().replace("DYE", "CANDLE_CAKE"));
+		if (Tag.ITEMS_HARNESSES.isTagged(dyingItem))
+			return Material.getMaterial(dyeItem.name().replace("DYE", "HARNESS"));
 
 		return null;
 	}
@@ -303,7 +308,7 @@ public class ImmersiveDyes implements Listener {
 	 */
 	public static void playEffect(Player player, @Nullable EquipmentSlot hand, Location loc, @Nullable BlockData effect) {
 		player.clearActiveItem(); // In case dye is usable
-		player.emitSound(Sound.ENTITY_LEASH_KNOT_PLACE, 1F, 2F);
+		player.emitSound(Sound.ITEM_LEAD_TIED, 1F, 2F);
 		if (hand != null) player.swingHand(hand);
 		if (effect != null) loc.getWorld().spawnParticle(Particle.BLOCK_CRUMBLE, loc.center(0.5), 10, 0.4, 0.4, 0.4, 0, effect);
 	}

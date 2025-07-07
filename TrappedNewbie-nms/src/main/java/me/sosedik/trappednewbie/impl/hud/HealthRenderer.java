@@ -128,7 +128,7 @@ public class HealthRenderer extends SimpleHudRenderer {
 			return null;
 		} else if (this.player.hasPotionEffect(PotionEffectType.WITHER)) {
 			return WITHERED_HEARTS;
-		} else if (false /* HYPOTHERMIA && !COLD_RESISTANCE */) {
+		} else if (false /* HYPOTHERMIA && !COLD_RESISTANCE */) { // TODO temperature render
 			return COLD_HEARTS;
 		} else if (false /* HYPERTHERMIA && !HEAT_RESISTANCE (&& !FIRE_RESISTANCE ?) */) {
 			return getFireHearts();

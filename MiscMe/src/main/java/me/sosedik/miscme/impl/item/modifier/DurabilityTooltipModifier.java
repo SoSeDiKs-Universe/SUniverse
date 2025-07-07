@@ -8,7 +8,6 @@ import me.sosedik.miscme.dataset.MiscMeTags;
 import me.sosedik.resourcelib.ResourceLib;
 import me.sosedik.utilizer.api.language.LangOptionsStorage;
 import me.sosedik.utilizer.api.message.Messenger;
-import me.sosedik.utilizer.api.message.Mini;
 import me.sosedik.utilizer.util.DurabilityUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -32,8 +31,8 @@ import static net.kyori.adventure.text.Component.text;
 @NullMarked
 public class DurabilityTooltipModifier extends ItemModifier {
 
-	public static final Component DURABILITY_ICON = Mini.asIcon(ResourceLib.requireFontData(miscMeKey("durability")).mapping());
-	public static final Component CAPACITY_ICON = Mini.asIcon(ResourceLib.requireFontData(miscMeKey("capacity")).mapping());
+	public static final Component DURABILITY_ICON = ResourceLib.requireFontData(miscMeKey("durability")).icon();
+	public static final Component CAPACITY_ICON = ResourceLib.requireFontData(miscMeKey("capacity")).icon();
 
 	public DurabilityTooltipModifier(NamespacedKey modifierId) {
 		super(modifierId);

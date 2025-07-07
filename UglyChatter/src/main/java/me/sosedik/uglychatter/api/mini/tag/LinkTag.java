@@ -7,7 +7,6 @@ import me.sosedik.resourcelib.ResourceLib;
 import me.sosedik.resourcelib.util.SpacingUtil;
 import me.sosedik.uglychatter.UglyChatter;
 import me.sosedik.utilizer.api.message.Messenger;
-import me.sosedik.utilizer.api.message.Mini;
 import me.sosedik.utilizer.util.FileUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
@@ -98,8 +97,8 @@ public record LinkTag(Messenger messenger) implements TagResolver {
 
 	public static class KnownLink {
 
-		private static final Component LINK_TOP = Mini.asIcon(ResourceLib.requireFontData(uglyChatterKey("link_top")).mapping());
-		private static final Component LINK_BOTTOM = Mini.asIcon(ResourceLib.requireFontData(uglyChatterKey("link_bottom")).mapping());
+		private static final Component LINK_TOP = ResourceLib.requireFontData(uglyChatterKey("link_top")).icon();
+		private static final Component LINK_BOTTOM = ResourceLib.requireFontData(uglyChatterKey("link_bottom")).icon();
 
 		private final String name;
 		private final TextColor color;

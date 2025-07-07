@@ -1,7 +1,6 @@
 package me.sosedik.moves.listener.movement;
 
 import io.papermc.paper.event.player.PlayerClientLoadedWorldEvent;
-import me.sosedik.moves.Moves;
 import me.sosedik.utilizer.util.MetadataUtil;
 import org.bukkit.Location;
 import org.bukkit.Material;

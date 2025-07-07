@@ -1,5 +1,6 @@
 package me.sosedik.resourcelib.feature;
 
+import com.google.common.base.Preconditions;
 import me.sosedik.resourcelib.ResourceLib;
 import net.kyori.adventure.text.Component;
 import org.bukkit.NamespacedKey;
@@ -74,38 +75,39 @@ public class TabRenderer extends BukkitRunnable {
 
 	@Override
 	public void run() {
-		components.clear();
+		this.components.clear();
 		for (HudProvider hudProvider : this.hudProviders.values()) {
 			List<Component> hudElement = hudProvider.getHud();
 			if (hudElement != null)
-				components.addAll(hudElement);
+				this.components.addAll(hudElement);
 		}
-		Component hud = combined(components);
-		components.clear();
-		components.add(hud);
+		Component hud = combined(this.components);
+		this.components.clear();
+		this.components.add(hud);
 		HEADER_PRIORITIES.forEach(key -> {
-			HudProvider hudProvider = headerProviders.get(key);
+			HudProvider hudProvider = this.headerProviders.get(key);
 			if (hudProvider == null) return;
 
 			List<Component> hudElement = hudProvider.getHud();
 			if (hudElement != null)
-				components.addAll(hudElement);
+				this.components.addAll(hudElement);
 		});
-		Component header = combine(Component.newline(), components);
-		components.clear();
+		Component header = combine(Component.newline(), this.components);
+		this.components.clear();
 		FOOTER_PRIORITIES.forEach(key -> {
-			HudProvider hudProvider = footerProviders.get(key);
+			HudProvider hudProvider = this.footerProviders.get(key);
 			if (hudProvider == null) return;
 
 			List<Component> hudElement = hudProvider.getHud();
 			if (hudElement != null)
-				components.addAll(hudElement);
+				this.components.addAll(hudElement);
 		});
-		Component footer = combine(Component.newline(), components);
+		Component footer = combine(Component.newline(), this.components);
 		this.player.sendPlayerListHeaderAndFooter(header, footer);
 	}
 
 	public static TabRenderer of(Player player) {
+		Preconditions.checkArgument(player.isOnline(), "Player must be online");
 		return STORED_HUDS.computeIfAbsent(player.getUniqueId(), k -> new TabRenderer(player));
 	}
 
@@ -123,7 +125,7 @@ public class TabRenderer extends BukkitRunnable {
 	}
 
 	/**
-	 * Inits tab renderer's options
+	 * Initializes tab renderer's options
 	 *
 	 * @param plugin plugin instance
 	 */

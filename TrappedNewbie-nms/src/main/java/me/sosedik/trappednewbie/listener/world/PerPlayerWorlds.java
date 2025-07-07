@@ -1,5 +1,8 @@
 package me.sosedik.trappednewbie.listener.world;
 
+import com.destroystokyo.paper.event.player.PlayerConnectionCloseEvent;
+import io.papermc.paper.connection.PlayerConfigurationConnection;
+import io.papermc.paper.event.connection.PlayerConnectionValidateLoginEvent;
 import io.papermc.paper.event.entity.EntityPortalReadyEvent;
 import me.sosedik.limboworldgenerator.VoidChunkGenerator;
 import me.sosedik.miscme.task.CustomDayCycleTask;
@@ -19,8 +22,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityPortalEnterEvent;
-import org.bukkit.event.player.PlayerLoginEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -49,16 +50,19 @@ public class PerPlayerWorlds implements Listener {
 	);
 
 	@EventHandler(priority = EventPriority.MONITOR)
-	public void onWorldLeave(PlayerQuitEvent event) {
-		UUID playerUuid = event.getPlayer().getUniqueId();
+	public void onWorldLeave(PlayerConnectionCloseEvent event) {
+		UUID playerUuid = event.getPlayerUniqueId();
 		TrappedNewbie.scheduler().sync(() -> unloadIfEmpty(playerUuid), 1L);
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
-	public void onJoin(PlayerLoginEvent event) { // TODO cleanup in case the player didn't join
-		if (event.getResult() != PlayerLoginEvent.Result.ALLOWED) return;
+	public void onJoin(PlayerConnectionValidateLoginEvent event) {
+		if (!event.isAllowed()) return;
+		if (!(event.getConnection() instanceof PlayerConfigurationConnection connection)) return;
 
-		UUID playerUuid = event.getPlayer().getUniqueId();
+		UUID playerUuid = connection.getProfile().getId();
+		if (playerUuid == null) return;
+
 		getPersonalWorld(playerUuid);
 		for (World.Environment environment : RESOURCE_ENVIRONMENTS)
 			getResourceWorld(playerUuid, environment);
@@ -94,9 +98,9 @@ public class PerPlayerWorlds implements Listener {
 				event.setSpawnLocation(event.getInitialLocation().world(world));
 				return;
 			}
-			event.setSpawnLocation(new Location(world, 0, 1600, 0));
+			event.setSpawnLocation(new Location(world, 0, world.getMaxHeight() + 50, 0));
 			World finalWorld = world;
-			TrappedNewbie.scheduler().sync(() -> LimboWorldFall.runRtp(event.getPlayer(), finalWorld), 1L);
+			TrappedNewbie.scheduler().sync(() -> LimboWorldFall.spawnTeleport(event.getPlayer(), finalWorld), 1L);
 		} else if (worldKey.startsWith("worlds-personal/")) {
 			if (!new File(Bukkit.getWorldContainer(), worldKey).exists()) return;
 
@@ -299,8 +303,8 @@ public class PerPlayerWorlds implements Listener {
 	public static void applyWorldRules(World world) {
 		world.setDifficulty(Difficulty.HARD);
 		world.setGameRule(GameRule.NATURAL_REGENERATION, false);
-		world.setGameRule(GameRule.DO_IMMEDIATE_RESPAWN, true);
-		world.setGameRule(GameRule.DO_LIMITED_CRAFTING, true);
+		world.setGameRule(GameRule.DO_IMMEDIATE_RESPAWN, false);
+		world.setGameRule(GameRule.DO_LIMITED_CRAFTING, false);
 		world.setGameRule(GameRule.REDUCED_DEBUG_INFO, true);
 		world.setGameRule(GameRule.SPAWN_CHUNK_RADIUS, 0);
 	}

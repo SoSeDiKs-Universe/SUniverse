@@ -27,7 +27,7 @@ import java.util.Map;
 /**
  * Possessed mimik actions of their possessor
  */
-// MCCheck: 1.21.5, new mobs carrying items
+// MCCheck: 1.21.7, new mobs carrying items
 @NullMarked
 public class PossessedMimikPossessor implements Listener {
 

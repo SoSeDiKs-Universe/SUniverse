@@ -1,55 +1,51 @@
 package me.sosedik.trappednewbie.api.advancement.display;
 
 import io.papermc.paper.advancement.AdvancementDisplay;
-import io.papermc.paper.datacomponent.DataComponentTypes;
 import me.sosedik.packetadvancements.PacketAdvancementsAPI;
 import me.sosedik.packetadvancements.api.advancement.IAdvancement;
-import me.sosedik.packetadvancements.api.advancement.IAdvancementLike;
 import me.sosedik.packetadvancements.api.display.IAdvancementDisplay;
-import me.sosedik.packetadvancements.imlp.advancement.linking.LinkingAdvancement;
+import me.sosedik.packetadvancements.api.reward.SimpleAdvancementReward;
+import me.sosedik.packetadvancements.imlp.advancement.fake.FakeAdvancement;
 import me.sosedik.packetadvancements.imlp.advancement.mimic.MimicAdvancement;
 import me.sosedik.packetadvancements.imlp.display.FancyAdvancementDisplay;
 import me.sosedik.packetadvancements.imlp.display.coordinatemodes.OffsetCoordinateMode;
 import me.sosedik.resourcelib.api.font.FontData;
-import me.sosedik.trappednewbie.api.advancement.ToastBackgroundAdvancement;
+import me.sosedik.trappednewbie.api.advancement.reward.FancyAdvancementReward;
 import me.sosedik.utilizer.api.language.LangOptionsStorage;
 import me.sosedik.utilizer.api.message.Messenger;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.ShadowColor;
 import net.kyori.adventure.text.format.TextColor;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
-import java.util.function.BiFunction;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
+import static me.sosedik.utilizer.api.message.Mini.combine;
+import static me.sosedik.utilizer.api.message.Mini.combined;
 import static me.sosedik.utilizer.api.message.Mini.raw;
 
 @NullMarked
 @SuppressWarnings("unchecked")
 public abstract class FancierAdvancementDisplay<T extends FancierAdvancementDisplay<T>> extends FancyAdvancementDisplay<T> {
 
-	private static final BiFunction<IAdvancementLike, Player, IAdvancementDisplay> DISPLAY_FUNCTION = (advancementLike, player) -> {
-		IAdvancementDisplay display = advancementLike.getDisplay();
-		if (advancementLike instanceof IAdvancement advancement && display instanceof FancierAdvancementDisplay<?> fancierDisplay)
-			display = fancierDisplay.clone().withObtained(advancement.isDone(player));
-		return display;
-	};
 	private static final Consumer<IAdvancement> REGISTER_HOOK = (advancement) -> {
+		if (advancement instanceof MimicAdvancement) return;
+
 		IAdvancementDisplay display = advancement.getDisplay();
 		if (display instanceof FancierAdvancementDisplay<?> fancierDisplay) {
 			AdvancementFrame advancementFrame = fancierDisplay.getAdvancementFrame();
-			if (advancementFrame.getItemModelKey(false) != null) {
-				ToastBackgroundAdvancement toastBackgroundAdvancement = new ToastBackgroundAdvancement(LinkingAdvancement.buildLinking(advancement, advancement), advancementFrame);
-				advancement.getAdvancementTab().registerAdvancements(toastBackgroundAdvancement);
+			if (advancementFrame.requiresBackground()) {
+				FakeAdvancement.buildFake(advancement).display(new FrameAdvancementDisplay(advancement, advancementFrame).xy(0, 0)).buildAndRegister();
 				MimicAdvancement.buildMimic(advancement) // TODO this is a huge hack, also kinda broken since 1.21.6
 					.advancementMimic(advancement)
-					.displayMimic(() -> FancyAdvancementDisplay.fancyDisplay().copyFrom(advancement.getDisplay()))
 					.coordMimic(new OffsetCoordinateMode(0F, 0F))
 					.buildAndRegister();
 			}
@@ -59,26 +55,23 @@ public abstract class FancierAdvancementDisplay<T extends FancierAdvancementDisp
 	protected @Nullable IAdvancement advancement;
 	protected @Nullable AdvancementFrame advancementFrame;
 	protected @Nullable AnnouncementMessage announcementMessage;
-	protected boolean obtained;
-	protected boolean real = true;
 
 	@Override
 	public T copyFrom(AdvancementDisplay display) {
 		super.copyFrom(display);
 		if (display instanceof FancierAdvancementDisplay<?> fancierDisplay) {
-			withReal(fancierDisplay.isReal());
-			withObtained(fancierDisplay.isObtained());
-			withAdvancementFrame(fancierDisplay.getAdvancementFrame());
-			withAnnouncementMessage(fancierDisplay.getAnnouncementMessage());
+			this.advancement = fancierDisplay.advancement;
+			this.advancementFrame = fancierDisplay.advancementFrame;
+			this.announcementMessage = fancierDisplay.announcementMessage;
 		}
 		return (T) this;
 	}
 
 	@Override
 	public void onRegister(IAdvancement advancement) {
+		super.onRegister(advancement);
 		this.advancement = advancement;
-		advancement.setDisplayFunction(DISPLAY_FUNCTION);
-		if (!(advancement instanceof ToastBackgroundAdvancement)) REGISTER_HOOK.accept(advancement);
+		REGISTER_HOOK.accept(advancement);
 	}
 
 	@Override
@@ -91,45 +84,80 @@ public abstract class FancierAdvancementDisplay<T extends FancierAdvancementDisp
 	}
 
 	@Override
-	public ItemStack advancementIcon() {
-		if (isReal()) return super.advancementIcon();
-
-		NamespacedKey itemModelKey = getAdvancementFrame().getItemModelKey(isObtained());
-		if (itemModelKey == null) return super.advancementIcon();
-
-		var icon = new ItemStack(Material.LIGHT_GRAY_STAINED_GLASS_PANE);
-		icon.setData(DataComponentTypes.ITEM_MODEL, itemModelKey);
-		return icon;
-	}
-
-	@Override
-	public Component title(@Nullable Player viewer) {
-		if (!isReal()) return super.title(viewer);
-		if (this.advancement == null) return super.title(viewer);
+	public Component renderTitle(@Nullable Player viewer) {
+		if (isHidden()) return super.renderTitle(viewer);
+		if (this.advancement == null) return super.renderTitle(viewer);
+		if (this.title != null && this.title != Component.empty()) return super.renderTitle(viewer);
 
 		var messenger = viewer == null ? Messenger.messenger(LangOptionsStorage.getDefaultLangOptions()) : Messenger.messenger(viewer);
-		return messenger.getMessage("adv." + this.advancement.getKey().value().replace('/', '.') + ".title");
+		Component title = messenger.getMessage("adv." + this.advancement.getKey().value().replace('/', '.') + ".title");
+		Component parent = getFancyTitleParent();
+		return parent == null ? title : parent.append(title);
 	}
 
 	@Override
-	public Component description(@Nullable Player viewer) {
-		if (!isReal()) return super.description(viewer);
-		if (this.advancement == null) return super.description(viewer);
+	public Component renderDescription(@Nullable Player viewer) {
+		if (isHidden()) return super.renderDescription(viewer);
+		if (this.advancement == null) return super.renderDescription(viewer);
+		if (this.description != null && this.description != Component.empty()) return super.renderDescription(viewer);
 
 		var messenger = viewer == null ? Messenger.messenger(LangOptionsStorage.getDefaultLangOptions()) : Messenger.messenger(viewer);
-		return messenger.getMessage("adv." + this.advancement.getKey().value().replace('/', '.') + ".description");
+		Component description = messenger.getMessage("adv." + this.advancement.getKey().value().replace('/', '.') + ".description");
+		Component parent = getFancyDescriptionParent();
+		return parent == null ? description : parent.append(description);
 	}
 
 	@Override
-	public Component advancementTitle(@Nullable Player viewer) {
-		if (!isReal()) return super.advancementTitle(viewer);
+	public Component renderAdvancementDescription(@Nullable Player viewer) {
+		if (isHidden()) return super.renderAdvancementDescription(viewer);
+		if (this.advancement == null) return super.renderAdvancementDescription(viewer);
+		if (viewer == null) return super.renderAdvancementDescription(null);
+		if (!(this.advancement.getAdvancementReward() instanceof SimpleAdvancementReward simpleReward)) return super.renderAdvancementDescription(viewer);
 
-		FontData fontData = getAdvancementFrame().getFontData(isObtained());
-		if (fontData == null) return super.advancementTitle(viewer);
+		Component description = super.renderAdvancementDescription(viewer);
+
+		List<Component> awards = new ArrayList<>();
+		int exp = simpleReward.getExp();
+		if (exp != 0)
+			awards.add(FancyAdvancementReward.getExpMessage(viewer, exp));
+
+		List<ItemStack> items = simpleReward.getItems();
+		if (!items.isEmpty())
+			items.forEach(item -> awards.add(FancyAdvancementReward.getItemMessage(item, NamedTextColor.GREEN)));
+
+		if (simpleReward instanceof FancyAdvancementReward fancyReward) {
+			ItemStack trophyItem = fancyReward.getTrophyItem();
+			if (trophyItem != null)
+				awards.add(FancyAdvancementReward.getItemMessage(trophyItem, NamedTextColor.GOLD));
+
+			List<Function<Player, @Nullable Component>> extraMessages = fancyReward.getExtraMessages();
+			if (extraMessages != null) {
+				extraMessages.forEach(m -> {
+					Component message = m.apply(viewer);
+					if (message != null)
+						awards.add(message);
+				});
+			}
+		}
+
+		if (awards.isEmpty()) return description;
+
+		return combined(description, Component.newline(), Component.newline(), combine(Component.newline(), awards));
+	}
+
+	@Override
+	public Component renderAdvancementTitle(@Nullable Player viewer) {
+		if (isHidden()) return super.renderAdvancementTitle(viewer);
+		if (viewer == null) return super.renderAdvancementTitle(null);
+		if (this.advancement == null) return super.renderAdvancementTitle(null);
+
+		boolean obtained = this.advancement.isDone(viewer);
+		FontData fontData = getAdvancementFrame().getFontData(obtained);
+		if (fontData == null) return super.renderAdvancementTitle(viewer);
 
 		return Component.textOfChildren(
 			fontData.offsetMapping(-29).shadowColor(ShadowColor.none()),
-			super.advancementTitle(viewer)
+			super.renderAdvancementTitle(viewer)
 		);
 	}
 	
@@ -147,8 +175,8 @@ public abstract class FancierAdvancementDisplay<T extends FancierAdvancementDisp
 	}
 
 	@Override
-	public Component chatAnnouncement(@Nullable Player viewer, Component completerDisplayName) {
-		if (this.announcementMessage == null) return super.chatAnnouncement(viewer, completerDisplayName);
+	public Component renderChatAnnouncement(@Nullable Player viewer, Component completerDisplayName) {
+		if (this.announcementMessage == null) return super.renderChatAnnouncement(viewer, completerDisplayName);
 
 		Component title = PacketAdvancementsAPI.produceAnnounceAdvancementDisplay(viewer, this);
 		var messenger = viewer == null ? Messenger.messenger(LangOptionsStorage.getDefaultLangOptions()) : Messenger.messenger(viewer);
@@ -157,24 +185,6 @@ public abstract class FancierAdvancementDisplay<T extends FancierAdvancementDisp
 				raw("player", completerDisplayName),
 				raw("advancement", title)
 			).colorIfAbsent(this.announcementMessage.getColor());
-	}
-
-	public boolean isObtained() {
-		return this.obtained;
-	}
-
-	public T withObtained(boolean obtained) {
-		this.obtained = obtained;
-		return (T) this;
-	}
-
-	public boolean isReal() {
-		return this.real;
-	}
-
-	public T withReal(boolean real) {
-		this.real = real;
-		return (T) this;
 	}
 
 	@Override

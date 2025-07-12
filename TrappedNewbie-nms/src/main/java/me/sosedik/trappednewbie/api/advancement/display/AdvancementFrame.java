@@ -46,6 +46,10 @@ public enum AdvancementFrame {
 		this.unobtainedFontData = id == null ? null : ResourceLib.requireFontData(TrappedNewbie.trappedNewbieKey("advancement/" + id + "_frame_unobtained"));
 	}
 
+	public boolean requiresBackground() {
+		return this.obtainedKey != null;
+	}
+
 	public @Nullable NamespacedKey getItemModelKey(boolean obtained) {
 		return obtained ? this.obtainedKey : this.unobtainedKey;
 	}

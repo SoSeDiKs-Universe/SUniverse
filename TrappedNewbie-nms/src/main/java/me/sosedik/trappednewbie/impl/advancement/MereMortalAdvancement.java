@@ -9,6 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 @NullMarked
 public class MereMortalAdvancement extends BaseAdvancement {
@@ -18,10 +19,12 @@ public class MereMortalAdvancement extends BaseAdvancement {
 	}
 
 	@Override
-	public IAdvancementDisplay getDisplay(Player player) {
+	public IAdvancementDisplay getDisplay(@Nullable Player player) {
+		if (player == null) return super.getDisplay(null);
+
 		var headItem = new ItemStack(Material.PLAYER_HEAD);
 		headItem.setData(DataComponentTypes.PROFILE, ResolvableProfile.resolvableProfile(player.getPlayerProfile()));
-		return getDisplay().clone().icon(headItem);
+		return super.getDisplay(player).clone().icon(headItem);
 	}
 
 }

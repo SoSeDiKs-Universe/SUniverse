@@ -18,7 +18,7 @@ import org.bukkit.event.Listener;
  */
 public class ActionBarCatcher implements PacketListener, Listener {
 
-	private static final String HUD_MARKER = ChatUtil.getPlainText(SpacingUtil.getSpacing(-2));
+	private static final String HUD_MARKER = ChatUtil.getPlainText(SpacingUtil.ZERO_SPACE);
 
 	@Override
 	public void onPacketSend(PacketSendEvent event) {

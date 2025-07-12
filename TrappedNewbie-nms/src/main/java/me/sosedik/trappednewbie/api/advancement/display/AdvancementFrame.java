@@ -1,4 +1,4 @@
-package me.sosedik.trappednewbie.api.advancement;
+package me.sosedik.trappednewbie.api.advancement.display;
 
 import me.sosedik.resourcelib.ResourceLib;
 import me.sosedik.resourcelib.api.font.FontData;

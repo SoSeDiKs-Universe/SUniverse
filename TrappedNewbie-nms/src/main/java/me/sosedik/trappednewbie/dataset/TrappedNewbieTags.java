@@ -1,33 +1,42 @@
 package me.sosedik.trappednewbie.dataset;
 
+import me.sosedik.trappednewbie.TrappedNewbie;
 import me.sosedik.utilizer.util.ItemUtil;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.jspecify.annotations.NullMarked;
-
-import static me.sosedik.trappednewbie.TrappedNewbie.trappedNewbieKey;
 
 // MCCheck: 1.21.7, new branches (chopping blocks, work stations), hardened
 @NullMarked
 public class TrappedNewbieTags {
 
 	// items
-	public static final Tag<Material> STICKS = ItemUtil.itemTag(trappedNewbieKey("sticks"));
-	public static final Tag<Material> BRANCHES = ItemUtil.itemTag(trappedNewbieKey("branches"));
-	public static final Tag<Material> ROCKS = ItemUtil.itemTag(trappedNewbieKey("rocks"));
-	public static final Tag<Material> GLOVES = ItemUtil.itemTag(trappedNewbieKey("gloves"));
-	public static final Tag<Material> HAMMERS = ItemUtil.itemTag(trappedNewbieKey("hammers"));
-	public static final Tag<Material> COSMETIC_ARMOR = ItemUtil.itemTag(trappedNewbieKey("cosmetic_armor"));
-	public static final Tag<Material> ITEM_CHOPPING_BLOCKS = ItemUtil.itemTag(trappedNewbieKey("chopping_blocks"));
-	public static final Tag<Material> ITEM_WORK_STATIONS = ItemUtil.itemTag(trappedNewbieKey("work_stations"));
-	public static final Tag<Material> GLASS_SHARDS = ItemUtil.itemTag(trappedNewbieKey("glass_shards"));
-	public static final Tag<Material> PLACEABLE_ITEMS = ItemUtil.itemTag(trappedNewbieKey("placeable_items"));
+	public static final Tag<Material> STICKS = itemTag("sticks");
+	public static final Tag<Material> BRANCHES = itemTag("branches");
+	public static final Tag<Material> ROCKS = itemTag("rocks");
+	public static final Tag<Material> ROCKY = itemTag("rocky");
+	public static final Tag<Material> GLOVES = itemTag("gloves");
+	public static final Tag<Material> HAMMERS = itemTag("hammers");
+	public static final Tag<Material> COSMETIC_ARMOR = itemTag("cosmetic_armor");
+	public static final Tag<Material> ITEM_CHOPPING_BLOCKS = itemTag("chopping_blocks");
+	public static final Tag<Material> ITEM_WORK_STATIONS = itemTag("work_stations");
+	public static final Tag<Material> GLASS_SHARDS = itemTag("glass_shards");
+	public static final Tag<Material> PLACEABLE_ITEMS = itemTag("placeable_items");
+	public static final Tag<Material> PAPERS = itemTag("papers");
 
 	// blocks
-	public static final Tag<Material> MINEABLE_BY_HAND = ItemUtil.blockTag(trappedNewbieKey("mineable/hand"));
-	public static final Tag<Material> CHOPPING_BLOCKS = ItemUtil.blockTag(trappedNewbieKey("chopping_blocks"));
-	public static final Tag<Material> WORK_STATIONS = ItemUtil.blockTag(trappedNewbieKey("work_stations"));
-	public static final Tag<Material> HARDENED = ItemUtil.blockTag(trappedNewbieKey("hardened"));
-	public static final Tag<Material> PRICKY_BLOCKS = ItemUtil.blockTag(trappedNewbieKey("pricky_blocks"));
+	public static final Tag<Material> MINEABLE_BY_HAND = blockTag("mineable/hand");
+	public static final Tag<Material> CHOPPING_BLOCKS = blockTag("chopping_blocks");
+	public static final Tag<Material> WORK_STATIONS = blockTag("work_stations");
+	public static final Tag<Material> HARDENED = blockTag("hardened");
+	public static final Tag<Material> PRICKY_BLOCKS = blockTag("pricky_blocks");
+
+	private static Tag<Material> itemTag(String key) {
+		return ItemUtil.itemTag(TrappedNewbie.trappedNewbieKey(key));
+	}
+
+	private static Tag<Material> blockTag(String key) {
+		return ItemUtil.blockTag(TrappedNewbie.trappedNewbieKey(key));
+	}
 
 }

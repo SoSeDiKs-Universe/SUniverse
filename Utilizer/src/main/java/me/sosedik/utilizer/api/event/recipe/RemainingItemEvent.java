@@ -27,6 +27,7 @@ public class RemainingItemEvent extends Event {
 	private final ItemStack item;
 	private final int amount;
 	private @Nullable ItemStack result;
+	private boolean finite = false;
 
 	public RemainingItemEvent(@Nullable Event parentEvent, @Nullable Player player, @Nullable Recipe recipe, NamespacedKey key, ItemStack item, int amount) {
 		super();
@@ -120,12 +121,29 @@ public class RemainingItemEvent extends Event {
 	}
 
 	/**
+	 * Prevents any further result modifications
+	 */
+	public void lockResult() {
+		this.finite = true;
+	}
+
+	/**
+	 * Checks whether the result has been locked
+	 *
+	 * @return whether the result has been locked
+	 */
+	public boolean isLocked() {
+		return this.finite;
+	}
+
+	/**
 	 * Sets the result item
 	 *
 	 * @param result the result item
 	 */
 	public void setResult(@Nullable ItemStack result) {
-		this.result = result;
+		if (!this.finite)
+			this.result = result;
 	}
 
 	@Override

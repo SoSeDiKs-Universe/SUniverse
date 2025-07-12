@@ -4,6 +4,12 @@
 	"item.modifier.letter.friendship": "<red><i>Містить силу дружби",
 	"limbo.welcome": "Гм, ще один?",
 	"limbo.welcome.ignored": "Збираєтесь мене ось так ігнорувати, дійсно?",
-	"limbo.friendship": "Тепер Ви друзі з <gold>мандрівним крамарем</gold>!",
-	"break.light": "Тут занадто темно, щоб ламати блоки"
+	"limbo.friendship": "Ви здружились з <gold>мандрівним крамарем</gold>!",
+	"break.light": "Тут занадто темно, щоб ламати блоки",
+	"advancement.reward.exp": "<blue><exp> <plural:uk_ua:одиниця|одиниці|одиниць:'<exp_raw>'> досвіду",
+	"advancement.announcement.super_challenge": "Гравець <player> завершив надвипробування <advancement>",
+	"advancement.announcement.torture": "Гравець <player> завершив виснажливе досягнення <advancement>",
+	"advancement.announcement.super_torture": "Гравець <player> завершив надвиснажливе досягнення <advancement>",
+	"advancement.announcement.cheat": "Гравець <player> накрутив досягнення <advancement>",
+	"advancement.trophy": "<gray><!i>Трофей <player> за <advancement>"
 }

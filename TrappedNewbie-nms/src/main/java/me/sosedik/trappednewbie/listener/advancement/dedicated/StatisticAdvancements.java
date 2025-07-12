@@ -100,10 +100,10 @@ public class StatisticAdvancements implements Listener {
 				if (statValue >= 100) TrappedNewbieAdvancements.BREED_100.awardAllCriteria(player);
 				if (statValue >= 500) TrappedNewbieAdvancements.BREED_500.awardAllCriteria(player);
 				if (statValue >= 2500) TrappedNewbieAdvancements.BREED_2500.awardAllCriteria(player);
-				if (statValue >= 5000) TrappedNewbieAdvancements.BREED_5000.awardAllCriteria(player);
-				if (statValue >= 10_000) TrappedNewbieAdvancements.BREED_10000.awardAllCriteria(player);
-				if (statValue >= 15_000) TrappedNewbieAdvancements.BREED_15000.awardAllCriteria(player);
-				if (statValue >= 25_000) TrappedNewbieAdvancements.BREED_25000.awardAllCriteria(player);
+				if (statValue >= 5000) TrappedNewbieAdvancements.BREED_5K.awardAllCriteria(player);
+				if (statValue >= 10_000) TrappedNewbieAdvancements.BREED_10K.awardAllCriteria(player);
+				if (statValue >= 15_000) TrappedNewbieAdvancements.BREED_15K.awardAllCriteria(player);
+				if (statValue >= 25_000) TrappedNewbieAdvancements.BREED_25K.awardAllCriteria(player);
 			}
 			case MOB_KILLS -> {
 				if (statValue >= 250) TrappedNewbieAdvancements.KILL_250.awardAllCriteria(player);
@@ -138,7 +138,11 @@ public class StatisticAdvancements implements Listener {
 				if (statValue >= 10_000_000) TrappedNewbieAdvancements.BELL_10000K.awardAllCriteria(player);
 			}
 			case FISH_CAUGHT -> {
+				if (statValue >= 5) TrappedNewbieAdvancements.FISH_5.awardAllCriteria(player);
+				if (statValue >= 25) TrappedNewbieAdvancements.FISH_25.awardAllCriteria(player);
+				if (statValue >= 100) TrappedNewbieAdvancements.FISH_100.awardAllCriteria(player);
 				if (statValue >= 250) TrappedNewbieAdvancements.FISH_250.awardAllCriteria(player);
+				if (statValue >= 500) TrappedNewbieAdvancements.FISH_500.awardAllCriteria(player);
 				if (statValue >= 1000) TrappedNewbieAdvancements.FISH_1K.awardAllCriteria(player);
 				if (statValue >= 2500) TrappedNewbieAdvancements.FISH_2500.awardAllCriteria(player);
 				if (statValue >= 5000) TrappedNewbieAdvancements.FISH_5K.awardAllCriteria(player);
@@ -184,6 +188,9 @@ public class StatisticAdvancements implements Listener {
 		trackMovementStat(player, Statistic.MINECART_ONE_CM, 10 * 1000 * 100, TrappedNewbieAdvancements.MINECART_10KM);
 		trackMovementStat(player, Statistic.MINECART_ONE_CM, 50 * 1000 * 100, TrappedNewbieAdvancements.MINECART_50KM);
 		trackMovementStat(player, Statistic.MINECART_ONE_CM, 250 * 1000 * 100, TrappedNewbieAdvancements.MINECART_250KM);
+		trackMovementStat(player, Statistic.MINECART_ONE_CM, 500 * 1000 * 100, TrappedNewbieAdvancements.MINECART_500KM);
+		trackMovementStat(player, Statistic.MINECART_ONE_CM, 5000 * 1000 * 100, TrappedNewbieAdvancements.MINECART_5000KM);
+		trackMovementStat(player, Statistic.MINECART_ONE_CM, 15000 * 1000 * 100, TrappedNewbieAdvancements.MINECART_15000KM);
 		trackMovementStat(player, Statistic.AVIATE_ONE_CM, 10 * 1000 * 100, TrappedNewbieAdvancements.ELYTRA_10KM);
 		trackMovementStat(player, Statistic.AVIATE_ONE_CM, 100 * 1000 * 100, TrappedNewbieAdvancements.ELYTRA_100KM);
 		trackMovementStat(player, Statistic.AVIATE_ONE_CM, 1000 * 1000 * 100, TrappedNewbieAdvancements.ELYTRA_1000KM);
@@ -212,13 +219,13 @@ public class StatisticAdvancements implements Listener {
 		trackMovementStat(player, Statistic.HAPPY_GHAST_ONE_CM, 50 * 1000 * 100, TrappedNewbieAdvancements.HAPPY_GHAST_50KM);
 		trackMovementStat(player, Statistic.HAPPY_GHAST_ONE_CM, 100 * 1000 * 100, TrappedNewbieAdvancements.HAPPY_GHAST_100KM);
 		trackMovementStat(player, Statistic.HAPPY_GHAST_ONE_CM, 250 * 1000 * 100, TrappedNewbieAdvancements.HAPPY_GHAST_250KM);
-		trackMovementStat(player, Statistic.HORSE_ONE_CM, 1000 * 100, TrappedNewbieAdvancements.HORSE_1K);
-		trackMovementStat(player, Statistic.HORSE_ONE_CM, 10 * 1000 * 100, TrappedNewbieAdvancements.HORSE_10K);
-		trackMovementStat(player, Statistic.HORSE_ONE_CM, 25 * 1000 * 100, TrappedNewbieAdvancements.HORSE_25K);
-		trackMovementStat(player, Statistic.HORSE_ONE_CM, 50 * 1000 * 100, TrappedNewbieAdvancements.HORSE_50K);
-		trackMovementStat(player, Statistic.HORSE_ONE_CM, 100 * 1000 * 100, TrappedNewbieAdvancements.HORSE_100K);
-		trackMovementStat(player, Statistic.HORSE_ONE_CM, 250 * 1000 * 100, TrappedNewbieAdvancements.HORSE_250K);
-		trackMovementStat(player, Statistic.HORSE_ONE_CM, 500 * 1000 * 100, TrappedNewbieAdvancements.HORSE_500K);
+		trackMovementStat(player, Statistic.HORSE_ONE_CM, 1000 * 100, TrappedNewbieAdvancements.HORSE_1KM);
+		trackMovementStat(player, Statistic.HORSE_ONE_CM, 10 * 1000 * 100, TrappedNewbieAdvancements.HORSE_10KM);
+		trackMovementStat(player, Statistic.HORSE_ONE_CM, 25 * 1000 * 100, TrappedNewbieAdvancements.HORSE_25KM);
+		trackMovementStat(player, Statistic.HORSE_ONE_CM, 50 * 1000 * 100, TrappedNewbieAdvancements.HORSE_50KM);
+		trackMovementStat(player, Statistic.HORSE_ONE_CM, 100 * 1000 * 100, TrappedNewbieAdvancements.HORSE_100KM);
+		trackMovementStat(player, Statistic.HORSE_ONE_CM, 250 * 1000 * 100, TrappedNewbieAdvancements.HORSE_250KM);
+		trackMovementStat(player, Statistic.HORSE_ONE_CM, 500 * 1000 * 100, TrappedNewbieAdvancements.HORSE_500KM);
 		trackMovementStat(player, Statistic.PIG_ONE_CM, 100 * 100, TrappedNewbieAdvancements.PIG_100M);
 		trackMovementStat(player, Statistic.PIG_ONE_CM, 1000 * 100, TrappedNewbieAdvancements.PIG_1KM);
 		trackMovementStat(player, Statistic.PIG_ONE_CM, 10 * 1000 * 100, TrappedNewbieAdvancements.PIG_10KM);

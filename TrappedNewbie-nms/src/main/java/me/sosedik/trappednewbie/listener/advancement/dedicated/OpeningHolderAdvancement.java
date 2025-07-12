@@ -46,8 +46,8 @@ public class OpeningHolderAdvancement implements Listener {
 			description = messenger.getMessageIfExists("adv." + key  + ".description." + worldData.key() + ".guest", raw("owner", worldData.ownerName()));
 		}
 
-		if (title != null) display.title(title);
-		if (description != null) display.description(description);
+		if (title != null) display.withTitle(title);
+		if (description != null) display.withDescription(description);
 
 		if (title != null || description != null)
 			event.setSentDisplay(display);

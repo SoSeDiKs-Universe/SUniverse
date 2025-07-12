@@ -1,0 +1,11 @@
+{
+	"values": [
+		"#minecraft:base_stone_overworld",
+		"#minecraft:base_stone_nether",
+		"#utilizer:ores",
+		"#trapped_newbie:rocks",
+		"minecraft:cobblestone",
+		"minecraft:end_stone",
+		"minecraft:bedrock"
+	]
+}

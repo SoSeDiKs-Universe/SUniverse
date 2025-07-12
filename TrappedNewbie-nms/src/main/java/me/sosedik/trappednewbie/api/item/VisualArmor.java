@@ -4,7 +4,6 @@ import me.sosedik.trappednewbie.listener.player.VisualArmorLayer;
 import me.sosedik.utilizer.util.DurabilityUtil;
 import me.sosedik.utilizer.util.InventoryUtil;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -59,7 +58,7 @@ public class VisualArmor {
 			case LEGS -> getLeggings();
 			case FEET -> getBoots();
 			case OFF_HAND -> getGloves();
-			default -> ItemStack.of(Material.AIR);
+			default -> ItemStack.empty();
 		};
 	}
 
@@ -78,7 +77,7 @@ public class VisualArmor {
 	}
 
 	public ItemStack getHelmet() {
-		return helmet == null ? ItemStack.of(Material.AIR) : helmet;
+		return helmet == null ? ItemStack.empty() : helmet;
 	}
 
 	public void setHelmet(@Nullable ItemStack helmet) {
@@ -91,7 +90,7 @@ public class VisualArmor {
 	}
 
 	public ItemStack getChestplate() {
-		return chestplate == null ? ItemStack.of(Material.AIR) : chestplate;
+		return chestplate == null ? ItemStack.empty() : chestplate;
 	}
 
 	public void setChestplate(@Nullable ItemStack chestplate) {
@@ -104,7 +103,7 @@ public class VisualArmor {
 	}
 
 	public ItemStack getLeggings() {
-		return leggings == null ? ItemStack.of(Material.AIR) : leggings;
+		return leggings == null ? ItemStack.empty() : leggings;
 	}
 
 	public void setLeggings(@Nullable ItemStack leggings) {
@@ -117,7 +116,7 @@ public class VisualArmor {
 	}
 
 	public ItemStack getBoots() {
-		return boots == null ? ItemStack.of(Material.AIR) : boots;
+		return boots == null ? ItemStack.empty() : boots;
 	}
 
 	public void setBoots(@Nullable ItemStack boots) {
@@ -134,7 +133,7 @@ public class VisualArmor {
 	}
 
 	public ItemStack getGloves() {
-		return gloves == null ? ItemStack.of(Material.AIR) : gloves;
+		return gloves == null ? ItemStack.empty() : gloves;
 	}
 
 	public void setGloves(@Nullable ItemStack gloves) {
@@ -143,6 +142,10 @@ public class VisualArmor {
 
 	public ItemStack[] getArmorContents() {
 		return new ItemStack[] {getHelmet(), getChestplate(), getLeggings(), getBoots()};
+	}
+
+	public ItemStack[] getAllContents() {
+		return new ItemStack[] {getHelmet(), getChestplate(), getLeggings(), getBoots(), getGloves()};
 	}
 
 	private void refreshVisuals(EquipmentSlot slot) {

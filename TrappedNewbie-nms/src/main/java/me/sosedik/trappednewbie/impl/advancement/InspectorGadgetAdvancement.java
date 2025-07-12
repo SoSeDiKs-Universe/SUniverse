@@ -6,10 +6,14 @@ import me.sosedik.packetadvancements.imlp.advancement.base.BaseAdvancementBuilde
 import me.sosedik.packetadvancements.imlp.progress.vanilla.types.PlayerKilledEntityTriggerData;
 import me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData;
 import org.bukkit.Material;
+import org.bukkit.Tag;
 import org.bukkit.entity.EntityType;
 import org.jspecify.annotations.NullMarked;
 
-// MCCheck: 1.21.7, new zombie types
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
 @NullMarked
 public class InspectorGadgetAdvancement extends BaseAdvancement {
 
@@ -18,12 +22,10 @@ public class InspectorGadgetAdvancement extends BaseAdvancement {
 	}
 
 	private static RequiredAdvancementProgress getProgress() {
-		return RequiredAdvancementProgress.vanillaAny(
-			playerKilledEntity(EntityType.ZOMBIE),
-			playerKilledEntity(EntityType.ZOMBIE_VILLAGER),
-			playerKilledEntity(EntityType.DROWNED),
-			playerKilledEntity(EntityType.HUSK)
-		);
+		Set<EntityType> zombieTypes = Tag.ENTITY_TYPES_ZOMBIES.getValues();
+		List<VanillaTriggerData<?>> triggerDatas = new ArrayList<>(zombieTypes.size());
+		zombieTypes.forEach(zombieType -> triggerDatas.add(playerKilledEntity(zombieType)));
+		return RequiredAdvancementProgress.vanillaAny(triggerDatas);
 	}
 
 	private static PlayerKilledEntityTriggerData playerKilledEntity(EntityType entityType) {

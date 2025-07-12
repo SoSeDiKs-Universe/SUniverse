@@ -3,6 +3,7 @@ package me.sosedik.trappednewbie.api.advancement;
 import me.sosedik.packetadvancements.api.advancement.linking.LinkingAdvancementBuilder;
 import me.sosedik.packetadvancements.api.display.IAdvancementDisplay;
 import me.sosedik.packetadvancements.imlp.advancement.linking.LinkingAdvancement;
+import me.sosedik.trappednewbie.api.advancement.display.AdvancementFrame;
 import me.sosedik.trappednewbie.api.advancement.display.FancierAdvancementDisplay;
 import org.bukkit.entity.Player;
 import org.jspecify.annotations.NullMarked;

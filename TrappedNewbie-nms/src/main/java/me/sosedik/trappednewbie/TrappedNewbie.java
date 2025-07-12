@@ -8,8 +8,10 @@ import me.sosedik.requiem.feature.GhostyPlayer;
 import me.sosedik.requiem.feature.PossessingPlayer;
 import me.sosedik.resourcelib.ResourceLib;
 import me.sosedik.trappednewbie.api.command.parser.PlayerWorldParser;
+import me.sosedik.trappednewbie.api.item.VisualArmor;
 import me.sosedik.trappednewbie.command.MigrateCommand;
 import me.sosedik.trappednewbie.command.SpitCommand;
+import me.sosedik.trappednewbie.command.TestCommand;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieAdvancements;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieItems;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieRecipes;
@@ -19,6 +21,8 @@ import me.sosedik.trappednewbie.impl.blockstorage.ChoppingBlockStorage;
 import me.sosedik.trappednewbie.impl.blockstorage.ClayKilnBlockStorage;
 import me.sosedik.trappednewbie.impl.blockstorage.SleepingBagBlockStorage;
 import me.sosedik.trappednewbie.impl.blockstorage.WorkStationBlockStorage;
+import me.sosedik.trappednewbie.impl.item.modifier.AdvancementTrophyModifier;
+import me.sosedik.trappednewbie.impl.item.modifier.AdvancementTrophyNameLoreModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.ItemModelModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.ItemOverlayToggleModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.LetterModifier;
@@ -26,6 +30,7 @@ import me.sosedik.trappednewbie.impl.item.modifier.PaperPlaneModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.UnlitCampfireModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.VisualArmorModifier;
 import me.sosedik.trappednewbie.impl.recipe.ChoppingBlockCrafting;
+import me.sosedik.trappednewbie.listener.advancement.AdvancementTrophies;
 import me.sosedik.trappednewbie.listener.advancement.AdvancementsLocalizer;
 import me.sosedik.trappednewbie.listener.advancement.LoadSaveAdvancementsOnJoinQuit;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.CampfirePlacingAdvancements;
@@ -53,6 +58,7 @@ import me.sosedik.trappednewbie.listener.block.UnlitCampfireByDefault;
 import me.sosedik.trappednewbie.listener.entity.AngryAnimals;
 import me.sosedik.trappednewbie.listener.entity.BabierBabyMobs;
 import me.sosedik.trappednewbie.listener.entity.LimboEntities;
+import me.sosedik.trappednewbie.listener.item.BlackBeltSpeed;
 import me.sosedik.trappednewbie.listener.item.FirestrikerFire;
 import me.sosedik.trappednewbie.listener.item.FlintToFlakedFlint;
 import me.sosedik.trappednewbie.listener.item.FlowerBouquetAttackEffects;
@@ -61,6 +67,7 @@ import me.sosedik.trappednewbie.listener.item.MeshSifting;
 import me.sosedik.trappednewbie.listener.item.PaperPlanes;
 import me.sosedik.trappednewbie.listener.item.RoughSticksCreateFire;
 import me.sosedik.trappednewbie.listener.item.ThrowableRockBehavior;
+import me.sosedik.trappednewbie.listener.item.TimeMachineClockIsTotemOfUndying;
 import me.sosedik.trappednewbie.listener.item.TrumpetScare;
 import me.sosedik.trappednewbie.listener.item.VisualPumpkin;
 import me.sosedik.trappednewbie.listener.misc.CustomHudRenderer;
@@ -87,6 +94,7 @@ import me.sosedik.utilizer.listener.BlockStorage;
 import me.sosedik.utilizer.listener.item.PlaceableBlockItems;
 import me.sosedik.utilizer.util.EventUtil;
 import me.sosedik.utilizer.util.FileUtil;
+import me.sosedik.utilizer.util.InventoryUtil;
 import me.sosedik.utilizer.util.Scheduler;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.bukkit.Bukkit;
@@ -103,6 +111,7 @@ import org.jetbrains.annotations.UnknownNullability;
 import org.jspecify.annotations.NullMarked;
 
 import java.io.File;
+import java.util.List;
 
 @NullMarked
 public final class TrappedNewbie extends JavaPlugin {
@@ -146,6 +155,10 @@ public final class TrappedNewbie extends JavaPlugin {
 		ChoppingBlockCrafting.registerRecipes();
 		TrappedNewbieAdvancements.setupAdvancements();
 
+		InventoryUtil.addExtraItemChecker(player -> List.of(VisualArmor.of(player).getAllContents()));
+
+		new AdvancementTrophyModifier(trappedNewbieKey("advancement_trophy")).register();
+		new AdvancementTrophyNameLoreModifier(trappedNewbieKey("advancement_trophy_name_lore")).register();
 		new ItemModelModifier(trappedNewbieKey("item_model")).register();
 		ItemModelModifier.addReplacement(TrappedNewbieItems.SLEEPING_BAG, ResourceLib.storage().getItemModelMapping(trappedNewbieKey("sleeping_bag_item")));
 		ItemModelModifier.addReplacement(TrappedNewbieItems.CLAY_KILN, contextBox -> {
@@ -154,7 +167,6 @@ public final class TrappedNewbie extends JavaPlugin {
 			if (!clayKiln.isBurned()) return null;
 			return ResourceLib.storage().getItemModelMapping(trappedNewbieKey("brick_kiln"));
 		});
-
 		new ItemOverlayToggleModifier(trappedNewbieKey("overlay_toggle")).register();
 		new LetterModifier(trappedNewbieKey("letter")).register();
 		new PaperPlaneModifier(trappedNewbieKey("paper_plane")).register();
@@ -164,6 +176,7 @@ public final class TrappedNewbie extends JavaPlugin {
 		EventUtil.registerListeners(this,
 			// advancement
 			AdvancementsLocalizer.class,
+			AdvancementTrophies.class,
 			LoadSaveAdvancementsOnJoinQuit.class,
 			/// dedicated advancement
 			CampfirePlacingAdvancements.class,
@@ -194,6 +207,7 @@ public final class TrappedNewbie extends JavaPlugin {
 			BabierBabyMobs.class,
 			LimboEntities.class,
 			// item
+			BlackBeltSpeed.class,
 			FirestrikerFire.class,
 			FlintToFlakedFlint.class,
 			FlowerBouquetAttackEffects.class,
@@ -202,6 +216,7 @@ public final class TrappedNewbie extends JavaPlugin {
 			PaperPlanes.class,
 			RoughSticksCreateFire.class,
 			ThrowableRockBehavior.class,
+			TimeMachineClockIsTotemOfUndying.class,
 			TrumpetScare.class,
 			VisualPumpkin.class,
 			// misc
@@ -311,7 +326,8 @@ public final class TrappedNewbie extends JavaPlugin {
 
 		commandManager.registerCommands(this,
 			MigrateCommand.class,
-			SpitCommand.class
+			SpitCommand.class,
+			TestCommand.class
 		);
 	}
 

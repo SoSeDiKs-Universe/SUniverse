@@ -8,6 +8,7 @@ import me.sosedik.utilizer.api.language.TranslationHolder;
 import me.sosedik.utilizer.api.message.Mini;
 import me.sosedik.utilizer.command.LangCommand;
 import me.sosedik.utilizer.command.TranslatorCommand;
+import me.sosedik.utilizer.impl.item.modifier.CustomTotemOfUndyingModifier;
 import me.sosedik.utilizer.impl.item.modifier.DyedItemNamesModifier;
 import me.sosedik.utilizer.impl.item.modifier.GlowingItemModifier;
 import me.sosedik.utilizer.impl.item.modifier.HiddenTooltipsModifier;
@@ -82,6 +83,7 @@ public final class Utilizer extends JavaPlugin {
 			LocaleResolver::new
 		);
 
+		new CustomTotemOfUndyingModifier(utilizerKey("custom_totem_display")).register();
 		new DyedItemNamesModifier(utilizerKey("dyed_item_name")).register();
 		new GlowingItemModifier(utilizerKey("glowing_item")).register();
 		new HiddenTooltipsModifier(utilizerKey("hidden_tooltips")).register();

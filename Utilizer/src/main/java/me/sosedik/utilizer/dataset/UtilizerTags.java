@@ -1,9 +1,11 @@
 package me.sosedik.utilizer.dataset;
 
 import me.sosedik.utilizer.Utilizer;
+import me.sosedik.utilizer.util.EntityUtil;
 import me.sosedik.utilizer.util.ItemUtil;
 import org.bukkit.Material;
 import org.bukkit.Tag;
+import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NullMarked;
 
@@ -33,9 +35,24 @@ public class UtilizerTags {
 	public static final Tag<Material> BOWS = itemTag("bows");
 	public static final Tag<Material> KNIFES = itemTag("knifes");
 	public static final Tag<Material> FLAT_BLOCK_RENDER = itemTag("flat_block_render");
+	public static final Tag<Material> STONE_ORES = itemTag("stone_ores");
+	public static final Tag<Material> ORES = itemTag("ores");
+
+	public static final Tag<Material> STONE_ORES_BLOCKS = blockTag("stone_ores");
+	public static final Tag<Material> ORES_BLOCKS = blockTag("ores");
+
+	public static final Tag<EntityType> HOSTILE_MONSTERS = entityTag("hostile_monsters");
 
 	private static Tag<Material> itemTag(String key) {
 		return ItemUtil.itemTag(Utilizer.utilizerKey(key));
+	}
+
+	private static Tag<Material> blockTag(String key) {
+		return ItemUtil.itemTag(Utilizer.utilizerKey(key));
+	}
+
+	private static Tag<EntityType> entityTag(String key) {
+		return EntityUtil.entityTag(Utilizer.utilizerKey(key));
 	}
 
 }

@@ -44,6 +44,10 @@ public class SpacingUtil {
 	 * Space of icon's width
 	 */
 	public static final Component ICON_SPACE = getSpacing(9);
+	/**
+	 * Space of icon's width
+	 */
+	public static final Component ZERO_SPACE = getSpacing(0);
 
 	/**
 	 * Color used in text shader to position action bar text to the top left corner

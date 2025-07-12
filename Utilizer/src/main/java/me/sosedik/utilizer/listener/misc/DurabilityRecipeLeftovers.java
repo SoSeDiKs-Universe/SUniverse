@@ -16,7 +16,7 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public class DurabilityRecipeLeftovers implements Listener {
 
-	@EventHandler(priority = EventPriority.LOWEST)
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onCraft(RemainingItemEvent event) {
 		if (event.getResult() != null) return;
 		// Ignore vanilla recipes

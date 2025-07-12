@@ -46,7 +46,7 @@ public class ItemUtil {
 	 * @return items tag
 	 */
 	public static Tag<Material> itemTag(NamespacedKey key) {
-		return Objects.requireNonNull(Bukkit.getTag(Tag.REGISTRY_ITEMS, key, Material.class));
+		return Objects.requireNonNull(Bukkit.getTag(Tag.REGISTRY_ITEMS, key, Material.class), () -> "Couldn't find item tag " + key);
 	}
 
 	/**
@@ -56,7 +56,7 @@ public class ItemUtil {
 	 * @return items tag
 	 */
 	public static Tag<Material> blockTag(NamespacedKey key) {
-		return Objects.requireNonNull(Bukkit.getTag(Tag.REGISTRY_BLOCKS, key, Material.class));
+		return Objects.requireNonNull(Bukkit.getTag(Tag.REGISTRY_BLOCKS, key, Material.class), () -> "Couldn't find block tag " + key);
 	}
 
 	/**

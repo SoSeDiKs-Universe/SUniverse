@@ -1,0 +1,248 @@
+{
+	"trophy.master_shieldsman.name": "<#1A308C><b>The Hylian Shield",
+	"trophy.master_shieldsman.lore": [
+		"<#1A308C><!i>Should have spoken to the Keaton Mask Soldier",
+		"<#1A308C><!i>to get a discount at the Bazaar"
+	],
+	"trophy.when_pigs_finally_fly.name": "<#EB9492><b>Reuben the Wither Storm Ender",
+	"trophy.when_pigs_finally_fly.lore": "<#EB9492><!i>He was a great pig",
+	"trophy.half_a_heart_1h.name": "<gray><b>Energy of Dark Souls",
+	"trophy.half_a_heart_1h.lore": [
+		"<gray><!i>What's the Point in wearing Armor",
+		"<gray><!i>if you aren't going to get hit"
+	],
+	"trophy.half_a_heart_6h.name": "<dark_gray><b>The Hole",
+	"trophy.half_a_heart_6h.lore": [
+		"<dark_gray><!i>You sat in a Hole for 6 Hours.",
+		"<dark_gray><!i>Now it will sit in your Inventory for the Rest of your Life."
+	],
+	"trophy.deflect_200.name": "<#BF7960><b>Unbreakable Barrier",
+	"trophy.deflect_200.lore": [
+		"<#BF7960><!i>You didn't just block the damage;",
+		"<#BF7960><!i>you mocked it."
+	],
+	"trophy.deflect_shield.name": "<#D6B169><b>Wooden Wreck",
+	"trophy.deflect_shield.lore": [
+		"<#D6B169><!i>Who needs durability when you can break it all",
+		"<#D6B169><!i>in one hit?"
+	],
+	"trophy.play_365d.name": "<#B92929><b>New Year's Fireworks",
+	"trophy.play_365d.lore": "<#B92929><!i>It's the final countdown!",
+	"trophy.play_1000d.name": "<#FFFFEA><b>Golden Hourglass",
+	"trophy.play_1000d.lore": [
+		"<#FFFFEA><!i>You spent quite a long time in the",
+		"<#FFFFEA><!i>psychiatric hospital"
+	],
+	"trophy.level_300.name": "<#967441><b>Zero Tick Farm",
+	"trophy.level_300.lore": [
+		"<#967441><!i>R.I.P. Zero Tick Farms",
+		"<#967441><!i>2013 – 2020"
+	],
+	"trophy.level_1000.name": "<#e8f46a><b>God Particle",
+	"trophy.level_1000.lore": [
+		"<#e8f46a><!i>This boson is so central to the state of physics today,",
+		"<#e8f46a><!i>so crucial to our final understanding of the structure of matter,",
+		"<#e8f46a><!i>yet so elusive…"
+	],
+	"trophy.enchant_250.name": "<#891F3D><b>Enchanter's Tome",
+	"trophy.enchant_250.lore": "<#891F3D><!i>Used by Illager Enchanters to enchant mobs",
+	"trophy.enchant_5k.name": "<#673A93><b>A good Table",
+	"trophy.enchant_5k.lore": [
+		"<#673A93><!i>Turned the Enchanting Table into your",
+		"<#673A93><!i>personal desk"
+	],
+	"trophy.eat_2500.name": "<#C1793A><b>Mammoth Steak",
+	"trophy.eat_2500.lore": "<#C1793A><!i>Long extinct, with an unforgettable taste",
+	"trophy.eat_10k.name": "<#176B2E><b>Low-Calorie Food",
+	"trophy.eat_10k.lore": "<#176B2E><!i>I think you need to go on a diet",
+	"trophy.breed_2500.name": "<#1604FF><b>Noah's Ark",
+	"trophy.breed_2500.lore": "<#1604FF><!i>A deluge is imminent",
+	"trophy.breed_10k.name": "<#FFBBCF><b>Mr. Sheep",
+	"trophy.breed_10k.lore": [
+		"<#FFBBCF><!i>A miniature arc, acknowledging your",
+		"<#FFBBCF><!i>animal breeding prowess"
+	],
+	"trophy.kill_25k.name": "<#FFE70F><b>Flowey the Flower",
+	"trophy.kill_25k.lore": "<#FFE70F><!i>All what's left of Asriel, the monsters' prince",
+	"trophy.kill_500k.name": "<#FF5359><b>Blood Moon",
+	"trophy.kill_500k.lore": "<#FF5359><!i>Become the Nightmare",
+	"trophy.trade_2500.name": "<#FDD744><b>Big Pointy Arrow",
+	"trophy.trade_2500.lore": "<#FDD744><!i>Things are on the up and up!",
+	"trophy.trade_10k.name": "<#FFFCEC><b>STONKS!",
+	"trophy.trade_10k.lore": "<#FFFCEC><!i>Become richer than Rockefeller",
+	"trophy.loot_500.name": "<#784112><b>Mimic",
+	"trophy.loot_500.lore": [
+		"<#784112><!i>You didn't think you could open that many chests",
+		"<#784112><!i>and not come across one of these?"
+	],
+	"trophy.loot_2500.name": "<#FFC975><b>Treasure Trove",
+	"trophy.loot_2500.lore": [
+		"<#FFC975><!i>A miniature chest trophy that's",
+		"<#FFC975><!i>surprisingly empty"
+	],
+	"trophy.walk_250km.name": "<#955E3B><b>World's Most Reliable Shoes",
+	"trophy.walk_250km.lore": [
+		"<#955E3B><!i>Durable enough to last the entire distance you've travelled.",
+		"<#955E3B><!i>Combine with other boots to change their properties."
+	],
+	"trophy.walk_1000km.name": "<#D28037><b>Time Machine",
+	"trophy.walk_1000km.lore": [
+		"<#D28037><!i>You'll need it to get back all those hours you spent.",
+		"<#D28037><!i>May save your life once in a while."
+	],
+	"trophy.sprint_250km.name": "<#0090FF><b>Refreshment",
+	"trophy.sprint_250km.lore": "<#0090FF><!i>You'll need it after running that far",
+	"trophy.sprint_1000km.name": "<#F4FFA7><b>Running shoes",
+	"trophy.sprint_1000km.lore": [
+		"<#F4FFA7><!i>This is only 1/40 of the perimeter",
+		"<#F4FFA7><!i>of our planet"
+	],
+	"trophy.jump_50k.name": "<#73C262><b>Portable Trampoline",
+	"trophy.jump_50k.lore": "<#73C262><!i>Hours of sick fun for the whole family!",
+	"trophy.jump_250k.name": "<#FFD9E2><b>Trick or Treat Basket with Rabbit",
+	"trophy.jump_250k.lore": [
+		"<#FFD9E2><!i>Channels the spirit of bouncy joy,",
+		"<#FFD9E2><!i>turning every leap into a pile of delight"
+	],
+	"trophy.sneak_10km.name": "<#4D3A3A><b>Black Belt",
+	"trophy.sneak_10km.lore": "<#4D3A3A><!i>Who's the greatest man?",
+	"trophy.sneak_100km.name": "<#E6FDFF><b>Katana",
+	"trophy.sneak_100km.lore": "<#E6FDFF><!i>Mastery does not tolerate haste",
+	"trophy.boat_25km.name": "<#333333><b>Black Pearl",
+	"trophy.boat_25km.lore": "<#333333><!i>Wherever we want to go, we'll go",
+	"trophy.boat_500km.name": "<#FFD2E9><b>Motor Boat",
+	"trophy.boat_500km.lore": "<#FFD2E9><!i>Fast as the speed of light",
+	"trophy.horse_25km.name": "<dark_aqua><b>Firearm's Firearm",
+	"trophy.horse_25km.lore": "<dark_aqua><!i>Now how did this get here? Seriously?",
+	"trophy.horse_250km.name": "<#FFD700><b>Gold Horse",
+	"trophy.horse_250km.lore": [
+		"<#FFD700><!i>Elegance in equine form, a majestic",
+		"<#FFD700><!i>steed that doesn't just gallop, but",
+		"<#FFD700><!i>glitters as it gracefully traverses",
+		"<#FFD700><!i>realms of luxury and extravagance"
+	],
+	"trophy.pig_10km.name": "<#E4493E><b>Piston Cup",
+	"trophy.pig_10km.lore": "<#E4493E><!i>It's just an empty cup",
+	"trophy.pig_100km.name": "<#FFA3AC><b>PigTrain",
+	"trophy.pig_100km.lore": "<#FFA3AC><!i>You have a specific taste in transportation",
+	"trophy.elytra_1000km.name": "<#D71E24><b>Superman's Cape",
+	"trophy.elytra_1000km.lore": [
+		"<#D71E24><!i>Is it a bird?",
+		"<#D71E24><!i>Is it a plane?",
+		"<#D71E24><!i>Is it an egg salad sandwich?",
+		"<#D71E24><!i>No way, it's a Charizard!"
+	],
+	"trophy.elytra_15000km.name": "<#78FFC0><b>Big Firework Star",
+	"trophy.elytra_15000km.lore": [
+		"<#78FFC0><!i>Craft a big firework rocket,",
+		"<#78FFC0><!i>you deserve it"
+	],
+	"trophy.swim_50km.name": "<#E4493E><b>Gold Medal",
+	"trophy.swim_50km.lore": "<#E4493E><!i>Probably not a real gold",
+	"trophy.swim_250km.name": "<#A2D5FF><b>Private Pool",
+	"trophy.swim_250km.lore": [
+		"<#A2D5FF><!i>An exclusive oasis of aquatic luxury,",
+		"<#A2D5FF><!i>this private pool is your personal",
+		"<#A2D5FF><!i>retreat, where relaxation meets opulence",
+		"<#A2D5FF><!i>in the comfort of your own space"
+	],
+	"trophy.minecart_50km.name": "<#2AB9E5><b>Thomas the Tank Engine",
+	"trophy.minecart_50km.lore": "<#2AB9E5><!i>He's the real number one",
+	"trophy.minecart_250km.name": "<#FFE56B><b>Railroad Baron's Emblem",
+	"trophy.minecart_250km.lore": [
+		"<#FFE56B><!i>A sleek golden trophy resembling",
+		"<#FFE56B><!i>intertwined train tracks"
+	],
+	"trophy.strider_10km.name": "<#14B485><b>Strider Treat",
+	"trophy.strider_10km.lore": "<#14B485><!i>Your strider deserved it",
+	"trophy.strider_250km.name": "<#E5535C><b>Strider",
+	"trophy.strider_250km.lore": [
+		"<#E5535C><!i>Your personal lava-walker and",
+		"<#E5535C><!i>spontaneous thrill ride"
+	],
+	"trophy.happy_ghast_10km.name": "<#2ec9f9><b>M.O.A.B.",
+	"trophy.happy_ghast_10km.lore": [
+		"<#2ec9f9><!i>M.O.A.B stands for Massive Ornary Air Blimp, not Mother Of All Bloons",
+		"<#2ec9f9><!i>Either way, it brings pain"
+	],
+	"trophy.happy_ghast_50km.name": "<#28BBC5><b>Diamond Harness",
+	"trophy.happy_ghast_50km.lore": "<#28BBC5><!i>Tighter than others",
+	"trophy.bell_10000k.name": "<#0090FF><b>Heavenly Bell",
+	"trophy.bell_10000k.lore": "<#0090FF><!i>ding ding ding ding ding ding ding ding ding ding ding ding ding ding ding",
+	"trophy.fish_250.name": "<#C8C7BF><b>Incredibly Big Salmon",
+	"trophy.fish_250.lore": "<#C8C7BF><!i>Is it worth eating?",
+	"trophy.fish_1k.name": "<#BFB773><b>Professional Fishing Rod",
+	"trophy.fish_1k.lore": "<#BFB773><!i>For real Masters",
+	"trophy.fish_2500.name": "<#DCD9C0><b>The No-Worries Rod",
+	"trophy.fish_2500.lore": "<#DCD9C0><!i>Don't worry, be fishing",
+	"trophy.totem_100.name": "<#FCD05C><b>Totem of Totems",
+	"trophy.totem_100.lore": "<#FCD05C><!i>Maybe stop dying?",
+	"trophy.totem_1000.name": "<#DCD9C0><b>The Magic that couldn't save you",
+	"trophy.totem_1000.lore": [
+		"<#DCD9C0><!i>How did this happen?",
+		"<#DCD9C0><!i>A Long Time ago, actually never, and also now, Nothing is Nowhere",
+		"<#DCD9C0><!i>Makes sense, right?"
+	],
+	"trophy.totem_2500.name": "<#FCD05C><b>Totem of Totem of Totems",
+	"trophy.totem_2500.lore": "<#FCD05C><!i>STOP DYING!",
+	"trophy.climb_3km.name": "<#EFD267><b>Ladder",
+	"trophy.climb_3km.lore": "<#EFD267><!i>Simple ladder, you can use it",
+	"trophy.climb_10km.name": "<#FFC975><b>High Ladder",
+	"trophy.climb_10km.lore": [
+		"<#FFC975><!i>Scaling heights like a seasoned",
+		"<#FFC975><!i>mountaineer, you've climbed 10km with a",
+		"<#FFC975><!i>mere ladder or vines"
+	],
+	"trophy.break_10k_netherite.name": "<#ADF3FD><b>High-Quality Diamond Ore",
+	"trophy.break_10k_netherite.lore": "<#ADF3FD><!i>Your glory",
+	"trophy.break_100k_netherite.name": "<#F6FFBC><b>Golden Infused Pickaxe",
+	"trophy.break_100k_netherite.lore": [
+		"<#F6FFBC><!i>The master who created it put all his",
+		"<#F6FFBC><!i>efforts into efficiency"
+	],
+	"trophy.survive_50h.name": "<#FFDE00><b>Your Clock",
+	"trophy.survive_50h.lore": "<#FFDE00><!i>Do you know what time it is?",
+	"trophy.survive_200h.name": "<#EE505F><b>Your Heart",
+	"trophy.survive_200h.lore": "<#EE505F><!i>Your life is like a heart on TV",
+	"trophy.open_chest_10k.name": "<#FF9D00><b>Personal Chest",
+	"trophy.open_chest_10k.lore": "<#FF9D00><!i>I know you like chests",
+	"trophy.open_chest_25k.name": "<#FF8E27><b>Christmas Chest",
+	"trophy.open_chest_25k.lore": [
+		"<#FF8E27><!i>A festive trophy shaped like Santa's",
+		"<#FF8E27><!i>sack overflowing with loot. Includes a",
+		"<#FF8E27><!i>special Christmas Chest for the true",
+		"<#FF8E27><!i>chest opening connoisseur!"
+	],
+	"trophy.open_crafting_table_500.name": "<#EF8310><b>Crafting Factory",
+	"trophy.open_crafting_table_500.lore": "<#EF8310><!i>Try not to craft on it",
+	"trophy.open_crafting_table_2500.name": "<#FFF665><b>Gold Chest",
+	"trophy.open_crafting_table_2500.lore": [
+		"<#FFF665><!i>You've crafted your way into the",
+		"<#FFF665><!i>legendary artisan's league!"
+	],
+	"trophy.horse_speed_3.name": "<#FFA66D><b>Lightweight Saddle",
+	"trophy.horse_speed_3.lore": "<#FFA66D><!i>Perfect for your fast steed",
+	"trophy.horse_speed_4.name": "<#FFB09C><b>Horse Pet",
+	"trophy.horse_speed_4.lore": [
+		"<#FFB09C><!i>Have you heard about this horse?",
+		"<#FFB09C><!i>They say it exceeded the speed of light!"
+	],
+	"trophy.raid_100.name": "<#CFD4D7><b>Iron Ax",
+	"trophy.raid_100.lore": "<#CFD4D7><!i>Heavier than a regular axe",
+	"trophy.raid_2000.name": "<#8D8D8D><b>Ravager's Head",
+	"trophy.raid_2000.lore": "<#8D8D8D><!i>Trophy obtained by force",
+	"trophy.open_shulker_10k.name": "<#FF8DC9><b>Freebox",
+	"trophy.open_shulker_10k.lore": [
+		"<#FF8DC9><!i>The Freebox is an ADSL-VDSL-FTTH modem",
+		"<#FF8DC9><!i>and a set-top box that the French",
+		"<#FF8DC9><!i>Internet service provider named Free",
+		"<#FF8DC9><!i>(part of the Iliad group) provides to",
+		"<#FF8DC9><!i>its DSL-FTTH subscribers"
+	],
+	"trophy.open_shulker_100k.name": "<#FFBAE3><b>Infinite Shulker Box",
+	"trophy.open_shulker_100k.lore": [
+		"<#FFBAE3><!i>Boundless storage, enchanted organization,",
+		"<#FFBAE3><!i>and ethereal design for effortless and",
+		"<#FFBAE3><!i>compact inventory management"
+	]
+}

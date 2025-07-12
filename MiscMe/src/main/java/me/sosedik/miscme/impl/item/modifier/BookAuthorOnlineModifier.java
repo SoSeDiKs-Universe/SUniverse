@@ -17,6 +17,7 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.UUID;
 import java.util.regex.Pattern;
 
 import static me.sosedik.utilizer.api.message.Mini.combined;
@@ -28,8 +29,8 @@ import static me.sosedik.utilizer.api.message.Mini.combined;
 public class BookAuthorOnlineModifier extends ItemModifier {
 
 	private static final Pattern VALID_NICKNAME = Pattern.compile("^[a-zA-Z0-9_]{2,16}$");
-	private static final Component ONLINE = Component.text(" ●", NamedTextColor.GREEN);
-	private static final Component OFFLINE = Component.text(" ●", NamedTextColor.RED);
+	private static final Component ONLINE = Component.text(" ● ", NamedTextColor.GREEN);
+	private static final Component OFFLINE = Component.text(" ● ", NamedTextColor.RED);
 
 	public BookAuthorOnlineModifier(NamespacedKey modifierId) {
 		super(modifierId);
@@ -71,8 +72,9 @@ public class BookAuthorOnlineModifier extends ItemModifier {
 	 * @return online status indicator, or null if unknown/invalid player
 	 */
 	public static @Nullable Component getStatus(String author) {
-		if (Bukkit.getPlayerExact(author) != null)
-			return combined(Component.text(author), ONLINE);
+		Player playerExact = Bukkit.getPlayerExact(author);
+		if (playerExact != null)
+			return combined(playerExact.displayName(), ONLINE);
 
 		OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayerIfCached(author);
 		if (offlinePlayer == null) offlinePlayer = Bukkit.getOfflinePlayer(author);
@@ -81,6 +83,22 @@ public class BookAuthorOnlineModifier extends ItemModifier {
 			return combined(Component.text(author), OFFLINE);
 
 		return null;
+	}
+
+	/**
+	 * Gets the online status indicator from the player name
+	 *
+	 * @param author player name
+	 * @return online status indicator, or null if unknown/invalid player
+	 */
+	public static @Nullable Component getStatus(UUID author) {
+		Player player = Bukkit.getPlayer(author);
+		if (player != null)
+			return combined(ONLINE, player.displayName());
+
+		OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(author);
+		String name = offlinePlayer.getName();
+		return name == null ? null : combined(OFFLINE, Component.text(name));
 	}
 
 }

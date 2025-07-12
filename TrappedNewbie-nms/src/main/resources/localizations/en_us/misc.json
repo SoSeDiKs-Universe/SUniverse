@@ -5,5 +5,11 @@
 	"limbo.welcome": "Huh, another one?",
 	"limbo.welcome.ignored": "You're gonna ignore me like that, really?",
 	"limbo.friendship": "You befriended the <gold>Wandering Trader</gold>!",
-	"break.light": "It's too dark here to break blocks"
+	"break.light": "It's too dark here to break blocks",
+	"advancement.reward.exp": "<blue><exp> Experience",
+	"advancement.announcement.super_challenge": "<player> has completed the super challenge <advancement>",
+	"advancement.announcement.torture": "<player> has completed the torturous advancement <advancement>",
+	"advancement.announcement.super_torture": "<player> has completed the super torturous advancement <advancement>",
+	"advancement.announcement.cheat": "<player> has cheated the advancement <advancement>",
+	"advancement.trophy": "<gray><!i><player>'s trophy for <advancement>"
 }

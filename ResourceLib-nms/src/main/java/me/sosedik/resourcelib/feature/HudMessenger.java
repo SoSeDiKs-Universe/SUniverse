@@ -69,6 +69,7 @@ public class HudMessenger extends BukkitRunnable {
 
 	public synchronized Component getHudMessage() {
 		this.huds.clear();
+		this.huds.add(SpacingUtil.ZERO_SPACE);
 		for (HudProvider hudProvider : this.hudProviders.values()) {
 			Component hudElement = hudProvider.getHud();
 			if (hudElement != null)

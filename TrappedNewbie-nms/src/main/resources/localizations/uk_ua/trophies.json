@@ -1,0 +1,238 @@
+{
+	"trophy.master_shieldsman.name": "<#1A308C><b>Гіліанський щит",
+	"trophy.master_shieldsman.lore": [
+		"<#1A308C><!i>Варто було поговорити з солдатом в масці Кітона,",
+		"<#1A308C><!i>щоб отримати знижку на базарі"
+	],
+	"trophy.when_pigs_finally_fly.name": "<#EB9492><b>Рубен, кінець візер-бурі",
+	"trophy.when_pigs_finally_fly.lore": "<#EB9492><!i>Він був чудовою свинкою",
+	"trophy.half_a_heart_1h.name": "<gray><b>Енергія Dark Souls",
+	"trophy.half_a_heart_1h.lore": [
+		"<gray><!i>Який сенс носити броню, якщо",
+		"<gray><!i>Ви не отримуєте урону"
+	],
+	"trophy.half_a_heart_6h.name": "<dark_gray><b>The Hole",
+	"trophy.half_a_heart_6h.lore": [
+		"<dark_gray><!i>You sat in a Hole for 6 Hours.",
+		"<dark_gray><!i>Now it will sit in your Inventory for the Rest of your Life."
+	],
+	"trophy.deflect_200.name": "<#BF7960><b>Незламний бар'єр",
+	"trophy.deflect_200.lore": [
+		"<#BF7960><!i>Ви не просто заблокували удар,",
+		"<#BF7960><!i>Ви його висміяли."
+	],
+	"trophy.deflect_shield.name": "<#D6B169><b>Дерев'яний уламок",
+	"trophy.deflect_shield.lore": [
+		"<#D6B169><!i>Кому потрібна міцність, коли можна",
+		"<#D6B169><!i>зламати все одним ударом?"
+	],
+	"trophy.play_365d.name": "<#B92929><b>Новорічний феєрверк",
+	"trophy.play_365d.lore": "<#B92929><!i>Десять, дев'ять, вісім…",
+	"trophy.play_1000d.name": "<#FFFFEA><b>Золотий пісочний годинник",
+	"trophy.play_1000d.lore": [
+		"<#FFFFEA><!i>Ви провели досить тривалий час",
+		"<#FFFFEA><!i>у психіатричній лікарні"
+	],
+	"trophy.level_300.name": "<#967441><b>Нуль-тактова ферма",
+	"trophy.level_300.lore": [
+		"<#967441><!i>Спочивай з миром",
+		"<#967441><!i>2013 – 2020"
+	],
+	"trophy.level_1000.name": "<#e8f46a><b>Частинка Бога",
+	"trophy.level_1000.lore": [
+		"<#e8f46a><!i>Цей бозон настільки важливий для сучасного стану фізики,",
+		"<#e8f46a><!i>настільки вирішальний для нашого остаточного розуміння структури матерії,",
+		"<#e8f46a><!i>але такий невловимий…"
+	],
+	"trophy.enchant_250.name": "<#891F3D><b>Том чарівника",
+	"trophy.enchant_250.lore": "<#891F3D><!i>Використовується ілюзіонинами для причарування істот",
+	"trophy.enchant_5k.name": "<#673A93><b>Хороший стіл",
+	"trophy.enchant_5k.lore": [
+		"<#673A93><!i>Стіл зачарування в якості",
+		"<#673A93><!i>персонального столу"
+	],
+	"trophy.eat_2500.name": "<#C1793A><b>Мамонтовий стейк",
+	"trophy.eat_2500.lore": "<#C1793A><!i>Давно вимерлий, із незабутнім смаком",
+	"trophy.eat_10k.name": "<#176B2E><b>Низькокалорійний продукт",
+	"trophy.eat_10k.lore": "<#176B2E><!i>Вам би не завадило сісти на дієту",
+	"trophy.breed_2500.name": "<#1604FF><b>Ноїв ковчег",
+	"trophy.breed_2500.lore": "<#1604FF><!i>Потоп насувається",
+	"trophy.kill_25k.name": "<#FFE70F><b>Квітка на ім'я Квітик",
+	"trophy.kill_25k.lore": "<#FFE70F><!i>Все, що залишилося від Азріеля, принца монстрів",
+	"trophy.kill_500k.name": "<#FF5359><b>Кривавий Місяць",
+	"trophy.kill_500k.lore": "<#FF5359><!i>Станьте кошмаром",
+	"trophy.trade_2500.name": "<#FDD744><b>Велика стрілка доходів",
+	"trophy.trade_2500.lore": "<#FDD744><!i>Справи стають все кращими й кращими!",
+	"trophy.trade_10k.name": "<#FFFCEC><b>ПРИБУТОК!",
+	"trophy.trade_10k.lore": "<#FFFCEC><!i>Станьте багатшими за Рокфеллера",
+	"trophy.loot_500.name": "<#784112><b>Мімік",
+	"trophy.loot_500.lore": [
+		"<#784112><!i>Ви ж не думали, що після усіх цих скринь",
+		"<#784112><!i>не натрапите на одного з них?"
+	],
+	"trophy.loot_2500.name": "<#FFC975><b>Скарбничка",
+	"trophy.loot_2500.lore": [
+		"<#FFC975><!i>Мініатюрний трофей-сундук,",
+		"<#FFC975><!i>який на диво порожній"
+	],
+	"trophy.walk_250km.name": "<#955E3B><b>Найнадійніше взуття у світі",
+	"trophy.walk_250km.lore": [
+		"<#955E3B><!i>Достатньо надійне, щоб витримати усю пройдену Вами відстань.",
+		"<#955E3B><!i>Поєднайте з іншим взуттям, щоб змінити властивості."
+	],
+	"trophy.walk_1000km.name": "<#D28037><b>Машина часу",
+	"trophy.walk_1000km.lore": [
+		"<#D28037><!i>Потрібна, щоб повернути всі ті години, які Ви витратили.",
+		"<#D28037><!i>Час від часу може врятувати Вам життя."
+	],
+	"trophy.sprint_250km.name": "<#0090FF><b>Живчик",
+	"trophy.sprint_250km.lore": "<#0090FF><!i>Після ТАКОЇ пробіжки він Вам точно знадобиться",
+	"trophy.sprint_1000km.name": "<#F4FFA7><b>Бігові кросівки",
+	"trophy.sprint_1000km.lore": "<#F4FFA7><!i>Це лише 1/40 периметра нашої планети",
+	"trophy.jump_50k.name": "<#73C262><b>Портативний батут",
+	"trophy.jump_50k.lore": "<#73C262><!i>Години класної забави для всієї родини!",
+	"trophy.jump_250k.name": "<#FFD9E2><b>Кошик з кроликом для солодощів",
+	"trophy.jump_250k.lore": [
+		"<#FFD9E2><!i>Спрямовує дух стрибучої радості, перетворюючи",
+		"<#FFD9E2><!i>кожен стрибок на купу захоплення"
+	],
+	"trophy.sneak_10km.name": "<#4D3A3A><b>Чорний пояс",
+	"trophy.sneak_10km.lore": "<#4D3A3A><!i>Хто найвеличніша людина?",
+	"trophy.sneak_100km.name": "<#E6FDFF><b>Катана",
+	"trophy.sneak_100km.lore": "<#E6FDFF><!i>Майстерність не терпить поспіху",
+	"trophy.boat_25km.name": "<#333333><b>Чорна перлина",
+	"trophy.boat_25km.lore": "<#333333><!i>Куди захочемо, туди й відпливемо",
+	"trophy.boat_500km.name": "<#FFD2E9><b>Моторний човен",
+	"trophy.boat_500km.lore": "<#FFD2E9><!i>Швидкий, як швидкість світла",
+	"trophy.horse_25km.name": "<dark_aqua><b>Вогнепальна зброя",
+	"trophy.horse_25km.lore": "<dark_aqua><!i>Як вона сюди потрапила? Як?",
+	"trophy.horse_250km.name": "<#FFD700><b>Золотий кінь",
+	"trophy.horse_250km.lore": [
+		"<#FFD700><!i>Елегантність у вигляді коня, величного коня,",
+		"<#FFD700><!i>який не просто скаче, а виблискує, граціозно",
+		"<#FFD700><!i>перетинаючи кордони розкоші та екстравагантності"
+	],
+	"trophy.pig_10km.name": "<#E4493E><b>Однопоршневий двигун",
+	"trophy.pig_10km.lore": "<#E4493E><!i>Назва говорить сама за себе",
+	"trophy.pig_100km.name": "<#FFA3AC><b>Свинопотяг",
+	"trophy.pig_100km.lore": "<#FFA3AC><!i>У Вас специфічний смак у транспорті",
+	"trophy.elytra_1000km.name": "<#D71E24><b>Плащ Супермена",
+	"trophy.elytra_1000km.lore": [
+		"<#D71E24><!i>Це птах?",
+		"<#D71E24><!i>Це літак?",
+		"<#D71E24><!i>Це канапка з маслом та шинкою?",
+		"<#D71E24><!i>Не може бути, це ж Чарізард!"
+	],
+	"trophy.elytra_15000km.name": "<#78FFC0><b>Велика феєрверкова зірка",
+	"trophy.elytra_15000km.lore": [
+		"<#78FFC0><!i>Створіть великий феєрверк,",
+		"<#78FFC0><!i>Ви на це заслуговуєте"
+	],
+	"trophy.swim_50km.name": "<#E4493E><b>Золота медаль",
+	"trophy.swim_50km.lore": "<#E4493E><!i>Ймовірно, не справжнє золото",
+	"trophy.swim_250km.name": "<#A2D5FF><b>Приватний басейн",
+	"trophy.swim_250km.lore": [
+		"<#A2D5FF><!i>Ексклюзивний оазис водної розкоші, цей",
+		"<#A2D5FF><!i>приватний басейн — Ваш особистий притулок,",
+		"<#A2D5FF><!i>де релаксація поєднується з розкішшю",
+		"<#A2D5FF><!i>в комфорті Вашого власного простору"
+	],
+	"trophy.minecart_50km.name": "<#2AB9E5><b>Паровозик Томас",
+	"trophy.minecart_50km.lore": "<#2AB9E5><!i>Він — справжній номер один",
+	"trophy.minecart_250km.name": "<#FFE56B><b>Емблема залізничного барона",
+	"trophy.minecart_250km.lore": [
+		"<#FFE56B><!i>Витончений золотий трофей, що нагадує",
+		"<#FFE56B><!i>переплетені залізничні колії"
+	],
+	"trophy.strider_10km.name": "<#14B485><b>Смаколик для блукача",
+	"trophy.strider_10km.lore": "<#14B485><!i>Ваш блукач заслужив це",
+	"trophy.strider_250km.name": "<#E5535C><b>Блукач",
+	"trophy.strider_250km.lore": [
+		"<#E5535C><!i>Ваш особистий лавохід і атракціон",
+		"<#E5535C><!i>спонтанних гострих відчуттів"
+	],
+	"trophy.happy_ghast_10km.name": "<#2ec9f9><b>М.В.Б.",
+	"trophy.happy_ghast_10km.lore": [
+		"<#2ec9f9><!i>М.В.Б. означає «Масивний верховий бомбардирувальник», а не «Мати всіх бомб»",
+		"<#2ec9f9><!i>Так чи інакше, ця річ приносить біль"
+	],
+	"trophy.happy_ghast_50km.name": "<#28BBC5><b>Діамантова упряж",
+	"trophy.happy_ghast_50km.lore": "<#28BBC5><!i>Міцніша, ніж інші",
+	"trophy.bell_10000k.name": "<#0090FF><b>Небесний дзвін",
+	"trophy.bell_10000k.lore": "<#0090FF><!i>дзинь-дзинь-дзинь-дзинь-дзинь-дзинь-дзинь-дзинь-дзинь-дзинь-дзинь-дзинь",
+	"trophy.fish_250.name": "<#C8C7BF><b>Неймовірно великий лосось",
+	"trophy.fish_250.lore": "<#C8C7BF><!i>Чи варто його їсти?",
+	"trophy.fish_1k.name": "<#BFB773><b>Професійна рибальська вудка",
+	"trophy.fish_1k.lore": "<#BFB773><!i>Для справжніх майстрів",
+	"trophy.fish_2500.name": "<#DCD9C0><b>Безтурботна вудочка",
+	"trophy.fish_2500.lore": "<#DCD9C0><!i>Не хвилюйтесь, ловіть рибу",
+	"trophy.totem_100.name": "<#FCD05C><b>Тотем тотемів",
+	"trophy.totem_100.lore": "<#FCD05C><!i>Може, перестати вмирати?",
+	"trophy.totem_1000.name": "<#DCD9C0><b>Магія, яка не змогла тебе врятувати",
+	"trophy.totem_1000.lore": [
+		"<#DCD9C0><!i>Як це сталося?",
+		"<#DCD9C0><!i>Давним-давно, насправді ніколи, а також зараз, ніщо є ніде",
+		"<#DCD9C0><!i>Має сенс, чи не так?"
+	],
+	"trophy.totem_2500.name": "<#FCD05C><b>Тотем тотема тотемів",
+	"trophy.totem_2500.lore": "<#FCD05C><!i>ПРИПИНІТЬ ПОМИРАТИ!",
+	"trophy.climb_3km.name": "<#EFD267><b>Драбина",
+	"trophy.climb_3km.lore": "<#EFD267><!i>Звичайна драбина, можете користуватись",
+	"trophy.climb_10km.name": "<#FFC975><b>Висока драбина",
+	"trophy.climb_10km.lore": [
+		"<#FFC975><!i>Підкорюючи висоти, як досвідчений альпініст,",
+		"<#FFC975><!i>Ви подолали 10км за допомогою звичайної",
+		"<#FFC975><!i>драбини або ліан"
+	],
+	"trophy.break_10k_netherite.name": "<#ADF3FD><b>Високоякісна діамантова руда",
+	"trophy.break_10k_netherite.lore": "<#ADF3FD><!i>Ваша гордість",
+	"trophy.break_100k_netherite.name": "<#F6FFBC><b>Золота інкрустована кирка",
+	"trophy.break_100k_netherite.lore": [
+		"<#F6FFBC><!i>Майстер, який створив її, вклав",
+		"<#F6FFBC><!i>усі свої зусилля в ефективність"
+	],
+	"trophy.survive_50h.name": "<#FFDE00><b>Ваш годинник",
+	"trophy.survive_50h.lore": "<#FFDE00><!i>Ви знаєте, котра година?",
+	"trophy.survive_200h.name": "<#EE505F><b>Ваше серце",
+	"trophy.survive_200h.lore": "<#EE505F><!i>Стукає на повну силу",
+	"trophy.open_chest_10k.name": "<#FF9D00><b>Особиста скриня",
+	"trophy.open_chest_10k.lore": "<#FF9D00><!i>Я знаю, ти любиш скрині",
+	"trophy.open_chest_25k.name": "<#FF8E27><b>Різдвяна скриня",
+	"trophy.open_chest_25k.lore": [
+		"<#FF8E27><!i>Святковий трофей у формі мішка Санти,",
+		"<#FF8E27><!i>переповненого здобиччю. Включає спеціальну",
+		"<#FF8E27><!i>різдвяну скриню для справжнього поціновувача",
+		"<#FF8E27><!i>відкривання скринь!"
+	],
+	"trophy.open_crafting_table_500.name": "<#EF8310><b>Ремісничий стіл",
+	"trophy.open_crafting_table_500.lore": "<#EF8310><!i>Намагайтеся не крафтити на ньому",
+	"trophy.open_crafting_table_2500.name": "<#FFF665><b>Золота скриня",
+	"trophy.open_crafting_table_2500.lore": [
+		"<#FFF665><!i>Ви проклали собі шлях до",
+		"<#FFF665><!i>легендарної ліги ремісників!"
+	],
+	"trophy.horse_speed_3.name": "<#FFA66D><b>Легке сідло",
+	"trophy.horse_speed_3.lore": "<#FFA66D><!i>Ідеальне для швидких коней",
+	"trophy.horse_speed_4.name": "<#FFB09C><b>Конячка",
+	"trophy.horse_speed_4.lore": [
+		"<#FFB09C><!i>Ви чули про цю конячку? Кажуть,",
+		"<#FFB09C><!i>вона перевищила швидкість світла!"
+	],
+	"trophy.raid_100.name": "<#CFD4D7><b>Залізна сокира",
+	"trophy.raid_100.lore": "<#CFD4D7><!i>Важча за звичайну сокиру",
+	"trophy.raid_2000.name": "<#8D8D8D><b>Голова спустошувача",
+	"trophy.raid_2000.lore": "<#8D8D8D><!i>Трофей, здобутий силою",
+	"trophy.open_shulker_10k.name": "<#FF8DC9><b>Freebox",
+	"trophy.open_shulker_10k.lore": [
+		"<#FF8DC9><!i>Freebox — це модем ADSL-VDSL-FTTH",
+		"<#FF8DC9><!i>і телевізійна приставка, які французький",
+		"<#FF8DC9><!i>інтернет-провайдер Free (частина групи Iliad)",
+		"<#FF8DC9><!i>надає своїм DSL-FTTH абонентам"
+	],
+	"trophy.open_shulker_100k.name": "<#FFBAE3><b>Нескінченна шалкерова коробка",
+	"trophy.open_shulker_100k.lore": [
+		"<#FFBAE3><!i>Безмежне сховище, покращена організація",
+		"<#FFBAE3><!i>та витончений дизайн для легкого та",
+		"<#FFBAE3><!i>компактного управління інвентарем"
+	]
+}

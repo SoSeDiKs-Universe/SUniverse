@@ -3,9 +3,6 @@ package me.sosedik.trappednewbie.listener.misc;
 import com.destroystokyo.paper.event.player.PlayerPostRespawnEvent;
 import com.google.common.base.Preconditions;
 import de.tr7zw.nbtapi.iface.ReadWriteNBT;
-import io.papermc.paper.datacomponent.DataComponentTypes;
-import io.papermc.paper.datacomponent.item.BundleContents;
-import io.papermc.paper.datacomponent.item.ItemContainerContents;
 import me.sosedik.miscme.dataset.MiscMeItems;
 import me.sosedik.miscme.impl.item.modifier.BarometerModifier;
 import me.sosedik.miscme.impl.item.modifier.ClockModifier;
@@ -16,12 +13,12 @@ import me.sosedik.resourcelib.api.font.FontData;
 import me.sosedik.resourcelib.feature.ScoreboardRenderer;
 import me.sosedik.resourcelib.util.SpacingUtil;
 import me.sosedik.trappednewbie.TrappedNewbie;
-import me.sosedik.trappednewbie.api.item.VisualArmor;
 import me.sosedik.trappednewbie.impl.item.modifier.ItemOverlayToggleModifier;
 import me.sosedik.utilizer.api.event.player.PlayerDataLoadedEvent;
 import me.sosedik.utilizer.api.event.player.PlayerDataSaveEvent;
 import me.sosedik.utilizer.api.message.Messenger;
 import me.sosedik.utilizer.api.storage.player.PlayerDataStorage;
+import me.sosedik.utilizer.util.InventoryUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
@@ -38,9 +35,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 import org.jspecify.annotations.NullMarked;
-import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -321,55 +316,20 @@ public class DynamicInventoryInfoGatherer implements Listener {
 
 	public static class InventoryData {
 
-		private boolean clock = false;
-		private boolean lunarClock = false;
-		private boolean compass = false;
-		private boolean depthMeter = false;
-		private boolean barometer = false;
-		private boolean speedometer = false;
+		private final boolean clock;
+		private final boolean lunarClock;
+		private final boolean compass;
+		private final boolean depthMeter;
+		private final boolean barometer;
+		private final boolean speedometer;
 
 		public InventoryData(Player player) {
-			PlayerInventory inventory = player.getInventory();
-			checkItem(inventory.getItemInOffHand());
-			for (ItemStack item : inventory.getStorageContents()) {
-				checkItem(item);
-				if (hasAllItems())
-					return;
-			}
-			checkItem(player.getOpenInventory().getCursor());
-			VisualArmor visualArmor = VisualArmor.of(player);
-			if (visualArmor.hasHelmet())
-				checkItem(visualArmor.getHelmet());
-		}
-
-		public void checkItem(@Nullable ItemStack item) {
-			if (ItemStack.isEmpty(item)) return;
-
-			if (Tag.ITEMS_COMPASSES.isTagged(item.getType())) this.compass = true;
-			else if (item.getType() == MiscMeItems.LUNAR_CLOCK) this.lunarClock = true;
-			else if (item.getType() == MiscMeItems.DEPTH_METER) this.depthMeter = true;
-			else if (item.getType() == MiscMeItems.BAROMETER) this.barometer = true;
-			else if (item.getType() == MiscMeItems.SPEEDOMETER) this.speedometer = true;
-			else if (item.getType() == Material.CLOCK) this.clock = true;
-			else if (item.getType() == Material.BUNDLE) {
-				BundleContents data = item.getData(DataComponentTypes.BUNDLE_CONTENTS);
-				if (data == null) return;
-
-				for (ItemStack storedItem : data.contents()) {
-					checkItem(storedItem);
-					if (hasAllItems())
-						return;
-				}
-			} else if (item.hasData(DataComponentTypes.CONTAINER)) {
-				ItemContainerContents data = item.getData(DataComponentTypes.CONTAINER);
-				if (data == null) return;
-
-				for (ItemStack storedItem : data.contents()) {
-					checkItem(storedItem);
-					if (hasAllItems())
-						return;
-				}
-			}
+			this.clock = InventoryUtil.findItem(player, item -> item.getType() == Material.CLOCK) != null;
+			this.lunarClock = InventoryUtil.findItem(player, item -> item.getType() == MiscMeItems.LUNAR_CLOCK) != null;
+			this.compass = InventoryUtil.findItem(player, item -> Tag.ITEMS_COMPASSES.isTagged(item.getType())) != null;
+			this.depthMeter = InventoryUtil.findItem(player, item -> item.getType() == MiscMeItems.DEPTH_METER) != null;
+			this.barometer = InventoryUtil.findItem(player, item -> item.getType() == MiscMeItems.BAROMETER) != null;
+			this.speedometer = InventoryUtil.findItem(player, item -> item.getType() == MiscMeItems.SPEEDOMETER) != null;
 		}
 
 		public boolean hasClock() {

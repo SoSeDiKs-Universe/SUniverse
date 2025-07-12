@@ -4,6 +4,12 @@
 	"item.modifier.letter.friendship": "<red><i>Содержит силу дружбы",
 	"limbo.welcome": "Хм, ещё один?",
 	"limbo.welcome.ignored": "Собираетесь меня вот так игнорировать, правда?",
-	"limbo.friendship": "Теперь Вы друзья со <gold>странствующим торговцем</gold>!",
-	"break.light": "Здесь слишком темно, чтобы ломать блоки"
+	"limbo.friendship": "Вы подружились со <gold>странствующим торговцем</gold>!",
+	"break.light": "Здесь слишком темно, чтобы ломать блоки",
+	"advancement.reward.exp": "<blue><exp> <plural:ru_ru:единица|единицы|единиц:'<exp_raw>'> опыта",
+	"advancement.announcement.super_challenge": "Игрок <player> завершил супериспытание <advancement>",
+	"advancement.announcement.torture": "Игрок <player> завершил мучительное достижение <advancement>",
+	"advancement.announcement.super_torture": "Игрок <player> завершил сверхмучительное достижение <advancement>",
+	"advancement.announcement.cheat": "Игрок <player> считерил достижение <advancement>",
+	"advancement.trophy": "<gray><!i>Трофей <player> за <advancement>"
 }

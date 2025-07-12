@@ -1,6 +1,9 @@
 package me.sosedik.utilizer.util;
 
+import org.bukkit.Bukkit;
 import org.bukkit.HeightMap;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Tag;
 import org.bukkit.World;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Drowned;
@@ -23,6 +26,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Predicate;
 
 @NullMarked
@@ -44,6 +48,16 @@ public class EntityUtil {
 	public static Predicate<LivingEntity> IGNORE_INTERACTION = (entity) -> entity instanceof ArmorStand armorStand && armorStand.isMarker();
 
 	private static final List<Predicate<LivingEntity>> EXTRA_PLAYER_VISIBILITY_RULES = new ArrayList<>();
+
+	/**
+	 * Tries to get items tag
+	 *
+	 * @param key key
+	 * @return items tag
+	 */
+	public static Tag<EntityType> entityTag(NamespacedKey key) {
+		return Objects.requireNonNull(Bukkit.getTag(Tag.REGISTRY_ENTITY_TYPES, key, EntityType.class), () -> "Couldn't find entity type tag " + key);
+	}
 
 	/**
 	 * Adds a rule to exempt the entity from being considered in darkness

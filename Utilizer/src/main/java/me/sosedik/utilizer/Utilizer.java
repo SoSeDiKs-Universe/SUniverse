@@ -36,19 +36,24 @@ import me.sosedik.utilizer.listener.misc.MilkImmuneEffects;
 import me.sosedik.utilizer.listener.player.CleanupPlayerScoreboards;
 import me.sosedik.utilizer.listener.player.PlayerDataLoadSave;
 import me.sosedik.utilizer.listener.player.PlayerLanguageLoadSave;
+import me.sosedik.utilizer.listener.player.PlayerOptions;
 import me.sosedik.utilizer.listener.player.SetupPlayerScoreboards;
 import me.sosedik.utilizer.listener.player.UpdateInventoryOnLocaleChange;
 import me.sosedik.utilizer.listener.recipe.FireCrafting;
 import me.sosedik.utilizer.util.EventUtil;
 import me.sosedik.utilizer.util.Scheduler;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
+import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
+import org.bukkit.ServerLinks;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.incendo.cloud.bukkit.internal.BukkitBrigadierMapper;
 import org.incendo.cloud.parser.ParserDescriptor;
 import org.jetbrains.annotations.UnknownNullability;
 import org.jspecify.annotations.NullMarked;
+
+import java.net.URI;
 
 @NullMarked
 public final class Utilizer extends JavaPlugin {
@@ -82,6 +87,10 @@ public final class Utilizer extends JavaPlugin {
 			DiscordResolver::new,
 			LocaleResolver::new
 		);
+		URI discordUrl = URI.create(DiscordResolver.DISCORD_URL.startsWith("http") ? DiscordResolver.DISCORD_URL : "https://" + DiscordResolver.DISCORD_URL);
+		Bukkit.getServer().getServerLinks().addLink(ServerLinks.Type.REPORT_BUG, discordUrl);
+		Bukkit.getServer().getServerLinks().addLink(ServerLinks.Type.COMMUNITY, discordUrl);
+		Bukkit.getServer().getServerLinks().addLink(ServerLinks.Type.WEBSITE, URI.create("https://sosedik.com"));
 
 		new CustomTotemOfUndyingModifier(utilizerKey("custom_totem_display")).register();
 		new DyedItemNamesModifier(utilizerKey("dyed_item_name")).register();
@@ -114,11 +123,13 @@ public final class Utilizer extends JavaPlugin {
 			CleanupPlayerScoreboards.class,
 			PlayerDataLoadSave.class,
 			PlayerLanguageLoadSave.class,
+			PlayerOptions.class,
 			SetupPlayerScoreboards.class,
 			UpdateInventoryOnLocaleChange.class,
 			// recipe
 			FireCrafting.class
 		);
+
 		saveConfig();
 	}
 

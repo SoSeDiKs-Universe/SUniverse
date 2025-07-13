@@ -6,6 +6,15 @@
 	],
 	"trophy.when_pigs_finally_fly.name": "<#EB9492><b>Рубен, кінець візер-бурі",
 	"trophy.when_pigs_finally_fly.lore": "<#EB9492><!i>Він був чудовою свинкою",
+	"trophy.kill_10_chicken_in_air.name": "<#C1D9D8><b>Пташине божевілля",
+	"trophy.kill_10_chicken_in_air.lore": [
+		"<#C1D9D8><!i>Хто б міг подумати, що повітряний",
+		"<#C1D9D8><!i>бій може бути таким… брудним?"
+	],
+	"trophy.blow_up_all_monsters_with_tnt.name": "<#DB2F1A><b>Бумерська футболка",
+	"trophy.blow_up_all_monsters_with_tnt.lore": "<#DB2F1A><!i>Жодних помилок, тільки веселі бум-бумчики",
+	"trophy.more_shields.name": "<#67FF6D><b>Дерев'яний щит",
+	"trophy.more_shields.lore": "<#67FF6D><!i>Ви витратили на це 3 стаки дошок",
 	"trophy.half_a_heart_1h.name": "<gray><b>Енергія Dark Souls",
 	"trophy.half_a_heart_1h.lore": [
 		"<gray><!i>Який сенс носити броню, якщо",

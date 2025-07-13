@@ -47,7 +47,7 @@ public class PossessedInfiniteProjectiles implements Listener {
 	public void onArrowLaunch(EntityShootBowEvent event) {
 		if (!(event.getEntity() instanceof Player player)) return;
 		if (!(event.getProjectile() instanceof AbstractArrow projectile)) return;
-		if (projectile instanceof Trident) return;
+		if (!Tag.ENTITY_TYPES_ARROWS.isTagged(projectile.getType())) return;
 		if (!PossessingPlayer.isPossessing(player)) return;
 
 		LivingEntity riding = PossessingPlayer.getPossessed(player);

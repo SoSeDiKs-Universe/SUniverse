@@ -6,6 +6,12 @@
 	],
 	"trophy.when_pigs_finally_fly.name": "<#EB9492><b>Reuben the Wither Storm Ender",
 	"trophy.when_pigs_finally_fly.lore": "<#EB9492><!i>He was a great pig",
+	"trophy.kill_10_chicken_in_air.name": "<#C1D9D8><b>Feathered Frenzy",
+	"trophy.kill_10_chicken_in_air.lore": "<#C1D9D8><!i>Who knew aerial combat could be so… messy?",
+	"trophy.blow_up_all_monsters_with_tnt.name": "<#DB2F1A><b>Boomer T-Shirt",
+	"trophy.blow_up_all_monsters_with_tnt.lore": "<#DB2F1A><!i>There are no mistakes, just happy explosions",
+	"trophy.more_shields.name": "<#67FF6D><b>Tree Shield",
+	"trophy.more_shields.lore": "<#67FF6D><!i>You spent 3 stacks of wood on this",
 	"trophy.half_a_heart_1h.name": "<gray><b>Energy of Dark Souls",
 	"trophy.half_a_heart_1h.lore": [
 		"<gray><!i>What's the Point in wearing Armor",

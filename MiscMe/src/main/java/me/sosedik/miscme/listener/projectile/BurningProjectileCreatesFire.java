@@ -1,6 +1,7 @@
 package me.sosedik.miscme.listener.projectile;
 
 import me.sosedik.miscme.MiscMe;
+import me.sosedik.miscme.api.event.player.PlayerIgniteExplosiveMinecartEvent;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.block.Block;
@@ -10,8 +11,10 @@ import org.bukkit.block.data.Lightable;
 import org.bukkit.block.data.type.Campfire;
 import org.bukkit.block.data.type.Candle;
 import org.bukkit.block.data.type.Fire;
+import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.entity.minecart.ExplosiveMinecart;
@@ -47,6 +50,8 @@ public class BurningProjectileCreatesFire implements Listener {
 		if (hitEntity != null) {
 			if (hitEntity instanceof ExplosiveMinecart explosiveMinecart && !explosiveMinecart.isIgnited()) {
 				explosiveMinecart.ignite();
+				if (projectile.getShooter() instanceof Player shooter)
+					new PlayerIgniteExplosiveMinecartEvent(shooter, explosiveMinecart).callEvent();
 				return;
 			}
 			hitEntity.setFireTicks(Math.max(hitEntity.getFireTicks(), 20 * 5));
@@ -61,7 +66,14 @@ public class BurningProjectileCreatesFire implements Listener {
 		var hitBlockFace = event.getHitBlockFace();
 		if (hitBlock == null || hitBlockFace == null) return;
 
-		createFireOrIgnite(hitBlock, hitBlockFace, projectile, BlockIgniteEvent.IgniteCause.ARROW);
+		if (!createFireOrIgnite(hitBlock, hitBlockFace, projectile, BlockIgniteEvent.IgniteCause.ARROW)) return;
+
+		if (projectile instanceof AbstractArrow arrow) {
+			MiscMe.scheduler().sync(() -> {
+				if (arrow.isValid())
+					arrow.startFalling();
+			}, 1L);
+		}
 	}
 
 	/**
@@ -76,7 +88,14 @@ public class BurningProjectileCreatesFire implements Listener {
 
 		if (hitBlock.getType() == Material.TNT) {
 			hitBlock.setType(Material.AIR);
-			hitBlock.getWorld().spawn(hitBlock.getLocation().center(), TNTPrimed.class);
+			hitBlock.getWorld().spawn(hitBlock.getLocation().center(), TNTPrimed.class, tnt -> {
+				Entity source = ignitingEntity;
+				if (source instanceof Projectile projectile && projectile.getShooter() instanceof Entity shooter)
+					source = shooter;
+				tnt.setSource(source);
+			});
+			if (ignitingEntity != null && Tag.ENTITY_TYPES_ARROWS.isTagged(ignitingEntity.getType()))
+				ignitingEntity.remove();
 			return true;
 		}
 		if (tryToLit(hitBlock)) return true;

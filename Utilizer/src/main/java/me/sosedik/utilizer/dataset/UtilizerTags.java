@@ -41,6 +41,7 @@ public class UtilizerTags {
 	public static final Tag<Material> STONE_ORES_BLOCKS = blockTag("stone_ores");
 	public static final Tag<Material> ORES_BLOCKS = blockTag("ores");
 
+	// MCCheck: 1.21.7, new hostile mobs
 	public static final Tag<EntityType> HOSTILE_MONSTERS = entityTag("hostile_monsters");
 
 	private static Tag<Material> itemTag(String key) {

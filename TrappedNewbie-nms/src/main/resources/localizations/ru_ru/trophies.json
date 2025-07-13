@@ -6,6 +6,15 @@
 	],
 	"trophy.when_pigs_finally_fly.name": "<#EB9492><b>Рубен, сокрушитель визер-шторма",
 	"trophy.when_pigs_finally_fly.lore": "<#EB9492><!i>Он был отличным свином",
+	"trophy.kill_10_chicken_in_air.name": "<#C1D9D8><b>Пернатое безумие",
+	"trophy.kill_10_chicken_in_air.lore": [
+		"<#C1D9D8><!i>Кто бы мог подумать, что воздушный",
+		"<#C1D9D8><!i>бой может быть таким… грязным?"
+	],
+	"trophy.blow_up_all_monsters_with_tnt.name": "<#DB2F1A><b>Бумерская футболка",
+	"trophy.blow_up_all_monsters_with_tnt.lore": "<#DB2F1A><!i>Ошибок не бывает, только счастливые бум-бумы",
+	"trophy.more_shields.name": "<#67FF6D><b>Древесный щит",
+	"trophy.more_shields.lore": "<#67FF6D><!i>Вы потратили на это 3 стака досок",
 	"trophy.half_a_heart_1h.name": "<gray><b>Энергия Dark Souls",
 	"trophy.half_a_heart_1h.lore": [
 		"<gray><!i>Какой смысл носить доспехи, если",

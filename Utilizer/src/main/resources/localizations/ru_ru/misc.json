@@ -1,3 +1,6 @@
 {
-	"item.modifier.glowy": "<gray><i>Светящийся"
+	"item.modifier.glowy": "<gray><i>Светящийся",
+	"preferences.title": "Настройки",
+	"preferences.done": "Готово",
+	"preferences.preference.am_pm": "12-часовые часы (AM-PM)"
 }

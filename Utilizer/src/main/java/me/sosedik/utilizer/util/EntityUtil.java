@@ -17,6 +17,7 @@ import org.bukkit.entity.Turtle;
 import org.bukkit.entity.WaterMob;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -211,6 +212,35 @@ public class EntityUtil {
 	 */
 	public static boolean isWaterMob(@Nullable LivingEntity entity) {
 		return entity instanceof WaterMob || entity instanceof Turtle || entity instanceof Drowned;
+	}
+
+	/**
+	 * Checks whether the entity is in the air
+	 *
+	 * @param entity entity
+	 * @return whether the entity is in the air
+	 */
+	public static boolean isInAirLazy(LivingEntity entity) {
+		if (entity.isOnGround()) return false;
+		if (entity.isClimbing()) return false;
+		if (entity.isGliding()) return false;
+		if (entity.isRiptiding()) return false;
+		if (entity.isSwimming()) return false;
+		if (entity.isInsideVehicle()) return false;
+		return entity.getMovementAffectingBlock().isEmpty();
+	}
+
+	/**
+	 * Checks whether the damage is a fire damage
+	 *
+	 * @param cause cause
+	 * @return whether the damage is a fire damage
+	 */
+	public static boolean isFireDamageCause(EntityDamageEvent.DamageCause cause) {
+		return cause == EntityDamageEvent.DamageCause.FIRE
+				|| cause == EntityDamageEvent.DamageCause.FIRE_TICK
+				|| cause == EntityDamageEvent.DamageCause.LAVA
+				|| cause == EntityDamageEvent.DamageCause.HOT_FLOOR;
 	}
 
 }

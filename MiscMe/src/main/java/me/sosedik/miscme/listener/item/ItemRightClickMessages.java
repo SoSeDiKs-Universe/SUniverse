@@ -56,7 +56,7 @@ public class ItemRightClickMessages implements Listener {
 					messenger.sendActionBar("item.clock.time.the_end");
 				} else {
 					long day = world.getFullTime() / 24_000;
-					Component time = ClockModifier.formatTime(world, messenger, player.locale());
+					Component time = ClockModifier.formatTime(world, messenger, player);
 					messenger.sendActionBar("item.clock.click", raw("day", day), raw("time", time));
 				}
 				player.swingMainHand();

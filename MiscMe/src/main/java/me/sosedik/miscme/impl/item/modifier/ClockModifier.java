@@ -10,6 +10,7 @@ import me.sosedik.miscme.MiscMe;
 import me.sosedik.resourcelib.ResourceLib;
 import me.sosedik.utilizer.api.language.LangOptionsStorage;
 import me.sosedik.utilizer.api.message.Messenger;
+import me.sosedik.utilizer.listener.player.PlayerOptions;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -81,7 +82,7 @@ public class ClockModifier extends ItemModifier {
 		if (world.getEnvironment() == World.Environment.THE_END) return messenger.getMessage("item.clock.time.the_end");
 
 		long day = world.getFullTime() / 24_000;
-		Component time = formatTime(world, messenger, locale);
+		Component time = formatTime(world, messenger, player);
 
 		long t = world.getTime();
 		int h = (int) (t / 1000) + 6;
@@ -91,13 +92,13 @@ public class ClockModifier extends ItemModifier {
 		return messenger.getMessage("item.clock.time", raw("emoji", clock), raw("day", day), component("time", time));
 	}
 
-	public static Component formatTime(World world, Messenger messenger, Locale locale) {
+	public static Component formatTime(World world, Messenger messenger, Player player) {
 		long t = world.getTime();
 		int h = (int) (t / 1000) + 6;
 		if (h > 23) h -= 24;
 		int m = (int) ((60 * (t % 1000)) / 1000);
 		String amPm;
-		var useAmPm = isAmPmFormat(locale);
+		boolean useAmPm = PlayerOptions.isAmPm(player);
 		if (useAmPm) {
 			if (h > 12) {
 				h -= 12;
@@ -135,10 +136,6 @@ public class ClockModifier extends ItemModifier {
 			case 11, 23 -> "🕚";
 			default -> throw new IllegalArgumentException("Hour must be between 0 and 23.");
 		};
-	}
-
-	private static boolean isAmPmFormat(Locale locale) {
-		return locale.equals(Locale.US);
 	}
 
 }

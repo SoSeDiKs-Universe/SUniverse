@@ -5,16 +5,19 @@ import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.BannerPatternLayers;
 import io.papermc.paper.datacomponent.item.DyedItemColor;
 import io.papermc.paper.datacomponent.item.Fireworks;
+import io.papermc.paper.datacomponent.item.ItemArmorTrim;
 import io.papermc.paper.datacomponent.item.ItemContainerContents;
 import io.papermc.paper.datacomponent.item.ItemEnchantments;
 import io.papermc.paper.datacomponent.item.PotionContents;
 import io.papermc.paper.datacomponent.item.UseCooldown;
+import io.papermc.paper.registry.keys.tags.DamageTypeTagKeys;
 import me.sosedik.miscme.dataset.MoreMobHeads;
 import me.sosedik.packetadvancements.api.advancement.IAdvancement;
 import me.sosedik.packetadvancements.api.advancement.root.IRootAdvancement;
 import me.sosedik.packetadvancements.api.tab.AdvancementManager;
 import me.sosedik.packetadvancements.api.tab.AdvancementTab;
 import me.sosedik.packetadvancements.imlp.progress.vanilla.conditions.DamageTriggerCondition;
+import me.sosedik.packetadvancements.imlp.progress.vanilla.conditions.EntityStateTriggerCondition;
 import me.sosedik.packetadvancements.imlp.progress.vanilla.conditions.ItemTriggerCondition;
 import me.sosedik.packetadvancements.util.storage.JsonStorage;
 import me.sosedik.requiem.dataset.RequiemItems;
@@ -27,6 +30,7 @@ import me.sosedik.trappednewbie.api.advancement.reward.FancyAdvancementReward;
 import me.sosedik.trappednewbie.impl.advancement.AttackSquidInTheAirWithASnowballAdvancement;
 import me.sosedik.trappednewbie.impl.advancement.AttackWithAnEggAdvancement;
 import me.sosedik.trappednewbie.impl.advancement.AttackZombieWithAnEggAdvancement;
+import me.sosedik.trappednewbie.impl.advancement.BlowUpAllMonstersWithTNTAdvancement;
 import me.sosedik.trappednewbie.impl.advancement.GetABannerShieldAdvancement;
 import me.sosedik.trappednewbie.impl.advancement.InspectorGadgetAdvancement;
 import me.sosedik.trappednewbie.impl.advancement.MasterShieldsmanAdvancement;
@@ -35,6 +39,7 @@ import me.sosedik.trappednewbie.impl.advancement.RockPaperShearsAdvancement;
 import me.sosedik.trappednewbie.impl.advancement.Walk10KKMAdvancement;
 import me.sosedik.trappednewbie.impl.item.modifier.LetterModifier;
 import me.sosedik.trappednewbie.listener.advancement.AdvancementTrophies;
+import me.sosedik.utilizer.api.message.Messenger;
 import me.sosedik.utilizer.dataset.UtilizerTags;
 import me.sosedik.utilizer.util.ItemUtil;
 import me.sosedik.utilizer.util.MiscUtil;
@@ -54,6 +59,9 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.trim.ArmorTrim;
+import org.bukkit.inventory.meta.trim.TrimMaterial;
+import org.bukkit.inventory.meta.trim.TrimPattern;
 import org.bukkit.potion.PotionType;
 import org.jspecify.annotations.NullMarked;
 
@@ -77,6 +85,7 @@ import static me.sosedik.packetadvancements.imlp.display.AdvancementVisibilities
 import static me.sosedik.packetadvancements.imlp.display.AdvancementVisibilities.ifVisible;
 import static me.sosedik.packetadvancements.imlp.display.AdvancementVisibilities.parentGranted;
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.entityHurtPlayer;
+import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.entityKilledPlayer;
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.fishingRodHooked;
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.inventoryChanged;
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.playerHurtEntity;
@@ -370,7 +379,23 @@ public class TrappedNewbieAdvancements {
 				new Pattern(DyeColor.BLACK, PatternType.SQUARE_BOTTOM_LEFT)
 			)));
 			return item;
-		})).buildAndRegister();
+		}))
+		.withReward(rewards()
+			.withExp(25)
+			.withTrophy(() -> {
+				ItemStack item = shield(DyeColor.LIME);
+				item.setData(DataComponentTypes.BANNER_PATTERNS, BannerPatternLayers.bannerPatternLayers(List.of(
+					new Pattern(DyeColor.BROWN, PatternType.PIGLIN),
+					new Pattern(DyeColor.BROWN, PatternType.TRIANGLES_BOTTOM),
+					new Pattern(DyeColor.BROWN, PatternType.STRIPE_CENTER),
+					new Pattern(DyeColor.GREEN, PatternType.TRIANGLES_TOP),
+					new Pattern(DyeColor.GREEN, PatternType.GRADIENT),
+					new Pattern(DyeColor.GREEN, PatternType.BRICKS)
+				)));
+				return item;
+			})
+		)
+		.buildAndRegister();
 	public static final IAdvancement MASTER_SHIELDSMAN = buildBase(MORE_SHIELDS, "master_shieldsman").display(display().x(1F).fancyDescriptionParent(NamedTextColor.DARK_PURPLE).challengeFrame().icon(shield(DyeColor.BLACK)))
 		.withReward(rewards()
 			.withExp(100)
@@ -403,20 +428,28 @@ public class TrappedNewbieAdvancements {
 		}))
 		.requiredProgress(vanilla(entityHurtPlayer().withDamage(damage -> damage.blocked().withMinDealtDamage(40D))))
 		.buildAndRegister();
-	public static final IAdvancement ATTACK_WITH_AN_EGG = buildBase(WEAPONRY_ROOT, "attack_with_an_egg").display(display().xy(1F, -1.5F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.EGG))
+	public static final IAdvancement ATTACK_WITH_AN_EGG = buildBase(WEAPONRY_ROOT, "attack_with_an_egg").display(display().xy(1F, -3F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.EGG))
 		.buildAndRegister(AttackWithAnEggAdvancement::new);
 	public static final IAdvancement ATTACK_ZOMBIE_WITH_AN_EGG = buildBase(ATTACK_WITH_AN_EGG, "attack_zombie_with_an_egg").display(display().x(1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().icon(Material.ZOMBIE_HEAD))
 		.buildAndRegister(AttackZombieWithAnEggAdvancement::new);
 	public static final IAdvancement ATTACK_SQUID_IN_THE_AIR_WITH_A_SNOWBALL = buildBase(ATTACK_ZOMBIE_WITH_AN_EGG, "attack_squid_in_the_air_with_a_snowball").display(display().x(1F).fancyDescriptionParent(NamedTextColor.DARK_PURPLE).challengeFrame().icon(Material.SNOWBALL))
 		.withReward(rewards().withExp(70))
 		.buildAndRegister(AttackSquidInTheAirWithASnowballAdvancement::new);
-	public static final IAdvancement HOOK_PIG = buildBase(WEAPONRY_ROOT, "hook_pig").display(display().xy(1F, -2.5F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.PORKCHOP))
+	public static final IAdvancement HOOK_PIG = buildBase(WEAPONRY_ROOT, "hook_pig").display(display().xy(1F, -4F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.PORKCHOP))
 		.requiredProgress(vanilla(fishingRodHooked().withEntity(entity -> entity.withEntityType(EntityType.PIG))))
 		.buildAndRegister();
 	public static final IAdvancement HOOK_MONSTER = buildBase(HOOK_PIG, "hook_monster").display(display().x(1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().icon(Material.FISHING_ROD))
 		.requiredProgress(vanilla(fishingRodHooked().withEntity(entity -> entity.withEntityType(UtilizerTags.HOSTILE_MONSTERS))))
 		.buildAndRegister();
-	public static final IAdvancement WHEN_PIGS_FINALLY_FLY = buildBase(HOOK_MONSTER, "when_pigs_finally_fly").display(display().x(1F).fancyDescriptionParent(NamedTextColor.DARK_PURPLE).challengeFrame().icon(PIG_HEAD))
+	public static final IAdvancement HOOK_TNT = buildBase(HOOK_MONSTER, "hook_tnt").display(display().x(1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().icon(ItemUtil.glint(Material.FISHING_ROD)))
+		.withReward(rewards().withExp(25))
+		.requiredProgress(vanilla(fishingRodHooked().withEntity(entity -> entity.withEntityType(EntityType.TNT))))
+		.buildAndRegister();
+	public static final IAdvancement HOOK_WARDEN = buildBase(HOOK_TNT, "hook_warden").display(display().x(1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().icon(ItemUtil.glint(Material.WARD_ARMOR_TRIM_SMITHING_TEMPLATE)))
+		.withReward(rewards().withExp(40).addItems(ItemStack.of(Material.SCULK_CATALYST, 2)))
+		.requiredProgress(vanilla(fishingRodHooked().withEntity(entity -> entity.withEntityType(EntityType.WARDEN))))
+		.buildAndRegister();
+	public static final IAdvancement WHEN_PIGS_FINALLY_FLY = buildBase(HOOK_WARDEN, "when_pigs_finally_fly").display(display().x(1F).fancyDescriptionParent(NamedTextColor.DARK_PURPLE).challengeFrame().icon(PIG_HEAD))
 		.withReward(rewards()
 			.withExp(100)
 			.addItems(ItemStack.of(Material.PORKCHOP, 32))
@@ -424,6 +457,125 @@ public class TrappedNewbieAdvancements {
 		)
 		.requiredProgress(vanilla(fishingRodHooked().withEntity(entity -> entity.withEntityType(EntityType.PIG).withDistanceToPlayer(distance -> distance.minAbsolute(25D)))))
 		.buildAndRegister();
+	public static final IAdvancement ATTACK_WITH_A_SNOWBALL = buildBase(WEAPONRY_ROOT, "attack_with_a_snowball").display(display().xy(1F, -1.5F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.SNOWBALL))
+		.withReward(rewards().addItems(ItemStack.of(Material.SNOWBALL, 16)))
+		.requiredProgress(vanilla(
+			playerHurtEntity()
+				.withDamage(damage -> damage
+					.withDamageSource(source -> source
+						.withTag(DamageTypeTagKeys.IS_PROJECTILE, true)
+						.withDirectEntity(direct -> direct
+							.withEntityType(EntityType.SNOWBALL)
+							.withNbt("{Item:{id:\"%s\"}}".formatted(Material.SNOWBALL.key()))
+						)
+					)
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement KILL_SNOW_GOLEM_WITH_A_SNOWBALL = buildBase(ATTACK_WITH_A_SNOWBALL, "kill_snow_golem_with_a_snowball").display(display().xy(1F, 0.5F).fancyDescriptionParent(NamedTextColor.AQUA).taskFrame().icon(Material.CARVED_PUMPKIN))
+		.withReward(rewards().withExp(25).addItems(ItemStack.of(Material.SNOWBALL, 4)))
+		.requiredProgress(vanilla(
+			playerKilledEntity()
+				.withPlayer(player -> player
+					.withEquipment(equipment -> equipment
+						.withMainHand(Material.SNOWBALL)
+					)
+				)
+				.withEntity(entity -> entity
+					.withEntityType(EntityType.SNOW_GOLEM)
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement GET_KILLED_BY_A_SNOW_GOLEM = buildBase(KILL_SNOW_GOLEM_WITH_A_SNOWBALL, "get_killed_by_a_snow_golem").display(display().x(1F).fancyDescriptionParent(NamedTextColor.DARK_PURPLE).challengeFrame().icon(ItemUtil.glint(Material.SNOWBALL)))
+		.withReward(rewards().withExp(50))
+		.requiredProgress(vanilla(
+			entityKilledPlayer()
+				.withEntity(entity -> entity
+					.withEntityType(EntityType.SNOW_GOLEM)
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement KILL_A_BLAZE_WITH_A_SNOWBALL = buildBase(ATTACK_WITH_A_SNOWBALL, "kill_a_blaze_with_a_snowball").display(display().xy(1F, -0.5F).fancyDescriptionParent(NamedTextColor.AQUA).taskFrame().icon(Material.BLAZE_POWDER))
+		.withReward(rewards().addItems(ItemStack.of(Material.BLAZE_ROD, 4)))
+		.requiredProgress(vanilla(
+			playerKilledEntity()
+				.withEntity(entity -> entity
+					.withEntityType(EntityType.BLAZE)
+				)
+				.withDamage(source -> source
+					.withTag(DamageTypeTagKeys.IS_PROJECTILE, true)
+					.withDirectEntity(direct -> direct
+						.withEntityType(EntityType.SNOWBALL)
+						.withNbt("{Item:{id:\"%s\"}}".formatted(Material.SNOWBALL.key()))
+					)
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement KILL_A_BRAZE_WITH_A_BRAZE_ROD_WHILE_ON_FIRE = buildBase(KILL_A_BLAZE_WITH_A_SNOWBALL, "kill_a_braze_with_a_braze_rod_while_on_fire").display(display().x(1F).fancyDescriptionParent(NamedTextColor.AQUA).taskFrame().icon(Material.BLAZE_ROD))
+		.withReward(rewards().withExp(50).addItems(ItemStack.of(Material.BLAZE_ROD, 8)))
+		.requiredProgress(vanilla(
+			playerKilledEntity()
+				.withEntity(entity -> entity
+					.withEntityType(EntityType.BLAZE)
+					.withState(EntityStateTriggerCondition::onFire)
+				)
+				.withPlayer(player -> player
+					.withEquipment(equipment -> equipment
+						.withMainHand(Material.BLAZE_ROD)
+					)
+					.withState(EntityStateTriggerCondition::onFire)
+				)
+				.withDamage(source -> source
+					.withTag(DamageTypeTagKeys.IS_PLAYER_ATTACK, true)
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement KILL_10_CHICKEN_IN_AIR = buildBase(KILL_A_BRAZE_WITH_A_BRAZE_ROD_WHILE_ON_FIRE, "kill_10_chicken_in_air").display(display().x(1F).fancyDescriptionParent(NamedTextColor.DARK_PURPLE).challengeFrame().icon(Material.GUSTER_BANNER_PATTERN))
+		.withReward(rewards()
+			.withExp(80)
+			.withTrophy(ItemStack.of(Material.FEATHER))
+		)
+		.buildAndRegister();
+	public static final IAdvancement GET_TNT = buildBase(WEAPONRY_ROOT, "get_tnt").display(display().xy(1F, -5F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.TNT))
+		.requiredProgress(vanilla(inventoryChanged().withItems(ItemTriggerCondition.of(Material.TNT))))
+		.buildAndRegister();
+	public static final IAdvancement BLOW_UP_A_CREEPER_WITH_TNT = buildBase(GET_TNT, "blow_up_a_creeper_with_tnt").display(display().x(1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.CREEPER_HEAD))
+		.withReward(rewards().addItems(ItemStack.of(Material.TNT, 5)))
+		.requiredProgress(vanilla(
+			playerKilledEntity()
+				.withEntity(entity -> entity
+					.withEntityType(EntityType.CREEPER)
+				)
+				.withDamage(source -> source
+					.withTag(DamageTypeTagKeys.IS_EXPLOSION, true)
+					.withDirectEntity(entity -> entity
+						.withEntityType(EntityType.TNT)
+					)
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement IGNITE_250_TNT = buildBase(BLOW_UP_A_CREEPER_WITH_TNT, "ignite_250_tnt").display(display().x(1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().icon(ItemUtil.glint(Material.TNT)))
+		.withReward(rewards().withExp(90).addItems(ItemStack.of(Material.TNT, 4)))
+		.requiredProgress(simple(250, 1))
+		.buildAndRegister();
+	public static final IAdvancement IGNITE_CHARGED_CREEPER_MIDAIR = buildBase(IGNITE_250_TNT, "ignite_charged_creeper_midair").display(display().x(1F).fancyDescriptionParent(NamedTextColor.DARK_PURPLE).withAdvancementFrame(AdvancementFrame.STAR).icon(ItemUtil.glint(Material.FIREWORK_ROCKET)))
+		.withReward(rewards()
+			.withExp(65)
+			.withExtraMessage(player -> Messenger.messenger(player).getMessage("advancement.reward.shearable_creepers"))
+		)
+		.buildAndRegister();
+	public static final IAdvancement BLOW_UP_ALL_MONSTERS_WITH_TNT = buildBase(IGNITE_CHARGED_CREEPER_MIDAIR, "blow_up_all_monsters_with_tnt").display(display().x(1F).fancyDescriptionParent(NamedTextColor.DARK_PURPLE).challengeFrame().icon(Material.FIRE_CHARGE))
+		.withReward(rewards()
+			.withExp(100)
+			.addItems(ItemStack.of(Material.TNT, 25))
+			.withTrophy(() -> {
+				var item = ItemStack.of(Material.LEATHER_CHESTPLATE);
+				item.setData(DataComponentTypes.DYED_COLOR, DyedItemColor.dyedItemColor(Color.fromRGB(14364442)));
+				item.setData(DataComponentTypes.TRIM, ItemArmorTrim.itemArmorTrim(new ArmorTrim(TrimMaterial.QUARTZ, TrimPattern.HOST)));
+				return item;
+			})
+		)
+		.buildAndRegister(BlowUpAllMonstersWithTNTAdvancement::new);
 
 	public static final AdvancementTab CHALLENGES_TAB = buildTab("challenges", MANAGER).inverseY().backgroundPathBlock(Material.BEDROCK).build();
 	public static final IRootAdvancement CHALLENGES_ROOT = buildRoot(CHALLENGES_TAB).display(display().xy(0F, 0F).withAdvancementFrame(AdvancementFrame.SQUIRCLE).fancyDescriptionParent(GRAY).icon(Material.ENDER_EYE))

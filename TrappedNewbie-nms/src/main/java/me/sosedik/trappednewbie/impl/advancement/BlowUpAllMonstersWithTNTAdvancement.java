@@ -1,9 +1,10 @@
 package me.sosedik.trappednewbie.impl.advancement;
 
+import io.papermc.paper.registry.keys.tags.DamageTypeTagKeys;
 import me.sosedik.packetadvancements.api.progression.RequiredAdvancementProgress;
 import me.sosedik.packetadvancements.imlp.advancement.base.BaseAdvancement;
 import me.sosedik.packetadvancements.imlp.advancement.base.BaseAdvancementBuilderImpl;
-import me.sosedik.packetadvancements.imlp.progress.vanilla.types.EntityHurtPlayerTriggerData;
+import me.sosedik.packetadvancements.imlp.progress.vanilla.types.PlayerKilledEntityTriggerData;
 import me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData;
 import me.sosedik.utilizer.dataset.UtilizerTags;
 import org.bukkit.entity.EntityType;
@@ -12,16 +13,16 @@ import org.jspecify.annotations.NullMarked;
 import java.util.ArrayList;
 import java.util.List;
 
-// MCCheck: 1.21.7, new hostile mobs that can't have attack damage deflected
+// MCCheck: 1.21.7, new hostile mobs that have tnt immunity
 @NullMarked
-public class MasterShieldsmanAdvancement extends BaseAdvancement {
+public class BlowUpAllMonstersWithTNTAdvancement extends BaseAdvancement {
 
-	public MasterShieldsmanAdvancement(BaseAdvancementBuilderImpl advancementBuilder) {
+	public BlowUpAllMonstersWithTNTAdvancement(BaseAdvancementBuilderImpl advancementBuilder) {
 		super(advancementBuilder.requiredProgress(getProgress()));
 	}
 
 	private static RequiredAdvancementProgress getProgress() {
-		List<List<String>> requirements = new ArrayList<>();
+		List<List<String>> requirements = new ArrayList<>(UtilizerTags.HOSTILE_MONSTERS.getValues().size());
 		List<VanillaTriggerData<?>> triggerDatas = new ArrayList<>();
 		for (EntityType entityType : UtilizerTags.HOSTILE_MONSTERS.getValues()) {
 			if (shouldSkip(entityType)) continue;
@@ -34,16 +35,16 @@ public class MasterShieldsmanAdvancement extends BaseAdvancement {
 
 	private static boolean shouldSkip(EntityType entityType) {
 		return entityType == EntityType.WITHER
-			|| entityType == EntityType.WITCH
-			|| entityType == EntityType.ENDERMITE
-			|| entityType == EntityType.EVOKER
-			|| entityType == EntityType.GUARDIAN
-			|| entityType == EntityType.ELDER_GUARDIAN;
+			|| entityType == EntityType.ENDER_DRAGON;
 	}
 
-	private static EntityHurtPlayerTriggerData hurt(EntityType entityType) {
-		return VanillaTriggerData.entityHurtPlayer(entityType.key().value())
-			.withDamage(damage -> damage.blocked().withSourceEntity(entity -> entity.withEntityType(entityType)));
+	private static PlayerKilledEntityTriggerData hurt(EntityType entityType) {
+		return VanillaTriggerData.playerKilledEntity(entityType.key().value())
+			.withEntity(entity -> entity.withEntityType(entityType))
+			.withDamage(source -> source
+				.withTag(DamageTypeTagKeys.IS_EXPLOSION, true)
+				.withDirectEntity(entity -> entity.withEntityType(EntityType.TNT))
+			);
 	}
 
 }

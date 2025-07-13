@@ -63,6 +63,7 @@ public class DynamicInventoryInfoGatherer implements Listener {
 	private static final FontData START_THREE = ResourceLib.requireFontData(TrappedNewbie.trappedNewbieKey("sb_back/left_three"));
 	private static final FontData CENTER_THREE = ResourceLib.requireFontData(TrappedNewbie.trappedNewbieKey("sb_back/center_three"));
 	private static final FontData END_THREE = ResourceLib.requireFontData(TrappedNewbie.trappedNewbieKey("sb_back/right_three"));
+	private static final String OVERLAY_TAG = "overlay";
 
 	public DynamicInventoryInfoGatherer() {
 		TrappedNewbie.scheduler().sync(() -> {
@@ -156,7 +157,7 @@ public class DynamicInventoryInfoGatherer implements Listener {
 			if (world.getEnvironment() == World.Environment.NETHER) return null;
 			if (world.getEnvironment() == World.Environment.THE_END) return null;
 
-			Component text = ClockModifier.formatTime(world, Messenger.messenger(player), player.locale());
+			Component text = ClockModifier.formatTime(world, Messenger.messenger(player), player);
 
 			int textWidth = SpacingUtil.getWidth(text);
 			text = SpacingUtil.getOffset(-textWidth, textWidth, text);
@@ -270,7 +271,7 @@ public class DynamicInventoryInfoGatherer implements Listener {
 		if (overlayToggleable.condition() != null && !overlayToggleable.condition().test(player)) return;
 
 		ReadWriteNBT data = PlayerDataStorage.getData(player);
-		data = data.getOrCreateCompound("overlay");
+		data = data.getOrCreateCompound(OVERLAY_TAG);
 
 		data.setBoolean(overlayToggleable.id(), !data.getOrDefault(overlayToggleable.id(), true));
 	}
@@ -286,8 +287,8 @@ public class DynamicInventoryInfoGatherer implements Listener {
 	}
 
 	private void persistData(ReadWriteNBT preData, ReadWriteNBT data) {
-		if (preData.hasTag("overlay"))
-			data.getOrCreateCompound("overlay").mergeCompound(preData.getOrCreateCompound("overlay"));
+		if (preData.hasTag(OVERLAY_TAG))
+			data.getOrCreateCompound(OVERLAY_TAG).mergeCompound(preData.getOrCreateCompound(OVERLAY_TAG));
 	}
 
 	@EventHandler

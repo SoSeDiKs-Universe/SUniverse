@@ -16,7 +16,7 @@ import java.util.Objects;
 @NullMarked
 public record DiscordResolver(Messenger messenger) implements TagResolver {
 
-	private static final String DISCORD_URL = Objects.requireNonNull(Utilizer.instance().getConfig().getString("discord", "discord.com"));
+	public static final String DISCORD_URL = Objects.requireNonNull(Utilizer.instance().getConfig().getString("discord", "discord.com"));
 
 	@Override
 	public @Nullable Tag resolve(String name, ArgumentQueue args, Context ctx) {

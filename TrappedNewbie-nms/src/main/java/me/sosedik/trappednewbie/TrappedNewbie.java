@@ -41,7 +41,9 @@ import me.sosedik.trappednewbie.listener.advancement.dedicated.GoodAsNewAdvancem
 import me.sosedik.trappednewbie.listener.advancement.dedicated.HalfAHeartAdvancements;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.HorseStatsAdvancements;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.IHateSandAdvancement;
+import me.sosedik.trappednewbie.listener.advancement.dedicated.IgniteChargedCreeperMidairAdvancement;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.InventoryAdvancements;
+import me.sosedik.trappednewbie.listener.advancement.dedicated.Kill10ChickensInAirAdvancement;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.KungFuPandaAdvancement;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.LevelAdvancements;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.LootOpensAdvancements;
@@ -49,6 +51,7 @@ import me.sosedik.trappednewbie.listener.advancement.dedicated.OpeningHolderAdva
 import me.sosedik.trappednewbie.listener.advancement.dedicated.PathwaysAdvancement;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.QuickDeathAdvancements;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.StatisticAdvancements;
+import me.sosedik.trappednewbie.listener.advancement.dedicated.TNTPrimesAdvancement;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.WashAdvancements;
 import me.sosedik.trappednewbie.listener.block.BlockBreakHurts;
 import me.sosedik.trappednewbie.listener.block.BlockChoppingViaSwing;
@@ -57,7 +60,9 @@ import me.sosedik.trappednewbie.listener.block.SoftBlockHandBreaking;
 import me.sosedik.trappednewbie.listener.block.UnlitCampfireByDefault;
 import me.sosedik.trappednewbie.listener.entity.AngryAnimals;
 import me.sosedik.trappednewbie.listener.entity.BabierBabyMobs;
+import me.sosedik.trappednewbie.listener.entity.CreepersLoveCrawlers;
 import me.sosedik.trappednewbie.listener.entity.LimboEntities;
+import me.sosedik.trappednewbie.listener.entity.ShearableCreepers;
 import me.sosedik.trappednewbie.listener.item.BlackBeltSpeed;
 import me.sosedik.trappednewbie.listener.item.FirestrikerFire;
 import me.sosedik.trappednewbie.listener.item.FlintToFlakedFlint;
@@ -76,6 +81,7 @@ import me.sosedik.trappednewbie.listener.misc.DynamicInventoryInfoGatherer;
 import me.sosedik.trappednewbie.listener.misc.DynamicReducedF3DebugInfo;
 import me.sosedik.trappednewbie.listener.misc.FakeHardcoreHearts;
 import me.sosedik.trappednewbie.listener.misc.TabHeaderFooterBeautifier;
+import me.sosedik.trappednewbie.listener.misc.TemporaryScoreboardAdvancementMessages;
 import me.sosedik.trappednewbie.listener.player.DisableNaturalRespawn;
 import me.sosedik.trappednewbie.listener.player.DynamicGameMode;
 import me.sosedik.trappednewbie.listener.player.ExtraPossessedDrops;
@@ -83,6 +89,7 @@ import me.sosedik.trappednewbie.listener.player.NewbieWelcome;
 import me.sosedik.trappednewbie.listener.player.StartAsGhost;
 import me.sosedik.trappednewbie.listener.player.TaskManagement;
 import me.sosedik.trappednewbie.listener.player.TeamableLeatherEquipment;
+import me.sosedik.trappednewbie.listener.player.TrappedNewbiePlayerOptions;
 import me.sosedik.trappednewbie.listener.player.VisualArmorLayer;
 import me.sosedik.trappednewbie.listener.world.LimboWorldFall;
 import me.sosedik.trappednewbie.listener.world.LimitedLimbo;
@@ -186,8 +193,10 @@ public final class TrappedNewbie extends JavaPlugin {
 			GoodAsNewAdvancement.class,
 			HalfAHeartAdvancements.class,
 			HorseStatsAdvancements.class,
+			IgniteChargedCreeperMidairAdvancement.class,
 			IHateSandAdvancement.class,
 			InventoryAdvancements.class,
+			Kill10ChickensInAirAdvancement.class,
 			KungFuPandaAdvancement.class,
 			LevelAdvancements.class,
 			LootOpensAdvancements.class,
@@ -195,6 +204,7 @@ public final class TrappedNewbie extends JavaPlugin {
 			PathwaysAdvancement.class,
 			QuickDeathAdvancements.class,
 			StatisticAdvancements.class,
+			TNTPrimesAdvancement.class,
 			WashAdvancements.class,
 			// block
 			BlockBreakHurts.class,
@@ -205,7 +215,9 @@ public final class TrappedNewbie extends JavaPlugin {
 			// entity
 			AngryAnimals.class,
 			BabierBabyMobs.class,
+			CreepersLoveCrawlers.class,
 			LimboEntities.class,
+			ShearableCreepers.class,
 			// item
 			BlackBeltSpeed.class,
 			FirestrikerFire.class,
@@ -226,6 +238,7 @@ public final class TrappedNewbie extends JavaPlugin {
 			DynamicReducedF3DebugInfo.class,
 			FakeHardcoreHearts.class,
 			TabHeaderFooterBeautifier.class,
+			TemporaryScoreboardAdvancementMessages.class,
 			// player
 			DisableNaturalRespawn.class,
 			DynamicGameMode.class,
@@ -234,6 +247,7 @@ public final class TrappedNewbie extends JavaPlugin {
 			StartAsGhost.class,
 			TaskManagement.class,
 			TeamableLeatherEquipment.class,
+			TrappedNewbiePlayerOptions.class,
 			VisualArmorLayer.class,
 			// world
 			LimboWorldFall.class,

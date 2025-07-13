@@ -3,6 +3,7 @@ package me.sosedik.requiem.listener.entity;
 import de.tr7zw.nbtapi.NBT;
 import io.papermc.paper.tag.EntityTags;
 import me.sosedik.requiem.Requiem;
+import me.sosedik.utilizer.util.EntityUtil;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.enchantments.Enchantment;
@@ -69,7 +70,7 @@ public class UndeadConsecration implements Listener {
 		if (healTask == null) return;
 		if (healTask.isVulnerable()) return;
 
-		if (isFireDamageCause(event.getCause())) {
+		if (!EntityUtil.isFireDamageCause(event.getCause())) {
 			if (event.getEntity().isImmuneToFire()) {
 				event.setCancelled(true);
 			} else {
@@ -113,13 +114,6 @@ public class UndeadConsecration implements Listener {
 		}
 
 		event.setDamage(event.getDamage() * 0.2);
-	}
-
-	private boolean isFireDamageCause(EntityDamageEvent.DamageCause cause) {
-		return cause == EntityDamageEvent.DamageCause.FIRE
-				|| cause == EntityDamageEvent.DamageCause.FIRE_TICK
-				|| cause == EntityDamageEvent.DamageCause.LAVA
-				|| cause == EntityDamageEvent.DamageCause.HOT_FLOOR;
 	}
 
 	private boolean isExplosionDamageCause(EntityDamageEvent.DamageCause cause) {

@@ -1,3 +1,6 @@
 {
-	"item.modifier.glowy": "<gray><i>Glowy"
+	"item.modifier.glowy": "<gray><i>Glowy",
+	"preferences.title": "Preferences",
+	"preferences.done": "Done",
+	"preferences.preference.am_pm": "12-hour clock (AM-PM)"
 }

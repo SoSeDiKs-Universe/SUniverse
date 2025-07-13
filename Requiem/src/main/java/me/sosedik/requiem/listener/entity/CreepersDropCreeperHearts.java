@@ -13,7 +13,7 @@ import org.bukkit.inventory.ItemStack;
  */
 public class CreepersDropCreeperHearts implements Listener {
 
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onDeath(EntityDeathEvent event) {
 		if (!(event.getEntity() instanceof Creeper creeper)) return;
 		if (!creeper.isPowered()) return;

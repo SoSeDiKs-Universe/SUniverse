@@ -1,3 +1,6 @@
 {
-	"item.modifier.glowy": "<gray><i>Сяючий"
+	"item.modifier.glowy": "<gray><i>Сяючий",
+	"preferences.title": "Налаштування",
+	"preferences.done": "Готово",
+	"preferences.preference.am_pm": "12-годинний годинник (AM-PM)"
 }

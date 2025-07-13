@@ -1,5 +1,6 @@
 package me.sosedik.trappednewbie.dataset;
 
+import me.sosedik.miscme.api.event.player.PlayerIgniteExplosiveMinecartEvent;
 import me.sosedik.requiem.dataset.RequiemItems;
 import me.sosedik.trappednewbie.TrappedNewbie;
 import me.sosedik.utilizer.api.event.recipe.ItemCraftPrepareEvent;
@@ -249,11 +250,14 @@ public class TrappedNewbieRecipes {
 			.addIngredients(Tag.LOGS.getValues())
 			.register();
 		new FireCraft(ItemStack.empty(), trappedNewbieKey("tnt_exploding"))
-			.withAction((player, loc) -> loc.getWorld().spawn(loc, TNTPrimed.class))
+			.withAction((player, loc) -> loc.getWorld().spawn(loc, TNTPrimed.class, tnt -> tnt.setSource(player)))
 			.addIngredients(Material.TNT)
 			.register();
 		new FireCraft(ItemStack.empty(), trappedNewbieKey("tnt_minecart_exploding"))
-			.withAction((player, loc) -> loc.getWorld().spawn(loc, ExplosiveMinecart.class, ExplosiveMinecart::explode))
+			.withAction((player, loc) -> loc.getWorld().spawn(loc, ExplosiveMinecart.class, minecart -> {
+				if (player != null) new PlayerIgniteExplosiveMinecartEvent(player, minecart).callEvent();
+				minecart.explode();
+			}))
 			.addIngredients(Material.TNT_MINECART)
 			.register();
 		new FireCraft(ItemStack.empty(), trappedNewbieKey("creeper_heart_exploding"))

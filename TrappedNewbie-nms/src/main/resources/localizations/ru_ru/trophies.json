@@ -15,6 +15,13 @@
 	"trophy.blow_up_all_monsters_with_tnt.lore": "<#DB2F1A><!i>Ошибок не бывает, только счастливые бум-бумы",
 	"trophy.more_shields.name": "<#67FF6D><b>Древесный щит",
 	"trophy.more_shields.lore": "<#67FF6D><!i>Вы потратили на это 3 стака досок",
+	"trophy.die_twice_within_5s.name": "<#F6FFDF><b>Неудачник",
+	"trophy.die_twice_within_5s.lore": "<#F6FFDF><!i>Используйте, чтобы не умирать",
+	"trophy.attack_with_all_weapons.name": "<#DBB364><b>Многооружие",
+	"trophy.attack_with_all_weapons.lore": [
+		"<#DBB364><!i>Это меч, топор и…",
+		"<#DBB364><!i>Неважно, оно сломалось"
+	],
 	"trophy.half_a_heart_1h.name": "<gray><b>Энергия Dark Souls",
 	"trophy.half_a_heart_1h.lore": [
 		"<gray><!i>Какой смысл носить доспехи, если",

@@ -3,6 +3,7 @@ package me.sosedik.trappednewbie.dataset;
 import de.tr7zw.nbtapi.NBT;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.BannerPatternLayers;
+import io.papermc.paper.datacomponent.item.ChargedProjectiles;
 import io.papermc.paper.datacomponent.item.DyedItemColor;
 import io.papermc.paper.datacomponent.item.Fireworks;
 import io.papermc.paper.datacomponent.item.ItemArmorTrim;
@@ -28,6 +29,9 @@ import me.sosedik.trappednewbie.api.advancement.display.FancierAdvancementDispla
 import me.sosedik.trappednewbie.api.advancement.display.OpeningHolderAdvancementDisplay;
 import me.sosedik.trappednewbie.api.advancement.reward.FancyAdvancementReward;
 import me.sosedik.trappednewbie.impl.advancement.AttackSquidInTheAirWithASnowballAdvancement;
+import me.sosedik.trappednewbie.impl.advancement.AttackWithAllAxesAdvancement;
+import me.sosedik.trappednewbie.impl.advancement.AttackWithAllShovelsAdvancement;
+import me.sosedik.trappednewbie.impl.advancement.AttackWithAllWeaponsAdvancement;
 import me.sosedik.trappednewbie.impl.advancement.AttackWithAnEggAdvancement;
 import me.sosedik.trappednewbie.impl.advancement.AttackZombieWithAnEggAdvancement;
 import me.sosedik.trappednewbie.impl.advancement.BlowUpAllMonstersWithTNTAdvancement;
@@ -35,6 +39,7 @@ import me.sosedik.trappednewbie.impl.advancement.GetABannerShieldAdvancement;
 import me.sosedik.trappednewbie.impl.advancement.InspectorGadgetAdvancement;
 import me.sosedik.trappednewbie.impl.advancement.MasterShieldsmanAdvancement;
 import me.sosedik.trappednewbie.impl.advancement.MereMortalAdvancement;
+import me.sosedik.trappednewbie.impl.advancement.PyrotechnicAdvancement;
 import me.sosedik.trappednewbie.impl.advancement.RockPaperShearsAdvancement;
 import me.sosedik.trappednewbie.impl.advancement.Walk10KKMAdvancement;
 import me.sosedik.trappednewbie.impl.item.modifier.LetterModifier;
@@ -88,8 +93,11 @@ import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaT
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.entityKilledPlayer;
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.fishingRodHooked;
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.inventoryChanged;
+import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.killedByArrow;
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.playerHurtEntity;
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.playerKilledEntity;
+import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.shotCrossbow;
+import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.usingItem;
 import static me.sosedik.trappednewbie.TrappedNewbie.trappedNewbieKey;
 
 @NullMarked
@@ -303,21 +311,21 @@ public class TrappedNewbieAdvancements {
 		.visibilityRule(ifDone(false, BRAVE_NEW_WORLD))
 		.requiredProgress(alwaysDone())
 		.buildAndRegister();
-	public static final IAdvancement EXPELLIARMUS = buildBase(WEAPONRY_ROOT, "expelliarmus").display(display().x(1F).withAdvancementFrame(AdvancementFrame.CIRCLE).fancyDescriptionParent(NamedTextColor.GREEN).icon(ItemUtil.glint(TrappedNewbieItems.ROUGH_STICK)))
+	public static final IAdvancement EXPELLIARMUS = buildBase(WEAPONRY_ROOT, "expelliarmus").display(display().x(1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(ItemUtil.glint(TrappedNewbieItems.ROUGH_STICK)))
 		.requiredProgress(vanilla(playerHurtEntity("expelliarmus").withEntity(entity -> entity.withDistanceToPlayer(distance -> distance.maxAbsolute(5D))).withPlayer(player -> player.withEquipment(equipment -> equipment.withMainHand(ItemTriggerCondition.of(MiscUtil.combineArrays(TrappedNewbieTags.STICKS.getValues().toArray(new Material[0]), new Material[] {TrappedNewbieItems.ROUGH_STICK})))))))
 		.buildAndRegister();
-	public static final IAdvancement SLAPFISH = buildBase(EXPELLIARMUS, "slapfish").display(display().x(1F).withAdvancementFrame(AdvancementFrame.CIRCLE).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.COD))
+	public static final IAdvancement SLAPFISH = buildBase(EXPELLIARMUS, "slapfish").display(display().x(1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.COD))
 		.requiredProgress(vanilla(playerHurtEntity("slapfish").withEntity(entity -> entity.withDistanceToPlayer(distance -> distance.maxAbsolute(5D))).withPlayer(player -> player.withEquipment(equipment -> equipment.withMainHand(Tag.ITEMS_FISHES)))))
 		.buildAndRegister();
-	public static final IAdvancement DIEMONDS = buildBase(SLAPFISH, "diemonds").display(display().x(1F).withAdvancementFrame(AdvancementFrame.CIRCLE).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.DIAMOND))
+	public static final IAdvancement DIEMONDS = buildBase(SLAPFISH, "diemonds").display(display().x(1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.DIAMOND))
 		.requiredProgress(vanilla(playerHurtEntity("diemonds").withEntity(entity -> entity.withDistanceToPlayer(distance -> distance.maxAbsolute(5D))).withPlayer(player -> player.withEquipment(equipment -> equipment.withMainHand(Material.DIAMOND)))))
 		.buildAndRegister();
-	public static final IAdvancement INSPECTOR_GADGET = buildBase(DIEMONDS, "inspector_gadget").display(display().xy(1F, -0.5F).withAdvancementFrame(AdvancementFrame.CIRCLE).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.SPYGLASS))
+	public static final IAdvancement INSPECTOR_GADGET = buildBase(DIEMONDS, "inspector_gadget").display(display().xy(1F, -0.5F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.SPYGLASS))
 		.withReward(rewards().addItems(ItemStack.of(Material.COPPER_INGOT, 4), ItemStack.of(Material.AMETHYST_SHARD, 4)))
 		.requiredProgress(vanilla(playerKilledEntity().withEntity(entity -> entity.withDistanceToPlayer(distance -> distance.maxAbsolute(5D))).withPlayer(player -> player.withEquipment(equipment -> equipment.withMainHand(Material.SPYGLASS)))))
 		.buildAndRegister(InspectorGadgetAdvancement::new);
-	public static final IAdvancement ROCK_PAPER_SHEARS = buildBase(INSPECTOR_GADGET, "rock_paper_shears").display(display().x(1F).withAdvancementFrame(AdvancementFrame.STAR).fancyDescriptionParent(NamedTextColor.AQUA).icon(Material.SHEARS)).buildAndRegister(RockPaperShearsAdvancement::new);
-	public static final IAdvancement ITS_TIME_CONSUMING = buildBase(DIEMONDS, "its_time_consuming").display(display().xy(1F, 0.5F).withAdvancementFrame(AdvancementFrame.CIRCLE).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.CLOCK))
+	public static final IAdvancement ROCK_PAPER_SHEARS = buildBase(INSPECTOR_GADGET, "rock_paper_shears").display(display().x(1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().icon(Material.SHEARS)).buildAndRegister(RockPaperShearsAdvancement::new);
+	public static final IAdvancement ITS_TIME_CONSUMING = buildBase(DIEMONDS, "its_time_consuming").display(display().xy(1F, 0.5F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.CLOCK))
 		.withReward(rewards().addItems(ItemStack.of(Material.GOLD_INGOT, 4)))
 		.requiredProgress(vanilla(playerKilledEntity().withEntity(entity -> entity.withDistanceToPlayer(distance -> distance.maxAbsolute(5D))).withPlayer(player -> player.withEquipment(equipment -> equipment.withMainHand(Material.CLOCK)))))
 		.buildAndRegister();
@@ -428,6 +436,54 @@ public class TrappedNewbieAdvancements {
 		}))
 		.requiredProgress(vanilla(entityHurtPlayer().withDamage(damage -> damage.blocked().withMinDealtDamage(40D))))
 		.buildAndRegister();
+	public static final IAdvancement ATTACK_WITH_AN_AXE = buildBase(WEAPONRY_ROOT, "attack_with_an_axe").display(display().xy(1F, 2.5F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.STONE_AXE))
+		.requiredProgress(vanilla(
+			playerHurtEntity()
+				.withDamage(damage -> damage
+					.withDamageSource(source -> source.withTag(DamageTypeTagKeys.IS_PLAYER_ATTACK, true))
+					.withSourceEntity(entity -> entity
+						.withEquipment(equipment -> equipment
+							.withMainHand(Tag.ITEMS_AXES)
+						)
+					)
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement ATTACK_WITH_ALL_AXES = buildBase(ATTACK_WITH_AN_AXE, "attack_with_all_axes").display(display().x(1).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().icon(Material.DIAMOND_AXE))
+		.withReward(rewards().withExp(50))
+		.buildAndRegister(AttackWithAllAxesAdvancement::new);
+	public static final IAdvancement ATTACK_WITH_ALL_SHOVELS = buildBase(ATTACK_WITH_ALL_AXES, "attack_with_all_shovels").display(display().x(1).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().icon(Material.IRON_SHOVEL))
+		.withReward(rewards().withExp(100))
+		.buildAndRegister(AttackWithAllShovelsAdvancement::new);
+	public static final IAdvancement SPLEAF = buildBase(ATTACK_WITH_ALL_SHOVELS, "spleaf").display(display().x(1).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().icon(Material.BIG_DRIPLEAF))
+		.withReward(rewards().withExp(50).addItems(ItemStack.of(Material.BIG_DRIPLEAF, 4)))
+		.requiredProgress(vanilla(
+			playerKilledEntity()
+				.withEntity(entity -> entity
+					.withDistanceToPlayer(distance -> distance.maxAbsolute(5D))
+					.withSteppingLocation(loc -> loc
+						.withBlock(block -> block.withBlocks(Material.BIG_DRIPLEAF))
+					)
+				)
+				.withDamage(source -> source
+					.withTag(DamageTypeTagKeys.IS_PLAYER_ATTACK, true)
+					.withSourceEntity(entity -> entity
+						.withSteppingLocation(loc -> loc
+							.withBlock(block -> block.withBlocks(Material.BIG_DRIPLEAF))
+						)
+						.withEquipment(equipment -> equipment
+							.withMainHand(Tag.ITEMS_SHOVELS)
+						)
+					)
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement ATTACK_WITH_ALL_WEAPONS = buildBase(SPLEAF, "attack_with_all_weapons").display(display().x(1).fancyDescriptionParent(NamedTextColor.DARK_PURPLE).challengeFrame().icon(Material.NETHERITE_SWORD))
+		.withReward(rewards()
+			.withExp(100)
+			.withTrophy(ItemStack.of(Material.STICK))
+		)
+		.buildAndRegister(AttackWithAllWeaponsAdvancement::new);
 	public static final IAdvancement ATTACK_WITH_AN_EGG = buildBase(WEAPONRY_ROOT, "attack_with_an_egg").display(display().xy(1F, -3F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.EGG))
 		.buildAndRegister(AttackWithAnEggAdvancement::new);
 	public static final IAdvancement ATTACK_ZOMBIE_WITH_AN_EGG = buildBase(ATTACK_WITH_AN_EGG, "attack_zombie_with_an_egg").display(display().x(1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().icon(Material.ZOMBIE_HEAD))
@@ -576,6 +632,88 @@ public class TrappedNewbieAdvancements {
 			})
 		)
 		.buildAndRegister(BlowUpAllMonstersWithTNTAdvancement::new);
+	public static final IAdvancement GET_A_CROWSSBOW = buildBase(WEAPONRY_ROOT, "get_a_crowssbow").display(display().xy(1F, -6F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.TRIPWIRE_HOOK))
+		.requiredProgress(vanilla(inventoryChanged().withItems(ItemTriggerCondition.of(Material.CROSSBOW))))
+		.buildAndRegister();
+	public static final IAdvancement SHOOT_A_CROWSSBOW = buildBase(GET_A_CROWSSBOW, "shoot_a_crowssbow").display(display().x(1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.CROSSBOW))
+		.withReward(rewards().addItems(ItemStack.of(Material.ARROW, 8)))
+		.requiredProgress(vanilla(shotCrossbow().withItem(ItemTriggerCondition.of(Material.CROSSBOW))))
+		.buildAndRegister();
+	public static final IAdvancement HOLD_A_CROWSSBOW_AND_A_SPYGLASS = buildBase(SHOOT_A_CROWSSBOW, "hold_a_crowssbow_and_a_spyglass").display(display().x(1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.SPYGLASS))
+		.withReward(rewards().withExp(20))
+		.requiredProgress(vanilla(
+			usingItem()
+				.withPlayer(player -> player
+					.withEquipment(equipment -> equipment
+						.withOffHand(Material.CROSSBOW)
+					)
+				)
+				.withItem(ItemTriggerCondition.of(Material.SPYGLASS))
+		))
+		.buildAndRegister();
+	public static final IAdvancement KILL_A_PILLAGER_WITH_A_CROSSBOW = buildBase(HOLD_A_CROWSSBOW_AND_A_SPYGLASS, "kill_a_pillager_with_a_crossbow").display(display().x(1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(ItemUtil.texturedHead(MoreMobHeads.PILLAGER)))
+		.withReward(rewards().addItems(ItemStack.of(Material.EMERALD, 2)))
+		.requiredProgress(vanilla(
+			killedByArrow()
+				.withEntity(entity -> entity.withEntityType(EntityType.PILLAGER))
+				.withWeapon(ItemTriggerCondition.of(Material.CROSSBOW))
+		))
+		.buildAndRegister();
+	public static final IAdvancement CROSSBOWS_HOTBAR = buildBase(KILL_A_PILLAGER_WITH_A_CROSSBOW, "crossbows_hotbar").display(display().x(1F).fancyDescriptionParent(NamedTextColor.AQUA).taskFrame().icon(() -> {
+			var item = ItemStack.of(Material.CROSSBOW);
+			item.setData(DataComponentTypes.CHARGED_PROJECTILES, ChargedProjectiles.chargedProjectiles().add(ItemStack.of(Material.ARROW)).build());
+			return item;
+		}))
+		.withReward(rewards()
+			.withExp(50)
+			.addItems(ItemStack.of(Material.CROSSBOW), ItemStack.of(Material.ARROW, 32))
+			.addItems(() -> {
+				var item = ItemStack.of(Material.ENCHANTED_BOOK);
+				item.setData(DataComponentTypes.STORED_ENCHANTMENTS, ItemEnchantments.itemEnchantments().add(Enchantment.MULTISHOT, 1).build());
+				return item;
+			})
+		)
+		.buildAndRegister();
+	public static final IAdvancement GET_A_FIREWORK = buildBase(CROSSBOWS_HOTBAR, "get_a_firework").display(display().x(1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.FIREWORK_ROCKET))
+		.requiredProgress(vanilla(inventoryChanged().withItems(ItemTriggerCondition.of(Material.FIREWORK_ROCKET))))
+		.buildAndRegister();
+	public static final IAdvancement PYROTECHNIC = buildBase(GET_A_FIREWORK, "pyrotechnic").display(display().x(1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().icon(() -> {
+			var item = ItemStack.of(Material.FIREWORK_STAR);
+			item.setData(DataComponentTypes.FIREWORK_EXPLOSION, FireworkEffect.builder().with(FireworkEffect.Type.BALL).withColor(Color.fromRGB(4312372)).build());
+			return item;
+		}))
+		.withReward(rewards().withExp(50).addItems(ItemStack.of(Material.GUNPOWDER, 16), ItemStack.of(Material.DIAMOND)))
+		.buildAndRegister(PyrotechnicAdvancement::new);
+	public static final IAdvancement CROSSBOW_WITH_FIREWORK = buildBase(PYROTECHNIC, "crossbow_with_firework").display(display().x(1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(() -> {
+			var item = ItemStack.of(Material.CROSSBOW);
+			item.setData(DataComponentTypes.CHARGED_PROJECTILES, ChargedProjectiles.chargedProjectiles().add(ItemStack.of(Material.FIREWORK_ROCKET)).build());
+			return item;
+		}))
+		.withReward(rewards().addItems(ItemStack.of(Material.GUNPOWDER, 8)))
+		.buildAndRegister();
+	public static final IAdvancement KILL_WITH_FIREWORK = buildBase(CROSSBOW_WITH_FIREWORK, "kill_with_firework").display(display().x(1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(() -> {
+			var item = ItemStack.of(Material.FIREWORK_STAR);
+			item.setData(DataComponentTypes.FIREWORK_EXPLOSION, FireworkEffect.builder().with(FireworkEffect.Type.BALL).withColor(Color.fromRGB(11743532)).build());
+			return item;
+		}))
+		.withReward(rewards().addItems(ItemStack.of(Material.GUNPOWDER, 8)))
+		.requiredProgress(vanilla(
+			playerKilledEntity()
+				.withDamage(source -> source
+					.withDirectEntity(entity -> entity.withEntityType(EntityType.FIREWORK_ROCKET))
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement KILL_GHAST_WITH_FIREWORK = buildBase(KILL_WITH_FIREWORK, "kill_ghast_with_firework").display(display().x(1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().icon(Material.GHAST_TEAR))
+		.withReward(rewards().addItems(ItemStack.of(Material.GUNPOWDER, 16)))
+		.requiredProgress(vanilla(
+			playerKilledEntity()
+				.withEntity(entity -> entity.withEntityType(EntityType.GHAST))
+				.withDamage(source -> source
+					.withDirectEntity(entity -> entity.withEntityType(EntityType.FIREWORK_ROCKET))
+				)
+		))
+		.buildAndRegister();
 
 	public static final AdvancementTab CHALLENGES_TAB = buildTab("challenges", MANAGER).inverseY().backgroundPathBlock(Material.BEDROCK).build();
 	public static final IRootAdvancement CHALLENGES_ROOT = buildRoot(CHALLENGES_TAB).display(display().xy(0F, 0F).withAdvancementFrame(AdvancementFrame.SQUIRCLE).fancyDescriptionParent(GRAY).icon(Material.ENDER_EYE))

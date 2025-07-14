@@ -12,6 +12,13 @@
 	"trophy.blow_up_all_monsters_with_tnt.lore": "<#DB2F1A><!i>There are no mistakes, just happy explosions",
 	"trophy.more_shields.name": "<#67FF6D><b>Tree Shield",
 	"trophy.more_shields.lore": "<#67FF6D><!i>You spent 3 stacks of wood on this",
+	"trophy.die_twice_within_5s.name": "<#F6FFDF><b>Loser",
+	"trophy.die_twice_within_5s.lore": "<#F6FFDF><!i>Use it so you don't die",
+	"trophy.attack_with_all_weapons.name": "<#DBB364><b>Multiweapon",
+	"trophy.attack_with_all_weapons.lore": [
+		"<#DBB364><!i>It's a sword, an axe, and…",
+		"<#DBB364><!i>Never mind, it broke"
+	],
 	"trophy.half_a_heart_1h.name": "<gray><b>Energy of Dark Souls",
 	"trophy.half_a_heart_1h.lore": [
 		"<gray><!i>What's the Point in wearing Armor",

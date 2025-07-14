@@ -43,6 +43,14 @@ public class LimboWorldFall implements Listener {
 		}
 	}
 
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onWorldChange(PlayerTeleportEvent event) {
+		if (event.getTo().getWorld() != TrappedNewbie.limboWorld()) return;
+		if (event.getFrom().getWorld() == TrappedNewbie.limboWorld()) return;
+
+		event.setTo(TrappedNewbie.limboWorld().getSpawnLocation());
+	}
+
 	/**
 	 * Teleports the player to a spawn location in the world
 	 *

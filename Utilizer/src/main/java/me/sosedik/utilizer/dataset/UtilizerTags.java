@@ -41,8 +41,11 @@ public class UtilizerTags {
 	public static final Tag<Material> STONE_ORES_BLOCKS = blockTag("stone_ores");
 	public static final Tag<Material> ORES_BLOCKS = blockTag("ores");
 
-	// MCCheck: 1.21.7, new hostile mobs
+	// MCCheck: 1.21.7, new mobs
 	public static final Tag<EntityType> HOSTILE_MONSTERS = entityTag("hostile_monsters");
+	public static final Tag<EntityType> CHEST_BOATS = entityTag("chest_boats");
+	public static final Tag<EntityType> NON_MOB_ENTITIES = entityTag("non_mob_entities");
+	public static final Tag<EntityType> LINGERING_POTION_DAMAGE_SOURCES = entityTag("lingering_potion_damage_sources");
 
 	private static Tag<Material> itemTag(String key) {
 		return ItemUtil.itemTag(Utilizer.utilizerKey(key));

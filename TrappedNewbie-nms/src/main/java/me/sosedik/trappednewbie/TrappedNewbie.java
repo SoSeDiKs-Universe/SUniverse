@@ -34,6 +34,8 @@ import me.sosedik.trappednewbie.listener.advancement.AdvancementTrophies;
 import me.sosedik.trappednewbie.listener.advancement.AdvancementsLocalizer;
 import me.sosedik.trappednewbie.listener.advancement.LoadSaveAdvancementsOnJoinQuit;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.CampfirePlacingAdvancements;
+import me.sosedik.trappednewbie.listener.advancement.dedicated.CrossbowWithFireworkAdvancement;
+import me.sosedik.trappednewbie.listener.advancement.dedicated.CrossbowsHotbarAdvancement;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.FindGravelAdvancement;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.FirstPossessionAdvancement;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.FoodConsumingAdvancement;
@@ -187,6 +189,8 @@ public final class TrappedNewbie extends JavaPlugin {
 			LoadSaveAdvancementsOnJoinQuit.class,
 			/// dedicated advancement
 			CampfirePlacingAdvancements.class,
+			CrossbowsHotbarAdvancement.class,
+			CrossbowWithFireworkAdvancement.class,
 			FindGravelAdvancement.class,
 			FirstPossessionAdvancement.class,
 			FoodConsumingAdvancement.class,

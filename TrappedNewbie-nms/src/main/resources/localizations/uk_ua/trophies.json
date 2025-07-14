@@ -15,6 +15,13 @@
 	"trophy.blow_up_all_monsters_with_tnt.lore": "<#DB2F1A><!i>Жодних помилок, тільки веселі бум-бумчики",
 	"trophy.more_shields.name": "<#67FF6D><b>Дерев'яний щит",
 	"trophy.more_shields.lore": "<#67FF6D><!i>Ви витратили на це 3 стаки дошок",
+	"trophy.die_twice_within_5s.name": "<#F6FFDF><b>Невдаха",
+	"trophy.die_twice_within_5s.lore": "<#F6FFDF><!i>Використовуйте, щоб не помирати",
+	"trophy.attack_with_all_weapons.name": "<#DBB364><b>Мультизброя",
+	"trophy.attack_with_all_weapons.lore": [
+		"<#DBB364><!i>Це меч, сокира і…",
+		"<#DBB364><!i>Неважливо, воно зламалось"
+	],
 	"trophy.half_a_heart_1h.name": "<gray><b>Енергія Dark Souls",
 	"trophy.half_a_heart_1h.lore": [
 		"<gray><!i>Який сенс носити броню, якщо",

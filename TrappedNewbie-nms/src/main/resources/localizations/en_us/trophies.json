@@ -6,6 +6,13 @@
 	],
 	"trophy.when_pigs_finally_fly.name": "<#EB9492><b>Reuben the Wither Storm Ender",
 	"trophy.when_pigs_finally_fly.lore": "<#EB9492><!i>He was a great pig",
+	"trophy.kill_a_baby_turtle_with_a_trident_from_a_height.name": "<#D6137A><b>Portable Telescope",
+	"trophy.kill_a_baby_turtle_with_a_trident_from_a_height.lore": "<#D6137A><!i>Allows you to see more",
+	"trophy.mace_500_damage.name": "<#819988><b>Sculk Meteorite",
+	"trophy.mace_500_damage.lore": [
+		"<#819988><!i>This actually caused the rise of the",
+		"<#819988><!i>Warden species, not its extinction"
+	],
 	"trophy.kill_10_chicken_in_air.name": "<#C1D9D8><b>Feathered Frenzy",
 	"trophy.kill_10_chicken_in_air.lore": "<#C1D9D8><!i>Who knew aerial combat could be so… messy?",
 	"trophy.blow_up_all_monsters_with_tnt.name": "<#DB2F1A><b>Boomer T-Shirt",
@@ -14,6 +21,19 @@
 	"trophy.more_shields.lore": "<#67FF6D><!i>You spent 3 stacks of wood on this",
 	"trophy.die_twice_within_5s.name": "<#F6FFDF><b>Loser",
 	"trophy.die_twice_within_5s.lore": "<#F6FFDF><!i>Use it so you don't die",
+	"trophy.die_from_skeleton_not_from_an_arrow.name": "<gray><b>Useless Target",
+	"trophy.die_from_skeleton_not_from_an_arrow.lore": "<gray><!i>This Skeleton doesn't need Practice anymore",
+	"trophy.there_it_goes.name": "<#dab930><b>Really Really Pointy Arrow",
+	"trophy.there_it_goes.lore": "<#dab930><!i>This deals more damage than it seems",
+	"trophy.hunt_land_animals.name": "<#FE4952><b>1000-Degree Knife",
+	"trophy.hunt_land_animals.lore": "<#FE4952><!i>(GONE WRONG) (NOT CLICKBAIT)",
+	"trophy.you_monster.name": "<dark_red><b>The Babies' Blood",
+	"trophy.you_monster.lore": "<red><!i>It's all that is left of these Small Helpless Creatures",
+	"trophy.bat_duel.name": "<dark_gray><b>Batbow",
+	"trophy.bat_duel.lore": [
+		"<dark_gray><!i>Batman III",
+		"<dark_gray><!i>You used a Batbow, not a Baterang"
+	],
 	"trophy.attack_with_all_weapons.name": "<#DBB364><b>Multiweapon",
 	"trophy.attack_with_all_weapons.lore": [
 		"<#DBB364><!i>It's a sword, an axe, and…",
@@ -257,5 +277,7 @@
 		"<#FFBAE3><!i>Boundless storage, enchanted organization,",
 		"<#FFBAE3><!i>and ethereal design for effortless and",
 		"<#FFBAE3><!i>compact inventory management"
-	]
+	],
+	"trophy.wash_250.name": "<#DCD9C0><b>Socks",
+	"trophy.wash_250.lore": "<#DCD9C0><!i>Even after 250 washes it still smells…"
 }

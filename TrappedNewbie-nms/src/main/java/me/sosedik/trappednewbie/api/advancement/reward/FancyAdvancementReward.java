@@ -12,7 +12,9 @@ import me.sosedik.utilizer.api.message.Messenger;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
+import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
+import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NullMarked;
@@ -93,6 +95,28 @@ public class FancyAdvancementReward extends SimpleAdvancementRewardBuilder<Fancy
 		return this;
 	}
 
+	public FancyAdvancementReward withDeathExp(int exp) {
+		return withExtraAction(action -> {
+			Player completer = action.completer();
+			if (completer == null) return;
+
+			Location loc = completer.getLocation();
+			loc.getWorld().spawn(loc, ExperienceOrb.class, orb -> orb.setExperience(exp));
+		}).withExtraMessage(player -> FancyAdvancementReward.getExpMessage(player, exp));
+	}
+
+	public FancyAdvancementReward withDeathTrophy(Supplier<ItemStack> item) {
+		return withTrophy(item, true).withExtraAction(data -> {
+			Player completer = data.completer();
+			if (completer == null) return;
+
+			Location loc = completer.getLocation();
+			ItemStack drop = AdvancementTrophies.produceTrophy(data.advancement(), completer);
+			if (drop != null)
+				loc.getWorld().dropItemNaturally(loc, drop, i -> i.setInvulnerable(true));
+		});
+	}
+
 	public @Nullable ItemStack getTrophyItem() {
 		return this.trophyItem;
 	}
@@ -111,14 +135,14 @@ public class FancyAdvancementReward extends SimpleAdvancementRewardBuilder<Fancy
 			this.extraMessages.forEach(m -> {
 				Component message = m.apply(player);
 				if (message != null)
-					player.sendMessage(message);
+					player.sendMessage(Component.space().append(message));
 			});
 		}
 	}
 
 	public static void sendExpMessage(Player player, int exp) {
 		if (exp != 0)
-			player.sendMessage(getExpMessage(player, exp));
+			player.sendMessage(Component.space().append(getExpMessage(player, exp)));
 	}
 
 	public static Component getExpMessage(Player player, int exp) {
@@ -133,13 +157,13 @@ public class FancyAdvancementReward extends SimpleAdvancementRewardBuilder<Fancy
 			if (data == null) return;
 
 			for (ItemStack storedItem : data.contents())
-				player.sendMessage(getItemMessage(storedItem, NamedTextColor.GREEN));
+				player.sendMessage(Component.space().append(getItemMessage(storedItem, NamedTextColor.GREEN)));
 		} else if (item.hasData(DataComponentTypes.CONTAINER)) {
 			ItemContainerContents data = item.getData(DataComponentTypes.CONTAINER);
 			if (data == null) return;
 
 			for (ItemStack storedItem : data.contents())
-				player.sendMessage(getItemMessage(storedItem, NamedTextColor.GREEN));
+				player.sendMessage(Component.space().append(getItemMessage(storedItem, NamedTextColor.GREEN)));
 		}
 	}
 

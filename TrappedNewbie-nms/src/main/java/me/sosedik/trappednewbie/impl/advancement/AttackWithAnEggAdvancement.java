@@ -9,6 +9,7 @@ import me.sosedik.packetadvancements.imlp.advancement.base.BaseAdvancement;
 import me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData;
 import me.sosedik.trappednewbie.api.advancement.reward.FancyAdvancementReward;
 import me.sosedik.utilizer.util.InventoryUtil;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.entity.EntityType;
@@ -29,18 +30,20 @@ public class AttackWithAnEggAdvancement extends BaseAdvancement {
 	}
 
 	private static AdvancementReward getReward() {
-		return new FancyAdvancementReward().withExtraAction(action -> {
-			Player completer = action.completer();
-			if (completer == null) return;
+		return new FancyAdvancementReward()
+			.withExtraAction(action -> {
+				Player completer = action.completer();
+				if (completer == null) return;
 
-			IAdvancement advancement = action.advancement();
-			for (Material type : Tag.ITEMS_EGGS.getValues()) {
-				if (!advancement.hasCriteria(completer, type.key().value())) continue;
+				IAdvancement advancement = action.advancement();
+				for (Material type : Tag.ITEMS_EGGS.getValues()) {
+					if (!advancement.hasCriteria(completer, type.key().value())) continue;
 
-				InventoryUtil.addOrDrop(completer, ItemStack.of(type, 4), false);
-				return;
-			}
-		});
+					InventoryUtil.addOrDrop(completer, ItemStack.of(type, 4), false);
+					return;
+				}
+			})
+			.withExtraMessage(player -> FancyAdvancementReward.getItemMessage(ItemStack.of(Material.EGG, 4), NamedTextColor.GREEN));
 	}
 
 	private static RequiredAdvancementProgress getProgress() {

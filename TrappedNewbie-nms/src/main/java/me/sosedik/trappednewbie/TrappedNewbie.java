@@ -55,6 +55,7 @@ import me.sosedik.trappednewbie.listener.advancement.dedicated.QuickDeathAdvance
 import me.sosedik.trappednewbie.listener.advancement.dedicated.StatisticAdvancements;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.TNTPrimesAdvancement;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.WashAdvancements;
+import me.sosedik.trappednewbie.listener.advancement.dedicated.YouMonsterAdvancement;
 import me.sosedik.trappednewbie.listener.block.BlockBreakHurts;
 import me.sosedik.trappednewbie.listener.block.BlockChoppingViaSwing;
 import me.sosedik.trappednewbie.listener.block.CustomBlockBreaking;
@@ -210,6 +211,7 @@ public final class TrappedNewbie extends JavaPlugin {
 			StatisticAdvancements.class,
 			TNTPrimesAdvancement.class,
 			WashAdvancements.class,
+			YouMonsterAdvancement.class,
 			// block
 			BlockBreakHurts.class,
 			BlockChoppingViaSwing.class,

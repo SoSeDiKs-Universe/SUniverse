@@ -6,6 +6,13 @@
 	],
 	"trophy.when_pigs_finally_fly.name": "<#EB9492><b>Рубен, сокрушитель визер-шторма",
 	"trophy.when_pigs_finally_fly.lore": "<#EB9492><!i>Он был отличным свином",
+	"trophy.kill_a_baby_turtle_with_a_trident_from_a_height.name": "<#D6137A><b>Портативный телескоп",
+	"trophy.kill_a_baby_turtle_with_a_trident_from_a_height.lore": "<#D6137A><!i>Позволяет увидеть больше",
+	"trophy.mace_500_damage.name": "<#819988><b>Скалковый метеорит",
+	"trophy.mace_500_damage.lore": [
+		"<#819988><!i>На самом деле это привело к увеличению",
+		"<#819988><!i>популяции хранителей, а не к их вымиранию"
+	],
 	"trophy.kill_10_chicken_in_air.name": "<#C1D9D8><b>Пернатое безумие",
 	"trophy.kill_10_chicken_in_air.lore": [
 		"<#C1D9D8><!i>Кто бы мог подумать, что воздушный",
@@ -17,6 +24,19 @@
 	"trophy.more_shields.lore": "<#67FF6D><!i>Вы потратили на это 3 стака досок",
 	"trophy.die_twice_within_5s.name": "<#F6FFDF><b>Неудачник",
 	"trophy.die_twice_within_5s.lore": "<#F6FFDF><!i>Используйте, чтобы не умирать",
+	"trophy.die_from_skeleton_not_from_an_arrow.name": "<gray><b>Бесполезная мишень",
+	"trophy.die_from_skeleton_not_from_an_arrow.lore": "<gray><!i>Этому скелету больше не нужна практика",
+	"trophy.there_it_goes.name": "<#dab930><b>Действительно очень острая стрела",
+	"trophy.there_it_goes.lore": "<#dab930><!i>Наносит больше урона, чем кажется",
+	"trophy.hunt_land_animals.name": "<#FE4952><b>1000-градусный нож",
+	"trophy.hunt_land_animals.lore": "<#FE4952><!i>(ЧТО-ТО ПОШЛО НЕ ТАК) (НЕ КЛИКБЕЙТ)",
+	"trophy.you_monster.name": "<dark_red><b>Кровь младенцев",
+	"trophy.you_monster.lore": "<red><!i>Это всё, что осталось от этих маленьких беспомощных существ",
+	"trophy.bat_duel.name": "<dark_gray><b>Мышелук",
+	"trophy.bat_duel.lore": [
+		"<dark_gray><!i>Бэтмен III",
+		"<dark_gray><!i>Вы использовали мышелук вместо мышеранга"
+	],
 	"trophy.attack_with_all_weapons.name": "<#DBB364><b>Многооружие",
 	"trophy.attack_with_all_weapons.lore": [
 		"<#DBB364><!i>Это меч, топор и…",
@@ -256,5 +276,7 @@
 		"<#FFBAE3><!i>улучшенная организация и неземной",
 		"<#FFBAE3><!i>дизайн для удобного и компактного",
 		"<#FFBAE3><!i>управления инвентарём"
-	]
+	],
+	"trophy.wash_250.name": "<#DCD9C0><b>Носки",
+	"trophy.wash_250.lore": "<#DCD9C0><!i>Даже после 250 стирок они всё ещё пахнут…"
 }

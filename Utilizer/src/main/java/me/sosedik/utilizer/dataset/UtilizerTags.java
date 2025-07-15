@@ -46,6 +46,10 @@ public class UtilizerTags {
 	public static final Tag<EntityType> CHEST_BOATS = entityTag("chest_boats");
 	public static final Tag<EntityType> NON_MOB_ENTITIES = entityTag("non_mob_entities");
 	public static final Tag<EntityType> LINGERING_POTION_DAMAGE_SOURCES = entityTag("lingering_potion_damage_sources");
+	public static final Tag<EntityType> BOW_SKELETONS = entityTag("bow_skeletons");
+	public static final Tag<EntityType> LAND_ANIMALS = entityTag("land_animals");
+	public static final Tag<EntityType> NATIVE_NETHER_MOBS = entityTag("native_nether_mobs");
+	public static final Tag<EntityType> NON_NATIVE_NETHER_MOBS = entityTag("non_native_nether_mobs");
 
 	private static Tag<Material> itemTag(String key) {
 		return ItemUtil.itemTag(Utilizer.utilizerKey(key));

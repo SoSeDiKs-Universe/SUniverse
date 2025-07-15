@@ -6,12 +6,14 @@ import me.sosedik.requiem.Requiem;
 import me.sosedik.utilizer.util.EntityUtil;
 import org.bukkit.Location;
 import org.bukkit.Particle;
+import org.bukkit.Tag;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Golem;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.ThrownPotion;
+import org.bukkit.entity.Wolf;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -66,12 +68,13 @@ public class UndeadConsecration implements Listener {
 
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onDamage(EntityDamageEvent event) {
-		HealTask healTask = UNDEAD_MOBS.get(event.getEntity().getUniqueId());
+		Entity entity = event.getEntity();
+		HealTask healTask = UNDEAD_MOBS.get(entity.getUniqueId());
 		if (healTask == null) return;
 		if (healTask.isVulnerable()) return;
 
 		if (!EntityUtil.isFireDamageCause(event.getCause())) {
-			if (event.getEntity().isImmuneToFire()) {
+			if (entity.isImmuneToFire()) {
 				event.setCancelled(true);
 			} else {
 				healTask.updateVulnerabilityTime(20);
@@ -85,9 +88,12 @@ public class UndeadConsecration implements Listener {
 				case Golem golem -> {
 					return;
 				}
+				case Wolf wolf when Tag.ENTITY_TYPES_SKELETONS.isTagged(entity.getType()) -> {
+					return;
+				}
 				case Projectile projectile -> {
 					if (projectile.getFireTicks() > 0 || projectile.getVisualFire().toBooleanOrElse(false)) {
-						if (event.getEntity().isImmuneToFire()) {
+						if (entity.isImmuneToFire()) {
 							event.setCancelled(true);
 						} else {
 							healTask.updateVulnerabilityTime(20);

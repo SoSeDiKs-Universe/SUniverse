@@ -6,6 +6,8 @@ import me.sosedik.kiterino.modifier.item.ModificationResult;
 import me.sosedik.utilizer.api.language.LangOptionsStorage;
 import me.sosedik.utilizer.api.message.Messenger;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.jspecify.annotations.NullMarked;
@@ -30,6 +32,12 @@ public class CustomLoreModifier extends ItemModifier {
 		Component[] lores = Messenger.messenger(LangOptionsStorage.getByLocale(contextBox.getLocale()))
 				.getMessagesIfExists("item." + key.getNamespace() + "." + key.getKey() + ".lore");
 		if (lores == null) return ModificationResult.PASS;
+
+		for (int i = 0; i < lores.length; i++) {
+			lores[i] = lores[i]
+				.decorationIfAbsent(TextDecoration.ITALIC, TextDecoration.State.FALSE)
+				.colorIfAbsent(NamedTextColor.GRAY);
+		}
 
 		contextBox.addLore(List.of(lores));
 

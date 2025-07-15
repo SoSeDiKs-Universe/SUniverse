@@ -6,6 +6,13 @@
 	],
 	"trophy.when_pigs_finally_fly.name": "<#EB9492><b>Рубен, кінець візер-бурі",
 	"trophy.when_pigs_finally_fly.lore": "<#EB9492><!i>Він був чудовою свинкою",
+	"trophy.kill_a_baby_turtle_with_a_trident_from_a_height.name": "<#D6137A><b>Портативний телескоп",
+	"trophy.kill_a_baby_turtle_with_a_trident_from_a_height.lore": "<#D6137A><!i>Дозволяє побачити більше",
+	"trophy.mace_500_damage.name": "<#819988><b>Скалковий метеорит",
+	"trophy.mace_500_damage.lore": [
+		"<#819988><!i>Фактично, це спричинило процвітання",
+		"<#819988><!i>виду боронителів, а не його вимирання"
+	],
 	"trophy.kill_10_chicken_in_air.name": "<#C1D9D8><b>Пташине божевілля",
 	"trophy.kill_10_chicken_in_air.lore": [
 		"<#C1D9D8><!i>Хто б міг подумати, що повітряний",
@@ -17,6 +24,19 @@
 	"trophy.more_shields.lore": "<#67FF6D><!i>Ви витратили на це 3 стаки дошок",
 	"trophy.die_twice_within_5s.name": "<#F6FFDF><b>Невдаха",
 	"trophy.die_twice_within_5s.lore": "<#F6FFDF><!i>Використовуйте, щоб не помирати",
+	"trophy.die_from_skeleton_not_from_an_arrow.name": "<gray><b>Марна мішень",
+	"trophy.die_from_skeleton_not_from_an_arrow.lore": "<gray><!i>Цей скелет більше не потребує тренувань",
+	"trophy.there_it_goes.name": "<#dab930><b>Дуже, дуже гостра стріла",
+	"trophy.there_it_goes.lore": "<#dab930><!i>Завдає більше шкоди, ніж здається",
+	"trophy.hunt_land_animals.name": "<#FE4952><b>1000-градусний ніж",
+	"trophy.hunt_land_animals.lore": "<#FE4952><!i>(ЩОСЬ ПІШЛО НЕ ТАК) (НЕ КЛІКБЕЙТ)",
+	"trophy.you_monster.name": "<dark_red><b>Кров немовлят",
+	"trophy.you_monster.lore": "<red><!i>Це все, що залишилося від цих маленьких безпорадних створінь",
+	"trophy.bat_duel.name": "<dark_gray><b>Кажанолук",
+	"trophy.bat_duel.lore": [
+		"<dark_gray><!i>Бетмен III",
+		"<dark_gray><!i>Ви використали кажанолук замість кажаноранга"
+	],
 	"trophy.attack_with_all_weapons.name": "<#DBB364><b>Мультизброя",
 	"trophy.attack_with_all_weapons.lore": [
 		"<#DBB364><!i>Це меч, сокира і…",
@@ -250,5 +270,7 @@
 		"<#FFBAE3><!i>Безмежне сховище, покращена організація",
 		"<#FFBAE3><!i>та витончений дизайн для легкого та",
 		"<#FFBAE3><!i>компактного управління інвентарем"
-	]
+	],
+	"trophy.wash_250.name": "<#DCD9C0><b>Шкарпетки",
+	"trophy.wash_250.lore": "<#DCD9C0><!i>Навіть після 250 прань вони все ще пахнуть…"
 }

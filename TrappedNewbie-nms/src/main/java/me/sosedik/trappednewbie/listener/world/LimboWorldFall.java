@@ -48,7 +48,7 @@ public class LimboWorldFall implements Listener {
 		if (event.getTo().getWorld() != TrappedNewbie.limboWorld()) return;
 		if (event.getFrom().getWorld() == TrappedNewbie.limboWorld()) return;
 
-		event.setTo(TrappedNewbie.limboWorld().getSpawnLocation());
+		event.setTo(TrappedNewbie.limboWorld().getSpawnLocation().addY(1));
 	}
 
 	/**

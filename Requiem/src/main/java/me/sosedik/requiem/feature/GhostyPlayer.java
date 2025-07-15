@@ -48,6 +48,13 @@ public class GhostyPlayer {
 	 * @param player player
 	 */
 	public static void markGhost(Player player) {
+		for (ItemStack item : player.getInventory()) {
+			if (ItemStack.isEmpty(item)) continue;
+
+			player.dropItem(item, true, i -> i.setPickupDelay(5));
+			item.setAmount(0);
+		}
+
 		GHOSTS.add(player.getUniqueId());
 
 		EntityUtil.clearTargets(player);

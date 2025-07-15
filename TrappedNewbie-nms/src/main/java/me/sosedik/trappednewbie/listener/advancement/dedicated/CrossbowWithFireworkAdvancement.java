@@ -14,7 +14,7 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NullMarked;
 
-// MCCheck 1.21.7, maybe a better way of checking?
+// MCCheck: 1.21.7, maybe a better way of checking?
 @NullMarked
 public class CrossbowWithFireworkAdvancement implements Listener {
 

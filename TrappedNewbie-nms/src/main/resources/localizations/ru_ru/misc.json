@@ -7,7 +7,7 @@
 	"limbo.friendship": "Вы подружились со <gold>странствующим торговцем</gold>!",
 	"break.light": "Здесь слишком темно, чтобы ломать блоки",
 	"advancement.reward.exp": "<blue><exp> <plural:ru_ru:единица|единицы|единиц:'<exp_raw>'> опыта",
-	"advancement.reward.shearable_creepers": "<gold>+ Способность стричь незаряженных криперов",
+	"advancement.reward.shearable_creepers": "<yellow>+ Способность стричь незаряженных криперов",
 	"advancement.announcement.super_challenge": "Игрок <player> завершил супериспытание <advancement>",
 	"advancement.announcement.torture": "Игрок <player> завершил мучительное достижение <advancement>",
 	"advancement.announcement.super_torture": "Игрок <player> завершил сверхмучительное достижение <advancement>",

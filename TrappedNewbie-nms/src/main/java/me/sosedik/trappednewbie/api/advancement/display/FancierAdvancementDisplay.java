@@ -34,7 +34,10 @@ import static me.sosedik.utilizer.api.message.Mini.raw;
 
 @NullMarked
 @SuppressWarnings("unchecked")
+// MCCheckL 1.21.7, hopefully background hack is no longer needed? :(
 public abstract class FancierAdvancementDisplay<T extends FancierAdvancementDisplay<T>> extends FancyAdvancementDisplay<T> {
+
+	private BackgroundHackType backgroundHackType = BackgroundHackType.TOP;
 
 	private static final Consumer<IAdvancement> REGISTER_HOOK = (advancement) -> {
 		if (advancement instanceof MimicAdvancement) return;
@@ -43,11 +46,19 @@ public abstract class FancierAdvancementDisplay<T extends FancierAdvancementDisp
 		if (display instanceof FancierAdvancementDisplay<?> fancierDisplay) {
 			AdvancementFrame advancementFrame = fancierDisplay.getAdvancementFrame();
 			if (advancementFrame.requiresBackground()) {
+				if (fancierDisplay.backgroundHackType == BackgroundHackType.BOTTOM) {
+					MimicAdvancement.buildMimic(advancement)
+						.advancementMimic(advancement)
+						.coordMimic(new OffsetCoordinateMode(0F, 0F))
+						.buildAndRegister();
+				}
 				FakeAdvancement.buildFake(advancement).display(new FrameAdvancementDisplay(advancement, advancementFrame).xy(0, 0)).buildAndRegister();
-				MimicAdvancement.buildMimic(advancement) // TODO this is a huge hack, also kinda broken since 1.21.6
-					.advancementMimic(advancement)
-					.coordMimic(new OffsetCoordinateMode(0F, 0F))
-					.buildAndRegister();
+				if (fancierDisplay.backgroundHackType == BackgroundHackType.TOP) {
+					MimicAdvancement.buildMimic(advancement)
+						.advancementMimic(advancement)
+						.coordMimic(new OffsetCoordinateMode(0F, 0F))
+						.buildAndRegister();
+				}
 			}
 		}
 	};
@@ -72,6 +83,11 @@ public abstract class FancierAdvancementDisplay<T extends FancierAdvancementDisp
 		super.onRegister(advancement);
 		this.advancement = advancement;
 		REGISTER_HOOK.accept(advancement);
+	}
+
+	public FancierAdvancementDisplay<T> bottomHack() {
+		this.backgroundHackType = BackgroundHackType.BOTTOM;
+		return this;
 	}
 
 	@Override
@@ -236,6 +252,10 @@ public abstract class FancierAdvancementDisplay<T extends FancierAdvancementDisp
 
 	public static FancierAdvancementDisplayImpl fancierDisplay() {
 		return new FancierAdvancementDisplayImpl();
+	}
+
+	private enum BackgroundHackType {
+		TOP, BOTTOM
 	}
 
 	public static final class FancierAdvancementDisplayImpl extends FancierAdvancementDisplay<FancierAdvancementDisplayImpl> {

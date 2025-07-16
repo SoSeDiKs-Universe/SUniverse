@@ -6,6 +6,7 @@ import me.sosedik.resourcelib.impl.block.nms.DirectionalBarrierNMSBlock;
 import me.sosedik.resourcelib.impl.block.nms.SimpleFakeSculkNMSBlock;
 import me.sosedik.resourcelib.impl.block.nms.SimpleNMSBlock;
 import me.sosedik.resourcelib.impl.block.nms.VegetationBlock;
+import me.sosedik.resourcelib.impl.block.nms.WaterloggedBarrierNMSBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import org.bukkit.NamespacedKey;
 import org.jspecify.annotations.NullMarked;
@@ -25,6 +26,10 @@ public class BlockCreator {
 
 	public static KiterinoBlock barrier(Object properties, String key) {
 		return new BarrierNMSBlock(((BlockBehaviour.Properties) properties), requireNonNull(NamespacedKey.fromString(key)));
+	}
+
+	public static KiterinoBlock waterloggedBarrier(Object properties, String key) {
+		return new WaterloggedBarrierNMSBlock(((BlockBehaviour.Properties) properties), requireNonNull(NamespacedKey.fromString(key)));
 	}
 
 	public static KiterinoBlock directionalBarrier(Object properties, String key) {

@@ -15,7 +15,7 @@ public class BarrierNMSBlock extends Block implements KiterinoBlock {
 
 	private static final Set<NamespacedKey> KEYS = new HashSet<>();
 
-	private static org.bukkit.block.@Nullable BlockState bukkitState;
+	protected static org.bukkit.block.@Nullable BlockState bukkitState;
 
 	public BarrierNMSBlock(Properties settings, NamespacedKey key) {
 		super(settings.noOcclusion());

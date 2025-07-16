@@ -1,4 +1,6 @@
 {
+	"destroy_time": 2,
+	"explosion_resistance": 1,
 	"client_type": "minecraft:barrier",
 	"state_parser": "none",
 	"rarity": "uncommon",

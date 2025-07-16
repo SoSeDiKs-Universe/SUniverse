@@ -33,16 +33,16 @@ public class AttackWithAllAxesAdvancement extends BaseAdvancement {
 
 	private static VanillaTriggerData<?> triggerData(Material axeType) {
 		return playerHurtEntity(axeType.key().value())
-			.withDamage(damage -> damage
-				.withDamageSource(source -> source
-					.withTag(DamageTypeTagKeys.IS_PLAYER_ATTACK, true)
-					.withSourceEntity(entity -> entity
-						.withEquipment(equipment -> equipment
-							.withMainHand(axeType)
+				.withDamage(damage -> damage
+					.withDamageSource(source -> source
+						.withTag(DamageTypeTagKeys.IS_PLAYER_ATTACK, true)
+						.withSourceEntity(entity -> entity
+							.withEquipment(equipment -> equipment
+								.withMainHand(axeType)
+							)
 						)
 					)
-				)
-			);
+				);
 	}
 
 }

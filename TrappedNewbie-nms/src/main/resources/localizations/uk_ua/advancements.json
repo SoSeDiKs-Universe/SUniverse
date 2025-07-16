@@ -286,6 +286,8 @@
 	"adv.trappednewbie.weaponry.give_wind_mace_to_a_fox.description": "Дайте лисиці булаву з зачаруванням «Порив вітру III»",
 	"adv.trappednewbie.weaponry.mace_500_damage.title": "Розборонення",
 	"adv.trappednewbie.weaponry.mace_500_damage.description": "Завдайте 250 сердець шкоди боронителю булавою… щоб вбити його одним ударом",
+	"adv.trappednewbie.weaponry.kill_mobs_using_their_items.title": "Це належить Вам?",
+	"adv.trappednewbie.weaponry.kill_mobs_using_their_items.description": "Вбийте кожного моба, набивши їм пику предметами, з якими вони з'являються або з якими зазвичай взаємодіють, не маючи <u>нічого</u> в другій руці",
 
 	"adv.trappednewbie.challenges.tab.title": "Надвипробування",
 	"adv.trappednewbie.challenges.root.title": "Надвипробування",

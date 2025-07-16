@@ -286,6 +286,8 @@
 	"adv.trappednewbie.weaponry.give_wind_mace_to_a_fox.description": "Дайте лисице булаву с зачарованием «Порыв ветра III»",
 	"adv.trappednewbie.weaponry.mace_500_damage.title": "Метеорит",
 	"adv.trappednewbie.weaponry.mace_500_damage.description": "Нанесите 250 сердец урона хранителю булавой… чтобы убить его одним ударом",
+	"adv.trappednewbie.weaponry.kill_mobs_using_their_items.title": "Это принадлежит Вам?",
+	"adv.trappednewbie.weaponry.kill_mobs_using_their_items.description": "Убейте каждого моба, набив им лицо предметами, с которыми они появляются или с которыми обычно взаимодействуют, не имея <u>ничего</u> в другой руке",
 
 	"adv.trappednewbie.challenges.tab.title": "Сверхвызовы",
 	"adv.trappednewbie.challenges.root.title": "Сверхвызовы",

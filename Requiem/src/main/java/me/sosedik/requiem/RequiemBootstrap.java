@@ -26,7 +26,7 @@ public class RequiemBootstrap implements PluginBootstrap {
 		ResourceLibBootstrap.parseResources(context, effectsProvider);
 
 		ResourceLibBootstrap.setupBlocks(context, null, (key, properties) -> switch (key.substring("requiem:".length())) {
-			case String k when k.endsWith("_tombstone") -> BlockCreator.barrier(properties, key);
+			case String k when k.endsWith("_tombstone") -> BlockCreator.waterloggedBarrier(properties, key);
 			default -> throw new IllegalArgumentException("Unknown blockstate: %s".formatted(key));
 		});
 		ResourceLibBootstrap.setupItems(context, RequiemItems.class, null, (key, properties) -> switch (key.substring("requiem:".length())) {

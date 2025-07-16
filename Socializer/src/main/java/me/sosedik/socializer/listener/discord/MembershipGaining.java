@@ -20,7 +20,7 @@ public class MembershipGaining extends ListenerAdapter {
 	private final @UnknownNullability Role memberRole;
 
 	public MembershipGaining(Socializer plugin) {
-		if (!plugin.getConfig().getBoolean("grant-memberships", false)) {
+		if (!plugin.getConfig().getBoolean("discord.grant-memberships", false)) {
 			this.memberRole = null;
 			return;
 		}

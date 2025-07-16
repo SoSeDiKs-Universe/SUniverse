@@ -25,6 +25,7 @@ import java.util.Map;
 public class LangOptionsStorage {
 
 	private static final LangOptionsStorage LANG_OPTIONS_STORAGE = new LangOptionsStorage();
+	private static final Gson GSON = new Gson();
 
 	private final Map<String, LangOptions> keyToLang = new HashMap<>();
 	private final Map<String, LangOptions> countryToLang = new HashMap<>();
@@ -74,7 +75,7 @@ public class LangOptionsStorage {
 			InputStream is = new URI("http://ip-api.com/json/" + address + "?fields=1").toURL().openStream();
 			Reader reader = new InputStreamReader(is)
 		) {
-			JsonObject obj = new Gson().fromJson(reader, JsonObject.class);
+			JsonObject obj = GSON.fromJson(reader, JsonObject.class);
 			return obj.has("country") ? getByCountry(obj.get("country").getAsString()) : getDefaultLangOptions();
 		} catch (IOException | URISyntaxException e) {
 			if (!"ip-api.com".equals(address))

@@ -32,7 +32,7 @@ public class TrappedNewbieBootstrap implements PluginBootstrap {
 		ResourceLibBootstrap.setupBlocks(context, null, (key, properties) -> switch (key.substring("trapped_newbie:".length())) {
 			case String k when k.endsWith("_branch") -> BlockCreator.vegetation(properties, key, Material::isSolid);
 			case String k when k.equals("pebble") || k.endsWith("_pebble") -> BlockCreator.vegetation(properties, key, Material::isSolid);
-			case String k when k.startsWith("destroy_stage_") -> BlockCreator.barrier(properties, key);
+			case String k when k.startsWith("destroy_stage_") -> BlockCreator.waterloggedBarrier(properties, key);
 			case String k when k.endsWith("_work_station") -> BlockCreator.directionalBarrier(properties, key);
 			case String k when k.endsWith("_chopping_block") -> BlockCreator.fakeSculk(properties, key);
 			case "clay_kiln" -> new ClayKilnBlock(properties, key);

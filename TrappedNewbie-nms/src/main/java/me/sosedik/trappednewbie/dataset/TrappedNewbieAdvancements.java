@@ -41,6 +41,7 @@ import me.sosedik.trappednewbie.impl.advancement.HuntLandAnimalsAdvancement;
 import me.sosedik.trappednewbie.impl.advancement.InspectorGadgetAdvancement;
 import me.sosedik.trappednewbie.impl.advancement.KillAllAquaticWithATridentAdvancement;
 import me.sosedik.trappednewbie.impl.advancement.KillAllNetherWithATridentAdvancement;
+import me.sosedik.trappednewbie.impl.advancement.KillAllUsingTheirItemsAdvancement;
 import me.sosedik.trappednewbie.impl.advancement.MasterShieldsmanAdvancement;
 import me.sosedik.trappednewbie.impl.advancement.MereMortalAdvancement;
 import me.sosedik.trappednewbie.impl.advancement.PyrotechnicAdvancement;
@@ -312,6 +313,11 @@ public class TrappedNewbieAdvancements {
 		.visibilityRule(ifDone(false, BRAVE_NEW_WORLD))
 		.requiredProgress(alwaysDone())
 		.buildAndRegister();
+	public static final IAdvancement KILL_MOBS_USING_THEIR_ITEMS = buildBase(WEAPONRY_ROOT, "kill_mobs_using_their_items").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.DARK_RED).withAdvancementFrame(AdvancementFrame.BUTTERFLY).torture().icon(Material.GRAY_STAINED_GLASS_PANE))
+		.withReward(rewards()
+			.withTrophy(ItemStack.of(Material.GRAY_STAINED_GLASS_PANE))
+		)
+		.buildAndRegister(KillAllUsingTheirItemsAdvancement::new);
 	public static final IAdvancement EXPELLIARMUS = buildBase(WEAPONRY_ROOT, "expelliarmus").display(display().x(1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(ItemUtil.glint(TrappedNewbieItems.ROUGH_STICK)))
 		.requiredProgress(vanilla(playerHurtEntity("expelliarmus").withEntity(entity -> entity.withDistanceToPlayer(distance -> distance.maxAbsolute(5D))).withPlayer(player -> player.withEquipment(equipment -> equipment.withMainHand(ItemTriggerCondition.of(MiscUtil.combineArrays(TrappedNewbieTags.STICKS.getValues().toArray(new Material[0]), new Material[] {TrappedNewbieItems.ROUGH_STICK})))))))
 		.buildAndRegister();
@@ -330,7 +336,7 @@ public class TrappedNewbieAdvancements {
 		.withReward(rewards().addItems(ItemStack.of(Material.GOLD_INGOT, 4)))
 		.requiredProgress(vanilla(playerKilledEntity().withEntity(entity -> entity.withDistanceToPlayer(distance -> distance.maxAbsolute(5D))).withPlayer(player -> player.withEquipment(equipment -> equipment.withMainHand(Material.CLOCK)))))
 		.buildAndRegister();
-	public static final IAdvancement DIE_TWICE_WITHIN_10S = buildBase(ITS_TIME_CONSUMING, "die_twice_within_10s").display(display().x(1F).goalFrame().fancyDescriptionParent(NamedTextColor.GREEN).icon(banner(Material.BLACK_BANNER, new Pattern(DyeColor.WHITE, PatternType.STRIPE_LEFT), new Pattern(DyeColor.WHITE, PatternType.STRIPE_TOP), new Pattern(DyeColor.WHITE, PatternType.STRIPE_MIDDLE), new Pattern(DyeColor.BLACK, PatternType.BORDER)))).buildAndRegister();
+	public static final IAdvancement DIE_TWICE_WITHIN_10S = buildBase(ITS_TIME_CONSUMING, "die_twice_within_10s").display(display().x(1F).goalFrame().bottomHack().fancyDescriptionParent(NamedTextColor.GREEN).icon(banner(Material.BLACK_BANNER, new Pattern(DyeColor.WHITE, PatternType.STRIPE_LEFT), new Pattern(DyeColor.WHITE, PatternType.STRIPE_TOP), new Pattern(DyeColor.WHITE, PatternType.STRIPE_MIDDLE), new Pattern(DyeColor.BLACK, PatternType.BORDER)))).buildAndRegister();
 	public static final IAdvancement DIE_TWICE_WITHIN_5S = buildBase(DIE_TWICE_WITHIN_10S, "die_twice_within_5s").display(display().x(1F).challengeFrame().fancyDescriptionParent(NamedTextColor.AQUA).icon(banner(Material.WHITE_BANNER, new Pattern(DyeColor.BLACK, PatternType.STRIPE_BOTTOM), new Pattern(DyeColor.BLACK, PatternType.STRIPE_LEFT), new Pattern(DyeColor.WHITE, PatternType.BORDER))))
 		.withReward(rewards()
 			.withDeathExp(35)
@@ -444,7 +450,7 @@ public class TrappedNewbieAdvancements {
 	public static final IAdvancement ATTACK_WITH_ALL_AXES = buildBase(ATTACK_WITH_AN_AXE, "attack_with_all_axes").display(display().x(1).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().bottomHack().icon(Material.DIAMOND_AXE))
 		.withReward(rewards().withExp(50))
 		.buildAndRegister(AttackWithAllAxesAdvancement::new);
-	public static final IAdvancement ATTACK_WITH_ALL_SHOVELS = buildBase(ATTACK_WITH_ALL_AXES, "attack_with_all_shovels").display(display().x(1).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().bottomHack().icon(Material.IRON_SHOVEL))
+	public static final IAdvancement ATTACK_WITH_ALL_SHOVELS = buildBase(ATTACK_WITH_ALL_AXES, "attack_with_all_shovels").display(display().x(1).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().icon(Material.IRON_SHOVEL))
 		.withReward(rewards().withExp(100))
 		.buildAndRegister(AttackWithAllShovelsAdvancement::new);
 	public static final IAdvancement SPLEAF = buildBase(ATTACK_WITH_ALL_SHOVELS, "spleaf").display(display().x(1).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().icon(Material.BIG_DRIPLEAF))
@@ -961,7 +967,7 @@ public class TrappedNewbieAdvancements {
 				)
 		))
 		.buildAndRegister();
-	public static final IAdvancement KILL_GHAST_WITH_FIREWORK = buildBase(KILL_WITH_FIREWORK, "kill_ghast_with_firework").display(display().x(1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().icon(Material.GHAST_TEAR))
+	public static final IAdvancement KILL_GHAST_WITH_FIREWORK = buildBase(KILL_WITH_FIREWORK, "kill_ghast_with_firework").display(display().x(1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().bottomHack().icon(Material.GHAST_TEAR))
 		.withReward(rewards().addItems(ItemStack.of(Material.GUNPOWDER, 16)))
 		.requiredProgress(vanilla(
 			playerKilledEntity()
@@ -1061,7 +1067,7 @@ public class TrappedNewbieAdvancements {
 	public static final IAdvancement LEVEL_30 = buildBase(STATISTICS_RIGHT_LINKER, "level_30").display(display().xy(1F, 1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(ItemUtil.glint(Material.EXPERIENCE_BOTTLE)))
 		.withReward(rewards().withExp(50).addItems(ItemStack.of(Material.LAPIS_LAZULI, 12)))
 		.buildAndRegister();
-	public static final IAdvancement LEVEL_100 = buildBase(LEVEL_30, "level_100").display(display().x(1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().icon(ItemUtil.glint(Material.ENCHANTED_BOOK)))
+	public static final IAdvancement LEVEL_100 = buildBase(LEVEL_30, "level_100").display(display().x(1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().bottomHack().icon(ItemUtil.glint(Material.ENCHANTED_BOOK)))
 		.withReward(rewards().withExp(200).addItems(ItemStack.of(Material.LAPIS_LAZULI, 64)))
 		.buildAndRegister();
 	public static final IAdvancement LEVEL_300 = buildBase(LEVEL_100, "level_300").display(display().x(1F).fancyDescriptionParent(NamedTextColor.DARK_PURPLE).challengeFrame().icon(ItemUtil.glint(Material.LAPIS_BLOCK)))
@@ -1078,11 +1084,11 @@ public class TrappedNewbieAdvancements {
 		)
 		.buildAndRegister();
 	public static final IAdvancement LEVEL_2500 = buildBase(LEVEL_1000, "level_2500").display(display().x(1F).fancyDescriptionParent(NamedTextColor.RED).challengeFrame().superTorture().icon(ItemUtil.glint(Material.ENCHANTING_TABLE))).buildAndRegister();
-	public static final IAdvancement LEVEL_5000 = buildBase(LEVEL_2500, "level_5000").display(display().x(1F).fancyDescriptionParent(NamedTextColor.BLACK).withAdvancementFrame(AdvancementFrame.BUTTERFLY).bottomHack().cheat().icon(ItemUtil.glint(Material.DAMAGED_ANVIL))).buildAndRegister();
+	public static final IAdvancement LEVEL_5000 = buildBase(LEVEL_2500, "level_5000").display(display().x(1F).fancyDescriptionParent(NamedTextColor.BLACK).withAdvancementFrame(AdvancementFrame.BUTTERFLY).cheat().icon(ItemUtil.glint(Material.DAMAGED_ANVIL))).buildAndRegister();
 	public static final IAdvancement ENCHANT_10 = buildBase(STATISTICS_RIGHT_LINKER, "enchant_10").display(display().xy(1F, 2F).fancyDescriptionParent(NamedTextColor.GREEN).icon(ItemUtil.glint(Material.IRON_SWORD)))
 		.withReward(rewards().withExp(50).addItems(ItemStack.of(Material.LAPIS_LAZULI, 12)))
 		.buildAndRegister();
-	public static final IAdvancement ENCHANT_50 = buildBase(ENCHANT_10, "enchant_50").display(display().x(1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().icon(ItemUtil.glint(Material.DIAMOND_AXE)))
+	public static final IAdvancement ENCHANT_50 = buildBase(ENCHANT_10, "enchant_50").display(display().x(1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().bottomHack().icon(ItemUtil.glint(Material.DIAMOND_AXE)))
 		.withReward(rewards().withExp(200).addItems(ItemStack.of(Material.LAPIS_LAZULI, 64)))
 		.buildAndRegister();
 	public static final IAdvancement ENCHANT_250 = buildBase(ENCHANT_50, "enchant_250").display(display().x(1F).fancyDescriptionParent(NamedTextColor.DARK_PURPLE).challengeFrame().icon(ItemUtil.glint(Material.TRIDENT)))
@@ -1100,7 +1106,7 @@ public class TrappedNewbieAdvancements {
 			.withTrophy(ItemStack.of(Material.ENCHANTING_TABLE))
 		)
 		.buildAndRegister();
-	public static final IAdvancement ENCHANT_10K = buildBase(ENCHANT_5K, "enchant_10k").display(display().x(1F).fancyDescriptionParent(NamedTextColor.BLACK).withAdvancementFrame(AdvancementFrame.BUTTERFLY).bottomHack().cheat().icon(ItemUtil.glint(Material.ENCHANTED_BOOK))).buildAndRegister();
+	public static final IAdvancement ENCHANT_10K = buildBase(ENCHANT_5K, "enchant_10k").display(display().x(1F).fancyDescriptionParent(NamedTextColor.BLACK).withAdvancementFrame(AdvancementFrame.BUTTERFLY).cheat().icon(ItemUtil.glint(Material.ENCHANTED_BOOK))).buildAndRegister();
 	public static final IAdvancement WASH_10 = buildBase(STATISTICS_RIGHT_LINKER, "wash_10").display(display().xy(1F, 3F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.WHITE_BANNER)).requiredProgress(simple(10, 1)).buildAndRegister();
 	public static final IAdvancement WASH_50 = buildBase(WASH_10, "wash_50").display(display().x(1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().icon(ItemStack.of(Material.LEATHER_BOOTS).withColor(NamedTextColor.LIGHT_PURPLE))).requiredProgress(simple(50, 1)).buildAndRegister();
 	public static final IAdvancement WASH_250 = buildBase(WASH_50, "wash_250").display(display().x(1F).fancyDescriptionParent(NamedTextColor.DARK_PURPLE).challengeFrame().icon(Material.CAULDRON)).requiredProgress(simple(250, 1))
@@ -1157,7 +1163,7 @@ public class TrappedNewbieAdvancements {
 	public static final IAdvancement EAT_200 = buildBase(STATISTICS_RIGHT_LINKER, "eat_200").display(display().xy(1F, 5F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.BREAD)).requiredProgress(simple(200, 1))
 		.withReward(rewards().withExp(50))
 		.buildAndRegister();
-	public static final IAdvancement EAT_1K = buildBase(EAT_200, "eat_1k").display(display().x(1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().icon(Material.COOKED_PORKCHOP)).requiredProgress(simple(1000, 1))
+	public static final IAdvancement EAT_1K = buildBase(EAT_200, "eat_1k").display(display().x(1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().bottomHack().icon(Material.COOKED_PORKCHOP)).requiredProgress(simple(1000, 1))
 		.withReward(rewards().withExp(200))
 		.buildAndRegister();
 	public static final IAdvancement EAT_2500 = buildBase(EAT_1K, "eat_2500").display(display().x(1F).fancyDescriptionParent(NamedTextColor.DARK_PURPLE).challengeFrame().icon(Material.COOKED_BEEF)).requiredProgress(simple(2500, 1))
@@ -1174,17 +1180,17 @@ public class TrappedNewbieAdvancements {
 		)
 		.buildAndRegister();
 	public static final IAdvancement EAT_25K = buildBase(EAT_10K, "eat_25k").display(display().x(1F).fancyDescriptionParent(PURPLE).challengeFrame().superTorture().icon(Material.COOKIE)).requiredProgress(simple(25000, 1)).buildAndRegister();
-	public static final IAdvancement EAT_50K = buildBase(EAT_25K, "eat_50k").display(display().x(1F).fancyDescriptionParent(NamedTextColor.BLACK).withAdvancementFrame(AdvancementFrame.BUTTERFLY).bottomHack().cheat().icon(Material.CAKE)).requiredProgress(simple(50000, 1)).buildAndRegister();
+	public static final IAdvancement EAT_50K = buildBase(EAT_25K, "eat_50k").display(display().x(1F).fancyDescriptionParent(NamedTextColor.BLACK).withAdvancementFrame(AdvancementFrame.BUTTERFLY).cheat().icon(Material.CAKE)).requiredProgress(simple(50000, 1)).buildAndRegister();
 	public static final IAdvancement TOTEM_5 = buildBase(STATISTICS_RIGHT_LINKER, "totem_5").display(display().xy(1F, 6F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.GOLD_NUGGET))
 		.withReward(rewards().withExp(15).addItems(ItemStack.of(Material.EMERALD, 4)))
 		.buildAndRegister();
 	public static final IAdvancement TOTEM_10 = buildBase(TOTEM_5, "totem_10").display(display().x(1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.TOTEM_OF_UNDYING))
 		.withReward(rewards().withExp(25).addItems(ItemStack.of(Material.TOTEM_OF_UNDYING)))
 		.buildAndRegister();
-	public static final IAdvancement TOTEM_25 = buildBase(TOTEM_10, "totem_25").display(display().x(1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().icon(Material.RAW_GOLD))
+	public static final IAdvancement TOTEM_25 = buildBase(TOTEM_10, "totem_25").display(display().x(1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().bottomHack().icon(Material.RAW_GOLD))
 		.withReward(rewards().withExp(50))
 		.buildAndRegister();
-	public static final IAdvancement TOTEM_50 = buildBase(TOTEM_25, "totem_50").display(display().x(1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().bottomHack().icon(Material.PLAYER_HEAD))
+	public static final IAdvancement TOTEM_50 = buildBase(TOTEM_25, "totem_50").display(display().x(1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().icon(Material.PLAYER_HEAD))
 		.withReward(rewards().withExp(75))
 		.buildAndRegister();
 	public static final IAdvancement TOTEM_100 = buildBase(TOTEM_50, "totem_100").display(display().x(1F).fancyDescriptionParent(NamedTextColor.DARK_PURPLE).challengeFrame().icon(Material.ZOMBIE_HEAD))
@@ -1211,13 +1217,13 @@ public class TrappedNewbieAdvancements {
 			.withTrophy(ItemUtil.texturedHead("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZDI2ODg1N2JmYzJmMWI5YjA2MzZlMTVlNGYwN2Q3MWM5YmIyNjhjYjc5YzNkNDdmNTU3OTk2MzBkNmFiMDgzMCJ9fX0=")) // todo textured heads
 		)
 		.buildAndRegister();
-	public static final IAdvancement TOTEM_5000 = buildBase(TOTEM_2500, "totem_5000").display(display().x(1F).fancyDescriptionParent(NamedTextColor.BLACK).withAdvancementFrame(AdvancementFrame.BUTTERFLY).cheat().icon(ItemUtil.glint(Material.TOTEM_OF_UNDYING)))
+	public static final IAdvancement TOTEM_5000 = buildBase(TOTEM_2500, "totem_5000").display(display().x(1F).fancyDescriptionParent(NamedTextColor.BLACK).withAdvancementFrame(AdvancementFrame.BUTTERFLY).bottomHack().cheat().icon(ItemUtil.glint(Material.TOTEM_OF_UNDYING)))
 		.withReward(rewards().withExp(1000))
 		.buildAndRegister();
 	public static final IAdvancement RAID_5 = buildBase(STATISTICS_RIGHT_LINKER, "raid_5").display(display().xy(1F, 7F).fancyDescriptionParent(NamedTextColor.GREEN).challengeFrame().icon(Material.CROSSBOW))
 		.withReward(rewards().withExp(50).addItems(ItemStack.of(Material.EMERALD, 4)))
 		.buildAndRegister();
-	public static final IAdvancement RAID_20 = buildBase(RAID_5, "raid_20").display(display().x(1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().bottomHack().icon(Material.IRON_AXE))
+	public static final IAdvancement RAID_20 = buildBase(RAID_5, "raid_20").display(display().x(1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().icon(Material.IRON_AXE))
 		.withReward(rewards().withExp(70).addItems(ItemStack.of(Material.EMERALD, 16)))
 		.buildAndRegister();
 	public static final IAdvancement RAID_100 = buildBase(RAID_20, "raid_100").display(display().x(1F).fancyDescriptionParent(NamedTextColor.DARK_PURPLE).challengeFrame().icon(ItemUtil.glint(Material.SADDLE)))
@@ -1308,7 +1314,7 @@ public class TrappedNewbieAdvancements {
 	public static final IAdvancement TRADE_100 = buildBase(STATISTICS_RIGHT_LINKER, "trade_100").display(display().xy(1F, -3F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.EMERALD))
 		.withReward(rewards().withExp(50).addItems(ItemStack.of(Material.EMERALD, 8)))
 		.buildAndRegister();
-	public static final IAdvancement TRADE_500 = buildBase(TRADE_100, "trade_500").display(display().x(1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().icon(Material.EMERALD_BLOCK))
+	public static final IAdvancement TRADE_500 = buildBase(TRADE_100, "trade_500").display(display().x(1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().bottomHack().icon(Material.EMERALD_BLOCK))
 		.withReward(rewards().withExp(200).addItems(ItemStack.of(Material.EMERALD, 24)))
 		.buildAndRegister();
 	public static final IAdvancement TRADE_2500 = buildBase(TRADE_500, "trade_2500").display(display().x(1F).fancyDescriptionParent(NamedTextColor.DARK_PURPLE).challengeFrame().icon(Material.EGG))
@@ -1326,14 +1332,14 @@ public class TrappedNewbieAdvancements {
 		.buildAndRegister();
 	public static final IAdvancement TRADE_25K = buildBase(TRADE_10K, "trade_25k").display(display().x(1F).fancyDescriptionParent(NamedTextColor.RED).challengeFrame().torture().icon(Material.MELON)).buildAndRegister();
 	public static final IAdvancement TRADE_50K = buildBase(TRADE_25K, "trade_50k").display(display().x(1F).fancyDescriptionParent(PURPLE).challengeFrame().superTorture().icon(Material.GLASS)).buildAndRegister();
-	public static final IAdvancement TRADE_250K = buildBase(TRADE_50K, "trade_250k").display(display().x(1F).fancyDescriptionParent(NamedTextColor.BLACK).withAdvancementFrame(AdvancementFrame.BUTTERFLY).bottomHack().cheat().icon(TRADER_HEAD)).buildAndRegister();
+	public static final IAdvancement TRADE_250K = buildBase(TRADE_50K, "trade_250k").display(display().x(1F).fancyDescriptionParent(NamedTextColor.BLACK).withAdvancementFrame(AdvancementFrame.BUTTERFLY).cheat().icon(TRADER_HEAD)).buildAndRegister();
 	public static final IAdvancement LOOT_10 = buildBase(STATISTICS_RIGHT_LINKER, "loot_10").display(display().xy(1F, -4F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.CHEST)).requiredProgress(simple(10, 1))
 		.withReward(rewards().withExp(50))
 		.buildAndRegister();
 	public static final IAdvancement LOOT_100 = buildBase(LOOT_10, "loot_100").display(display().x(1F).fancyDescriptionParent(NamedTextColor.AQUA).icon(Material.BARREL)).requiredProgress(simple(100, 1))
 		.withReward(rewards().withExp(200))
 		.buildAndRegister();
-	public static final IAdvancement LOOT_500 = buildBase(LOOT_100, "loot_500").display(display().x(1F).fancyDescriptionParent(NamedTextColor.DARK_PURPLE).goalFrame().icon(Material.ENDER_CHEST)).requiredProgress(simple(500, 1))
+	public static final IAdvancement LOOT_500 = buildBase(LOOT_100, "loot_500").display(display().x(1F).fancyDescriptionParent(NamedTextColor.DARK_PURPLE).goalFrame().bottomHack().icon(Material.ENDER_CHEST)).requiredProgress(simple(500, 1))
 		.withReward(rewards()
 			.withExp(500)
 			.withTrophy(ItemStack.of(Material.TRAPPED_CHEST))
@@ -1347,7 +1353,7 @@ public class TrappedNewbieAdvancements {
 		)
 		.buildAndRegister();
 	public static final IAdvancement LOOT_5K = buildBase(LOOT_2500, "loot_5k").display(display().x(1F).fancyDescriptionParent(PURPLE).challengeFrame().superTorture().icon(ItemUtil.glint(Material.ENDER_CHEST))).requiredProgress(simple(5000, 1)).buildAndRegister();
-	public static final IAdvancement LOOT_10K = buildBase(LOOT_5K, "loot_10k").display(display().x(1F).fancyDescriptionParent(NamedTextColor.BLACK).withAdvancementFrame(AdvancementFrame.BUTTERFLY).bottomHack().cheat().icon(Material.FLINT_AND_STEEL)).requiredProgress(simple(10000, 1)).buildAndRegister();
+	public static final IAdvancement LOOT_10K = buildBase(LOOT_5K, "loot_10k").display(display().x(1F).fancyDescriptionParent(NamedTextColor.BLACK).withAdvancementFrame(AdvancementFrame.BUTTERFLY).cheat().icon(Material.FLINT_AND_STEEL)).requiredProgress(simple(10000, 1)).buildAndRegister();
 	public static final IAdvancement OPEN_CHEST_100 = buildBase(STATISTICS_RIGHT_LINKER, "open_chest_100").display(display().xy(1F, -5F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.CHEST))
 		.withReward(rewards().withExp(15))
 		.buildAndRegister();
@@ -1415,7 +1421,7 @@ public class TrappedNewbieAdvancements {
 			.withTrophy(ItemStack.of(Material.DIAMOND_ORE))
 		)
 		.buildAndRegister();
-	public static final IAdvancement BREAK_100K_NETHERITE = buildBase(BREAK_10K_NETHERITE, "break_100k_netherite").display(display().x(1F).fancyDescriptionParent(NamedTextColor.LIGHT_PURPLE).withAdvancementFrame(AdvancementFrame.BUTTERFLY).icon(ItemUtil.glint(Material.NETHERITE_PICKAXE)))
+	public static final IAdvancement BREAK_100K_NETHERITE = buildBase(BREAK_10K_NETHERITE, "break_100k_netherite").display(display().x(1F).fancyDescriptionParent(NamedTextColor.LIGHT_PURPLE).withAdvancementFrame(AdvancementFrame.BUTTERFLY).bottomHack().icon(ItemUtil.glint(Material.NETHERITE_PICKAXE)))
 		.withReward(rewards()
 			.withExp(400)
 			.addItems(ItemStack.of(Material.DIAMOND_ORE, 5))
@@ -1429,7 +1435,7 @@ public class TrappedNewbieAdvancements {
 	public static final IAdvancement SURVIVE_1H = buildBase(STATISTICS_RIGHT_LINKER, "survive_1h").display(display().xy(1F, -8F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.CLOCK))
 		.withReward(rewards().withExp(30))
 		.buildAndRegister();
-	public static final IAdvancement SURVIVE_10H = buildBase(SURVIVE_1H, "survive_10h").display(display().x(1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().bottomHack().icon(SURVIVE_HEAD_1))
+	public static final IAdvancement SURVIVE_10H = buildBase(SURVIVE_1H, "survive_10h").display(display().x(1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().icon(SURVIVE_HEAD_1))
 		.withReward(rewards().withExp(70))
 		.buildAndRegister();
 	public static final IAdvancement SURVIVE_50H = buildBase(SURVIVE_10H, "survive_50h").display(display().x(1F).fancyDescriptionParent(NamedTextColor.DARK_PURPLE).challengeFrame().icon(SURVIVE_HEAD_2))
@@ -1438,16 +1444,16 @@ public class TrappedNewbieAdvancements {
 			.withTrophy(ItemStack.of(Material.CLOCK))
 		)
 		.buildAndRegister();
-	public static final IAdvancement SURVIVE_200H = buildBase(SURVIVE_50H, "survive_200h").display(display().x(1F).fancyDescriptionParent(NamedTextColor.LIGHT_PURPLE).withAdvancementFrame(AdvancementFrame.BUTTERFLY).superChallenge().icon(SURVIVE_HEAD_3))
+	public static final IAdvancement SURVIVE_200H = buildBase(SURVIVE_50H, "survive_200h").display(display().x(1F).fancyDescriptionParent(NamedTextColor.LIGHT_PURPLE).withAdvancementFrame(AdvancementFrame.BUTTERFLY).bottomHack().superChallenge().icon(SURVIVE_HEAD_3))
 		.withReward(rewards()
 			.withExp(1000)
 			.withTrophy(ItemUtil.texturedHead("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZmUwOTk4NTgxMDg3ZWYyY2M3ZTA1OGQ3ZGZjZTIxOTZiY2FjZDk2ZmY0NjhlNjQ4MjM3YWE4OWQ4ZWI2NmUzMCJ9fX0=")) // TODO textured heads
 		)
 		.buildAndRegister();
 	public static final IAdvancement DEATHS_1 = buildBase(SURVIVE_200H, "deaths_1").display(display().x(1.5F).fancyDescriptionParent(NamedTextColor.DARK_RED).icon(RequiemItems.HEART)).buildAndRegister();
-	public static final IAdvancement DEATHS_50 = buildBase(DEATHS_1, "deaths_50").display(display().x(1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().bottomHack().icon(Material.BONE)).buildAndRegister();
+	public static final IAdvancement DEATHS_50 = buildBase(DEATHS_1, "deaths_50").display(display().x(1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().icon(Material.BONE)).buildAndRegister();
 	public static final IAdvancement DEATHS_250 = buildBase(DEATHS_50, "deaths_250").display(display().x(1F).fancyDescriptionParent(NamedTextColor.DARK_PURPLE).challengeFrame().icon(RequiemItems.SPINE)).buildAndRegister();
-	public static final IAdvancement DEATHS_1000 = buildBase(DEATHS_250, "deaths_1000").display(display().x(1F).fancyDescriptionParent(NamedTextColor.LIGHT_PURPLE).withAdvancementFrame(AdvancementFrame.BUTTERFLY).icon(Material.SKELETON_SKULL)).buildAndRegister();
+	public static final IAdvancement DEATHS_1000 = buildBase(DEATHS_250, "deaths_1000").display(display().x(1F).fancyDescriptionParent(NamedTextColor.LIGHT_PURPLE).withAdvancementFrame(AdvancementFrame.BUTTERFLY).bottomHack().icon(Material.SKELETON_SKULL)).buildAndRegister();
 //	public static final IAdvancement HORSE_SPEED_1 = buildBase(STATISTICS_RIGHT_LINKER, "horse_speed_1").display(display().xy(1F, -9F).fancyDescriptionParent(NamedTextColor.GREEN).icon(ItemStack.of(Material.LEATHER_HORSE_ARMOR).withColor(TextColor.color(16707753))))
 //		.withReward(rewards().withExp(10))
 //		.buildAndRegister();
@@ -1471,7 +1477,7 @@ public class TrappedNewbieAdvancements {
 	public static final IAdvancement WALK_10KM = buildBase(STATISTICS_ROOT, "walk_10km").display(display().x(-1.75F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.LEATHER_BOOTS))
 		.withReward(rewards().withExp(50))
 		.buildAndRegister();
-	public static final IAdvancement WALK_50KM = buildBase(WALK_10KM, "walk_50km").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().bottomHack().icon(Material.CHAINMAIL_BOOTS))
+	public static final IAdvancement WALK_50KM = buildBase(WALK_10KM, "walk_50km").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().icon(Material.CHAINMAIL_BOOTS))
 		.withReward(rewards().withExp(200))
 		.buildAndRegister();
 	public static final IAdvancement WALK_250KM = buildBase(WALK_50KM, "walk_250km").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.DARK_PURPLE).challengeFrame().icon(Material.IRON_BOOTS))
@@ -1558,7 +1564,7 @@ public class TrappedNewbieAdvancements {
 	public static final IAdvancement BOAT_50KM = buildBase(BOAT_25KM, "boat_50km").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.LIGHT_PURPLE).challengeFrame().superChallenge().icon(Material.MANGROVE_BOAT)).buildAndRegister();
 	public static final IAdvancement BOAT_100KM = buildBase(BOAT_50KM, "boat_100km").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.DARK_RED).challengeFrame().torture().icon(Material.ACACIA_BOAT)).buildAndRegister();
 	public static final IAdvancement BOAT_250KM = buildBase(BOAT_100KM, "boat_250km").display(display().x(-1F).fancyDescriptionParent(PURPLE).challengeFrame().superTorture().icon(Material.BIRCH_BOAT)).buildAndRegister();
-	public static final IAdvancement BOAT_500KM = buildBase(BOAT_250KM, "boat_500km").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.BLACK).withAdvancementFrame(AdvancementFrame.BUTTERFLY).cheat().icon(ItemUtil.glint(Material.CHERRY_BOAT)))
+	public static final IAdvancement BOAT_500KM = buildBase(BOAT_250KM, "boat_500km").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.BLACK).withAdvancementFrame(AdvancementFrame.BUTTERFLY).bottomHack().cheat().icon(ItemUtil.glint(Material.CHERRY_BOAT)))
 		.withReward(rewards()
 			.withExp(500)
 			.withTrophy(ItemStack.of(Material.CHERRY_BOAT))
@@ -1567,7 +1573,7 @@ public class TrappedNewbieAdvancements {
 	public static final IAdvancement HORSE_1KM = buildBase(WALK_10KM, "horse_1km").display(display().y(4F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.IRON_HORSE_ARMOR))
 		.withReward(rewards().withExp(50).addItems(ItemStack.of(Material.LEATHER, 3), ItemStack.of(Material.IRON_HORSE_ARMOR)))
 		.buildAndRegister();
-	public static final IAdvancement HORSE_10KM = buildBase(HORSE_1KM, "horse_10km").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().bottomHack().icon(Material.GOLDEN_HORSE_ARMOR))
+	public static final IAdvancement HORSE_10KM = buildBase(HORSE_1KM, "horse_10km").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().icon(Material.GOLDEN_HORSE_ARMOR))
 		.withReward(rewards().withExp(200).addItems(ItemStack.of(Material.LEATHER, 8), ItemStack.of(Material.GOLDEN_HORSE_ARMOR)))
 		.buildAndRegister();
 	public static final IAdvancement HORSE_25KM = buildBase(HORSE_10KM, "horse_25km").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.DARK_PURPLE).challengeFrame().icon(Material.DIAMOND_HORSE_ARMOR))
@@ -1589,11 +1595,11 @@ public class TrappedNewbieAdvancements {
 			.withTrophy(ItemUtil.texturedHead("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvN2Q4ODY0M2IwNDg2Nzk2MjRhNDJlZTA0NjY2YTQ4NjVlYzE2ODcxYzczMjc5NzM0NjVhZjZiZDVhYmRkOGNhNyJ9fX0=")) // todo textured heads
 		)
 		.buildAndRegister();
-	public static final IAdvancement HORSE_500KM = buildBase(HORSE_250KM, "horse_500km").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.BLACK).withAdvancementFrame(AdvancementFrame.BUTTERFLY).cheat().icon(wrathHorseItem())).buildAndRegister();
+	public static final IAdvancement HORSE_500KM = buildBase(HORSE_250KM, "horse_500km").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.BLACK).withAdvancementFrame(AdvancementFrame.BUTTERFLY).bottomHack().cheat().icon(wrathHorseItem())).buildAndRegister();
 	public static final IAdvancement PIG_100M = buildBase(WALK_10KM, "pig_100m").display(display().y(5F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.SADDLE))
 		.withReward(rewards().withExp(50).addItems(ItemStack.of(Material.PORKCHOP, 3)))
 		.buildAndRegister();
-	public static final IAdvancement PIG_1KM = buildBase(PIG_100M, "pig_1km").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().bottomHack().icon(Material.CARROT_ON_A_STICK))
+	public static final IAdvancement PIG_1KM = buildBase(PIG_100M, "pig_1km").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().icon(Material.CARROT_ON_A_STICK))
 		.withReward(rewards().withExp(200).addItems(ItemStack.of(Material.PORKCHOP, 8), ItemStack.of(Material.CARROT, 16)))
 		.buildAndRegister();
 	public static final IAdvancement PIG_10KM = buildBase(PIG_1KM, "pig_10km").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.DARK_PURPLE).challengeFrame().icon(PIG_HEAD))
@@ -1718,7 +1724,7 @@ public class TrappedNewbieAdvancements {
 	public static final IAdvancement CLIMB_100M = buildBase(WALK_10KM, "climb_100m").display(display().y(-3F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.VINE))
 		.withReward(rewards().withExp(5))
 		.buildAndRegister();
-	public static final IAdvancement CLIMB_500M = buildBase(CLIMB_100M, "climb_500m").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().icon(Material.WEEPING_VINES))
+	public static final IAdvancement CLIMB_500M = buildBase(CLIMB_100M, "climb_500m").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().bottomHack().icon(Material.WEEPING_VINES))
 		.withReward(rewards().withExp(45))
 		.buildAndRegister();
 	public static final IAdvancement CLIMB_3KM = buildBase(CLIMB_500M, "climb_3km").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.DARK_PURPLE).challengeFrame().icon(Material.LADDER))
@@ -1736,7 +1742,7 @@ public class TrappedNewbieAdvancements {
 	public static final IAdvancement MINECART_1KM = buildBase(WALK_10KM, "minecart_1km").display(display().y(-4F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.MINECART))
 		.withReward(rewards().withExp(50).addItems(ItemStack.of(Material.IRON_INGOT, 8)))
 		.buildAndRegister();
-	public static final IAdvancement MINECART_10KM = buildBase(MINECART_1KM, "minecart_10km").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().icon(Material.FURNACE_MINECART))
+	public static final IAdvancement MINECART_10KM = buildBase(MINECART_1KM, "minecart_10km").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().bottomHack().icon(Material.FURNACE_MINECART))
 		.withReward(rewards().withExp(200).addItems(ItemStack.of(Material.IRON_INGOT, 24)))
 		.buildAndRegister();
 	public static final IAdvancement MINECART_50KM = buildBase(MINECART_10KM, "minecart_50km").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.DARK_PURPLE).challengeFrame().icon(Material.COMMAND_BLOCK_MINECART))
@@ -1754,7 +1760,7 @@ public class TrappedNewbieAdvancements {
 		.buildAndRegister();
 	public static final IAdvancement MINECART_500KM = buildBase(MINECART_250KM, "minecart_500km").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.DARK_RED).challengeFrame().torture().icon(Material.HOPPER_MINECART)).buildAndRegister();
 	public static final IAdvancement MINECART_5000KM = buildBase(MINECART_500KM, "minecart_5000km").display(display().x(-1F).fancyDescriptionParent(PURPLE).challengeFrame().superTorture().icon(Material.CHEST_MINECART)).buildAndRegister();
-	public static final IAdvancement MINECART_15000KM = buildBase(MINECART_5000KM, "minecart_15000km").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.BLACK).withAdvancementFrame(AdvancementFrame.BUTTERFLY).bottomHack().cheat().icon(Material.TNT_MINECART)).buildAndRegister();
+	public static final IAdvancement MINECART_15000KM = buildBase(MINECART_5000KM, "minecart_15000km").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.BLACK).withAdvancementFrame(AdvancementFrame.BUTTERFLY).cheat().icon(Material.TNT_MINECART)).buildAndRegister();
 	public static final IAdvancement STRIDER_100M = buildBase(WALK_10KM, "strider_100m").display(display().y(-5F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.LAVA_BUCKET))
 		.withReward(rewards().withExp(50).addItems(ItemStack.of(Material.WARPED_FUNGUS, 3)))
 		.buildAndRegister();

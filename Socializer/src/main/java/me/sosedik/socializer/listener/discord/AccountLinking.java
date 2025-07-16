@@ -26,7 +26,7 @@ import org.jspecify.annotations.NullMarked;
 public class AccountLinking extends ListenerAdapter {
 
 	public AccountLinking(Socializer plugin) {
-		if (!plugin.getConfig().getBoolean("account-linking", false)) return;
+		if (!plugin.getConfig().getBoolean("discord.account-linking", false)) return;
 
 		DiscordBot.getDiscordBot().addEventListener(this);
 	}

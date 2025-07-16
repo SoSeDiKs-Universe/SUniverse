@@ -10,7 +10,7 @@ dependencies {
     compileOnly("org.incendo:cloud-paper:${project.property("cloudImplVersion")}")
     compileOnly("org.incendo:cloud-annotations:${project.property("cloudVersion")}")
 
-    paperLibrary("net.dv8tion:JDA:5.1.2") {
+    paperLibrary("net.dv8tion:JDA:5.6.1") {
         exclude("opus-java")
     }
     paperLibrary("club.minnced:discord-webhooks:0.8.4")

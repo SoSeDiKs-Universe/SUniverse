@@ -19,15 +19,16 @@ import me.sosedik.utilizer.util.Scheduler;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.UnknownNullability;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
 public final class Socializer extends JavaPlugin {
 
-	private static Socializer instance;
+	private static @UnknownNullability Socializer instance;
 
-	private Scheduler scheduler;
-	private Database database;
+	private @UnknownNullability Scheduler scheduler;
+	private @UnknownNullability Database database;
 
 	@Override
 	public void onLoad() {
@@ -37,7 +38,7 @@ public final class Socializer extends JavaPlugin {
 
 		TranslationHolder.extractLocales(this);
 
-		if (getConfig().getBoolean("discord.run-bot")) {
+		if (getConfig().getBoolean("discord.run-bot", false)) {
 			DiscordBot.setupBot(this);
 		}
 	}
@@ -45,7 +46,7 @@ public final class Socializer extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		// Discord listeners
-		if (getConfig().getBoolean("discord.run-bot")) {
+		if (getConfig().getBoolean("discord.run-bot", false)) {
 			new AccountLinking(this);
 			new ConsoleCommands(this);
 			new DiscordChatLinker(this, new DiscordChatRenderer());

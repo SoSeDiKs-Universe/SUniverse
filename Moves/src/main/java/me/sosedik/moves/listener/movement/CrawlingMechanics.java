@@ -17,6 +17,7 @@ import org.bukkit.entity.Pose;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.util.Vector;
@@ -193,6 +194,11 @@ public class CrawlingMechanics implements Listener {
 			if (finalSlide)
 				slide(player);
 		}, 1L);
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onDeath(PlayerDeathEvent event) {
+		standUp(event.getPlayer());
 	}
 
 	/**

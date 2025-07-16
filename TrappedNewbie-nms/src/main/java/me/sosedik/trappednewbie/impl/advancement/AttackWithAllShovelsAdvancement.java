@@ -33,16 +33,16 @@ public class AttackWithAllShovelsAdvancement extends BaseAdvancement {
 
 	private static VanillaTriggerData<?> triggerData(Material shovelType) {
 		return playerHurtEntity(shovelType.key().value())
-			.withDamage(damage -> damage
-				.withDamageSource(source -> source
-					.withTag(DamageTypeTagKeys.IS_PLAYER_ATTACK, true)
-					.withSourceEntity(entity -> entity
-						.withEquipment(equipment -> equipment
-							.withMainHand(shovelType)
+				.withDamage(damage -> damage
+					.withDamageSource(source -> source
+						.withTag(DamageTypeTagKeys.IS_PLAYER_ATTACK, true)
+						.withSourceEntity(entity -> entity
+							.withEquipment(equipment -> equipment
+								.withMainHand(shovelType)
+							)
 						)
 					)
-				)
-			);
+				);
 	}
 
 }

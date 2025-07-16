@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerStatisticIncrementEvent;
 import org.jspecify.annotations.NullMarked;
 
@@ -20,6 +21,18 @@ public class StatisticAdvancements implements Listener {
 
 	public StatisticAdvancements() {
 		TrappedNewbie.scheduler().async(() -> Bukkit.getOnlinePlayers().forEach(this::trackMovementStats), 3 * 20L, 3 * 20L);
+	}
+
+	@EventHandler
+	public void onJoin(PlayerJoinEvent event) {
+		Player player = event.getPlayer();
+		int statValue = player.getStatistic(Statistic.LEAVE_GAME);
+		if (statValue >= 1) TrappedNewbieAdvancements.GAME_LEAVES_1.awardAllCriteria(player);
+		if (statValue >= 10) TrappedNewbieAdvancements.GAME_LEAVES_10.awardAllCriteria(player);
+		if (statValue >= 100) TrappedNewbieAdvancements.GAME_LEAVES_100.awardAllCriteria(player);
+		if (statValue >= 1000) TrappedNewbieAdvancements.GAME_LEAVES_1K.awardAllCriteria(player);
+		if (statValue >= 5000) TrappedNewbieAdvancements.GAME_LEAVES_5K.awardAllCriteria(player);
+		if (statValue >= 10_000) TrappedNewbieAdvancements.GAME_LEAVES_10K.awardAllCriteria(player);
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

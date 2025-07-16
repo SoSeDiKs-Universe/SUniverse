@@ -281,5 +281,10 @@
 		"<#FFBAE3><!i>compact inventory management"
 	],
 	"trophy.wash_250.name": "<#DCD9C0><b>Socks",
-	"trophy.wash_250.lore": "<#DCD9C0><!i>Even after 250 washes it still smells…"
+	"trophy.wash_250.lore": "<#DCD9C0><!i>Even after 250 washes it still smells…",
+	"trophy.game_leaves_100.name": "<#DCD9C0><b>The Quitter's Leaf",
+	"trophy.game_leaves_100.lore": [
+		"<#DCD9C0><!i>This is bestowed upon you for Rage-quitting 100 Times.",
+		"<#DCD9C0><!i>You should get some Anger Management Therapy."
+	]
 }

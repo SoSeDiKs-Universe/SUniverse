@@ -30,6 +30,8 @@ public class BookContentModifier extends ItemModifier {
 		if (item.hasData(DataComponentTypes.WRITTEN_BOOK_CONTENT)) {
 			WrittenBookContent writtenBookContent = item.getData(DataComponentTypes.WRITTEN_BOOK_CONTENT);
 			assert writtenBookContent != null;
+			if (writtenBookContent.author().isEmpty()) return ModificationResult.PASS; // Likely server book
+
 			WrittenBookContent newContent = BookBeautifier.updateContent(player, writtenBookContent);
 			if (newContent != null) {
 				item.setData(DataComponentTypes.WRITTEN_BOOK_CONTENT, newContent);

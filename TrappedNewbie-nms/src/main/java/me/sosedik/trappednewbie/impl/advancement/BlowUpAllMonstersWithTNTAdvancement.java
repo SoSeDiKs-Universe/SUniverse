@@ -13,7 +13,7 @@ import org.jspecify.annotations.NullMarked;
 import java.util.ArrayList;
 import java.util.List;
 
-// MCCheck: 1.21.7, new hostile mobs that have tnt immunity
+// MCCheck: 1.21.8, new hostile mobs that have tnt immunity
 @NullMarked
 public class BlowUpAllMonstersWithTNTAdvancement extends BaseAdvancement {
 

@@ -21,6 +21,7 @@ public enum AdvancementFrame {
 	BLOCK,
 	BUTTERFLY,
 	CIRCLE,
+	CRESTED,
 	HEART,
 	SHARP,
 	SPEECH_BUBBLE,

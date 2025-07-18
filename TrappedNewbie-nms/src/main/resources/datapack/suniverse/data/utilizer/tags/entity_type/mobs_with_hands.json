@@ -1,0 +1,28 @@
+{
+	"replace": false,
+	"values": [
+		"#utilizer:bow_skeletons",
+		"minecraft:wither_skeleton",
+		"minecraft:drowned",
+		"minecraft:husk",
+		"minecraft:zombie",
+		"minecraft:zombie_villager",
+		"minecraft:enderman",
+		"minecraft:witch",
+		"minecraft:zombified_piglin",
+		"minecraft:piglin",
+		"minecraft:piglin_brute",
+		"minecraft:evoker",
+		"minecraft:pillager",
+		"minecraft:vindicator",
+		"minecraft:illusioner",
+		"minecraft:villager",
+		"minecraft:wandering_trader",
+		"minecraft:snow_golem",
+		"minecraft:iron_golem",
+		"minecraft:allay",
+		"minecraft:vex",
+		"minecraft:creaking",
+		"minecraft:warden"
+	]
+}

@@ -2,6 +2,8 @@
 	"replace": false,
 	"values": [
 		"#trapped_newbie:chopping_blocks",
-		"#trapped_newbie:work_stations"
+		"#trapped_newbie:work_stations",
+		"#trapped_newbie:drums",
+		"#trapped_newbie:totem_bases"
 	]
 }

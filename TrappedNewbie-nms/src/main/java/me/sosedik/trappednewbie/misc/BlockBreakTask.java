@@ -2,6 +2,7 @@ package me.sosedik.trappednewbie.misc;
 
 import io.papermc.paper.math.BlockPosition;
 import io.papermc.paper.math.Position;
+import me.sosedik.requiem.feature.PossessingPlayer;
 import me.sosedik.resourcelib.feature.HudMessenger;
 import me.sosedik.resourcelib.impl.block.nms.BarrierNMSBlock;
 import me.sosedik.trappednewbie.TrappedNewbie;
@@ -12,6 +13,7 @@ import me.sosedik.trappednewbie.listener.block.CustomBlockBreaking;
 import me.sosedik.trappednewbie.listener.player.VisualArmorLayer;
 import me.sosedik.utilizer.api.math.WorldChunkPosition;
 import me.sosedik.utilizer.api.message.Messenger;
+import me.sosedik.utilizer.dataset.UtilizerTags;
 import me.sosedik.utilizer.util.DurabilityUtil;
 import me.sosedik.utilizer.util.EntityUtil;
 import org.bukkit.Bukkit;
@@ -32,6 +34,7 @@ import org.bukkit.block.data.type.Bed;
 import org.bukkit.block.data.type.Door;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.ItemDisplay;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -293,8 +296,15 @@ public class BlockBreakTask extends BukkitRunnable {
 			if (ItemStack.isEmpty(helmet) || !helmet.containsEnchantment(Enchantment.AQUA_AFFINITY))
 				seconds *= 5F;
 		}
-		if (!this.player.isOnGround() && !this.player.isFlying())
-			seconds *= 5F;
+		if (!this.player.isOnGround() && !this.player.isFlying()) {
+			LivingEntity possessed = PossessingPlayer.getPossessed(this.player);
+			if (possessed != null) {
+				if (!UtilizerTags.MOBS_WITH_HANDS.isTagged(possessed.getType()))
+					seconds *= 2F;
+			} else {
+				seconds *= 5F;
+			}
+		}
 
 		seconds = (float) (Math.ceil(seconds * 20) / 20D);
 

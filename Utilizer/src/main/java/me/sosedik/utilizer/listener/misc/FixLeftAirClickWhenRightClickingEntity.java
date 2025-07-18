@@ -3,6 +3,7 @@ package me.sosedik.utilizer.listener.misc;
 import me.sosedik.kiterino.event.player.PlayerArmSwingFromServerEvent;
 import me.sosedik.utilizer.Utilizer;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -28,10 +29,11 @@ public class FixLeftAirClickWhenRightClickingEntity implements Listener {
 
 	private static final Set<UUID> ON_COOLDOWN = new HashSet<>();
 
-	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onInteract(PlayerInteractEvent event) {
 		if (event.getHand() != EquipmentSlot.HAND) return;
 		if (event.getAction() != Action.LEFT_CLICK_AIR && event.getAction() != Action.LEFT_CLICK_BLOCK) return;
+		if (event.useItemInHand() == Event.Result.DENY) return;
 
 		Player player = event.getPlayer();
 		if (!ON_COOLDOWN.contains(player.getUniqueId())) return;

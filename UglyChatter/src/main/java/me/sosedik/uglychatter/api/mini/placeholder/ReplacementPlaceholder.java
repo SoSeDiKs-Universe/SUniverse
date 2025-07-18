@@ -115,7 +115,7 @@ public abstract class ReplacementPlaceholder {
 	 * @return the placeholder display
 	 */
 	public Component getDisplay() {
-		return Component.empty();
+		return Component.text(getShortcode());
 	}
 
 	/**
@@ -190,7 +190,7 @@ public abstract class ReplacementPlaceholder {
 		for (T placeholder : placeholders) {
 			Pattern pattern = placeholder.getReplacementPattern();
 			Matcher matcher = pattern.matcher(result);
-			StringBuffer tempResult = new StringBuffer();
+			var tempResult = new StringBuffer();
 
 			while (matcher.find()) {
 				matcher.appendReplacement(tempResult, placeholder.getShortcode());

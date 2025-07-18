@@ -6,15 +6,18 @@ import me.sosedik.utilizer.api.message.Messenger;
 import me.sosedik.utilizer.api.message.Mini;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.text.Component;
+import org.bukkit.NamespacedKey;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
-import java.util.function.Function;
+import java.util.Map;
+import java.util.function.Supplier;
 
 import static me.sosedik.utilizer.api.message.Mini.combine;
 import static me.sosedik.utilizer.api.message.Mini.combined;
@@ -23,6 +26,7 @@ import static me.sosedik.utilizer.api.message.Mini.combined;
 public class BossBarTask extends BukkitRunnable {
 
 	private static final Component PREFIX = Mini.asIcon(Component.text("✨"));
+	private static final List<NamespacedKey> subtitlePriorities = new ArrayList<>();
 
 	private final Player player;
 	private final BossBar[] bossBars = new BossBar[]{constructBossBar(), constructBossBar(), constructBossBar(), constructBossBar()};
@@ -30,7 +34,7 @@ public class BossBarTask extends BukkitRunnable {
 	private final List<IconProvider> iconProviders = new ArrayList<>();
 	private final List<Component> iconTitles;
 	private @Nullable Component @Nullable [] subtitle;
-	private final List<SubtitleProvider> subtitleProviders = new ArrayList<>();
+	private final Map<NamespacedKey, SubtitleProvider> subtitleProviders = new HashMap<>();
 
 	public BossBarTask(Player player) {
 		this.player = player;
@@ -48,15 +52,18 @@ public class BossBarTask extends BukkitRunnable {
 		iconTitles.clear();
 		subtitle = null;
 
-		for (SubtitleProvider provider : subtitleProviders) {
-			subtitle = provider.getSubtitle(player);
+		for (NamespacedKey key : subtitlePriorities) {
+			SubtitleProvider provider = subtitleProviders.get(key);
+			if (provider == null) continue;
+
+			subtitle = provider.getSubtitles();
 			if (subtitle != null)
 				break;
 		}
 
 		if (subtitle == null) {
 			for (IconProvider provider : iconProviders) {
-				Component icon = provider.getIcon(player);
+				Component icon = provider.getIcon();
 				if (icon != null)
 					iconTitles.add(icon);
 			}
@@ -124,41 +131,49 @@ public class BossBarTask extends BukkitRunnable {
 		return progressionTask;
 	}
 
-	public void addIconProvider(String providerId, int priority, Function<Player, @Nullable Component> subtitleProvider) {
-		iconProviders.add(new IconProvider(providerId, priority, subtitleProvider));
-		iconProviders.sort(Comparator.comparingInt(IconProvider::priority));
+	public void addIconProvider(NamespacedKey providerId, IconProvider iconProvider) {
+		iconProviders.add(iconProvider);
 	}
 
-	public void addProviderSingle(String providerId, int priority, Function<Player, @Nullable Component> subtitleProvider) {
-		addProvider(providerId, priority, p -> {
-			Component display = subtitleProvider.apply(p);
+	public void addProviderSingle(NamespacedKey providerId, Supplier<@Nullable Component> subtitleProvider) {
+		addProvider(providerId, () -> {
+			Component display = subtitleProvider.get();
 			return display == null ? null : new Component[]{display};
 		});
 	}
 
-	public void addProvider(String providerId, int priority, Function<Player, @Nullable Component @Nullable[]> subtitleProvider) {
-		subtitleProviders.add(new SubtitleProvider(providerId, priority, subtitleProvider));
-		subtitleProviders.sort(Comparator.comparingInt(SubtitleProvider::priority));
+	public void addProvider(NamespacedKey providerId, SubtitleProvider subtitleProvider) {
+		subtitleProviders.put(providerId, subtitleProvider);
 	}
 
-	public void removeProvider(String providerId) {
-		subtitleProviders.removeIf(provider -> provider.providerId().equals(providerId));
+	@FunctionalInterface
+	public interface IconProvider {
+
+		@Nullable Component getIcon();
+
 	}
 
-	private record IconProvider(String providerId, int priority, Function<Player, @Nullable Component> subtitleProvider) {
+	@FunctionalInterface
+	public interface SubtitleProvider {
 
-		public @Nullable Component getIcon(Player player) {
-			return subtitleProvider.apply(player);
+		@Nullable Component @Nullable[] getSubtitles();
+
+	}
+
+	/**
+	 * Initializes scoreboard renderer's options
+	 *
+	 * @param plugin plugin instance
+	 */
+	public static void init(TrappedNewbie plugin) {
+		FileConfiguration config = plugin.getConfig();
+		if (!config.contains("boss-bar.subtitle-priorities")) {
+			config.set("boss-bar.subtitle-priorities", List.of());
+			return;
 		}
 
-	}
-
-	private record SubtitleProvider(String providerId, int priority, Function<Player, @Nullable Component @Nullable[]> subtitleProvider) {
-
-		public @Nullable Component @Nullable [] getSubtitle(Player player) {
-			return subtitleProvider.apply(player);
-		}
-
+		List<String> priorities = config.getStringList("boss-bar.subtitle-priorities");
+		priorities.forEach(key -> subtitlePriorities.add(NamespacedKey.fromString(key)));
 	}
 
 }

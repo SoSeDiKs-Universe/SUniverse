@@ -24,6 +24,7 @@ import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockBurnEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.loot.LootContext;
@@ -149,6 +150,13 @@ public class TombstoneBlockStorage extends BlockDataStorageHolder {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public void onBurn(BlockBurnEvent event) {
+		super.onBurn(event);
+
+		dropLoot(null);
 	}
 
 	@Override

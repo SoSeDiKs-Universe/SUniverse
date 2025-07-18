@@ -7,6 +7,7 @@ import me.sosedik.utilizer.util.EntityUtil;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.Tag;
+import org.bukkit.damage.DamageType;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Golem;
@@ -33,7 +34,7 @@ import java.util.UUID;
 /**
  * The only thing undead feat is the holy might. And fire, unless...
  */
-// MCCheck: 1.21.7, new fire damages
+// MCCheck: 1.21.8, new fire damages
 public class UndeadConsecration implements Listener {
 
 	private static final Map<UUID, HealTask> UNDEAD_MOBS = new HashMap<>();
@@ -68,6 +69,8 @@ public class UndeadConsecration implements Listener {
 
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onDamage(EntityDamageEvent event) {
+		if (shouldIgnoreDamage(event.getDamageSource().getDamageType())) return;
+
 		Entity entity = event.getEntity();
 		HealTask healTask = UNDEAD_MOBS.get(entity.getUniqueId());
 		if (healTask == null) return;
@@ -122,9 +125,15 @@ public class UndeadConsecration implements Listener {
 		event.setDamage(event.getDamage() * 0.2);
 	}
 
+	private boolean shouldIgnoreDamage(DamageType damageType) {
+		return damageType == DamageType.GENERIC_KILL
+			|| damageType == DamageType.OUT_OF_WORLD
+			|| damageType == DamageType.OUTSIDE_BORDER;
+	}
+
 	private boolean isExplosionDamageCause(EntityDamageEvent.DamageCause cause) {
 		return cause == EntityDamageEvent.DamageCause.BLOCK_EXPLOSION
-				|| cause == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION;
+			|| cause == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION;
 	}
 
 	private static class HealTask extends BukkitRunnable {

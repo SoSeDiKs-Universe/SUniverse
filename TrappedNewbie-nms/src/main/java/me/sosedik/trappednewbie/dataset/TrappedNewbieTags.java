@@ -6,7 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.jspecify.annotations.NullMarked;
 
-// MCCheck: 1.21.7, new branches (chopping blocks, work stations), hardened
+// MCCheck: 1.21.8, new branches (chopping blocks, work stations), hardened
 @NullMarked
 public class TrappedNewbieTags {
 
@@ -23,11 +23,14 @@ public class TrappedNewbieTags {
 	public static final Tag<Material> GLASS_SHARDS = itemTag("glass_shards");
 	public static final Tag<Material> PLACEABLE_ITEMS = itemTag("placeable_items");
 	public static final Tag<Material> PAPERS = itemTag("papers");
+	public static final Tag<Material> HIDES = itemTag("hides");
 
 	// blocks
 	public static final Tag<Material> MINEABLE_BY_HAND = blockTag("mineable/hand");
 	public static final Tag<Material> CHOPPING_BLOCKS = blockTag("chopping_blocks");
 	public static final Tag<Material> WORK_STATIONS = blockTag("work_stations");
+	public static final Tag<Material> DRUMS = blockTag("drums");
+	public static final Tag<Material> TOTEM_BASES = blockTag("totem_bases");
 	public static final Tag<Material> HARDENED = blockTag("hardened");
 	public static final Tag<Material> PRICKY_BLOCKS = blockTag("pricky_blocks");
 

@@ -49,10 +49,10 @@
 		"<gray><!i>Який сенс носити броню, якщо",
 		"<gray><!i>Ви не отримуєте урону"
 	],
-	"trophy.half_a_heart_6h.name": "<dark_gray><b>The Hole",
+	"trophy.half_a_heart_6h.name": "<dark_gray><b>Дірка",
 	"trophy.half_a_heart_6h.lore": [
-		"<dark_gray><!i>You sat in a Hole for 6 Hours.",
-		"<dark_gray><!i>Now it will sit in your Inventory for the Rest of your Life."
+		"<dark_gray><!i>Ви просиділи в дірі 6 годин. Тепер вона просидить",
+		"<dark_gray><!i>у Вашому інвентарі до кінця Вашого життя."
 	],
 	"trophy.deflect_200.name": "<#BF7960><b>Незламний бар'єр",
 	"trophy.deflect_200.lore": [

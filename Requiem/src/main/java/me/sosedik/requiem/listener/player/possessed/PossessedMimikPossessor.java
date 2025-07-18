@@ -27,7 +27,7 @@ import java.util.Map;
 /**
  * Possessed mimik actions of their possessor
  */
-// MCCheck: 1.21.7, new mobs carrying items
+// MCCheck: 1.21.8, new mobs carrying items
 @NullMarked
 public class PossessedMimikPossessor implements Listener {
 
@@ -116,15 +116,19 @@ public class PossessedMimikPossessor implements Listener {
 		entityEquipment.setItem(event.getSlot(), event.getNewItem());
 	}
 
-	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onCombust(EntityCombustEvent event) {
 		if (!(event.getEntity() instanceof Player player)) return;
-		if (!PossessingPlayer.isPossessing(player)) return;
 
 		LivingEntity entity = PossessingPlayer.getPossessed(player);
 		if (entity == null) return;
 
-		entity.setFireTicks((int) Math.max(event.getDuration() * 20, entity.getFireTicks()));
+		event.setCancelled(true);
+
+		int ticks = (int) (event.getDuration() * 20);
+		if (entity.getFireTicks() >= ticks) return;
+
+		entity.setFireTicks(ticks);
 	}
 
 	@SuppressWarnings("deprecation")

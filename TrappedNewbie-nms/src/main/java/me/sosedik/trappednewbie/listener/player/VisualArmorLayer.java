@@ -51,7 +51,7 @@ import java.util.UUID;
 /**
  * Players have a visual second armor layer
  */
-// MCCheck: 1.21.7, new equipable items (& equip sounds)
+// MCCheck: 1.21.8, new equipable items (& equip sounds)
 @NullMarked
 public class VisualArmorLayer implements Listener {
 

@@ -16,8 +16,7 @@ public class GoodAsNewAdvancement implements Listener {
 		if (!(event.getEntity() instanceof Zombie)) return;
 
 		Player player = event.getPlayer();
-		if (TrappedNewbieAdvancements.GOOD_AS_NEW.awardAllCriteria(player))
-			TrappedNewbieAdvancements.BASICS_TAB.switchTab(player);
+		TrappedNewbieAdvancements.GOOD_AS_NEW.awardAllCriteria(player);
 	}
 
 }

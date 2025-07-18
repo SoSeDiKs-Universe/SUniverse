@@ -49,10 +49,10 @@
 		"<gray><!i>Какой смысл носить доспехи, если",
 		"<gray><!i>Вы не получаете урона?"
 	],
-	"trophy.half_a_heart_6h.name": "<dark_gray><b>The Hole",
+	"trophy.half_a_heart_6h.name": "<dark_gray><b>Дыра",
 	"trophy.half_a_heart_6h.lore": [
-		"<dark_gray><!i>You sat in a Hole for 6 Hours.",
-		"<dark_gray><!i>Now it will sit in your Inventory for the Rest of your Life."
+		"<dark_gray><!i>Вы просидели в дыре 6 часов. Теперь она просидит",
+		"<dark_gray><!i>в Вашем инвентаре до конца Вашей жизни."
 	],
 	"trophy.deflect_200.name": "<#BF7960><b>Несокрушимый барьер",
 	"trophy.deflect_200.lore": [

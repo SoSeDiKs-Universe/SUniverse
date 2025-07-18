@@ -3,11 +3,16 @@ package me.sosedik.socializer.listener.discord;
 import club.minnced.discord.webhook.send.WebhookEmbed;
 import club.minnced.discord.webhook.send.WebhookEmbedBuilder;
 import club.minnced.discord.webhook.send.WebhookMessageBuilder;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import me.sosedik.socializer.Socializer;
 import me.sosedik.socializer.discord.DiscordBot;
+import me.sosedik.socializer.discord.Discorder;
 import me.sosedik.socializer.util.DiscordUtil;
 import me.sosedik.socializer.util.MinecraftChatRenderer;
 import me.sosedik.uglychatter.api.markdown.MiniMarkdown;
+import me.sosedik.utilizer.Utilizer;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -16,9 +21,16 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.jspecify.annotations.NullMarked;
 
 import java.io.File;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 /**
@@ -29,6 +41,15 @@ public class DiscordChatLinker extends ListenerAdapter {
 
 	private static final Pattern IMAGE_URL = Pattern.compile("(http(s?):)([/.\\w\\s:-])*\\.(?:jpg|gif|png)(\\S*)");
 	private static final String DISCORD_EMOTE = "<:discord:971000408124293151>";
+	private static final LoadingCache<Long, String> CHAT_USERS = CacheBuilder.newBuilder()
+			.expireAfterAccess(5, TimeUnit.MINUTES)
+			.build(
+				new CacheLoader<>() {
+					public String load(Long id) {
+						return fetchUserById(id);
+					}
+				}
+			);
 
 	private static TextChannel serverChat;
 
@@ -38,6 +59,7 @@ public class DiscordChatLinker extends ListenerAdapter {
 		this.chatRenderer = chatRenderer;
 		serverChat = DiscordBot.getDiscordBot().getTextChannelById(plugin.getConfig().getLong("discord.channels.server-chat"));
 		DiscordBot.getDiscordBot().addEventListener(this);
+		runCleanupTask();
 	}
 
 	@Override
@@ -50,7 +72,8 @@ public class DiscordChatLinker extends ListenerAdapter {
 		if (member == null) return;
 
 		Message message = event.getMessage();
-		String nickname = member.getEffectiveName();
+		String nickname = CHAT_USERS.getUnchecked(member.getIdLong());
+		if (nickname.isEmpty()) nickname = member.getEffectiveName();
 		String rawMessage = message.getContentRaw();
 		String gameMessage = message.getContentDisplay();
 
@@ -132,6 +155,28 @@ public class DiscordChatLinker extends ListenerAdapter {
 			embedBuilder.setThumbnailUrl(thumbnail.getUrl());
 
 		return embedBuilder.build();
+	}
+
+	private static String fetchUserById(long id) {
+		String selectSql = "SELECT `UUID` FROM `" + Discorder.DATABASE_NAME + "` WHERE `DiscordId` = '" + id + "';";
+		try (Connection connection = Socializer.database().openConnection();
+			 PreparedStatement ps = connection.prepareStatement(selectSql)) {
+			ResultSet rs = ps.executeQuery();
+			if (!rs.next()) return "";
+
+			UUID uuid = UUID.fromString(rs.getString("UUID"));
+			OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
+			String name = offlinePlayer.getName();
+			return name == null ? "" : name;
+		} catch (SQLException | IllegalArgumentException ex) {
+			ex.printStackTrace();
+			return "";
+		}
+	}
+
+	private static void runCleanupTask() {
+		long cleanupInterval = 60 * 20L;
+		Utilizer.scheduler().async(CHAT_USERS::cleanUp, cleanupInterval, cleanupInterval);
 	}
 
 }

@@ -65,7 +65,7 @@ public class EndermanTeleportsPlayers implements Listener {
 			return;
 		}
 
-		while (!destinationBlock.getType().isEmpty())
+		while (!destinationBlock.getType().isAir())
 			destinationBlock = destinationBlock.getRelative(BlockFace.UP);
 
 		int destY = destinationBlock.getLocation().getBlockY();

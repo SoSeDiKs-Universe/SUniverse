@@ -12,7 +12,7 @@ import org.jspecify.annotations.NullMarked;
 import java.util.ArrayList;
 import java.util.List;
 
-// MCCheck: 1.21.7, new hostile mobs that can't have attack damage deflected
+// MCCheck: 1.21.8, new hostile mobs that can't have attack damage deflected
 @NullMarked
 public class MasterShieldsmanAdvancement extends BaseAdvancement {
 

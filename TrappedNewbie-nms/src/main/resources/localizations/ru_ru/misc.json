@@ -13,5 +13,11 @@
 	"advancement.announcement.super_torture": "Игрок <player> завершил сверхмучительное достижение <advancement>",
 	"advancement.announcement.cheat": "Игрок <player> считерил достижение <advancement>",
 	"advancement.trophy": "<gray><!i>Трофей <player> за <advancement>",
-	"preferences.preference.adv_helper": "Показывать помощник для достижений"
+	"preferences.preference.adv_helper": "Показывать помощник для достижений",
+	"ritual.picker": "Выберите ритуал:",
+	"ritual.required_instruments": "Среди инструментов должны присутствовать:",
+	"ritual.instruments.rattle": "Трещотка",
+	"ritual.instruments.flute": "Флейта",
+	"ritual.instruments.drum": "Барабан",
+	"ritual.instruments.trumpet": "Труба"
 }

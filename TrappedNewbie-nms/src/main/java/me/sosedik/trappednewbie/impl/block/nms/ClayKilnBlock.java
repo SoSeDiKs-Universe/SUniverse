@@ -5,11 +5,9 @@ import it.unimi.dsi.fastutil.Pair;
 import me.sosedik.resourcelib.impl.block.nms.DirectionalBarrierNMSBlock;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.block.state.properties.EnumProperty;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
@@ -22,7 +20,6 @@ import java.util.Set;
 @NullMarked
 public class ClayKilnBlock extends DirectionalBarrierNMSBlock {
 
-	public static final EnumProperty<Direction> FACING = HorizontalDirectionalBlock.FACING;
 	public static final BooleanProperty BURNED = BooleanProperty.create("burned");
 
 	public ClayKilnBlock(Object properties, String key) {

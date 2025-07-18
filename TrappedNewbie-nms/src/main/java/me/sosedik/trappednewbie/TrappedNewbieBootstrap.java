@@ -13,11 +13,13 @@ import me.sosedik.trappednewbie.entity.api.PaperPlane;
 import me.sosedik.trappednewbie.entity.craft.CraftPaperPlane;
 import me.sosedik.trappednewbie.impl.block.nms.ClayKilnBlock;
 import me.sosedik.trappednewbie.impl.block.nms.SleepingBagBlock;
+import me.sosedik.trappednewbie.impl.block.nms.TotemBaseBlock;
 import me.sosedik.trappednewbie.impl.item.nms.PaperPlaneItem;
 import me.sosedik.trappednewbie.impl.item.nms.ThrowableRockItem;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.DispenserBlock;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.craftbukkit.entity.CraftEntityTypes;
 import org.jspecify.annotations.NullMarked;
 
@@ -34,6 +36,8 @@ public class TrappedNewbieBootstrap implements PluginBootstrap {
 			case String k when k.equals("pebble") || k.endsWith("_pebble") -> BlockCreator.vegetation(properties, key, Material::isSolid);
 			case String k when k.startsWith("destroy_stage_") -> BlockCreator.waterloggedBarrier(properties, key);
 			case String k when k.endsWith("_work_station") -> BlockCreator.directionalBarrier(properties, key);
+			case String k when k.endsWith("_drum") -> BlockCreator.barrier(properties, key);
+			case String k when k.endsWith("_totem_base") -> new TotemBaseBlock(properties, NamespacedKey.fromString(key));
 			case String k when k.endsWith("_chopping_block") -> BlockCreator.fakeSculk(properties, key);
 			case "clay_kiln" -> new ClayKilnBlock(properties, key);
 			case "sleeping_bag" -> new SleepingBagBlock(properties);

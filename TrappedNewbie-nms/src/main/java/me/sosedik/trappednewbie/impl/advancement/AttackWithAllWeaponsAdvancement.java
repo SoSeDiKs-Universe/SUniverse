@@ -12,7 +12,7 @@ import org.bukkit.Tag;
 import org.bukkit.entity.EntityType;
 import org.jspecify.annotations.NullMarked;
 
-// MCCheck: 1.21.7, new weapons / attack opportunities
+// MCCheck: 1.21.8, new weapons / attack opportunities
 @NullMarked
 public class AttackWithAllWeaponsAdvancement extends BaseAdvancement {
 

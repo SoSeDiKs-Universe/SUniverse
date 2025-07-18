@@ -1,6 +1,7 @@
 package me.sosedik.trappednewbie.impl.hud;
 
 import me.sosedik.requiem.feature.GhostyPlayer;
+import me.sosedik.requiem.feature.PossessingPlayer;
 import me.sosedik.resourcelib.ResourceLib;
 import me.sosedik.resourcelib.util.SpacingUtil;
 import me.sosedik.trappednewbie.TrappedNewbie;
@@ -38,7 +39,8 @@ public class HungerRenderer extends SimpleHudRenderer {
 	@Override
 	public @Nullable Component render() {
 		if (this.player.getGameMode().isInvulnerable()) return null;
-		if (GhostyPlayer.isGhost(player)) return null;
+		if (GhostyPlayer.isGhost(this.player)) return null;
+		if (PossessingPlayer.isPossessing(this.player)) return null;
 
 		this.foodDisplay.clear();
 

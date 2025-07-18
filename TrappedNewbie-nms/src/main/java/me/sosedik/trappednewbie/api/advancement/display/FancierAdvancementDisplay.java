@@ -34,7 +34,7 @@ import static me.sosedik.utilizer.api.message.Mini.raw;
 
 @NullMarked
 @SuppressWarnings("unchecked")
-// MCCheckL 1.21.7, hopefully background hack is no longer needed? :(
+// MCCheckL 1.21.8, hopefully background hack is no longer needed? :(
 public abstract class FancierAdvancementDisplay<T extends FancierAdvancementDisplay<T>> extends FancyAdvancementDisplay<T> {
 
 	private BackgroundHackType backgroundHackType = BackgroundHackType.TOP;

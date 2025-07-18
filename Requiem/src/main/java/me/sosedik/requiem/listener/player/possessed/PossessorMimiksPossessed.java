@@ -7,7 +7,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityCombustEvent;
 import org.bukkit.event.entity.EntityPotionEffectEvent;
 import org.bukkit.potion.PotionEffect;
 import org.jspecify.annotations.NullMarked;
@@ -17,17 +16,6 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 public class PossessorMimiksPossessed implements Listener {
-
-	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	public void onCombust(EntityCombustEvent event) {
-		if (!(event.getEntity() instanceof LivingEntity entity)) return;
-
-		Player rider = entity.getRider();
-		if (rider == null) return;
-		if (!PossessingPlayer.isPossessing(rider)) return;
-
-		rider.setFireTicks((int) (event.getDuration() * 20));
-	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onEffect(EntityPotionEffectEvent event) {

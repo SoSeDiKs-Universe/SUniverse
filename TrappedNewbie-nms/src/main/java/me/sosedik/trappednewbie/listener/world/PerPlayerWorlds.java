@@ -15,6 +15,7 @@ import org.bukkit.Difficulty;
 import org.bukkit.GameRule;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
+import org.bukkit.ServerTickManager;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.entity.Player;
@@ -42,8 +43,8 @@ import static java.util.Objects.requireNonNull;
 @NullMarked
 public class PerPlayerWorlds implements Listener {
 
-	private static final double DAY_TIME_TICK_INCREASE = 1;
-	private static final double NIGHT_TIME_TICK_INCREASE = DAY_TIME_TICK_INCREASE;
+	private static final double DAY_TIME_TICK_INCREASE = 0.25; // 40 minutes
+	private static final double NIGHT_TIME_TICK_INCREASE = 0.5; // 20 minutes
 	
 	private static final List<World.Environment> RESOURCE_ENVIRONMENTS = List.of(
 		World.Environment.NORMAL, World.Environment.NETHER, World.Environment.THE_END
@@ -202,16 +203,20 @@ public class PerPlayerWorlds implements Listener {
 
 	private static void startDayCycleTask(World world) {
 		new CustomDayCycleTask(world, () -> {
-			if (Bukkit.getServerTickManager().isFrozen()) return 0D;
-			if (world.isDayTime()) return DAY_TIME_TICK_INCREASE;
+			ServerTickManager serverTickManager = Bukkit.getServerTickManager();
+			if (serverTickManager.isFrozen()) return 0D;
+			double incrementTimeBy = world.isDayTime() ? DAY_TIME_TICK_INCREASE : NIGHT_TIME_TICK_INCREASE;
 
-			double incrementTimeBy = NIGHT_TIME_TICK_INCREASE;
 			int sleepers = (int) Bukkit.getOnlinePlayers().stream().filter(Player::isDeeplySleeping).filter(Player::bedExists).count();
 			if (sleepers > 0) {
 				int players = (int) Bukkit.getOnlinePlayers().stream().filter(PerPlayerWorlds::isSleepCounted).count();
 				if (players > 0)
 					incrementTimeBy += 6D * sleepers / players;
 			}
+
+			float tickRate = serverTickManager.getTickRate();
+			if (tickRate != 20F) incrementTimeBy *= tickRate / 20F;
+
 			return incrementTimeBy;
 		});
 	}

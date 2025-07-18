@@ -1,6 +1,8 @@
 package me.sosedik.requiem.feature;
 
 import me.sosedik.requiem.Requiem;
+import me.sosedik.requiem.api.event.player.PlayerStartGhostingEvent;
+import me.sosedik.requiem.api.event.player.PlayerStopGhostingEvent;
 import me.sosedik.requiem.dataset.RequiemItems;
 import me.sosedik.requiem.listener.entity.PrepareGhostMobs;
 import me.sosedik.requiem.task.GhostAuraTask;
@@ -92,6 +94,8 @@ public class GhostyPlayer {
 		new GhostAuraTask(player);
 		new GhostMobVisionTask(player);
 
+		new PlayerStartGhostingEvent(player).callEvent();
+
 		Requiem.logger().info("Making {} a ghost", player.getName());
 	}
 
@@ -101,6 +105,8 @@ public class GhostyPlayer {
 	 * @param player player
 	 */
 	public static void clearGhost(Player player) {
+		boolean callEvent = isGhost(player);
+
 		GHOSTS.remove(player.getUniqueId());
 
 		PrepareGhostMobs.hideVisibility(player, false);
@@ -120,6 +126,9 @@ public class GhostyPlayer {
 
 		checkCanGhostFly(player);
 		checkCanHoldGhostItems(player);
+
+		if (callEvent)
+			new PlayerStopGhostingEvent(player).callEvent();
 
 		Requiem.logger().info("Clearing ghost state for {}", player.getName());
 	}

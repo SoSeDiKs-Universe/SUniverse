@@ -13,5 +13,11 @@
 	"advancement.announcement.super_torture": "Гравець <player> завершив надвиснажливе досягнення <advancement>",
 	"advancement.announcement.cheat": "Гравець <player> накрутив досягнення <advancement>",
 	"advancement.trophy": "<gray><!i>Трофей <player> за <advancement>",
-	"preferences.preference.adv_helper": "Показувати помічник для досягнень"
+	"preferences.preference.adv_helper": "Показувати помічник для досягнень",
+	"ritual.picker": "Оберіть ритуал:",
+	"ritual.required_instruments": "Серед інструментів повинні бути:",
+	"ritual.instruments.rattle": "Брязкальце",
+	"ritual.instruments.flute": "Флейта",
+	"ritual.instruments.drum": "Барабан",
+	"ritual.instruments.trumpet": "Труба"
 }

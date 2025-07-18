@@ -163,6 +163,29 @@ public class TrappedNewbieRecipes {
 			})
 			.register();
 
+		new ShapedCraft(ItemStack.of(TrappedNewbieItems.TOTEMIC_STAFF), trappedNewbieKey("totemic_staff"), " LS", " S ", "S L")
+			.addIngredients('L', Tag.LEAVES.getValues())
+			.addIngredients('S', Material.STICK, TrappedNewbieItems.ROUGH_STICK)
+			.register();
+		new ShapedCraft(ItemStack.of(TrappedNewbieItems.FLUTE), trappedNewbieKey("flute"), " LS", " S ", "S  ")
+			.addIngredients('L', Tag.LEAVES.getValues())
+			.addIngredients('S', Material.STICK, TrappedNewbieItems.ROUGH_STICK)
+			.register();
+		new ShapedCraft(ItemStack.of(TrappedNewbieItems.RATTLE), trappedNewbieKey("rattle"), " WW", " BW", "S  ")
+			.addIngredients('W', Tag.LOGS_THAT_BURN.getValues())
+			.addIngredients('B', Material.STRING, TrappedNewbieItems.TWINE)
+			.addIngredients('S', Material.STICK, TrappedNewbieItems.ROUGH_STICK)
+			.register();
+		TrappedNewbieTags.DRUMS.getValues().forEach(type -> {
+			new ShapedCraft(new ItemStack(type), type.getKey(), "EEE", "LWL", "WLW")
+				.withGroup("drum")
+				.addIngredients('E', TrappedNewbieTags.HIDES.getValues())
+				.addIngredients('E', Material.LEATHER)
+				.addIngredients('L', figureOutLog(type, "drum"))
+				.addIngredients('W', Tag.WOOL.getValues())
+				.register();
+		});
+
 		addFlowerBouquetRecipe();
 
 		addBranchRecipe(TrappedNewbieItems.ACACIA_BRANCH, Material.ACACIA_SAPLING);
@@ -198,27 +221,17 @@ public class TrappedNewbieRecipes {
 		addRockRecipe(TrappedNewbieItems.ICE_PEBBLE, Material.ICE);
 
 		TrappedNewbieTags.CHOPPING_BLOCKS.getValues().forEach(type -> {
-			Material logType = Material.matchMaterial(type.key().value().replace("chopping_block", "log"));
-			if (logType == null) logType = Material.matchMaterial(type.key().value().replace("chopping_block", "stem"));
-			if (logType == null && type == TrappedNewbieItems.BAMBOO_CHOPPING_BLOCK) logType = Material.BAMBOO_BLOCK;
-			if (logType == null) throw new IllegalArgumentException("Couldn't find log item for " + type.key());
-
 			new ShapelessCraft(new ItemStack(type), type.getKey())
 				.withGroup("chopping_block")
-				.addIngredients(logType)
-				.addIngredients(Tag.ITEMS_AXES.getValues())
+				.addIngredients(figureOutLog(type, "chopping_block"))
 				.register();
 		});
 
 		TrappedNewbieTags.WORK_STATIONS.getValues().forEach(type -> {
-			Material logType = Material.matchMaterial(type.key().value().replace("work_station", "log"));
-			if (logType == null) logType = Material.matchMaterial(type.key().value().replace("work_station", "stem"));
-			if (logType == null && type == TrappedNewbieItems.BAMBOO_WORK_STATION) logType = Material.BAMBOO_BLOCK;
-			if (logType == null) throw new IllegalArgumentException("Couldn't find log item for " + type.key());
-
 			new ShapelessCraft(new ItemStack(type), type.getKey())
 				.withGroup("work_station")
-				.addIngredients(logType)
+				.addIngredients(figureOutLog(type, "work_station"))
+				.addIngredients(Tag.ITEMS_AXES.getValues())
 				.register();
 		});
 
@@ -274,6 +287,14 @@ public class TrappedNewbieRecipes {
 		addFuels();
 		removeRecipes();
 		makeIngredientReplacements();
+	}
+
+	private static Material figureOutLog(Material type, String suffix) {
+		Material logType = Material.matchMaterial(type.key().value().replace(suffix, "log"));
+		if (logType == null) logType = Material.matchMaterial(type.key().value().replace(suffix, "stem"));
+		if (logType == null && type.key().value().startsWith("bamboo_")) logType = Material.BAMBOO_BLOCK;
+		if (logType == null) throw new IllegalArgumentException("Couldn't find log item for " + type.key());
+		return logType;
 	}
 
 	private static void addFlowerBouquetRecipe() {

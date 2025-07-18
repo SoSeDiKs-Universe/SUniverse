@@ -147,6 +147,33 @@ public class TrappedNewbieItems {
 	public static final Material TRUMPET = byKey("trumpet");
 	public static final Material FLOWER_BOUQUET = byKey("flower_bouquet");
 
+	public static final Material TOTEMIC_STAFF = byKey("totemic_staff");
+	public static final Material RATTLE = byKey("rattle");
+	public static final Material FLUTE = byKey("flute");
+	public static final Material ACACIA_DRUM = byKey("acacia_drum");
+	public static final Material BIRCH_DRUM = byKey("birch_drum");
+	public static final Material CHERRY_DRUM = byKey("cherry_drum");
+	public static final Material DARK_OAK_DRUM = byKey("dark_oak_drum");
+	public static final Material JUNGLE_DRUM = byKey("jungle_drum");
+	public static final Material MANGROVE_DRUM = byKey("mangrove_drum");
+	public static final Material OAK_DRUM = byKey("oak_drum");
+	public static final Material PALE_OAK_DRUM = byKey("pale_oak_drum");
+	public static final Material SPRUCE_DRUM = byKey("spruce_drum");
+	public static final Material BAMBOO_DRUM = byKey("bamboo_drum");
+	public static final Material CRIMSON_DRUM = byKey("crimson_drum");
+	public static final Material WARPED_DRUM = byKey("warped_drum");
+	public static final Material ACACIA_TOTEM_BASE = byKey("acacia_totem_base");
+	public static final Material BIRCH_TOTEM_BASE = byKey("birch_totem_base");
+	public static final Material CHERRY_TOTEM_BASE = byKey("cherry_totem_base");
+	public static final Material DARK_OAK_TOTEM_BASE = byKey("dark_oak_totem_base");
+	public static final Material JUNGLE_TOTEM_BASE = byKey("jungle_totem_base");
+	public static final Material MANGROVE_TOTEM_BASE = byKey("mangrove_totem_base");
+	public static final Material OAK_TOTEM_BASE = byKey("oak_totem_base");
+	public static final Material PALE_OAK_TOTEM_BASE = byKey("pale_oak_totem_base");
+	public static final Material SPRUCE_TOTEM_BASE = byKey("spruce_totem_base");
+	public static final Material CRIMSON_TOTEM_BASE = byKey("crimson_totem_base");
+	public static final Material WARPED_TOTEM_BASE = byKey("warped_totem_base");
+
 	public static final Material DESTROY_STAGE_0 = byKey("destroy_stage_0");
 	public static final Material DESTROY_STAGE_1 = byKey("destroy_stage_1");
 	public static final Material DESTROY_STAGE_2 = byKey("destroy_stage_2");

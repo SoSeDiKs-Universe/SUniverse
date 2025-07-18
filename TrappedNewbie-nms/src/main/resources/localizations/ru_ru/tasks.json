@@ -11,5 +11,9 @@
 	"task.limbo_void_fall": [
 		"<#FFE0B2>Завершите задания, указанные в достижении <red>«<locale:adv.trappednewbie.requiem.brave_new_world.title>»",
 		"<gray>(нажмите <yellow><key:key.advancements></yellow>, чтобы быстро открыть меню достижений)"
-	]
+	],
+	"task.ritual.rain_dance": "Танец дождя",
+	"task.ritual.rain_dance.description": "Призывает дождь",
+	"task.ritual.soul_melancholy": "Меланхолия души",
+	"task.ritual.soul_melancholy.description": "Привязывает Вашу душу к человекоподобной<br>нежити при управлении ею"
 }

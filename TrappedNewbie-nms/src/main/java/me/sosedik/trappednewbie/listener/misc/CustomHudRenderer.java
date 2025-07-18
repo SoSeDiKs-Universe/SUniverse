@@ -58,7 +58,7 @@ public class CustomHudRenderer implements Listener {
 		BossBarTask bossBarTask = TaskManagement.bossBar(player);
 		for (HudRenderer hud : huds) {
 			renderers.put(hud.getClass(), hud);
-			bossBarTask.addIconProvider(hud.getId(), 0, p -> hud.render());
+			bossBarTask.addIconProvider(TrappedNewbie.trappedNewbieKey(hud.getId()), hud::render);
 		}
 	}
 

@@ -29,6 +29,10 @@ public class BarrierNMSBlock extends Block implements KiterinoBlock {
 		return bukkitState;
 	}
 
+	public static void addBarrier(NamespacedKey key) {
+		KEYS.add(key);
+	}
+
 	public static boolean isBarrierBlock(Material type) {
 		return KEYS.contains(type.getKey());
 	}

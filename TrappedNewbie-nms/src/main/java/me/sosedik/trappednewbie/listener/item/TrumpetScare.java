@@ -5,6 +5,7 @@ import me.sosedik.kiterino.event.entity.ItemConsumeEvent;
 import me.sosedik.resourcelib.ResourceLib;
 import me.sosedik.trappednewbie.TrappedNewbie;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieItems;
+import me.sosedik.trappednewbie.listener.player.TotemRituals;
 import net.kyori.adventure.sound.Sound;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Tag;
@@ -39,6 +40,8 @@ public class TrumpetScare implements Listener {
 
 		LivingEntity livingEntity = event.getEntity();
 		livingEntity.emitSound(Sound.sound(SOUND, Sound.Source.HOSTILE, 1F, 0.9F + (float) Math.random() * 0.2F));
+		if (livingEntity instanceof Player player)
+			TotemRituals.playedInstrument(player, TrappedNewbieItems.TRUMPET, player.getLocation());
 		boolean undead = Tag.ENTITY_TYPES_UNDEAD.isTagged(livingEntity.getType());
 
 		if (livingEntity instanceof Player player && !player.getGameMode().isInvulnerable())

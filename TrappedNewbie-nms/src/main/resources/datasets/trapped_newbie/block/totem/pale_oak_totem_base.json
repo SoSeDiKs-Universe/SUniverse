@@ -1,0 +1,12 @@
+{
+	"destroy_time": 2,
+	"explosion_resistance": 1,
+	"ignited_by_lava": true,
+	"sound_type": "wood",
+	"map_color": "quartz",
+	"note_block_instrument": "bass",
+	"client_type": "minecraft:barrier",
+	"state_parser": "none",
+	"parent_model": "trapped_newbie:block/totem/pale_oak_totem_base",
+	"no_texture": true
+}

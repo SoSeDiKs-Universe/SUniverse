@@ -9,6 +9,7 @@ import me.sosedik.requiem.feature.PossessingPlayer;
 import me.sosedik.resourcelib.ResourceLib;
 import me.sosedik.trappednewbie.api.command.parser.PlayerWorldParser;
 import me.sosedik.trappednewbie.api.item.VisualArmor;
+import me.sosedik.trappednewbie.api.task.BossBarTask;
 import me.sosedik.trappednewbie.command.MigrateCommand;
 import me.sosedik.trappednewbie.command.SpitCommand;
 import me.sosedik.trappednewbie.command.TestCommand;
@@ -19,7 +20,9 @@ import me.sosedik.trappednewbie.dataset.TrappedNewbieTags;
 import me.sosedik.trappednewbie.impl.block.nms.ClayKilnBlock;
 import me.sosedik.trappednewbie.impl.blockstorage.ChoppingBlockStorage;
 import me.sosedik.trappednewbie.impl.blockstorage.ClayKilnBlockStorage;
+import me.sosedik.trappednewbie.impl.blockstorage.DrumBlockStorage;
 import me.sosedik.trappednewbie.impl.blockstorage.SleepingBagBlockStorage;
+import me.sosedik.trappednewbie.impl.blockstorage.TotemBaseBlockStorage;
 import me.sosedik.trappednewbie.impl.blockstorage.WorkStationBlockStorage;
 import me.sosedik.trappednewbie.impl.item.modifier.AdvancementTrophyModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.AdvancementTrophyNameLoreModifier;
@@ -30,6 +33,7 @@ import me.sosedik.trappednewbie.impl.item.modifier.PaperPlaneModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.UnlitCampfireModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.VisualArmorModifier;
 import me.sosedik.trappednewbie.impl.recipe.ChoppingBlockCrafting;
+import me.sosedik.trappednewbie.listener.advancement.AdvancementRecipes;
 import me.sosedik.trappednewbie.listener.advancement.AdvancementTrophies;
 import me.sosedik.trappednewbie.listener.advancement.AdvancementsLocalizer;
 import me.sosedik.trappednewbie.listener.advancement.LoadSaveAdvancementsOnJoinQuit;
@@ -71,9 +75,11 @@ import me.sosedik.trappednewbie.listener.item.FirestrikerFire;
 import me.sosedik.trappednewbie.listener.item.FlintToFlakedFlint;
 import me.sosedik.trappednewbie.listener.item.FlowerBouquetAttackEffects;
 import me.sosedik.trappednewbie.listener.item.GlassShardCuts;
+import me.sosedik.trappednewbie.listener.item.KnifeCarvesTotemBases;
 import me.sosedik.trappednewbie.listener.item.MeshSifting;
 import me.sosedik.trappednewbie.listener.item.PaperPlanes;
 import me.sosedik.trappednewbie.listener.item.RoughSticksCreateFire;
+import me.sosedik.trappednewbie.listener.item.SimpleSoundItems;
 import me.sosedik.trappednewbie.listener.item.ThrowableRockBehavior;
 import me.sosedik.trappednewbie.listener.item.TimeMachineClockIsTotemOfUndying;
 import me.sosedik.trappednewbie.listener.item.TrumpetScare;
@@ -92,6 +98,7 @@ import me.sosedik.trappednewbie.listener.player.NewbieWelcome;
 import me.sosedik.trappednewbie.listener.player.StartAsGhost;
 import me.sosedik.trappednewbie.listener.player.TaskManagement;
 import me.sosedik.trappednewbie.listener.player.TeamableLeatherEquipment;
+import me.sosedik.trappednewbie.listener.player.TotemRituals;
 import me.sosedik.trappednewbie.listener.player.TrappedNewbiePlayerOptions;
 import me.sosedik.trappednewbie.listener.player.VisualArmorLayer;
 import me.sosedik.trappednewbie.listener.world.LimboWorldFall;
@@ -145,6 +152,8 @@ public final class TrappedNewbie extends JavaPlugin {
 		ResourceLib.loadDefaultResources(this);
 
 		TrappedNewbieTags.CHOPPING_BLOCKS.getValues().forEach(material -> BlockStorage.addMapping(material, ChoppingBlockStorage.class));
+		TrappedNewbieTags.DRUMS.getValues().forEach(material -> BlockStorage.addMapping(material, DrumBlockStorage.class));
+		TrappedNewbieTags.TOTEM_BASES.getValues().forEach(material -> BlockStorage.addMapping(material, TotemBaseBlockStorage.class));
 		TrappedNewbieTags.WORK_STATIONS.getValues().forEach(material -> BlockStorage.addMapping(material, WorkStationBlockStorage.class));
 		BlockStorage.addMapping(TrappedNewbieItems.CLAY_KILN, ClayKilnBlockStorage.class);
 		BlockStorage.addMapping(TrappedNewbieItems.SLEEPING_BAG, SleepingBagBlockStorage.class);
@@ -161,6 +170,7 @@ public final class TrappedNewbie extends JavaPlugin {
 		setupLimboWorld();
 		registerCommands();
 
+		BossBarTask.init(this);
 		TrappedNewbieRecipes.addRecipes();
 		ChoppingBlockCrafting.registerRecipes();
 		TrappedNewbieAdvancements.setupAdvancements();
@@ -185,6 +195,7 @@ public final class TrappedNewbie extends JavaPlugin {
 
 		EventUtil.registerListeners(this,
 			// advancement
+			AdvancementRecipes.class,
 			AdvancementsLocalizer.class,
 			AdvancementTrophies.class,
 			LoadSaveAdvancementsOnJoinQuit.class,
@@ -230,9 +241,11 @@ public final class TrappedNewbie extends JavaPlugin {
 			FlintToFlakedFlint.class,
 			FlowerBouquetAttackEffects.class,
 			GlassShardCuts.class,
+			KnifeCarvesTotemBases.class,
 			MeshSifting.class,
 			PaperPlanes.class,
 			RoughSticksCreateFire.class,
+			SimpleSoundItems.class,
 			ThrowableRockBehavior.class,
 			TimeMachineClockIsTotemOfUndying.class,
 			TrumpetScare.class,
@@ -253,6 +266,7 @@ public final class TrappedNewbie extends JavaPlugin {
 			StartAsGhost.class,
 			TaskManagement.class,
 			TeamableLeatherEquipment.class,
+			TotemRituals.class,
 			TrappedNewbiePlayerOptions.class,
 			VisualArmorLayer.class,
 			// world

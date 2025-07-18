@@ -12,9 +12,9 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public class UtilizerTags {
 
-	// MCCheck: 1.21.7, new flattenables (hardcoded in ShovelItem)
+	// MCCheck: 1.21.8, new flattenables (hardcoded in ShovelItem)
 	public static final Tag<Material> FLATTENABLES = itemTag("flattenables");
-	// MCCheck: 1.21.7, new tillables (hardcoded in HoeItem)
+	// MCCheck: 1.21.8, new tillables (hardcoded in HoeItem)
 	public static final Tag<Material> TILLABLES = itemTag("tillables");
 	/**
 	 * @see ItemUtil#isHot(ItemStack)
@@ -41,7 +41,7 @@ public class UtilizerTags {
 	public static final Tag<Material> STONE_ORES_BLOCKS = blockTag("stone_ores");
 	public static final Tag<Material> ORES_BLOCKS = blockTag("ores");
 
-	// MCCheck: 1.21.7, new mobs
+	// MCCheck: 1.21.8, new mobs
 	public static final Tag<EntityType> HOSTILE_MONSTERS = entityTag("hostile_monsters");
 	public static final Tag<EntityType> CHEST_BOATS = entityTag("chest_boats");
 	public static final Tag<EntityType> NON_MOB_ENTITIES = entityTag("non_mob_entities");
@@ -50,6 +50,8 @@ public class UtilizerTags {
 	public static final Tag<EntityType> LAND_ANIMALS = entityTag("land_animals");
 	public static final Tag<EntityType> NATIVE_NETHER_MOBS = entityTag("native_nether_mobs");
 	public static final Tag<EntityType> NON_NATIVE_NETHER_MOBS = entityTag("non_native_nether_mobs");
+	public static final Tag<EntityType> HUMAN_LIKE_ZOMBIES = entityTag("human_like_zombies");
+	public static final Tag<EntityType> MOBS_WITH_HANDS = entityTag("mobs_with_hands");
 
 	private static Tag<Material> itemTag(String key) {
 		return ItemUtil.itemTag(Utilizer.utilizerKey(key));

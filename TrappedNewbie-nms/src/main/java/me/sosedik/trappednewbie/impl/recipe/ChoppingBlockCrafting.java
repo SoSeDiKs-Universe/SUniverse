@@ -59,7 +59,7 @@ public class ChoppingBlockCrafting implements CustomRecipe {
 		RecipeManager.addRecipe(this);
 	}
 
-	// MCCheck: 1.21.7, new blocks
+	// MCCheck: 1.21.8, new blocks
 	public static void registerRecipes() {
 		// Logs > Planks
 		new ChoppingBlockCrafting(Material.ACACIA_LOG, Material.ACACIA_PLANKS, 2, 4).register();

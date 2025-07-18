@@ -11,5 +11,9 @@
 	"task.limbo_void_fall": [
 		"<#FFE0B2>Виконайте завдання, вказані у досягненні <red>«<locale:adv.trappednewbie.requiem.brave_new_world.title>»",
 		"<gray>(натисніть <yellow><key:key.advancements></yellow>, щоб швидко переглянути меню досягнень)"
-	]
+	],
+	"task.ritual.rain_dance": "Танець дощу",
+	"task.ritual.rain_dance.description": "Викликає дощ",
+	"task.ritual.soul_melancholy": "Меланхолія душі",
+	"task.ritual.soul_melancholy.description": "Прив'язує Вашу душу до тіла людиноподібної<br>нежиті при управлінні нею"
 }

@@ -1,0 +1,17 @@
+{
+	"destroy_time": 2,
+	"explosion_resistance": 1,
+	"ignited_by_lava": false,
+	"sound_type": "wood",
+	"map_color": "color_orange",
+	"note_block_instrument": "bass",
+	"client_type": "minecraft:barrier",
+	"state_parser": "none",
+	"parent_model": "trapped_newbie:block/drum",
+	"no_texture": true,
+	"model_extras": {
+		"textures": {
+			"0": "minecraft:block/warped_stem"
+		}
+	}
+}

@@ -22,6 +22,7 @@ public class HostRevocatorBodyLeaving implements Listener {
 	public void onBow(EntityShootBowEvent event) {
 		if (!(event.getEntity() instanceof Player player)) return;
 		if (!ItemStack.isType(event.getBow(), RequiemItems.HOST_REVOCATOR)) return;
+		if (event.getForce() < 1F) return;
 
 		event.setCancelled(true);
 
@@ -29,7 +30,7 @@ public class HostRevocatorBodyLeaving implements Listener {
 		if (possessed == null || possessed instanceof Golem) {
 			PossessingPlayer.stopPossessing(player);
 		} else {
-			possessed.damage(Double.MAX_VALUE, DamageSource.builder(DamageType.MAGIC).build());
+			possessed.damage(Double.MAX_VALUE, DamageSource.builder(DamageType.GENERIC_KILL).build());
 		}
 	}
 

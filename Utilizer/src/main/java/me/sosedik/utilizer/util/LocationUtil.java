@@ -3,6 +3,7 @@ package me.sosedik.utilizer.util;
 import io.papermc.paper.block.fluid.FluidData;
 import io.papermc.paper.entity.TeleportFlag;
 import me.sosedik.utilizer.Utilizer;
+import org.bukkit.Chunk;
 import org.bukkit.Fluid;
 import org.bukkit.HeightMap;
 import org.bukkit.Location;
@@ -13,6 +14,7 @@ import org.bukkit.World;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.BlockState;
 import org.bukkit.block.data.Levelled;
 import org.bukkit.block.data.type.Campfire;
 import org.bukkit.block.data.type.Door;
@@ -27,6 +29,7 @@ import org.bukkit.util.BoundingBox;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -34,6 +37,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 @NullMarked
 public class LocationUtil {
@@ -300,6 +304,48 @@ public class LocationUtil {
 		}
 
 		return closestEntity;
+	}
+
+	/**
+	 * Finds loaded tile entities around location
+	 *
+	 * @param loc location
+	 * @param radius radius
+	 * @param blockPredicate block predicate
+	 * @return found block states
+	 */
+	public static Stream<BlockState> findTileEntitiesNearby(Location loc, double radius, Predicate<? super Block> blockPredicate) {
+		return getLoadedChunksInRadius(loc, radius).stream().map(chunk -> chunk.getTileEntities(blockPredicate, false)).flatMap(Collection::stream);
+	}
+
+	/**
+	 * Gets loaded chunks around location
+	 *
+	 * @param center location
+	 * @param radius radius
+	 * @return chunks around location
+	 */
+	public static List<Chunk> getLoadedChunksInRadius(Location center, double radius) {
+		List<Chunk> chunks = new ArrayList<>();
+		World world = center.getWorld();
+
+		int centerX = (int) Math.floor(center.getX()) >> 4;
+		int centerZ = (int) Math.floor(center.getZ()) >> 4;
+
+		int radiusInChunks = (int) Math.ceil(radius / 16D);
+
+		for (int x = -radiusInChunks; x <= radiusInChunks; x++) {
+			for (int z = -radiusInChunks; z <= radiusInChunks; z++) {
+				if (x * x + z * z <= radiusInChunks * radiusInChunks) {
+					if (!world.isChunkLoaded(centerX + x, centerZ + z)) continue;
+
+					Chunk chunk = world.getChunkAt(centerX + x, centerZ + z);
+					chunks.add(chunk);
+				}
+			}
+		}
+
+		return chunks;
 	}
 
 }

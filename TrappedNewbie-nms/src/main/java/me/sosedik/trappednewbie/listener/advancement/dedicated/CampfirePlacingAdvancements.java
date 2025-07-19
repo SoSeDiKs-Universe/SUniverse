@@ -1,8 +1,8 @@
 package me.sosedik.trappednewbie.listener.advancement.dedicated;
 
 import me.sosedik.trappednewbie.dataset.TrappedNewbieAdvancements;
-import org.bukkit.Bukkit;
 import org.bukkit.Tag;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -28,8 +28,19 @@ public class CampfirePlacingAdvancements implements Listener {
 	 */
 	public static void grant(Player player, Block block) {
 		TrappedNewbieAdvancements.CAMPING_OUT.awardAllCriteria(player);
-		if (Bukkit.getWorlds().getFirst().equals(block.getWorld()) && Math.abs(block.getX()) <= 10 && Math.abs(block.getZ()) <= 10)
+		World world = block.getWorld();
+		if (Math.abs(block.getX()) == 0 && Math.abs(block.getZ()) == 0) {
 			TrappedNewbieAdvancements.SPAWN_CAMPING.awardAllCriteria(player);
+			return;
+		}
+		if (Math.abs(block.getX()) >= 29_999_980 && Math.abs(block.getZ()) >= 29_999_980) {
+			TrappedNewbieAdvancements.CORNER_CAMPING.awardAllCriteria(player);
+			return;
+		}
+		if (world.getEnvironment() == World.Environment.THE_END) {
+			if (block.getX() == 1_894_255 && block.getY() == 14 && block.getZ() == -804_312)
+				TrappedNewbieAdvancements.NOT_SPAWN_CAMPING.awardAllCriteria(player);
+		}
 	}
 
 }

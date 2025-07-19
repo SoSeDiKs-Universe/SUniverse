@@ -10,15 +10,15 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.jspecify.annotations.NullMarked;
 
 /**
- * Possesed mimik owner's poses
+ * Possesed mimic owner's poses
  */
 @NullMarked
-public class PoseMimikingTask extends BukkitRunnable {
+public class PoseMimicingTask extends BukkitRunnable {
 
 	private final Player player;
 	private final LivingEntity entity;
 
-	public PoseMimikingTask(Player player, LivingEntity entity) {
+	public PoseMimicingTask(Player player, LivingEntity entity) {
 		this.player = player;
 		this.entity = entity;
 		Requiem.scheduler().sync(this, 1L, 1L);

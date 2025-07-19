@@ -33,7 +33,7 @@ public class CompassModifier extends ItemModifier {
 	private static final List<String> DIRECTIONS = List.of("south", "south_west", "west", "north_west", "north", "north_east", "east", "south_east");
 	private static final NamespacedKey STILL_COMPASS = MiscMe.miscMeKey("compass_00");
 	private static final NamespacedKey STILL_RECOVERY_COMPASS = MiscMe.miscMeKey("recovery_compass_00");
-	private static final NamespacedKey COMPASS_MIMIK = MiscMe.miscMeKey("compass");
+	private static final NamespacedKey COMPASS_MIMIC = MiscMe.miscMeKey("compass");
 
 	public CompassModifier(NamespacedKey modifierId) {
 		super(modifierId);
@@ -62,27 +62,27 @@ public class CompassModifier extends ItemModifier {
 				&& world != Bukkit.getWorlds().getFirst()
 				&& !contextBox.getItem().isDataOverridden(DataComponentTypes.ITEM_MODEL)) {
 			updated = true;
-			contextBox.getItem().setData(DataComponentTypes.ITEM_MODEL, COMPASS_MIMIK);
+			contextBox.getItem().setData(DataComponentTypes.ITEM_MODEL, COMPASS_MIMIC);
 		}
 
 		if (!contextBox.getContextType().hasVisibleLore()) return updated ? ModificationResult.OK : ModificationResult.PASS;
 		if (!(contextBox.getContext() instanceof SlottedItemModifierContext)) return updated ? ModificationResult.OK : ModificationResult.PASS;
 
+		Location loc = player.getLocation();
+		int x = loc.getBlockX();
+		int z = loc.getBlockZ();
+
 		var messenger = Messenger.messenger(LangOptionsStorage.getByLocale(contextBox.getLocale()));
 
 		if (world.getEnvironment() == World.Environment.NETHER) {
-			contextBox.addLore(messenger.getMessage("item.compass.position.nether"));
+			contextBox.addLore(messenger.getMessage("item.compass.position.nether", raw("x", x), raw("z", z)));
 			return ModificationResult.OK;
 		}
 
 		if (world.getEnvironment() == World.Environment.THE_END) {
-			contextBox.addLore(messenger.getMessage("item.compass.position.the_end"));
+			contextBox.addLore(messenger.getMessage("item.compass.position.the_end", raw("x", x), raw("z", z)));
 			return ModificationResult.OK;
 		}
-
-		Location loc = player.getLocation();
-		int x = loc.getBlockX();
-		int z = loc.getBlockZ();
 		contextBox.addLore(messenger.getMessage("item.compass.position", component("direction", getDirection(player, contextBox.getLocale())), raw("x", x), raw("z", z)));
 
 		return ModificationResult.OK;

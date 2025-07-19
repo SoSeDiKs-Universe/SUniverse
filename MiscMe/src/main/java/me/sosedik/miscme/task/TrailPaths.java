@@ -47,8 +47,8 @@ public class TrailPaths extends BukkitRunnable {
 
 	private void makePath(Location oldLoc) {
 		int relY = oldLoc.getBlockY() & 0xFF;
-		if (relY < oldLoc.getWorld().getMinHeight()) return;
-		if (relY > oldLoc.getWorld().getMaxHeight()) return;
+		if (relY <= oldLoc.getWorld().getMinHeight()) return;
+		if (relY >= oldLoc.getWorld().getMaxHeight()) return;
 
 		int relX = oldLoc.getBlockX() & 0xF;
 		int relZ = oldLoc.getBlockZ() & 0xF;

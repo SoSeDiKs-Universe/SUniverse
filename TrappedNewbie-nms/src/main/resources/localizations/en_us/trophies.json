@@ -1,4 +1,11 @@
 {
+	"trophy.not_spawn_camping.name": "<gray><b>Not Spawn Compass",
+	"trophy.not_spawn_camping.lore": "<gray><!i>Mostly doesn't point to Spawn",
+	"trophy.corner_camping.name": "<dark_red><b>A Corner Camper's Weapon",
+	"trophy.corner_camping.lore": [
+		"<dark_red><!i>Just stand here and wait.",
+		"<dark_red><!i>They'll come around the Corner eventually…"
+	],
 	"trophy.master_shieldsman.name": "<#1A308C><b>The Hylian Shield",
 	"trophy.master_shieldsman.lore": [
 		"<#1A308C><!i>Should have spoken to the Keaton Mask Soldier",

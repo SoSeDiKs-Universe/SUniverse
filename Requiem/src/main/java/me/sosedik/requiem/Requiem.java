@@ -37,10 +37,10 @@ import me.sosedik.requiem.listener.player.possessed.PossessedDismount;
 import me.sosedik.requiem.listener.player.possessed.PossessedDropOwnerItems;
 import me.sosedik.requiem.listener.player.possessed.PossessedInfiniteProjectiles;
 import me.sosedik.requiem.listener.player.possessed.PossessedLimitedControl;
-import me.sosedik.requiem.listener.player.possessed.PossessedMimikPossessor;
+import me.sosedik.requiem.listener.player.possessed.PossessedMimicPossessor;
 import me.sosedik.requiem.listener.player.possessed.PossessedUndeadZombieCuring;
 import me.sosedik.requiem.listener.player.possessed.PossessingOverMobs;
-import me.sosedik.requiem.listener.player.possessed.PossessorMimiksPossessed;
+import me.sosedik.requiem.listener.player.possessed.PossessorMimicsPossessed;
 import me.sosedik.requiem.listener.player.possessed.TransformationsKeepPossessor;
 import me.sosedik.resourcelib.ResourceLib;
 import me.sosedik.utilizer.CommandManager;
@@ -113,10 +113,10 @@ public final class Requiem extends JavaPlugin {
 			PossessedDropOwnerItems.class,
 			PossessedInfiniteProjectiles.class,
 			PossessedLimitedControl.class,
-			PossessedMimikPossessor.class,
+			PossessedMimicPossessor.class,
 			PossessedUndeadZombieCuring.class,
 			PossessingOverMobs.class,
-			PossessorMimiksPossessed.class,
+			PossessorMimicsPossessed.class,
 			TransformationsKeepPossessor.class
 		);
 

@@ -60,13 +60,12 @@ public class ItemUtil {
 	}
 
 	/**
-	 * Checks whether the item is a water bottle
+	 * Checks whether the item is a water potion
 	 *
 	 * @param item item
-	 * @return whether the item is a water bottle
+	 * @return whether the item is a water potion
 	 */
-	public static boolean isWaterBottle(ItemStack item) {
-		if (item.getType() != Material.POTION) return false;
+	public static boolean isWaterPotion(ItemStack item) {
 		if (!item.hasData(DataComponentTypes.POTION_CONTENTS)) return false;
 
 		PotionContents potionContents = item.getData(DataComponentTypes.POTION_CONTENTS);

@@ -3,7 +3,7 @@
   "no_collision": true,
   "replaceable": true,
   "client_type": "minecraft:barrier",
-  "mimik": "trapped_newbie:netherrack_rock",
+  "mimic": "trapped_newbie:netherrack_rock",
   "state_parser": "tripwire",
   "variations": [
     {

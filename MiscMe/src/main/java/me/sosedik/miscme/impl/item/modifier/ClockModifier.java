@@ -32,7 +32,7 @@ import static me.sosedik.utilizer.api.message.Mini.raw;
 public class ClockModifier extends ItemModifier {
 
 	private static final NamespacedKey STILL_CLOCK = ResourceLib.storage().getItemModelMapping(MiscMe.miscMeKey("clock_00"));
-	private static final NamespacedKey CLOCK_MIMIK = ResourceLib.storage().getItemModelMapping(MiscMe.miscMeKey("clock"));
+	private static final NamespacedKey CLOCK_MIMIC = ResourceLib.storage().getItemModelMapping(MiscMe.miscMeKey("clock"));
 
 	public ClockModifier(NamespacedKey modifierId) {
 		super(modifierId);
@@ -55,7 +55,7 @@ public class ClockModifier extends ItemModifier {
 		// Properly render clock in custom overworlds
 		if (world.getEnvironment() == World.Environment.NORMAL && world != Bukkit.getWorlds().getFirst() && !contextBox.getItem().isDataOverridden(DataComponentTypes.ITEM_MODEL)) {
 			updated = true;
-			contextBox.getItem().setData(DataComponentTypes.ITEM_MODEL, CLOCK_MIMIK);
+			contextBox.getItem().setData(DataComponentTypes.ITEM_MODEL, CLOCK_MIMIC);
 		}
 
 		if (!contextBox.getContextType().hasVisibleLore()) return updated ? ModificationResult.OK : ModificationResult.PASS;

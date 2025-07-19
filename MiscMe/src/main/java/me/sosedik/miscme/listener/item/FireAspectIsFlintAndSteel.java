@@ -51,10 +51,10 @@ public class FireAspectIsFlintAndSteel implements Listener {
 		ItemStack item = player.getInventory().getItem(hand);
 		if (ItemStack.isEmpty(item)) return false;
 		if (!item.hasEnchant(Enchantment.FIRE_ASPECT)) return false;
-		return mimikFlintAndSteel(player, entity, hand);
+		return mimicFlintAndSteel(player, entity, hand);
 	}
 
-	public static boolean mimikFlintAndSteel(Player player, Entity entity, EquipmentSlot hand) {
+	public static boolean mimicFlintAndSteel(Player player, Entity entity, EquipmentSlot hand) {
 		ItemStack item = player.getInventory().getItem(hand);
 		ItemStack flintAndSteel = new ItemStack(Material.FLINT_AND_STEEL);
 		player.getInventory().setItem(hand, flintAndSteel);
@@ -103,10 +103,10 @@ public class FireAspectIsFlintAndSteel implements Listener {
 		if (ItemStack.isEmpty(item)) return false;
 		if (!item.hasEnchant(Enchantment.FIRE_ASPECT)) return false;
 		if (player.hasCooldown(item)) return false;
-		return mimikFlintAndSteel(player, action, block, blockFace, hand);
+		return mimicFlintAndSteel(player, action, block, blockFace, hand);
 	}
 
-	public static boolean mimikFlintAndSteel(LivingEntity livingEntity, Action action, Block block, BlockFace blockFace, EquipmentSlot hand) {
+	public static boolean mimicFlintAndSteel(LivingEntity livingEntity, Action action, Block block, BlockFace blockFace, EquipmentSlot hand) {
 		if (livingEntity.getEquipment() == null) return false;
 
 		ItemStack item = livingEntity.getEquipment().getItem(hand);

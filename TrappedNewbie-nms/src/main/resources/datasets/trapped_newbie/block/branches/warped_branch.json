@@ -3,7 +3,7 @@
   "no_collision": true,
   "replaceable": true,
   "client_type": "minecraft:barrier",
-  "mimik": "trapped_newbie:warped_stick",
+  "mimic": "trapped_newbie:warped_stick",
   "state_parser": "tripwire",
   "variations": [
     {

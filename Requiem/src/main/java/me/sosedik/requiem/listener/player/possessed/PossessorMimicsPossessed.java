@@ -12,10 +12,10 @@ import org.bukkit.potion.PotionEffect;
 import org.jspecify.annotations.NullMarked;
 
 /**
- * Possessor mimiks actions of possessed mob
+ * Possessor mimics actions of possessed mob
  */
 @NullMarked
-public class PossessorMimiksPossessed implements Listener {
+public class PossessorMimicsPossessed implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onEffect(EntityPotionEffectEvent event) {

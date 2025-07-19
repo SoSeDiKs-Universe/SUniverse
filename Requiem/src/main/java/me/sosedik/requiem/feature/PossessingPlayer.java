@@ -9,7 +9,7 @@ import me.sosedik.requiem.api.event.player.PlayerStartPossessingEntityEvent;
 import me.sosedik.requiem.api.event.player.PlayerStopPossessingEntityEvent;
 import me.sosedik.requiem.dataset.RequiemItems;
 import me.sosedik.requiem.task.DynamicScaleTask;
-import me.sosedik.requiem.task.PoseMimikingTask;
+import me.sosedik.requiem.task.PoseMimicingTask;
 import me.sosedik.utilizer.api.storage.player.PlayerDataStorage;
 import me.sosedik.utilizer.util.EntityUtil;
 import org.bukkit.Bukkit;
@@ -117,7 +117,7 @@ public class PossessingPlayer {
 		new PlayerStartPossessingEntityEvent(player, entity).callEvent();
 
 		new DynamicScaleTask(player, entity);
-		new PoseMimikingTask(player, entity);
+		new PoseMimicingTask(player, entity);
 
 		Requiem.logger().info("Making " + player.getName() + " possess " + entity.getType().getKey());
 	}

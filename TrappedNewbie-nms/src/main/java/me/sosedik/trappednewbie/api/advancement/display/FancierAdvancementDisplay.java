@@ -3,12 +3,13 @@ package me.sosedik.trappednewbie.api.advancement.display;
 import io.papermc.paper.advancement.AdvancementDisplay;
 import me.sosedik.packetadvancements.PacketAdvancementsAPI;
 import me.sosedik.packetadvancements.api.advancement.IAdvancement;
+import me.sosedik.packetadvancements.api.display.CoordinateMode;
 import me.sosedik.packetadvancements.api.display.IAdvancementDisplay;
 import me.sosedik.packetadvancements.api.reward.SimpleAdvancementReward;
 import me.sosedik.packetadvancements.imlp.advancement.fake.FakeAdvancement;
 import me.sosedik.packetadvancements.imlp.advancement.mimic.MimicAdvancement;
 import me.sosedik.packetadvancements.imlp.display.FancyAdvancementDisplay;
-import me.sosedik.packetadvancements.imlp.display.coordinatemodes.OffsetCoordinateMode;
+import me.sosedik.packetadvancements.imlp.display.SimpleAdvancementDisplay;
 import me.sosedik.resourcelib.api.font.FontData;
 import me.sosedik.trappednewbie.api.advancement.reward.FancyAdvancementReward;
 import me.sosedik.utilizer.api.language.LangOptionsStorage;
@@ -34,11 +35,10 @@ import static me.sosedik.utilizer.api.message.Mini.raw;
 
 @NullMarked
 @SuppressWarnings("unchecked")
-// MCCheckL 1.21.8, hopefully background hack is no longer needed? :(
+// MCCheck: 1.21.8, hopefully background workaround is no longer needed
 public abstract class FancierAdvancementDisplay<T extends FancierAdvancementDisplay<T>> extends FancyAdvancementDisplay<T> {
 
-	private BackgroundHackType backgroundHackType = BackgroundHackType.TOP;
-
+	private static final Component DEFAULT_PARENT = Component.empty().shadowColor(ShadowColor.none());
 	private static final Consumer<IAdvancement> REGISTER_HOOK = (advancement) -> {
 		if (advancement instanceof MimicAdvancement) return;
 
@@ -46,19 +46,12 @@ public abstract class FancierAdvancementDisplay<T extends FancierAdvancementDisp
 		if (display instanceof FancierAdvancementDisplay<?> fancierDisplay) {
 			AdvancementFrame advancementFrame = fancierDisplay.getAdvancementFrame();
 			if (advancementFrame.requiresBackground()) {
-				if (fancierDisplay.backgroundHackType == BackgroundHackType.BOTTOM) {
-					MimicAdvancement.buildMimic(advancement)
-						.advancementMimic(advancement)
-						.coordMimic(new OffsetCoordinateMode(0F, 0F))
-						.buildAndRegister();
-				}
-				FakeAdvancement.buildFake(advancement).display(new FrameAdvancementDisplay(advancement, advancementFrame).xy(0, 0)).buildAndRegister();
-				if (fancierDisplay.backgroundHackType == BackgroundHackType.TOP) {
-					MimicAdvancement.buildMimic(advancement)
-						.advancementMimic(advancement)
-						.coordMimic(new OffsetCoordinateMode(0F, 0F))
-						.buildAndRegister();
-				}
+				var leftLine = FakeAdvancement.buildFake(advancement).display(SimpleAdvancementDisplay.simpleDisplay().isHidden(true).x(0F)).buildAndRegister();
+				var bg = FakeAdvancement.buildFake(leftLine).display(new FrameAdvancementDisplay(advancement, advancementFrame).x(0F)).buildAndRegister();
+				MimicAdvancement.buildMimic(bg)
+					.advancementMimic(advancement)
+					.coordMimic(CoordinateMode.offset(0F, 0F))
+					.buildAndRegister();
 			}
 		}
 	};
@@ -83,11 +76,6 @@ public abstract class FancierAdvancementDisplay<T extends FancierAdvancementDisp
 		super.onRegister(advancement);
 		this.advancement = advancement;
 		REGISTER_HOOK.accept(advancement);
-	}
-
-	public FancierAdvancementDisplay<T> bottomHack() {
-		this.backgroundHackType = BackgroundHackType.BOTTOM;
-		return this;
 	}
 
 	@Override
@@ -204,6 +192,18 @@ public abstract class FancierAdvancementDisplay<T extends FancierAdvancementDisp
 	}
 
 	@Override
+	public Component getFancyDescriptionParent() {
+		Component parent = this.fancyDescriptionParent;
+		return parent == null ? DEFAULT_PARENT : parent;
+	}
+
+	@Override
+	public T fancyDescriptionParent(@Nullable Component fancyDescriptionParent) {
+		this.fancyDescriptionParent = fancyDescriptionParent == null ? null : fancyDescriptionParent.shadowColorIfAbsent(ShadowColor.none());
+		return (T) this;
+	}
+
+	@Override
 	public T frame(AdvancementDisplay.Frame frame) {
 		return switch (frame) {
 			case TASK -> withAdvancementFrame(AdvancementFrame.TASK);
@@ -252,10 +252,6 @@ public abstract class FancierAdvancementDisplay<T extends FancierAdvancementDisp
 
 	public static FancierAdvancementDisplayImpl fancierDisplay() {
 		return new FancierAdvancementDisplayImpl();
-	}
-
-	private enum BackgroundHackType {
-		TOP, BOTTOM
 	}
 
 	public static final class FancierAdvancementDisplayImpl extends FancierAdvancementDisplay<FancierAdvancementDisplayImpl> {

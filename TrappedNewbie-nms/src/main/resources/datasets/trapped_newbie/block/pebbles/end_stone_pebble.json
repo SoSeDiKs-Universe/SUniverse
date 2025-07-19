@@ -3,7 +3,7 @@
   "no_collision": true,
   "replaceable": true,
   "client_type": "minecraft:barrier",
-  "mimik": "trapped_newbie:end_stone_rock",
+  "mimic": "trapped_newbie:end_stone_rock",
   "state_parser": "tripwire",
   "variations": [
     {

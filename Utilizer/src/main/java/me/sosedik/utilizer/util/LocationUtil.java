@@ -180,6 +180,26 @@ public class LocationUtil {
 	}
 
 	/**
+	 * Gets the blocks in radius around the provided block (including the provided block)
+	 *
+	 * @param start central block
+	 * @param xzRadius XZ plane radius
+	 * @param yRadius Y plane radius
+	 * @return mutable list of surrounding blocks
+	 */
+	public static List<Block> getBlocksAround(Block start, int xzRadius, int yRadius) {
+		int iterations = (xzRadius * 2) + 1;
+		List<Block> blocks = new ArrayList<>(iterations * iterations * iterations);
+		for (int x = -xzRadius; x <= xzRadius; x++) {
+			for (int y = -yRadius; y <= yRadius; y++) {
+				for (int z = -xzRadius; z <= xzRadius; z++)
+					blocks.add(start.getRelative(x, y, z));
+			}
+		}
+		return blocks;
+	}
+
+	/**
 	 * Checks if this block is water or water-covered
 	 *
 	 * @param block block

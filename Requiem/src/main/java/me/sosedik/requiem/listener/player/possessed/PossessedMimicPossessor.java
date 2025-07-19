@@ -25,11 +25,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Possessed mimik actions of their possessor
+ * Possessed mimic actions of their possessor
  */
 // MCCheck: 1.21.8, new mobs carrying items
 @NullMarked
-public class PossessedMimikPossessor implements Listener {
+public class PossessedMimicPossessor implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onSwing(PlayerArmSwingEvent event) {

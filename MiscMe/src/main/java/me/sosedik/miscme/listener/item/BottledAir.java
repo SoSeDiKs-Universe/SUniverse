@@ -23,7 +23,7 @@ public class BottledAir implements Listener {
 	public void onFill(PlayerFillBottleEvent event) {
 		ItemStack bottle = event.getBottle();
 		if (bottle.getType() != Material.GLASS_BOTTLE) return;
-		if (!ItemUtil.isWaterBottle(event.getResultItem())) return;
+		if (!ItemUtil.isWaterPotion(event.getResultItem())) return;
 
 		Player player = event.getPlayer();
 		if (!player.isInWater()) return;

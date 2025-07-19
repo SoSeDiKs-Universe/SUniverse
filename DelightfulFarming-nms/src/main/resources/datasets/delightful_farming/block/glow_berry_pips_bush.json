@@ -4,6 +4,6 @@
 	"no_collision": true,
 	"replaceable": true,
 	"client_type": "minecraft:barrier",
-	"mimik": "delightful_farming:glow_berry_pips",
+	"mimic": "delightful_farming:glow_berry_pips",
 	"state_parser": "weeping_vines"
 }

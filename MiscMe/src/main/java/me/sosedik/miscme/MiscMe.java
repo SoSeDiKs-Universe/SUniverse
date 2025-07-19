@@ -29,6 +29,7 @@ import me.sosedik.miscme.listener.block.FallingBeeNests;
 import me.sosedik.miscme.listener.block.MelonPumpkinBlowing;
 import me.sosedik.miscme.listener.block.NoIceInNether;
 import me.sosedik.miscme.listener.block.NoteBlockShowsNotes;
+import me.sosedik.miscme.listener.block.PickableSnow;
 import me.sosedik.miscme.listener.block.SignsRetain;
 import me.sosedik.miscme.listener.entity.AnimalAgeLocking;
 import me.sosedik.miscme.listener.entity.ArmorStandBedrockPoses;
@@ -64,6 +65,7 @@ import me.sosedik.miscme.listener.item.ReadableBooksInFrames;
 import me.sosedik.miscme.listener.item.ShovelsConvertAdditionalBlocks;
 import me.sosedik.miscme.listener.item.ShovelsRemoveSnow;
 import me.sosedik.miscme.listener.item.SwordsSwingThroughGrass;
+import me.sosedik.miscme.listener.item.TorchesBurnCobwebs;
 import me.sosedik.miscme.listener.misc.BetterTimeSetCommand;
 import me.sosedik.miscme.listener.misc.WaterAwarePotionReset;
 import me.sosedik.miscme.listener.player.BurningForcesToRun;
@@ -74,6 +76,8 @@ import me.sosedik.miscme.listener.player.PlayerSpeedTracker;
 import me.sosedik.miscme.listener.player.SwapHalfStack;
 import me.sosedik.miscme.listener.projectile.BurningLitsProjectiles;
 import me.sosedik.miscme.listener.projectile.BurningProjectileCreatesFire;
+import me.sosedik.miscme.listener.projectile.SnowballCreatesSnow;
+import me.sosedik.miscme.listener.projectile.WaterPotionSplashesTorches;
 import me.sosedik.miscme.listener.vehicle.JumpyBoats;
 import me.sosedik.miscme.listener.world.CustomDayCycleCleanup;
 import me.sosedik.miscme.task.TrailPaths;
@@ -140,6 +144,7 @@ public final class MiscMe extends JavaPlugin {
 			MelonPumpkinBlowing.class,
 			NoIceInNether.class,
 			NoteBlockShowsNotes.class,
+			PickableSnow.class,
 			SignsRetain.class,
 			// entity
 			AnimalAgeLocking.class,
@@ -177,6 +182,7 @@ public final class MiscMe extends JavaPlugin {
 			ShovelsConvertAdditionalBlocks.class,
 			ShovelsRemoveSnow.class,
 			SwordsSwingThroughGrass.class,
+			TorchesBurnCobwebs.class,
 			// misc
 			BetterTimeSetCommand.class,
 			WaterAwarePotionReset.class,
@@ -190,6 +196,8 @@ public final class MiscMe extends JavaPlugin {
 			// projectile
 			BurningLitsProjectiles.class,
 			BurningProjectileCreatesFire.class,
+			SnowballCreatesSnow.class,
+			WaterPotionSplashesTorches.class,
 			// vehicle
 			JumpyBoats.class,
 			// world

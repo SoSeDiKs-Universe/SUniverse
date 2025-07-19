@@ -3,7 +3,7 @@
   "no_collision": true,
   "replaceable": true,
   "client_type": "minecraft:barrier",
-  "mimik": "trapped_newbie:ball_of_mud",
+  "mimic": "trapped_newbie:ball_of_mud",
   "state_parser": "tripwire",
   "variations": [
     {

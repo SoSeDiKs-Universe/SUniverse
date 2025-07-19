@@ -1,4 +1,11 @@
 {
+	"trophy.not_spawn_camping.name": "<gray><b>Не спавневий компас",
+	"trophy.not_spawn_camping.lore": "<gray><!i>Здебільшого не вказує на спавн",
+	"trophy.corner_camping.name": "<dark_red><b>Зброя кутового кемпера",
+	"trophy.corner_camping.lore": [
+		"<dark_red><!i>Просто стояти і чекати.",
+		"<dark_red><!i>Зрештою, вони вийдуть з-за рогу…"
+	],
 	"trophy.master_shieldsman.name": "<#1A308C><b>Гіліанський щит",
 	"trophy.master_shieldsman.lore": [
 		"<#1A308C><!i>Варто було поговорити з солдатом в масці Кітона,",

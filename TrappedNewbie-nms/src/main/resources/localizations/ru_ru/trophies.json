@@ -1,4 +1,11 @@
 {
+	"trophy.not_spawn_camping.name": "<gray><b>Не спавнский компас",
+	"trophy.not_spawn_camping.lore": "<gray><!i>В основном не указывает на спавн",
+	"trophy.corner_camping.name": "<dark_red><b>Оружие углового кемпера",
+	"trophy.corner_camping.lore": [
+		"<dark_red><!i>Просто стоять и ждать.",
+		"<dark_red><!i>В конце концов, они выйдут с угла…"
+	],
 	"trophy.master_shieldsman.name": "<#1A308C><b>Гилианский щит",
 	"trophy.master_shieldsman.lore": [
 		"<#1A308C><!i>Надо было поговорить с солдатом в маске Китона,",

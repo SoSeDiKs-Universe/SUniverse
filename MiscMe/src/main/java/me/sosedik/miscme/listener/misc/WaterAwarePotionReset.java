@@ -67,7 +67,7 @@ public class WaterAwarePotionReset implements Listener {
 	public void onConsume(PlayerItemConsumeEvent event) {
 		if (event.getReplacement() != null && !ItemStack.isType(event.getReplacement(), Material.GLASS_BOTTLE)) return;
 		if (!event.getPlayer().isUnderWater()) return;
-		if (!ItemUtil.isWaterBottle(event.getItem())) return;
+		if (!ItemUtil.isWaterPotion(event.getItem())) return;
 
 		event.setReplacement(getWaterBottle(1));
 	}

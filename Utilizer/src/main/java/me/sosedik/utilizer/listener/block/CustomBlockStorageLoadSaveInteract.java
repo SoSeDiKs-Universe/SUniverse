@@ -1,6 +1,7 @@
 package me.sosedik.utilizer.listener.block;
 
 import com.destroystokyo.paper.event.block.BlockDestroyEvent;
+import me.sosedik.utilizer.Utilizer;
 import me.sosedik.utilizer.api.math.WorldChunkPosition;
 import me.sosedik.utilizer.api.storage.block.BlockDataStorage;
 import me.sosedik.utilizer.listener.BlockStorage;
@@ -13,6 +14,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockBurnEvent;
+import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.BlockPistonEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
@@ -26,14 +28,18 @@ import org.bukkit.event.world.WorldUnloadEvent;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Handling custom block storage
  */
 @NullMarked
 public class CustomBlockStorageLoadSaveInteract implements Listener {
+
+	private static final Map<Location, BlockDataStorage> DROP_CACHE = new HashMap<>();
 
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onChunkLoad(ChunkLoadEvent event) {
@@ -106,10 +112,21 @@ public class CustomBlockStorageLoadSaveInteract implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onBreak(BlockBreakEvent event) {
-		BlockDataStorage storage = BlockStorage.removeInfo(event.getBlock().getLocation());
+		Location loc = event.getBlock().getLocation();
+		BlockDataStorage storage = BlockStorage.removeInfo(loc);
 		if (storage == null) return;
 
 		storage.onBreak(event);
+		DROP_CACHE.put(loc, storage);
+		Utilizer.scheduler().sync(() -> DROP_CACHE.remove(loc), 1L);
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onDrop(BlockDropItemEvent event) {
+		BlockDataStorage storage = DROP_CACHE.remove(event.getBlock().getLocation());
+		if (storage == null) return;
+
+		storage.onDrop(event);
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

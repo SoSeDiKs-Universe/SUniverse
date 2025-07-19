@@ -9,6 +9,7 @@ import org.bukkit.block.Block;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockBurnEvent;
+import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.jspecify.annotations.NullMarked;
@@ -56,6 +57,13 @@ public interface BlockDataStorage {
 	 * @param event event
 	 */
 	default void onBreak(BlockBreakEvent event) {}
+
+	/**
+	 * Called when the block drops items
+	 *
+	 * @param event event
+	 */
+	default void onDrop(BlockDropItemEvent event) {}
 
 	/**
 	 * Called when the block is burnt

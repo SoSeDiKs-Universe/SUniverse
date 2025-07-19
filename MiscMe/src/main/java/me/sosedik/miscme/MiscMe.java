@@ -25,6 +25,7 @@ import me.sosedik.miscme.listener.block.Couplings;
 import me.sosedik.miscme.listener.block.DontEditSignsOnPlace;
 import me.sosedik.miscme.listener.block.DoorBells;
 import me.sosedik.miscme.listener.block.ExplosiveCoal;
+import me.sosedik.miscme.listener.block.ExtractFurnaceExperience;
 import me.sosedik.miscme.listener.block.FallingBeeNests;
 import me.sosedik.miscme.listener.block.MelonPumpkinBlowing;
 import me.sosedik.miscme.listener.block.NoIceInNether;
@@ -50,6 +51,7 @@ import me.sosedik.miscme.listener.entity.SheepBurnableWool;
 import me.sosedik.miscme.listener.entity.SheepRegrowNaturalWool;
 import me.sosedik.miscme.listener.entity.TNTDefuse;
 import me.sosedik.miscme.listener.entity.WololoChangesNaturalSheepWool;
+import me.sosedik.miscme.listener.fixup.IgnitableCobweb;
 import me.sosedik.miscme.listener.item.BottledAir;
 import me.sosedik.miscme.listener.item.ColoredShulkerShells;
 import me.sosedik.miscme.listener.item.DyeableItemsInItemFrames;
@@ -140,6 +142,7 @@ public final class MiscMe extends JavaPlugin {
 			DontEditSignsOnPlace.class,
 			DoorBells.class,
 			ExplosiveCoal.class,
+			ExtractFurnaceExperience.class,
 			FallingBeeNests.class,
 			MelonPumpkinBlowing.class,
 			NoIceInNether.class,
@@ -166,6 +169,8 @@ public final class MiscMe extends JavaPlugin {
 			SheepRegrowNaturalWool.class,
 			TNTDefuse.class,
 			WololoChangesNaturalSheepWool.class,
+			// fixup
+			IgnitableCobweb.class,
 			// item
 			BottledAir.class,
 			ColoredShulkerShells.class,

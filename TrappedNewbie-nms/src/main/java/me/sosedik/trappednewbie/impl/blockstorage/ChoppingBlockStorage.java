@@ -18,7 +18,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -178,11 +178,9 @@ public class ChoppingBlockStorage extends BlockDataStorageHolder {
 	}
 
 	@Override
-	public void onBreak(BlockBreakEvent event) { // TODO block drops API
-		if (!event.isDropItems()) return;
-
+	public void onDrop(BlockDropItemEvent event) {
 		if (this.currentItem != null)
-			getBlock().getWorld().dropItemNaturally(calcDisplayLocation(), this.currentItem);
+			event.addDrop(this.currentItem);
 	}
 
 	@Override

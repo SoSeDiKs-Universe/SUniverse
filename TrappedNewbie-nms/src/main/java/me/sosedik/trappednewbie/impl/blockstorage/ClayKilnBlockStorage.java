@@ -17,7 +17,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
@@ -255,12 +255,9 @@ public class ClayKilnBlockStorage extends BlockDataStorageHolder {
 	}
 
 	@Override
-	public void onBreak(BlockBreakEvent event) { // TODO block drops API
-		if (!event.isDropItems()) return;
-
-		Block block = getBlock();
+	public void onDrop(BlockDropItemEvent event) {
 		if (this.storedItem != null)
-			block.getWorld().dropItemNaturally(block.getLocation().center(), this.storedItem);
+			event.addDrop(this.storedItem);
 	}
 
 	@Override

@@ -1,5 +1,7 @@
 package me.sosedik.miscme.listener.block;
 
+import me.sosedik.utilizer.api.storage.block.InventoryBlockDataStorageHolder;
+import me.sosedik.utilizer.listener.BlockStorage;
 import net.kyori.adventure.util.TriState;
 import org.bukkit.Material;
 import org.bukkit.Statistic;
@@ -15,6 +17,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.Inventory;
 import org.jspecify.annotations.NullMarked;
 
 /**
@@ -65,7 +68,9 @@ public class ClickThroughHanging implements Listener {
 
 			player.angerNearbyPiglins(true);
 			return TriState.TRUE;
-		} else if (container.getType() == Material.ENDER_CHEST) {
+		}
+
+		if (container.getType() == Material.ENDER_CHEST) {
 			if (!(container.getState(false) instanceof EnderChest enderChest)) return TriState.NOT_SET;
 
 			player.swingMainHand();
@@ -74,6 +79,15 @@ public class ClickThroughHanging implements Listener {
 
 			player.incrementStatistic(Statistic.ENDERCHEST_OPENED);
 			player.angerNearbyPiglins(true);
+			return TriState.TRUE;
+		}
+
+		if (BlockStorage.getByLoc(container) instanceof InventoryBlockDataStorageHolder storage) {
+			Inventory inventory = storage.getInventory();
+			if (inventory == null) return TriState.FALSE;
+
+			player.swingMainHand();
+			player.openInventory(inventory);
 			return TriState.TRUE;
 		}
 

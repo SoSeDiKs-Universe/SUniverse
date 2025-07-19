@@ -182,13 +182,13 @@ public abstract class FancierAdvancementDisplay<T extends FancierAdvancementDisp
 	public Component renderChatAnnouncement(@Nullable Player viewer, Component completerDisplayName) {
 		if (this.announcementMessage == null) return super.renderChatAnnouncement(viewer, completerDisplayName);
 
-		Component title = PacketAdvancementsAPI.produceAnnounceAdvancementDisplay(viewer, this);
+		Component title = PacketAdvancementsAPI.produceAnnounceAdvancementDisplay(viewer, this).colorIfAbsent(this.announcementMessage.getColor());
 		var messenger = viewer == null ? Messenger.messenger(LangOptionsStorage.getDefaultLangOptions()) : Messenger.messenger(viewer);
 
 		return messenger.getMessage("advancement.announcement." + this.announcementMessage.name().toLowerCase(Locale.US),
 				raw("player", completerDisplayName),
 				raw("advancement", title)
-			).colorIfAbsent(this.announcementMessage.getColor());
+			);
 	}
 
 	@Override

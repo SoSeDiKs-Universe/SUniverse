@@ -3,11 +3,13 @@ package me.sosedik.utilizer.listener;
 import de.tr7zw.nbtapi.NBT;
 import de.tr7zw.nbtapi.NBTChunk;
 import de.tr7zw.nbtapi.iface.ReadWriteNBT;
+import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.math.BlockPosition;
 import io.papermc.paper.math.Position;
 import me.sosedik.utilizer.Utilizer;
 import me.sosedik.utilizer.api.math.WorldChunkPosition;
 import me.sosedik.utilizer.api.storage.block.BlockDataStorage;
+import me.sosedik.utilizer.api.storage.block.InventoryBlockDataStorageHolder;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -15,6 +17,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -62,7 +65,6 @@ public class BlockStorage {
 	}
 
 	public static synchronized @Nullable BlockDataStorage initBlock(Block block, @Nullable BlockPlaceEvent event) {
-		Material blockType = block.getType();
 		return createInfo(block.getLocation(), block.getType().getKey(), event);
 	}
 
@@ -92,7 +94,14 @@ public class BlockStorage {
 			}
 			saveInfo(loc, storage);
 			storage.onLoad();
-			if (event != null) storage.onPlace(event);
+			if (event != null) {
+				storage.onPlace(event);
+				if (storage instanceof InventoryBlockDataStorageHolder invStorage) {
+					ItemStack item = event.getItemInHand();
+					if (item.hasData(DataComponentTypes.CUSTOM_NAME))
+						invStorage.setName(item.getData(DataComponentTypes.CUSTOM_NAME));
+				}
+			}
 			return storage;
 		} catch (InvocationTargetException | InstantiationException | IllegalAccessException |
 		         NoSuchMethodException e) {

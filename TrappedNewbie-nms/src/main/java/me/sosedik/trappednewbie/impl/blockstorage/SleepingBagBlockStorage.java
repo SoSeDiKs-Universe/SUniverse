@@ -20,7 +20,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;
-import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -107,10 +107,8 @@ public class SleepingBagBlockStorage extends BlockDataStorageHolder {
 	}
 
 	@Override
-	public void onBreak(BlockBreakEvent event) { // TODO block drops API
-		if (!event.isDropItems()) return;
-
-		getBlock().getWorld().dropItemNaturally(getBlock().getLocation().center(), this.storedItem);
+	public void onDrop(BlockDropItemEvent event) {
+		event.addDrop(this.storedItem);
 	}
 
 	@Override

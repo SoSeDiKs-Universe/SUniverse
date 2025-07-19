@@ -21,7 +21,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -360,17 +360,13 @@ public class WorkStationBlockStorage extends BlockDataStorageHolder {
 	}
 
 	@Override
-	public void onBreak(BlockBreakEvent event) { // TODO block drops API
-		if (!event.isDropItems()) return;
-
-		Block block = getBlock();
-		Location loc = block.getLocation().center();
+	public void onDrop(BlockDropItemEvent event) {
 		for (ItemStack item : this.displayItems) {
 			if (!ItemStack.isEmpty(item))
-				block.getWorld().dropItemNaturally(loc, item);
+				event.addDrop(item);
 		}
 		if (!ItemStack.isEmpty(this.storedTool))
-			block.getWorld().dropItemNaturally(loc, this.storedTool);
+			event.addDrop(this.storedTool);
 	}
 
 	@Override

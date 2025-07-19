@@ -15,7 +15,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.inventory.ItemStack;
@@ -71,8 +70,6 @@ public class FallingBeeNests implements Listener {
 		beehive.releaseEntities(loc).forEach(bee -> {
 			bee.setCannotEnterHiveTicks(20 * 20);
 			bee.setAnger(40);
-			if (!bee.isValid()) // TODO remove this hack
-				bee.spawnAt(loc, CreatureSpawnEvent.SpawnReason.BEEHIVE);
 		});
 
 		Player closestPlayer = (Player) LocationUtil.findClosestEntity(loc, 16, entity -> entity instanceof Player);

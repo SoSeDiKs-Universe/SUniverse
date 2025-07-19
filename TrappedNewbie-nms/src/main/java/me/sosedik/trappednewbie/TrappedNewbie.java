@@ -21,6 +21,7 @@ import me.sosedik.trappednewbie.impl.block.nms.ClayKilnBlock;
 import me.sosedik.trappednewbie.impl.blockstorage.ChoppingBlockStorage;
 import me.sosedik.trappednewbie.impl.blockstorage.ClayKilnBlockStorage;
 import me.sosedik.trappednewbie.impl.blockstorage.DrumBlockStorage;
+import me.sosedik.trappednewbie.impl.blockstorage.FlowerPotBlockStorage;
 import me.sosedik.trappednewbie.impl.blockstorage.SleepingBagBlockStorage;
 import me.sosedik.trappednewbie.impl.blockstorage.TotemBaseBlockStorage;
 import me.sosedik.trappednewbie.impl.blockstorage.WorkStationBlockStorage;
@@ -119,6 +120,7 @@ import org.bukkit.Difficulty;
 import org.bukkit.GameRule;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Tag;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -155,6 +157,7 @@ public final class TrappedNewbie extends JavaPlugin {
 		TrappedNewbieTags.DRUMS.getValues().forEach(material -> BlockStorage.addMapping(material, DrumBlockStorage.class));
 		TrappedNewbieTags.TOTEM_BASES.getValues().forEach(material -> BlockStorage.addMapping(material, TotemBaseBlockStorage.class));
 		TrappedNewbieTags.WORK_STATIONS.getValues().forEach(material -> BlockStorage.addMapping(material, WorkStationBlockStorage.class));
+		Tag.FLOWER_POTS.getValues().forEach(material -> BlockStorage.addMapping(material, FlowerPotBlockStorage.class));
 		BlockStorage.addMapping(TrappedNewbieItems.CLAY_KILN, ClayKilnBlockStorage.class);
 		BlockStorage.addMapping(TrappedNewbieItems.SLEEPING_BAG, SleepingBagBlockStorage.class);
 	}

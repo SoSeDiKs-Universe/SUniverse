@@ -5,7 +5,7 @@ plugins {
     id("com.gradleup.shadow") version "9.0.0-rc1" // Shading
 }
 
-val mcVersion: String = project.property("mcVersion").toString()
+val mcVersion: String = rootProject.property("mcVersion").toString()
 dependencies {
     paperweight.paperDevBundle(mcVersion, "me.sosedik.kiterino")
 }
@@ -71,7 +71,11 @@ subprojects {
 
     apply(plugin = "de.eldoria.plugin-yml.paper")
     paper {
-        apiVersion = "${project.property("apiVersion")}"
+        apiVersion = "${rootProject.property("apiVersion")}"
         authors = listOf("SoSeDiK")
     }
 }
+
+//paper {
+//    main = "me.sosedik.dummy.Dummy"
+//}

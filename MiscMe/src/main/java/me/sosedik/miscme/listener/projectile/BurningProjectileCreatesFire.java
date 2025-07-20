@@ -135,7 +135,13 @@ public class BurningProjectileCreatesFire implements Listener {
 		return true;
 	}
 
-	private static boolean tryToLit(Block block) {
+	/**
+	 * Try to lit the block
+	 *
+	 * @param block block
+	 * @return whether the block was lit
+	 */
+	public static boolean tryToLit(Block block) {
 		BlockData blockData = block.getBlockData();
 		if (blockData instanceof Campfire campfire && !campfire.isLit()) {
 			campfire.setLit(true);

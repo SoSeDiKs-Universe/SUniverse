@@ -40,6 +40,7 @@ public class UtilizerTags {
 
 	public static final Tag<Material> STONE_ORES_BLOCKS = blockTag("stone_ores");
 	public static final Tag<Material> ORES_BLOCKS = blockTag("ores");
+	public static final Tag<Material> FRAGILE_BLOCKS = blockTag("fragile_blocks");
 
 	// MCCheck: 1.21.8, new mobs
 	public static final Tag<EntityType> HOSTILE_MONSTERS = entityTag("hostile_monsters");
@@ -58,7 +59,7 @@ public class UtilizerTags {
 	}
 
 	private static Tag<Material> blockTag(String key) {
-		return ItemUtil.itemTag(Utilizer.utilizerKey(key));
+		return ItemUtil.blockTag(Utilizer.utilizerKey(key));
 	}
 
 	private static Tag<EntityType> entityTag(String key) {

@@ -40,6 +40,7 @@ import me.sosedik.miscme.listener.entity.BurningSpreadsWhenAttacking;
 import me.sosedik.miscme.listener.entity.ColoredShulkerUponSpawn;
 import me.sosedik.miscme.listener.entity.DyeableShulkers;
 import me.sosedik.miscme.listener.entity.DynamicCreeperExplosion;
+import me.sosedik.miscme.listener.entity.DynamicMovingSpeed;
 import me.sosedik.miscme.listener.entity.EndermanTeleportsPlayers;
 import me.sosedik.miscme.listener.entity.ItemFrameReverseRotate;
 import me.sosedik.miscme.listener.entity.MinecartSlimeBoost;
@@ -76,6 +77,7 @@ import me.sosedik.miscme.listener.player.HidePlayerNameTags;
 import me.sosedik.miscme.listener.player.JumpingOverFences;
 import me.sosedik.miscme.listener.player.PlayerSpeedTracker;
 import me.sosedik.miscme.listener.player.SwapHalfStack;
+import me.sosedik.miscme.listener.projectile.ArrowsBreakFragileBlocks;
 import me.sosedik.miscme.listener.projectile.BurningLitsProjectiles;
 import me.sosedik.miscme.listener.projectile.BurningProjectileCreatesFire;
 import me.sosedik.miscme.listener.projectile.SnowballCreatesSnow;
@@ -158,6 +160,7 @@ public final class MiscMe extends JavaPlugin {
 			ColoredShulkerUponSpawn.class,
 			DyeableShulkers.class,
 			DynamicCreeperExplosion.class,
+			DynamicMovingSpeed.class,
 			EndermanTeleportsPlayers.class,
 			ItemFrameReverseRotate.class,
 			MinecartSlimeBoost.class,
@@ -199,6 +202,7 @@ public final class MiscMe extends JavaPlugin {
 			PlayerSpeedTracker.class,
 			SwapHalfStack.class,
 			// projectile
+			ArrowsBreakFragileBlocks.class,
 			BurningLitsProjectiles.class,
 			BurningProjectileCreatesFire.class,
 			SnowballCreatesSnow.class,

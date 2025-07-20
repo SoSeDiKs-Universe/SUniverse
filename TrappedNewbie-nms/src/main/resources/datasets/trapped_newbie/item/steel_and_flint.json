@@ -1,0 +1,5 @@
+{
+	"parent_model": "handheld",
+	"client_type": "minecraft:iron_nugget",
+	"durability": 64
+}

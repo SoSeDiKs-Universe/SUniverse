@@ -7,6 +7,8 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.DryVegetationBlock;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -20,13 +22,15 @@ import static java.util.Objects.requireNonNull;
 public class VegetationBlock extends DryVegetationBlock implements KiterinoBlock {
 
 	private @Nullable BlockState bukkitState;
+	private final @Nullable VoxelShape shapeOverride;
 	private final PlacementRule placementRule;
 	private final NamespacedKey blockId;
 
-	public VegetationBlock(Properties settings, NamespacedKey blockId, PlacementRule placementRule) {
+	public VegetationBlock(Properties settings, NamespacedKey blockId, PlacementRule placementRule, @Nullable VoxelShape shapeOverride) {
 		super(settings);
 		this.placementRule = placementRule;
 		this.blockId = blockId;
+		this.shapeOverride = shapeOverride;
 	}
 
 	@Override
@@ -41,6 +45,11 @@ public class VegetationBlock extends DryVegetationBlock implements KiterinoBlock
 	@Override
 	protected boolean mayPlaceOn(net.minecraft.world.level.block.state.BlockState state, BlockGetter level, BlockPos pos) {
 		return this.placementRule.mayPlaceOn(state.getBukkitMaterial());
+	}
+
+	@Override
+	protected VoxelShape getShape(net.minecraft.world.level.block.state.BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+		return this.shapeOverride == null ? super.getShape(state, level, pos, context) : this.shapeOverride;
 	}
 
 	@Override

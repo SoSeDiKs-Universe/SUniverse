@@ -39,7 +39,7 @@ public class PrimingExplosiveMinecart implements Listener {
 			player.incrementStatistic(Statistic.USE_ITEM, Material.FIRE_CHARGE);
 		} else if (UtilizerTags.FLINT_AND_STEEL.isTagged(item.getType())) {
 			item.damage(1, player);
-			player.emitSound(Sound.ITEM_FLINTANDSTEEL_USE, 1F, 1F);
+			player.emitSound(Sound.ITEM_FLINTANDSTEEL_USE, 1F, (float) Math.random() * 0.4F + 0.8F);
 			player.incrementStatistic(Statistic.USE_ITEM, Material.FLINT_AND_STEEL);
 		} else {
 			return false;

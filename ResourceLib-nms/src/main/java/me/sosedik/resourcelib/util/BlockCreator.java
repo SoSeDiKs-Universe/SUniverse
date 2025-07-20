@@ -8,8 +8,10 @@ import me.sosedik.resourcelib.impl.block.nms.SimpleNMSBlock;
 import me.sosedik.resourcelib.impl.block.nms.VegetationBlock;
 import me.sosedik.resourcelib.impl.block.nms.WaterloggedBarrierNMSBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import org.bukkit.NamespacedKey;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import static java.util.Objects.requireNonNull;
 
@@ -36,8 +38,8 @@ public class BlockCreator {
 		return new DirectionalBarrierNMSBlock(((BlockBehaviour.Properties) properties), requireNonNull(NamespacedKey.fromString(key)));
 	}
 
-	public static KiterinoBlock vegetation(Object properties, String key, VegetationBlock.PlacementRule placementRule) {
-		return new VegetationBlock((BlockBehaviour.Properties) properties, requireNonNull(NamespacedKey.fromString(key)), placementRule);
+	public static KiterinoBlock vegetation(Object properties, String key, VegetationBlock.PlacementRule placementRule, @Nullable VoxelShape shapeOverride) {
+		return new VegetationBlock((BlockBehaviour.Properties) properties, requireNonNull(NamespacedKey.fromString(key)), placementRule, shapeOverride);
 	}
 
 }

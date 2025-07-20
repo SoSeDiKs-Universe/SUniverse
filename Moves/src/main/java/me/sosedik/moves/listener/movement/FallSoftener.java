@@ -1,6 +1,6 @@
 package me.sosedik.moves.listener.movement;
 
-import me.sosedik.moves.dataset.MovesTags;
+import me.sosedik.utilizer.dataset.UtilizerTags;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.block.Block;
@@ -37,7 +37,7 @@ public class FallSoftener implements Listener {
 			|| Tag.LEAVES.isTagged(blockType)
 		) {
 			event.setDamage(event.getFinalDamage() / 2);
-		} else if (MovesTags.FRAGILE_BLOCKS.isTagged(blockType)) {
+		} else if (UtilizerTags.FRAGILE_BLOCKS.isTagged(blockType)) {
 			event.setDamage(event.getFinalDamage() / 1.25);
 			if (event.getEntity().getFallDistance() > 12 || (Math.random() > 0.4 && event.getFinalDamage() >= 2)) {
 				block.breakNaturally(true, true);

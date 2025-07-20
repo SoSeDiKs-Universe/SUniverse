@@ -76,11 +76,13 @@ import me.sosedik.trappednewbie.listener.item.FirestrikerFire;
 import me.sosedik.trappednewbie.listener.item.FlintToFlakedFlint;
 import me.sosedik.trappednewbie.listener.item.FlowerBouquetAttackEffects;
 import me.sosedik.trappednewbie.listener.item.GlassShardCuts;
+import me.sosedik.trappednewbie.listener.item.HammerBlockRepair;
 import me.sosedik.trappednewbie.listener.item.KnifeCarvesTotemBases;
 import me.sosedik.trappednewbie.listener.item.MeshSifting;
 import me.sosedik.trappednewbie.listener.item.PaperPlanes;
 import me.sosedik.trappednewbie.listener.item.RoughSticksCreateFire;
 import me.sosedik.trappednewbie.listener.item.SimpleSoundItems;
+import me.sosedik.trappednewbie.listener.item.SteelAndFlint;
 import me.sosedik.trappednewbie.listener.item.ThrowableRockBehavior;
 import me.sosedik.trappednewbie.listener.item.TimeMachineClockIsTotemOfUndying;
 import me.sosedik.trappednewbie.listener.item.TrumpetScare;
@@ -244,11 +246,13 @@ public final class TrappedNewbie extends JavaPlugin {
 			FlintToFlakedFlint.class,
 			FlowerBouquetAttackEffects.class,
 			GlassShardCuts.class,
+			HammerBlockRepair.class,
 			KnifeCarvesTotemBases.class,
 			MeshSifting.class,
 			PaperPlanes.class,
 			RoughSticksCreateFire.class,
 			SimpleSoundItems.class,
+			SteelAndFlint.class,
 			ThrowableRockBehavior.class,
 			TimeMachineClockIsTotemOfUndying.class,
 			TrumpetScare.class,

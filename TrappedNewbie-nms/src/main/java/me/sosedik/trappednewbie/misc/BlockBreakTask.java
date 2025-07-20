@@ -22,6 +22,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.SoundGroup;
 import org.bukkit.Tag;
 import org.bukkit.attribute.Attribute;
@@ -358,9 +359,11 @@ public class BlockBreakTask extends BukkitRunnable {
 			if (!this.player.breakBlock(this.block)) return;
 		}
 
-		if (!Tag.FIRE.isTagged(this.block.getType())) {
+		if (Tag.FIRE.isTagged(this.block.getType())) {
+			this.block.emitSound(Sound.BLOCK_FIRE_EXTINGUISH, 1F, 0.9F + (float) Math.random() * 0.2F);
+		} else {
 			this.block.getWorld().spawnParticle(Particle.BLOCK_CRUMBLE, this.block.getLocation().toCenterLocation(), 50, 0.4, 0.4, 0.4, blockData);
-			this.block.emitSound(soundGroup.getBreakSound(), 1F, 0.8F);
+			this.block.emitSound(soundGroup.getBreakSound(), 1F, (float) Math.random() * 0.4F + 0.8F);
 		}
 
 		if (this.hammer != null) {

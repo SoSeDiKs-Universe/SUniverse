@@ -38,7 +38,7 @@ public class IgnitableCobweb implements Listener {
 
 		Player player = event.getPlayer();
 		if (tryToIgnite(player, EquipmentSlot.HAND) || tryToIgnite(player, EquipmentSlot.OFF_HAND))
-			block.emitSound(Sound.ITEM_FLINTANDSTEEL_USE, 1F, 1F);
+			block.emitSound(Sound.ITEM_FLINTANDSTEEL_USE, 1F, (float) Math.random() * 0.4F + 0.8F);
 	}
 
 	private boolean tryToIgnite(Player player, EquipmentSlot hand) {

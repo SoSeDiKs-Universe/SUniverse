@@ -134,7 +134,7 @@ public class FireAspectIsFlintAndSteel implements Listener {
 			return false;
 		}
 
-		block.emitSound(Sound.ITEM_FLINTANDSTEEL_USE, SoundCategory.BLOCKS, 1F, 1.2F);
+		block.emitSound(Sound.ITEM_FLINTANDSTEEL_USE, SoundCategory.BLOCKS, 1F, (float) Math.random() * 0.4F + 0.8F);
 		item.damage(1, livingEntity);
 		livingEntity.getEquipment().setItem(hand, item);
 		livingEntity.swingHand(hand);

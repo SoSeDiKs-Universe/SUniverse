@@ -125,6 +125,19 @@ public class TrappedNewbieRecipes {
 			.addIngredients('S', Material.STICK, TrappedNewbieItems.ROUGH_STICK)
 			.register();
 
+		new ShapedCraft(new ItemStack(TrappedNewbieItems.STEEL_AND_FLINT), trappedNewbieKey("steel_and_flint_1"), "F ", " S")
+			.withGroup("steel_and_flint")
+			.withCategory(CraftingBookCategory.EQUIPMENT)
+			.addIngredients('F', Material.FLINT)
+			.addIngredients('S', Material.IRON_INGOT)
+			.register();
+		new ShapedCraft(new ItemStack(TrappedNewbieItems.STEEL_AND_FLINT), trappedNewbieKey("steel_and_flint_2"), "F", "S")
+			.withGroup("steel_and_flint")
+			.withCategory(CraftingBookCategory.EQUIPMENT)
+			.addIngredients('F', Material.FLINT)
+			.addIngredients('S', Material.IRON_INGOT)
+			.register();
+
 		new ShapedCraft(new ItemStack(TrappedNewbieItems.CLAY_KILN), trappedNewbieKey("clay_kiln"), "CCC", "C C", "CCC")
 			.addIngredients('C', Material.CLAY_BALL)
 			.register();

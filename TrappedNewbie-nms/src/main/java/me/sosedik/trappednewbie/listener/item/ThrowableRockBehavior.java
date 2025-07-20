@@ -1,9 +1,9 @@
 package me.sosedik.trappednewbie.listener.item;
 
-import me.sosedik.moves.dataset.MovesTags;
 import me.sosedik.trappednewbie.TrappedNewbie;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieItems;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieTags;
+import me.sosedik.utilizer.dataset.UtilizerTags;
 import me.sosedik.utilizer.util.LocationUtil;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
@@ -78,12 +78,12 @@ public class ThrowableRockBehavior implements Listener {
 		ItemStack projectile = snowball.getItem();
 		if (!TrappedNewbieTags.ROCKS.isTagged(projectile.getType())) return;
 
-		if (!MovesTags.FRAGILE_BLOCKS.isTagged(block.getType())) {
+		if (!UtilizerTags.FRAGILE_BLOCKS.isTagged(block.getType())) {
 			block.emitSound(Sound.BLOCK_STONE_HIT, 1F, 1F);
 			return;
 		}
 
-		block.breakNaturally(ItemStack.empty(), true, true);
+		block.breakNaturally(projectile, true, true);
 	}
 
 }

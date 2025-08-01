@@ -140,7 +140,7 @@ public class CustomRecipeLeftovers implements Listener {
 
 			Material replacement = matrix[i].getType().getCraftingRemainingItem();
 			if (replacement != null) {
-				matrix[i] = new ItemStack(replacement);
+				matrix[i] = ItemStack.of(replacement);
 				continue;
 			}
 

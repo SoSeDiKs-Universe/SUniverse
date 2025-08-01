@@ -25,7 +25,7 @@ public record Scheduler(Plugin plugin) {
 	 * @return Task id number (-1 if scheduling failed)
 	 */
 	public int sync(Runnable runnable) {
-		return Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, runnable);
+		return Bukkit.getScheduler().scheduleSyncDelayedTask(this.plugin, runnable);
 	}
 
 	/**
@@ -38,7 +38,7 @@ public record Scheduler(Plugin plugin) {
 	 * @return Task id number (-1 if scheduling failed)
 	 */
 	public int sync(Runnable runnable, long delay) {
-		return Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, runnable, delay);
+		return Bukkit.getScheduler().scheduleSyncDelayedTask(this.plugin, runnable, delay);
 	}
 
 	/**
@@ -56,7 +56,7 @@ public record Scheduler(Plugin plugin) {
 				if (runnable.test(this))
 					cancel();
 			}
-		}.runTaskTimer(plugin, delay, period);
+		}.runTaskTimer(this.plugin, delay, period);
 	}
 
 	/**
@@ -68,7 +68,7 @@ public record Scheduler(Plugin plugin) {
 	 * @return a BukkitTask that contains the id number
 	 */
 	public BukkitTask sync(Runnable runnable, long delay, long period) {
-		return Bukkit.getScheduler().runTaskTimer(plugin, runnable, delay, period);
+		return Bukkit.getScheduler().runTaskTimer(this.plugin, runnable, delay, period);
 	}
 
 	/**
@@ -80,7 +80,7 @@ public record Scheduler(Plugin plugin) {
 	 * @return a BukkitTask that contains the id number
 	 */
 	public BukkitTask sync(BukkitRunnable runnable, long delay, long period) {
-		return runnable.runTaskTimer(plugin, delay, period);
+		return runnable.runTaskTimer(this.plugin, delay, period);
 	}
 
 	/**
@@ -93,7 +93,7 @@ public record Scheduler(Plugin plugin) {
 	 * @return a BukkitTask that contains the id number
 	 */
 	public BukkitTask async(Runnable runnable) {
-		return Bukkit.getScheduler().runTaskAsynchronously(plugin, runnable);
+		return Bukkit.getScheduler().runTaskAsynchronously(this.plugin, runnable);
 	}
 
 	/**
@@ -108,7 +108,7 @@ public record Scheduler(Plugin plugin) {
 	 * @return a BukkitTask that contains the id number
 	 */
 	public BukkitTask async(Runnable runnable, long delay) {
-		return Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, runnable, delay);
+		return Bukkit.getScheduler().runTaskLaterAsynchronously(this.plugin, runnable, delay);
 	}
 
 	/**
@@ -130,7 +130,7 @@ public record Scheduler(Plugin plugin) {
 				if (runnable.test(this))
 					cancel();
 			}
-		}.runTaskTimerAsynchronously(plugin, delay, period);
+		}.runTaskTimerAsynchronously(this.plugin, delay, period);
 	}
 
 	/**
@@ -146,7 +146,7 @@ public record Scheduler(Plugin plugin) {
 	 * @return a BukkitTask that contains the id number
 	 */
 	public BukkitTask async(Runnable runnable, long delay, long period) {
-		return Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, runnable, delay, period);
+		return Bukkit.getScheduler().runTaskTimerAsynchronously(this.plugin, runnable, delay, period);
 	}
 
 	/**
@@ -162,7 +162,7 @@ public record Scheduler(Plugin plugin) {
 	 * @return a BukkitTask that contains the id number
 	 */
 	public BukkitTask async(BukkitRunnable runnable, long delay, long period) {
-		return runnable.runTaskTimerAsynchronously(plugin, delay, period);
+		return runnable.runTaskTimerAsynchronously(this.plugin, delay, period);
 	}
 
 	/**

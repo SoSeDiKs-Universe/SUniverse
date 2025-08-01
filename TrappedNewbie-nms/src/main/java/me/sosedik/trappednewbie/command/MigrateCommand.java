@@ -128,10 +128,8 @@ public class MigrateCommand implements Listener {
 					if (advTeams.has(oldUuid.toString())) {
 						int teamId = advTeams.get(oldUuid.toString()).getAsInt();
 						if (delete) {
-							file = new File(TrappedNewbie.instance().getDataFolder(), "advancements" + File.separator + "storage" + File.separator + "team_" + teamId + ".json");
-							if (file.exists()) file.delete();
-							file = new File(TrappedNewbie.instance().getDataFolder(), "advancements" + File.separator + "storage" + File.separator + "team_" + teamId + ".json.old");
-							if (file.exists()) file.delete();
+							file = new File(TrappedNewbie.instance().getDataFolder(), "advancements" + File.separator + "storage" + File.separator + "team_" + teamId);
+							FileUtil.deleteFolder(file);
 						} else {
 							advTeams.remove(oldUuid.toString());
 							advTeams.addProperty(newUuid.toString(), teamId);

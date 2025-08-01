@@ -1,10 +1,22 @@
 {
 	"item.modifier.blazified": "<gray><i>Blazified",
 	"item.modifier.fragile": "<gray><i>Fragile",
-	"item.modifier.letter.friendship": "<red><i>Friendship-powered",
+	"item.modifier.letter.friendship": [
+		"<red><i>Friendship-powered",
+		"<!i><yellow><key:key.use><gray> on an empty-handed player",
+		"<!i><gray>to suggest a friendship"
+	],
+	"item.modifier.letter.friendship.bound": "<gray><!i><from>'s friendship request for <to>",
+	"item.modifier.letter.friendship.bound.you": [
+		"<gray><!i><from>'s friendship request",
+		"<!i><yellow><key:key.use><gray> on them with this letter to accept! "
+	],
 	"limbo.welcome": "Huh, another one?",
-	"limbo.welcome.ignored": "You're gonna ignore me like that, really?",
-	"limbo.friendship": "You befriended the <gold>Wandering Trader</gold>!",
+	"limbo.welcome.interacted": "Yes, yes, good! Follow the on-screen instructions to proceed!",
+	"limbo.welcome.ignored": "You're gonna ignore me like that, really? Literally gave you on-screen instructions…",
+	"limbo.free_letter_already_obtained": "Hey, you haven't used the prior one yet!",
+	"friendship.limbo": "You befriended the <gold>Wandering Trader</gold>!",
+	"friendship.player": "You befriended the <gold><player></gold>!",
 	"break.light": "It's too dark here to break blocks",
 	"advancement.reward.exp": "<blue><exp> Experience",
 	"advancement.reward.shearable_creepers": "<yellow>+ Ability to shear non-powered Creepers",

@@ -10,9 +10,6 @@ import org.bukkit.scoreboard.Team;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-import java.util.List;
-import java.util.UUID;
-
 @NullMarked
 public class GlowingUtil {
 
@@ -23,7 +20,7 @@ public class GlowingUtil {
 	private static final String GLOW_TEAM_ID_PREFIX = "Glow-";
 
 	/**
-	 * Sets entity's glowing color for the player and refreshes it for the player
+	 * Sets entity's glowing color for the player and makes it always glow for the player
 	 *
 	 * @param player player
 	 * @param entity entity
@@ -31,18 +28,14 @@ public class GlowingUtil {
 	 */
 	public static void applyGlowingColor(Player player, Entity entity, @Nullable NamedTextColor glowColor) {
 		setGlowingColor(player, entity, glowColor);
-		if (glowColor != null) {
-			EntityGlowTracker.getPlayers(entity.getEntityId(), true).add(player.getUniqueId());
-		} else {
-			List<UUID> playerUuids = EntityGlowTracker.getPlayers(entity.getEntityId(), false);
-			if (playerUuids != null)
-				playerUuids.remove(player.getUniqueId());
-		}
-		entity.resendMetadata(0);
+		if (glowColor != null)
+			EntityGlowTracker.addPlayer(player, entity);
+		else
+			EntityGlowTracker.removePlayer(player, entity);
 	}
 
 	/**
-	 * Sets entity's glowing color for the player without refreshing
+	 * Sets entity's glowing color for the player without making it always glow
 	 *
 	 * @param player player
 	 * @param entity entity

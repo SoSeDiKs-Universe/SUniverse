@@ -74,7 +74,7 @@ public class BabierBabyMobs implements Listener {
 
 		if (skeleton instanceof Bogged) {
 			skeleton.launchProjectile(Snowball.class, null, snowball -> {
-				snowball.setItem(new ItemStack(Math.random() > 0.5 ? Material.RED_MUSHROOM : Material.BROWN_MUSHROOM));
+				snowball.setItem(ItemStack.of(Math.random() > 0.5 ? Material.RED_MUSHROOM : Material.BROWN_MUSHROOM));
 				NBT.modifyPersistentData(snowball, (Consumer<ReadWriteNBT>) nbt -> nbt.setBoolean(BOGGED_PROJECTILE_MARKER, true));
 			});
 		} else {
@@ -145,22 +145,22 @@ public class BabierBabyMobs implements Listener {
 			var nms = ((CraftAbstractSkeleton) skeleton).getHandle();
 			Material main = Math.random() > 0.5 ? Material.RED_MUSHROOM : Material.BROWN_MUSHROOM;
 			Material off = main == Material.RED_MUSHROOM ? Material.BROWN_MUSHROOM : Material.RED_MUSHROOM;
-			skeleton.getEquipment().setItemInMainHand(new ItemStack(main));
-			skeleton.getEquipment().setItemInOffHand(new ItemStack(off));
+			skeleton.getEquipment().setItemInMainHand(ItemStack.of(main));
+			skeleton.getEquipment().setItemInOffHand(ItemStack.of(off));
 			skeleton.getEquipment().setItemInMainHandDropChance(0.2F);
 			skeleton.getEquipment().setItemInOffHandDropChance(0.2F);
 			Bukkit.getMobGoals().removeGoal(skeleton, VanillaGoal.RANGED_BOW_ATTACK);
 			Bukkit.getMobGoals().addGoal(skeleton, 1, new PaperGoal<>(new NonBowRangedAttackGoal<>(nms, 1, 30, 15F)));
 		} else if (entity instanceof Stray skeleton) {
 			var nms = ((CraftAbstractSkeleton) skeleton).getHandle();
-			skeleton.getEquipment().setItemInMainHand(new ItemStack(Material.SNOWBALL));
+			skeleton.getEquipment().setItemInMainHand(ItemStack.of(Material.SNOWBALL));
 			skeleton.getEquipment().setItemInMainHandDropChance(0.2F);
 			Bukkit.getMobGoals().removeGoal(skeleton, VanillaGoal.RANGED_BOW_ATTACK);
 			Bukkit.getMobGoals().addGoal(skeleton, 1, new PaperGoal<>(new NonBowRangedAttackGoal<>(nms, 1, 30, 15F)));
 		} else if (entity instanceof WitherSkeleton skeleton) {
 			if (getItemHand(skeleton, Material.WITHER_ROSE) == null) {
 				var nms = ((CraftAbstractSkeleton) skeleton).getHandle();
-				skeleton.getEquipment().setItemInMainHand(new ItemStack(Material.WITHER_SKELETON_SKULL));
+				skeleton.getEquipment().setItemInMainHand(ItemStack.of(Material.WITHER_SKELETON_SKULL));
 				skeleton.getEquipment().setItemInMainHandDropChance(1F);
 				Bukkit.getMobGoals().removeGoal(skeleton, VanillaGoal.NEAREST_ATTACKABLE);
 				Bukkit.getMobGoals().removeGoal(skeleton, VanillaGoal.HURT_BY);
@@ -170,7 +170,7 @@ public class BabierBabyMobs implements Listener {
 			}
 		} else if (entity instanceof Skeleton skeleton) {
 			var nms = ((CraftAbstractSkeleton) skeleton).getHandle();
-			skeleton.getEquipment().setItemInMainHand(new ItemStack(TrappedNewbieItems.TRUMPET));
+			skeleton.getEquipment().setItemInMainHand(ItemStack.of(TrappedNewbieItems.TRUMPET));
 			skeleton.getEquipment().setItemInMainHandDropChance(0.085F);
 			Bukkit.getMobGoals().removeGoal(skeleton, VanillaGoal.RANGED_BOW_ATTACK);
 			Bukkit.getMobGoals().removeGoal(skeleton, VanillaGoal.SKELETON_MELEE);

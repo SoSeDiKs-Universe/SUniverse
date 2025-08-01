@@ -33,6 +33,8 @@ import me.sosedik.utilizer.listener.misc.DurabilityRecipeLeftovers;
 import me.sosedik.utilizer.listener.misc.ExtraChatTabSuggestions;
 import me.sosedik.utilizer.listener.misc.ExtraRecipeHandlers;
 import me.sosedik.utilizer.listener.misc.FixLeftAirClickWhenRightClickingEntity;
+import me.sosedik.utilizer.listener.misc.LocalizedDisconnectMessages;
+import me.sosedik.utilizer.listener.misc.LocalizedUnknownCommand;
 import me.sosedik.utilizer.listener.misc.MilkImmuneEffects;
 import me.sosedik.utilizer.listener.player.CleanupPlayerScoreboards;
 import me.sosedik.utilizer.listener.player.PlayerDataLoadSave;
@@ -121,6 +123,8 @@ public final class Utilizer extends JavaPlugin {
 			ExtraChatTabSuggestions.class,
 			ExtraRecipeHandlers.class,
 			FixLeftAirClickWhenRightClickingEntity.class,
+			LocalizedDisconnectMessages.class,
+			LocalizedUnknownCommand.class,
 			MilkImmuneEffects.class,
 			// player
 			CleanupPlayerScoreboards.class,

@@ -2,5 +2,8 @@
 	"item.modifier.glowy": "<gray><i>Glowy",
 	"preferences.title": "Preferences",
 	"preferences.done": "Done",
-	"preferences.preference.am_pm": "12-hour clock (AM-PM)"
+	"preferences.preference.am_pm": "12-hour clock (AM-PM)",
+	"disconnect.server.closed": "Server is temporarily closed",
+	"disconnect.server.restart": "Server is restarting",
+	"server.unknown_command": "<yellow>Unknown command <red><kaomoji:pain>"
 }

@@ -31,8 +31,8 @@ public class FakeHorseSaddlesModifier extends ItemModifier {
 		if (player == null) return ModificationResult.PASS;
 		if (!(PossessingPlayer.getPossessed(player) instanceof AbstractHorse)) return ModificationResult.PASS;
 
-		ItemStack saddle = ItemModifier.modifyItem(player, contextBox.getLocale(), new ItemStack(RequiemItems.SADDLE_OUTLINE));
-		if (saddle == null) saddle = new ItemStack(Material.SADDLE);
+		ItemStack saddle = ItemModifier.modifyItem(player, contextBox.getLocale(), ItemStack.of(RequiemItems.SADDLE_OUTLINE));
+		if (saddle == null) saddle = ItemStack.of(Material.SADDLE);
 		contextBox.setItem(saddle);
 		return ModificationResult.RETURN;
 	}

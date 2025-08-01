@@ -98,7 +98,7 @@ public class ColoredShulkerShells implements Listener {
 		if (shulkerBox == null) return;
 
 		String prefix = dyeColor == null ? "" : dyeColor.name().toLowerCase(Locale.US) + "_";
-		var craft = new ShapedCraft(new ItemStack(shulkerBox), MiscMe.miscMeKey(prefix + "shulker_box"), "S", "C", "S")
+		var craft = new ShapedCraft(ItemStack.of(shulkerBox), MiscMe.miscMeKey(prefix + "shulker_box"), "S", "C", "S")
 			.withGroup("shulker_box")
 			.addIngredients('C', Material.CHEST, Material.TRAPPED_CHEST);
 
@@ -140,7 +140,7 @@ public class ColoredShulkerShells implements Listener {
 				event.setResult(result.withType(coloredBox));
 			});
 		} else {
-			var shell = new ItemStack(Material.SHULKER_SHELL);
+			var shell = ItemStack.of(Material.SHULKER_SHELL);
 			NBT.modify(shell, (Consumer<ReadWriteItemNBT>) nbt -> nbt.setEnum(COLOR_TAG, dyeColor));
 			craft.addIngredientItems('S', shell,
 			item -> item.hasData(DataComponentTypes.DYED_COLOR)

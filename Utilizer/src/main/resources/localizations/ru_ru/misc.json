@@ -2,5 +2,8 @@
 	"item.modifier.glowy": "<gray><i>Светящийся",
 	"preferences.title": "Настройки",
 	"preferences.done": "Готово",
-	"preferences.preference.am_pm": "12-часовые часы (AM-PM)"
+	"preferences.preference.am_pm": "12-часовые часы (AM-PM)",
+	"disconnect.server.closed": "Сервер временно отключен",
+	"disconnect.server.restart": "Сервер перезагружается",
+	"server.unknown_command": "<yellow>Неизвестная команда <red><kaomoji:pain>"
 }

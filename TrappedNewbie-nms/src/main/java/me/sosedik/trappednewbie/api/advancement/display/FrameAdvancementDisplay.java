@@ -30,7 +30,7 @@ public class FrameAdvancementDisplay extends FancyAdvancementDisplay<FrameAdvanc
 		NamespacedKey itemModelKey = getAdvancementFrame().getItemModelKey(obtained);
 		if (itemModelKey == null) return super.advancementIcon();
 
-		var icon = new ItemStack(Material.LIGHT_GRAY_STAINED_GLASS_PANE);
+		var icon = ItemStack.of(Material.LIGHT_GRAY_STAINED_GLASS_PANE);
 		icon.setData(DataComponentTypes.ITEM_MODEL, itemModelKey);
 		return icon;
 	}

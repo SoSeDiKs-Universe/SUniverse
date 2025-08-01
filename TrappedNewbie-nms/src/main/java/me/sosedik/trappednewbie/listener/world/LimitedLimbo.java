@@ -1,5 +1,7 @@
 package me.sosedik.trappednewbie.listener.world;
 
+import io.papermc.paper.event.player.PrePlayerAttackEntityEvent;
+import me.sosedik.requiem.api.event.player.PlayerTryPossessingEntityEvent;
 import me.sosedik.trappednewbie.TrappedNewbie;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -20,13 +22,13 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public class LimitedLimbo implements Listener {
 
-	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onInteract(PlayerInteractEntityEvent event) {
 		if (shouldDeny(event.getPlayer()))
 			event.setCancelled(true);
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onInteract(PlayerInteractAtEntityEvent event) {
 		if (shouldDeny(event.getPlayer()))
 			event.setCancelled(true);
@@ -50,9 +52,21 @@ public class LimitedLimbo implements Listener {
 			event.setCancelled(true);
 	}
 
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+	public void onAttack(PrePlayerAttackEntityEvent event) {
+		if (event.getPlayer().getWorld() == TrappedNewbie.limboWorld())
+			event.setCancelled(true);
+	}
+
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onMount(EntityMountEvent event) {
 		if (event.getEntity().getWorld() == TrappedNewbie.limboWorld())
+			event.setCancelled(true);
+	}
+
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onPosses(PlayerTryPossessingEntityEvent event) {
+		if (event.getPlayer().getWorld() == TrappedNewbie.limboWorld())
 			event.setCancelled(true);
 	}
 

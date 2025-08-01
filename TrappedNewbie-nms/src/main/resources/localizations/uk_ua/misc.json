@@ -1,10 +1,22 @@
 {
 	"item.modifier.blazified": "<gray><i>Блазифікований",
 	"item.modifier.fragile": "<gray><i>Крихкий",
-	"item.modifier.letter.friendship": "<red><i>Містить силу дружби",
+	"item.modifier.letter.friendship": [
+		"<red><i>Містить силу дружби",
+		"<!i><yellow><key:key.use><gray> по гравцю з пустою рукою,",
+		"<!i><gray>щоб запропонувати дружбу"
+	],
+	"item.modifier.letter.friendship.bound": "<gray><!i>Дружня пропозиція від <from> для <to>",
+	"item.modifier.letter.friendship.bound.you": [
+		"<gray><!i>Дружня пропозиція від <from>",
+		"<!i><yellow><key:key.use><gray> по ним, щоб прийняти пропозицію! "
+	],
 	"limbo.welcome": "Гм, ще один?",
-	"limbo.welcome.ignored": "Збираєтесь мене ось так ігнорувати, дійсно?",
-	"limbo.friendship": "Ви здружились з <gold>мандрівним крамарем</gold>!",
+	"limbo.welcome.interacted": "Так-так, добре! Дотримуйтесь інструкцій на екрані!",
+	"limbo.welcome.ignored": "Збираєтесь мене ось так ігнорувати, дійсно? Буквально на екрані є інструкції…",
+	"limbo.free_letter_already_obtained": "Гей, Ви ще не використали попередній!",
+	"friendship.limbo": "Ви здружились з <gold>мандрівним крамарем</gold>!",
+	"friendship.player": "Ви здружились з <gold><player></gold>!",
 	"break.light": "Тут занадто темно, щоб ламати блоки",
 	"advancement.reward.exp": "<blue><exp> <plural:uk_ua:одиниця|одиниці|одиниць:'<exp_raw>'> досвіду",
 	"advancement.reward.shearable_creepers": "<yellow>+ Здатність стригти незаряджених кріперів",

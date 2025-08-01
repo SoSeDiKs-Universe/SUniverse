@@ -4,6 +4,7 @@ import me.sosedik.socializer.command.DiscordCommand;
 import me.sosedik.socializer.discord.DiscordBot;
 import me.sosedik.socializer.discord.DiscordChatRenderer;
 import me.sosedik.socializer.listener.DiscordServerStatusUpdater;
+import me.sosedik.socializer.listener.FriendlyPlayers;
 import me.sosedik.socializer.listener.LoadSaveDiscordersOnJoinLeave;
 import me.sosedik.socializer.listener.MinecraftChatLinker;
 import me.sosedik.socializer.listener.discord.AccountLinking;
@@ -59,6 +60,7 @@ public final class Socializer extends JavaPlugin {
 		}
 
 		EventUtil.registerListeners(this,
+			FriendlyPlayers.class,
 			LoadSaveDiscordersOnJoinLeave.class,
 			MinecraftChatLinker.class
 		);

@@ -32,49 +32,53 @@ public class GhostMobVisionTask extends BukkitRunnable {
 
 	@Override
 	public void run() {
-		if (!player.isOnline() || !GhostyPlayer.isGhost(player)) {
+		if (!this.player.isOnline() || !GhostyPlayer.isGhost(this.player)) {
 			cancel();
-			if (player.isOnline()) glowingMobs.forEach((uuid, mob) -> clearGlowing(mob));
-			glowingMobs.clear();
 			return;
 		}
 
-		Location loc = player.getLocation().addY(player.getHeight() / 2);
+		Location loc = this.player.getLocation().addY(this.player.getHeight() / 2);
 
-		new ArrayList<>(glowingMobs.values()).forEach(mob -> {
+		new ArrayList<>(this.glowingMobs.values()).forEach(mob -> {
 			Location mobLoc = mob.getLocation();
 			if (loc.getWorld() != mobLoc.getWorld()) {
-				glowingMobs.remove(mob.getUniqueId());
+				this.glowingMobs.remove(mob.getUniqueId());
 				return;
 			}
 			if (mobLoc.distanceSquared(loc) < 900) return;
-			glowingMobs.remove(mob.getUniqueId());
+
+			this.glowingMobs.remove(mob.getUniqueId());
 			clearGlowing(mob);
 		});
 
-		loc.getNearbyLivingEntities(25, entity -> !glowingMobs.containsKey(entity.getUniqueId()) && !shouldSkipGlow(entity)).forEach(entity -> {
-			glowingMobs.put(entity.getUniqueId(), entity);
+		loc.getNearbyLivingEntities(25, entity -> !shouldSkipGlow(entity)).forEach(entity -> {
+			this.glowingMobs.put(entity.getUniqueId(), entity);
 			NamedTextColor glowColor;
-			if (PossessingPlayer.isAllowedForCapture(player, entity))
+			if (PossessingPlayer.isAllowedForCapture(this.player, entity))
 				glowColor = NamedTextColor.GREEN;
 			else if (PossessingPlayer.isPossessable(entity))
 				glowColor = NamedTextColor.YELLOW;
 			else
 				glowColor = NamedTextColor.RED;
-			GlowingUtil.applyGlowingColor(player, entity, glowColor);
+			GlowingUtil.applyGlowingColor(this.player, entity, glowColor);
 		});
+	}
+
+	@Override
+	public void cancel() {
+		super.cancel();
+		if (this.player.isOnline()) this.glowingMobs.forEach((uuid, mob) -> clearGlowing(mob));
+		this.glowingMobs.clear();
 	}
 
 	private boolean shouldSkipGlow(LivingEntity entity) {
 		if (entity.isInvisible()) return true;
-		return switch (entity.getType()) {
-			case ARMOR_STAND, PLAYER -> true;
-			default -> false;
-		};
+		if (!entity.getType().isSpawnable()) return true;
+		return !entity.getType().isAlive();
 	}
 
 	private void clearGlowing(LivingEntity entity) {
-		GlowingUtil.applyGlowingColor(player, entity, null);
+		GlowingUtil.applyGlowingColor(this.player, entity, null);
 	}
 
 }

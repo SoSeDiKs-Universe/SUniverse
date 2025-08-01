@@ -7,6 +7,7 @@ import io.papermc.paper.tag.EntityTags;
 import me.sosedik.requiem.Requiem;
 import me.sosedik.requiem.api.event.player.PlayerStartPossessingEntityEvent;
 import me.sosedik.requiem.api.event.player.PlayerStopPossessingEntityEvent;
+import me.sosedik.requiem.api.event.player.PlayerTryPossessingEntityEvent;
 import me.sosedik.requiem.dataset.RequiemItems;
 import me.sosedik.requiem.task.DynamicScaleTask;
 import me.sosedik.requiem.task.PoseMimicingTask;
@@ -84,12 +85,29 @@ public class PossessingPlayer {
 	 *
 	 * @param player player
 	 * @param entity possessed entity
+	 * @param preAction pre-possessing action
 	 */
-	public static void startPossessing(Player player, LivingEntity entity) {
-		if (isPossessing(player) && getPossessed(player) == entity) return;
-		if (!entity.setRider(player)) return;
+	public static boolean startPossessing(Player player, LivingEntity entity, @Nullable Runnable preAction) {
+		return startPossessing(player, entity, preAction, false);
+	}
+
+	/**
+	 * Makes the player to start possessing the mob
+	 *
+	 * @param player player
+	 * @param entity possessed entity
+	 * @param preAction pre-possessing action
+	 * @param skipEvent whether to skip the pre event
+	 */
+	public static boolean startPossessing(Player player, LivingEntity entity, @Nullable Runnable preAction, boolean skipEvent) {
+		if (isPossessing(player) && getPossessed(player) == entity) return false;
+		if (!skipEvent && !new PlayerTryPossessingEntityEvent(player, entity).callEvent()) return false;
+		if (!entity.setRider(player)) return false;
 
 		POSSESSING.add(player.getUniqueId());
+
+		if (preAction != null)
+			preAction.run();
 
 		GhostyPlayer.clearGhost(player);
 //		TemperaturedPlayer.of(player).addFlag(TempFlag.GHOST_IMMUNE); // TODO
@@ -120,6 +138,7 @@ public class PossessingPlayer {
 		new PoseMimicingTask(player, entity);
 
 		Requiem.logger().info("Making " + player.getName() + " possess " + entity.getType().getKey());
+		return true;
 	}
 
 	/**
@@ -254,7 +273,7 @@ public class PossessingPlayer {
 		if (entity instanceof Enderman enderman) {
 			BlockData blockData = enderman.getCarriedBlock();
 			if (blockData != null) {
-				var item = new ItemStack(blockData.getMaterial());
+				var item = ItemStack.of(blockData.getMaterial());
 				item.setBlockData(blockData);
 				playerInventory.setItemInMainHand(item);
 			}
@@ -319,7 +338,7 @@ public class PossessingPlayer {
 		LivingEntity entity = (LivingEntity) Bukkit.getUnsafe().deserializeEntity(entityData, player.getWorld(), true);
 
 		entity.spawnAt(player.getLocation());
-		startPossessing(player, entity);
+		startPossessing(player, entity, null, true);
 		checkPossessedExtraItems(player); // ToDo: restore inventory? // TODO
 
 		return true;
@@ -395,9 +414,9 @@ public class PossessingPlayer {
 
 		if (!player.getInventory().contains(RequiemItems.HOST_REVOCATOR)) { // TODO should also be soulbound
 			if (ItemStack.isEmpty(player.getInventory().getItem(8)))
-				player.getInventory().setItem(8, new ItemStack(RequiemItems.HOST_REVOCATOR));
+				player.getInventory().setItem(8, ItemStack.of(RequiemItems.HOST_REVOCATOR));
 			else
-				player.getInventory().addItem(new ItemStack(RequiemItems.HOST_REVOCATOR));
+				player.getInventory().addItem(ItemStack.of(RequiemItems.HOST_REVOCATOR));
 		}
 		return true;
 	}

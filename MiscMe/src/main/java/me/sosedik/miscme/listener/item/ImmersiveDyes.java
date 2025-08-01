@@ -170,7 +170,7 @@ public class ImmersiveDyes implements Listener {
 				newData.setFacing(oldData.getFacing());
 				block.setBlockData(newData);
 				if (apply == Material.PISTON)
-					block.getWorld().dropItemNaturally(block.getLocation().center(), new ItemStack(Material.SLIME_BALL));
+					block.getWorld().dropItemNaturally(block.getLocation().center(), ItemStack.of(Material.SLIME_BALL));
 				if (oldData.isExtended()) {
 					block = block.getRelative(oldData.getFacing());
 					if (block.getBlockData() instanceof PistonHead head) {

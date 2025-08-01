@@ -43,7 +43,7 @@ public class PickableSnow implements Listener {
 			}
 		} else if (block.getType() == Material.SNOW_BLOCK) {
 			event.setCancelled(true);
-			player.getInventory().setItemInMainHand(new ItemStack(Material.SNOWBALL));
+			player.getInventory().setItemInMainHand(ItemStack.of(Material.SNOWBALL));
 			block.setType(Material.SNOW);
 			block.emitSound(Sound.BLOCK_SNOW_HIT, 1F, 1F);
 			if (block.getBlockData() instanceof Snow snow) {

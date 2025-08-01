@@ -53,7 +53,7 @@ public class FlowerBouquetAttackEffects implements Listener {
 		if (item.getType() != TrappedNewbieItems.FLOWER_BOUQUET) return;
 
 		Location loc = event.getEntity().getLocation().addY(event.getEntity().getHeight() - 0.1);
-		Tag.SMALL_FLOWERS.getValues().forEach(flower -> SprayItemDrops.spawnSpray(loc, new ItemStack(flower)));
+		Tag.SMALL_FLOWERS.getValues().forEach(flower -> SprayItemDrops.spawnSpray(loc, ItemStack.of(flower)));
 	}
 
 }

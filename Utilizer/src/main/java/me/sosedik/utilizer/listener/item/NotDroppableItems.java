@@ -1,5 +1,6 @@
 package me.sosedik.utilizer.listener.item;
 
+import io.papermc.paper.event.player.PlayerInventorySlotChangeEvent;
 import me.sosedik.utilizer.dataset.UtilizerTags;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -32,12 +33,11 @@ public class NotDroppableItems implements Listener {
 
 		ItemStack item;
 		if (event.getAction() == InventoryAction.HOTBAR_SWAP) {
+			if (event.getSlot() != event.getRawSlot()) return; // Player inventory
 			int slot = event.getHotbarButton();
 			if (slot == -1) {
-				if (event.getSlot() != event.getRawSlot()) return; // Player inv
 				item = player.getInventory().getItemInOffHand();
 			} else {
-				if (event.getSlot() == event.getRawSlot()) return;
 				item = player.getInventory().getItem(slot);
 			}
 		} else if (event.isShiftClick()) {
@@ -64,6 +64,26 @@ public class NotDroppableItems implements Listener {
 				return;
 			}
 		}
+	}
+
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onClick(InventoryClickEvent event) {
+		ItemStack currentItem = event.getCurrentItem();
+		if (ItemStack.isEmpty(currentItem)) return;
+
+		if (UtilizerTags.MATERIAL_AIR.isTagged(currentItem.getType()))
+			event.setCancelled(true);
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void onAcquire(PlayerInventorySlotChangeEvent event) {
+		if (event.getSlot() == event.getRawSlot()) return; // Not a player inventory
+
+		ItemStack currentItem = event.getPlayer().getInventory().getItem(event.getSlot());
+		if (ItemStack.isEmpty(currentItem)) return;
+		if (!UtilizerTags.MATERIAL_AIR.isTagged(currentItem.getType())) return;
+
+		currentItem.setAmount(0);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)

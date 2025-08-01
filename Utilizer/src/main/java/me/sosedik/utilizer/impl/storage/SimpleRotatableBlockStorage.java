@@ -34,7 +34,7 @@ public class SimpleRotatableBlockStorage extends BlockDataStorageHolder {
 
 	private ItemDisplay createDisplay() {
 		return this.block.getWorld().spawn(this.block.getLocation().center(), ItemDisplay.class, display -> {
-			display.setItemStack(new ItemStack(requireMatchingMaterial()));
+			display.setItemStack(ItemStack.of(requireMatchingMaterial()));
 			display.setPersistent(false);
 			Transformation transformation = display.getTransformation();
 			transformation.getLeftRotation().set(switch (facing) {

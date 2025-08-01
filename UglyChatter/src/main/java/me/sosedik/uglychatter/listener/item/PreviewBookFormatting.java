@@ -48,7 +48,7 @@ public class PreviewBookFormatting implements Listener {
 		if (!(item.getItemMeta() instanceof BookMeta oldMeta)) return false; // TODO yeet ItemMeta
 
 		if (item.getType() != Material.WRITTEN_BOOK) {
-			item = new ItemStack(Material.WRITTEN_BOOK);
+			item = ItemStack.of(Material.WRITTEN_BOOK);
 			if (!(item.getItemMeta() instanceof BookMeta meta)) return false;
 
 			item.setItemMeta(meta.toBuilder().title(DUMMY_AUTHOR).author(DUMMY_AUTHOR).pages(oldMeta.pages()).build());

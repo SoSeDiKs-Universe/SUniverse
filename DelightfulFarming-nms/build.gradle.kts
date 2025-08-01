@@ -1,10 +1,12 @@
 import net.minecrell.pluginyml.paper.PaperPluginDescription
 
-description = "Endless farming simulator (so fun!)"
+description = "Endless farming simulator (so fun!) for sweet-sweet sugar eaters"
 
 dependencies {
     compileOnly(project(":Utilizer"))
     compileOnly(project(":ResourceLib-nms"))
+
+    compileOnly("de.tr7zw:item-nbt-api-plugin:${project.property("nbtApiVersion")}")
 }
 
 paper {
@@ -20,6 +22,10 @@ paper {
     }
 
     serverDependencies {
+        register("NBTAPI") {
+            load = PaperPluginDescription.RelativeLoadOrder.BEFORE
+            required = true
+        }
         register("Utilizer") {
             load = PaperPluginDescription.RelativeLoadOrder.BEFORE
             required = true

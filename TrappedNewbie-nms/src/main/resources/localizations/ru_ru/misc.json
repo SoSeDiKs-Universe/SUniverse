@@ -1,10 +1,22 @@
 {
 	"item.modifier.blazified": "<gray><i>Блазифицированный",
 	"item.modifier.fragile": "<gray><i>Хрупкий",
-	"item.modifier.letter.friendship": "<red><i>Содержит силу дружбы",
+	"item.modifier.letter.friendship": [
+		"<red><i>Содержит силу дружбы",
+		"<!i><yellow><key:key.use><gray> по игроку с пустой рукой,",
+		"<!i><gray>чтобы предложить дружбу"
+	],
+	"item.modifier.letter.friendship.bound": "<gray><!i>Дружеское предложение от <from> для <to>",
+	"item.modifier.letter.friendship.bound.you": [
+		"<gray><!i>Дружеское предложение от <from>",
+		"<!i><yellow><key:key.use><gray> по ним этим письмом, чтобы принять! "
+	],
 	"limbo.welcome": "Хм, ещё один?",
-	"limbo.welcome.ignored": "Собираетесь меня вот так игнорировать, правда?",
-	"limbo.friendship": "Вы подружились со <gold>странствующим торговцем</gold>!",
+	"limbo.welcome.interacted": "Да-да, хорошо! Следуйте инструкциям на экране!",
+	"limbo.welcome.ignored": "Собираетесь меня вот так игнорировать, правда? Буквально на экране есть инструкции…",
+	"limbo.free_letter_already_obtained": "Эй, Вы ещё не использовали предыдущий!",
+	"friendship.limbo": "Вы подружились со <gold>странствующим торговцем</gold>!",
+	"friendship.player": "Вы подружились с <gold><player></gold>!",
 	"break.light": "Здесь слишком темно, чтобы ломать блоки",
 	"advancement.reward.exp": "<blue><exp> <plural:ru_ru:единица|единицы|единиц:'<exp_raw>'> опыта",
 	"advancement.reward.shearable_creepers": "<yellow>+ Способность стричь незаряженных криперов",

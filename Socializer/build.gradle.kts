@@ -7,6 +7,8 @@ dependencies {
     compileOnly(project(":ResourceLib-nms"))
     compileOnly(project(":UglyChatter"))
 
+    compileOnly("de.tr7zw:item-nbt-api-plugin:${project.property("nbtApiVersion")}")
+
     compileOnly("org.incendo:cloud-paper:${project.property("cloudImplVersion")}")
     compileOnly("org.incendo:cloud-annotations:${project.property("cloudVersion")}")
 
@@ -23,6 +25,10 @@ paper {
     generateLibrariesJson = true
 
     serverDependencies {
+        register("NBTAPI") {
+            load = PaperPluginDescription.RelativeLoadOrder.BEFORE
+            required = true
+        }
         register("Utilizer") {
             load = PaperPluginDescription.RelativeLoadOrder.BEFORE
             required = true

@@ -24,7 +24,7 @@ public class ChoppingBlockCrafting implements CustomRecipe {
 	private final int max;
 
 	public ChoppingBlockCrafting(Material base, Material result, int min, int max) {
-		this(base, new ItemStack(result), min, max);
+		this(base, ItemStack.of(result), min, max);
 	}
 
 	public ChoppingBlockCrafting(Material base, ItemStack result, int min, int max) {

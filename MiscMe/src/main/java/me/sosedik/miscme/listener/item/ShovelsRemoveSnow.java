@@ -35,7 +35,7 @@ public class ShovelsRemoveSnow implements Listener {
 			event.setCancelled(true);
 			event.getPlayer().swingMainHand();
 			block.emitSound(Sound.BLOCK_SNOW_BREAK, 1F, 1F);
-			block.getWorld().dropItemNaturally(block.getLocation().center(), new ItemStack(Material.SNOWBALL));
+			block.getWorld().dropItemNaturally(block.getLocation().center(), ItemStack.of(Material.SNOWBALL));
 			if (snow.getLayers() == snow.getMinimumLayers()) {
 				block.setType(Material.AIR);
 			} else {
@@ -47,7 +47,7 @@ public class ShovelsRemoveSnow implements Listener {
 			event.getPlayer().swingMainHand();
 			block.setType(Material.SNOW);
 			block.emitSound(Sound.BLOCK_SNOW_BREAK, 1F, 1F);
-			block.getWorld().dropItemNaturally(block.getLocation().center(), new ItemStack(Material.SNOWBALL));
+			block.getWorld().dropItemNaturally(block.getLocation().center(), ItemStack.of(Material.SNOWBALL));
 			if (block.getBlockData() instanceof Snow snow) {
 				snow.setLayers(snow.getMaximumLayers() - 1);
 				block.setBlockData(snow);

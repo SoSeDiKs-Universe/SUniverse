@@ -70,7 +70,7 @@ public class TNTDefuse implements Listener {
 
 		event.setCancelled(true);
 		tnt.remove();
-		tnt.getWorld().dropItemNaturally(tnt.getLocation(), new ItemStack(tnt instanceof TNTPrimed ? Material.TNT : Material.TNT_MINECART));
+		tnt.getWorld().dropItemNaturally(tnt.getLocation(), ItemStack.of(tnt instanceof TNTPrimed ? Material.TNT : Material.TNT_MINECART));
 		tnt.emitSound(Sound.BLOCK_LAVA_EXTINGUISH, 0.75F, 1F);
 		tnt.getWorld().spawnParticle(Particle.CLOUD, tnt.getLocation().addY(0.25), 20, 0.075F, 0.1F, 0.075F, 0.1F);
 	}

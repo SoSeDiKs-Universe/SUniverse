@@ -2,5 +2,8 @@
 	"item.modifier.glowy": "<gray><i>Сяючий",
 	"preferences.title": "Налаштування",
 	"preferences.done": "Готово",
-	"preferences.preference.am_pm": "12-годинний годинник (AM-PM)"
+	"preferences.preference.am_pm": "12-годинний годинник (AM-PM)",
+	"disconnect.server.closed": "Сервер тимчасово вимкнено",
+	"disconnect.server.restart": "Сервер перезавантажується",
+	"server.unknown_command": "<yellow>Невідома команда <red><kaomoji:pain>"
 }

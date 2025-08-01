@@ -99,9 +99,9 @@ public class BossBarTask extends BukkitRunnable {
 		}
 
 		if (progressionTask != null) {
-			@Nullable Component[] task = progressionTask.getDisplay();
-			bossBars[1].name(task[0] == null ? Component.empty() : combine(Component.space(), PREFIX, task[0], PREFIX));
-			bossBars[2].name(task[1] == null ? Component.empty() : task[1]);
+			Component[] task = progressionTask.getDisplay();
+			bossBars[1].name(task == null || task[0] == null ? Component.empty() : combine(Component.space(), PREFIX, task[0], PREFIX));
+			bossBars[2].name(task == null || task[1] == null ? Component.empty() : task[1]);
 			bossBars[3].name(Component.empty());
 			return;
 		}

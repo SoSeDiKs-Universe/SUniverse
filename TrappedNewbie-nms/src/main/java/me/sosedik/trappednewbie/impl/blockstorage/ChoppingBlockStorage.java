@@ -78,7 +78,7 @@ public class ChoppingBlockStorage extends BlockDataStorageHolder {
 		if (tryToPickup(player, EquipmentSlot.HAND) || tryToPickup(player, EquipmentSlot.OFF_HAND)) {
 			event.setCancelled(true);
 			this.currentItem = null;
-			this.display.setItemStack(new ItemStack(TrappedNewbieItems.MATERIAL_AIR));
+			this.display.setItemStack(ItemStack.of(TrappedNewbieItems.MATERIAL_AIR));
 		}
 	}
 
@@ -146,7 +146,7 @@ public class ChoppingBlockStorage extends BlockDataStorageHolder {
 		if (result != null)
 			getBlock().getWorld().dropItemNaturally(calcDisplayLocation(), result);
 		this.currentItem = null;
-		this.display.setItemStack(new ItemStack(TrappedNewbieItems.MATERIAL_AIR));
+		this.display.setItemStack(ItemStack.of(TrappedNewbieItems.MATERIAL_AIR));
 
 		return true;
 	}
@@ -161,7 +161,7 @@ public class ChoppingBlockStorage extends BlockDataStorageHolder {
 		Location loc = calcDisplayLocation();
 		return loc.getWorld().spawn(loc, ItemDisplay.class, display -> {
 			display.setPersistent(false);
-			display.setItemStack(this.currentItem == null ? new ItemStack(TrappedNewbieItems.MATERIAL_AIR) : this.currentItem);
+			display.setItemStack(this.currentItem == null ? ItemStack.of(TrappedNewbieItems.MATERIAL_AIR) : this.currentItem);
 			Transformation transformation = display.getTransformation();
 			transformation.getTranslation().set(0F, 0.2F, 0F);
 			transformation.getScale().set(0.4F);

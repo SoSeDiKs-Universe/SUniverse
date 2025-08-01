@@ -93,9 +93,11 @@ public class DeathMakesPossessed implements Listener {
 			PossessingPlayer.migrateStatsToEntity(player, entity);
 			PossessingPlayer.markResurrected(entity);
 		});
-		EntityUtil.clearTargets(player);
-		PossessingPlayer.startPossessing(player, possessed);
-		new PlayerResurrectEvent(player, possessed).callEvent();
+		Runnable action = () -> EntityUtil.clearTargets(player);
+		if (PossessingPlayer.startPossessing(player, possessed, action))
+			new PlayerResurrectEvent(player, possessed).callEvent();
+		else
+			possessed.remove();
 	}
 
 }

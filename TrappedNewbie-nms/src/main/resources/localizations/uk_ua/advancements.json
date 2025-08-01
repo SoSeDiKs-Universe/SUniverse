@@ -1,11 +1,20 @@
 {
 	"adv.trappednewbie.requiem.tab.title": "Мертвонароджений",
 	"adv.trappednewbie.requiem.root.title": "Зустріч по той бік",
-	"adv.trappednewbie.requiem.root.description": "Ласкаво просимо на борт, мандрівна душе",
+	"adv.trappednewbie.requiem.root.description": [
+		"Ласкаво просимо на борт, мандрівна душе!",
+		"",
+		"Потоваришуйте з <icon:trapped_newbie:wandering_trader_head> <gold>мандрівним крамарем</gold> за допомоги листа дружби.",
+		"Ви також можете потоваришувати з іншими гравцями."
+	],
 	"adv.trappednewbie.requiem.holder.title": "<aqua>Всесвіт Сусіда",
 	"adv.trappednewbie.requiem.holder.description": "Раді бачити Вас з нами!",
 	"adv.trappednewbie.requiem.holder.title.limbo": "Ласкаво просимо до Лімбо",
-	"adv.trappednewbie.requiem.holder.description.limbo": "Спокійне місце",
+	"adv.trappednewbie.requiem.holder.description.limbo": [
+		"Спокійне місце",
+		"",
+		"<dark_gray>(примітка: це досягнення завжди показує Ваш поточний світ)"
+	],
 	"adv.trappednewbie.requiem.holder.title.personal": "<black>Порожнеча",
 	"adv.trappednewbie.requiem.holder.description.personal": "Ваше особисте середовище проживання",
 	"adv.trappednewbie.requiem.holder.title.personal.guest": "<black>Порожнеча гравця <owner>",
@@ -27,11 +36,7 @@
 	"adv.trappednewbie.requiem.holder.title.resource.dreamland.guest": "<yellow>Сновидіння гравця <owner>",
 	"adv.trappednewbie.requiem.holder.description.resource.dreamland.guest": "Все Ваше існування залежить від усвідомленого сновидіння гравця <owner>",
 	"adv.trappednewbie.requiem.brave_new_world.title": "Кардинально новий світ",
-	"adv.trappednewbie.requiem.brave_new_world.description": [
-		"Отримайте та використайте листи дружби від <icon:trapped_newbie:wandering_trader_head> <gold>мандрівного крамаря</gold>, а потім стрибніть у порожнечу.",
-		"",
-		"Це лише початок!"
-	],
+	"adv.trappednewbie.requiem.brave_new_world.description": "Стрибніть у порожнечу. Це лише початок!",
 	"adv.trappednewbie.requiem.first_possession.title": "Це тіло мені підходить",
 	"adv.trappednewbie.requiem.first_possession.description": "Оволодійте управлінням над іншою істотою",
 	"adv.trappednewbie.requiem.good_as_new.title": "Як новенький!",
@@ -147,7 +152,7 @@
 	"adv.trappednewbie.basics.moar_tools.title": "БІЛЬШЕ інструментів",
 	"adv.trappednewbie.basics.moar_tools.description": "Створіть кам'яні кайло, сокиру, лопату, мотику та меч",
 	"adv.trappednewbie.basics.body_helper.title": "Володіти чужим тілом важко…",
-	"adv.trappednewbie.basics.body_helper.description": "То чому б не захопити його? На щастя, людиноподібні зомбі — ідеальні маріонетки.<br><br>Проведіть ритуал «Меланхолія душі», опанувавши підходящого зомбі, щоб з'єднати ваші душі й отримати повний контроль над тілом.<br><br>Якщо зомбі немає, невеликий дощ може допомогти з цим.",
+	"adv.trappednewbie.basics.body_helper.description": "То чому б не захопити його? На щастя, людиноподібні зомбі — ідеальні маріонетки.<br><br>Проведіть ритуал «Меланхолія душі», опанувавши підходящого зомбі, щоб з'єднати ваші душі й отримати повний контроль над тілом.",
 	"adv.trappednewbie.basics.make_a_totem_base.title": "Віруючий",
 	"adv.trappednewbie.basics.make_a_totem_base.description": "Використайте ніж на колоді в присяді, щоб вирізати основу тотема",
 	"adv.trappednewbie.basics.perform_a_ritual.title": "Задобрювач богів",

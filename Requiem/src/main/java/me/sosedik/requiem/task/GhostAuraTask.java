@@ -24,14 +24,14 @@ public class GhostAuraTask extends BukkitRunnable {
 
 	@Override
 	public void run() {
-		if (!player.isOnline() || !GhostyPlayer.isGhost(player)) {
+		if (!this.player.isOnline() || !GhostyPlayer.isGhost(this.player)) {
 			cancel();
 			return;
 		}
 
-		player.sendRedTint(1);
-		Location loc = player.getLocation().addY(player.getHeight() / 2);
-		player.spawnParticle(Particle.SOUL, loc, 2, 0.03, 0.08, 0.03, 0.04);
+		this.player.sendRedTint(1);
+		Location loc = this.player.getLocation().addY(this.player.getHeight() / 2);
+		this.player.spawnParticle(Particle.SOUL, loc, 2, 0.03, 0.08, 0.03, 0.04);
 		loc.getNearbyEntitiesByType(Animals.class, 2.5).forEach(animal -> animal.setPanicTicks(80));
 	}
 
@@ -39,7 +39,7 @@ public class GhostAuraTask extends BukkitRunnable {
 	public void cancel() {
 		super.cancel();
 
-		player.sendRedTint(0);
+		this.player.sendRedTint(0);
 	}
 
 }

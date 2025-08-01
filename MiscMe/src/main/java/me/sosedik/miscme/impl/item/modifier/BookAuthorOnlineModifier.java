@@ -29,8 +29,8 @@ import static me.sosedik.utilizer.api.message.Mini.combined;
 public class BookAuthorOnlineModifier extends ItemModifier {
 
 	private static final Pattern VALID_NICKNAME = Pattern.compile("^[a-zA-Z0-9_]{2,16}$");
-	private static final Component ONLINE = Component.text(" ● ", NamedTextColor.GREEN);
-	private static final Component OFFLINE = Component.text(" ● ", NamedTextColor.RED);
+	private static final Component ONLINE = Component.text("●", NamedTextColor.GREEN);
+	private static final Component OFFLINE = Component.text("●", NamedTextColor.RED);
 
 	public BookAuthorOnlineModifier(NamespacedKey modifierId) {
 		super(modifierId);
@@ -74,13 +74,13 @@ public class BookAuthorOnlineModifier extends ItemModifier {
 	public static @Nullable Component getStatus(String author) {
 		Player playerExact = Bukkit.getPlayerExact(author);
 		if (playerExact != null)
-			return combined(playerExact.displayName(), ONLINE);
+			return combined(playerExact.displayName(), Component.space(), ONLINE);
 
 		OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayerIfCached(author);
 		if (offlinePlayer == null) offlinePlayer = Bukkit.getOfflinePlayer(author);
 
 		if (offlinePlayer.hasPlayedBefore())
-			return combined(Component.text(author), OFFLINE);
+			return combined(Component.text(author), Component.space(), OFFLINE);
 
 		return null;
 	}
@@ -94,11 +94,11 @@ public class BookAuthorOnlineModifier extends ItemModifier {
 	public static @Nullable Component getStatus(UUID author) {
 		Player player = Bukkit.getPlayer(author);
 		if (player != null)
-			return combined(ONLINE, player.displayName());
+			return combined(ONLINE, Component.space(), player.displayName());
 
 		OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(author);
 		String name = offlinePlayer.getName();
-		return name == null ? null : combined(OFFLINE, Component.text(name));
+		return name == null ? null : combined(OFFLINE, Component.space(), Component.text(name));
 	}
 
 }

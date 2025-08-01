@@ -129,13 +129,13 @@ public class TrappedNewbieAdvancements {
 	public static final AdvancementManager MANAGER = new AdvancementManager(new JsonStorage(TrappedNewbie.instance()));
 
 	public static final AdvancementTab REQUIEM_TAB = buildTab("requiem", MANAGER).inverseY().backgroundPathBlock(Material.SOUL_SAND).icon(Material.SKELETON_SKULL).build();
-	public static final IRootAdvancement REQUIEM_ROOT = buildRoot(REQUIEM_TAB).display(display().xy(0F, 0F).noAnnounceChat().withAdvancementFrame(AdvancementFrame.SQUIRCLE).icon(Material.SUNFLOWER)).requiredProgress(requirements("interact", "open"))
+	public static final IRootAdvancement REQUIEM_ROOT = buildRoot(REQUIEM_TAB).display(display().xy(0F, 0F).noAnnounceChat().withAdvancementFrame(AdvancementFrame.SQUIRCLE).icon(Material.SUNFLOWER)).requiredProgress(requirements("interact", "open", "letter", "friendship"))
 		.visibilityRule(hidden())
 		.buildAndRegister();
 	public static final IAdvancement OPENING_HOLDER = buildFake(REQUIEM_ROOT, "holder").display(new OpeningHolderAdvancementDisplay().x(-1.25F).noAnnounceChat().withAdvancementFrame(AdvancementFrame.SPEECH_BUBBLE).icon(WANDERING_TRADER_HEAD))
 		.requiredProgress(alwaysDone())
 		.buildAndRegister();
-	public static final IAdvancement BRAVE_NEW_WORLD = buildBase(REQUIEM_ROOT, "brave_new_world").display(display().x(1F).noAnnounceChat().icon(braveNewWorldItem())).requiredProgress(requirements("friendship", "fall")).buildAndRegister();
+	public static final IAdvancement BRAVE_NEW_WORLD = buildBase(REQUIEM_ROOT, "brave_new_world").display(display().x(1F).noAnnounceChat().icon(braveNewWorldItem())).buildAndRegister();
 	public static final IAdvancement FIRST_POSSESSION = buildBase(BRAVE_NEW_WORLD, "first_possession").display(display().x(1.25F).withAdvancementFrame(AdvancementFrame.SHARP).icon(RequiemItems.HOST_REVOCATOR))
 		.visibilityRule(parentGranted())
 		.buildAndRegister();
@@ -151,7 +151,7 @@ public class TrappedNewbieAdvancements {
 
 	public static final AdvancementTab BASICS_TAB = buildTab("basics", MANAGER).inverseY().backgroundPathBlock(Material.GRAVEL).build();
 	public static final IRootAdvancement BASICS_ROOT = buildRoot(BASICS_TAB).display(display().xy(0F, 0F).withAdvancementFrame(AdvancementFrame.SQUIRCLE).icon(Material.ROOTED_DIRT))
-			.visibilityRule(ifDone(false, FIRST_POSSESSION))
+			.visibilityRule(ifDone(false, BRAVE_NEW_WORLD))
 			.requiredProgress(alwaysDone())
 			.buildAndRegister();
 	public static final IAdvancement GET_A_FIBER = buildBase(BASICS_ROOT, "get_a_fiber").display(display().x(1.5F).withAdvancementFrame(AdvancementFrame.SHARP).icon(TrappedNewbieItems.FIBER))

@@ -11,6 +11,7 @@ dependencies {
     compileOnly(project(":Moves"))
     compileOnly(project(":FancyMotd"))
     compileOnly(project(":Requiem"))
+    compileOnly(project(":Socializer"))
     compileOnly(project(":DelightfulFarming-nms"))
 
     compileOnly("me.sosedik:PacketAdvancements-api:1.0-SNAPSHOT")
@@ -74,6 +75,10 @@ paper {
             required = true
         }
         register("Requiem") {
+            load = PaperPluginDescription.RelativeLoadOrder.BEFORE
+            required = true
+        }
+        register("Socializer") {
             load = PaperPluginDescription.RelativeLoadOrder.BEFORE
             required = true
         }

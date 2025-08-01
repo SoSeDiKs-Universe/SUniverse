@@ -69,7 +69,7 @@ public class FlintToFlakedFlint implements Listener {
 			this.usesMap.remove(player.getUniqueId());
 			item.subtract();
 			player.emitSound(Sound.sound(SUCCESS_SOUND, Sound.Source.PLAYER, 1F, 0.9F + (float) Math.random() * 0.2F));
-			block.getWorld().dropItemNaturally(block.getLocation().center(), new ItemStack(TrappedNewbieItems.FLAKED_FLINT, Math.random() < 0.25 ? 3 : 2));
+			block.getWorld().dropItemNaturally(block.getLocation().center(), ItemStack.of(TrappedNewbieItems.FLAKED_FLINT, Math.random() < 0.25 ? 3 : 2));
 		} else {
 			this.usesMap.replace(player.getUniqueId(), currentUse);
 			player.emitSound(Sound.sound(FAIL_SOUND, Sound.Source.PLAYER, 1F, 0.9F + (float) Math.random() * 0.2F));

@@ -62,13 +62,12 @@ public abstract class FancierAdvancementDisplay<T extends FancierAdvancementDisp
 
 	@Override
 	public T copyFrom(AdvancementDisplay display) {
-		super.copyFrom(display);
 		if (display instanceof FancierAdvancementDisplay<?> fancierDisplay) {
 			this.advancement = fancierDisplay.advancement;
 			this.advancementFrame = fancierDisplay.advancementFrame;
 			this.announcementMessage = fancierDisplay.announcementMessage;
 		}
-		return (T) this;
+		return super.copyFrom(display);
 	}
 
 	@Override
@@ -108,7 +107,7 @@ public abstract class FancierAdvancementDisplay<T extends FancierAdvancementDisp
 		var messenger = viewer == null ? Messenger.messenger(LangOptionsStorage.getDefaultLangOptions()) : Messenger.messenger(viewer);
 		Component description = messenger.getMessage("adv." + this.advancement.getKey().value().replace('/', '.') + ".description");
 		Component parent = getFancyDescriptionParent();
-		return parent == null ? description : parent.append(description);
+		return parent.append(description);
 	}
 
 	@Override

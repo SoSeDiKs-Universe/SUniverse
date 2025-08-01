@@ -44,58 +44,58 @@ public class TrappedNewbieRecipes {
 	}
 
 	public static void addRecipes() {
-		new ShapedCraft(new ItemStack(TrappedNewbieItems.PAPER_PLANE, 3), trappedNewbieKey("paper_plane"), "P P", " P ")
+		new ShapedCraft(ItemStack.of(TrappedNewbieItems.PAPER_PLANE, 3), trappedNewbieKey("paper_plane"), "P P", " P ")
 			.withGroup("paper_plane")
 			.addIngredients('P', Material.PAPER)
 			.register();
 
-		new ShapelessCraft(new ItemStack(TrappedNewbieItems.TWINE), trappedNewbieKey("twine"))
+		new ShapelessCraft(ItemStack.of(TrappedNewbieItems.TWINE), trappedNewbieKey("twine"))
 			.addIngredients(TrappedNewbieItems.FIBER, 3)
 			.register();
 
-		new ShapedCraft(new ItemStack(TrappedNewbieItems.FLINT_KNIFE), trappedNewbieKey("flint_knife"), "FT", "FS")
+		new ShapedCraft(ItemStack.of(TrappedNewbieItems.FLINT_KNIFE), trappedNewbieKey("flint_knife"), "FT", "FS")
 			.withCategory(CraftingBookCategory.EQUIPMENT)
 			.addIngredients('T', Material.STRING, TrappedNewbieItems.TWINE) // HORSEHAIR
 			.addIngredients('S', Material.STICK, TrappedNewbieItems.ROUGH_STICK)
 			.addIngredients('F', TrappedNewbieItems.FLAKED_FLINT)
 			.register();
 
-		new ShapedCraft(new ItemStack(TrappedNewbieItems.FLINT_AXE), trappedNewbieKey("flint_axe"), "FF", "ST")
+		new ShapedCraft(ItemStack.of(TrappedNewbieItems.FLINT_AXE), trappedNewbieKey("flint_axe"), "FF", "ST")
 			.withCategory(CraftingBookCategory.EQUIPMENT)
 			.addIngredients('S', Material.STICK, TrappedNewbieItems.ROUGH_STICK)
 			.addIngredients('T', Material.STRING, TrappedNewbieItems.TWINE) // HORSEHAIR
 			.addIngredients('F', TrappedNewbieItems.FLAKED_FLINT)
 			.register();
 
-		new ShapedCraft(new ItemStack(TrappedNewbieItems.FLINT_SHEARS), trappedNewbieKey("flint_shears"), "FT", "FF")
+		new ShapedCraft(ItemStack.of(TrappedNewbieItems.FLINT_SHEARS), trappedNewbieKey("flint_shears"), "FT", "FF")
 			.withCategory(CraftingBookCategory.EQUIPMENT)
 			.addIngredients('T', Material.STRING, TrappedNewbieItems.TWINE) // HORSEHAIR
 			.addIngredients('F', TrappedNewbieItems.FLAKED_FLINT)
 			.register();
 
-		new ShapelessCraft(new ItemStack(TrappedNewbieItems.ROUGH_STICK), trappedNewbieKey("rough_stick"))
+		new ShapelessCraft(ItemStack.of(TrappedNewbieItems.ROUGH_STICK), trappedNewbieKey("rough_stick"))
 			.addIngredients(TrappedNewbieTags.BRANCHES.getValues())
 			.addIngredients('S', UtilizerTags.SHEARS.getValues())
 			.addIngredients('S', UtilizerTags.KNIFES.getValues())
 			.register();
-		new ShapelessCraft(new ItemStack(Material.STICK), trappedNewbieKey("stick"))
+		new ShapelessCraft(ItemStack.of(Material.STICK), trappedNewbieKey("stick"))
 			.addIngredients(TrappedNewbieItems.ROUGH_STICK)
 			.addIngredients(UtilizerTags.KNIFES.getValues())
 			.register();
 
-		new ShapedCraft(new ItemStack(TrappedNewbieItems.GRASS_MESH), trappedNewbieKey("grass_mesh"), "TS", "ST")
+		new ShapedCraft(ItemStack.of(TrappedNewbieItems.GRASS_MESH), trappedNewbieKey("grass_mesh"), "TS", "ST")
 			.addIngredients('S', Material.STICK, TrappedNewbieItems.ROUGH_STICK)
 			.addIngredients('T', Material.STRING, TrappedNewbieItems.TWINE) // HORSEHAIR
 			.register();
 
-		new ShapedCraft(new ItemStack(TrappedNewbieItems.COBBLESTONE_HAMMER), trappedNewbieKey("cobblestone_hammer"), "CT", "SC")
+		new ShapedCraft(ItemStack.of(TrappedNewbieItems.COBBLESTONE_HAMMER), trappedNewbieKey("cobblestone_hammer"), "CT", "SC")
 			.withCategory(CraftingBookCategory.EQUIPMENT)
 			.addIngredients('T', Material.STRING, TrappedNewbieItems.TWINE) // HORSEHAIR
 			.addIngredients('S', Material.STICK, TrappedNewbieItems.ROUGH_STICK)
 			.addIngredients('C', Material.COBBLESTONE)
 			.register();
 
-		new ShapedCraft(new ItemStack(TrappedNewbieItems.FLINT_SHOVEL), trappedNewbieKey("flint_shovel_1"), "FT", "S ")
+		new ShapedCraft(ItemStack.of(TrappedNewbieItems.FLINT_SHOVEL), trappedNewbieKey("flint_shovel_1"), "FT", "S ")
 			.withGroup("flint_shovel")
 			.withCategory(CraftingBookCategory.EQUIPMENT)
 			.addIngredients('S', Material.STICK, TrappedNewbieItems.ROUGH_STICK)
@@ -103,7 +103,7 @@ public class TrappedNewbieRecipes {
 			.addIngredients('F', TrappedNewbieItems.FLAKED_FLINT)
 			.register();
 
-		new ShapedCraft(new ItemStack(TrappedNewbieItems.FLINT_SHOVEL), trappedNewbieKey("flint_shovel_2"), "F ", "ST")
+		new ShapedCraft(ItemStack.of(TrappedNewbieItems.FLINT_SHOVEL), trappedNewbieKey("flint_shovel_2"), "F ", "ST")
 			.withGroup("flint_shovel")
 			.withCategory(CraftingBookCategory.EQUIPMENT)
 			.addIngredients('S', Material.STICK, TrappedNewbieItems.ROUGH_STICK)
@@ -111,38 +111,38 @@ public class TrappedNewbieRecipes {
 			.addIngredients('F', TrappedNewbieItems.FLAKED_FLINT)
 			.register();
 
-		new ShapedCraft(new ItemStack(TrappedNewbieItems.FLINT_PICKAXE), trappedNewbieKey("flint_pickaxe"), "FP", "SF")
+		new ShapedCraft(ItemStack.of(TrappedNewbieItems.FLINT_PICKAXE), trappedNewbieKey("flint_pickaxe"), "FP", "SF")
 			.withCategory(CraftingBookCategory.EQUIPMENT)
 			.addIngredients('S', Material.STICK, TrappedNewbieItems.ROUGH_STICK)
 			.addIngredients('F', Material.FLINT)
 			.addIngredients('P', Tag.PLANKS.getValues())
 			.register();
 
-		new ShapedCraft(new ItemStack(TrappedNewbieItems.FIRESTRIKER), trappedNewbieKey("firestriker"), "CS", "SF")
+		new ShapedCraft(ItemStack.of(TrappedNewbieItems.FIRESTRIKER), trappedNewbieKey("firestriker"), "CS", "SF")
 			.withCategory(CraftingBookCategory.EQUIPMENT)
 			.addIngredients('F', Material.FLINT)
 			.addIngredients('C', Tag.ITEMS_COALS.getValues())
 			.addIngredients('S', Material.STICK, TrappedNewbieItems.ROUGH_STICK)
 			.register();
 
-		new ShapedCraft(new ItemStack(TrappedNewbieItems.STEEL_AND_FLINT), trappedNewbieKey("steel_and_flint_1"), "F ", " S")
+		new ShapedCraft(ItemStack.of(TrappedNewbieItems.STEEL_AND_FLINT), trappedNewbieKey("steel_and_flint_1"), "F ", " S")
 			.withGroup("steel_and_flint")
 			.withCategory(CraftingBookCategory.EQUIPMENT)
 			.addIngredients('F', Material.FLINT)
 			.addIngredients('S', Material.IRON_INGOT)
 			.register();
-		new ShapedCraft(new ItemStack(TrappedNewbieItems.STEEL_AND_FLINT), trappedNewbieKey("steel_and_flint_2"), "F", "S")
+		new ShapedCraft(ItemStack.of(TrappedNewbieItems.STEEL_AND_FLINT), trappedNewbieKey("steel_and_flint_2"), "F", "S")
 			.withGroup("steel_and_flint")
 			.withCategory(CraftingBookCategory.EQUIPMENT)
 			.addIngredients('F', Material.FLINT)
 			.addIngredients('S', Material.IRON_INGOT)
 			.register();
 
-		new ShapedCraft(new ItemStack(TrappedNewbieItems.CLAY_KILN), trappedNewbieKey("clay_kiln"), "CCC", "C C", "CCC")
+		new ShapedCraft(ItemStack.of(TrappedNewbieItems.CLAY_KILN), trappedNewbieKey("clay_kiln"), "CCC", "C C", "CCC")
 			.addIngredients('C', Material.CLAY_BALL)
 			.register();
 
-		new ShapelessCraft(new ItemStack(TrappedNewbieItems.SLEEPING_BAG), trappedNewbieKey("sleeping_bag"))
+		new ShapelessCraft(ItemStack.of(TrappedNewbieItems.SLEEPING_BAG), trappedNewbieKey("sleeping_bag"))
 			.addIngredients('T', Material.STRING, TrappedNewbieItems.TWINE) // HORSEHAIR
 			.addIngredients(Tag.WOOL_CARPETS.getValues(), 3)
 			.withPreCheck(event -> {
@@ -159,7 +159,7 @@ public class TrappedNewbieRecipes {
 						continue;
 					}
 					if (carpet1 == type) {
-						event.setResult(new ItemStack(TrappedNewbieItems.SLEEPING_BAG).withColor(MiscUtil.getDyeColor(type, "CARPET")));
+						event.setResult(ItemStack.of(TrappedNewbieItems.SLEEPING_BAG).withColor(MiscUtil.getDyeColor(type, "CARPET")));
 						return;
 					}
 					if (carpet2 == null) {
@@ -167,12 +167,12 @@ public class TrappedNewbieRecipes {
 						continue;
 					}
 					if (carpet2 == type) {
-						event.setResult(new ItemStack(TrappedNewbieItems.SLEEPING_BAG).withColor(MiscUtil.getDyeColor(type, "CARPET")));
+						event.setResult(ItemStack.of(TrappedNewbieItems.SLEEPING_BAG).withColor(MiscUtil.getDyeColor(type, "CARPET")));
 						return;
 					}
 				}
 				if (carpet1 != null)
-					event.setResult(new ItemStack(TrappedNewbieItems.SLEEPING_BAG).withColor(MiscUtil.getDyeColor(carpet1, "CARPET")));
+					event.setResult(ItemStack.of(TrappedNewbieItems.SLEEPING_BAG).withColor(MiscUtil.getDyeColor(carpet1, "CARPET")));
 			})
 			.register();
 
@@ -190,7 +190,7 @@ public class TrappedNewbieRecipes {
 			.addIngredients('S', Material.STICK, TrappedNewbieItems.ROUGH_STICK)
 			.register();
 		TrappedNewbieTags.DRUMS.getValues().forEach(type -> {
-			new ShapedCraft(new ItemStack(type), type.getKey(), "EEE", "LWL", "WLW")
+			new ShapedCraft(ItemStack.of(type), type.getKey(), "EEE", "LWL", "WLW")
 				.withGroup("drum")
 				.addIngredients('E', TrappedNewbieTags.HIDES.getValues())
 				.addIngredients('E', Material.LEATHER)
@@ -234,14 +234,14 @@ public class TrappedNewbieRecipes {
 		addRockRecipe(TrappedNewbieItems.ICE_PEBBLE, Material.ICE);
 
 		TrappedNewbieTags.CHOPPING_BLOCKS.getValues().forEach(type -> {
-			new ShapelessCraft(new ItemStack(type), type.getKey())
+			new ShapelessCraft(ItemStack.of(type), type.getKey())
 				.withGroup("chopping_block")
 				.addIngredients(figureOutLog(type, "chopping_block"))
 				.register();
 		});
 
 		TrappedNewbieTags.WORK_STATIONS.getValues().forEach(type -> {
-			new ShapelessCraft(new ItemStack(type), type.getKey())
+			new ShapelessCraft(ItemStack.of(type), type.getKey())
 				.withGroup("work_station")
 				.addIngredients(figureOutLog(type, "work_station"))
 				.addIngredients(Tag.ITEMS_AXES.getValues())
@@ -252,26 +252,26 @@ public class TrappedNewbieRecipes {
 			Material base = type == TrappedNewbieItems.GLASS_SHARD ? Material.GLASS : Material.getMaterial(type.name().replace("_GLASS_SHARD", "_STAINED_GLASS"));
 			if (base == null) return;
 
-			new ShapelessCraft(new ItemStack(base), trappedNewbieKey(base.key().value() + "_from_shards"))
+			new ShapelessCraft(ItemStack.of(base), trappedNewbieKey(base.key().value() + "_from_shards"))
 				.withGroup("glass_from_shards")
 				.addIngredients(type, 4)
 				.register();
-			new ShapelessCraft(new ItemStack(type, 4), trappedNewbieKey(base.key().value() + "_to_shards"))
+			new ShapelessCraft(ItemStack.of(type, 4), trappedNewbieKey(base.key().value() + "_to_shards"))
 				.withGroup("glass_to_shards")
 				.addIngredients(base)
 				.addIngredients(TrappedNewbieTags.HAMMERS.getValues())
 				.register();
 		});
 
-		new FireCraft(new ItemStack(Material.BRICK), trappedNewbieKey("clay_ball_to_brick"))
+		new FireCraft(ItemStack.of(Material.BRICK), trappedNewbieKey("clay_ball_to_brick"))
 			.withBurnChance(0.1)
 			.addIngredients(Material.CLAY_BALL)
 			.register();
-		new FireCraft(new ItemStack(Material.BAKED_POTATO), trappedNewbieKey("potato_to_baked_potato"))
+		new FireCraft(ItemStack.of(Material.BAKED_POTATO), trappedNewbieKey("potato_to_baked_potato"))
 			.withBurnChance(0.2)
 			.addIngredients(Material.POTATO)
 			.register();
-		new FireCraft(new ItemStack(Material.CHARCOAL), trappedNewbieKey("logs_to_charcoal"))
+		new FireCraft(ItemStack.of(Material.CHARCOAL), trappedNewbieKey("logs_to_charcoal"))
 			.withBurnChance(0.2)
 			.addIngredients(Tag.LOGS.getValues())
 			.register();
@@ -311,7 +311,7 @@ public class TrappedNewbieRecipes {
 	}
 
 	private static void addFlowerBouquetRecipe() {
-		var recipe = new ShapelessCraft(new ItemStack(TrappedNewbieItems.FLOWER_BOUQUET), trappedNewbieKey("flower_bouquet"))
+		var recipe = new ShapelessCraft(ItemStack.of(TrappedNewbieItems.FLOWER_BOUQUET), trappedNewbieKey("flower_bouquet"))
 			.addIngredients('S', Material.STRING, TrappedNewbieItems.TWINE); // HORSEHAIR
 		for (int i = 0; i < 7; i++)
 			recipe.addIngredients(MiscUtil.rotate(i, Tag.ITEMS_FLOWERS.getValues()));
@@ -371,14 +371,14 @@ public class TrappedNewbieRecipes {
 	}
 
 	private static void addBranchRecipe(Material branch, Material sapling) {
-		new ShapelessCraft(new ItemStack(branch), trappedNewbieKey(sapling.key().value() + "_to_" + branch.key().value()))
+		new ShapelessCraft(ItemStack.of(branch), trappedNewbieKey(sapling.key().value() + "_to_" + branch.key().value()))
 			.withGroup("sapling_to_branches")
 			.addIngredients(sapling)
 			.register();
 	}
 
 	private static void addRockRecipe(Material rock, Material stone) {
-		new ShapedCraft(new ItemStack(stone), trappedNewbieKey(rock.key().value() + "_to_" + stone.key().value()), "RR", "RR")
+		new ShapedCraft(ItemStack.of(stone), trappedNewbieKey(rock.key().value() + "_to_" + stone.key().value()), "RR", "RR")
 			.withGroup("shards_to_block")
 			.addIngredients('R', rock)
 			.register();
@@ -422,7 +422,7 @@ public class TrappedNewbieRecipes {
 			for (Material material : materialChoice.getChoices()) {
 				List<ItemStack> replacements = map.get(material);
 				if (replacements == null) {
-					items.add(new ItemStack(material));
+					items.add(ItemStack.of(material));
 				} else {
 					modified = true;
 					items.addAll(replacements);

@@ -484,13 +484,13 @@ public class BlockBreakTask extends BukkitRunnable {
 			if (type == null)
 				this.display.remove();
 			else
-				this.display.setItemStack(new ItemStack(type));
+				this.display.setItemStack(ItemStack.of(type));
 		}
 
 		public void spawnDisplay(Location loc) {
 			this.display = loc.getWorld().spawn(loc, ItemDisplay.class, itemDisplay -> {
 				itemDisplay.setPersistent(false);
-				itemDisplay.setItemStack(new ItemStack(TrappedNewbieItems.MATERIAL_AIR));
+				itemDisplay.setItemStack(ItemStack.of(TrappedNewbieItems.MATERIAL_AIR));
 			});
 		}
 

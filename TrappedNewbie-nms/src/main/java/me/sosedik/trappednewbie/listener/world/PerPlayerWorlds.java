@@ -4,6 +4,7 @@ import com.destroystokyo.paper.event.player.PlayerConnectionCloseEvent;
 import io.papermc.paper.connection.PlayerConfigurationConnection;
 import io.papermc.paper.event.connection.PlayerConnectionValidateLoginEvent;
 import io.papermc.paper.event.entity.EntityPortalReadyEvent;
+import me.sosedik.delightfulfarming.feature.sugar.MealTime;
 import me.sosedik.limboworldgenerator.VoidChunkGenerator;
 import me.sosedik.miscme.task.CustomDayCycleTask;
 import me.sosedik.trappednewbie.TrappedNewbie;
@@ -43,8 +44,8 @@ import static java.util.Objects.requireNonNull;
 @NullMarked
 public class PerPlayerWorlds implements Listener {
 
-	private static final double DAY_TIME_TICK_INCREASE = 0.25; // 40 minutes
-	private static final double NIGHT_TIME_TICK_INCREASE = 0.5; // 20 minutes
+	private static final double DAY_TIME_TICK_INCREASE = 0.375; // 40 minutes
+	private static final double NIGHT_TIME_TICK_INCREASE = 0.25; // 20 minutes
 	
 	private static final List<World.Environment> RESOURCE_ENVIRONMENTS = List.of(
 		World.Environment.NORMAL, World.Environment.NETHER, World.Environment.THE_END
@@ -205,7 +206,9 @@ public class PerPlayerWorlds implements Listener {
 		new CustomDayCycleTask(world, () -> {
 			ServerTickManager serverTickManager = Bukkit.getServerTickManager();
 			if (serverTickManager.isFrozen()) return 0D;
-			double incrementTimeBy = world.isDayTime() ? DAY_TIME_TICK_INCREASE : NIGHT_TIME_TICK_INCREASE;
+
+			boolean nightTime = MealTime.NIGHT_SNACK.is(world.getTime());
+			double incrementTimeBy = nightTime ? NIGHT_TIME_TICK_INCREASE : DAY_TIME_TICK_INCREASE;
 
 			int sleepers = (int) Bukkit.getOnlinePlayers().stream().filter(Player::isDeeplySleeping).filter(Player::bedExists).count();
 			if (sleepers > 0) {

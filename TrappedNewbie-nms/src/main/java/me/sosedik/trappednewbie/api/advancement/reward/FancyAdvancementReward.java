@@ -6,6 +6,7 @@ import io.papermc.paper.datacomponent.item.BundleContents;
 import io.papermc.paper.datacomponent.item.ItemContainerContents;
 import me.sosedik.packetadvancements.api.advancement.IAdvancement;
 import me.sosedik.packetadvancements.imlp.reward.SimpleAdvancementRewardBuilder;
+import me.sosedik.requiem.feature.GhostyPlayer;
 import me.sosedik.trappednewbie.impl.item.modifier.AdvancementTrophyModifier;
 import me.sosedik.trappednewbie.listener.advancement.AdvancementTrophies;
 import me.sosedik.utilizer.api.message.Messenger;
@@ -41,6 +42,11 @@ public class FancyAdvancementReward extends SimpleAdvancementRewardBuilder<Fancy
 			if (completer != null)
 				sendAwardsInfo(completer);
 		});
+	}
+
+	@Override
+	public boolean shouldSkipGranting(Player player) {
+		return GhostyPlayer.isGhost(player) || super.shouldSkipGranting(player);
 	}
 
 	@Override

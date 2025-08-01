@@ -12,14 +12,12 @@ import org.bukkit.event.Listener;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-import java.lang.reflect.InvocationTargetException;
-
 @NullMarked
 public abstract class Task {
 
 	private final String taskId;
 	private final Player player;
-	private @Nullable Listener listener;
+	private @Nullable Listener eventsListener;
 
 	protected Task(String taskId, Player player) {
 		this.taskId = taskId;
@@ -35,24 +33,28 @@ public abstract class Task {
 	}
 
 	protected void startListening(@Nullable Listener listener) {
-		if (this.listener != null)
-			HandlerList.unregisterAll(this.listener);
-		this.listener = listener;
-		if (this.listener != null)
+		if (this.eventsListener != null)
+			HandlerList.unregisterAll(this.eventsListener);
+		this.eventsListener = listener;
+		if (this.eventsListener != null)
 			Bukkit.getPluginManager().registerEvents(listener, TrappedNewbie.instance());
 	}
 
-	public @Nullable Component[] getDisplay() {
+	public @Nullable Component @Nullable [] getDisplay() {
 		return Messenger.messenger(getPlayer()).getMessages("task." + getTaskId());
 	}
 
 	public void onStart() {
+		if (canBeSkipped()) {
+			finish();
+			return;
+		}
 		if (this instanceof Listener listener)
 			startListening(listener);
 	}
 
 	public void onFinish() {
-		player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1F, 1F);
+		this.player.playSound(this.player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1F, (float) Math.random() * 0.2F + 0.9F);
 	}
 
 	public void abort() {
@@ -65,15 +67,7 @@ public abstract class Task {
 
 	protected void finish() {
 		abort();
-		TrappedNewbie.scheduler().sync(() -> new PlayerCompletedTaskEvent(player, this).callEvent());
-	}
-
-	public static <T extends Task> T getTask(Class<T> taskClass, String taskId, Player player) {
-		try {
-			return taskClass.getDeclaredConstructor(String.class, Player.class).newInstance(taskId, player);
-		} catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-			throw new RuntimeException("Something went wrong while creating new task", e);
-		}
+		TrappedNewbie.scheduler().sync(() -> new PlayerCompletedTaskEvent(this.player, this).callEvent());
 	}
 
 }

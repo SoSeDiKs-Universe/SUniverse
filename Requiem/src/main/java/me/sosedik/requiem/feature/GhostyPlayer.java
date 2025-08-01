@@ -8,12 +8,14 @@ import me.sosedik.requiem.listener.entity.PrepareGhostMobs;
 import me.sosedik.requiem.task.GhostAuraTask;
 import me.sosedik.requiem.task.GhostMobVisionTask;
 import me.sosedik.utilizer.util.EntityUtil;
+import me.sosedik.utilizer.util.MetadataUtil;
 import net.kyori.adventure.util.TriState;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
@@ -33,6 +35,8 @@ public class GhostyPlayer {
 	private static final Set<UUID> GHOSTS = new HashSet<>();
 	private static final List<Predicate<Player>> FLIGHT_RULES = new ArrayList<>();
 	private static final List<Predicate<Player>> ITEM_RULES = new ArrayList<>();
+	private static final String AURA_TASK_KEY = "ghost_aura_task";
+	private static final String VISION_TASK_KEY = "ghost_vision_task";
 
 	/**
 	 * Checks whether this player is a ghost
@@ -50,6 +54,8 @@ public class GhostyPlayer {
 	 * @param player player
 	 */
 	public static void markGhost(Player player) {
+		if (isGhost(player)) return;
+
 		for (ItemStack item : player.getInventory()) {
 			if (ItemStack.isEmpty(item)) continue;
 
@@ -91,8 +97,8 @@ public class GhostyPlayer {
 		checkCanGhostFly(player);
 		checkCanHoldGhostItems(player);
 
-		new GhostAuraTask(player);
-		new GhostMobVisionTask(player);
+		MetadataUtil.setMetadata(player, AURA_TASK_KEY, new GhostAuraTask(player));
+		MetadataUtil.setMetadata(player, VISION_TASK_KEY, new GhostMobVisionTask(player));
 
 		new PlayerStartGhostingEvent(player).callEvent();
 
@@ -108,6 +114,9 @@ public class GhostyPlayer {
 		boolean callEvent = isGhost(player);
 
 		GHOSTS.remove(player.getUniqueId());
+
+		cancelTask(player, AURA_TASK_KEY);
+		cancelTask(player, VISION_TASK_KEY);
 
 		PrepareGhostMobs.hideVisibility(player, false);
 
@@ -131,6 +140,12 @@ public class GhostyPlayer {
 			new PlayerStopGhostingEvent(player).callEvent();
 
 		Requiem.logger().info("Clearing ghost state for {}", player.getName());
+	}
+	
+	private static void cancelTask(Player player, String taskId) {
+		MetadataUtil.MetadataValue metadataValue = MetadataUtil.removeMetadata(player, taskId);
+		if (metadataValue != null)
+			metadataValue.get(BukkitRunnable.class).cancel();
 	}
 
 	/**
@@ -228,8 +243,8 @@ public class GhostyPlayer {
 			}
 		}
 
-		if (!player.getInventory().contains(RequiemItems.GHOST_MOTIVATOR)) player.getInventory().addItem(new ItemStack(RequiemItems.GHOST_MOTIVATOR));
-		if (!player.getInventory().contains(RequiemItems.GHOST_RELOCATOR)) player.getInventory().addItem(new ItemStack(RequiemItems.GHOST_RELOCATOR));
+		if (!player.getInventory().contains(RequiemItems.GHOST_MOTIVATOR)) player.getInventory().addItem(ItemStack.of(RequiemItems.GHOST_MOTIVATOR));
+		if (!player.getInventory().contains(RequiemItems.GHOST_RELOCATOR)) player.getInventory().addItem(ItemStack.of(RequiemItems.GHOST_RELOCATOR));
 		return true;
 	}
 

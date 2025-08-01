@@ -20,7 +20,7 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public class BowUsableWithoutArrows implements Listener {
 
-	private static final ItemStack DUMMY_ARROW = new ItemStack(Material.ARROW);
+	private static final ItemStack DUMMY_ARROW = ItemStack.of(Material.ARROW);
 
 	@EventHandler(priority = EventPriority.LOW)
 	public void onBlockInteract(PlayerInteractEvent event) {

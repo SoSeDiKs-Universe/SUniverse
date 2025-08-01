@@ -1,13 +1,10 @@
 package me.sosedik.trappednewbie.impl.advancement;
 
-import io.papermc.paper.datacomponent.DataComponentTypes;
-import io.papermc.paper.datacomponent.item.ResolvableProfile;
 import me.sosedik.packetadvancements.api.advancement.base.BaseAdvancementBuilder;
 import me.sosedik.packetadvancements.api.display.IAdvancementDisplay;
 import me.sosedik.packetadvancements.imlp.advancement.base.BaseAdvancement;
-import org.bukkit.Material;
+import me.sosedik.utilizer.util.ItemUtil;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -22,9 +19,7 @@ public class MereMortalAdvancement extends BaseAdvancement {
 	public IAdvancementDisplay getDisplay(@Nullable Player player) {
 		if (player == null) return super.getDisplay(null);
 
-		var headItem = new ItemStack(Material.PLAYER_HEAD);
-		headItem.setData(DataComponentTypes.PROFILE, ResolvableProfile.resolvableProfile(player.getPlayerProfile()));
-		return super.getDisplay(player).clone().icon(headItem);
+		return super.getDisplay(player).clone().icon(ItemUtil.playerHead(player));
 	}
 
 }

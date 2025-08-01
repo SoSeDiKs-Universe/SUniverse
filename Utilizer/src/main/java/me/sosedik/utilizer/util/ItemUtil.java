@@ -17,6 +17,7 @@ import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.block.data.type.Campfire;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
@@ -146,10 +147,22 @@ public class ItemUtil {
 	 * @return textured head item
 	 */
 	public static ItemStack texturedHead(String texture) {
-		var item = new ItemStack(Material.PLAYER_HEAD);
+		var item = ItemStack.of(Material.PLAYER_HEAD);
 		PlayerProfile playerProfile = Bukkit.createProfile(UUID.randomUUID());
 		playerProfile.setProperty(new ProfileProperty("textures", texture));
 		item.setData(DataComponentTypes.PROFILE, ResolvableProfile.resolvableProfile(playerProfile));
+		return item;
+	}
+
+	/**
+	 * Created player head with a texture
+	 *
+	 * @param player player
+	 * @return textured head item
+	 */
+	public static ItemStack playerHead(Player player) {
+		var item = ItemStack.of(Material.PLAYER_HEAD);
+		item.setData(DataComponentTypes.PROFILE, ResolvableProfile.resolvableProfile(player.getPlayerProfile()));
 		return item;
 	}
 
@@ -260,7 +273,7 @@ public class ItemUtil {
 	 * @return item with enchantment glint
 	 */
 	public static ItemStack glint(Material item) {
-		return glint(new ItemStack(item));
+		return glint(ItemStack.of(item));
 	}
 
 	/**

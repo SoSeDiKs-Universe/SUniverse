@@ -70,11 +70,13 @@ import me.sosedik.trappednewbie.listener.entity.AngryAnimals;
 import me.sosedik.trappednewbie.listener.entity.BabierBabyMobs;
 import me.sosedik.trappednewbie.listener.entity.CreepersLoveCrawlers;
 import me.sosedik.trappednewbie.listener.entity.LimboEntities;
+import me.sosedik.trappednewbie.listener.entity.LimboWandererTrades;
 import me.sosedik.trappednewbie.listener.entity.ShearableCreepers;
 import me.sosedik.trappednewbie.listener.item.BlackBeltSpeed;
 import me.sosedik.trappednewbie.listener.item.FirestrikerFire;
 import me.sosedik.trappednewbie.listener.item.FlintToFlakedFlint;
 import me.sosedik.trappednewbie.listener.item.FlowerBouquetAttackEffects;
+import me.sosedik.trappednewbie.listener.item.FriendshipLetters;
 import me.sosedik.trappednewbie.listener.item.GlassShardCuts;
 import me.sosedik.trappednewbie.listener.item.HammerBlockRepair;
 import me.sosedik.trappednewbie.listener.item.KnifeCarvesTotemBases;
@@ -239,12 +241,14 @@ public final class TrappedNewbie extends JavaPlugin {
 			BabierBabyMobs.class,
 			CreepersLoveCrawlers.class,
 			LimboEntities.class,
+			LimboWandererTrades.class,
 			ShearableCreepers.class,
 			// item
 			BlackBeltSpeed.class,
 			FirestrikerFire.class,
 			FlintToFlakedFlint.class,
 			FlowerBouquetAttackEffects.class,
+			FriendshipLetters.class,
 			GlassShardCuts.class,
 			HammerBlockRepair.class,
 			KnifeCarvesTotemBases.class,

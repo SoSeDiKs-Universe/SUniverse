@@ -56,7 +56,7 @@ public class FireAspectIsFlintAndSteel implements Listener {
 
 	public static boolean mimicFlintAndSteel(Player player, Entity entity, EquipmentSlot hand) {
 		ItemStack item = player.getInventory().getItem(hand);
-		ItemStack flintAndSteel = new ItemStack(Material.FLINT_AND_STEEL);
+		ItemStack flintAndSteel = ItemStack.of(Material.FLINT_AND_STEEL);
 		player.getInventory().setItem(hand, flintAndSteel);
 		var interactEvent = new PlayerInteractEntityEvent(player, entity, hand);
 		interactEvent.callEvent();
@@ -110,7 +110,7 @@ public class FireAspectIsFlintAndSteel implements Listener {
 		if (livingEntity.getEquipment() == null) return false;
 
 		ItemStack item = livingEntity.getEquipment().getItem(hand);
-		ItemStack flintAndSteel = new ItemStack(Material.FLINT_AND_STEEL);
+		ItemStack flintAndSteel = ItemStack.of(Material.FLINT_AND_STEEL);
 		livingEntity.getEquipment().setItem(hand, flintAndSteel);
 		boolean actionApplied = false;
 		if (livingEntity instanceof Player player) {

@@ -2,10 +2,12 @@ package me.sosedik.requiem.listener.player.ghost;
 
 import com.destroystokyo.paper.event.player.PlayerPickupExperienceEvent;
 import me.sosedik.requiem.feature.GhostyPlayer;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.entity.EntityPotionEffectEvent;
 import org.bukkit.event.player.PlayerAttemptPickupItemEvent;
 import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -13,6 +15,8 @@ import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerPickupArrowEvent;
+import org.bukkit.event.player.PlayerStatisticIncrementEvent;
+import org.bukkit.potion.PotionEffect;
 import org.jspecify.annotations.NullMarked;
 
 /**
@@ -81,6 +85,23 @@ public class NoGhostInteractions implements Listener {
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onPickup(PlayerPickupExperienceEvent event) {
+		if (!GhostyPlayer.isGhost(event.getPlayer())) return;
+
+		event.setCancelled(true);
+	}
+
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onEffect(EntityPotionEffectEvent event) {
+		if (event.getNewEffect() == null) return;
+		if (event.getNewEffect().getDuration() == PotionEffect.INFINITE_DURATION) return;
+		if (!(event.getEntity() instanceof Player player)) return;
+		if (!GhostyPlayer.isGhost(player)) return;
+
+		event.setCancelled(true);
+	}
+
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onStatistics(PlayerStatisticIncrementEvent event) {
 		if (!GhostyPlayer.isGhost(event.getPlayer())) return;
 
 		event.setCancelled(true);

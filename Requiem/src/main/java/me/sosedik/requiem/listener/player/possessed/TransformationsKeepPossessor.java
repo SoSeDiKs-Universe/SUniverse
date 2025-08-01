@@ -42,13 +42,13 @@ public class TransformationsKeepPossessor implements Listener {
 		if (PossessingPlayer.isResurrected(entity))
 			PossessingPlayer.markResurrected(transformed);
 
-		PossessingPlayer.migrateStatsToEntity(rider, transformed);
-		if (transformed.isValid()) transformed(rider, transformed, entity);
-		else Requiem.scheduler().sync(() -> transformed(rider, transformed, entity), 1L); // TODO Find a way to remove delay?
+		Runnable action = () -> PossessingPlayer.migrateStatsToEntity(rider, transformed);
+		if (transformed.isValid()) transformed(rider, transformed, entity, action);
+		else Requiem.scheduler().sync(() -> transformed(rider, transformed, entity, action), 1L); // TODO Find a way to remove delay?
 	}
 
-	private void transformed(Player possessor, LivingEntity transformed, LivingEntity entity) {
-		PossessingPlayer.startPossessing(possessor, transformed);
+	private void transformed(Player possessor, LivingEntity transformed, LivingEntity entity, Runnable preAction) {
+		if (!PossessingPlayer.startPossessing(possessor, transformed, preAction, true)) return;
 		new PlayerPossessedTransformEvent(possessor, transformed, entity).callEvent();
 	}
 

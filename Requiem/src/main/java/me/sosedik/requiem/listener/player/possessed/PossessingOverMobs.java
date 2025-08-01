@@ -43,11 +43,13 @@ public class PossessingOverMobs implements Listener {
 		if (!GhostyPlayer.isGhost(player)) return;
 		if (player.getInventory().getItemInMainHand().getType() != Material.AIR) return;
 
-		event.setCancelled(true);
+		Runnable action = () -> {
+			markSoulboundItems(entity);
+			PossessingPlayer.migrateStatsToPlayer(player, entity);
+		};
+		if (!PossessingPlayer.startPossessing(player, entity, action)) return;
 
-		markSoulboundItems(entity);
-		PossessingPlayer.migrateStatsToPlayer(player, entity);
-		PossessingPlayer.startPossessing(player, entity);
+		event.setCancelled(true);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)

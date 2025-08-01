@@ -26,7 +26,7 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public class PossessedInfiniteProjectiles implements Listener {
 
-	private static final ItemStack DUMMY_ARROW = new ItemStack(Material.ARROW);
+	private static final ItemStack DUMMY_ARROW = ItemStack.of(Material.ARROW);
 
 	@EventHandler(ignoreCancelled = true)
 	public void onTridentLaunch(PlayerLaunchProjectileEvent event) {

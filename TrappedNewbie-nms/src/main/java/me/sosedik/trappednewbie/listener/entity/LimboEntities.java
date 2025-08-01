@@ -18,6 +18,7 @@ import org.bukkit.block.BlockState;
 import org.bukkit.craftbukkit.entity.CraftTraderLlama;
 import org.bukkit.craftbukkit.entity.CraftWanderingTrader;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.TraderLlama;
 import org.bukkit.entity.WanderingTrader;
 import org.bukkit.event.EventHandler;
@@ -25,11 +26,14 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
+import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.EntitiesLoadEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 import org.jspecify.annotations.NullMarked;
+
+import java.util.List;
 
 /**
  * Limbo is a special place for entities
@@ -52,10 +56,18 @@ public class LimboEntities implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
-	public void onSpawn(EntitySpawnEvent event) {
+	public void onSpawn(EntitySpawnEvent event) {applyEntityRules(event.getEntity());
 		if (event.getEntity().getWorld() != TrappedNewbie.limboWorld()) return;
 
 		applyEntityRules(event.getEntity());
+	}
+
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onUnleash(HangingBreakEvent event) {
+		if (event.getEntity().getWorld() != TrappedNewbie.limboWorld()) return;
+		if (event.getEntity().getType() != EntityType.LEASH_KNOT) return;
+
+		event.setCancelled(true);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
@@ -84,6 +96,7 @@ public class LimboEntities implements Listener {
 			wanderingTrader.setCanDrinkPotion(false);
 			wanderingTrader.setCanDrinkMilk(false);
 			wanderingTrader.setCollidable(false);
+			wanderingTrader.setRecipes(List.of());
 
 			net.minecraft.world.entity.npc.WanderingTrader nms = ((CraftWanderingTrader) wanderingTrader).getHandle();
 

@@ -5,8 +5,11 @@ import me.sosedik.moves.listener.movement.FreeFall;
 import me.sosedik.trappednewbie.TrappedNewbie;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieAdvancements;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieFonts;
+import me.sosedik.trappednewbie.dataset.TrappedNewbieItems;
+import me.sosedik.trappednewbie.impl.item.modifier.LetterModifier;
 import me.sosedik.utilizer.api.message.Messenger;
 import me.sosedik.utilizer.api.message.Mini;
+import me.sosedik.utilizer.util.InventoryUtil;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -18,6 +21,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.Vector;
 import org.jspecify.annotations.NullMarked;
 
 /**
@@ -33,14 +38,22 @@ public class LimboWorldFall implements Listener {
 		if (event.getDamageSource().getDamageType() != DamageType.OUT_OF_WORLD) return;
 
 		event.setCancelled(true);
-		if (TrappedNewbieAdvancements.BRAVE_NEW_WORLD.hasCriteria(player, "friendship")) {
-			TrappedNewbieAdvancements.BRAVE_NEW_WORLD.awardCriteria(player, "fall");
+		if (TrappedNewbieAdvancements.REQUIEM_ROOT.isDone(player)) {
+			if (TrappedNewbieAdvancements.BRAVE_NEW_WORLD.awardAllCriteria(player))
+				removeFreeFriendshipLetters(player);
 			World world = PerPlayerWorlds.getResourceWorld(player.getUniqueId(), World.Environment.NORMAL);
 			spawnTeleport(player, world);
 		} else {
-			player.teleportAsync(TrappedNewbie.limboWorld().getSpawnLocation());
+			player.setVelocity(new Vector());
+			player.teleportAsync(TrappedNewbie.limboWorld().getSpawnLocation().add(0.5, 1, 0.5));
 			player.sendMessage(Mini.combine(Component.space(), TrappedNewbieFonts.WANDERING_TRADER_HEAD.mapping(), Messenger.messenger(player).getMessage("limbo.welcome.ignored")));
 		}
+	}
+
+	private void removeFreeFriendshipLetters(Player player) {
+		ItemStack item;
+		while ((item = InventoryUtil.findItem(player, i -> i.getType() == TrappedNewbieItems.LETTER && LetterModifier.isUnboundFriendshipLetter(i))) != null)
+			item.setAmount(0);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
@@ -48,7 +61,7 @@ public class LimboWorldFall implements Listener {
 		if (event.getTo().getWorld() != TrappedNewbie.limboWorld()) return;
 		if (event.getFrom().getWorld() == TrappedNewbie.limboWorld()) return;
 
-		event.setTo(TrappedNewbie.limboWorld().getSpawnLocation().addY(1));
+		event.setTo(TrappedNewbie.limboWorld().getSpawnLocation().add(0.5, 1, 0.5));
 	}
 
 	/**
@@ -58,7 +71,7 @@ public class LimboWorldFall implements Listener {
 	 * @param world world
 	 */
 	public static void spawnTeleport(Player player, World world) {
-		player.teleportAsync(world.getSpawnLocation().y(world.getMaxHeight() + 50))
+		player.teleportAsync(world.getSpawnLocation().center().y(world.getMaxHeight() + 50))
 			.thenRun(() -> {
 				Entity vehicle = player.getVehicle();
 				if (vehicle == null) {

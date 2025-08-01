@@ -62,11 +62,11 @@ public class MeshSifting implements Listener {
 
 		block.setType(Material.AIR);
 		Location loc = block.getLocation().center();
-		block.getWorld().dropItemNaturally(loc, new ItemStack(Material.FLINT));
+		block.getWorld().dropItemNaturally(loc, ItemStack.of(Material.FLINT));
 
 		Material extra = EXTRA_DROPS.get();
 		if (extra != null) {
-			block.getWorld().dropItemNaturally(loc, new ItemStack(extra));
+			block.getWorld().dropItemNaturally(loc, ItemStack.of(extra));
 			TrappedNewbieAdvancements.TREASURE_HUNT.awardAllCriteria(player);
 		}
 		player.swingHand(hand);

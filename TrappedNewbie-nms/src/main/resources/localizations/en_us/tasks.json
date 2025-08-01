@@ -1,16 +1,24 @@
 {
 	"task.current_goal": "<gold>Current goal:",
 	"task.meet_wandering_trader": [
-		"<#FFE0B2>Speak with the <icon:trapped_newbie:wandering_trader_head> <gold>Wandering Trader",
-		"<gray>(press <yellow><key:key.use></yellow> on it)"
+		"<#FFE0B2>Hit up with the <icon:trapped_newbie:wandering_trader_head> <gold>Wandering Trader",
+		"<gray>(press <yellow><key:key.attack></yellow> on it)"
 	],
 	"task.open_advancements": [
 		"<#FFE0B2>Check <red>advancements</red> to view your current progression",
 		"<gray>(press <yellow><key:key.advancements></yellow> to open advancements screen)"
 	],
+	"task.obtain_friendship_letter": [
+		"<#FFE0B2>Obtain a <red>Friendship Letter</red> from the <icon:trapped_newbie:wandering_trader_head> <gold>Wandering Trader",
+		"<gray>(trade with them via <yellow><key:key.use></yellow>)"
+	],
+	"task.befriend_wandering_trader": [
+		"<#FFE0B2>Befriend the <icon:trapped_newbie:wandering_trader_head> <gold>Wandering Trader",
+		"<gray>(use (<yellow><key:key.use></yellow>) the <red>Friendship Letter</red> on it)"
+	],
 	"task.limbo_void_fall": [
-		"<#FFE0B2>Complete <red>«<locale:adv.trappednewbie.requiem.brave_new_world.title>»</red> advancement's instructions",
-		"<gray>(press <yellow><key:key.advancements></yellow> to open advancements screen)"
+		"<#FFE0B2>Begin your <red>epic</red> adventure",
+		"<gray>(fall into the void; optionally, make more friends for free while you can!)"
 	],
 	"task.ritual.rain_dance": "Rain Dance",
 	"task.ritual.rain_dance.description": "Make it rain",

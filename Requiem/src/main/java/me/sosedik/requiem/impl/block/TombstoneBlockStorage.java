@@ -205,7 +205,7 @@ public class TombstoneBlockStorage extends BlockDataStorageHolder {
 		if (type == null) return false;
 
 		Location loc = this.block.getLocation().center();
-		item = new ItemStack(type);
+		item = ItemStack.of(type);
 
 		if (this.storedData.hasTag(STORAGES_KEY)) {
 			ReadWriteNBT storage = this.storedData.getOrCreateCompound(STORAGES_KEY).getCompound("0");
@@ -306,7 +306,7 @@ public class TombstoneBlockStorage extends BlockDataStorageHolder {
 
 	private static ItemDisplay createDisplay(Block block, BlockFace facing, @Nullable Material type) {
 		return block.getWorld().spawn(block.getLocation().center().setDirection(facing.getDirection()), ItemDisplay.class, display -> {
-			display.setItemStack(new ItemStack(type == null ? RequiemItems.BASIC_SKELETON_TOMBSTONE : type));
+			display.setItemStack(ItemStack.of(type == null ? RequiemItems.BASIC_SKELETON_TOMBSTONE : type));
 			display.setPersistent(false);
 			Transformation transformation = display.getTransformation();
 			transformation.getScale().set(0.99);

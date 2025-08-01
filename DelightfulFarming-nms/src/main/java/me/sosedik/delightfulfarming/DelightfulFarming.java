@@ -4,6 +4,10 @@ import me.sosedik.delightfulfarming.dataset.DelightfulFarmingItems;
 import me.sosedik.delightfulfarming.dataset.DelightfulFarmingRecipes;
 import me.sosedik.delightfulfarming.impl.item.modifier.BerriesModifier;
 import me.sosedik.delightfulfarming.listener.block.NoBerriesPlacement;
+import me.sosedik.delightfulfarming.listener.sugar.AlwaysAllowEating;
+import me.sosedik.delightfulfarming.listener.sugar.CaloriesExhaustion;
+import me.sosedik.delightfulfarming.listener.sugar.CaloriesOnFoodConsume;
+import me.sosedik.delightfulfarming.listener.sugar.CaloriesOnJoinLeave;
 import me.sosedik.resourcelib.ResourceLib;
 import me.sosedik.utilizer.api.language.TranslationHolder;
 import me.sosedik.utilizer.impl.storage.SimpleRotatableBlockStorage;
@@ -42,7 +46,12 @@ public final class DelightfulFarming extends JavaPlugin {
 
 		EventUtil.registerListeners(this,
 			// block
-			NoBerriesPlacement.class
+			NoBerriesPlacement.class,
+			// sugar
+			AlwaysAllowEating.class,
+			CaloriesExhaustion.class,
+			CaloriesOnFoodConsume.class,
+			CaloriesOnJoinLeave.class
 		);
 
 		PlaceableBlockItems.addMapping(DelightfulFarmingItems.SWEET_BERRY_PIPS, DelightfulFarmingItems.SWEET_BERRY_PIPS_BUSH);

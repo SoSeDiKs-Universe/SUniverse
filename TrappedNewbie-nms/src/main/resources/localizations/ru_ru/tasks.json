@@ -2,15 +2,23 @@
 	"task.current_goal": "<gold>Текущая цель:",
 	"task.meet_wandering_trader": [
 		"<#FFE0B2>Поговорите со <icon:trapped_newbie:wandering_trader_head> <gold>странствующим торговцем",
-		"<gray>(нажмите <yellow><key:key.use></yellow> по нему)"
+		"<gray>(нажмите <yellow><key:key.attack></yellow> по нему)"
 	],
 	"task.open_advancements": [
-		"<#FFE0B2>Загляните в <red>достижения</red> для просмотра текущего этапа развития",
+		"<#FFE0B2>Загляните в <red>достижения</red> для просмотра текущего этапа развития событий",
 		"<gray>(нажмите <yellow><key:key.advancements></yellow>, чтобы быстро открыть меню достижений)"
 	],
+	"task.obtain_friendship_letter": [
+		"<#FFE0B2>Получите <red>письмо дружбы</red> от <icon:trapped_newbie:wandering_trader_head> <gold>странствующего торговца",
+		"<gray>(поторгуйтесь с ним при помощи <yellow><key:key.use></yellow>)"
+	],
+	"task.befriend_wandering_trader": [
+		"<#FFE0B2>Подружитесь со <icon:trapped_newbie:wandering_trader_head> <gold>странствующим торговцем",
+		"<gray>(используйте (<yellow><key:key.use></yellow>) <red>письмо дружбы</red> на нём)"
+	],
 	"task.limbo_void_fall": [
-		"<#FFE0B2>Завершите задания, указанные в достижении <red>«<locale:adv.trappednewbie.requiem.brave_new_world.title>»",
-		"<gray>(нажмите <yellow><key:key.advancements></yellow>, чтобы быстро открыть меню достижений)"
+		"<#FFE0B2>Начните Ваше <red>эпическое</red> приключение",
+		"<gray>(прыгайте в бездну; по желанию, пока есть бесплатная возможность, подружитесь с другими игроками!)"
 	],
 	"task.ritual.rain_dance": "Танец дождя",
 	"task.ritual.rain_dance.description": "Призывает дождь",

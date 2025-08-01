@@ -2,15 +2,23 @@
 	"task.current_goal": "<gold>Поточна мета:",
 	"task.meet_wandering_trader": [
 		"<#FFE0B2>Поспілкуйтесь з <icon:trapped_newbie:wandering_trader_head> <gold>мандрівним крамарем",
-		"<gray>(натисніть <yellow><key:key.use></yellow> по ньому)"
+		"<gray>(натисніть <yellow><key:key.attack></yellow> по ньому)"
 	],
 	"task.open_advancements": [
-		"<#FFE0B2>Відкрийте <red>досягнення</red> для перегляду наявного етапу розвитку",
+		"<#FFE0B2>Відкрийте <red>досягнення</red> для перегляду наявного етапу розвитку подій",
 		"<gray>(натисніть <yellow><key:key.advancements></yellow>, щоб швидко переглянути меню досягнень)"
 	],
+	"task.obtain_friendship_letter": [
+		"<#FFE0B2>Отримайте <red>лист друдби</red> від <icon:trapped_newbie:wandering_trader_head> <gold>мандрівного крамаря",
+		"<gray>(поторгуйтесь з ним за допомоги <yellow><key:key.use></yellow>)"
+	],
+	"task.befriend_wandering_trader": [
+		"<#FFE0B2>Потоваришуйте з <icon:trapped_newbie:wandering_trader_head> <gold>мандрівним крамарем",
+		"<gray>(використайте (<yellow><key:key.use></yellow>) <red>лист дружби</red> на ньому)"
+	],
 	"task.limbo_void_fall": [
-		"<#FFE0B2>Виконайте завдання, вказані у досягненні <red>«<locale:adv.trappednewbie.requiem.brave_new_world.title>»",
-		"<gray>(натисніть <yellow><key:key.advancements></yellow>, щоб швидко переглянути меню досягнень)"
+		"<#FFE0B2>Почніть Вашу <red>епічну</red> пригоду",
+		"<gray>(стрибайте у прірву; за бажанням, поки є безкоштовна можливість, потоваришуйте з іншими гравцями!)"
 	],
 	"task.ritual.rain_dance": "Танець дощу",
 	"task.ritual.rain_dance.description": "Викликає дощ",

@@ -15,17 +15,17 @@ public class MiscMeRecipes {
 	}
 
 	public static void addRecipes() {
-		new ShapedCraft(new ItemStack(MiscMeItems.LUNAR_CLOCK), miscMeKey("lunar_clock"), " L ", "LCL", " L ")
+		new ShapedCraft(ItemStack.of(MiscMeItems.LUNAR_CLOCK), miscMeKey("lunar_clock"), " L ", "LCL", " L ")
 			.withCategory(CraftingBookCategory.EQUIPMENT)
 			.addIngredients('L', Material.LAPIS_LAZULI)
 			.addIngredients('C', Material.CLOCK)
 			.register();
-		new ShapedCraft(new ItemStack(MiscMeItems.DEPTH_METER), miscMeKey("depth_meter"), " C ", "CRC", " C ")
+		new ShapedCraft(ItemStack.of(MiscMeItems.DEPTH_METER), miscMeKey("depth_meter"), " C ", "CRC", " C ")
 			.withCategory(CraftingBookCategory.EQUIPMENT)
 			.addIngredients('C', Material.COPPER_INGOT)
 			.addIngredients('R', Material.REDSTONE)
 			.register();
-		new ShapedCraft(new ItemStack(MiscMeItems.SPEEDOMETER), miscMeKey("speedometer"), "PPP", "SQD", "IRI")
+		new ShapedCraft(ItemStack.of(MiscMeItems.SPEEDOMETER), miscMeKey("speedometer"), "PPP", "SQD", "IRI")
 			.withCategory(CraftingBookCategory.EQUIPMENT)
 			.addIngredients('P', MaterialTags.GLASS_PANES.getValues())
 			.addIngredients('D', Material.BLACK_DYE)
@@ -34,7 +34,7 @@ public class MiscMeRecipes {
 			.addIngredients('R', Material.REDSTONE)
 			.addIngredients('S', Material.STICK)
 			.register();
-		new ShapedCraft(new ItemStack(MiscMeItems.BAROMETER), miscMeKey("barometer"), " C ", "CRC", " C ")
+		new ShapedCraft(ItemStack.of(MiscMeItems.BAROMETER), miscMeKey("barometer"), " C ", "CRC", " C ")
 			.withCategory(CraftingBookCategory.EQUIPMENT)
 			.addIngredients('C', Material.COPPER_INGOT)
 			.addIngredients('R', Material.REDSTONE_TORCH)

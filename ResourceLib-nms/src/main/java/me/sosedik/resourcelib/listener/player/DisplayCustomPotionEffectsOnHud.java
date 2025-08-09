@@ -50,7 +50,7 @@ public class DisplayCustomPotionEffectsOnHud implements Listener {
 		BACKGROUND_BENEFICIAL = requireNonNull(ResourceLib.storage().getFontData(NamespacedKey.minecraft("effect_background_beneficial")));
 		BACKGROUND_HARMFUL = requireNonNull(ResourceLib.storage().getFontData(NamespacedKey.minecraft("effect_background_harmful")));
 
-		Registry.EFFECT.forEach(effectType -> {
+		Registry.MOB_EFFECT.forEach(effectType -> {
 			NamespacedKey key = effectType.getKey();
 			if (NamespacedKey.MINECRAFT.equals(key.getNamespace())) return;
 
@@ -144,6 +144,7 @@ public class DisplayCustomPotionEffectsOnHud implements Listener {
 		int vanillaHarmful = 0;
 		List<PotionEffect> effects = new ArrayList<>(player.getActivePotionEffects()); // We're async, avoid CME
 		for (PotionEffect potionEffect : effects) {
+			if (!potionEffect.hasIcon()) continue;
 			if (NamespacedKey.MINECRAFT.equals(potionEffect.getType().getKey().getNamespace())) {
 				if (potionEffect.getType().getEffectCategory() == PotionEffectType.Category.BENEFICIAL)
 					vanillaBeneficial++;
@@ -185,11 +186,11 @@ public class DisplayCustomPotionEffectsOnHud implements Listener {
 		int amplifier = effect.getAmplifier();
 		Component icon = getSmallIcon(effect.getType());
 		return messenger.getMessage("resourcelib.tab.effects",
-				component("effect_icon", icon),
-				component("effect_name", messenger.getMessage(getTranslationKey(effect.getType()))),
-				raw("effect_level", (amplifier == 0 ? "" : " " + RomanNumerals.toRoman(amplifier))),
-				raw("effect_duration", durationDisplay),
-				component("spacing", SpacingUtil.getSpacing(spacing))
+			component("effect_icon", icon),
+			component("effect_name", messenger.getMessage(getTranslationKey(effect.getType()))),
+			raw("effect_level", (amplifier == 0 ? "" : " " + RomanNumerals.toRoman(amplifier))),
+			raw("effect_duration", durationDisplay),
+			component("spacing", SpacingUtil.getSpacing(spacing))
 		);
 	}
 

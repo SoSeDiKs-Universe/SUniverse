@@ -1,14 +1,13 @@
 package me.sosedik.miscme.listener.misc;
 
 import me.sosedik.miscme.MiscMe;
+import me.sosedik.miscme.dataset.MiscMeTags;
 import me.sosedik.utilizer.api.event.recipe.ItemCraftPrepareEvent;
 import me.sosedik.utilizer.api.event.recipe.RemainingItemEvent;
 import me.sosedik.utilizer.impl.recipe.ShapelessCraft;
 import me.sosedik.utilizer.util.InventoryUtil;
 import me.sosedik.utilizer.util.ItemUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.Tag;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -18,9 +17,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionType;
 import org.jspecify.annotations.NullMarked;
-
-import java.util.Objects;
-import java.util.Set;
 
 /**
  * Converts bottles to water bottles when in water,
@@ -33,7 +29,7 @@ public class WaterAwarePotionReset implements Listener {
 		addPotionResetRecipe();
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onCraft(ItemCraftPrepareEvent event) {
 		Player player = event.getPlayer();
 		if (player == null) return;
@@ -72,19 +68,18 @@ public class WaterAwarePotionReset implements Listener {
 		event.setReplacement(getWaterBottle(1));
 	}
 
-	private ItemStack getWaterBottle(int amount) {
-		var item = ItemStack.of(Material.POTION, amount);
-		item.editMeta(PotionMeta.class, meta -> meta.setBasePotionType(PotionType.WATER));
-		return item;
-	}
-
 	private void addPotionResetRecipe() {
-		Set<Material> potions = Objects.requireNonNull(Bukkit.getTag(Tag.REGISTRY_ITEMS, MiscMe.miscMeKey("resettable_bottled_items"), Material.class)).getValues();
 		new ShapelessCraft(ItemStack.of(Material.GLASS_BOTTLE), MiscMe.miscMeKey("potion_reset"))
 			.special()
 			.withExemptLeftovers()
-			.addIngredients(potions)
+			.addIngredients(MiscMeTags.RESETTABLE_BOTTLE_ITEMS.getValues())
 			.register();
+	}
+
+	public static ItemStack getWaterBottle(int amount) {
+		var item = ItemStack.of(Material.POTION, amount);
+		item.editMeta(PotionMeta.class, meta -> meta.setBasePotionType(PotionType.WATER));
+		return item;
 	}
 
 }

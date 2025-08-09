@@ -2,7 +2,9 @@ package me.sosedik.trappednewbie;
 
 import io.leangen.geantyref.TypeToken;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
+import me.sosedik.delightfulfarming.dataset.DelightfulFarmingRecipes;
 import me.sosedik.limboworldgenerator.VoidChunkGenerator;
+import me.sosedik.miscme.listener.entity.ItemFrameFallables;
 import me.sosedik.miscme.task.CustomDayCycleTask;
 import me.sosedik.requiem.feature.GhostyPlayer;
 import me.sosedik.requiem.feature.PossessingPlayer;
@@ -13,7 +15,9 @@ import me.sosedik.trappednewbie.api.task.BossBarTask;
 import me.sosedik.trappednewbie.command.MigrateCommand;
 import me.sosedik.trappednewbie.command.SpitCommand;
 import me.sosedik.trappednewbie.command.TestCommand;
+import me.sosedik.trappednewbie.command.ThirstCommand;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieAdvancements;
+import me.sosedik.trappednewbie.dataset.TrappedNewbieEffects;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieItems;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieRecipes;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieTags;
@@ -27,13 +31,18 @@ import me.sosedik.trappednewbie.impl.blockstorage.TotemBaseBlockStorage;
 import me.sosedik.trappednewbie.impl.blockstorage.WorkStationBlockStorage;
 import me.sosedik.trappednewbie.impl.item.modifier.AdvancementTrophyModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.AdvancementTrophyNameLoreModifier;
+import me.sosedik.trappednewbie.impl.item.modifier.DirtyWaterModifier;
+import me.sosedik.trappednewbie.impl.item.modifier.FoodTooltipModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.ItemModelModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.ItemOverlayToggleModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.LetterModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.PaperPlaneModifier;
+import me.sosedik.trappednewbie.impl.item.modifier.ScrapModifier;
+import me.sosedik.trappednewbie.impl.item.modifier.ThirstTooltipModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.UnlitCampfireModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.VisualArmorModifier;
 import me.sosedik.trappednewbie.impl.recipe.ChoppingBlockCrafting;
+import me.sosedik.trappednewbie.impl.thirst.ThirstData;
 import me.sosedik.trappednewbie.listener.advancement.AdvancementRecipes;
 import me.sosedik.trappednewbie.listener.advancement.AdvancementTrophies;
 import me.sosedik.trappednewbie.listener.advancement.AdvancementsLocalizer;
@@ -64,6 +73,7 @@ import me.sosedik.trappednewbie.listener.advancement.dedicated.YouMonsterAdvance
 import me.sosedik.trappednewbie.listener.block.BlockBreakHurts;
 import me.sosedik.trappednewbie.listener.block.BlockChoppingViaSwing;
 import me.sosedik.trappednewbie.listener.block.CustomBlockBreaking;
+import me.sosedik.trappednewbie.listener.block.LogStrippingGivesBarks;
 import me.sosedik.trappednewbie.listener.block.SoftBlockHandBreaking;
 import me.sosedik.trappednewbie.listener.block.UnlitCampfireByDefault;
 import me.sosedik.trappednewbie.listener.entity.AngryAnimals;
@@ -73,6 +83,9 @@ import me.sosedik.trappednewbie.listener.entity.LimboEntities;
 import me.sosedik.trappednewbie.listener.entity.LimboWandererTrades;
 import me.sosedik.trappednewbie.listener.entity.ShearableCreepers;
 import me.sosedik.trappednewbie.listener.item.BlackBeltSpeed;
+import me.sosedik.trappednewbie.listener.item.CanteenInteractions;
+import me.sosedik.trappednewbie.listener.item.FillingBowlWithMilk;
+import me.sosedik.trappednewbie.listener.item.FillingBowlWithWater;
 import me.sosedik.trappednewbie.listener.item.FirestrikerFire;
 import me.sosedik.trappednewbie.listener.item.FlintToFlakedFlint;
 import me.sosedik.trappednewbie.listener.item.FlowerBouquetAttackEffects;
@@ -82,13 +95,16 @@ import me.sosedik.trappednewbie.listener.item.HammerBlockRepair;
 import me.sosedik.trappednewbie.listener.item.KnifeCarvesTotemBases;
 import me.sosedik.trappednewbie.listener.item.MeshSifting;
 import me.sosedik.trappednewbie.listener.item.PaperPlanes;
+import me.sosedik.trappednewbie.listener.item.QuenchedFromDrinkingCacti;
 import me.sosedik.trappednewbie.listener.item.RoughSticksCreateFire;
+import me.sosedik.trappednewbie.listener.item.ScrapOnItemBreak;
 import me.sosedik.trappednewbie.listener.item.SimpleSoundItems;
 import me.sosedik.trappednewbie.listener.item.SteelAndFlint;
 import me.sosedik.trappednewbie.listener.item.ThrowableRockBehavior;
 import me.sosedik.trappednewbie.listener.item.TimeMachineClockIsTotemOfUndying;
 import me.sosedik.trappednewbie.listener.item.TrumpetScare;
 import me.sosedik.trappednewbie.listener.item.VisualPumpkin;
+import me.sosedik.trappednewbie.listener.misc.ComfortEffectHandler;
 import me.sosedik.trappednewbie.listener.misc.CustomHudRenderer;
 import me.sosedik.trappednewbie.listener.misc.DisableJoinQuitMessages;
 import me.sosedik.trappednewbie.listener.misc.DynamicInventoryInfoGatherer;
@@ -100,16 +116,27 @@ import me.sosedik.trappednewbie.listener.player.DisableNaturalRespawn;
 import me.sosedik.trappednewbie.listener.player.DynamicGameMode;
 import me.sosedik.trappednewbie.listener.player.ExtraPossessedDrops;
 import me.sosedik.trappednewbie.listener.player.NewbieWelcome;
+import me.sosedik.trappednewbie.listener.player.PossessingRegeneration;
 import me.sosedik.trappednewbie.listener.player.StartAsGhost;
 import me.sosedik.trappednewbie.listener.player.TaskManagement;
 import me.sosedik.trappednewbie.listener.player.TeamableLeatherEquipment;
 import me.sosedik.trappednewbie.listener.player.TotemRituals;
 import me.sosedik.trappednewbie.listener.player.TrappedNewbiePlayerOptions;
 import me.sosedik.trappednewbie.listener.player.VisualArmorLayer;
+import me.sosedik.trappednewbie.listener.thirst.DrinkableWater;
+import me.sosedik.trappednewbie.listener.thirst.HealRestoresThirst;
+import me.sosedik.trappednewbie.listener.thirst.NoSprintingWhileThirsty;
+import me.sosedik.trappednewbie.listener.thirst.RainIsDrinkable;
+import me.sosedik.trappednewbie.listener.thirst.SavingThirstDataToWaterBottles;
+import me.sosedik.trappednewbie.listener.thirst.ThirstDecrease;
+import me.sosedik.trappednewbie.listener.thirst.ThirstFromConsuming;
+import me.sosedik.trappednewbie.listener.thirst.ThirstOnJoinLeave;
+import me.sosedik.trappednewbie.listener.thirst.ThirstRestoreOnDeath;
 import me.sosedik.trappednewbie.listener.world.LimboWorldFall;
 import me.sosedik.trappednewbie.listener.world.LimitedLimbo;
 import me.sosedik.trappednewbie.listener.world.NoDayChangeInLimbo;
 import me.sosedik.trappednewbie.listener.world.PerPlayerWorlds;
+import me.sosedik.trappednewbie.listener.world.RainRefillsWaterAndMakesPuddles;
 import me.sosedik.utilizer.CommandManager;
 import me.sosedik.utilizer.api.language.TranslationHolder;
 import me.sosedik.utilizer.listener.BlockStorage;
@@ -124,9 +151,12 @@ import org.bukkit.Difficulty;
 import org.bukkit.GameRule;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Sound;
 import org.bukkit.Tag;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.data.Levelled;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.incendo.cloud.bukkit.internal.BukkitBrigadierMapper;
 import org.jetbrains.annotations.Nullable;
@@ -152,6 +182,8 @@ public final class TrappedNewbie extends JavaPlugin {
 		TrappedNewbie.instance = this;
 		this.scheduler = new Scheduler(this);
 
+		TrappedNewbieEffects.init();
+
 		cleanupTemporaryWorlds();
 
 		TranslationHolder.extractLocales(this);
@@ -164,6 +196,17 @@ public final class TrappedNewbie extends JavaPlugin {
 		Tag.FLOWER_POTS.getValues().forEach(material -> BlockStorage.addMapping(material, FlowerPotBlockStorage.class));
 		BlockStorage.addMapping(TrappedNewbieItems.CLAY_KILN, ClayKilnBlockStorage.class);
 		BlockStorage.addMapping(TrappedNewbieItems.SLEEPING_BAG, SleepingBagBlockStorage.class);
+
+		FillingBowlWithWater.BOWLS.forEach((bowl, filledBowl) -> {
+			ItemStack filled = TrappedNewbieRecipes.getFilled(ItemStack.of(bowl), ThirstData.DrinkType.MILK);
+			assert filled != null;
+			DelightfulFarmingRecipes.addMilkPredicate(filled, item -> ThirstData.DrinkType.fromItem(item) == ThirstData.DrinkType.MILK);
+		});
+		TrappedNewbieTags.CANTEENS.getValues().forEach(canteen -> {
+			ItemStack filled = TrappedNewbieRecipes.getFilled(ItemStack.of(canteen), ThirstData.DrinkType.MILK);
+			assert filled != null;
+			DelightfulFarmingRecipes.addMilkPredicate(filled, item -> ThirstData.DrinkType.fromItem(item) == ThirstData.DrinkType.MILK);
+		});
 	}
 
 	private void cleanupTemporaryWorlds() {
@@ -186,6 +229,8 @@ public final class TrappedNewbie extends JavaPlugin {
 
 		new AdvancementTrophyModifier(trappedNewbieKey("advancement_trophy")).register();
 		new AdvancementTrophyNameLoreModifier(trappedNewbieKey("advancement_trophy_name_lore")).register();
+		new DirtyWaterModifier(trappedNewbieKey("dirty_water")).register();
+		new FoodTooltipModifier(trappedNewbieKey("food_tooltip")).register();
 		new ItemModelModifier(trappedNewbieKey("item_model")).register();
 		ItemModelModifier.addReplacement(TrappedNewbieItems.SLEEPING_BAG, ResourceLib.storage().getItemModelMapping(trappedNewbieKey("sleeping_bag_item")));
 		ItemModelModifier.addReplacement(TrappedNewbieItems.CLAY_KILN, contextBox -> {
@@ -197,6 +242,8 @@ public final class TrappedNewbie extends JavaPlugin {
 		new ItemOverlayToggleModifier(trappedNewbieKey("overlay_toggle")).register();
 		new LetterModifier(trappedNewbieKey("letter")).register();
 		new PaperPlaneModifier(trappedNewbieKey("paper_plane")).register();
+		new ScrapModifier(trappedNewbieKey("scrap")).register();
+		new ThirstTooltipModifier(trappedNewbieKey("thirst_tooltip")).register();
 		new UnlitCampfireModifier(trappedNewbieKey("unlit_campfire")).register();
 		new VisualArmorModifier(trappedNewbieKey("visual_armor")).register();
 
@@ -234,6 +281,7 @@ public final class TrappedNewbie extends JavaPlugin {
 			BlockBreakHurts.class,
 			BlockChoppingViaSwing.class,
 			CustomBlockBreaking.class,
+			LogStrippingGivesBarks.class,
 			SoftBlockHandBreaking.class,
 			UnlitCampfireByDefault.class,
 			// entity
@@ -245,6 +293,9 @@ public final class TrappedNewbie extends JavaPlugin {
 			ShearableCreepers.class,
 			// item
 			BlackBeltSpeed.class,
+			CanteenInteractions.class,
+			FillingBowlWithMilk.class,
+			FillingBowlWithWater.class,
 			FirestrikerFire.class,
 			FlintToFlakedFlint.class,
 			FlowerBouquetAttackEffects.class,
@@ -254,7 +305,9 @@ public final class TrappedNewbie extends JavaPlugin {
 			KnifeCarvesTotemBases.class,
 			MeshSifting.class,
 			PaperPlanes.class,
+			QuenchedFromDrinkingCacti.class,
 			RoughSticksCreateFire.class,
+			ScrapOnItemBreak.class,
 			SimpleSoundItems.class,
 			SteelAndFlint.class,
 			ThrowableRockBehavior.class,
@@ -262,6 +315,7 @@ public final class TrappedNewbie extends JavaPlugin {
 			TrumpetScare.class,
 			VisualPumpkin.class,
 			// misc
+			ComfortEffectHandler.class,
 			CustomHudRenderer.class,
 			DisableJoinQuitMessages.class,
 			DynamicInventoryInfoGatherer.class,
@@ -274,17 +328,29 @@ public final class TrappedNewbie extends JavaPlugin {
 			DynamicGameMode.class,
 			ExtraPossessedDrops.class,
 			NewbieWelcome.class,
+			PossessingRegeneration.class,
 			StartAsGhost.class,
 			TaskManagement.class,
 			TeamableLeatherEquipment.class,
 			TotemRituals.class,
 			TrappedNewbiePlayerOptions.class,
 			VisualArmorLayer.class,
+			// thirst
+			DrinkableWater.class,
+			HealRestoresThirst.class,
+			NoSprintingWhileThirsty.class,
+			RainIsDrinkable.class,
+			SavingThirstDataToWaterBottles.class,
+			ThirstDecrease.class,
+			ThirstFromConsuming.class,
+			ThirstOnJoinLeave.class,
+			ThirstRestoreOnDeath.class,
 			// world
 			LimboWorldFall.class,
 			LimitedLimbo.class,
 			NoDayChangeInLimbo.class,
 			PerPlayerWorlds.class,
+			RainRefillsWaterAndMakesPuddles.class,
 			// command
 			MigrateCommand.class
 		);
@@ -298,11 +364,42 @@ public final class TrappedNewbie extends JavaPlugin {
 		GhostyPlayer.addFlightDenyRule(player -> player.getWorld() == limboWorld());
 		GhostyPlayer.addItemsDenyRule(player -> player.getWorld() == limboWorld());
 		PossessingPlayer.addItemsDenyRule(player -> player.getWorld() == limboWorld());
+
+		addItemFrameFallables();
+	}
+
+	private void addItemFrameFallables() {
+		ItemFrameFallables.addFallable(TrappedNewbieItems.FILLED_BOWL, (item, block) -> {
+			if (block.getType() == Material.CAULDRON) {
+				block.setType(Material.WATER_CAULDRON);
+				block.emitSound(Sound.BLOCK_POINTED_DRIPSTONE_DRIP_WATER_INTO_CAULDRON, 0.7F, 1.3F);
+				return null;
+			}
+
+			if (block.getType() == Material.WATER_CAULDRON && block.getBlockData() instanceof Levelled levelled) {
+				if (levelled.getLevel() < levelled.getMaximumLevel()) {
+					levelled.setLevel(levelled.getLevel() + 1);
+					block.setBlockData(levelled);
+				}
+				block.emitSound(Sound.BLOCK_POINTED_DRIPSTONE_DRIP_WATER_INTO_CAULDRON, 0.6F, 1.3F);
+				return null;
+			}
+
+			if (block.getType() == Material.LAVA_CAULDRON) {
+				block.emitSound(Sound.BLOCK_FIRE_EXTINGUISH, 0.6F, 1.3F);
+				return null;
+			}
+
+			block.emitSound(Sound.ENTITY_GENERIC_DRINK, 0.6F, 1.3F);
+			return null;
+		});
 	}
 
 	@Override
 	public void onDisable() {
+		RainRefillsWaterAndMakesPuddles.removeAllPuddles();
 		TrappedNewbieAdvancements.MANAGER.saveProgresses();
+		ThirstOnJoinLeave.saveAll();
 
 		for (int x = -CHUNK_RADIUS; x < CHUNK_RADIUS; x++) {
 			for (int y = -CHUNK_RADIUS; y < CHUNK_RADIUS; y++) {
@@ -372,7 +469,8 @@ public final class TrappedNewbie extends JavaPlugin {
 		commandManager.registerCommands(this,
 			MigrateCommand.class,
 			SpitCommand.class,
-			TestCommand.class
+			TestCommand.class,
+			ThirstCommand.class
 		);
 	}
 

@@ -36,6 +36,7 @@ import me.sosedik.utilizer.listener.misc.FixLeftAirClickWhenRightClickingEntity;
 import me.sosedik.utilizer.listener.misc.LocalizedDisconnectMessages;
 import me.sosedik.utilizer.listener.misc.LocalizedUnknownCommand;
 import me.sosedik.utilizer.listener.misc.MilkImmuneEffects;
+import me.sosedik.utilizer.listener.misc.SneakEmptyHandRightClickCatcher;
 import me.sosedik.utilizer.listener.player.CleanupPlayerScoreboards;
 import me.sosedik.utilizer.listener.player.PlayerDataLoadSave;
 import me.sosedik.utilizer.listener.player.PlayerLanguageLoadSave;
@@ -43,6 +44,7 @@ import me.sosedik.utilizer.listener.player.PlayerOptions;
 import me.sosedik.utilizer.listener.player.SetupPlayerScoreboards;
 import me.sosedik.utilizer.listener.player.UpdateInventoryOnLocaleChange;
 import me.sosedik.utilizer.listener.recipe.FireCrafting;
+import me.sosedik.utilizer.listener.recipe.WaterCrafting;
 import me.sosedik.utilizer.util.EventUtil;
 import me.sosedik.utilizer.util.Scheduler;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
@@ -126,6 +128,7 @@ public final class Utilizer extends JavaPlugin {
 			LocalizedDisconnectMessages.class,
 			LocalizedUnknownCommand.class,
 			MilkImmuneEffects.class,
+			SneakEmptyHandRightClickCatcher.class,
 			// player
 			CleanupPlayerScoreboards.class,
 			PlayerDataLoadSave.class,
@@ -134,7 +137,8 @@ public final class Utilizer extends JavaPlugin {
 			SetupPlayerScoreboards.class,
 			UpdateInventoryOnLocaleChange.class,
 			// recipe
-			FireCrafting.class
+			FireCrafting.class,
+			WaterCrafting.class
 		);
 
 		saveConfig();

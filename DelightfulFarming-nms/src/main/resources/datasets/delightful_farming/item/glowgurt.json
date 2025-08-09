@@ -2,20 +2,20 @@
 	"client_type": "minecraft:iron_nugget",
 	"food": {
 		"nutrition": 10,
-		"saturation": 0.6,
-		"consumable": {
-			"effects": [
-				{
-					"type": "apply_status_effects",
-					"effects": [
-						{
-							"type": "minecraft:glowing",
-							"duration": 3000,
-							"amplifier": 0
-						}
-					]
-				}
-			]
-		}
+		"saturation": 0.6
+	},
+	"consumable": {
+		"effects": [
+			{
+				"type": "apply_status_effects",
+				"effects": [
+					{
+						"type": "minecraft:glowing",
+						"duration": 3000,
+						"amplifier": 0
+					}
+				]
+			}
+		]
 	}
 }

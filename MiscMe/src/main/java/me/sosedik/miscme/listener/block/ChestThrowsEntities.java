@@ -10,9 +10,9 @@ import io.papermc.paper.world.damagesource.CombatEntry;
 import me.sosedik.miscme.MiscMe;
 import me.sosedik.utilizer.util.EntityUtil;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.BlockState;
 import org.bukkit.block.EnderChest;
 import org.bukkit.block.TileState;
 import org.bukkit.block.data.Directional;
@@ -81,10 +81,6 @@ public class ChestThrowsEntities implements Listener {
 		});
 	}
 
-	private boolean isChest(TileState tileState) {
-		return tileState instanceof org.bukkit.block.Chest || tileState instanceof EnderChest;
-	}
-
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onOpen(PlayerInteractEvent event) {
 		if (event.getHand() != EquipmentSlot.HAND) return;
@@ -96,7 +92,6 @@ public class ChestThrowsEntities implements Listener {
 
 		Block block = event.getClickedBlock();
 		if (block == null) return;
-		if (!isChest(block.getType())) return;
 		if (!(block.getBlockData() instanceof Chest)) return;
 		if (block.getRelative(BlockFace.UP).isSolid()) return;
 		if (!(block.getState(false) instanceof Lidded lidded)) return;
@@ -114,7 +109,7 @@ public class ChestThrowsEntities implements Listener {
 		if (!event.isOpening()) return;
 
 		Block block = event.getBlock();
-		if (!isChest(block.getType())) return;
+		if (!isChest(block.getState(false))) return;
 		if (!(block.getBlockData() instanceof Directional directional)) return;
 		if (block.getRelative(BlockFace.UP).isSolid()) return;
 		if (!(block.getState(false) instanceof TileState tileState)) return;
@@ -150,10 +145,8 @@ public class ChestThrowsEntities implements Listener {
 		});
 	}
 
-	private boolean isChest(Material type) {
-		return type == Material.CHEST
-				|| type == Material.TRAPPED_CHEST
-				|| type == Material.ENDER_CHEST;
+	private boolean isChest(BlockState state) {
+		return state instanceof org.bukkit.block.Chest || state instanceof EnderChest;
 	}
 
 }

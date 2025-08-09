@@ -9,5 +9,11 @@
 	"item.delightful_farming.sweet_berry_basket.name": "Basket of Sweet Berries",
 	"item.delightful_farming.glow_berry_basket.name": "Basket of Glow Berries",
 	"item.delightful_farming.glowgurt.name": "Glowgurt",
-	"item.delightful_farming.charcoal_block.name": "Block of Charcoal"
+	"item.delightful_farming.charcoal_block.name": "Block of Charcoal",
+	"item.delightful_farming.broken_egg.name": "Cracked Egg",
+	"item.delightful_farming.broken_brown_egg.name": "Cracked Brown Egg",
+	"item.delightful_farming.broken_blue_egg.name": "Cracked Blue Egg",
+	"item.delightful_farming.broken_turtle_egg.name": "Cracked Turtle Egg",
+	"item.delightful_farming.cactus_flesh.name": "Cactus Flesh",
+	"item.delightful_farming.cactus_steak.name": "Cactus Steak"
 }

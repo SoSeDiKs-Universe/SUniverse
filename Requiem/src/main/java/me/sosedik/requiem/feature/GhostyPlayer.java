@@ -54,16 +54,16 @@ public class GhostyPlayer {
 	 * @param player player
 	 */
 	public static void markGhost(Player player) {
-		if (isGhost(player)) return;
+		boolean freshAdd = GHOSTS.add(player.getUniqueId());
 
-		for (ItemStack item : player.getInventory()) {
-			if (ItemStack.isEmpty(item)) continue;
+		if (freshAdd) {
+			for (ItemStack item : player.getInventory()) {
+				if (ItemStack.isEmpty(item)) continue;
 
-			player.dropItem(item, true, i -> i.setPickupDelay(5));
-			item.setAmount(0);
+				player.dropItem(item, true, i -> i.setPickupDelay(5));
+				item.setAmount(0);
+			}
 		}
-
-		GHOSTS.add(player.getUniqueId());
 
 		EntityUtil.clearTargets(player);
 
@@ -97,12 +97,14 @@ public class GhostyPlayer {
 		checkCanGhostFly(player);
 		checkCanHoldGhostItems(player);
 
-		MetadataUtil.setMetadata(player, AURA_TASK_KEY, new GhostAuraTask(player));
-		MetadataUtil.setMetadata(player, VISION_TASK_KEY, new GhostMobVisionTask(player));
+		if (freshAdd) {
+			MetadataUtil.setMetadata(player, AURA_TASK_KEY, new GhostAuraTask(player));
+			MetadataUtil.setMetadata(player, VISION_TASK_KEY, new GhostMobVisionTask(player));
 
-		new PlayerStartGhostingEvent(player).callEvent();
+			new PlayerStartGhostingEvent(player).callEvent();
+		}
 
-		Requiem.logger().info("Making {} a ghost", player.getName());
+		Requiem.logger().info("Making {} a ghost (fresh: {})", player.getName(), freshAdd);
 	}
 
 	/**

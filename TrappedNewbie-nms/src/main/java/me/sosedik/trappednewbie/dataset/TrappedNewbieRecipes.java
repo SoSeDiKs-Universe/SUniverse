@@ -1,13 +1,20 @@
 package me.sosedik.trappednewbie.dataset;
 
+import me.sosedik.delightfulfarming.dataset.DelightfulFarmingItems;
 import me.sosedik.miscme.api.event.player.PlayerIgniteExplosiveMinecartEvent;
+import me.sosedik.miscme.listener.misc.WaterAwarePotionReset;
 import me.sosedik.requiem.dataset.RequiemItems;
 import me.sosedik.trappednewbie.TrappedNewbie;
+import me.sosedik.trappednewbie.impl.item.modifier.ScrapModifier;
+import me.sosedik.trappednewbie.impl.thirst.ThirstData;
+import me.sosedik.trappednewbie.listener.block.LogStrippingGivesBarks;
+import me.sosedik.trappednewbie.listener.item.FillingBowlWithWater;
 import me.sosedik.utilizer.api.event.recipe.ItemCraftPrepareEvent;
 import me.sosedik.utilizer.dataset.UtilizerTags;
 import me.sosedik.utilizer.impl.recipe.FireCraft;
 import me.sosedik.utilizer.impl.recipe.ShapedCraft;
 import me.sosedik.utilizer.impl.recipe.ShapelessCraft;
+import me.sosedik.utilizer.impl.recipe.WaterCraft;
 import me.sosedik.utilizer.util.MiscUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Keyed;
@@ -30,6 +37,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -199,7 +207,94 @@ public class TrappedNewbieRecipes {
 				.register();
 		});
 
+		new ShapelessCraft(ItemStack.of(TrappedNewbieItems.RAW_HIDE), trappedNewbieKey("raw_hide"))
+			.addIngredients(TrappedNewbieTags.HIDES.getValues())
+			.addIngredients(UtilizerTags.KNIFES.getValues())
+			.register();
+
+		new ShapelessCraft(ItemStack.of(Material.PAPER), trappedNewbieKey("paper_from_birch_barks"))
+			.addIngredients(TrappedNewbieItems.BIRCH_BARK, 3)
+			.register();
+
+		new ShapelessCraft(ItemStack.of(TrappedNewbieItems.CHARCOAL_FILTER, 3), trappedNewbieKey("charcoal_filter"))
+			.addIngredients(Material.PAPER, Material.CHARCOAL, Material.PAPER)
+			.register();
+
+		new ShapedCraft(ItemStack.of(TrappedNewbieItems.CACTUS_BOWL), trappedNewbieKey("cactus_bowl"), "C C", " C ")
+			.addIngredients('C', DelightfulFarmingItems.CACTUS_FLESH)
+			.register();
+
+		final String emptyingGroup = "fluid_emptying";
+		FillingBowlWithWater.BOWLS.forEach((bowl, filledBowl) -> {
+			if (bowl == Material.GLASS_BOTTLE) return;
+			new ShapelessCraft(ItemStack.of(bowl), trappedNewbieKey(bowl.key().value() + "_emptying"))
+				.withGroup(emptyingGroup)
+				.addIngredients(filledBowl)
+				.withExemptLeftovers()
+				.special()
+				.register();
+		});
+		new ShapelessCraft(ItemStack.of(Material.GLASS_BOTTLE), trappedNewbieKey("bottle_emptying"))
+			.withGroup(emptyingGroup)
+			.addIngredients('P', Material.POTION, Material.SPLASH_POTION, Material.LINGERING_POTION, Material.HONEY_BOTTLE)
+			.withExemptLeftovers()
+			.special()
+			.register();
+		TrappedNewbieTags.CANTEENS.getValues().forEach(canteen -> {
+			new ShapelessCraft(ItemStack.of(canteen), trappedNewbieKey(canteen.key().value() + "_emptying"))
+				.withGroup(emptyingGroup)
+				.addIngredients(TrappedNewbieItems.CANTEEN)
+				.withExemptLeftovers()
+				.special()
+				.withPreCheck(event -> {
+					ItemStack ingredient = null;
+					for (ItemStack item : event.getMatrix()) {
+						if (ItemStack.isEmpty(item)) continue;
+
+						ingredient = item;
+						break;
+					}
+					if (ingredient == null) {
+						event.setResult(null);
+						return;
+					}
+					event.setResult(ScrapModifier.makeScrap(ingredient));
+				})
+				.register();
+		});
+
+		new ShapedCraft(ItemStack.of(TrappedNewbieItems.CANTEEN), trappedNewbieKey("canteen"), "TLT", "LIL", "LLL")
+			.withCategory(CraftingBookCategory.EQUIPMENT)
+			.addIngredients('T', Material.STRING, TrappedNewbieItems.TWINE)
+			.addIngredients('L', Material.LEATHER)
+			.addIngredients('I', Material.INK_SAC, Material.GLOW_INK_SAC)
+			.register();
+
+		FillingBowlWithWater.BOWLS.forEach((bowl, filledBowl) -> {
+			new ShapelessCraft(Objects.requireNonNull(getFilled(ItemStack.of(bowl), ThirstData.DrinkType.CACTUS_JUICE)), trappedNewbieKey("cactus_" + filledBowl.key().value()))
+				.withGroup("cactus_juice")
+				.addIngredients(DelightfulFarmingItems.CACTUS_FLESH)
+				.addIngredients(Material.CACTUS_FLOWER)
+				.addIngredients(bowl)
+				.register();
+		});
+
+		addDrinkRecipes();
+
 		addFlowerBouquetRecipe();
+
+		addBarkRecipes(Material.ACACIA_LOG, Material.STRIPPED_ACACIA_LOG, Material.ACACIA_WOOD, Material.STRIPPED_ACACIA_WOOD, TrappedNewbieItems.ACACIA_BARK);
+		addBarkRecipes(Material.BIRCH_LOG, Material.STRIPPED_BIRCH_LOG, Material.BIRCH_WOOD, Material.STRIPPED_BIRCH_WOOD, TrappedNewbieItems.BIRCH_BARK);
+		addBarkRecipes(Material.DARK_OAK_LOG, Material.STRIPPED_DARK_OAK_LOG, Material.DARK_OAK_WOOD, Material.STRIPPED_DARK_OAK_WOOD, TrappedNewbieItems.DARK_OAK_BARK);
+		addBarkRecipes(Material.JUNGLE_LOG, Material.STRIPPED_JUNGLE_LOG, Material.JUNGLE_WOOD, Material.STRIPPED_JUNGLE_WOOD, TrappedNewbieItems.JUNGLE_BARK);
+		addBarkRecipes(Material.SPRUCE_LOG, Material.STRIPPED_SPRUCE_LOG, Material.SPRUCE_WOOD, Material.STRIPPED_SPRUCE_WOOD, TrappedNewbieItems.SPRUCE_BARK);
+		addBarkRecipes(Material.OAK_LOG, Material.STRIPPED_OAK_LOG, Material.OAK_WOOD, Material.STRIPPED_OAK_WOOD, TrappedNewbieItems.OAK_BARK);
+		addBarkRecipes(Material.CHERRY_LOG, Material.STRIPPED_CHERRY_LOG, Material.CHERRY_WOOD, Material.STRIPPED_CHERRY_WOOD, TrappedNewbieItems.CHERRY_BARK);
+		addBarkRecipes(Material.MANGROVE_LOG, Material.STRIPPED_MANGROVE_LOG, Material.MANGROVE_WOOD, Material.STRIPPED_MANGROVE_WOOD, TrappedNewbieItems.MANGROVE_BARK);
+		addBarkRecipes(Material.PALE_OAK_LOG, Material.STRIPPED_PALE_OAK_LOG, Material.PALE_OAK_WOOD, Material.STRIPPED_PALE_OAK_WOOD, TrappedNewbieItems.PALE_OAK_BARK);
+		addBarkRecipes(Material.CRIMSON_STEM, Material.STRIPPED_CRIMSON_STEM, Material.CRIMSON_HYPHAE, Material.STRIPPED_CRIMSON_HYPHAE, TrappedNewbieItems.CRIMSON_BARK);
+		addBarkRecipes(Material.WARPED_STEM, Material.STRIPPED_WARPED_STEM, Material.WARPED_HYPHAE, Material.STRIPPED_WARPED_HYPHAE, TrappedNewbieItems.WARPED_BARK);
+		addBarkRecipes(Material.BAMBOO_BLOCK, Material.STRIPPED_BAMBOO_BLOCK, null, null, TrappedNewbieItems.BAMBOO_BARK);
 
 		addBranchRecipe(TrappedNewbieItems.ACACIA_BRANCH, Material.ACACIA_SAPLING);
 		addBranchRecipe(TrappedNewbieItems.BIRCH_BRANCH, Material.BIRCH_SAPLING);
@@ -263,6 +358,18 @@ public class TrappedNewbieRecipes {
 				.register();
 		});
 
+		new WaterCraft(ItemStack.of(Material.WATER_BUCKET), trappedNewbieKey("water_bucket"))
+			.addIngredients(Material.BUCKET)
+			.register();
+		new WaterCraft(ItemStack.of(TrappedNewbieItems.FILLED_BOWL), trappedNewbieKey("filled_bowl"))
+			.addIngredients(Material.BOWL)
+			.withAction(itemDrop -> itemDrop.setItemStack(ThirstData.of(itemDrop.getLocation().getBlock()).saveInto(itemDrop.getItemStack())))
+			.register();
+		new WaterCraft(ItemStack.of(TrappedNewbieItems.FILLED_CACTUS_BOWL), trappedNewbieKey("water_cactus_bowl"))
+			.addIngredients(TrappedNewbieItems.CACTUS_BOWL)
+			.withAction(itemDrop -> itemDrop.setItemStack(ThirstData.of(itemDrop.getLocation().getBlock()).saveInto(itemDrop.getItemStack())))
+			.register();
+
 		new FireCraft(ItemStack.of(Material.BRICK), trappedNewbieKey("clay_ball_to_brick"))
 			.withBurnChance(0.1)
 			.addIngredients(Material.CLAY_BALL)
@@ -308,6 +415,60 @@ public class TrappedNewbieRecipes {
 		if (logType == null && type.key().value().startsWith("bamboo_")) logType = Material.BAMBOO_BLOCK;
 		if (logType == null) throw new IllegalArgumentException("Couldn't find log item for " + type.key());
 		return logType;
+	}
+
+	private static void addDrinkRecipes() {
+		FillingBowlWithWater.BOWLS.values().forEach(filledBowl -> registerDrinkRecipes(filledBowl == Material.POTION ? WaterAwarePotionReset.getWaterBottle(1) : ItemStack.of(filledBowl), filledBowl.key().value()));
+		TrappedNewbieTags.CANTEENS.getValues().forEach(canteen -> registerDrinkRecipes(ItemStack.of(canteen), canteen.key().value()));
+	}
+
+	private static void registerDrinkRecipes(ItemStack result, String key) {
+		Material ingredientType = result.getType();
+		new ShapelessCraft(ThirstData.of(result).withCooled().saveInto(result), trappedNewbieKey(key + "_cooling"))
+			.withGroup("drink_cooling")
+			.addIngredientItems(result, item -> !ThirstData.isCooled(item))
+			.addIngredients(TrappedNewbieItems.ICE_CUBE)
+			.withExemptLeftovers()
+			.withPreCheck(event -> {
+				ItemStack ingredient = null;
+				for (ItemStack item : event.getMatrix()) {
+					if (!ItemStack.isType(item, ingredientType)) continue;
+
+					ingredient = item;
+					break;
+				}
+				if (ingredient == null) {
+					event.setResult(null);
+					return;
+				}
+				ItemStack resultItem = ThirstData.of(ingredient).withCooled().saveInto(ingredient);
+				event.setResult(resultItem);
+			})
+			.register();
+
+		if (result.getType() == TrappedNewbieItems.DRAGON_FLASK) return;
+
+		new ShapelessCraft(ThirstData.of(result).withCooled().saveInto(result), trappedNewbieKey(key + "_purifying"))
+			.withGroup("drink_purifying")
+			.addIngredientItems(result, item -> !ThirstData.isPure(item))
+			.addIngredients(TrappedNewbieItems.CHARCOAL_FILTER)
+			.withExemptLeftovers()
+			.withPreCheck(event -> {
+				ItemStack ingredient = null;
+				for (ItemStack item : event.getMatrix()) {
+					if (!ItemStack.isType(item, ingredientType)) continue;
+
+					ingredient = item;
+					break;
+				}
+				if (ingredient == null) {
+					event.setResult(null);
+					return;
+				}
+				ItemStack resultItem = ThirstData.of(ingredient).withThirstChance(0).saveInto(ingredient);
+				event.setResult(resultItem);
+			})
+			.register();
 	}
 
 	private static void addFlowerBouquetRecipe() {
@@ -368,6 +529,28 @@ public class TrappedNewbieRecipes {
 				Bukkit.addRecipe(recipe, false);
 			});
 		}, 1L);
+	}
+
+	private static void addBarkRecipes(Material log, Material strippedLog, @Nullable Material wood, @Nullable Material strippedWood, Material bark) {
+		LogStrippingGivesBarks.addBark(log, strippedLog, ItemStack.of(bark, 4));
+		new ShapelessCraft(ItemStack.of(log), trappedNewbieKey(log.key().value() + "_from_barks"))
+			.withGroup("log_from_barks")
+			.addIngredients(strippedLog)
+			.addIngredients(bark, 4)
+			.register();
+		if (wood != null && strippedWood != null) {
+			LogStrippingGivesBarks.addBark(wood, strippedWood, ItemStack.of(bark, 6));
+			new ShapelessCraft(ItemStack.of(wood), trappedNewbieKey(wood.key().value() + "_from_log_and_barks"))
+				.withGroup("wood_log_and_barks")
+				.addIngredients(log)
+				.addIngredients(bark, 2)
+				.register();
+			new ShapelessCraft(ItemStack.of(wood), trappedNewbieKey(wood.key().value() + "_from_barks"))
+				.withGroup("wood_from_barks")
+				.addIngredients(strippedWood)
+				.addIngredients(bark, 6)
+				.register();
+		}
 	}
 
 	private static void addBranchRecipe(Material branch, Material sapling) {
@@ -457,6 +640,18 @@ public class TrappedNewbieRecipes {
 		}
 		if (!Bukkit.removeRecipe(NamespacedKey.minecraft(key)))
 			TrappedNewbie.logger().error("Could not find vanilla recipe with key {}", key);
+	}
+
+	public static @Nullable ItemStack getFilled(ItemStack item, ThirstData.DrinkType drinkType) {
+		Material filledType = FillingBowlWithWater.BOWLS.get(item.getType());
+		if (filledType == null) {
+			if (TrappedNewbieTags.CANTEENS.isTagged(item.getType()))
+				filledType = item.getType();
+			else
+				return null;
+		}
+
+		return new ThirstData(0, 0, 0, null, drinkType, false).saveInto(ItemStack.of(filledType));
 	}
 
 }

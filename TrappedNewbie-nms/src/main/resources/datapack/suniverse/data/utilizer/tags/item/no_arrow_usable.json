@@ -5,6 +5,9 @@
     "requiem:host_revocator",
     "trapped_newbie:trumpet",
     "trapped_newbie:firestriker",
+    "trapped_newbie:canteen",
+    "trapped_newbie:reinforced_canteen",
+    "trapped_newbie:dragon_flask",
     "#trapped_newbie:glass_shards"
   ]
 }

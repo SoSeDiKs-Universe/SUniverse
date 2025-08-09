@@ -9,6 +9,7 @@ import me.sosedik.trappednewbie.impl.hud.AirRenderer;
 import me.sosedik.trappednewbie.impl.hud.ArmorRenderer;
 import me.sosedik.trappednewbie.impl.hud.HealthRenderer;
 import me.sosedik.trappednewbie.impl.hud.HungerRenderer;
+import me.sosedik.trappednewbie.impl.hud.ThirstRenderer;
 import me.sosedik.trappednewbie.listener.player.TaskManagement;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -40,8 +41,8 @@ public class CustomHudRenderer implements Listener {
 			new AirRenderer(player),
 			new ArmorRenderer(player),
 			new HealthRenderer(player),
-			new HungerRenderer(player)
-//			new ThirstRenderer(player), // TODO thirst
+			new HungerRenderer(player),
+			new ThirstRenderer(player)
 //			new TemperatureRenderer(player) // TODO temperature
 		);
 		for (HudRenderer hud : huds) {

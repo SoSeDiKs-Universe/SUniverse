@@ -1,0 +1,10 @@
+{
+	"client_type": "minecraft:suspicious_stew",
+	"remaining_item": "trapped_newbie:cactus_bowl",
+	"using_converts_to": "trapped_newbie:cactus_bowl",
+	"stack_size": 1,
+	"dyeable": 4159204,
+	"consumable": {
+		"type": "drink"
+	}
+}

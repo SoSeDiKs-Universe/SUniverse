@@ -1,3 +1,5 @@
 {
-	"command.migrate.migrating": "Your progress is being reset, please, join a bit later!"
+	"command.migrate.migrating": "Your progress is being reset, please, join a bit later!",
+	"command.thirst": "Your thirst was set to <yellow><amount>",
+	"command.thirst.other": "You've set thirst to <yellow><amount></yellow> for <yellow><player>"
 }

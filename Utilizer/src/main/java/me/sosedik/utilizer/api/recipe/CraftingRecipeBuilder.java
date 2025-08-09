@@ -12,6 +12,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 /**
@@ -183,6 +184,18 @@ public abstract class CraftingRecipeBuilder<T extends CraftingRecipeBuilder<T>> 
 	 */
 	public T withValidator(char key, Predicate<ItemStack> validator) {
 		this.validators.put(key, validator);
+		return builder();
+	}
+
+	/**
+	 * Applies an action to this builder
+	 *
+	 * @param action action
+	 * @return this builder
+	 */
+	@SuppressWarnings("unchecked")
+	public T apply(Consumer<T> action) {
+		action.accept((T) this);
 		return builder();
 	}
 

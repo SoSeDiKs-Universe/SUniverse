@@ -52,7 +52,7 @@ public class NMesSUtil {
 		return Map.entry(resultItem.asBukkitCopy(), () -> new CraftItemEvent(recipeHolder.toBukkitRecipe(), craftMenu.getBukkitView(), InventoryType.SlotType.RESULT, 0, ClickType.LEFT, InventoryAction.NOTHING));
 	}
 
-	public static @Nullable FurnaceRecipe getFurnaceRecipe(org.bukkit.inventory.ItemStack input) { // TODO This omits smelt events, but they require a furnace block
+	public static @Nullable FurnaceRecipe getFurnaceRecipe(org.bukkit.inventory.ItemStack input) { // TODO This omits smelt events, but they require a furnace block, and I'm feeling lazy
 		Iterator<Recipe> recipeIterator = Bukkit.getServer().recipeIterator();
 		while (recipeIterator.hasNext()) {
 			if (!(recipeIterator.next() instanceof FurnaceRecipe furnaceRecipe)) continue;

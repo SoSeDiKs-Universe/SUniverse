@@ -9,5 +9,11 @@
 	"item.delightful_farming.sweet_berry_basket.name": "Кошик солодких ягід",
 	"item.delightful_farming.glow_berry_basket.name": "Кошик сяйних ягід",
 	"item.delightful_farming.glowgurt.name": "Сяюче варення",
-	"item.delightful_farming.charcoal_block.name": "Блок деревного вугілля"
+	"item.delightful_farming.charcoal_block.name": "Блок деревного вугілля",
+	"item.delightful_farming.broken_egg.name": "Тріснуте яйце",
+	"item.delightful_farming.broken_brown_egg.name": "Тріснуте коричневе яйце",
+	"item.delightful_farming.broken_blue_egg.name": "Тріснуте блакитне яйце",
+	"item.delightful_farming.broken_turtle_egg.name": "Тріснуте яйце черепахи",
+	"item.delightful_farming.cactus_flesh.name": "М'якоть кактуса",
+	"item.delightful_farming.cactus_steak.name": "Кактусовий стейк"
 }

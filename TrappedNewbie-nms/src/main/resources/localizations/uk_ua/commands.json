@@ -1,3 +1,5 @@
 {
-	"command.migrate.migrating": "Ваш прогрес у процесі скидання, будь ласка, зайдіть трішки пізніше!"
+	"command.migrate.migrating": "Ваш прогрес у процесі скидання, будь ласка, зайдіть трішки пізніше!",
+	"command.thirst": "Вашу спрагу було встановлено на <yellow><amount>",
+	"command.thirst.other": "Ви встановили спрагу на <yellow><amount></yellow> для гравця <yellow><player>"
 }

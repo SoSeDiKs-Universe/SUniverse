@@ -72,7 +72,7 @@ public class EventUtil {
 
 	private static boolean isValidListener(Class<?> listenerClass) {
 		return Listener.class.isAssignableFrom(listenerClass)
-				|| PacketListener.class.isAssignableFrom(listenerClass);
+			|| PacketListener.class.isAssignableFrom(listenerClass);
 	}
 
 }

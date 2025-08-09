@@ -4,6 +4,9 @@ import me.sosedik.resourcelib.impl.item.nms.AbstractBowItem;
 import me.sosedik.resourcelib.impl.item.nms.AbstractCrossbowItem;
 import me.sosedik.resourcelib.impl.item.nms.AbstractShearstItem;
 import me.sosedik.resourcelib.impl.item.nms.AbstractTridentItem;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ShearsItem;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -35,7 +38,7 @@ public class ItemCreator {
 	}
 
 	public static Object shearsItem(Object properties) {
-		return new AbstractShearstItem(properties);
+		return new AbstractShearstItem(((Item.Properties) properties).component(DataComponents.TOOL, ShearsItem.createToolProperties()));
 	}
 
 }

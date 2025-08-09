@@ -188,9 +188,9 @@ public class EntityUtil {
 	public static boolean isNaturallySpawned(Entity entity) {
 		CreatureSpawnEvent.SpawnReason spawnReason = entity.getEntitySpawnReason();
 		return spawnReason == CreatureSpawnEvent.SpawnReason.NATURAL
-				|| spawnReason == CreatureSpawnEvent.SpawnReason.DEFAULT
-				|| spawnReason == CreatureSpawnEvent.SpawnReason.SPAWNER
-				|| spawnReason == CreatureSpawnEvent.SpawnReason.SPAWNER_EGG;
+			|| spawnReason == CreatureSpawnEvent.SpawnReason.DEFAULT
+			|| spawnReason == CreatureSpawnEvent.SpawnReason.SPAWNER
+			|| spawnReason == CreatureSpawnEvent.SpawnReason.SPAWNER_EGG;
 	}
 
 	/**

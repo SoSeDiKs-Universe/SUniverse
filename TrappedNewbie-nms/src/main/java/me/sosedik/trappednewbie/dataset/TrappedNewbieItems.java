@@ -85,6 +85,20 @@ public class TrappedNewbieItems {
 	public static final Material CRIMSON_STICK = byKey("crimson_stick");
 	public static final Material WARPED_STICK = byKey("warped_stick");
 
+	// Barks
+	public static final Material ACACIA_BARK = byKey("acacia_bark");
+	public static final Material BIRCH_BARK = byKey("birch_bark");
+	public static final Material CHERRY_BARK = byKey("cherry_bark");
+	public static final Material DARK_OAK_BARK = byKey("dark_oak_bark");
+	public static final Material JUNGLE_BARK = byKey("jungle_bark");
+	public static final Material MANGROVE_BARK = byKey("mangrove_bark");
+	public static final Material OAK_BARK = byKey("oak_bark");
+	public static final Material PALE_OAK_BARK = byKey("pale_oak_bark");
+	public static final Material SPRUCE_BARK = byKey("spruce_bark");
+	public static final Material BAMBOO_BARK = byKey("bamboo_bark");
+	public static final Material CRIMSON_BARK = byKey("crimson_bark");
+	public static final Material WARPED_BARK = byKey("warped_bark");
+
 	// Chopping Blocks
 	public static final Material ACACIA_CHOPPING_BLOCK = byKey("acacia_chopping_block");
 	public static final Material BIRCH_CHOPPING_BLOCK = byKey("birch_chopping_block");
@@ -135,9 +149,12 @@ public class TrappedNewbieItems {
 	public static final Material CLAY_KILN = byKey("clay_kiln");
 	public static final Material SLEEPING_BAG = byKey("sleeping_bag");
 
+	public static final Material SCRAP = byKey("scrap");
 	public static final Material ASH = byKey("ash");
 	public static final Material BALL_OF_MUD = byKey("ball_of_mud");
 	public static final Material ICE_CUBE = byKey("ice_cube");
+	public static final Material CHARCOAL_FILTER = byKey("charcoal_filter");
+	public static final Material RAW_HIDE = byKey("raw_hide");
 
 	public static final Material LETTER = byKey("letter");
 	public static final Material PAPER_PLANE = byKey("paper_plane");
@@ -147,6 +164,13 @@ public class TrappedNewbieItems {
 	public static final Material RED_SANDSTONE_HAMMER = byKey("red_sandstone_hammer");
 	public static final Material TRUMPET = byKey("trumpet");
 	public static final Material FLOWER_BOUQUET = byKey("flower_bouquet");
+
+	public static final Material FILLED_BOWL = byKey("filled_bowl");
+	public static final Material CACTUS_BOWL = byKey("cactus_bowl");
+	public static final Material FILLED_CACTUS_BOWL = byKey("filled_cactus_bowl");
+	public static final Material CANTEEN = byKey("canteen");
+	public static final Material REINFORCED_CANTEEN = byKey("reinforced_canteen");
+	public static final Material DRAGON_FLASK = byKey("dragon_flask");
 
 	public static final Material TOTEMIC_STAFF = byKey("totemic_staff");
 	public static final Material RATTLE = byKey("rattle");

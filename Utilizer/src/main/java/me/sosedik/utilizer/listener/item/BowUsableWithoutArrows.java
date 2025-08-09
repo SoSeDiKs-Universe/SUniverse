@@ -1,5 +1,6 @@
 package me.sosedik.utilizer.listener.item;
 
+import io.papermc.paper.datacomponent.DataComponentTypes;
 import me.sosedik.kiterino.event.entity.EntityLoadsProjectileEvent;
 import me.sosedik.utilizer.dataset.UtilizerTags;
 import org.bukkit.Material;
@@ -22,6 +23,10 @@ public class BowUsableWithoutArrows implements Listener {
 
 	private static final ItemStack DUMMY_ARROW = ItemStack.of(Material.ARROW);
 
+	static {
+		DUMMY_ARROW.setData(DataComponentTypes.INTANGIBLE_PROJECTILE);
+	}
+
 	@EventHandler(priority = EventPriority.LOW)
 	public void onBlockInteract(PlayerInteractEvent event) {
 		if (event.getHand() != EquipmentSlot.OFF_HAND) return;
@@ -38,14 +43,15 @@ public class BowUsableWithoutArrows implements Listener {
 
 	@EventHandler(priority = EventPriority.LOW)
 	public void onAirInteract(PlayerInteractEvent event) {
-		if (event.useItemInHand() != Event.Result.DENY) return;
+		if (event.useItemInHand() == Event.Result.ALLOW) return;
 		if (event.getClickedBlock() != null) return;
 		if (event.getHand() == null) return;
 
 		Player player = event.getPlayer();
 		if (!UtilizerTags.NO_ARROW_USABLE.isTagged(player.getInventory().getItem(event.getHand()).getType())) return;
 
-		event.setCancelled(false);
+		event.setUseItemInHand(Event.Result.ALLOW);
+		player.startUsingItem(event.getHand());
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)

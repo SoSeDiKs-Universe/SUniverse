@@ -11,7 +11,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "trapped_newbie:flaked_flint"
+          "name": "minecraft:flint"
         }
       ],
       "rolls": 1.0

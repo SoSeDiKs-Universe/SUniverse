@@ -1,0 +1,10 @@
+{
+	"client_type": "minecraft:suspicious_stew",
+	"remaining_item": "minecraft:bowl",
+	"using_converts_to": "minecraft:bowl",
+	"stack_size": 1,
+	"dyeable": 4159204,
+	"consumable": {
+		"type": "drink"
+	}
+}

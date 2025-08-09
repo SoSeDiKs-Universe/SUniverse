@@ -10,6 +10,10 @@ import static me.sosedik.delightfulfarming.DelightfulFarming.delightfulFarmingKe
 @NullMarked
 public class DelightfulFarmingTags {
 
-	public static final Tag<Material> MILK_CONTAINERS = ItemUtil.itemTag(delightfulFarmingKey("milk_containers"));
+	public static final Tag<Material> DRINKS = itemTag("drinks");
+
+	private static Tag<Material> itemTag(String key) {
+		return ItemUtil.itemTag(delightfulFarmingKey(key));
+	}
 
 }

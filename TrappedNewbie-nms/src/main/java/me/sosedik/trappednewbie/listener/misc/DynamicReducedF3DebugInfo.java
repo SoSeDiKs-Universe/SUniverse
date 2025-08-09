@@ -58,8 +58,7 @@ public class DynamicReducedF3DebugInfo implements Listener {
 	}
 
 	private boolean shouldEnableF3(Player player) {
-		if (player.getGameMode().isInvulnerable()) return true;
-		return DynamicInventoryInfoGatherer.getInventoryData(player).shouldDisableReducedDebugInfo();
+		return isImmuneToReducedDebugInfo(player) || DynamicInventoryInfoGatherer.getInventoryData(player).shouldDisableReducedDebugInfo();
 	}
 
 	/**
@@ -69,9 +68,14 @@ public class DynamicReducedF3DebugInfo implements Listener {
 	 */
 	public static void enableReducedDebugInfo(Player player) {
 		if (!DEBUGGERS.add(player.getUniqueId())) return;
+		if (isImmuneToReducedDebugInfo(player)) return;
 
 		var packet = new WrapperPlayServerEntityStatus(player.getEntityId(), ENABLE_REDUCED_DEBUG_INFO);
 		PacketEvents.getAPI().getPlayerManager().sendPacket(player, packet);
+	}
+
+	private static boolean isImmuneToReducedDebugInfo(Player player) {
+		return player.isOp() || player.getGameMode().isInvulnerable();
 	}
 
 	/**

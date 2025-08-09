@@ -6,6 +6,7 @@ import io.papermc.paper.datacomponent.item.TooltipDisplay;
 import me.sosedik.kiterino.modifier.item.ItemContextBox;
 import me.sosedik.kiterino.modifier.item.ItemModifier;
 import me.sosedik.kiterino.modifier.item.ModificationResult;
+import me.sosedik.miscme.dataset.MiscMeTags;
 import me.sosedik.utilizer.api.message.Mini;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -41,9 +42,11 @@ public class FancierDyedLoreModifier extends ItemModifier {
 			item.setData(DataComponentTypes.TOOLTIP_DISPLAY, TooltipDisplay.tooltipDisplay().hiddenComponents(tooltipDisplay.hiddenComponents()).addHiddenComponents(DataComponentTypes.DYED_COLOR).build()); // TODO replace with toBuilder once available
 		}
 
-		DyedItemColor dyedItemColor = item.getData(DataComponentTypes.DYED_COLOR);
-		assert dyedItemColor != null;
-		contextBox.addLore(getDyedLore(dyedItemColor.color()));
+		if (!MiscMeTags.FAKE_DYEABLE.isTagged(contextBox.getInitialType())) {
+			DyedItemColor dyedItemColor = item.getData(DataComponentTypes.DYED_COLOR);
+			assert dyedItemColor != null;
+			contextBox.addLore(getDyedLore(dyedItemColor.color()));
+		}
 
 		return ModificationResult.OK;
 	}

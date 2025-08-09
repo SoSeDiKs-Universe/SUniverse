@@ -44,7 +44,7 @@ public class CustomTotemOfUndyingModifier extends ItemModifier {
 		ItemStack itemStack = TOTEM_CACHE.remove(player.getUniqueId());
 		if (itemStack == null) return ModificationResult.PASS;
 
-		itemStack = ItemModifier.modifyItem(new ItemContextBox(player, contextBox.getLocale(), ItemModifierContextType.EMPTY_NO_LORE, ItemModifierContext.EMPTY, itemStack.clone()));
+		itemStack = modifyItem(new ItemContextBox(player, contextBox.getLocale(), ItemModifierContextType.EMPTY_NO_LORE, ItemModifierContext.EMPTY, itemStack.clone()));
 		if (itemStack == null) return ModificationResult.PASS;
 
 		itemStack.setData(DataComponentTypes.CUSTOM_NAME, Component.empty());

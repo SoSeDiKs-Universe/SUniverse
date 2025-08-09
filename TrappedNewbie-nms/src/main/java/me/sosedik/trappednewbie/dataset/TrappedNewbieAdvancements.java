@@ -88,6 +88,7 @@ import static me.sosedik.packetadvancements.imlp.advancement.fake.FakeAdvancemen
 import static me.sosedik.packetadvancements.imlp.advancement.linking.LinkingAdvancement.buildLinking;
 import static me.sosedik.packetadvancements.imlp.advancement.multi.MultiParentAdvancement.buildMulti;
 import static me.sosedik.packetadvancements.imlp.advancement.root.RootAdvancement.buildRoot;
+import static me.sosedik.packetadvancements.imlp.display.AdvancementVisibilities.grandParentGranted;
 import static me.sosedik.packetadvancements.imlp.display.AdvancementVisibilities.hidden;
 import static me.sosedik.packetadvancements.imlp.display.AdvancementVisibilities.ifDone;
 import static me.sosedik.packetadvancements.imlp.display.AdvancementVisibilities.ifVisible;
@@ -147,6 +148,9 @@ public class TrappedNewbieAdvancements {
 		.buildAndRegister();
 	public static final IAdvancement KUNG_FU_PANDA = buildBase(FIRST_POSSESSION, "kung_fu_panda").display(display().xy(1F, -1F).withAdvancementFrame(AdvancementFrame.CIRCLE).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.BAMBOO))
 		.visibilityRule(parentGranted())
+		.buildAndRegister();
+	public static final IAdvancement FIRST_DRINK = buildBase(GOOD_AS_NEW, "first_drink").display(display().xy(1F, -1F).fancyDescriptionParent(NamedTextColor.GRAY).icon(Material.DRAGON_BREATH))
+		.visibilityRule(grandParentGranted())
 		.buildAndRegister();
 
 	public static final AdvancementTab BASICS_TAB = buildTab("basics", MANAGER).inverseY().backgroundPathBlock(Material.GRAVEL).build();
@@ -265,8 +269,10 @@ public class TrappedNewbieAdvancements {
 			.requiredProgress(vanilla(inventoryChanged().withItems(ItemTriggerCondition.of(TrappedNewbieItems.FLINT_KNIFE))))
 			.buildAndRegister();
 	public static final IAdvancement MAKE_A_TOTEM_BASE = buildBase(MAKE_A_FLINT_KNIFE, "make_a_totem_base").display(display().xy(1F, 0.5F).icon(TrappedNewbieItems.OAK_TOTEM_BASE))
+			.visibilityRule(ifDone(MAKE_A_WORK_STATION))
 			.buildAndRegister();
 	public static final IAdvancement PERFORM_A_RITUAL = buildBase(MAKE_A_FLINT_KNIFE, "perform_a_ritual").display(display().xy(1F, -0.5F).icon(TrappedNewbieItems.TOTEMIC_STAFF))
+			.visibilityRule(ifDone(MAKE_A_WORK_STATION))
 			.buildAndRegister();
 	public static final IAdvancement BODY_HELPER = buildFake(MAKE_A_TOTEM_BASE, "body_helper").display(display().xy(1F, -0.5F).noAnnounceChat().withAdvancementFrame(AdvancementFrame.SPEECH_BUBBLE).icon(WANDERING_TRADER_HEAD))
 			.requiredProgress(alwaysDone())
@@ -1602,7 +1608,7 @@ public class TrappedNewbieAdvancements {
 	public static final IAdvancement SPRINT_250KM = buildBase(SPRINT_MARATHON, "sprint_250km").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.DARK_PURPLE).challengeFrame().icon(Material.CHAINMAIL_LEGGINGS))
 		.withReward(rewards()
 			.withExp(500)
-			.withTrophy(potionItem(Material.POTION, PotionType.WATER))
+			.withTrophy(ItemStack.of(TrappedNewbieItems.DRAGON_FLASK))
 		)
 		.buildAndRegister();
 	public static final IAdvancement SPRINT_1000KM = buildBase(SPRINT_250KM, "sprint_1000km").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.LIGHT_PURPLE).challengeFrame().superChallenge().icon(ItemUtil.glint(Material.NETHERITE_LEGGINGS)))

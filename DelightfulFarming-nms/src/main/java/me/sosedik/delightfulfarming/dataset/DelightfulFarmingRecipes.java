@@ -1,5 +1,7 @@
 package me.sosedik.delightfulfarming.dataset;
 
+import me.sosedik.utilizer.api.recipe.CraftingRecipeBuilder;
+import me.sosedik.utilizer.dataset.UtilizerTags;
 import me.sosedik.utilizer.impl.recipe.CampfireCraft;
 import me.sosedik.utilizer.impl.recipe.ShapelessCraft;
 import me.sosedik.utilizer.impl.recipe.SmokingCraft;
@@ -8,12 +10,21 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NullMarked;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Predicate;
+
 import static me.sosedik.delightfulfarming.DelightfulFarming.delightfulFarmingKey;
 
 @NullMarked
 public class DelightfulFarmingRecipes {
 
+	private static final List<Map.Entry<ItemStack, Predicate<ItemStack>>> MILK_PREDICATES = new ArrayList<>();
+
 	public static void addRecipes() {
+		addMilkPredicate(ItemStack.of(Material.MILK_BUCKET), item -> true);
+
 		new ShapelessCraft(ItemStack.of(DelightfulFarmingItems.SWEET_BERRY_MINCE), delightfulFarmingKey("sweet_berry_mince"))
 			.addIngredients(Material.PORKCHOP, Material.SWEET_BERRIES)
 			.register();
@@ -22,7 +33,24 @@ public class DelightfulFarmingRecipes {
 			.addIngredients(Material.BOWL)
 			.addIngredients(Material.GLOW_BERRIES, 2)
 			.addIngredients(Material.SUGAR)
-			.addIngredients(DelightfulFarmingTags.MILK_CONTAINERS.getValues())
+			.apply(DelightfulFarmingRecipes::addMilkIngredient)
+			.register();
+
+		new ShapelessCraft(ItemStack.of(DelightfulFarmingItems.BROKEN_EGG), delightfulFarmingKey("broken_egg"))
+			.withGroup("broken_egg")
+			.addIngredients(Material.EGG)
+			.register();
+		new ShapelessCraft(ItemStack.of(DelightfulFarmingItems.BROKEN_BROWN_EGG), delightfulFarmingKey("broken_brown_egg"))
+			.withGroup("broken_egg")
+			.addIngredients(Material.BROWN_EGG)
+			.register();
+		new ShapelessCraft(ItemStack.of(DelightfulFarmingItems.BROKEN_BLUE_EGG), delightfulFarmingKey("broken_blue_egg"))
+			.withGroup("broken_egg")
+			.addIngredients(Material.BLUE_EGG)
+			.register();
+		new ShapelessCraft(ItemStack.of(DelightfulFarmingItems.BROKEN_TURTLE_EGG), delightfulFarmingKey("broken_turtle_egg"))
+			.withGroup("broken_egg")
+			.addIngredients(Material.TURTLE_EGG)
 			.register();
 
 		new ShapelessCraft(ItemStack.of(DelightfulFarmingItems.SWEET_BERRY_PIPS), delightfulFarmingKey("sweet_berry_pips_from_sweet_berries"))
@@ -59,7 +87,26 @@ public class DelightfulFarmingRecipes {
 			.addIngredients(DelightfulFarmingItems.CHARCOAL_BLOCK)
 			.register();
 
+		new ShapelessCraft(ItemStack.of(DelightfulFarmingItems.CACTUS_FLESH, 2), delightfulFarmingKey("cactus_flesh_from_cutting"))
+			.addIngredients(Material.CACTUS)
+			.addIngredients(UtilizerTags.KNIFES.getValues())
+			.register();
+		new CampfireCraft(ItemStack.of(DelightfulFarmingItems.CACTUS_STEAK), 30 * 20, delightfulFarmingKey("cactus_steak"))
+			.addIngredients(DelightfulFarmingItems.CACTUS_FLESH)
+			.register();
+		new SmokingCraft(ItemStack.of(DelightfulFarmingItems.CACTUS_STEAK), 10 * 20, delightfulFarmingKey("cactus_steak"))
+			.addIngredients(DelightfulFarmingItems.CACTUS_FLESH)
+			.register();
+
 		Bukkit.addFuel(DelightfulFarmingItems.CHARCOAL_BLOCK, 80 * 200);
+	}
+
+	private static void addMilkIngredient(CraftingRecipeBuilder<?> recipe) {
+		MILK_PREDICATES.forEach(entry -> recipe.addIngredientItems('M', entry.getKey(), entry.getValue()));
+	}
+
+	public static void addMilkPredicate(ItemStack preview, Predicate<ItemStack> predicate) {
+		MILK_PREDICATES.add(Map.entry(preview, predicate));
 	}
 
 }

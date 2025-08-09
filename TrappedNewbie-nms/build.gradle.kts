@@ -7,6 +7,7 @@ dependencies {
     compileOnly(project(":LimboWorldGenerator"))
     compileOnly(project(":Utilizer"))
     compileOnly(project(":ResourceLib-nms"))
+    compileOnly(project(":Essence"))
     compileOnly(project(":MiscMe"))
     compileOnly(project(":Moves"))
     compileOnly(project(":FancyMotd"))
@@ -66,6 +67,10 @@ paper {
             load = PaperPluginDescription.RelativeLoadOrder.BEFORE
             required = true
         }
+        register("Essence") {
+            load = PaperPluginDescription.RelativeLoadOrder.AFTER
+            required = false
+        }
         register("MiscMe") {
             load = PaperPluginDescription.RelativeLoadOrder.BEFORE
             required = true
@@ -85,11 +90,6 @@ paper {
         register("DelightfulFarming") {
             load = PaperPluginDescription.RelativeLoadOrder.BEFORE
             required = true
-        }
-        // TrappedNewbie registers custom world parser that Essence's /world can use
-        register("Essence") {
-            load = PaperPluginDescription.RelativeLoadOrder.AFTER
-            required = false
         }
     }
 }

@@ -133,7 +133,10 @@
 		"<#D28037><!i>May save your life once in a while."
 	],
 	"trophy.sprint_250km.name": "<#0090FF><b>Refreshment",
-	"trophy.sprint_250km.lore": "<#0090FF><!i>You'll need it after running that far",
+	"trophy.sprint_250km.lore": [
+		"<#0090FF><!i>You'll need it after running that far.",
+		"<#0090FF><!i>Automatically purifies water."
+	],
 	"trophy.sprint_1000km.name": "<#F4FFA7><b>Running shoes",
 	"trophy.sprint_1000km.lore": [
 		"<#F4FFA7><!i>This is only 1/40 of the perimeter",

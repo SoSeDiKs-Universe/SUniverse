@@ -16,6 +16,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.damage.DamageSource;
 import org.bukkit.damage.DamageType;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -60,7 +61,9 @@ public class WaterPuddleHurts implements Listener {
 	}
 
 	private boolean isExempt(Player player, float fallDistance) {
-		return player.getGameMode().isInvulnerable() || fallDistance < 3.4F;
+		return player.getGameMode().isInvulnerable()
+			|| fallDistance < 3.4F
+			|| player.getInventory().getBoots().hasEnchant(Enchantment.FEATHER_FALLING);
 	}
 
 	private void checkWaterFallDamage(Player player, Block block, float fallDistance) {

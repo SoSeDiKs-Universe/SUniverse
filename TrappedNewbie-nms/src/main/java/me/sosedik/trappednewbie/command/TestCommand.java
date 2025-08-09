@@ -2,6 +2,8 @@ package me.sosedik.trappednewbie.command;
 
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import me.sosedik.trappednewbie.TrappedNewbie;
+import me.sosedik.trappednewbie.dataset.TrappedNewbieAdvancements;
+import me.sosedik.trappednewbie.listener.advancement.AdvancementTrophies;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.Permission;
@@ -22,6 +24,7 @@ public class TestCommand {
 
 		TrappedNewbie.scheduler().sync(() -> {
 			// Stuff!
+			player.getInventory().addItem(AdvancementTrophies.produceTrophy(TrappedNewbieAdvancements.SPRINT_250KM, player));
 		});
 	}
 

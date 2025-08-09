@@ -143,6 +143,21 @@ public class InventoryUtil {
 	}
 
 	/**
+	 * Replaces item if air or adds to inventory otherwise
+	 *
+	 * @param player player
+	 * @param hand hand
+	 * @param item item
+	 */
+	public static void replaceOrAdd(Player player, EquipmentSlot hand, ItemStack item) {
+		ItemStack handItem = player.getInventory().getItem(hand);
+		if (handItem.isEmpty())
+			player.getInventory().setItem(hand, item);
+		else
+			addOrDrop(player, item, false);
+	}
+
+	/**
 	 * Adds items to player's inventory, or
 	 * drops if not enough space
 	 *

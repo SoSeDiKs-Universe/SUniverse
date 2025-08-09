@@ -52,6 +52,7 @@ public class LimboWorldFall implements Listener {
 
 	private void removeFreeFriendshipLetters(Player player) {
 		ItemStack item;
+		// TODO separate remove method, otherwise it can technically get stuck on folding
 		while ((item = InventoryUtil.findItem(player, i -> i.getType() == TrappedNewbieItems.LETTER && LetterModifier.isUnboundFriendshipLetter(i))) != null)
 			item.setAmount(0);
 	}

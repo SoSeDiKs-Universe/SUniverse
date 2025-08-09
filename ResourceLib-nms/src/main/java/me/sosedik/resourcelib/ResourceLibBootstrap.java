@@ -14,12 +14,14 @@ import io.papermc.paper.registry.event.RegistryComposeEvent;
 import io.papermc.paper.registry.event.RegistryEvents;
 import me.sosedik.kiterino.registry.data.BlockRegistryEntity;
 import me.sosedik.kiterino.registry.data.ItemRegistryEntity;
+import me.sosedik.kiterino.registry.data.MobEffectRegistryEntity;
 import me.sosedik.kiterino.registry.wrapper.KiterinoMobEffectBehaviourWrapper;
 import me.sosedik.kiterino.world.block.KiterinoBlock;
 import me.sosedik.utilizer.util.FileUtil;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -32,6 +34,8 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.component.Consumable;
+import net.minecraft.world.item.component.Consumables;
+import net.minecraft.world.item.component.DyedItemColor;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect;
 import net.minecraft.world.level.block.Block;
@@ -46,7 +50,6 @@ import org.bukkit.craftbukkit.potion.CraftPotionUtil;
 import org.bukkit.inventory.ItemType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.intellij.lang.annotations.Subst;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -213,9 +216,12 @@ public class ResourceLibBootstrap implements PluginBootstrap {
 			else
 				properties.repairable(BuiltInRegistries.ITEM.getValue(ResourceLocation.parse(tag)));
 		}
+		if (json.has("remaining_item")) properties.craftRemainder(BuiltInRegistries.ITEM.getValue(ResourceLocation.parse(json.get("remaining_item").getAsString())));
+		if (json.has("using_converts_to")) properties.usingConvertsTo(BuiltInRegistries.ITEM.getValue(ResourceLocation.parse(json.get("using_converts_to").getAsString())));
 		if (json.has("stack_size")) properties.stacksTo(json.get("stack_size").getAsInt());
 		if (json.has("fire_resistance") && json.get("fire_resistance").getAsBoolean()) properties.fireResistant();
 		if (json.has("rarity")) properties.rarity(Rarity.valueOf(json.get("rarity").getAsString().toUpperCase(Locale.ROOT)));
+		if (json.has("dyeable")) properties.component(DataComponents.DYED_COLOR, new DyedItemColor(json.get("dyeable").getAsInt()));
 
 		if (json.has("attributes")) {
 			JsonObject attributesJson = json.getAsJsonObject("attributes");
@@ -245,36 +251,51 @@ public class ResourceLibBootstrap implements PluginBootstrap {
 			if (foodJson.has("always_edible") && foodJson.get("always_edible").getAsBoolean())
 				foodProperties.alwaysEdible();
 
-			if (foodJson.has("consumable")) {
-				JsonObject consumableJson = foodJson.getAsJsonObject("consumable");
-				var consumable = Consumable.builder();
-				if (consumableJson.has("effects")) {
-					for (JsonElement effectElement : consumableJson.getAsJsonArray("effects")) {
-						JsonObject effectJson = effectElement.getAsJsonObject();
-						String type = effectJson.get("type").getAsString();
-						if ("apply_status_effects".equals(type)) {
-							float probability = effectJson.has("probability") ? effectJson.get("probability").getAsFloat() : 1F;
-							List<PotionEffect> effectList = effectJson.getAsJsonArray("effects").asList().stream().map(e -> {
-								String effectKey = e.getAsJsonObject().get("type").getAsString();
-								int duration = e.getAsJsonObject().get("duration").getAsInt();
-								int amplifier = e.getAsJsonObject().get("amplifier").getAsInt();
-								PotionEffectType potionEffectType = RegistryAccess.registryAccess().getRegistry(RegistryKey.MOB_EFFECT).get(Key.key(effectKey));
-								return new PotionEffect(potionEffectType, duration, amplifier);
-							}).toList();
-							consumable.onConsume(new ApplyStatusEffectsConsumeEffect(
-								new ArrayList<>(Lists.transform(effectList, CraftPotionUtil::fromBukkit)),
-								probability
-							));
-						}
-					}
-				}
-				properties.food(foodProperties.build(), consumable.build());
+			if (json.has("consumable")) {
+				properties.food(foodProperties.build(), getConsumable(json.getAsJsonObject("consumable")));
 			} else {
 				properties.food(foodProperties.build());
 			}
+		} else if (json.has("consumable")) {
+			properties.component(DataComponents.CONSUMABLE, getConsumable(json.getAsJsonObject("consumable")));
 		}
 
 		return properties;
+	}
+
+	private static Consumable getConsumable(JsonObject consumableJson) {
+		if (consumableJson.has("type")) {
+			String type = consumableJson.get("type").getAsString();
+			if ("drink".equals(type)) return Consumables.DEFAULT_DRINK;
+		}
+
+		var consumable = Consumable.builder();
+
+		if (consumableJson.has("consume_seconds"))
+			consumable.consumeSeconds(consumableJson.get("consume_seconds").getAsFloat());
+
+		if (consumableJson.has("effects")) {
+			for (JsonElement effectElement : consumableJson.getAsJsonArray("effects")) {
+				JsonObject effectJson = effectElement.getAsJsonObject();
+				String type = effectJson.get("type").getAsString();
+				if ("apply_status_effects".equals(type)) {
+					float probability = effectJson.has("probability") ? effectJson.get("probability").getAsFloat() : 1F;
+					List<PotionEffect> effectList = effectJson.getAsJsonArray("effects").asList().stream().map(e -> {
+						String effectKey = e.getAsJsonObject().get("type").getAsString();
+						int duration = e.getAsJsonObject().get("duration").getAsInt();
+						int amplifier = e.getAsJsonObject().get("amplifier").getAsInt();
+						PotionEffectType potionEffectType = RegistryAccess.registryAccess().getRegistry(RegistryKey.MOB_EFFECT).get(Key.key(effectKey));
+						return new PotionEffect(potionEffectType, duration, amplifier);
+					}).toList();
+					consumable.onConsume(new ApplyStatusEffectsConsumeEffect(
+							new ArrayList<>(Lists.transform(effectList, CraftPotionUtil::fromBukkit)),
+							probability
+					));
+				}
+			}
+		}
+
+		return consumable.build();
 	}
 
 	private static void goThroughDatasets(BootstrapContext context, String subdir, BiConsumer<String, List<Map.Entry<String, JsonElement>>> consumer) {
@@ -323,18 +344,8 @@ public class ResourceLibBootstrap implements PluginBootstrap {
 	public static void parseResources(BootstrapContext context, @Nullable Function<String, KiterinoMobEffectBehaviourWrapper> effectsProvider) {
 		extractDatapack(context);
 
-		File datasetsDir = new File(context.getDataDirectory().toFile(), "datasets");
-		if (!datasetsDir.exists()) return;
-		if (!datasetsDir.isDirectory()) return;
-
-		for (File namespaceDir : requireNonNull(datasetsDir.listFiles())) {
-			if (!namespaceDir.isDirectory()) continue;
-
-			var effectsDir = new File(namespaceDir, "effect");
-			if (effectsProvider != null && effectsDir.exists() && effectsDir.isDirectory()) {
-				registerMobEffects(context, effectsDir, namespaceDir.getName(), effectsProvider);
-			}
-		}
+		if (effectsProvider != null)
+			registerMobEffects(context, effectsProvider);
 	}
 
 	// Yes, ugly; better way?
@@ -373,32 +384,34 @@ public class ResourceLibBootstrap implements PluginBootstrap {
 		}
 	}
 
-	private static void registerMobEffects(BootstrapContext context, File effectsDir, String namespace, Function<String, KiterinoMobEffectBehaviourWrapper> provider) {
-		context.getLifecycleManager().registerEventHandler(RegistryEvents.MOB_EFFECT.compose(), event -> {
-			for (File effectFile : requireNonNull(effectsDir.listFiles())) {
-				if (!effectFile.getName().endsWith(".json")) continue;
-
-				JsonObject options = FileUtil.readJsonObject(effectFile);
-				String effectKey = effectFile.getName().substring(0, effectFile.getName().length() - ".json".length());
-				var category = PotionEffectType.Category.valueOf(options.get("category").getAsString().toUpperCase(Locale.ROOT));
-				int color;
-				try {
-					color = NamedTextColor.NAMES.valueOrThrow(options.get("color").getAsString()).value();
-				} catch (NoSuchElementException ignored) {
-					color = requireNonNull(TextColor.fromHexString(options.get("color").getAsString())).value();
-				}
-				int finalColor = color;
-				event.registry().register(potionEffectKey(namespace, effectKey), b -> b
-					.category(category)
-					.color(finalColor)
-					.wrapper(provider.apply(namespace + ":" + effectKey))
-				);
-			}
+	private static void registerMobEffects(BootstrapContext context, Function<String, KiterinoMobEffectBehaviourWrapper> effectsProvider) {
+		goThroughDatasets(context, "effect", (namespace, jsonEntries) -> {
+			context.getLifecycleManager().registerEventHandler(RegistryEvents.MOB_EFFECT.compose(),
+				event -> jsonEntries.forEach(
+					entry -> readEffect(event, Key.key(namespace, entry.getKey()), entry.getValue().getAsJsonObject(), effectsProvider)
+				)
+			);
 		});
 	}
 
-	private static TypedKey<PotionEffectType> potionEffectKey(@Subst("key") String namespace, @Subst("key") String key) {
-		return TypedKey.create(RegistryKey.MOB_EFFECT, new NamespacedKey(namespace, key));
+	private static void readEffect(RegistryComposeEvent<PotionEffectType, MobEffectRegistryEntity.Builder> event, Key key, JsonObject options, Function<String, KiterinoMobEffectBehaviourWrapper> provider) {
+		var category = PotionEffectType.Category.valueOf(options.get("category").getAsString().toUpperCase(Locale.US));
+		int color;
+		try {
+			color = NamedTextColor.NAMES.valueOrThrow(options.get("color").getAsString()).value();
+		} catch (NoSuchElementException ignored) {
+			color = requireNonNull(TextColor.fromHexString(options.get("color").getAsString())).value();
+		}
+		int finalColor = color;
+		event.registry().register(potionEffectKey(key), b -> b
+			.category(category)
+			.color(finalColor)
+			.wrapper(provider.apply(key.namespace() + ":" + key.value()))
+		);
+	}
+
+	private static TypedKey<PotionEffectType> potionEffectKey(Key key) {
+		return TypedKey.create(RegistryKey.MOB_EFFECT, key);
 	}
 
 }

@@ -1,0 +1,42 @@
+{
+	"client_type": "minecraft:iron_nugget",
+	"compost_chance": 0.25,
+	"food": {
+		"nutrition": 3,
+		"saturation": 0.3
+	},
+	"consumable": {
+		"effects": [
+			{
+				"type": "apply_status_effects",
+				"effects": [
+					{
+						"type": "minecraft:nausea",
+						"duration": 1200,
+						"amplifier": 0
+					}
+				]
+			},
+			{
+				"type": "apply_status_effects",
+				"effects": [
+					{
+						"type": "minecraft:mining_fatigue",
+						"duration": 200,
+						"amplifier": 0
+					}
+				]
+			},
+			{
+				"type": "apply_status_effects",
+				"effects": [
+					{
+						"type": "minecraft:weakness",
+						"duration": 200,
+						"amplifier": 0
+					}
+				]
+			}
+		]
+	}
+}

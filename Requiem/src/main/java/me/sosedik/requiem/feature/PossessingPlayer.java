@@ -15,6 +15,7 @@ import me.sosedik.utilizer.api.storage.player.PlayerDataStorage;
 import me.sosedik.utilizer.util.EntityUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.entity.AbstractHorse;
 import org.bukkit.entity.Ageable;
 import org.bukkit.entity.Animals;
 import org.bukkit.entity.Bat;
@@ -293,6 +294,7 @@ public class PossessingPlayer {
 	 */
 	public static boolean isAllowedForCapture(Player player, LivingEntity entity) {
 		if (!isPossessable(entity)) return false;
+		if (entity instanceof AbstractHorse) return false;
 		return switch (entity) {
 			case Animals animals -> true;
 			case Fish fish -> true;

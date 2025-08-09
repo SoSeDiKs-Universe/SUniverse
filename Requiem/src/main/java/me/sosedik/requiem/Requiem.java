@@ -1,6 +1,7 @@
 package me.sosedik.requiem;
 
 import me.sosedik.requiem.command.ReviveCommand;
+import me.sosedik.requiem.dataset.RequiemEffects;
 import me.sosedik.requiem.dataset.RequiemTags;
 import me.sosedik.requiem.feature.GhostyPlayer;
 import me.sosedik.requiem.feature.PossessingPlayer;
@@ -65,6 +66,8 @@ public final class Requiem extends JavaPlugin {
 	public void onLoad() {
 		Requiem.instance = this;
 		this.scheduler = new Scheduler(this);
+
+		RequiemEffects.init();
 
 		TranslationHolder.extractLocales(this);
 		ResourceLib.loadDefaultResources(this);

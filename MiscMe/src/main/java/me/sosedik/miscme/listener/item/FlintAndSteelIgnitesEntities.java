@@ -2,6 +2,7 @@ package me.sosedik.miscme.listener.item;
 
 import me.sosedik.utilizer.dataset.UtilizerTags;
 import me.sosedik.utilizer.util.DurabilityUtil;
+import me.sosedik.utilizer.util.EntityUtil;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.entity.LivingEntity;
@@ -45,7 +46,7 @@ public class FlintAndSteelIgnitesEntities implements Listener {
 		rightClicked.emitSound(Sound.ITEM_FIRECHARGE_USE, SoundCategory.PLAYERS, 1F, 1F);
 
 		if (rightClicked instanceof Mob mob && mob.getTarget() == null)
-			mob.setTarget(player);
+			EntityUtil.setTarget(mob, player);
 
 		return true;
 	}

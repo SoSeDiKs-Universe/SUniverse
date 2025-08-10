@@ -145,6 +145,12 @@ public class TrappedNewbieRecipes {
 			.addIngredients('F', Material.FLINT)
 			.addIngredients('S', Material.IRON_INGOT)
 			.register();
+		new ShapedCraft(ItemStack.of(TrappedNewbieItems.STEEL_AND_FLINT), trappedNewbieKey("steel_and_flint_3"), "FS")
+			.withGroup("steel_and_flint")
+			.withCategory(CraftingBookCategory.EQUIPMENT)
+			.addIngredients('F', Material.FLINT)
+			.addIngredients('S', Material.IRON_INGOT)
+			.register();
 
 		new ShapedCraft(ItemStack.of(TrappedNewbieItems.CLAY_KILN), trappedNewbieKey("clay_kiln"), "CCC", "C C", "CCC")
 			.addIngredients('C', Material.CLAY_BALL)
@@ -448,7 +454,7 @@ public class TrappedNewbieRecipes {
 
 		if (result.getType() == TrappedNewbieItems.DRAGON_FLASK) return;
 
-		new ShapelessCraft(ThirstData.of(result).withCooled().saveInto(result), trappedNewbieKey(key + "_purifying"))
+		new ShapelessCraft(ThirstData.of(result).withThirstChance(0).saveInto(result), trappedNewbieKey(key + "_purifying"))
 			.withGroup("drink_purifying")
 			.addIngredientItems(result, item -> !ThirstData.isPure(item))
 			.addIngredients(TrappedNewbieItems.CHARCOAL_FILTER)

@@ -8,7 +8,9 @@ import me.sosedik.delightfulfarming.dataset.DelightfulFarmingTags;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieEffects;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieItems;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieTags;
+import me.sosedik.trappednewbie.listener.item.FillingBowlWithWater;
 import me.sosedik.trappednewbie.listener.world.RainRefillsWaterAndMakesPuddles;
+import me.sosedik.utilizer.util.ItemUtil;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
@@ -52,11 +54,10 @@ public record ThirstData(
 	}
 
 	public ItemStack saveInto(ItemStack item) {
-		item = item.clone();
-		Material type = item.getType();
-		NBT.modify(item, nbt -> {
-			if (this.thirstChance != 0 && type != TrappedNewbieItems.DRAGON_FLASK) nbt.setDouble(THIRST_CHANCE_TAG, this.thirstChance);
-			else nbt.removeKey(THIRST_CHANCE_TAG);
+		ItemStack result = item.clone();
+		Material type = result.getType();
+		NBT.modify(result, nbt -> {
+			if (type != TrappedNewbieItems.DRAGON_FLASK && isWateryItem(result, type)) nbt.setDouble(THIRST_CHANCE_TAG, this.thirstChance);
 			if (this.cooled) nbt.setBoolean(COOLED_TAG, true);
 			else nbt.removeKey(COOLED_TAG);
 			if (this.thirstSource != null) nbt.setEnum(THIRST_SOURCE_TAG, this.thirstSource);
@@ -64,7 +65,7 @@ public record ThirstData(
 			if (this.drinkType != null) nbt.setEnum(DRINK_TYPE_TAG, this.drinkType);
 			else nbt.removeKey(DRINK_TYPE_TAG);
 		});
-		return item;
+		return result;
 	}
 
 	public static ThirstData of(ItemStack item) {
@@ -81,7 +82,7 @@ public record ThirstData(
 			thirst = THIRST_VALUES.get(type);
 		} else {
 			if (type == Material.POTION || drinkType == DrinkType.WATER) {
-				if (isWaterPotion(item)) {
+				if (isWateryItem(item, type)) {
 					thirst = 3;
 					thirstChanceBackup = HIGH_THIRST_CHANCE;
 					saturation = 0F;
@@ -108,9 +109,9 @@ public record ThirstData(
 		});
 	}
 
-	private static boolean isWaterPotion(ItemStack item) {
+	private static boolean isWateryItem(ItemStack item, Material type) { // todo canteens
 		PotionContents potionContents = item.getData(DataComponentTypes.POTION_CONTENTS);
-		if (potionContents == null) return false;
+		if (potionContents == null) return FillingBowlWithWater.REVERSED_BOWLS.get(type) != null;
 
 		PotionType potion = potionContents.potion();
 		return potion == PotionType.WATER
@@ -124,7 +125,9 @@ public record ThirstData(
 	}
 
 	public static boolean isPure(ItemStack item) {
-		return NBT.get(item, nbt -> (double) nbt.getOrDefault(THIRST_CHANCE_TAG, 0D)) == 0D;
+		if (item.getType() == TrappedNewbieItems.DRAGON_FLASK) return true;
+		if (!isWateryItem(item, item.getType())) return true;
+		return NBT.get(item, nbt -> (double) nbt.getOrDefault(THIRST_CHANCE_TAG, HIGH_THIRST_CHANCE)) == 0D;
 	}
 
 	public static ThirstData of(Block block) {
@@ -226,7 +229,8 @@ public record ThirstData(
 				return nbt.getOrNull(DRINK_TYPE_TAG, DrinkType.class);
 			});
 			if (drinkType != null) return drinkType;
-			if (type == Material.POTION) return isWaterPotion(item) ? WATER : DRINK;
+			if (type == Material.POTION) return ItemUtil.isWaterPotion(item) ? WATER : DRINK;
+			if (FillingBowlWithWater.REVERSED_BOWLS.get(type) != null) return WATER; // todo canteens
 
 			return DelightfulFarmingTags.DRINKS.isTagged(type) ? DRINK : null;
 		}

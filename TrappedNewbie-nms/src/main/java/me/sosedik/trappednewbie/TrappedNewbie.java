@@ -104,6 +104,7 @@ import me.sosedik.trappednewbie.listener.item.ThrowableRockBehavior;
 import me.sosedik.trappednewbie.listener.item.TimeMachineClockIsTotemOfUndying;
 import me.sosedik.trappednewbie.listener.item.TrumpetScare;
 import me.sosedik.trappednewbie.listener.item.VisualPumpkin;
+import me.sosedik.trappednewbie.listener.misc.AllRecipesInRecipeBook;
 import me.sosedik.trappednewbie.listener.misc.ComfortEffectHandler;
 import me.sosedik.trappednewbie.listener.misc.CustomHudRenderer;
 import me.sosedik.trappednewbie.listener.misc.DisableJoinQuitMessages;
@@ -246,6 +247,7 @@ public final class TrappedNewbie extends JavaPlugin {
 		new ThirstTooltipModifier(trappedNewbieKey("thirst_tooltip")).register();
 		new UnlitCampfireModifier(trappedNewbieKey("unlit_campfire")).register();
 		new VisualArmorModifier(trappedNewbieKey("visual_armor")).register();
+		new AllRecipesInRecipeBook.RecipeItemParser(trappedNewbieKey("recipe_parser")).register();
 
 		EventUtil.registerListeners(this,
 			// advancement
@@ -315,6 +317,7 @@ public final class TrappedNewbie extends JavaPlugin {
 			TrumpetScare.class,
 			VisualPumpkin.class,
 			// misc
+			AllRecipesInRecipeBook.class,
 			ComfortEffectHandler.class,
 			CustomHudRenderer.class,
 			DisableJoinQuitMessages.class,

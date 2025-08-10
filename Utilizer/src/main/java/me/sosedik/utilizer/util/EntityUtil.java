@@ -18,6 +18,8 @@ import org.bukkit.entity.WaterMob;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityTargetEvent;
+import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -241,6 +243,18 @@ public class EntityUtil {
 				|| cause == EntityDamageEvent.DamageCause.FIRE_TICK
 				|| cause == EntityDamageEvent.DamageCause.LAVA
 				|| cause == EntityDamageEvent.DamageCause.HOT_FLOOR;
+	}
+
+	/**
+	 * Sets mob's target after calling target event
+	 *
+	 * @param mob mob
+	 * @param target target
+	 */
+	public static void setTarget(Mob mob, LivingEntity target) {
+		EntityTargetEvent event = new EntityTargetLivingEntityEvent(mob, target, EntityTargetEvent.TargetReason.CUSTOM);
+		if (event.callEvent() && event.getTarget() instanceof LivingEntity living)
+			mob.setTarget(living);
 	}
 
 }

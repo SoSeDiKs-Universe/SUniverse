@@ -186,6 +186,8 @@
 	"item.trapped_newbie.purified_potion.name": "Purified Water Bottle",
 	"item.trapped_newbie.dirty_potion.name": "Dirty Water Bottle",
 	"item.trapped_newbie.dragon_flask.name": "Dragon Flask",
+	"item.trapped_newbie.milk_dragon_flask.name": "Dragon Flask with Milk",
+	"item.trapped_newbie.cactus_dragon_flask.name": "Dragon Flask with Cactus Juice",
 	"item.trapped_newbie.canteen.name": "Canteen",
 	"item.trapped_newbie.milk_canteen.name": "Canteen with Milk",
 	"item.trapped_newbie.cactus_canteen.name": "Canteen with Cactus Juice",

@@ -46,7 +46,7 @@ public interface CustomRecipe extends Recipe, Keyed {
 	static List<ItemStack> getFromChoice(RecipeChoice recipeChoice) {
 		return switch (recipeChoice) {
 			case RecipeChoice.ExactChoice choice -> choice.getChoices();
-			case RecipeChoice.MaterialChoice choice -> choice.getChoices().stream().map(ItemStack::new).toList();
+			case RecipeChoice.MaterialChoice choice -> choice.getChoices().stream().map(ItemStack::of).toList();
 			default -> List.of(recipeChoice.getItemStack());
 		};
 	}

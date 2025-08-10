@@ -1,7 +1,7 @@
 package me.sosedik.requiem.listener.player.possessed;
 
-import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import com.google.common.base.Function;
+import io.papermc.paper.event.entity.EntityEquipmentChangedEvent;
 import io.papermc.paper.event.player.PlayerArmSwingEvent;
 import io.papermc.paper.event.player.PlayerInventorySlotChangeEvent;
 import me.sosedik.requiem.feature.PossessingPlayer;
@@ -14,6 +14,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityCombustEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.EntityEquipment;
@@ -31,11 +32,19 @@ import java.util.Map;
 @NullMarked
 public class PossessedMimicPossessor implements Listener {
 
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onTarget(EntityTargetEvent event) {
+		if (!(event.getTarget() instanceof Player player)) return;
+
+		LivingEntity entity = PossessingPlayer.getPossessed(player);
+		if (entity == null) return;
+
+		event.setTarget(entity);
+	}
+
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onSwing(PlayerArmSwingEvent event) {
 		Player player = event.getPlayer();
-		if (!PossessingPlayer.isPossessing(player)) return;
-
 		LivingEntity entity = PossessingPlayer.getPossessed(player);
 		if (entity == null) return;
 
@@ -45,8 +54,6 @@ public class PossessedMimicPossessor implements Listener {
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onSlotChange(PlayerItemHeldEvent event) {
 		Player player = event.getPlayer();
-		if (!PossessingPlayer.isPossessing(player)) return;
-
 		LivingEntity entity = PossessingPlayer.getPossessed(player);
 		if (entity == null) return;
 
@@ -61,8 +68,6 @@ public class PossessedMimicPossessor implements Listener {
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onSwap(PlayerSwapHandItemsEvent event) {
 		Player player = event.getPlayer();
-		if (!PossessingPlayer.isPossessing(player)) return;
-
 		LivingEntity entity = PossessingPlayer.getPossessed(player);
 		if (entity == null) return;
 
@@ -79,7 +84,6 @@ public class PossessedMimicPossessor implements Listener {
 	public void onHeldItemChange(PlayerInventorySlotChangeEvent event) {
 		Player player = event.getPlayer();
 		if (event.getSlot() != player.getInventory().getHeldItemSlot()) return;
-		if (!PossessingPlayer.isPossessing(player)) return;
 
 		LivingEntity entity = PossessingPlayer.getPossessed(player);
 		if (entity == null) return;
@@ -103,9 +107,8 @@ public class PossessedMimicPossessor implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	public void onArmorChange(PlayerArmorChangeEvent event) {
-		Player player = event.getPlayer();
-		if (!PossessingPlayer.isPossessing(player)) return;
+	public void onArmorChange(EntityEquipmentChangedEvent event) {
+		if (!(event.getEntity() instanceof Player player)) return;
 
 		LivingEntity entity = PossessingPlayer.getPossessed(player);
 		if (entity == null) return;
@@ -113,7 +116,7 @@ public class PossessedMimicPossessor implements Listener {
 		EntityEquipment entityEquipment = entity.getEquipment();
 		if (entityEquipment == null) return;
 
-		entityEquipment.setItem(event.getSlot(), event.getNewItem());
+		event.getEquipmentChanges().forEach((slot, change) -> entityEquipment.setItem(slot, change.newItem()));
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)

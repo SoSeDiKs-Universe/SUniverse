@@ -186,6 +186,8 @@
 	"item.trapped_newbie.purified_potion.name": "Бутылочка чистой воды",
 	"item.trapped_newbie.dirty_potion.name": "Бутылочка грязной воды",
 	"item.trapped_newbie.dragon_flask.name": "Драконья бутылочка",
+	"item.trapped_newbie.milk_dragon_flask.name": "Драконья бутылочка молока",
+	"item.trapped_newbie.cactus_dragon_flask.name": "Драконья бутылочка кактусового сока",
 	"item.trapped_newbie.canteen.name": "Фляга",
 	"item.trapped_newbie.milk_canteen.name": "Фляга молока",
 	"item.trapped_newbie.cactus_canteen.name": "Фляга кактусового сока",

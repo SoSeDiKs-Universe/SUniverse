@@ -186,6 +186,8 @@
 	"item.trapped_newbie.purified_potion.name": "Пляшечка чистої води",
 	"item.trapped_newbie.dirty_potion.name": "Пляшечка грязної води",
 	"item.trapped_newbie.dragon_flask.name": "Драконяча пляшка",
+	"item.trapped_newbie.milk_dragon_flask.name": "Драконяча пляшка молока",
+	"item.trapped_newbie.cactus_dragon_flask.name": "Драконяча пляшка кактусового соку",
 	"item.trapped_newbie.canteen.name": "Фляга",
 	"item.trapped_newbie.milk_canteen.name": "Фляга молока",
 	"item.trapped_newbie.cactus_canteen.name": "Фляга кактусового соку",
@@ -213,5 +215,7 @@
 	"item.trapped_newbie.water_filled_cactus_bowl.name": "Кактусова миска води",
 	"item.trapped_newbie.dirty_filled_cactus_bowl.name": "Кактусова миска грязної води",
 	"item.trapped_newbie.purified_filled_cactus_bowl.name": "Кактусова миска чистої води",
-	"item.trapped_newbie.raw_hide.name": "Очищена шкура"
+	"item.trapped_newbie.raw_hide.name": "Очищена шкура",
+	"recipes.potion.extended": "<icon:trapped_newbie:info> Збільшує тривалість ефекту",
+	"recipes.potion.upgraded": "<icon:trapped_newbie:info> Підсилює ефект"
 }

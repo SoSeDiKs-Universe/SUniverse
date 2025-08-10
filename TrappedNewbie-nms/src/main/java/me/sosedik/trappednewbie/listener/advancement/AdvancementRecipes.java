@@ -86,7 +86,7 @@ public class AdvancementRecipes implements Listener {
 	public void onAdvancement(TeamMadeAdvancementEvent event) {
 		IAdvancement advancement = event.getAdvancement();
 		if (advancement == TrappedNewbieAdvancements.MAKE_A_WORK_STATION) {
-			event.getTeam().getOnlinePlayers().forEach(this::discoverRecipes);
+			event.getTeam().getOnlinePlayers().forEach(AdvancementRecipes::discoverRecipes);
 			return;
 		}
 
@@ -103,7 +103,7 @@ public class AdvancementRecipes implements Listener {
 		});
 	}
 
-	private void discoverRecipes(Player player) {
+	public static void discoverRecipes(Player player) {
 		List<NamespacedKey> recipeKeys = new ArrayList<>();
 		Iterator<Recipe> recipeIterator = Bukkit.recipeIterator();
 		while (recipeIterator.hasNext()) {

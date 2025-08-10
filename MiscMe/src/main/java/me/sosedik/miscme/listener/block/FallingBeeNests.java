@@ -2,6 +2,7 @@ package me.sosedik.miscme.listener.block;
 
 import io.papermc.paper.loot.LootContextKey;
 import me.sosedik.miscme.MiscMe;
+import me.sosedik.utilizer.util.EntityUtil;
 import me.sosedik.utilizer.util.LocationUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -73,8 +74,12 @@ public class FallingBeeNests implements Listener {
 		});
 
 		Player closestPlayer = (Player) LocationUtil.findClosestEntity(loc, 16, entity -> entity instanceof Player);
-		if (closestPlayer != null)
-			loc.getWorld().getNearbyEntitiesByType(Bee.class, loc, 50).forEach(bee -> bee.setTarget(closestPlayer));
+		if (closestPlayer != null) {
+			loc.getWorld().getNearbyEntitiesByType(Bee.class, loc, 50).forEach(bee -> {
+				if (bee.getTarget() == null)
+					EntityUtil.setTarget(bee, closestPlayer);
+			});
+		}
 
 		LootContext.Builder lootContext = new LootContext.Builder(loc.getWorld())
 			.with(LootContextKey.BLOCK_DATA, beehive.getBlockData())

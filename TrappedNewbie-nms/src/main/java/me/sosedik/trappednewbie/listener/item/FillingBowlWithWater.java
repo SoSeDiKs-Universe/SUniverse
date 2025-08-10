@@ -23,6 +23,7 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Bowl can be filled with water
@@ -35,6 +36,9 @@ public class FillingBowlWithWater implements Listener {
 		Map.entry(Material.BOWL, TrappedNewbieItems.FILLED_BOWL),
 		Map.entry(TrappedNewbieItems.CACTUS_BOWL, TrappedNewbieItems.FILLED_CACTUS_BOWL)
 	);
+	public static final Map<Material, Material> REVERSED_BOWLS = BOWLS.entrySet()
+		.stream()
+		.collect(Collectors.toMap(Map.Entry::getValue, Map.Entry::getKey));
 
 	@EventHandler
 	public void onFill(PlayerInteractEvent event) {

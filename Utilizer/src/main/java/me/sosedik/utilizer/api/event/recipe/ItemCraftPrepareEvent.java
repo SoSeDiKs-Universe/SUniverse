@@ -128,7 +128,7 @@ public class ItemCraftPrepareEvent extends Event {
 	 *
 	 * @return the crafting matrix
 	 */
-	public @Nullable ItemStack [] getMatrix() {
+	public @Nullable ItemStack[] getMatrix() {
 		if (this.parentEvent instanceof PrepareItemCraftEvent event) {
 			return event.getInventory().getMatrix();
 		} else if (this.parentEvent instanceof CrafterCraftEvent event) {

@@ -21,7 +21,7 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public class BowUsableWithoutArrows implements Listener {
 
-	private static final ItemStack DUMMY_ARROW = ItemStack.of(Material.ARROW);
+	public static final ItemStack DUMMY_ARROW = ItemStack.of(Material.ARROW);
 
 	static {
 		DUMMY_ARROW.setData(DataComponentTypes.INTANGIBLE_PROJECTILE);

@@ -3,6 +3,7 @@ package me.sosedik.requiem.listener.player.possessed;
 import com.destroystokyo.paper.event.player.PlayerLaunchProjectileEvent;
 import me.sosedik.kiterino.event.entity.EntityLoadsProjectileEvent;
 import me.sosedik.requiem.feature.PossessingPlayer;
+import me.sosedik.utilizer.listener.item.BowUsableWithoutArrows;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.entity.AbstractArrow;
@@ -25,8 +26,6 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 public class PossessedInfiniteProjectiles implements Listener {
-
-	private static final ItemStack DUMMY_ARROW = ItemStack.of(Material.ARROW);
 
 	@EventHandler(ignoreCancelled = true)
 	public void onTridentLaunch(PlayerLaunchProjectileEvent event) {
@@ -71,7 +70,7 @@ public class PossessedInfiniteProjectiles implements Listener {
 		if (riding == null) return;
 		if (!hasInfiniteArrows(riding.getType(), event.getWeapon())) return;
 
-		event.setProjectile(DUMMY_ARROW);
+		event.setProjectile(BowUsableWithoutArrows.DUMMY_ARROW);
 	}
 
 	@EventHandler(priority = EventPriority.LOW)

@@ -65,6 +65,8 @@ public class DirtyWaterModifier extends ItemModifier {
 			return ModificationResult.OK;
 		}
 
+		if (thirstData.drinkType() != ThirstData.DrinkType.WATER) return ModificationResult.PASS;
+
 		if (thirstData.thirstChance() == 0) {
 			applyColor(item, DrinkableWater.PURE_WATER_COLOR);
 			if (!contextBox.getContextType().hasVisibleName()) return ModificationResult.OK;

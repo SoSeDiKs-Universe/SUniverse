@@ -124,7 +124,7 @@ public class AngryAnimals implements Listener {
 
 		entity.getWorld().getNearbyEntitiesByType(Mob.class, entity.getLocation(), 20, mob -> shouldAggro(entity, mob)).forEach(mob -> {
 			if (mob.getTarget() == null)
-				mob.setTarget(damager);
+				EntityUtil.setTarget(mob, damager);
 		});
 	}
 

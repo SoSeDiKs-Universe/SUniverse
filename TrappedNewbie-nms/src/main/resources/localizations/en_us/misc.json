@@ -31,5 +31,7 @@
 	"ritual.instruments.rattle": "Rattle",
 	"ritual.instruments.flute": "Flute",
 	"ritual.instruments.drum": "Drums",
-	"ritual.instruments.trumpet": "Trumpet"
+	"ritual.instruments.trumpet": "Trumpet",
+	"recipes.potion.extended": "<icon:trapped_newbie:info> Extends potion",
+	"recipes.potion.upgraded": "<icon:trapped_newbie:info> Upgrades potion"
 }

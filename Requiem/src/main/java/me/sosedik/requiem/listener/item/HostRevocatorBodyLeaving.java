@@ -1,6 +1,7 @@
 package me.sosedik.requiem.listener.item;
 
 import me.sosedik.requiem.dataset.RequiemItems;
+import me.sosedik.requiem.feature.GhostyPlayer;
 import me.sosedik.requiem.feature.PossessingPlayer;
 import org.bukkit.damage.DamageSource;
 import org.bukkit.damage.DamageType;
@@ -29,6 +30,7 @@ public class HostRevocatorBodyLeaving implements Listener {
 		LivingEntity possessed = PossessingPlayer.getPossessed(player);
 		if (possessed == null || possessed instanceof Golem) {
 			PossessingPlayer.stopPossessing(player);
+			GhostyPlayer.markGhost(player);
 		} else {
 			possessed.damage(Double.MAX_VALUE, DamageSource.builder(DamageType.GENERIC_KILL).build());
 		}

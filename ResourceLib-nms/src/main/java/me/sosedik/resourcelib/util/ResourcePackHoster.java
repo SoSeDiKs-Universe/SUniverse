@@ -1,5 +1,6 @@
 package me.sosedik.resourcelib.util;
 
+import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
@@ -107,9 +108,11 @@ public class ResourcePackHoster {
 		@Override
 		public void handle(HttpExchange httpExchange) throws IOException {
 			httpExchange.setAttribute("Content-Type", "application/zip");
-			httpExchange.getResponseHeaders().add("Content-Disposition", "attachment; filename=resource_pack.zip");
+			Headers responseHeaders = httpExchange.getResponseHeaders();
+			responseHeaders.set("Content-Type", "application/zip");
+			responseHeaders.add("Content-Disposition", "attachment; filename=resource_pack.zip");
 			httpExchange.sendResponseHeaders(200, resourcePack.length);
-			try (OutputStream os = httpExchange.getResponseBody()) {
+			try (httpExchange; OutputStream os = httpExchange.getResponseBody()) {
 				os.write(resourcePack);
 			}
 		}

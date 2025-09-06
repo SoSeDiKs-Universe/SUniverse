@@ -1,12 +1,12 @@
 package me.sosedik.trappednewbie.impl.advancement;
 
-import com.destroystokyo.paper.MaterialTags;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import me.sosedik.packetadvancements.imlp.advancement.base.BaseAdvancement;
 import me.sosedik.packetadvancements.imlp.advancement.base.BaseAdvancementBuilderImpl;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieAdvancements;
 import me.sosedik.trappednewbie.listener.advancement.AdvancementTrophies;
 import me.sosedik.utilizer.impl.recipe.ShapelessCraft;
+import org.bukkit.Tag;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NullMarked;
@@ -27,8 +27,8 @@ public class Walk10KKMAdvancement extends BaseAdvancement {
 
 		new ShapelessCraft(requireNonNull(AdvancementTrophies.getBaseTrophy(this)), trappedNewbieKey("trophy/" + TrappedNewbieAdvancements.WALK_250KM.getRawKey()))
 			.special()
-			.addIngredients(MaterialTags.BOOTS.getValues())
-			.addIngredients(MaterialTags.BOOTS.getValues())
+			.addIngredients(Tag.ITEMS_FOOT_ARMOR.getValues())
+			.addIngredients(Tag.ITEMS_FOOT_ARMOR.getValues())
 			.withPreCheck(event -> {
 				Player player = event.getPlayer();
 				if (player == null) {

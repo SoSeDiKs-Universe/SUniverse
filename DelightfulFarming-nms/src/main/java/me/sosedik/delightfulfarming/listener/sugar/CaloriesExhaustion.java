@@ -15,8 +15,11 @@ public class CaloriesExhaustion implements Listener {
 	public void onExhaust(EntityExhaustionEvent event) {
 		if (!(event.getEntity() instanceof Player player)) return;
 
+		float exhaustion = event.getExhaustion();
+		if (exhaustion == 0F) return;
+
 		var sugarEater = SugarEater.of(player);
-		sugarEater.onExhaustion(event.getExhaustion());
+		sugarEater.onExhaustion(exhaustion);
 	}
 
 }

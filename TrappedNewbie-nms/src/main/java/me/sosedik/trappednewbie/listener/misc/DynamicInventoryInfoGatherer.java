@@ -157,7 +157,7 @@ public class DynamicInventoryInfoGatherer implements Listener {
 			if (world.getEnvironment() == World.Environment.NETHER) return null;
 			if (world.getEnvironment() == World.Environment.THE_END) return null;
 
-			Component text = ClockModifier.formatTime(world, Messenger.messenger(player), player);
+			Component text = ClockModifier.formatTime(world.getTime(), Messenger.messenger(player), player);
 
 			int textWidth = SpacingUtil.getWidth(text);
 			text = SpacingUtil.getOffset(-textWidth, textWidth, text);

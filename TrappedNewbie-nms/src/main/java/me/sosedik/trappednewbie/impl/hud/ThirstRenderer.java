@@ -25,7 +25,8 @@ public class ThirstRenderer extends SimpleHudRenderer {
 	private static final ThirstIconSet HOT = new ThirstIconSet("_hot");
 	private static final ThirstIconSet HOT_POISONED = new ThirstIconSet("_hot_poisoned");
 	private static final int HUD_OFFSET = 11;
-	private static final int HUD_LENGTH = 80;
+	private static final int ICON_WIDTH = 7;
+	private static final int HUD_LENGTH = (ICON_WIDTH + 1) * 10;
 
 	private final List<Component> thirstDisplay = new ArrayList<>();
 
@@ -58,6 +59,19 @@ public class ThirstRenderer extends SimpleHudRenderer {
 		for (int i = 0; i < thirstLevel / 2; i++) this.thirstDisplay.add(iconSet.full());
 
 		Component thirsts = combined(this.thirstDisplay);
+
+		if (saturation > 0) {
+			this.thirstDisplay.clear();
+			int fulls = ((int) saturation) / 2;
+			float leftover = saturation - ((int) saturation);
+			if (leftover > 0) this.thirstDisplay.add(iconSet.saturationHalf());
+			for (int i = 0; i < fulls; i++) this.thirstDisplay.add(iconSet.saturation());
+			int satIcons = leftover > 0 ? fulls + 1 : fulls;
+			int saturationWidth = ((ICON_WIDTH + 1) * satIcons);
+			Component saturationDisplay = combined(this.thirstDisplay);
+			thirsts = Component.textOfChildren(thirsts, SpacingUtil.getOffset(-saturationWidth, saturationWidth, saturationDisplay));
+		}
+
 		return SpacingUtil.getOffset(HUD_OFFSET, HUD_LENGTH, thirsts.shadowColor(ShadowColor.none()));
 	}
 

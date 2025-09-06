@@ -12,6 +12,7 @@ import me.sosedik.resourcelib.ResourceLib;
 import me.sosedik.resourcelib.api.font.FontData;
 import me.sosedik.utilizer.api.language.LangOptionsStorage;
 import me.sosedik.utilizer.api.message.Messenger;
+import me.sosedik.utilizer.util.ItemUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -65,7 +66,7 @@ public class BarometerModifier extends ItemModifier {
 
 		contextBox.getItem().setData(DataComponentTypes.ITEM_MODEL, CLEAR);
 
-		if (ClockModifier.shouldFreeze(contextBox)) return ModificationResult.OK;
+		if (ItemUtil.shouldFreeze(contextBox)) return ModificationResult.OK;
 
 		Entity target = null;
 		if (contextBox.getContext() instanceof EntityEquipmentPacketContext context) {

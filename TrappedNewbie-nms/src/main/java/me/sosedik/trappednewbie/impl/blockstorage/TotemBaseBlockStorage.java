@@ -152,8 +152,8 @@ public class TotemBaseBlockStorage extends DisplayBlockStorage {
 	public void abortRitual() {
 		if (this.ritualData == null) return;
 
-		stopRitual();
 		new HashSet<>(this.ritualData.getPerformers()).forEach(TotemRituals::abortActiveRitual);
+		stopRitual();
 	}
 
 	public void abortPickers() {

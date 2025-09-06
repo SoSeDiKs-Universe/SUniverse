@@ -12,6 +12,7 @@ import me.sosedik.resourcelib.ResourceLib;
 import me.sosedik.utilizer.api.language.LangOptionsStorage;
 import me.sosedik.utilizer.api.message.Messenger;
 import me.sosedik.utilizer.api.message.Mini;
+import me.sosedik.utilizer.util.ItemUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -52,7 +53,7 @@ public class LunarClockModifier extends ItemModifier {
 		if (contextBox.getInitialType() != MiscMeItems.LUNAR_CLOCK) return ModificationResult.PASS;
 
 		Player player = contextBox.getViewer();
-		if (player == null || ClockModifier.shouldFreeze(contextBox)) {
+		if (player == null || ItemUtil.shouldFreeze(contextBox)) {
 			contextBox.getItem().setData(DataComponentTypes.ITEM_MODEL, STILL_LUNAR_CLOCK);
 			return ModificationResult.OK;
 		}

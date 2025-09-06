@@ -17,6 +17,8 @@ import me.sosedik.utilizer.api.database.Database;
 import me.sosedik.utilizer.api.language.TranslationHolder;
 import me.sosedik.utilizer.util.EventUtil;
 import me.sosedik.utilizer.util.Scheduler;
+import net.dv8tion.jda.api.events.session.ShutdownEvent;
+import net.dv8tion.jda.internal.managers.AudioManagerImpl;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -57,6 +59,9 @@ public final class Socializer extends JavaPlugin {
 			EventUtil.registerListeners(this,
 				DiscordServerStatusUpdater.class
 			);
+
+			// Load early, so it's available in classpath during disable
+			loadClasses(ShutdownEvent.class, AudioManagerImpl.class);
 		}
 
 		EventUtil.registerListeners(this,
@@ -68,6 +73,10 @@ public final class Socializer extends JavaPlugin {
 		CommandManager.commandManager().registerCommands(this,
 			DiscordCommand.class
 		);
+	}
+
+	private void loadClasses(Class<?>... classes) {
+		// Yay!
 	}
 
 	@Override

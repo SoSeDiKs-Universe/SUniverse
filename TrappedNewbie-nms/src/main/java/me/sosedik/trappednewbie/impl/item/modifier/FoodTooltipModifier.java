@@ -9,6 +9,7 @@ import me.sosedik.resourcelib.ResourceLib;
 import me.sosedik.resourcelib.util.SpacingUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.ShadowColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NullMarked;
@@ -32,6 +33,7 @@ public class FoodTooltipModifier extends ItemModifier {
 	private static final Component SATURATION_ICON_2 = ResourceLib.requireFontData(trappedNewbieKey("sat_2_icon")).icon();
 	private static final Component SATURATION_ICON_3 = ResourceLib.requireFontData(trappedNewbieKey("sat_3_icon")).icon();
 	private static final Component SATURATION_ICON_4 = ResourceLib.requireFontData(trappedNewbieKey("sat_4_icon")).icon();
+	private static final int ICON_WIDTH = ResourceLib.requireFontData(trappedNewbieKey("hunger_icon")).width();
 
 	public FoodTooltipModifier(NamespacedKey modifierId) {
 		super(modifierId);
@@ -47,8 +49,27 @@ public class FoodTooltipModifier extends ItemModifier {
 			FoodProperties data = ogItem.getData(DataComponentTypes.FOOD);
 			assert data != null;
 			int foodValue = data.nutrition();
-			if (foodValue != 0)
-				contextBox.addLore(combineToOne(foodValue, SpacingUtil.getNegativePixel(), HUNGER_ICON_HALF, HUNGER_ICON));
+			if (foodValue != 0) {
+				Component hungerDisplay = combineToOne(foodValue, SpacingUtil.getNegativePixel(), HUNGER_ICON_HALF, HUNGER_ICON);
+				float saturation = data.saturation();
+				if (saturation > 0) {
+					int fulls = ((int) saturation) / 2;
+					float leftover = saturation - ((int) saturation);
+					List<Component> display = new ArrayList<>();
+					if (leftover > 0) {
+						if (leftover < 0.6F) display.add(SATURATION_ICON_1);
+						else if (leftover < 1.2F) display.add(SATURATION_ICON_2);
+						else display.add(SATURATION_ICON_3);
+					}
+					for (int i = 0; i < fulls; i++) display.add(SATURATION_ICON_4);
+					int hungerWidth = ICON_WIDTH * foodValue;
+					int satIcons = leftover > 0 ? fulls + 1 : fulls;
+					int saturationWidth = ICON_WIDTH * satIcons + 1;
+					Component saturationDisplay = combine(SpacingUtil.getNegativePixel(), display);
+					hungerDisplay = Component.textOfChildren(hungerDisplay, SpacingUtil.getOffset(-hungerWidth + (hungerWidth - saturationWidth), saturationWidth, saturationDisplay));
+				}
+				contextBox.addLore(hungerDisplay.shadowColor(ShadowColor.none()));
+			}
 		}
 
 		item.unsetData(DataComponentTypes.FOOD);

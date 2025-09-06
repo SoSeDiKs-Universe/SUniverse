@@ -45,7 +45,7 @@ public class FallingBeeNests implements Listener {
 		Block block = event.getHitBlock();
 		if (block.getType() != Material.BEE_NEST) return;
 
-		block.getWorld().spawn(block.getLocation().center(), FallingBlock.class, fallingBlock -> {
+		block.getWorld().spawn(block.getLocation().center(0), FallingBlock.class, fallingBlock -> {
 			fallingBlock.setBlockState(block.getState());
 			fallingBlock.setDropItem(false);
 		});

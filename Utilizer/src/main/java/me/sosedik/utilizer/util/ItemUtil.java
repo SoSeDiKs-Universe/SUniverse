@@ -6,6 +6,8 @@ import com.destroystokyo.paper.profile.ProfileProperty;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.PotionContents;
 import io.papermc.paper.datacomponent.item.ResolvableProfile;
+import me.sosedik.kiterino.modifier.item.ItemContextBox;
+import me.sosedik.kiterino.modifier.item.context.ItemModifierContextType;
 import me.sosedik.utilizer.dataset.UtilizerTags;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -299,6 +301,20 @@ public class ItemUtil {
 	public static boolean shouldRenderAsBlock(ItemStack item) {
 		Material type = item.getType();
 		return type.isBlock() && !UtilizerTags.FLAT_BLOCK_RENDER.isTagged(type);
+	}
+
+	/**
+	 * Checks whether the dynamic item should freeze instead in this context
+	 *
+	 * @param contextBox context
+	 * @return whether the dynamic item should freeze
+	 */
+	public static boolean shouldFreeze(ItemContextBox contextBox) {
+		ItemModifierContextType contextType = contextBox.getContextType();
+		return contextType == ItemModifierContextType.RECIPE_BOOK
+			|| contextType == ItemModifierContextType.RECIPE_GHOST
+			|| contextType == ItemModifierContextType.MERCHANT_OFFER
+			|| contextType == ItemModifierContextType.ADVANCEMENT;
 	}
 
 }

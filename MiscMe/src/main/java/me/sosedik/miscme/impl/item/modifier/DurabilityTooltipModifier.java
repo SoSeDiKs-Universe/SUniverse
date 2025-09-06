@@ -63,6 +63,9 @@ public class DurabilityTooltipModifier extends ItemModifier {
 		boolean capacity = MiscMeTags.DURABILITY_CAPACITY_TOOLTIP.isTagged(item.getType());
 		Component message = messenger.getMessage("attribute.durability" + (capacity ? ".capacity" : ""), component("value", durabilityComponent));
 
+		if (!capacity && durability == 0)
+			message = message.append(Component.space(), messenger.getMessage("attribute.durability.broken"));
+
 		contextBox.addLore(combined(capacity ? CAPACITY_ICON : DURABILITY_ICON, space(), message.decorationIfAbsent(TextDecoration.ITALIC, TextDecoration.State.FALSE)));
 
 		return ModificationResult.OK;

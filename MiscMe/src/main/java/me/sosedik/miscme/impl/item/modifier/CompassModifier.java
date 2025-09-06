@@ -8,6 +8,7 @@ import me.sosedik.kiterino.modifier.item.context.SlottedItemModifierContext;
 import me.sosedik.miscme.MiscMe;
 import me.sosedik.utilizer.api.language.LangOptionsStorage;
 import me.sosedik.utilizer.api.message.Messenger;
+import me.sosedik.utilizer.util.ItemUtil;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -43,7 +44,7 @@ public class CompassModifier extends ItemModifier {
 	public ModificationResult modify(ItemContextBox contextBox) {
 		if (!Tag.ITEMS_COMPASSES.isTagged(contextBox.getInitialType())) return ModificationResult.PASS;
 
-		if (ClockModifier.shouldFreeze(contextBox)) {
+		if (ItemUtil.shouldFreeze(contextBox)) {
 			if (contextBox.getItem().isDataOverridden(DataComponentTypes.ITEM_MODEL)) return ModificationResult.PASS;
 
 			NamespacedKey model = contextBox.getInitialType() == Material.RECOVERY_COMPASS ? STILL_RECOVERY_COMPASS : STILL_COMPASS;

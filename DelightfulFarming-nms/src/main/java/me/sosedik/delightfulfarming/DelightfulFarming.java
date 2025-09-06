@@ -3,11 +3,13 @@ package me.sosedik.delightfulfarming;
 import me.sosedik.delightfulfarming.dataset.DelightfulFarmingItems;
 import me.sosedik.delightfulfarming.dataset.DelightfulFarmingRecipes;
 import me.sosedik.delightfulfarming.impl.item.modifier.BerriesModifier;
+import me.sosedik.delightfulfarming.impl.item.modifier.ClockMealModifier;
 import me.sosedik.delightfulfarming.listener.block.NoBerriesPlacement;
 import me.sosedik.delightfulfarming.listener.sugar.AlwaysAllowEating;
 import me.sosedik.delightfulfarming.listener.sugar.CaloriesExhaustion;
 import me.sosedik.delightfulfarming.listener.sugar.CaloriesOnFoodConsume;
 import me.sosedik.delightfulfarming.listener.sugar.CaloriesOnJoinLeave;
+import me.sosedik.delightfulfarming.listener.sugar.HiddenSaturation;
 import me.sosedik.resourcelib.ResourceLib;
 import me.sosedik.utilizer.api.language.TranslationHolder;
 import me.sosedik.utilizer.impl.storage.SimpleRotatableBlockStorage;
@@ -51,13 +53,15 @@ public final class DelightfulFarming extends JavaPlugin {
 			AlwaysAllowEating.class,
 			CaloriesExhaustion.class,
 			CaloriesOnFoodConsume.class,
-			CaloriesOnJoinLeave.class
+			CaloriesOnJoinLeave.class,
+			HiddenSaturation.class
 		);
 
 		PlaceableBlockItems.addMapping(DelightfulFarmingItems.SWEET_BERRY_PIPS, DelightfulFarmingItems.SWEET_BERRY_PIPS_BUSH);
 		PlaceableBlockItems.addMapping(DelightfulFarmingItems.GLOW_BERRY_PIPS, DelightfulFarmingItems.GLOW_BERRY_PIPS_BUSH);
 
 		new BerriesModifier(delightfulFarmingKey("berries_modifier")).register();
+		new ClockMealModifier(delightfulFarmingKey("clock_meal")).register();
 	}
 
 	/**

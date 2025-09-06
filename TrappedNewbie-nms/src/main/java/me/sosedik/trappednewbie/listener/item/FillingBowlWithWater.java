@@ -1,5 +1,6 @@
 package me.sosedik.trappednewbie.listener.item;
 
+import me.sosedik.miscme.listener.entity.ItemFrameFallables;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieItems;
 import me.sosedik.trappednewbie.impl.thirst.ThirstData;
 import me.sosedik.trappednewbie.listener.thirst.DrinkableWater;
@@ -9,6 +10,7 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.block.Block;
+import org.bukkit.block.data.Levelled;
 import org.bukkit.block.data.type.Dispenser;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -39,6 +41,42 @@ public class FillingBowlWithWater implements Listener {
 	public static final Map<Material, Material> REVERSED_BOWLS = BOWLS.entrySet()
 		.stream()
 		.collect(Collectors.toMap(Map.Entry::getValue, Map.Entry::getKey));
+
+	public FillingBowlWithWater() {
+		addItemFrameFallables();
+	}
+
+	private void addItemFrameFallables() {
+		ItemFrameFallables.ItemFrameFallable fallableRule = (item, block) -> { // TODO custom cauldrons
+			if (block.getType() == Material.CAULDRON) {
+				block.setType(Material.WATER_CAULDRON);
+				block.emitSound(Sound.BLOCK_POINTED_DRIPSTONE_DRIP_WATER_INTO_CAULDRON, 0.7F, 1.3F);
+				return null;
+			}
+
+			if (block.getType() == Material.WATER_CAULDRON && block.getBlockData() instanceof Levelled levelled) {
+				if (levelled.getLevel() < levelled.getMaximumLevel()) {
+					levelled.setLevel(levelled.getLevel() + 1);
+					block.setBlockData(levelled);
+				}
+				block.emitSound(Sound.BLOCK_POINTED_DRIPSTONE_DRIP_WATER_INTO_CAULDRON, 0.6F, 1.3F);
+				return null;
+			}
+
+			if (block.getType() == Material.LAVA_CAULDRON) {
+				block.emitSound(Sound.BLOCK_FIRE_EXTINGUISH, 0.6F, 1.3F);
+				return null;
+			}
+
+			block.emitSound(Sound.ENTITY_GENERIC_DRINK, 0.6F, 1.3F);
+			return null;
+		};
+		FillingBowlWithWater.BOWLS.forEach((bowl, filledBowl) -> {
+			if (bowl == Material.GLASS_BOTTLE) return;
+
+			ItemFrameFallables.addFallable(filledBowl, fallableRule);
+		});
+	}
 
 	@EventHandler
 	public void onFill(PlayerInteractEvent event) {

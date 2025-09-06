@@ -1,5 +1,6 @@
 {
 	"attribute.durability": "<gray>Durability: <value>",
+	"attribute.durability.broken": "<dark_gray>(broken junk)",
 	"attribute.durability.capacity": "<gray>Capacity: <value>",
 	"overlay.toggle": [
 		"<yellow><!i><key:key.sneak> + <key:key.use> to",

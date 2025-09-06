@@ -19,7 +19,7 @@ public abstract class OneItemRecipe<T extends OneItemRecipe<T>> extends Shapeles
 	protected RecipeChoice.ExactChoice getRecipeChoice() {
 		for (Map.Entry<Character, List<ItemStack>> entry : getIngredients().entrySet()) {
 			var ingredientChoice = new RecipeChoice.ExactChoice(entry.getValue());
-			ingredientChoice.setPredicate(item -> findMatch(entry.getKey(), item));
+			ingredientChoice.setPredicate(new ItemPredicate(this, entry.getKey()));
 			return ingredientChoice;
 		}
 		throw new IllegalStateException("Recipe must have at least one ingredient");

@@ -53,6 +53,17 @@ public class MathUtil {
 	}
 
 	/**
+	 * Gets a random double value withing the specified range
+	 *
+	 * @param min min value
+	 * @param max max value
+	 * @return a random double value withing the specified range
+	 */
+	public static double getRandomDoubleInRange(double min, double max) {
+		return min + (max - min) * RANDOM.nextDouble();
+	}
+
+	/**
 	 * Returns random value from provided array
 	 *
 	 * @param values values array

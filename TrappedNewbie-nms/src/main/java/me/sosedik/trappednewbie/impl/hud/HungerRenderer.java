@@ -48,6 +48,7 @@ public class HungerRenderer extends SimpleHudRenderer {
 		HungerIconSet iconSet = getSet(sugarEater);
 		int maxFood = 20;
 		int foodLevel = sugarEater.getHungerBarPoints();
+		float saturation = sugarEater.getSaturationPoints();
 		boolean poisoned = this.player.hasPotionEffect(PotionEffectType.HUNGER);
 
 		// Empty food
@@ -60,6 +61,23 @@ public class HungerRenderer extends SimpleHudRenderer {
 		for (int i = 0; i < foodLevel / 2; i++) this.foodDisplay.add(poisoned ? iconSet.fullPoison() : iconSet.full());
 
 		Component foods = combine(SpacingUtil.getSpacing(-2), this.foodDisplay);
+
+		if (saturation > 0) {
+			this.foodDisplay.clear();
+			int fulls = ((int) saturation) / 2;
+			float leftover = saturation - ((int) saturation);
+			if (leftover > 0) {
+				if (leftover < 0.6F) this.foodDisplay.add(iconSet.saturated1());
+				else if (leftover < 1.2F) this.foodDisplay.add(iconSet.saturated2());
+				else this.foodDisplay.add(iconSet.saturated3());
+			}
+			for (int i = 0; i < fulls; i++) this.foodDisplay.add(iconSet.saturated4());
+			int satIcons = leftover > 0 ? fulls + 1 : fulls;
+			int saturationWidth = ((HUNGER_WIDTH - 2) * satIcons) + 1;
+			Component saturationDisplay = combine(SpacingUtil.getSpacing(-2), this.foodDisplay);
+			foods = Component.textOfChildren(foods, SpacingUtil.getOffset(-saturationWidth - 1, saturationWidth, saturationDisplay));
+		}
+
 		return SpacingUtil.getOffset(HUD_OFFSET, HUD_LENGTH, foods.shadowColor(ShadowColor.none()));
 	}
 
@@ -78,7 +96,11 @@ public class HungerRenderer extends SimpleHudRenderer {
 		Component half,
 		Component emptyPoison,
 		Component fullPoison,
-		Component halfPoison
+		Component halfPoison,
+		Component saturated1,
+		Component saturated2,
+		Component saturated3,
+		Component saturated4
 	) {
 
 		HungerIconSet(String suffix) {
@@ -88,7 +110,11 @@ public class HungerRenderer extends SimpleHudRenderer {
 				mapping("hunger/food_half" + suffix),
 				mapping("hunger/food_empty_hunger" + suffix),
 				mapping("hunger/food_empty_hunger" + suffix),
-				mapping("hunger/food_empty_hunger" + suffix)
+				mapping("hunger/food_empty_hunger" + suffix),
+				mapping("hunger/sat" + suffix + "_1"),
+				mapping("hunger/sat" + suffix + "_2"),
+				mapping("hunger/sat" + suffix + "_3"),
+				mapping("hunger/sat" + suffix + "_4")
 			);
 		}
 

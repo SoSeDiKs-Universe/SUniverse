@@ -52,6 +52,9 @@ public class FallThroughLeaves implements Listener {
 		Block block = to.getBlock().getRelative(BlockFace.DOWN);
 		if (!MovesTags.FALL_THROUGH_BLOCKS.isTagged(block.getType())) return;
 
+		Block supportingBlock = player.getSupportingBlock();
+		if (supportingBlock != null && !MovesTags.FALL_THROUGH_BLOCKS.isTagged(supportingBlock.getType())) return;
+
 		player.teleport(to.clone().addY(-0.1), TeleportFlag.Relative.VELOCITY_ROTATION, TeleportFlag.EntityState.RETAIN_VEHICLE, TeleportFlag.EntityState.RETAIN_PASSENGERS);
 		player.emitSound(Sound.BLOCK_GRASS_STEP, 1F, 1F);
 	}

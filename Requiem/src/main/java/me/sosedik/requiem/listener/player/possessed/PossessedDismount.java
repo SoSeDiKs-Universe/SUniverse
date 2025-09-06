@@ -29,12 +29,12 @@ public class PossessedDismount implements Listener {
 		if (!PossessingPlayer.isPossessingSoft(player)) return;
 
 		if (event.isCancellable()) {
-			if (cooldowns.contains(player.getUniqueId())) {
+			if (this.cooldowns.contains(player.getUniqueId())) {
 				event.setCancelled(true);
 			} else if (PossessingPlayer.isPossessable(vehicle)) {
 				event.setCancelled(true);
-				cooldowns.add(player.getUniqueId());
-				Requiem.scheduler().sync(() -> cooldowns.remove(player.getUniqueId()), 20L);
+				this.cooldowns.add(player.getUniqueId());
+				Requiem.scheduler().sync(() -> this.cooldowns.remove(player.getUniqueId()), 20L);
 			}
 
 			if (event.isCancelled()) {

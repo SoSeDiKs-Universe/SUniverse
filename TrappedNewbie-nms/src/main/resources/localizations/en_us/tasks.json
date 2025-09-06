@@ -23,5 +23,8 @@
 	"task.ritual.rain_dance": "Rain Dance",
 	"task.ritual.rain_dance.description": "Make it rain",
 	"task.ritual.soul_melancholy": "Soul Melancholy",
-	"task.ritual.soul_melancholy.description": "If possessing an undead human-like mob,<br>links your soul to its body"
+	"task.ritual.soul_melancholy.description": [
+		"If possessing an undead human-like mob,",
+		"links your soul to its body"
+	]
 }

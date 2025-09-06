@@ -1,7 +1,7 @@
 package me.sosedik.requiem.listener.player.possessed;
 
 import me.sosedik.requiem.feature.PossessingPlayer;
-import me.sosedik.resourcelib.impl.item.RLibItemTags;
+import me.sosedik.resourcelib.dataset.RLibItemTags;
 import org.bukkit.entity.AbstractSkeleton;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -33,8 +33,8 @@ public class MilkHelpsSkeletons implements Listener {
 
 	private boolean isSkeletonEntity(LivingEntity entity) {
 		return entity instanceof AbstractSkeleton
-				|| entity.getType() == EntityType.SKELETON_HORSE
-				|| entity.getType() == EntityType.WITHER;
+			|| entity.getType() == EntityType.SKELETON_HORSE
+			|| entity.getType() == EntityType.WITHER;
 	}
 
 }

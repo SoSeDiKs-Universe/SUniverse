@@ -1,0 +1,7 @@
+{
+	"meal.breakfast.name": "Завтрак",
+	"meal.dinner.name": "Обед",
+	"meal.supper.name": "Ужин",
+	"meal.night_snack.name": "Ночной перекус",
+	"meal.time": "<meal> (до <time>)"
+}

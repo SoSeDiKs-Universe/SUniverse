@@ -23,5 +23,8 @@
 	"task.ritual.rain_dance": "Танец дождя",
 	"task.ritual.rain_dance.description": "Призывает дождь",
 	"task.ritual.soul_melancholy": "Меланхолия души",
-	"task.ritual.soul_melancholy.description": "Привязывает Вашу душу к человекоподобной<br>нежити при управлении ею"
+	"task.ritual.soul_melancholy.description": [
+		"Привязывает Вашу душу к человекоподобной",
+		"нежити при управлении ею"
+	]
 }

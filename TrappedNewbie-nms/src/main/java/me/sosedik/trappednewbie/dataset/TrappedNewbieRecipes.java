@@ -10,6 +10,7 @@ import me.sosedik.trappednewbie.impl.thirst.ThirstData;
 import me.sosedik.trappednewbie.listener.block.LogStrippingGivesBarks;
 import me.sosedik.trappednewbie.listener.item.FillingBowlWithWater;
 import me.sosedik.utilizer.api.event.recipe.ItemCraftPrepareEvent;
+import me.sosedik.utilizer.api.recipe.CraftingRecipeBuilder;
 import me.sosedik.utilizer.dataset.UtilizerTags;
 import me.sosedik.utilizer.impl.recipe.FireCraft;
 import me.sosedik.utilizer.impl.recipe.ShapedCraft;
@@ -191,20 +192,24 @@ public class TrappedNewbieRecipes {
 			.register();
 
 		new ShapedCraft(ItemStack.of(TrappedNewbieItems.TOTEMIC_STAFF), trappedNewbieKey("totemic_staff"), " LS", " S ", "S L")
+			.withCategory(CraftingBookCategory.EQUIPMENT)
 			.addIngredients('L', Tag.LEAVES.getValues())
 			.addIngredients('S', Material.STICK, TrappedNewbieItems.ROUGH_STICK)
 			.register();
 		new ShapedCraft(ItemStack.of(TrappedNewbieItems.FLUTE), trappedNewbieKey("flute"), " LS", " S ", "S  ")
+			.withCategory(CraftingBookCategory.EQUIPMENT)
 			.addIngredients('L', Tag.LEAVES.getValues())
 			.addIngredients('S', Material.STICK, TrappedNewbieItems.ROUGH_STICK)
 			.register();
 		new ShapedCraft(ItemStack.of(TrappedNewbieItems.RATTLE), trappedNewbieKey("rattle"), " WW", " BW", "S  ")
+			.withCategory(CraftingBookCategory.EQUIPMENT)
 			.addIngredients('W', Tag.LOGS_THAT_BURN.getValues())
 			.addIngredients('B', Material.STRING, TrappedNewbieItems.TWINE)
 			.addIngredients('S', Material.STICK, TrappedNewbieItems.ROUGH_STICK)
 			.register();
 		TrappedNewbieTags.DRUMS.getValues().forEach(type -> {
 			new ShapedCraft(ItemStack.of(type), type.getKey(), "EEE", "LWL", "WLW")
+				.withCategory(CraftingBookCategory.EQUIPMENT)
 				.withGroup("drum")
 				.addIngredients('E', TrappedNewbieTags.HIDES.getValues())
 				.addIngredients('E', Material.LEATHER)
@@ -574,7 +579,7 @@ public class TrappedNewbieRecipes {
 	}
 
 	private static void addReplacements(Map<Material, List<ItemStack>> map, Material type, Tag<Material> replacements) {
-		map.computeIfAbsent(type, k -> new ArrayList<>()).addAll(replacements.getValues().stream().map(ItemStack::new).toList());
+		map.computeIfAbsent(type, k -> new ArrayList<>()).addAll(replacements.getValues().stream().map(ItemStack::of).toList());
 	}
 
 	private static boolean updateRecipe(Map<Material, List<ItemStack>> replacements, Recipe recipe) {
@@ -633,7 +638,11 @@ public class TrappedNewbieRecipes {
 		if (!modified) return null;
 
 		var updatedChoice = new RecipeChoice.ExactChoice(items.toArray(ItemStack[]::new));
-		if (predicate != null) updatedChoice.setPredicate(predicate);
+		if (predicate != null) {
+			if (predicate instanceof CraftingRecipeBuilder.ItemPredicate(CraftingRecipeBuilder<?> recipe, char key))
+				recipe.getIngredients().put(key, new ArrayList<>(items));
+			updatedChoice.setPredicate(predicate);
+		}
 		return updatedChoice;
 	}
 

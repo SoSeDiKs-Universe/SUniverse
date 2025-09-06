@@ -11,6 +11,7 @@ import me.sosedik.miscme.dataset.MiscMeItems;
 import me.sosedik.resourcelib.ResourceLib;
 import me.sosedik.utilizer.api.language.LangOptionsStorage;
 import me.sosedik.utilizer.api.message.Messenger;
+import me.sosedik.utilizer.util.ItemUtil;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
@@ -40,7 +41,7 @@ public class DepthMeterModifier extends ItemModifier {
 
 		contextBox.getItem().setData(DataComponentTypes.ITEM_MODEL, DEPTH_SURFACE);
 
-		if (ClockModifier.shouldFreeze(contextBox)) return ModificationResult.OK;
+		if (ItemUtil.shouldFreeze(contextBox)) return ModificationResult.OK;
 
 		Entity target = null;
 		if (contextBox.getContext() instanceof EntityEquipmentPacketContext context) {

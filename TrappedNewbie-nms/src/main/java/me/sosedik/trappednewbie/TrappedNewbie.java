@@ -4,7 +4,6 @@ import io.leangen.geantyref.TypeToken;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import me.sosedik.delightfulfarming.dataset.DelightfulFarmingRecipes;
 import me.sosedik.limboworldgenerator.VoidChunkGenerator;
-import me.sosedik.miscme.listener.entity.ItemFrameFallables;
 import me.sosedik.miscme.task.CustomDayCycleTask;
 import me.sosedik.requiem.feature.GhostyPlayer;
 import me.sosedik.requiem.feature.PossessingPlayer;
@@ -118,6 +117,7 @@ import me.sosedik.trappednewbie.listener.player.DynamicGameMode;
 import me.sosedik.trappednewbie.listener.player.ExtraPossessedDrops;
 import me.sosedik.trappednewbie.listener.player.NewbieWelcome;
 import me.sosedik.trappednewbie.listener.player.PossessingRegeneration;
+import me.sosedik.trappednewbie.listener.player.ReachAround;
 import me.sosedik.trappednewbie.listener.player.StartAsGhost;
 import me.sosedik.trappednewbie.listener.player.TaskManagement;
 import me.sosedik.trappednewbie.listener.player.TeamableLeatherEquipment;
@@ -152,11 +152,9 @@ import org.bukkit.Difficulty;
 import org.bukkit.GameRule;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.Sound;
 import org.bukkit.Tag;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.block.data.Levelled;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.incendo.cloud.bukkit.internal.BukkitBrigadierMapper;
@@ -332,6 +330,7 @@ public final class TrappedNewbie extends JavaPlugin {
 			ExtraPossessedDrops.class,
 			NewbieWelcome.class,
 			PossessingRegeneration.class,
+			ReachAround.class,
 			StartAsGhost.class,
 			TaskManagement.class,
 			TeamableLeatherEquipment.class,
@@ -367,35 +366,6 @@ public final class TrappedNewbie extends JavaPlugin {
 		GhostyPlayer.addFlightDenyRule(player -> player.getWorld() == limboWorld());
 		GhostyPlayer.addItemsDenyRule(player -> player.getWorld() == limboWorld());
 		PossessingPlayer.addItemsDenyRule(player -> player.getWorld() == limboWorld());
-
-		addItemFrameFallables();
-	}
-
-	private void addItemFrameFallables() {
-		ItemFrameFallables.addFallable(TrappedNewbieItems.FILLED_BOWL, (item, block) -> {
-			if (block.getType() == Material.CAULDRON) {
-				block.setType(Material.WATER_CAULDRON);
-				block.emitSound(Sound.BLOCK_POINTED_DRIPSTONE_DRIP_WATER_INTO_CAULDRON, 0.7F, 1.3F);
-				return null;
-			}
-
-			if (block.getType() == Material.WATER_CAULDRON && block.getBlockData() instanceof Levelled levelled) {
-				if (levelled.getLevel() < levelled.getMaximumLevel()) {
-					levelled.setLevel(levelled.getLevel() + 1);
-					block.setBlockData(levelled);
-				}
-				block.emitSound(Sound.BLOCK_POINTED_DRIPSTONE_DRIP_WATER_INTO_CAULDRON, 0.6F, 1.3F);
-				return null;
-			}
-
-			if (block.getType() == Material.LAVA_CAULDRON) {
-				block.emitSound(Sound.BLOCK_FIRE_EXTINGUISH, 0.6F, 1.3F);
-				return null;
-			}
-
-			block.emitSound(Sound.ENTITY_GENERIC_DRINK, 0.6F, 1.3F);
-			return null;
-		});
 	}
 
 	@Override

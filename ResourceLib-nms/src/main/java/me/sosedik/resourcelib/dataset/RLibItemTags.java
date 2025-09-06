@@ -1,4 +1,4 @@
-package me.sosedik.resourcelib.impl.item;
+package me.sosedik.resourcelib.dataset;
 
 import org.bukkit.Material;
 import org.bukkit.Tag;
@@ -14,6 +14,6 @@ public class RLibItemTags {
 	/**
 	 * Drinks that contain milk in them
 	 */
-	public static final Tag<Material> MILK_DRINKABLES = itemTag(resourceLibKey("milk_drinkables"));
+	public static final Tag<Material> MILK_DRINKABLES = itemTag(resourceLibKey("milk_drinkables")); // TODO not really possible
 
 }

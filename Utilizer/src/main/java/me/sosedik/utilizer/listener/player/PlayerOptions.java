@@ -81,7 +81,7 @@ public class PlayerOptions implements Listener, PacketListener {
 		var messenger = Messenger.messenger(player);
 
 		Component label = messenger.getMessage("preferences.preference.am_pm");
-		var preference = DialogInput.bool(AM_PM_TAG, label).initial(false).build();
+		var preference = DialogInput.bool(AM_PM_TAG, label).initial(PlayerOptions.getPreferences(player).getOrDefault(AM_PM_TAG, false)).build();
 
 		event.getPreferences().add(preference);
 	}

@@ -12,6 +12,7 @@ import me.sosedik.miscme.listener.player.PlayerSpeedTracker;
 import me.sosedik.resourcelib.ResourceLib;
 import me.sosedik.utilizer.api.language.LangOptionsStorage;
 import me.sosedik.utilizer.api.message.Messenger;
+import me.sosedik.utilizer.util.ItemUtil;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -45,7 +46,7 @@ public class SpeedometerModifier extends ItemModifier {
 
 		contextBox.getItem().setData(DataComponentTypes.ITEM_MODEL, MODELS[0]);
 
-		if (ClockModifier.shouldFreeze(contextBox)) return ModificationResult.OK;
+		if (ItemUtil.shouldFreeze(contextBox)) return ModificationResult.OK;
 
 		Entity target = null;
 		if (contextBox.getContext() instanceof EntityEquipmentPacketContext context) {

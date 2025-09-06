@@ -4,13 +4,13 @@ import io.papermc.paper.datacomponent.DataComponentTypes;
 import me.sosedik.kiterino.modifier.item.ItemContextBox;
 import me.sosedik.kiterino.modifier.item.ItemModifier;
 import me.sosedik.kiterino.modifier.item.ModificationResult;
-import me.sosedik.kiterino.modifier.item.context.ItemModifierContextType;
 import me.sosedik.kiterino.modifier.item.context.SlottedItemModifierContext;
 import me.sosedik.miscme.MiscMe;
 import me.sosedik.resourcelib.ResourceLib;
 import me.sosedik.utilizer.api.language.LangOptionsStorage;
 import me.sosedik.utilizer.api.message.Messenger;
 import me.sosedik.utilizer.listener.player.PlayerOptions;
+import me.sosedik.utilizer.util.ItemUtil;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -42,7 +42,7 @@ public class ClockModifier extends ItemModifier {
 	public ModificationResult modify(ItemContextBox contextBox) {
 		if (contextBox.getInitialType() != Material.CLOCK) return ModificationResult.PASS;
 
-		if (shouldFreeze(contextBox)) {
+		if (ItemUtil.shouldFreeze(contextBox)) {
 			contextBox.getItem().setData(DataComponentTypes.ITEM_MODEL, STILL_CLOCK);
 			return ModificationResult.OK;
 		}
@@ -66,14 +66,6 @@ public class ClockModifier extends ItemModifier {
 		return ModificationResult.OK;
 	}
 
-	public static boolean shouldFreeze(ItemContextBox contextBox) {
-		ItemModifierContextType contextType = contextBox.getContextType();
-		return contextType == ItemModifierContextType.RECIPE_BOOK
-				|| contextType == ItemModifierContextType.RECIPE_GHOST
-				|| contextType == ItemModifierContextType.MERCHANT_OFFER
-				|| contextType == ItemModifierContextType.ADVANCEMENT;
-	}
-
 	public static Component formatTime(Player player, Locale locale) {
 		var messenger = Messenger.messenger(LangOptionsStorage.getByLocale(locale));
 
@@ -82,7 +74,7 @@ public class ClockModifier extends ItemModifier {
 		if (world.getEnvironment() == World.Environment.THE_END) return messenger.getMessage("item.clock.time.the_end");
 
 		long day = world.getFullTime() / 24_000;
-		Component time = formatTime(world, messenger, player);
+		Component time = formatTime(world.getTime(), messenger, player);
 
 		long t = world.getTime();
 		int h = (int) (t / 1000) + 6;
@@ -92,11 +84,10 @@ public class ClockModifier extends ItemModifier {
 		return messenger.getMessage("item.clock.time", raw("emoji", clock), raw("day", day), component("time", time));
 	}
 
-	public static Component formatTime(World world, Messenger messenger, Player player) {
-		long t = world.getTime();
-		int h = (int) (t / 1000) + 6;
+	public static Component formatTime(long worldTime, Messenger messenger, Player player) {
+		int h = (int) (worldTime / 1000) + 6;
 		if (h > 23) h -= 24;
-		int m = (int) ((60 * (t % 1000)) / 1000);
+		int m = (int) ((60 * (worldTime % 1000)) / 1000);
 		String amPm;
 		boolean useAmPm = PlayerOptions.isAmPm(player);
 		if (useAmPm) {

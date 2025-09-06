@@ -258,4 +258,13 @@ public abstract class CraftingRecipeBuilder<T extends CraftingRecipeBuilder<T>> 
 		return (T) this;
 	}
 
+	public record ItemPredicate(CraftingRecipeBuilder<?> recipe, char key) implements Predicate<ItemStack> {
+
+		@Override
+		public boolean test(ItemStack item) {
+			return this.recipe.findMatch(key, item);
+		}
+
+	}
+
 }

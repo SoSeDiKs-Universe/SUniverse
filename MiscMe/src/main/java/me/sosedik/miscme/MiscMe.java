@@ -39,6 +39,7 @@ import me.sosedik.miscme.listener.entity.ArmorStandSpawnsWithArms;
 import me.sosedik.miscme.listener.entity.BetterEntitySuffocation;
 import me.sosedik.miscme.listener.entity.BurningSpreadsWhenAttacking;
 import me.sosedik.miscme.listener.entity.ColoredShulkerUponSpawn;
+import me.sosedik.miscme.listener.entity.DeadLivingsIgnoreCactiAndSweetBushes;
 import me.sosedik.miscme.listener.entity.DyeableShulkers;
 import me.sosedik.miscme.listener.entity.DynamicCreeperExplosion;
 import me.sosedik.miscme.listener.entity.DynamicMovingSpeed;
@@ -50,8 +51,10 @@ import me.sosedik.miscme.listener.entity.MoreBabyMobs;
 import me.sosedik.miscme.listener.entity.MovingMinecartsHurtEntities;
 import me.sosedik.miscme.listener.entity.PrimingExplosiveMinecart;
 import me.sosedik.miscme.listener.entity.RainbowSheepDropRandomWool;
+import me.sosedik.miscme.listener.entity.ReleaseEntityFromVehicle;
 import me.sosedik.miscme.listener.entity.SheepBurnableWool;
 import me.sosedik.miscme.listener.entity.SheepRegrowNaturalWool;
+import me.sosedik.miscme.listener.entity.SnowmanPumpkin;
 import me.sosedik.miscme.listener.entity.TNTDefuse;
 import me.sosedik.miscme.listener.entity.WololoChangesNaturalSheepWool;
 import me.sosedik.miscme.listener.fixup.IgnitableCobweb;
@@ -161,6 +164,7 @@ public final class MiscMe extends JavaPlugin {
 			BetterEntitySuffocation.class,
 			BurningSpreadsWhenAttacking.class,
 			ColoredShulkerUponSpawn.class,
+			DeadLivingsIgnoreCactiAndSweetBushes.class,
 			DyeableShulkers.class,
 			DynamicCreeperExplosion.class,
 			DynamicMovingSpeed.class,
@@ -172,8 +176,10 @@ public final class MiscMe extends JavaPlugin {
 			MovingMinecartsHurtEntities.class,
 			PrimingExplosiveMinecart.class,
 			RainbowSheepDropRandomWool.class,
+			ReleaseEntityFromVehicle.class,
 			SheepBurnableWool.class,
 			SheepRegrowNaturalWool.class,
+			SnowmanPumpkin.class,
 			TNTDefuse.class,
 			WololoChangesNaturalSheepWool.class,
 			// fixup

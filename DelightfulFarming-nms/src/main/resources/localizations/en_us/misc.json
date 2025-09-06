@@ -1,0 +1,7 @@
+{
+	"meal.breakfast.name": "Breakfast",
+	"meal.dinner.name": "Dinner",
+	"meal.supper.name": "Supper",
+	"meal.night_snack.name": "Night Snack",
+	"meal.time": "<meal> (till <time>)"
+}

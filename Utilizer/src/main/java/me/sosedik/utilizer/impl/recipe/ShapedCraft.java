@@ -32,7 +32,7 @@ public final class ShapedCraft extends ShapedRecipeBuilder<ShapedCraft> {
 
 		getIngredients().forEach((key, value) -> {
 			var ingredientChoice = new RecipeChoice.ExactChoice(value);
-			ingredientChoice.setPredicate(item -> findMatch(key, item));
+			ingredientChoice.setPredicate(new ItemPredicate(this, key));
 			recipe.setIngredient(key, ingredientChoice);
 		});
 

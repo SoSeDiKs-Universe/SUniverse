@@ -32,7 +32,7 @@ public final class ShapelessCraft extends ShapelessRecipeBuilder<ShapelessCraft>
 
 		getIngredients().forEach((key, value) -> {
 			var ingredientChoice = new RecipeChoice.ExactChoice(value);
-			ingredientChoice.setPredicate(item -> findMatch(key, item));
+			ingredientChoice.setPredicate(new ItemPredicate(this, key));
 			recipe.addIngredient(ingredientChoice);
 		});
 

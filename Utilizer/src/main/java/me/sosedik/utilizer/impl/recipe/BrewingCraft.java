@@ -25,7 +25,7 @@ public class BrewingCraft implements CustomRecipe {
 
 	public static final Set<Material> MUNDANE_INGREDIENTS = new HashSet<>();
 
-	// MCCheck: 1.21.8, new potion ingredients
+	// MCCheck: 1.21.10, new potion ingredients
 	static {
 		MUNDANE_INGREDIENTS.addAll(List.of(Material.GLISTERING_MELON_SLICE, Material.GHAST_TEAR, Material.RABBIT_FOOT, Material.BLAZE_POWDER, Material.SPIDER_EYE, Material.SUGAR, Material.MAGMA_CREAM, Material.REDSTONE));
 	}

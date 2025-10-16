@@ -1563,7 +1563,7 @@ public class TrappedNewbieAdvancements {
 				)
 		))
 		.buildAndRegister();
-	// MCCheck: 1.21.8, nbt
+	// MCCheck: 1.21.10, nbt
 	public static final IAdvancement KILL_ALL_DIAMOND_ZOMBIE_BUT_HARD = buildBase(KILL_ALL_DIAMOND_ZOMBIE, "kill_all_diamond_zombie_but_hard").display(display().x(-1F).withAdvancementFrame(AdvancementFrame.BUTTERFLY).fancyDescriptionParent(NamedTextColor.BLACK).cheat().icon(ASSASSIN_HEAD))
 		.withReward(rewards()
 			.withTrophy(ItemStack.of(Material.PLAYER_HEAD))

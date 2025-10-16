@@ -41,7 +41,7 @@ import org.bukkit.event.world.EntitiesLoadEvent;
 /**
  * Well, you are the only one to blame, really
  */
-// MCCheck: 1.21.8, new animals
+// MCCheck: 1.21.10, new animals
 public class AngryAnimals implements Listener {
 
 	@EventHandler

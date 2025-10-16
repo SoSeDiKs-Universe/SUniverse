@@ -28,7 +28,6 @@ import java.util.Map;
 /**
  * Possessed mimic actions of their possessor
  */
-// MCCheck: 1.21.8, new mobs carrying items
 @NullMarked
 public class PossessedMimicPossessor implements Listener {
 
@@ -96,6 +95,7 @@ public class PossessedMimicPossessor implements Listener {
 		updateMainHandVisuals(entity, mainHandItem);
 	}
 
+	// MCCheck: 1.21.10, new mobs carrying items
 	private void updateMainHandVisuals(LivingEntity entity, @Nullable ItemStack item) {
 		if (entity instanceof Enderman enderman) {
 			if (item != null && item.getType().isBlock()) {

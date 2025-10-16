@@ -42,7 +42,7 @@ import java.util.Map;
  * Dyes can be applied onto blocks immersible.
  * Also allows applying/removing sticky state from pistons.
  */
-// MCCheck: 1.21.8, new colored blocks / items
+// MCCheck: 1.21.10, new colored blocks / items
 @NullMarked
 public class ImmersiveDyes implements Listener {
 

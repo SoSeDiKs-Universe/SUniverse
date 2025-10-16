@@ -19,7 +19,7 @@ import java.util.List;
 
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.playerKilledEntity;
 
-// MCCheck: 1.21.8, new jockeys, entity nbt tags
+// MCCheck: 1.21.10, new jockeys, entity nbt tags
 @NullMarked
 public class KillAllAllJockeysAdvancement extends BaseAdvancement {
 

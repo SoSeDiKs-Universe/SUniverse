@@ -27,7 +27,7 @@ import static me.sosedik.trappednewbie.TrappedNewbie.trappedNewbieKey;
 /**
  * Granting recipes for advancements
  */
-// MCCheck: 1.21.8, new recipes
+// MCCheck: 1.21.10, new recipes
 @NullMarked
 public class AdvancementRecipes implements Listener {
 

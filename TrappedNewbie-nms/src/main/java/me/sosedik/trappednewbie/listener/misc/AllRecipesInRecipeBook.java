@@ -404,7 +404,7 @@ public class AllRecipesInRecipeBook implements Listener {
 			AdvancementRecipes.discoverRecipes(player);
 	}
 
-	// MCCheck: 1.21.8, new inventories
+	// MCCheck: 1.21.10, new inventories
 	public static boolean hasRecipeBook(InventoryType type) {
 		return switch (type) {
 			case WORKBENCH, FURNACE, BLAST_FURNACE, SMOKER -> true;
@@ -475,7 +475,7 @@ public class AllRecipesInRecipeBook implements Listener {
 
 	}
 
-	// MCCheck: 1.21.8, new potion mixes
+	// MCCheck: 1.21.10, new potion mixes
 	private static void addVanillaPotionMixes() { // From PotionBrewing class
 		addVanillaPotionMix("splash_potion", ItemStack.of(Material.SPLASH_POTION), new RecipeChoice.MaterialChoice(Material.GUNPOWDER), new RecipeChoice.MaterialChoice(Material.POTION), null, null);
 		addVanillaPotionMix("lingering_potion", ItemStack.of(Material.LINGERING_POTION), new RecipeChoice.MaterialChoice(Material.DRAGON_BREATH), new RecipeChoice.MaterialChoice(Material.SPLASH_POTION), null, null);

@@ -33,7 +33,7 @@ import java.util.UUID;
 /**
  * The only thing undead feat is the holy might. And fire, unless...
  */
-// MCCheck: 1.21.8, new fire damages
+// MCCheck: 1.21.10, new fire damages
 public class UndeadConsecration implements Listener {
 
 	private static final Map<UUID, HealTask> UNDEAD_MOBS = new HashMap<>();

@@ -44,7 +44,7 @@ import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-// MCCheck: 1.21.8, new mobs visually carrying items outside entity equipment
+// MCCheck: 1.21.10, new mobs visually carrying items outside entity equipment
 @NullMarked
 public class PossessingPlayer {
 
@@ -316,7 +316,7 @@ public class PossessingPlayer {
 	public static boolean isPossessable(LivingEntity entity) {
 		EntityType entityType = entity.getType();
 		return switch (entityType) {
-			case PLAYER, ARMOR_STAND, ENDER_DRAGON, WITHER -> false;
+			case PLAYER, ARMOR_STAND, MANNEQUIN, ENDER_DRAGON, WITHER -> false;
 			default -> true;
 		};
 	}

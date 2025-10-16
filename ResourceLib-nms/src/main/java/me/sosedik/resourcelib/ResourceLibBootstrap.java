@@ -157,7 +157,7 @@ public class ResourceLibBootstrap implements PluginBootstrap {
 			properties.lightLevel(state -> lightLevel);
 		}
 		if (json.has("ignited_by_lava") && json.get("ignited_by_lava").getAsBoolean()) properties.ignitedByLava();
-		if (json.has("no_collision") && json.get("no_collision").getAsBoolean()) properties.noCollission();
+		if (json.has("no_collision") && json.get("no_collision").getAsBoolean()) properties.noCollision();
 		if (json.has("replaceable") && json.get("replaceable").getAsBoolean()) properties.replaceable();
 		if (json.has("require_correct_tool") && json.get("require_correct_tool").getAsBoolean()) properties.requiresCorrectToolForDrops();
 		if (json.has("sound_type")) properties.sound((SoundType) SoundType.class.getDeclaredField(json.get("sound_type").getAsString().toUpperCase(Locale.US)).get(null));

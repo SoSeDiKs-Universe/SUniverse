@@ -13,7 +13,7 @@ import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
 
-// MCCheck: 1.21.8, new stone/rock types, new paper types
+// MCCheck: 1.21.10, new stone/rock types, new paper types
 @NullMarked
 public class RockPaperShearsAdvancement extends BaseAdvancement {
 

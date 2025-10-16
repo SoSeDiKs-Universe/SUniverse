@@ -401,7 +401,6 @@ public final class TrappedNewbie extends JavaPlugin {
 		world.setFullTime(0);
 		world.setDifficulty(Difficulty.PEACEFUL);
 		world.setGameRule(GameRule.SPAWN_RADIUS, 0);
-		world.setGameRule(GameRule.SPAWN_CHUNK_RADIUS, 3);
 		world.setGameRule(GameRule.DO_INSOMNIA, false);
 		world.setGameRule(GameRule.DO_MOB_SPAWNING, false);
 		world.setGameRule(GameRule.DO_PATROL_SPAWNING, false);

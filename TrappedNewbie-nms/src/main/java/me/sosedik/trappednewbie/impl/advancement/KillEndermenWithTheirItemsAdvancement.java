@@ -15,7 +15,7 @@ import java.util.List;
 
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.playerKilledEntity;
 
-// MCCheck: 1.21.8, nbt tag
+// MCCheck: 1.21.10, nbt tag
 @NullMarked
 public class KillEndermenWithTheirItemsAdvancement extends BaseAdvancement {
 

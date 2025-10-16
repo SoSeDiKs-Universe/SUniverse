@@ -6,7 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.jspecify.annotations.NullMarked;
 
-// MCCheck: 1.21.8, new branches (chopping blocks, work stations), hardened
+// MCCheck: 1.21.10, new branches (chopping blocks, work stations), hardened
 @NullMarked
 public class TrappedNewbieTags {
 

@@ -1,8 +1,8 @@
 plugins {
     `java-library`
-    id("io.papermc.paperweight.userdev") version "2.0.0-beta.17" // Accessing NMS
-    id("de.eldoria.plugin-yml.paper") version "0.7.1" // Generates paper-plugin.yml
-    id("com.gradleup.shadow") version "9.0.0-rc1" // Shading
+    id("io.papermc.paperweight.userdev") version "2.0.0-beta.19" // Accessing NMS
+    id("de.eldoria.plugin-yml.paper") version "0.8.0" // Generates paper-plugin.yml
+    id("com.gradleup.shadow") version "9.2.2" // Shading
 }
 
 val mcVersion: String = rootProject.property("mcVersion").toString()
@@ -75,7 +75,3 @@ subprojects {
         authors = listOf("SoSeDiK")
     }
 }
-
-//paper {
-//    main = "me.sosedik.dummy.Dummy"
-//}

@@ -15,7 +15,7 @@ import org.jspecify.annotations.NullMarked;
 import java.util.ArrayList;
 import java.util.List;
 
-// MCCheck: 1.21.8, new weapons / attack opportunities
+// MCCheck: 1.21.10, new weapons / attack opportunities
 @NullMarked
 public class AttackWithAllWeaponsAdvancement extends BaseAdvancement {
 

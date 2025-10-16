@@ -15,9 +15,9 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public class UtilizerTags {
 
-	// MCCheck: 1.21.8, new flattenables (hardcoded in ShovelItem)
+	// MCCheck: 1.21.10, new flattenables (hardcoded in ShovelItem)
 	public static final Tag<Material> FLATTENABLES = itemTag("flattenables");
-	// MCCheck: 1.21.8, new tillables (hardcoded in HoeItem)
+	// MCCheck: 1.21.10, new tillables (hardcoded in HoeItem)
 	public static final Tag<Material> TILLABLES = itemTag("tillables");
 	/**
 	 * @see ItemUtil#isHot(ItemStack)
@@ -46,7 +46,7 @@ public class UtilizerTags {
 	public static final Tag<Material> ORES_BLOCKS = blockTag("ores");
 	public static final Tag<Material> FRAGILE_BLOCKS = blockTag("fragile_blocks");
 
-	// MCCheck: 1.21.8, new mobs
+	// MCCheck: 1.21.10, new mobs
 	public static final Tag<EntityType> HOSTILE_MONSTERS = entityTag("hostile_monsters");
 	public static final Tag<EntityType> CHEST_BOATS = entityTag("chest_boats");
 	public static final Tag<EntityType> NON_MOB_ENTITIES = entityTag("non_mob_entities");

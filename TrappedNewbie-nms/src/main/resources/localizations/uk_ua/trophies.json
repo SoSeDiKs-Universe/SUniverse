@@ -1,293 +1,466 @@
 {
-	"trophy.not_spawn_camping.name": "<gray><b>Не спавневий компас",
-	"trophy.not_spawn_camping.lore": "<gray><!i>Здебільшого не вказує на спавн",
-	"trophy.corner_camping.name": "<dark_red><b>Зброя кутового кемпера",
+	"trophy.kill_all_hostile_mobs.name": "<#6D864C>Мобестіарій",
+	"trophy.kill_all_hostile_mobs.lore": "<#6D864C>Тепер доступний у магазинах",
+	"trophy.kill_a_phantom_underground_with_a_shovel.name": "<#DDD9DA>Лопата могильника",
+	"trophy.kill_a_phantom_underground_with_a_shovel.lore": "<#DDD9DA>Використовуйте для закопування ворогів",
+	"trophy.kill_all_zombie_villagers.name": "<dark_green>Є ще один",
+	"trophy.kill_all_zombie_villagers.lore": "<dark_green>Дезомбіфікація через лікування",
+	"trophy.kill_a_chicken_jockey_in_a_mansion.name": "<#ba5d41>Лава-курча",
+	"trophy.kill_a_chicken_jockey_in_a_mansion.lore": [
+		"<#ba5d41>Знаєте, що буде, якщо",
+		"<#ba5d41>змішати гарячу лаву і курча?"
+	],
+	"trophy.kill_all_jockeys.name": "<gold>Лук підпалу",
+	"trophy.kill_all_jockeys.lore": "<gold>Використовується єдиним, неповторним, Джекі Дауном",
+	"trophy.kill_a_husk_in_tundra.name": "<#C8DCFF>Ванільне морозиво",
+	"trophy.kill_a_husk_in_tundra.lore": [
+		"<#C8DCFF>Життя було б ванільним морозивом",
+		"<#C8DCFF>без 31 смаку індивідуальності"
+	],
+	"trophy.kill_a_mob_wearing_a_jack_o_lantern.name": "<#E3901D>Гарбуз-красунчик",
+	"trophy.kill_a_mob_wearing_a_jack_o_lantern.lore": "<#E3901D>Цей чувак кидається на мене з ложкою… Клятою ложкою!",
+	"trophy.kill_all_mobs_wearing_a_jack_o_lantern.name": "<gold>Ваш власний капелюх з ліхтаря Джека",
+	"trophy.kill_all_mobs_wearing_a_jack_o_lantern.lore": [
+		"<gold><i>Ви на це заслужили!",
+		"<gold><i>Чи значить тепер це, що потрібно",
+		"<gold><i>вбити й себе заради цього досягнення?"
+	],
+	"trophy.kill_1k_mobs_wearing_a_jack_o_lantern.name": "<#DCD9C0>Голова Джека Скеллінгтона",
+	"trophy.kill_1k_mobs_wearing_a_jack_o_lantern.lore": "<#DCD9C0>Що це? Що це?",
+	"trophy.kill_all_diamond_zombie.name": "<#7FCC19>Гіперпосилання",
+	"trophy.kill_all_diamond_zombie.lore": "<#7FCC19>Спонсором цього досягнення є MCStacker",
+	"trophy.kill_all_diamond_zombie_but_hard.name": "<dark_red>Голова Стіва",
+	"trophy.kill_all_diamond_zombie_but_hard.lore": "<dark_red>Обличчя твого вбивці ідентичне моєму",
+	"trophy.zombie_family_reunion.name": "<#4E7B36>І мертві підуть",
+	"trophy.zombie_family_reunion.lore": "<#4E7B36>І їх голови теж",
+	"trophy.communism.name": "<red>Комуністичний маніфест",
+	"trophy.communism.lore": "<red>НАШІ предмети",
+	"trophy.kill_500_jockeys.name": "<green>Смарагдова дружба",
+	"trophy.kill_500_jockeys.lore": [
+		"<green>Всі вони",
+		"<green>разом назавжди",
+		"<green>у вічному спокої"
+	],
+	"trophy.eat_1k_spider_eyes.name": "<#668674>Сильна жуйка",
+	"trophy.eat_1k_spider_eyes.lore": [
+		"<#668674>Вручається усім, кому потрібно перебити",
+		"<#668674>смак очей після цього випробування"
+	],
+	"trophy.kill_a_stray_in_a_desert.name": "<#F48522>Розплавлене морозиво",
+	"trophy.kill_a_stray_in_a_desert.lore": "<#F48522>Ні-і! Моє морозиво! Т_Т",
+	"trophy.kill_400_skeleton_horses.name": "<#DCD9C0>Кістка останнього коня",
+	"trophy.kill_400_skeleton_horses.lore": [
+		"<#DCD9C0>Після масового вбивства коней-скелетів",
+		"<#DCD9C0>від них нічого не залишилося…",
+		"<#DCD9C0>Лише поодинока кістка нагадує нам",
+		"<#DCD9C0>про той час, коли…"
+	],
+	"trophy.chestful_of_skeleton_skulls.name": "<gray>Кінцева скелетів",
+	"trophy.chestful_of_skeleton_skulls.lore": [
+		"<gray>Цей ґрунт символізує остаточне",
+		"<gray>місце спочинку скелетів"
+	],
+	"trophy.bone_to_party.name": "<#8DA9D8>Голова Санса",
+	"trophy.bone_to_party.lore": "<#8DA9D8>Вдалині чуються звуки МЕҐАЛОВАНІЇ",
+	"trophy.kill_a_mob_that_is_wearing_its_head.name": "<blue><lang:block.minecraft.player_head>",
+	"trophy.kill_a_mob_that_is_wearing_its_head.lore": "<blue>Ваша черга носити голову на голові",
+	"trophy.kill_10k_endermites.name": "<dark_purple>Домашній ендермайт",
+	"trophy.kill_10k_endermites.lore": [
+		"<dark_purple>Після різанини ендермайтів у Вас",
+		"<dark_purple>залишилося лише це єдине яйце.",
+		"<dark_purple>Використовуйте його розумно."
+	],
+	"trophy.use_100_stacks_of_ender_pearls.name": "<dark_aqua>СТАРТРЕККІНҐ",
+	"trophy.use_100_stacks_of_ender_pearls.lore": [
+		"<dark_aqua>Крізь Всесвіт,",
+		"<dark_aqua>на зорельці «Ентерпрайз» під капітаном Кірком.",
+		"<dark_aqua>Зорельцем по Всесвіту,",
+		"<dark_aqua>тільки вперед, бо ми не можемо знайти «Реверс».",
+		"<dark_aqua>Клінгони на правому борту, правий борт, правий борт;",
+		"<dark_aqua>Клінгони на правому борту, правий борт, Джим.",
+		"<dark_aqua>Це життя, Джим, але не таке, як ми знаємо, не таке, як ми знаємо, не таке, як ми знаємо;",
+		"<dark_aqua>це життя, Джим, але не таке, як ми знаємо, не таке, як ми знаємо, капітане.",
+		"<dark_aqua>Клінгони на правому борту, правий борт, правий борт;",
+		"<dark_aqua>Клінгони на правому борту, правий борт, Джим.",
+		"<dark_aqua>Зорельцем по Всесвіту,",
+		"<dark_aqua>на зорельці «Ентерпрайз» під капітаном Кірком.",
+		"<dark_aqua>Зорельцем по Всесвіту,",
+		"<dark_aqua>тільки вперед, все ще не можемо знайти «Реверс».",
+		"<dark_aqua>Гірше того, він помер, Джим, помер, Джим, помер, Джим;",
+		"<dark_aqua>гірше того, він помер, Джим, помер, Джим, помер.",
+		"<dark_aqua>Це життя, Джим, але не таке, як ми знаємо, не таке, як ми знаємо, не таке, як ми знаємо;",
+		"<dark_aqua>це життя, Джим, але не таке, як ми знаємо, не таке, як ми знаємо, капітане.",
+		"<dark_aqua>Клінгони на правому борту, правий борт, правий борт;",
+		"<dark_aqua>Клінгони на правому борту, зіскребіть їх, Джим.",
+		"<dark_aqua>Зорельцем по Всесвіту,",
+		"<dark_aqua>на зорельці «Ентерпрайз» під капітаном Кірком.",
+		"<dark_aqua>Зорельцем по Всесвіту,",
+		"<dark_aqua>тільки вперед, і справи стають гіршими!",
+		"<dark_aqua>Ви не можете змінити закони фізики, закони фізики, закони фізики;",
+		"<dark_aqua>Ви не можете змінити закони фізики, закони фізики, Джим.",
+		"<dark_aqua>Ах! Ми прийшли з миром, стріляйте на ураження, стріляйте на ураження, стріляйте на ураження;",
+		"<dark_aqua>ми прийшли з миром, стріляйте на ураження;",
+		"<dark_aqua>Скотті, підніміть мене нагору!",
+		"<dark_aqua>Гірше того, він помер, Джим, помер, Джим, помер, Джим;",
+		"<dark_aqua>гірше того, він помер, Джим, помер, Джим, помер.",
+		"<dark_aqua>Ну, це життя, Джим, але не таке, як ми знаємо, не таке, як ми знаємо, не таке, як ми знаємо;",
+		"<dark_aqua>це життя, Джим, але не таке, як ми знаємо, не таке, як ми знаємо, капітане.",
+		"<dark_aqua>Клінгони на правому борту, правий борт, правий борт;",
+		"<dark_aqua>Клінгони на правому борту, краще заспокойтесь!",
+		"<dark_aqua>Ви не можете змінити сценарій, Джим.",
+		"<dark_aqua>Гірше того, це фізика, Джим.",
+		"<dark_aqua>Міст до машинного відділення, варп-фактор 9.",
+		"<dark_aqua>Ох, якщо дам їй ще більше, вона вибухне, капітане!",
+		"<dark_aqua>Зорельцем по Всесвіту,",
+		"<dark_aqua>на зорельці «Ентерпрайз» під капітаном Кірком.",
+		"<dark_aqua>Зорельцем по Всесвіту,",
+		"<dark_aqua>тільки вперед, бо ми не можемо знайти «Реверс».",
+		"<dark_aqua>Зорельцем по Всесвіту,",
+		"<dark_aqua>на зорельці «Ентерпрайз» під капітаном Кірком.",
+		"<dark_aqua>Зорельцем по Всесвіту,",
+		"<dark_aqua>тільки вперед, бо ми не можемо знайти «Реверс».",
+		"<dark_aqua>Зорельцем по Всесвіту,",
+		"<dark_aqua>на зорельці «Ентерпрайз» під капітаном Кірком.",
+		"<dark_aqua>Зорельцем по Всесвіту,",
+		"<dark_aqua>тільки вперед, все ще не можемо знайти «Реверс»."
+	],
+	"trophy.kill_an_enderman_with_an_arrow.name": "<#CC00FA>Стріла Енду",
+	"trophy.kill_an_enderman_with_an_arrow.lore": [
+		"<#CC00FA>Ця стріла вбила ендермена.",
+		"<#CC00FA>Здається неможливим…"
+	],
+	"trophy.kill_a_wither_with_an_arrow.name": "<dark_gray>Стріла, яка покладе край усьому",
+	"trophy.kill_a_wither_with_an_arrow.lore": [
+		"<dark_gray>Озріель зробив це, він створив",
+		"<dark_gray>стрілу чистого руйнування…",
+		"<dark_gray>Він називає її «Покаянням»."
+	],
+	"trophy.kill_endermen_with_their_items.name": "<#F37513>Баскетблок",
+	"trophy.kill_endermen_with_their_items.lore": "<#F37513>Правильно, номер 7, це куб!",
+	"trophy.kill_500_witches_with_lingering_potions.name": "<light_purple>Ключ",
+	"trophy.kill_500_witches_with_lingering_potions.lore": "<light_purple>Ви знаєте, що кажуть! Послідовність — це ключ до успіху!",
+	"trophy.kill_10k_silverfishes.name": "<gray>Видобуток лусківниці",
+	"trophy.kill_10k_silverfishes.lore": [
+		"<gray>Після всього цього Вам вдалося об'єднати все залізо",
+		"<gray>і луски з тих лусківниць в один блок"
+	],
+	"trophy.stand_on_a_mansion_spider_spawner.name": "<#D9CACF>Трон павукоподібного",
+	"trophy.stand_on_a_mansion_spider_spawner.lore": [
+		"<#D9CACF>Сподіваємся, Ви не боїтеся",
+		"<#D9CACF>восьминогих сусідів!"
+	],
+	"trophy.kill_a_warden.name": "<#074A5A>Голова боронителя",
+	"trophy.kill_a_warden.lore": [
+		"<#074A5A>Гравці: Як ми маємо вбивати боронителя?",
+		"<#074A5A>Mojang: Це найкраща частина — ви й не повинні!",
+		"<#074A5A>Ви: Потримайте мої золоті морквини."
+	],
+	"trophy.get_a_warden_to_the_height_limit.name": "<#1C99A1>Табличка боронителя",
+	"trophy.get_a_warden_to_the_height_limit.lore": "<#1C99A1>Ця табличка мене не зупинить, тому що я її не бачу!",
+	"trophy.be_near_20_ravagers.name": "<#7F8399>Плюшевий спустошувач",
+	"trophy.be_near_20_ravagers.lore": [
+		"<#7F8399>Ви звикли до цього, і тепер це Ваша",
+		"<#7F8399>особиста іграшка для знущань"
+	],
+	"trophy.take_a_hit_from_a_warden_with_protection.name": "<#2B2936>Нокія 3310",
+	"trophy.take_a_hit_from_a_warden_with_protection.lore": [
+		"<#2B2936>Нею нагороджуються гравці, які довели,",
+		"<#2B2936>що вони такі ж незламні, як ця річ"
+	],
+	"trophy.hug_a_warden_for_a_minute.name": "<#046578>Жриця-боронительниця",
+	"trophy.hug_a_warden_for_a_minute.lore": [
+		"<#046578>Залишайтеся в межах 5 блоків від тюремного",
+		"<#046578>боронителя протягом 1 хвилини"
+	],
+	"trophy.not_spawn_camping.name": "<gray>Не спавневий компас",
+	"trophy.not_spawn_camping.lore": "<gray>Здебільшого не вказує на спавн",
+	"trophy.corner_camping.name": "<dark_red>Зброя кутового кемпера",
 	"trophy.corner_camping.lore": [
-		"<dark_red><!i>Просто стояти і чекати.",
-		"<dark_red><!i>Зрештою, вони вийдуть з-за рогу…"
+		"<dark_red>Просто стояти і чекати.",
+		"<dark_red>Зрештою, вони вийдуть з-за рогу…"
 	],
-	"trophy.master_shieldsman.name": "<#1A308C><b>Гіліанський щит",
+	"trophy.master_shieldsman.name": "<#1A308C>Гіліанський щит",
 	"trophy.master_shieldsman.lore": [
-		"<#1A308C><!i>Варто було поговорити з солдатом в масці Кітона,",
-		"<#1A308C><!i>щоб отримати знижку на базарі"
+		"<#1A308C>Варто було поговорити з солдатом в масці Кітона,",
+		"<#1A308C>щоб отримати знижку на базарі"
 	],
-	"trophy.when_pigs_finally_fly.name": "<#EB9492><b>Рубен, кінець візер-бурі",
-	"trophy.when_pigs_finally_fly.lore": "<#EB9492><!i>Він був чудовою свинкою",
-	"trophy.kill_mobs_using_their_items.name": "<white><b>Дзеркало",
-	"trophy.kill_mobs_using_their_items.lore": "<white><!i>Повертає атаку відправнику",
-	"trophy.kill_a_baby_turtle_with_a_trident_from_a_height.name": "<#D6137A><b>Портативний телескоп",
-	"trophy.kill_a_baby_turtle_with_a_trident_from_a_height.lore": "<#D6137A><!i>Дозволяє побачити більше",
-	"trophy.mace_500_damage.name": "<#819988><b>Скалковий метеорит",
+	"trophy.when_pigs_finally_fly.name": "<#EB9492>Рубен, кінець візер-бурі",
+	"trophy.when_pigs_finally_fly.lore": "<#EB9492>Він був чудовою свинкою",
+	"trophy.kill_mobs_using_their_items.name": "<white>Дзеркало",
+	"trophy.kill_mobs_using_their_items.lore": "<white>Повертає атаку відправнику",
+	"trophy.kill_a_baby_turtle_with_a_trident_from_a_height.name": "<#D6137A>Портативний телескоп",
+	"trophy.kill_a_baby_turtle_with_a_trident_from_a_height.lore": "<#D6137A>Дозволяє побачити більше",
+	"trophy.mace_500_damage.name": "<#819988>Скалковий метеорит",
 	"trophy.mace_500_damage.lore": [
-		"<#819988><!i>Фактично, це спричинило процвітання",
-		"<#819988><!i>виду боронителів, а не його вимирання"
+		"<#819988>Фактично, це спричинило процвітання",
+		"<#819988>виду боронителів, а не його вимирання"
 	],
-	"trophy.kill_10_chicken_in_air.name": "<#C1D9D8><b>Пташине божевілля",
+	"trophy.kill_10_chicken_in_air.name": "<#C1D9D8>Пташине божевілля",
 	"trophy.kill_10_chicken_in_air.lore": [
-		"<#C1D9D8><!i>Хто б міг подумати, що повітряний",
-		"<#C1D9D8><!i>бій може бути таким… брудним?"
+		"<#C1D9D8>Хто б міг подумати, що повітряний",
+		"<#C1D9D8>бій може бути таким… брудним?"
 	],
-	"trophy.blow_up_all_monsters_with_tnt.name": "<#DB2F1A><b>Бумерська футболка",
-	"trophy.blow_up_all_monsters_with_tnt.lore": "<#DB2F1A><!i>Жодних помилок, тільки веселі бум-бумчики",
-	"trophy.more_shields.name": "<#67FF6D><b>Дерев'яний щит",
-	"trophy.more_shields.lore": "<#67FF6D><!i>Ви витратили на це 3 стаки дошок",
-	"trophy.die_twice_within_5s.name": "<#F6FFDF><b>Невдаха",
-	"trophy.die_twice_within_5s.lore": "<#F6FFDF><!i>Використовуйте, щоб не помирати",
-	"trophy.die_from_skeleton_not_from_an_arrow.name": "<gray><b>Марна мішень",
-	"trophy.die_from_skeleton_not_from_an_arrow.lore": "<gray><!i>Цей скелет більше не потребує тренувань",
-	"trophy.there_it_goes.name": "<#dab930><b>Дуже, дуже гостра стріла",
-	"trophy.there_it_goes.lore": "<#dab930><!i>Завдає більше шкоди, ніж здається",
-	"trophy.hunt_land_animals.name": "<#FE4952><b>1000-градусний ніж",
-	"trophy.hunt_land_animals.lore": "<#FE4952><!i>(ЩОСЬ ПІШЛО НЕ ТАК) (НЕ КЛІКБЕЙТ)",
-	"trophy.you_monster.name": "<dark_red><b>Кров немовлят",
-	"trophy.you_monster.lore": "<red><!i>Це все, що залишилося від цих маленьких безпорадних створінь",
-	"trophy.bat_duel.name": "<dark_gray><b>Кажанолук",
+	"trophy.blow_up_all_monsters_with_tnt.name": "<#DB2F1A>Бумерська футболка",
+	"trophy.blow_up_all_monsters_with_tnt.lore": "<#DB2F1A>Жодних помилок, тільки веселі бум-бумчики",
+	"trophy.more_shields.name": "<#67FF6D>Дерев'яний щит",
+	"trophy.more_shields.lore": "<#67FF6D>Ви витратили на це 3 стаки дошок",
+	"trophy.die_twice_within_5s.name": "<#F6FFDF>Невдаха",
+	"trophy.die_twice_within_5s.lore": "<#F6FFDF>Використовуйте, щоб не помирати",
+	"trophy.die_from_skeleton_not_from_an_arrow.name": "<gray>Марна мішень",
+	"trophy.die_from_skeleton_not_from_an_arrow.lore": "<gray>Цей скелет більше не потребує тренувань",
+	"trophy.there_it_goes.name": "<#dab930>Дуже, дуже гостра стріла",
+	"trophy.there_it_goes.lore": "<#dab930>Завдає більше шкоди, ніж здається",
+	"trophy.hunt_land_animals.name": "<#FE4952>1000-градусний ніж",
+	"trophy.hunt_land_animals.lore": "<#FE4952>(ЩОСЬ ПІШЛО НЕ ТАК) (НЕ КЛІКБЕЙТ)",
+	"trophy.you_monster.name": "<dark_red>Кров немовлят",
+	"trophy.you_monster.lore": "<red>Це все, що залишилося від цих маленьких безпорадних створінь",
+	"trophy.bat_duel.name": "<dark_gray>Кажанолук",
 	"trophy.bat_duel.lore": [
-		"<dark_gray><!i>Бетмен III",
-		"<dark_gray><!i>Ви використали кажанолук замість кажаноранга"
+		"<dark_gray>Бетмен III",
+		"<dark_gray>Ви використали кажанолук замість кажаноранга"
 	],
-	"trophy.attack_with_all_weapons.name": "<#DBB364><b>Мультизброя",
+	"trophy.attack_with_all_weapons.name": "<#DBB364>Мультизброя",
 	"trophy.attack_with_all_weapons.lore": [
-		"<#DBB364><!i>Це меч, сокира і…",
-		"<#DBB364><!i>Неважливо, воно зламалось"
+		"<#DBB364>Це меч, сокира і…",
+		"<#DBB364>Неважливо, воно зламалось"
 	],
-	"trophy.half_a_heart_1h.name": "<gray><b>Енергія Dark Souls",
+	"trophy.half_a_heart_1h.name": "<gray>Енергія Dark Souls",
 	"trophy.half_a_heart_1h.lore": [
-		"<gray><!i>Який сенс носити броню, якщо",
-		"<gray><!i>Ви не отримуєте урону"
+		"<gray>Який сенс носити броню, якщо",
+		"<gray>Ви не отримуєте урону"
 	],
-	"trophy.half_a_heart_6h.name": "<dark_gray><b>Дірка",
+	"trophy.half_a_heart_6h.name": "<dark_gray>Дірка",
 	"trophy.half_a_heart_6h.lore": [
-		"<dark_gray><!i>Ви просиділи в дірі 6 годин. Тепер вона просидить",
-		"<dark_gray><!i>у Вашому інвентарі до кінця Вашого життя."
+		"<dark_gray>Ви просиділи в дірі 6 годин. Тепер вона просидить",
+		"<dark_gray>у Вашому інвентарі до кінця Вашого життя."
 	],
-	"trophy.deflect_200.name": "<#BF7960><b>Незламний бар'єр",
+	"trophy.deflect_200.name": "<#BF7960>Незламний бар'єр",
 	"trophy.deflect_200.lore": [
-		"<#BF7960><!i>Ви не просто заблокували удар,",
-		"<#BF7960><!i>Ви його висміяли."
+		"<#BF7960>Ви не просто заблокували удар,",
+		"<#BF7960>Ви його висміяли."
 	],
-	"trophy.deflect_shield.name": "<#D6B169><b>Дерев'яний уламок",
+	"trophy.deflect_shield.name": "<#D6B169>Дерев'яний уламок",
 	"trophy.deflect_shield.lore": [
-		"<#D6B169><!i>Кому потрібна міцність, коли можна",
-		"<#D6B169><!i>зламати все одним ударом?"
+		"<#D6B169>Кому потрібна міцність, коли можна",
+		"<#D6B169>зламати все одним ударом?"
 	],
-	"trophy.play_365d.name": "<#B92929><b>Новорічний феєрверк",
-	"trophy.play_365d.lore": "<#B92929><!i>Десять, дев'ять, вісім…",
-	"trophy.play_1000d.name": "<#FFFFEA><b>Золотий пісочний годинник",
+	"trophy.play_365d.name": "<#B92929>Новорічний феєрверк",
+	"trophy.play_365d.lore": "<#B92929>Десять, дев'ять, вісім…",
+	"trophy.play_1000d.name": "<#FFFFEA>Золотий пісочний годинник",
 	"trophy.play_1000d.lore": [
-		"<#FFFFEA><!i>Ви провели досить тривалий час",
-		"<#FFFFEA><!i>у психіатричній лікарні"
+		"<#FFFFEA>Ви провели досить тривалий час",
+		"<#FFFFEA>у психіатричній лікарні"
 	],
-	"trophy.level_300.name": "<#967441><b>Нуль-тактова ферма",
+	"trophy.level_300.name": "<#967441>Нуль-тактова ферма",
 	"trophy.level_300.lore": [
-		"<#967441><!i>Спочивай з миром",
-		"<#967441><!i>2013 – 2020"
+		"<#967441>Спочивай з миром",
+		"<#967441>2013 – 2020"
 	],
-	"trophy.level_1000.name": "<#e8f46a><b>Частинка Бога",
+	"trophy.level_1000.name": "<#e8f46a>Частинка Бога",
 	"trophy.level_1000.lore": [
-		"<#e8f46a><!i>Цей бозон настільки важливий для сучасного стану фізики,",
-		"<#e8f46a><!i>настільки вирішальний для нашого остаточного розуміння структури матерії,",
-		"<#e8f46a><!i>але такий невловимий…"
+		"<#e8f46a>Цей бозон настільки важливий для сучасного стану фізики,",
+		"<#e8f46a>настільки вирішальний для нашого остаточного розуміння структури матерії,",
+		"<#e8f46a>але такий невловимий…"
 	],
-	"trophy.enchant_250.name": "<#891F3D><b>Том чарівника",
-	"trophy.enchant_250.lore": "<#891F3D><!i>Використовується ілюзіонинами для причарування істот",
-	"trophy.enchant_5k.name": "<#673A93><b>Хороший стіл",
+	"trophy.enchant_250.name": "<#891F3D>Том чарівника",
+	"trophy.enchant_250.lore": "<#891F3D>Використовується ілюзіонинами для причарування істот",
+	"trophy.enchant_5k.name": "<#673A93>Хороший стіл",
 	"trophy.enchant_5k.lore": [
-		"<#673A93><!i>Стіл зачарування в якості",
-		"<#673A93><!i>персонального столу"
+		"<#673A93>Стіл зачарування в якості",
+		"<#673A93>персонального столу"
 	],
-	"trophy.eat_2500.name": "<#C1793A><b>Мамонтовий стейк",
-	"trophy.eat_2500.lore": "<#C1793A><!i>Давно вимерлий, із незабутнім смаком",
-	"trophy.eat_10k.name": "<#176B2E><b>Низькокалорійний продукт",
-	"trophy.eat_10k.lore": "<#176B2E><!i>Вам би не завадило сісти на дієту",
-	"trophy.breed_2500.name": "<#1604FF><b>Ноїв ковчег",
-	"trophy.breed_2500.lore": "<#1604FF><!i>Потоп насувається",
-	"trophy.kill_25k.name": "<#FFE70F><b>Квітка на ім'я Квітик",
-	"trophy.kill_25k.lore": "<#FFE70F><!i>Все, що залишилося від Азріеля, принца монстрів",
-	"trophy.kill_500k.name": "<#FF5359><b>Кривавий Місяць",
-	"trophy.kill_500k.lore": "<#FF5359><!i>Станьте кошмаром",
-	"trophy.trade_2500.name": "<#FDD744><b>Велика стрілка доходів",
-	"trophy.trade_2500.lore": "<#FDD744><!i>Справи стають все кращими й кращими!",
-	"trophy.trade_10k.name": "<#FFFCEC><b>ПРИБУТОК!",
-	"trophy.trade_10k.lore": "<#FFFCEC><!i>Станьте багатшими за Рокфеллера",
-	"trophy.loot_500.name": "<#784112><b>Мімік",
+	"trophy.eat_2500.name": "<#C1793A>Мамонтовий стейк",
+	"trophy.eat_2500.lore": "<#C1793A>Давно вимерлий, із незабутнім смаком",
+	"trophy.eat_10k.name": "<#176B2E>Низькокалорійний продукт",
+	"trophy.eat_10k.lore": "<#176B2E>Вам би не завадило сісти на дієту",
+	"trophy.breed_2500.name": "<#1604FF>Ноїв ковчег",
+	"trophy.breed_2500.lore": "<#1604FF>Потоп насувається",
+	"trophy.kill_25k.name": "<#FFE70F>Квітка на ім'я Квітик",
+	"trophy.kill_25k.lore": "<#FFE70F>Все, що залишилося від Азріеля, принца монстрів",
+	"trophy.kill_500k.name": "<#FF5359>Кривавий Місяць",
+	"trophy.kill_500k.lore": "<#FF5359>Станьте кошмаром",
+	"trophy.trade_2500.name": "<#FDD744>Велика стрілка доходів",
+	"trophy.trade_2500.lore": "<#FDD744>Справи стають все кращими й кращими!",
+	"trophy.trade_10k.name": "<#FFFCEC>ПРИБУТОК!",
+	"trophy.trade_10k.lore": "<#FFFCEC>Станьте багатшими за Рокфеллера",
+	"trophy.loot_500.name": "<#784112>Мімік",
 	"trophy.loot_500.lore": [
-		"<#784112><!i>Ви ж не думали, що після усіх цих скринь",
-		"<#784112><!i>не натрапите на одного з них?"
+		"<#784112>Ви ж не думали, що після усіх цих скринь",
+		"<#784112>не натрапите на одного з них?"
 	],
-	"trophy.loot_2500.name": "<#FFC975><b>Скарбничка",
+	"trophy.loot_2500.name": "<#FFC975>Скарбничка",
 	"trophy.loot_2500.lore": [
-		"<#FFC975><!i>Мініатюрний трофей-сундук,",
-		"<#FFC975><!i>який на диво порожній"
+		"<#FFC975>Мініатюрний трофей-сундук,",
+		"<#FFC975>який на диво порожній"
 	],
-	"trophy.walk_250km.name": "<#955E3B><b>Найнадійніше взуття у світі",
+	"trophy.walk_250km.name": "<#955E3B>Найнадійніше взуття у світі",
 	"trophy.walk_250km.lore": [
-		"<#955E3B><!i>Достатньо надійне, щоб витримати усю пройдену Вами відстань.",
-		"<#955E3B><!i>Поєднайте з іншим взуттям, щоб змінити властивості."
+		"<#955E3B>Достатньо надійне, щоб витримати усю пройдену Вами відстань.",
+		"<#955E3B>Поєднайте з іншим взуттям, щоб змінити властивості."
 	],
-	"trophy.walk_1000km.name": "<#D28037><b>Машина часу",
+	"trophy.walk_1000km.name": "<#D28037>Машина часу",
 	"trophy.walk_1000km.lore": [
-		"<#D28037><!i>Потрібна, щоб повернути всі ті години, які Ви витратили.",
-		"<#D28037><!i>Час від часу може врятувати Вам життя."
+		"<#D28037>Потрібна, щоб повернути всі ті години, які Ви витратили.",
+		"<#D28037>Час від часу може врятувати Вам життя."
 	],
-	"trophy.sprint_250km.name": "<#0090FF><b>Живчик",
+	"trophy.sprint_250km.name": "<#0090FF>Живчик",
 	"trophy.sprint_250km.lore": [
-		"<#0090FF><!i>Після ТАКОЇ пробіжки він Вам точно знадобиться.",
-		"<#0090FF><!i>Автоматично очищує воду."
+		"<#0090FF>Після ТАКОЇ пробіжки він Вам точно знадобиться.",
+		"<#0090FF>Автоматично очищує воду."
 	],
-	"trophy.sprint_1000km.name": "<#F4FFA7><b>Бігові кросівки",
-	"trophy.sprint_1000km.lore": "<#F4FFA7><!i>Це лише 1/40 периметра нашої планети",
-	"trophy.jump_50k.name": "<#73C262><b>Портативний батут",
-	"trophy.jump_50k.lore": "<#73C262><!i>Години класної забави для всієї родини!",
-	"trophy.jump_250k.name": "<#FFD9E2><b>Кошик з кроликом для солодощів",
+	"trophy.sprint_1000km.name": "<#F4FFA7>Бігові кросівки",
+	"trophy.sprint_1000km.lore": "<#F4FFA7>Це лише 1/40 периметра нашої планети",
+	"trophy.jump_50k.name": "<#73C262>Портативний батут",
+	"trophy.jump_50k.lore": "<#73C262>Години класної забави для всієї родини!",
+	"trophy.jump_250k.name": "<#FFD9E2>Кошик з кроликом для солодощів",
 	"trophy.jump_250k.lore": [
-		"<#FFD9E2><!i>Спрямовує дух стрибучої радості, перетворюючи",
-		"<#FFD9E2><!i>кожен стрибок на купу захоплення"
+		"<#FFD9E2>Спрямовує дух стрибучої радості, перетворюючи",
+		"<#FFD9E2>кожен стрибок на купу захоплення"
 	],
-	"trophy.sneak_10km.name": "<#4D3A3A><b>Чорний пояс",
-	"trophy.sneak_10km.lore": "<#4D3A3A><!i>Хто найвеличніша людина?",
-	"trophy.sneak_100km.name": "<#E6FDFF><b>Катана",
-	"trophy.sneak_100km.lore": "<#E6FDFF><!i>Майстерність не терпить поспіху",
-	"trophy.boat_25km.name": "<#333333><b>Чорна перлина",
-	"trophy.boat_25km.lore": "<#333333><!i>Куди захочемо, туди й відпливемо",
-	"trophy.boat_500km.name": "<#FFD2E9><b>Моторний човен",
-	"trophy.boat_500km.lore": "<#FFD2E9><!i>Швидкий, як швидкість світла",
-	"trophy.horse_25km.name": "<dark_aqua><b>Вогнепальна зброя",
-	"trophy.horse_25km.lore": "<dark_aqua><!i>Як вона сюди потрапила? Як?",
-	"trophy.horse_250km.name": "<#FFD700><b>Золотий кінь",
+	"trophy.sneak_10km.name": "<#4D3A3A>Чорний пояс",
+	"trophy.sneak_10km.lore": "<#4D3A3A>Хто найвеличніша людина?",
+	"trophy.sneak_100km.name": "<#E6FDFF>Катана",
+	"trophy.sneak_100km.lore": "<#E6FDFF>Майстерність не терпить поспіху",
+	"trophy.boat_25km.name": "<#333333>Чорна перлина",
+	"trophy.boat_25km.lore": "<#333333>Куди захочемо, туди й відпливемо",
+	"trophy.boat_500km.name": "<#FFD2E9>Моторний човен",
+	"trophy.boat_500km.lore": "<#FFD2E9>Швидкий, як швидкість світла",
+	"trophy.horse_25km.name": "<dark_aqua>Вогнепальна зброя",
+	"trophy.horse_25km.lore": "<dark_aqua>Як вона сюди потрапила? Як?",
+	"trophy.horse_250km.name": "<#FFD700>Золотий кінь",
 	"trophy.horse_250km.lore": [
-		"<#FFD700><!i>Елегантність у вигляді коня, величного коня,",
-		"<#FFD700><!i>який не просто скаче, а виблискує, граціозно",
-		"<#FFD700><!i>перетинаючи кордони розкоші та екстравагантності"
+		"<#FFD700>Елегантність у вигляді коня, величного коня,",
+		"<#FFD700>який не просто скаче, а виблискує, граціозно",
+		"<#FFD700>перетинаючи кордони розкоші та екстравагантності"
 	],
-	"trophy.pig_10km.name": "<#E4493E><b>Однопоршневий двигун",
-	"trophy.pig_10km.lore": "<#E4493E><!i>Назва говорить сама за себе",
-	"trophy.pig_100km.name": "<#FFA3AC><b>Свинопотяг",
-	"trophy.pig_100km.lore": "<#FFA3AC><!i>У Вас специфічний смак у транспорті",
-	"trophy.elytra_1000km.name": "<#D71E24><b>Плащ Супермена",
+	"trophy.pig_10km.name": "<#E4493E>Однопоршневий двигун",
+	"trophy.pig_10km.lore": "<#E4493E>Назва говорить сама за себе",
+	"trophy.pig_100km.name": "<#FFA3AC>Свинопотяг",
+	"trophy.pig_100km.lore": "<#FFA3AC>У Вас специфічний смак у транспорті",
+	"trophy.elytra_1000km.name": "<#D71E24>Плащ Супермена",
 	"trophy.elytra_1000km.lore": [
-		"<#D71E24><!i>Це птах?",
-		"<#D71E24><!i>Це літак?",
-		"<#D71E24><!i>Це канапка з маслом та шинкою?",
-		"<#D71E24><!i>Не може бути, це ж Чарізард!"
+		"<#D71E24>Це птах?",
+		"<#D71E24>Це літак?",
+		"<#D71E24>Це канапка з маслом та шинкою?",
+		"<#D71E24>Не може бути, це ж Чарізард!"
 	],
-	"trophy.elytra_15000km.name": "<#78FFC0><b>Велика феєрверкова зірка",
+	"trophy.elytra_15000km.name": "<#78FFC0>Велика феєрверкова зірка",
 	"trophy.elytra_15000km.lore": [
-		"<#78FFC0><!i>Створіть великий феєрверк,",
-		"<#78FFC0><!i>Ви на це заслуговуєте"
+		"<#78FFC0>Створіть великий феєрверк,",
+		"<#78FFC0>Ви на це заслуговуєте"
 	],
-	"trophy.swim_50km.name": "<#E4493E><b>Золота медаль",
-	"trophy.swim_50km.lore": "<#E4493E><!i>Ймовірно, не справжнє золото",
-	"trophy.swim_250km.name": "<#A2D5FF><b>Приватний басейн",
+	"trophy.swim_50km.name": "<#E4493E>Золота медаль",
+	"trophy.swim_50km.lore": "<#E4493E>Ймовірно, не справжнє золото",
+	"trophy.swim_250km.name": "<#A2D5FF>Приватний басейн",
 	"trophy.swim_250km.lore": [
-		"<#A2D5FF><!i>Ексклюзивний оазис водної розкоші, цей",
-		"<#A2D5FF><!i>приватний басейн — Ваш особистий притулок,",
-		"<#A2D5FF><!i>де релаксація поєднується з розкішшю",
-		"<#A2D5FF><!i>в комфорті Вашого власного простору"
+		"<#A2D5FF>Ексклюзивний оазис водної розкоші, цей",
+		"<#A2D5FF>приватний басейн — Ваш особистий притулок,",
+		"<#A2D5FF>де релаксація поєднується з розкішшю",
+		"<#A2D5FF>в комфорті Вашого власного простору"
 	],
-	"trophy.minecart_50km.name": "<#2AB9E5><b>Паровозик Томас",
-	"trophy.minecart_50km.lore": "<#2AB9E5><!i>Він — справжній номер один",
-	"trophy.minecart_250km.name": "<#FFE56B><b>Емблема залізничного барона",
+	"trophy.minecart_50km.name": "<#2AB9E5>Паровозик Томас",
+	"trophy.minecart_50km.lore": "<#2AB9E5>Він — справжній номер один",
+	"trophy.minecart_250km.name": "<#FFE56B>Емблема залізничного барона",
 	"trophy.minecart_250km.lore": [
-		"<#FFE56B><!i>Витончений золотий трофей, що нагадує",
-		"<#FFE56B><!i>переплетені залізничні колії"
+		"<#FFE56B>Витончений золотий трофей, що нагадує",
+		"<#FFE56B>переплетені залізничні колії"
 	],
-	"trophy.strider_10km.name": "<#14B485><b>Смаколик для блукача",
-	"trophy.strider_10km.lore": "<#14B485><!i>Ваш блукач заслужив це",
-	"trophy.strider_250km.name": "<#E5535C><b>Блукач",
+	"trophy.strider_10km.name": "<#14B485>Смаколик для блукача",
+	"trophy.strider_10km.lore": "<#14B485>Ваш блукач заслужив це",
+	"trophy.strider_250km.name": "<#E5535C>Блукач",
 	"trophy.strider_250km.lore": [
-		"<#E5535C><!i>Ваш особистий лавохід і атракціон",
-		"<#E5535C><!i>спонтанних гострих відчуттів"
+		"<#E5535C>Ваш особистий лавохід і атракціон",
+		"<#E5535C>спонтанних гострих відчуттів"
 	],
-	"trophy.happy_ghast_10km.name": "<#2ec9f9><b>М.В.Б.",
+	"trophy.happy_ghast_10km.name": "<#2ec9f9>М.В.Б.",
 	"trophy.happy_ghast_10km.lore": [
-		"<#2ec9f9><!i>М.В.Б. означає «Масивний верховий бомбардирувальник», а не «Мати всіх бомб»",
-		"<#2ec9f9><!i>Так чи інакше, ця річ приносить біль"
+		"<#2ec9f9>М.В.Б. означає «Масивний верховий бомбардирувальник», а не «Мати всіх бомб»",
+		"<#2ec9f9>Так чи інакше, ця річ приносить біль"
 	],
-	"trophy.happy_ghast_50km.name": "<#28BBC5><b>Діамантова упряж",
-	"trophy.happy_ghast_50km.lore": "<#28BBC5><!i>Міцніша, ніж інші",
-	"trophy.bell_10000k.name": "<#0090FF><b>Небесний дзвін",
-	"trophy.bell_10000k.lore": "<#0090FF><!i>дзинь-дзинь-дзинь-дзинь-дзинь-дзинь-дзинь-дзинь-дзинь-дзинь-дзинь-дзинь",
-	"trophy.fish_250.name": "<#C8C7BF><b>Неймовірно великий лосось",
-	"trophy.fish_250.lore": "<#C8C7BF><!i>Чи варто його їсти?",
-	"trophy.fish_1k.name": "<#BFB773><b>Професійна рибальська вудка",
-	"trophy.fish_1k.lore": "<#BFB773><!i>Для справжніх майстрів",
-	"trophy.fish_2500.name": "<#DCD9C0><b>Безтурботна вудочка",
-	"trophy.fish_2500.lore": "<#DCD9C0><!i>Не хвилюйтесь, ловіть рибу",
-	"trophy.totem_100.name": "<#FCD05C><b>Тотем тотемів",
-	"trophy.totem_100.lore": "<#FCD05C><!i>Може, перестати вмирати?",
-	"trophy.totem_1000.name": "<#DCD9C0><b>Магія, яка не змогла тебе врятувати",
+	"trophy.happy_ghast_50km.name": "<#28BBC5>Діамантова упряж",
+	"trophy.happy_ghast_50km.lore": "<#28BBC5>Міцніша, ніж інші",
+	"trophy.bell_10000k.name": "<#0090FF>Небесний дзвін",
+	"trophy.bell_10000k.lore": "<#0090FF>дзинь-дзинь-дзинь-дзинь-дзинь-дзинь-дзинь-дзинь-дзинь-дзинь-дзинь-дзинь",
+	"trophy.fish_250.name": "<#C8C7BF>Неймовірно великий лосось",
+	"trophy.fish_250.lore": "<#C8C7BF>Чи варто його їсти?",
+	"trophy.fish_1k.name": "<#BFB773>Професійна рибальська вудка",
+	"trophy.fish_1k.lore": "<#BFB773>Для справжніх майстрів",
+	"trophy.fish_2500.name": "<#DCD9C0>Безтурботна вудочка",
+	"trophy.fish_2500.lore": "<#DCD9C0>Не хвилюйтесь, ловіть рибу",
+	"trophy.totem_100.name": "<#FCD05C>Тотем тотемів",
+	"trophy.totem_100.lore": "<#FCD05C>Може, перестати вмирати?",
+	"trophy.totem_1000.name": "<#DCD9C0>Магія, яка не змогла тебе врятувати",
 	"trophy.totem_1000.lore": [
-		"<#DCD9C0><!i>Як це сталося?",
-		"<#DCD9C0><!i>Давним-давно, насправді ніколи, а також зараз, ніщо є ніде",
-		"<#DCD9C0><!i>Має сенс, чи не так?"
+		"<#DCD9C0>Як це сталося?",
+		"<#DCD9C0>Давним-давно, насправді ніколи, а також зараз, ніщо є ніде",
+		"<#DCD9C0>Має сенс, чи не так?"
 	],
-	"trophy.totem_2500.name": "<#FCD05C><b>Тотем тотема тотемів",
-	"trophy.totem_2500.lore": "<#FCD05C><!i>ПРИПИНІТЬ ПОМИРАТИ!",
-	"trophy.climb_3km.name": "<#EFD267><b>Драбина",
-	"trophy.climb_3km.lore": "<#EFD267><!i>Звичайна драбина, можете користуватись",
-	"trophy.climb_10km.name": "<#FFC975><b>Висока драбина",
+	"trophy.totem_2500.name": "<#FCD05C>Тотем тотема тотемів",
+	"trophy.totem_2500.lore": "<#FCD05C>ПРИПИНІТЬ ПОМИРАТИ!",
+	"trophy.climb_3km.name": "<#EFD267>Драбина",
+	"trophy.climb_3km.lore": "<#EFD267>Звичайна драбина, можете користуватись",
+	"trophy.climb_10km.name": "<#FFC975>Висока драбина",
 	"trophy.climb_10km.lore": [
-		"<#FFC975><!i>Підкорюючи висоти, як досвідчений альпініст,",
-		"<#FFC975><!i>Ви подолали 10км за допомогою звичайної",
-		"<#FFC975><!i>драбини або ліан"
+		"<#FFC975>Підкорюючи висоти, як досвідчений альпініст,",
+		"<#FFC975>Ви подолали 10км за допомогою звичайної",
+		"<#FFC975>драбини або ліан"
 	],
-	"trophy.break_10k_netherite.name": "<#ADF3FD><b>Високоякісна діамантова руда",
-	"trophy.break_10k_netherite.lore": "<#ADF3FD><!i>Ваша гордість",
-	"trophy.break_100k_netherite.name": "<#F6FFBC><b>Золота інкрустована кирка",
+	"trophy.break_10k_netherite.name": "<#ADF3FD>Високоякісна діамантова руда",
+	"trophy.break_10k_netherite.lore": "<#ADF3FD>Ваша гордість",
+	"trophy.break_100k_netherite.name": "<#F6FFBC>Золота інкрустована кирка",
 	"trophy.break_100k_netherite.lore": [
-		"<#F6FFBC><!i>Майстер, який створив її, вклав",
-		"<#F6FFBC><!i>усі свої зусилля в ефективність"
+		"<#F6FFBC>Майстер, який створив її, вклав",
+		"<#F6FFBC>усі свої зусилля в ефективність"
 	],
-	"trophy.survive_50h.name": "<#FFDE00><b>Ваш годинник",
-	"trophy.survive_50h.lore": "<#FFDE00><!i>Ви знаєте, котра година?",
-	"trophy.survive_200h.name": "<#EE505F><b>Ваше серце",
-	"trophy.survive_200h.lore": "<#EE505F><!i>Стукає на повну силу",
-	"trophy.open_chest_10k.name": "<#FF9D00><b>Особиста скриня",
-	"trophy.open_chest_10k.lore": "<#FF9D00><!i>Я знаю, ти любиш скрині",
-	"trophy.open_chest_25k.name": "<#FF8E27><b>Різдвяна скриня",
+	"trophy.survive_50h.name": "<#FFDE00>Ваш годинник",
+	"trophy.survive_50h.lore": "<#FFDE00>Ви знаєте, котра година?",
+	"trophy.survive_200h.name": "<#EE505F>Ваше серце",
+	"trophy.survive_200h.lore": "<#EE505F>Стукає на повну силу",
+	"trophy.open_chest_10k.name": "<#FF9D00>Особиста скриня",
+	"trophy.open_chest_10k.lore": "<#FF9D00>Я знаю, ти любиш скрині",
+	"trophy.open_chest_25k.name": "<#FF8E27>Різдвяна скриня",
 	"trophy.open_chest_25k.lore": [
-		"<#FF8E27><!i>Святковий трофей у формі мішка Санти,",
-		"<#FF8E27><!i>переповненого здобиччю. Включає спеціальну",
-		"<#FF8E27><!i>різдвяну скриню для справжнього поціновувача",
-		"<#FF8E27><!i>відкривання скринь!"
+		"<#FF8E27>Святковий трофей у формі мішка Санти,",
+		"<#FF8E27>переповненого здобиччю. Включає спеціальну",
+		"<#FF8E27>різдвяну скриню для справжнього поціновувача",
+		"<#FF8E27>відкривання скринь!"
 	],
-	"trophy.open_crafting_table_500.name": "<#EF8310><b>Ремісничий стіл",
-	"trophy.open_crafting_table_500.lore": "<#EF8310><!i>Намагайтеся не крафтити на ньому",
-	"trophy.open_crafting_table_2500.name": "<#FFF665><b>Золота скриня",
+	"trophy.open_crafting_table_500.name": "<#EF8310>Ремісничий стіл",
+	"trophy.open_crafting_table_500.lore": "<#EF8310>Намагайтеся не крафтити на ньому",
+	"trophy.open_crafting_table_2500.name": "<#FFF665>Золота скриня",
 	"trophy.open_crafting_table_2500.lore": [
-		"<#FFF665><!i>Ви проклали собі шлях до",
-		"<#FFF665><!i>легендарної ліги ремісників!"
+		"<#FFF665>Ви проклали собі шлях до",
+		"<#FFF665>легендарної ліги ремісників!"
 	],
-	"trophy.horse_speed_3.name": "<#FFA66D><b>Легке сідло",
-	"trophy.horse_speed_3.lore": "<#FFA66D><!i>Ідеальне для швидких коней",
-	"trophy.horse_speed_4.name": "<#FFB09C><b>Конячка",
+	"trophy.horse_speed_3.name": "<#FFA66D>Легке сідло",
+	"trophy.horse_speed_3.lore": "<#FFA66D>Ідеальне для швидких коней",
+	"trophy.horse_speed_4.name": "<#FFB09C>Конячка",
 	"trophy.horse_speed_4.lore": [
-		"<#FFB09C><!i>Ви чули про цю конячку? Кажуть,",
-		"<#FFB09C><!i>вона перевищила швидкість світла!"
+		"<#FFB09C>Ви чули про цю конячку? Кажуть,",
+		"<#FFB09C>вона перевищила швидкість світла!"
 	],
-	"trophy.raid_100.name": "<#CFD4D7><b>Залізна сокира",
-	"trophy.raid_100.lore": "<#CFD4D7><!i>Важча за звичайну сокиру",
-	"trophy.raid_2000.name": "<#8D8D8D><b>Голова спустошувача",
-	"trophy.raid_2000.lore": "<#8D8D8D><!i>Трофей, здобутий силою",
-	"trophy.open_shulker_10k.name": "<#FF8DC9><b>Freebox",
+	"trophy.raid_100.name": "<#CFD4D7>Залізна сокира",
+	"trophy.raid_100.lore": "<#CFD4D7>Важча за звичайну сокиру",
+	"trophy.raid_2000.name": "<#8D8D8D>Голова спустошувача",
+	"trophy.raid_2000.lore": "<#8D8D8D>Трофей, здобутий силою",
+	"trophy.open_shulker_10k.name": "<#FF8DC9>Freebox",
 	"trophy.open_shulker_10k.lore": [
-		"<#FF8DC9><!i>Freebox — це модем ADSL-VDSL-FTTH",
-		"<#FF8DC9><!i>і телевізійна приставка, які французький",
-		"<#FF8DC9><!i>інтернет-провайдер Free (частина групи Iliad)",
-		"<#FF8DC9><!i>надає своїм DSL-FTTH абонентам"
+		"<#FF8DC9>Freebox — це модем ADSL-VDSL-FTTH",
+		"<#FF8DC9>і телевізійна приставка, які французький",
+		"<#FF8DC9>інтернет-провайдер Free (частина групи Iliad)",
+		"<#FF8DC9>надає своїм DSL-FTTH абонентам"
 	],
-	"trophy.open_shulker_100k.name": "<#FFBAE3><b>Нескінченна шалкерова коробка",
+	"trophy.open_shulker_100k.name": "<#FFBAE3>Нескінченна шалкерова коробка",
 	"trophy.open_shulker_100k.lore": [
-		"<#FFBAE3><!i>Безмежне сховище, покращена організація",
-		"<#FFBAE3><!i>та витончений дизайн для легкого та",
-		"<#FFBAE3><!i>компактного управління інвентарем"
+		"<#FFBAE3>Безмежне сховище, покращена організація",
+		"<#FFBAE3>та витончений дизайн для легкого та",
+		"<#FFBAE3>компактного управління інвентарем"
 	],
-	"trophy.wash_250.name": "<#DCD9C0><b>Шкарпетки",
-	"trophy.wash_250.lore": "<#DCD9C0><!i>Навіть після 250 прань вони все ще пахнуть…",
-	"trophy.game_leaves_100.name": "<#DCD9C0><b>Листок відступника",
+	"trophy.wash_250.name": "<#DCD9C0>Шкарпетки",
+	"trophy.wash_250.lore": "<#DCD9C0>Навіть після 250 прань вони все ще пахнуть…",
+	"trophy.game_leaves_100.name": "<#DCD9C0>Листок відступника",
 	"trophy.game_leaves_100.lore": [
-		"<#DCD9C0><!i>Видано Вам за те, що Ви покинули в люті гру 100 разів.",
-		"<#DCD9C0><!i>Вам слід пройти курс терапії з управління гнівом."
+		"<#DCD9C0>Видано Вам за те, що Ви покинули в люті гру 100 разів.",
+		"<#DCD9C0>Вам слід пройти курс терапії з управління гнівом."
 	]
 }

@@ -13,10 +13,10 @@ import java.util.Set;
 public class BiomeTags {
 
 	public static final Set<Biome> DEEP_OCEAN = builder()
-			.add(Biome.DEEP_FROZEN_OCEAN).add(Biome.DEEP_COLD_OCEAN).add(Biome.DEEP_OCEAN).add(Biome.DEEP_LUKEWARM_OCEAN).build();
+			.add(Biome.DEEP_FROZEN_OCEAN, Biome.DEEP_COLD_OCEAN, Biome.DEEP_OCEAN, Biome.DEEP_LUKEWARM_OCEAN).build();
 
 	public static final Set<Biome> OCEAN = builder()
-			.addTag(DEEP_OCEAN).add(Biome.FROZEN_OCEAN).add(Biome.OCEAN).add(Biome.COLD_OCEAN).add(Biome.LUKEWARM_OCEAN).add(Biome.WARM_OCEAN).build();
+			.addTag(DEEP_OCEAN).add(Biome.FROZEN_OCEAN, Biome.OCEAN, Biome.COLD_OCEAN, Biome.LUKEWARM_OCEAN, Biome.WARM_OCEAN).build();
 
 	public static final Set<Biome> EXTRA_WARM = builder()
 			.add(Biome.DESERT)
@@ -24,7 +24,8 @@ public class BiomeTags {
 			.add(Biome.BADLANDS, Biome.ERODED_BADLANDS, Biome.WOODED_BADLANDS).build();
 
 	public static final Set<Biome> SNOWY = builder()
-			.add(Biome.FROZEN_PEAKS, Biome.GROVE, Biome.JAGGED_PEAKS, Biome.SNOWY_PLAINS, Biome.ICE_SPIKES, Biome.SNOWY_SLOPES, Biome.SNOWY_TAIGA, Biome.SNOWY_BEACH).build();
+			.add(Biome.FROZEN_PEAKS, Biome.GROVE, Biome.JAGGED_PEAKS, Biome.SNOWY_PLAINS, Biome.ICE_SPIKES, Biome.SNOWY_SLOPES, Biome.SNOWY_TAIGA, Biome.SNOWY_BEACH)
+			.add(Biome.FROZEN_RIVER, Biome.FROZEN_OCEAN, Biome.DEEP_FROZEN_OCEAN).build();
 
 	public static TagBuilder builder() {
 		return new TagBuilder();

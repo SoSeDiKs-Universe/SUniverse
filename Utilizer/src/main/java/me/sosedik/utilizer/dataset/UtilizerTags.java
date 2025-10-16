@@ -1,10 +1,13 @@
 package me.sosedik.utilizer.dataset;
 
+import io.papermc.paper.registry.keys.tags.DamageTypeTagKeys;
+import io.papermc.paper.registry.tag.TagKey;
 import me.sosedik.utilizer.Utilizer;
 import me.sosedik.utilizer.util.EntityUtil;
 import me.sosedik.utilizer.util.ItemUtil;
 import org.bukkit.Material;
 import org.bukkit.Tag;
+import org.bukkit.damage.DamageType;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NullMarked;
@@ -37,6 +40,7 @@ public class UtilizerTags {
 	public static final Tag<Material> FLAT_BLOCK_RENDER = itemTag("flat_block_render");
 	public static final Tag<Material> STONE_ORES = itemTag("stone_ores");
 	public static final Tag<Material> ORES = itemTag("ores");
+	public static final Tag<Material> POISON_CURES = itemTag("poison_cures");
 
 	public static final Tag<Material> STONE_ORES_BLOCKS = blockTag("stone_ores");
 	public static final Tag<Material> ORES_BLOCKS = blockTag("ores");
@@ -53,6 +57,18 @@ public class UtilizerTags {
 	public static final Tag<EntityType> NON_NATIVE_NETHER_MOBS = entityTag("non_native_nether_mobs");
 	public static final Tag<EntityType> HUMAN_LIKE_ZOMBIES = entityTag("human_like_zombies");
 	public static final Tag<EntityType> MOBS_WITH_HANDS = entityTag("mobs_with_hands");
+	public static final Tag<EntityType> OVERWORLD_HOSTILE_NIGHT_MOBS = entityTag("overworld_hostile_night_mobs");
+	public static final Tag<EntityType> NETHER_HOSTILE_MOBS = entityTag("nether_hostile_mobs");
+	public static final Tag<EntityType> END_HOSTILE_MOBS = entityTag("end_hostile_mobs");
+	public static final Tag<EntityType> DUNGEON_HOSTILE_MOBS = entityTag("dungeon_hostile_mobs");
+	public static final Tag<EntityType> HALLOWEEN_PUMPKIN_WEARERS = entityTag("halloween_pumpkin_wearers");
+	public static final Tag<EntityType> SPIDERS = entityTag("spiders");
+	/**
+	 * Entities that can spawn from naturally generates spawners
+	 */
+	public static final Tag<EntityType> NATURAL_SPAWNERS = entityTag("natural_spawners");
+
+	public static final TagKey<DamageType> IS_CAMPFIRE = damageTypeTag("is_campfire");
 
 	private static Tag<Material> itemTag(String key) {
 		return ItemUtil.itemTag(Utilizer.utilizerKey(key));
@@ -64,6 +80,10 @@ public class UtilizerTags {
 
 	private static Tag<EntityType> entityTag(String key) {
 		return EntityUtil.entityTag(Utilizer.utilizerKey(key));
+	}
+
+	private static TagKey<DamageType> damageTypeTag(String key) {
+		return DamageTypeTagKeys.create(Utilizer.utilizerKey(key));
 	}
 
 }

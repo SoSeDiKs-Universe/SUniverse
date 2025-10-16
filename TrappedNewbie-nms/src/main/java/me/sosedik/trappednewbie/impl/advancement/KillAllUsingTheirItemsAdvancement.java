@@ -1,5 +1,6 @@
 package me.sosedik.trappednewbie.impl.advancement;
 
+import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.registry.keys.tags.DamageTypeTagKeys;
 import me.sosedik.packetadvancements.api.advancement.base.BaseAdvancementBuilder;
 import me.sosedik.packetadvancements.api.progression.RequiredAdvancementProgress;
@@ -18,6 +19,7 @@ import java.util.List;
 
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.playerKilledEntity;
 
+// MCCheck: 1.21.8, new mobs with items
 @NullMarked
 public class KillAllUsingTheirItemsAdvancement extends BaseAdvancement {
 
@@ -79,12 +81,12 @@ public class KillAllUsingTheirItemsAdvancement extends BaseAdvancement {
 			String components = """
 				{
 					"components": {
-						"minecraft:potion_contents": {
-							"potion":"%s"
+						"%s": {
+							"potion": "%s"
 						}
 					}
 				}
-				""".formatted(potionType.key().value());
+				""".formatted(DataComponentTypes.POTION_CONTENTS.key(), potionType.key());
 			String criterion = entityType.key().value() + "_" + potionType.key().value() + "_" + itemType.key().value();
 			PlayerKilledEntityTriggerData triggerData = playerKilledEntity(criterion)
 				.withEntity(entity -> entity.withEntityType(entityType))

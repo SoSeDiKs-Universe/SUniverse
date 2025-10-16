@@ -14,8 +14,6 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NullMarked;
 
-import java.util.List;
-
 /**
  * Custom name and lore for trophies
  */
@@ -43,6 +41,7 @@ public class AdvancementTrophyNameLoreModifier extends ItemModifier {
 		if (name == null && lore == null) return ModificationResult.PASS;
 
 		if (name != null) {
+			name = name.decorationIfAbsent(TextDecoration.BOLD, TextDecoration.State.TRUE);
 			if (item.hasData(DataComponentTypes.CUSTOM_NAME))
 				item.setData(DataComponentTypes.ITEM_NAME, name);
 			else
@@ -50,7 +49,7 @@ public class AdvancementTrophyNameLoreModifier extends ItemModifier {
 		}
 
 		if (lore != null)
-			contextBox.addLore(List.of(lore));
+			contextBox.addLore(lore);
 
 		return ModificationResult.OK;
 	}

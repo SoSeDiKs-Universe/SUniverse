@@ -53,11 +53,13 @@ public class ThirstTooltipModifier extends ItemModifier {
 			List<Component> display = new ArrayList<>();
 			if (leftover > 0) display.add(SATURATION_ICON_HALF);
 			for (int i = 0; i < fulls; i++) display.add(SATURATION_ICON_FULL);
-			int thirstWidth = ICON_WIDTH * thirst;
+			int thirstWidth = ICON_WIDTH * (int) Math.ceil(thirst / 2D) + 1;
 			int satIcons = leftover > 0 ? fulls + 1 : fulls;
 			int saturationWidth = ICON_WIDTH * satIcons + 1;
 			Component saturationDisplay = combine(SpacingUtil.getNegativePixel(), display);
 			thirstDisplay = Component.textOfChildren(thirstDisplay, SpacingUtil.getOffset(-thirstWidth + (thirstWidth - saturationWidth), saturationWidth, saturationDisplay));
+			if (saturationWidth > thirstWidth)
+				thirstDisplay = Component.textOfChildren(SpacingUtil.getSpacing(saturationWidth - thirstWidth - 1), thirstDisplay);
 		}
 
 		if (thirstData.cooled())

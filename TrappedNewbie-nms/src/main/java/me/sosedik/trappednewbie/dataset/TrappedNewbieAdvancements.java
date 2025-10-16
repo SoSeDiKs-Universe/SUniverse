@@ -4,6 +4,7 @@ import de.tr7zw.nbtapi.NBT;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.BannerPatternLayers;
 import io.papermc.paper.datacomponent.item.ChargedProjectiles;
+import io.papermc.paper.datacomponent.item.DamageResistant;
 import io.papermc.paper.datacomponent.item.DyedItemColor;
 import io.papermc.paper.datacomponent.item.Fireworks;
 import io.papermc.paper.datacomponent.item.ItemArmorTrim;
@@ -19,6 +20,7 @@ import me.sosedik.packetadvancements.api.tab.AdvancementManager;
 import me.sosedik.packetadvancements.api.tab.AdvancementTab;
 import me.sosedik.packetadvancements.imlp.progress.vanilla.conditions.DamageTriggerCondition;
 import me.sosedik.packetadvancements.imlp.progress.vanilla.conditions.EntityStateTriggerCondition;
+import me.sosedik.packetadvancements.imlp.progress.vanilla.conditions.EntityTriggerCondition;
 import me.sosedik.packetadvancements.imlp.progress.vanilla.conditions.ItemTriggerCondition;
 import me.sosedik.packetadvancements.util.storage.JsonStorage;
 import me.sosedik.requiem.dataset.RequiemItems;
@@ -35,13 +37,28 @@ import me.sosedik.trappednewbie.impl.advancement.AttackWithAllWeaponsAdvancement
 import me.sosedik.trappednewbie.impl.advancement.AttackWithAnEggAdvancement;
 import me.sosedik.trappednewbie.impl.advancement.AttackZombieWithAnEggAdvancement;
 import me.sosedik.trappednewbie.impl.advancement.BlowUpAllMonstersWithTNTAdvancement;
+import me.sosedik.trappednewbie.impl.advancement.CommunismAdvancement;
+import me.sosedik.trappednewbie.impl.advancement.FrozenHeartAdvancement;
 import me.sosedik.trappednewbie.impl.advancement.GetABannerShieldAdvancement;
 import me.sosedik.trappednewbie.impl.advancement.GiveWindMaceToAFoxAdvancement;
 import me.sosedik.trappednewbie.impl.advancement.HuntLandAnimalsAdvancement;
 import me.sosedik.trappednewbie.impl.advancement.InspectorGadgetAdvancement;
+import me.sosedik.trappednewbie.impl.advancement.KillAHostileMobAdvancement;
+import me.sosedik.trappednewbie.impl.advancement.KillAMobThatIsWearingItsHeadAdvancement;
+import me.sosedik.trappednewbie.impl.advancement.KillAllAllJockeysAdvancement;
 import me.sosedik.trappednewbie.impl.advancement.KillAllAquaticWithATridentAdvancement;
+import me.sosedik.trappednewbie.impl.advancement.KillAllBabyZombiesAdvancement;
+import me.sosedik.trappednewbie.impl.advancement.KillAllHostileMobsAdvancement;
+import me.sosedik.trappednewbie.impl.advancement.KillAllJockeysAdvancement;
 import me.sosedik.trappednewbie.impl.advancement.KillAllNetherWithATridentAdvancement;
+import me.sosedik.trappednewbie.impl.advancement.KillAllPumpkinMobsAdvancement;
 import me.sosedik.trappednewbie.impl.advancement.KillAllUsingTheirItemsAdvancement;
+import me.sosedik.trappednewbie.impl.advancement.KillAllZombieVillagersAdvancement;
+import me.sosedik.trappednewbie.impl.advancement.KillEndermenWithTheirItemsAdvancement;
+import me.sosedik.trappednewbie.impl.advancement.KillHostileDungeonMobsAdvancement;
+import me.sosedik.trappednewbie.impl.advancement.KillHostileEndMobsAdvancement;
+import me.sosedik.trappednewbie.impl.advancement.KillHostileNetherMobsAdvancement;
+import me.sosedik.trappednewbie.impl.advancement.KillHostileOverworldNightMobsAdvancement;
 import me.sosedik.trappednewbie.impl.advancement.MasterShieldsmanAdvancement;
 import me.sosedik.trappednewbie.impl.advancement.MereMortalAdvancement;
 import me.sosedik.trappednewbie.impl.advancement.PyrotechnicAdvancement;
@@ -61,15 +78,19 @@ import org.bukkit.DyeColor;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
 import org.bukkit.Tag;
+import org.bukkit.World;
+import org.bukkit.block.Biome;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
 import org.bukkit.block.data.type.Campfire;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
+import org.bukkit.generator.structure.Structure;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.trim.ArmorTrim;
 import org.bukkit.inventory.meta.trim.TrimMaterial;
 import org.bukkit.inventory.meta.trim.TrimPattern;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 import org.jspecify.annotations.NullMarked;
 
@@ -82,6 +103,7 @@ import static me.sosedik.packetadvancements.api.progression.RequiredAdvancementP
 import static me.sosedik.packetadvancements.api.progression.RequiredAdvancementProgress.requirements;
 import static me.sosedik.packetadvancements.api.progression.RequiredAdvancementProgress.simple;
 import static me.sosedik.packetadvancements.api.progression.RequiredAdvancementProgress.vanilla;
+import static me.sosedik.packetadvancements.api.progression.RequiredAdvancementProgress.vanillaAny;
 import static me.sosedik.packetadvancements.api.tab.AdvancementTab.buildTab;
 import static me.sosedik.packetadvancements.imlp.advancement.base.BaseAdvancement.buildBase;
 import static me.sosedik.packetadvancements.imlp.advancement.fake.FakeAdvancement.buildFake;
@@ -93,14 +115,19 @@ import static me.sosedik.packetadvancements.imlp.display.AdvancementVisibilities
 import static me.sosedik.packetadvancements.imlp.display.AdvancementVisibilities.ifDone;
 import static me.sosedik.packetadvancements.imlp.display.AdvancementVisibilities.ifVisible;
 import static me.sosedik.packetadvancements.imlp.display.AdvancementVisibilities.parentGranted;
+import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.consumeItem;
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.entityHurtPlayer;
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.entityKilledPlayer;
+import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.fallFromHeight;
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.fishingRodHooked;
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.inventoryChanged;
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.killedByArrow;
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.playerHurtEntity;
+import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.playerInteractedWithEntity;
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.playerKilledEntity;
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.shotCrossbow;
+import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.startedRiding;
+import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.thrownItemPickedUpByEntity;
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.usingItem;
 import static me.sosedik.trappednewbie.TrappedNewbie.trappedNewbieKey;
 
@@ -109,6 +136,7 @@ import static me.sosedik.trappednewbie.TrappedNewbie.trappedNewbieKey;
 public class TrappedNewbieAdvancements {
 
 	private static final ItemStack WANDERING_TRADER_HEAD = ItemUtil.texturedHead(MoreMobHeads.WANDERING_TRADER);
+	private static final ItemStack VILLAGER_HEAD = ItemUtil.texturedHead(MoreMobHeads.PLAINS_VILLAGER);
 	private static final ItemStack SHIFTING_HEAD = ItemUtil.texturedHead("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNWQ4NmQwOTZiOGMwOGFkNWRhNmVhY2E5YTEwMTc1MWZiYzY4NzcwZDY3ZDUzMWU4Y2ZhNTYzYmE3M2Y5N2EzYyJ9fX0=");
 	private static final ItemStack PIG_HEAD = ItemUtil.texturedHead(MoreMobHeads.PIG_REGULAR);
 	private static final ItemStack MR_SHEEP_HEAD = ItemUtil.texturedHead("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYmQ0M2M0YjAwNDNhZWQyYThjMDAzNTEzZjI3OTgwMDM1NzY0MjUzMzg3N2UzZjJkNjhmZDkyYjY5NGJlM2E4NiJ9fX0=");
@@ -124,6 +152,13 @@ public class TrappedNewbieAdvancements {
 	private static final ItemStack SURVIVE_HEAD_2 = ItemUtil.texturedHead("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYjYwZmE2MzIyNzRlODliMDY0YzMwOTBjMWFiMTEwMTQ3YzgzZWM3M2VjNGMzMWNhNzUwODE0NTdlYmI4YjI2OSJ9fX0=");
 	private static final ItemStack SURVIVE_HEAD_3 = ItemUtil.texturedHead("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZDRhYjlkNmQ5ZjZkMjMxNGEyYmZmZjk4ZmRiODBmY2I0Y2UwYzhlZjc4ODEzMWE5YzZjMjJlY2M3MGU4M2Q3OSJ9fX0=");
 	private static final ItemStack STONKS_HEAD = ItemUtil.texturedHead("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMWUxNzBmMzZmNjY3MThmOGE2OWMyNWI4YTk5ZTI5ZDMwNjYxODU1M2MyM2IxZmUwNzBjZmViMzU5Y2NhMGU3YSJ9fX0=");
+	private static final ItemStack DESERT_HEAD = ItemUtil.texturedHead("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTAzMDdmNDkzZmRkYTc2ODU4ZTVkYWE1MTFlM2ZkYjRiN2VkMjQxZjdkM2E3YTIyNjU2ZWQ1YzZiYWNiZjUyIn19fQ==");
+	private static final ItemStack JACK_O_LANTERN_HEAD = ItemUtil.texturedHead("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDkyMTlmMjI5YTg2NjU1NDdhMWQ0MTZjMTUyN2MyZjk4YzNkYjE2NzE2ODU5NGI1MDgzZGIzZDgxNjA1NjQ2NCJ9fX0=");
+	private static final ItemStack FROZEN_HEART_HEAD = ItemUtil.texturedHead("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTFmNzcyZjBlMGE5NGM4NGIyNjgyNmQxNWVjNGNlMzljMDEzZDVmM2ViMGZjOGMxODY4MDA4YzdiNzRjZDAwNSJ9fX0=");
+	private static final ItemStack ASSASSIN_HEAD = ItemUtil.texturedHead("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZTJhNWU2NDJiZjAwMjZhODJhN2E0MGIxNWRmMzA3Nzg1NzAwYWU0OTc0YmIzN2MxZWQ1MDVlMTJmM2EzNmJkNiJ9fX0=");
+	private static final ItemStack THE_WALKING_HEAD = ItemUtil.texturedHead("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZDI4ZDlmZjU0MTg4YTFhZmVlNjViOTRmM2JmY2NlMzIxYzY0M2EzNDU5MGMxNGIxOTJiMmUzZWMyZjUyNWQzIn19fQ==");
+	private static final ItemStack ARACHNOPHOBIA_HEAD = ItemUtil.texturedHead("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTAxMjhlOWRiNGI1NDRlMTQ3ZWM2OGY5NGQ4NWY5ZGI4MTA5OTRhZWI5NDNiMDM4ZGQ0OTFlYTJlYTlhNDY5NiJ9fX0=");
+	private static final ItemStack SANS_HEAD = ItemUtil.texturedHead("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYmQ5MDcwODM4ZjZkNzU0M2U3NGQ0MjE3ZjI4YzcxNDdkODAxNDI3MWJlNDhhMzkzMGE5YjY2OWI0YTY1NWZmNSJ9fX0=");
 	private static final TextColor PURPLE = AnnouncementMessage.SUPER_TORTURE.getColor();
 	private static final TextColor GRAY = requireNonNull(TextColor.fromHexString("#cccccc"));
 
@@ -361,6 +396,20 @@ public class TrappedNewbieAdvancements {
 		.visibilityRule(ifDone(false, FIRST_POSSESSION))
 		.requiredProgress(alwaysDone())
 		.buildAndRegister();
+	public static final IAdvancement EAT_ROTTEN_FLESH = buildBase(NATURE_ROOT, "eat_rotten_flesh").display(display().x(1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.ROTTEN_FLESH))
+		.requiredProgress(vanilla(consumeItem().withItem(ItemTriggerCondition.of(Material.ROTTEN_FLESH))))
+		.buildAndRegister();
+	public static final IAdvancement EAT_CREEPER_HEART = buildBase(EAT_ROTTEN_FLESH, "eat_creeper_heart").display(display().x(1F).fancyDescriptionParent(NamedTextColor.DARK_PURPLE).challengeFrame().icon(RequiemItems.CREEPER_HEART))
+		.requiredProgress(vanilla(consumeItem().withItem(ItemTriggerCondition.of(RequiemItems.CREEPER_HEART))))
+		.buildAndRegister();
+	public static final IAdvancement EAT_1K_SPIDER_EYES = buildBase(EAT_CREEPER_HEART, "eat_1k_spider_eyes").display(display().x(1F).fancyDescriptionParent(NamedTextColor.DARK_PURPLE).challengeFrame().icon(Material.SPIDER_EYE))
+		.withReward(rewards()
+			.withExp(500)
+			.addItems(ItemStack.of(Material.DIAMOND, 77))
+			.withTrophy(ItemStack.of(Material.CHIPPED_ANVIL))
+		)
+		.requiredProgress(simple(1000))
+		.buildAndRegister();
 
 	public static final AdvancementTab BUILDING_TAB = buildTab("building", MANAGER).inverseY().backgroundPathTexture("block/oak_planks").build();
 	public static final IRootAdvancement BUILDING_ROOT = buildRoot(BUILDING_TAB).display(display().xy(0F, 0F).withAdvancementFrame(AdvancementFrame.SQUIRCLE).fancyDescriptionParent(GRAY).icon(Material.OAK_PLANKS))
@@ -371,13 +420,11 @@ public class TrappedNewbieAdvancements {
 	public static final AdvancementTab WEAPONRY_TAB = buildTab("weaponry", MANAGER).inverseY().backgroundPathTexture("block/smithing_table_top").build();
 	public static final IRootAdvancement WEAPONRY_ROOT = buildRoot(WEAPONRY_TAB).display(display().xy(0F, 0F).withAdvancementFrame(AdvancementFrame.SQUIRCLE).fancyDescriptionParent(GRAY).icon(Material.STONE_SWORD))
 		.visibilityRule(ifDone(false, FIRST_POSSESSION))
-		.requiredProgress(alwaysDone())
+		.requiredProgress(vanilla(
+			inventoryChanged()
+				.withItems(ItemTriggerCondition.of(Tag.ITEMS_SWORDS))
+		))
 		.buildAndRegister();
-	public static final IAdvancement KILL_MOBS_USING_THEIR_ITEMS = buildBase(WEAPONRY_ROOT, "kill_mobs_using_their_items").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.DARK_RED).withAdvancementFrame(AdvancementFrame.BUTTERFLY).torture().icon(Material.GRAY_STAINED_GLASS_PANE))
-		.withReward(rewards()
-			.withTrophy(ItemStack.of(Material.GRAY_STAINED_GLASS_PANE))
-		)
-		.buildAndRegister(KillAllUsingTheirItemsAdvancement::new);
 	public static final IAdvancement EXPELLIARMUS = buildBase(WEAPONRY_ROOT, "expelliarmus").display(display().x(1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(ItemUtil.glint(TrappedNewbieItems.ROUGH_STICK)))
 		.requiredProgress(vanilla(playerHurtEntity("expelliarmus").withEntity(entity -> entity.withDistanceToPlayer(distance -> distance.maxAbsolute(5D))).withPlayer(player -> player.withEquipment(equipment -> equipment.withMainHand(ItemTriggerCondition.of(MiscUtil.combineArrays(TrappedNewbieTags.STICKS.getValues().toArray(new Material[0]), new Material[] {TrappedNewbieItems.ROUGH_STICK})))))))
 		.buildAndRegister();
@@ -396,8 +443,8 @@ public class TrappedNewbieAdvancements {
 		.withReward(rewards().addItems(ItemStack.of(Material.GOLD_INGOT, 4)))
 		.requiredProgress(vanilla(playerKilledEntity().withEntity(entity -> entity.withDistanceToPlayer(distance -> distance.maxAbsolute(5D))).withPlayer(player -> player.withEquipment(equipment -> equipment.withMainHand(Material.CLOCK)))))
 		.buildAndRegister();
-	public static final IAdvancement DIE_TWICE_WITHIN_10S = buildBase(ITS_TIME_CONSUMING, "die_twice_within_10s").display(display().x(1F).goalFrame().fancyDescriptionParent(NamedTextColor.GREEN).icon(banner(Material.BLACK_BANNER, new Pattern(DyeColor.WHITE, PatternType.STRIPE_LEFT), new Pattern(DyeColor.WHITE, PatternType.STRIPE_TOP), new Pattern(DyeColor.WHITE, PatternType.STRIPE_MIDDLE), new Pattern(DyeColor.BLACK, PatternType.BORDER)))).buildAndRegister();
-	public static final IAdvancement DIE_TWICE_WITHIN_5S = buildBase(DIE_TWICE_WITHIN_10S, "die_twice_within_5s").display(display().x(1F).challengeFrame().fancyDescriptionParent(NamedTextColor.AQUA).icon(banner(Material.WHITE_BANNER, new Pattern(DyeColor.BLACK, PatternType.STRIPE_BOTTOM), new Pattern(DyeColor.BLACK, PatternType.STRIPE_LEFT), new Pattern(DyeColor.WHITE, PatternType.BORDER))))
+	public static final IAdvancement DIE_TWICE_WITHIN_10S = buildBase(ITS_TIME_CONSUMING, "die_twice_within_10s").display(display().x(1F).goalFrame().fancyDescriptionParent(NamedTextColor.AQUA).icon(banner(Material.BLACK_BANNER, new Pattern(DyeColor.WHITE, PatternType.STRIPE_LEFT), new Pattern(DyeColor.WHITE, PatternType.STRIPE_TOP), new Pattern(DyeColor.WHITE, PatternType.STRIPE_MIDDLE), new Pattern(DyeColor.BLACK, PatternType.BORDER)))).buildAndRegister();
+	public static final IAdvancement DIE_TWICE_WITHIN_5S = buildBase(DIE_TWICE_WITHIN_10S, "die_twice_within_5s").display(display().x(1F).challengeFrame().fancyDescriptionParent(NamedTextColor.DARK_PURPLE).icon(banner(Material.WHITE_BANNER, new Pattern(DyeColor.BLACK, PatternType.STRIPE_BOTTOM), new Pattern(DyeColor.BLACK, PatternType.STRIPE_LEFT), new Pattern(DyeColor.WHITE, PatternType.BORDER))))
 		.withReward(rewards()
 			.withDeathExp(35)
 			.withDeathTrophy(() -> {
@@ -550,7 +597,7 @@ public class TrappedNewbieAdvancements {
 						.withTag(DamageTypeTagKeys.IS_PROJECTILE, true)
 						.withDirectEntity(entity -> entity
 							.withEntityType(Tag.ENTITY_TYPES_ARROWS)
-							.withNbt("{weapon:{id:\"minecraft:bow\"}}")
+							.withNbt("{weapon:{id:\"%s\"}}".formatted(Material.BOW.getKey()))
 						)
 					)
 				)
@@ -660,7 +707,7 @@ public class TrappedNewbieAdvancements {
 			})
 		)
 		.buildAndRegister(HuntLandAnimalsAdvancement::new);
-	public static final IAdvancement YOU_MONSTER = buildBase(THERE_IT_GOES, "you_monster").display(display().x(1F).fancyDescriptionParent(NamedTextColor.DARK_RED).challengeFrame().superTorture().icon(Material.DIAMOND_SWORD))
+	public static final IAdvancement YOU_MONSTER = buildBase(THERE_IT_GOES, "you_monster").display(display().x(1F).withAdvancementFrame(AdvancementFrame.BUTTERFLY).fancyDescriptionParent(NamedTextColor.DARK_RED).superTorture().icon(Material.DIAMOND_SWORD))
 		.withReward(rewards()
 			.withTrophy(ItemStack.of(Material.RED_DYE))
 		)
@@ -756,7 +803,7 @@ public class TrappedNewbieAdvancements {
 			})
 		)
 		.buildAndRegister(KillAllNetherWithATridentAdvancement::new);
-	public static final IAdvancement ATTACK_WITH_A_MACE = buildBase(WEAPONRY_ROOT, "attack_with_a_mace").display(display().xy(1F, 6.5F).fancyDescriptionParent(NamedTextColor.AQUA).taskFrame().icon(Material.MACE))
+	public static final IAdvancement ATTACK_WITH_A_MACE = buildBase(WEAPONRY_ROOT, "attack_with_a_mace").display(display().xy(1F, 6.5F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.MACE))
 		.requiredProgress(vanilla(
 			playerHurtEntity()
 				.withDamage(damage -> damage
@@ -851,7 +898,7 @@ public class TrappedNewbieAdvancements {
 				)
 		))
 		.buildAndRegister();
-	public static final IAdvancement KILL_SNOW_GOLEM_WITH_A_SNOWBALL = buildBase(ATTACK_WITH_A_SNOWBALL, "kill_snow_golem_with_a_snowball").display(display().xy(1F, 0.5F).fancyDescriptionParent(NamedTextColor.AQUA).taskFrame().icon(Material.CARVED_PUMPKIN))
+	public static final IAdvancement KILL_SNOW_GOLEM_WITH_A_SNOWBALL = buildBase(ATTACK_WITH_A_SNOWBALL, "kill_snow_golem_with_a_snowball").display(display().xy(1F, 0.5F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().icon(Material.CARVED_PUMPKIN))
 		.withReward(rewards().withExp(25).addItems(ItemStack.of(Material.SNOWBALL, 4)))
 		.requiredProgress(vanilla(
 			playerKilledEntity()
@@ -874,7 +921,7 @@ public class TrappedNewbieAdvancements {
 				)
 		))
 		.buildAndRegister();
-	public static final IAdvancement KILL_A_BLAZE_WITH_A_SNOWBALL = buildBase(ATTACK_WITH_A_SNOWBALL, "kill_a_blaze_with_a_snowball").display(display().xy(1F, -0.5F).fancyDescriptionParent(NamedTextColor.AQUA).taskFrame().icon(Material.BLAZE_POWDER))
+	public static final IAdvancement KILL_A_BLAZE_WITH_A_SNOWBALL = buildBase(ATTACK_WITH_A_SNOWBALL, "kill_a_blaze_with_a_snowball").display(display().xy(1F, -0.5F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().icon(Material.BLAZE_POWDER))
 		.withReward(rewards().addItems(ItemStack.of(Material.BLAZE_ROD, 4)))
 		.requiredProgress(vanilla(
 			playerKilledEntity()
@@ -890,7 +937,7 @@ public class TrappedNewbieAdvancements {
 				)
 		))
 		.buildAndRegister();
-	public static final IAdvancement KILL_A_BRAZE_WITH_A_BRAZE_ROD_WHILE_ON_FIRE = buildBase(KILL_A_BLAZE_WITH_A_SNOWBALL, "kill_a_braze_with_a_braze_rod_while_on_fire").display(display().x(1F).fancyDescriptionParent(NamedTextColor.AQUA).taskFrame().icon(Material.BLAZE_ROD))
+	public static final IAdvancement KILL_A_BRAZE_WITH_A_BRAZE_ROD_WHILE_ON_FIRE = buildBase(KILL_A_BLAZE_WITH_A_SNOWBALL, "kill_a_braze_with_a_braze_rod_while_on_fire").display(display().x(1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().icon(Material.BLAZE_ROD))
 		.withReward(rewards().withExp(50).addItems(ItemStack.of(Material.BLAZE_ROD, 8)))
 		.requiredProgress(vanilla(
 			playerKilledEntity()
@@ -933,9 +980,13 @@ public class TrappedNewbieAdvancements {
 				)
 		))
 		.buildAndRegister();
-	public static final IAdvancement IGNITE_250_TNT = buildBase(BLOW_UP_A_CREEPER_WITH_TNT, "ignite_250_tnt").display(display().x(1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().icon(ItemUtil.glint(Material.TNT)))
+	public static final IAdvancement GET_A_ZOMBIE_HEAD = buildBase(BLOW_UP_A_CREEPER_WITH_TNT, "get_a_zombie_head").display(display().x(1F).challengeFrame().fancyDescriptionParent(NamedTextColor.DARK_PURPLE).icon(Material.ZOMBIE_HEAD))
+		.withReward(rewards().withExp(250))
+		.requiredProgress(vanilla(inventoryChanged().withItems(ItemTriggerCondition.of(Material.ZOMBIE_HEAD))))
+		.buildAndRegister();
+	public static final IAdvancement IGNITE_250_TNT = buildBase(GET_A_ZOMBIE_HEAD, "ignite_250_tnt").display(display().x(1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().icon(ItemUtil.glint(Material.TNT)))
 		.withReward(rewards().withExp(90).addItems(ItemStack.of(Material.TNT, 4)))
-		.requiredProgress(simple(250, 1))
+		.requiredProgress(simple(250))
 		.buildAndRegister();
 	public static final IAdvancement IGNITE_CHARGED_CREEPER_MIDAIR = buildBase(IGNITE_250_TNT, "ignite_charged_creeper_midair").display(display().x(1F).fancyDescriptionParent(NamedTextColor.DARK_PURPLE).withAdvancementFrame(AdvancementFrame.CRESTED).icon(ItemUtil.glint(Material.FIREWORK_ROCKET)))
 		.withReward(rewards()
@@ -982,7 +1033,7 @@ public class TrappedNewbieAdvancements {
 				.withWeapon(ItemTriggerCondition.of(Material.CROSSBOW))
 		))
 		.buildAndRegister();
-	public static final IAdvancement CROSSBOWS_HOTBAR = buildBase(KILL_A_PILLAGER_WITH_A_CROSSBOW, "crossbows_hotbar").display(display().x(1F).fancyDescriptionParent(NamedTextColor.AQUA).taskFrame().icon(() -> {
+	public static final IAdvancement CROSSBOWS_HOTBAR = buildBase(KILL_A_PILLAGER_WITH_A_CROSSBOW, "crossbows_hotbar").display(display().x(1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().icon(() -> {
 			var item = ItemStack.of(Material.CROSSBOW);
 			item.setData(DataComponentTypes.CHARGED_PROJECTILES, ChargedProjectiles.chargedProjectiles().add(ItemStack.of(Material.ARROW)).build());
 			return item;
@@ -1092,6 +1143,1167 @@ public class TrappedNewbieAdvancements {
 		)
 		.requiredProgress(vanilla(entityHurtPlayer().withDamage(damage -> damage.blocked().withMinDealtDamage((double) Material.SHIELD.getMaxDurability()))))
 		.buildAndRegister();
+	public static final IAdvancement KILL_A_HOSTILE_MOB = buildBase(WEAPONRY_ROOT, "kill_a_hostile_mob").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.WOODEN_SWORD))
+		.buildAndRegister(KillAHostileMobAdvancement::new);
+	public static final IAdvancement KILL_HOSTILE_OVERWORLD_NIGHT_MOBS = buildBase(KILL_A_HOSTILE_MOB, "kill_hostile_overworld_night_mobs").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().icon(Material.IRON_SWORD))
+		.withReward(rewards().withExp(50))
+		.buildAndRegister(KillHostileOverworldNightMobsAdvancement::new);
+	public static final IAdvancement KILL_HOSTILE_NETHER_MOBS = buildBase(KILL_HOSTILE_OVERWORLD_NIGHT_MOBS, "kill_hostile_nether_mobs").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().icon(Material.BLAZE_ROD))
+		.withReward(rewards().withExp(50))
+		.buildAndRegister(KillHostileNetherMobsAdvancement::new);
+	public static final IAdvancement KILL_HOSTILE_END_MOBS = buildBase(KILL_HOSTILE_NETHER_MOBS, "kill_hostile_end_mobs").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().icon(Material.ENDER_PEARL))
+		.withReward(rewards().withExp(50))
+		.buildAndRegister(KillHostileEndMobsAdvancement::new);
+	public static final IAdvancement KILL_HOSTILE_DUNGEON_MOBS = buildBase(KILL_HOSTILE_END_MOBS, "kill_hostile_dungeon_mobs").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().icon(Material.STONE_BRICKS))
+		.withReward(rewards().withExp(50))
+		.buildAndRegister(KillHostileDungeonMobsAdvancement::new);
+	public static final IAdvancement KILL_ALL_HOSTILE_MOBS = buildBase(KILL_HOSTILE_DUNGEON_MOBS, "kill_all_hostile_mobs").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.DARK_PURPLE).challengeFrame().icon(Material.DIAMOND_SWORD))
+		.withReward(rewards()
+			.withExp(100)
+			.withTrophy(ItemStack.of(Material.BOOK))
+		)
+		.buildAndRegister(KillAllHostileMobsAdvancement::new);
+	public static final IAdvancement KILL_MOBS_USING_THEIR_ITEMS = buildBase(KILL_ALL_HOSTILE_MOBS, "kill_mobs_using_their_items").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.DARK_RED).withAdvancementFrame(AdvancementFrame.BUTTERFLY).torture().icon(Material.GRAY_STAINED_GLASS_PANE))
+		.withReward(rewards()
+			.withTrophy(ItemStack.of(Material.GRAY_STAINED_GLASS_PANE))
+		)
+		.buildAndRegister(KillAllUsingTheirItemsAdvancement::new);
+	public static final IAdvancement GET_ATTACKED_BY_A_PHANTOM = buildBase(KILL_A_HOSTILE_MOB, "get_attacked_by_a_phantom").display(display().xy(0F, 1.5F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.PHANTOM_MEMBRANE))
+		.requiredProgress(vanilla(
+			entityHurtPlayer()
+				.withDamage(damage -> damage
+					.withSourceEntity(entity -> entity.withEntityType(EntityType.PHANTOM))
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement BLOCK_A_PHANTOM_WITH_A_SHIELD = buildBase(GET_ATTACKED_BY_A_PHANTOM, "block_a_phantom_with_a_shield").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(() -> {
+			ItemStack item = shield(DyeColor.BLUE);
+			item.setData(DataComponentTypes.BANNER_PATTERNS, BannerPatternLayers.bannerPatternLayers(List.of(
+				new Pattern(DyeColor.LIME, PatternType.STRIPE_MIDDLE),
+				new Pattern(DyeColor.BLUE, PatternType.STRIPE_CENTER),
+				new Pattern(DyeColor.BLACK, PatternType.STRIPE_TOP),
+				new Pattern(DyeColor.BLACK, PatternType.STRIPE_BOTTOM)
+			)));
+			return item;
+		}))
+		.withReward(rewards().addItems(ItemStack.of(Material.PHANTOM_MEMBRANE)))
+		.requiredProgress(vanilla(
+			entityHurtPlayer()
+				.withDamage(damage -> damage
+					.blocked()
+					.withSourceEntity(entity -> entity.withEntityType(EntityType.PHANTOM))
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement GET_A_STACK_OF_PHANTOM_MEMBRANES = buildBase(BLOCK_A_PHANTOM_WITH_A_SHIELD, "get_a_stack_of_phantom_membranes").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().icon(Material.PHANTOM_SPAWN_EGG))
+		.withReward(rewards().withExp(50).addItems(ItemStack.of(Material.PHANTOM_MEMBRANE, 8)))
+		.requiredProgress(vanilla(inventoryChanged().withItems(ItemTriggerCondition.of(Material.PHANTOM_MEMBRANE).withAmount(Material.PHANTOM_MEMBRANE.getMaxStackSize()))))
+		.buildAndRegister();
+	public static final IAdvancement SHOOT_A_PHANTOM = buildBase(GET_A_STACK_OF_PHANTOM_MEMBRANES, "shoot_a_phantom").display(display().xy(-1F, -0.5F).fancyDescriptionParent(NamedTextColor.DARK_PURPLE).challengeFrame().icon(Material.BOW))
+		.withReward(rewards().withExp(50).addItems(ItemStack.of(Material.PHANTOM_MEMBRANE, 3)))
+		.requiredProgress(vanilla(
+			playerKilledEntity()
+				.withEntity(entity -> entity
+					.withEntityType(EntityType.PHANTOM)
+					.withDistanceToPlayer(distance -> distance.minAbsolute(30D))
+				)
+				.withDamage(damage -> damage
+					.withTag(DamageTypeTagKeys.IS_PROJECTILE, true)
+					.withDirectEntity(direct -> direct
+						.withEntityType(Tag.ENTITY_TYPES_ARROWS)
+					)
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement SHOOT_TWO_PHANTOMS_AT_ONCE = buildBase(SHOOT_A_PHANTOM, "shoot_two_phantoms_at_once").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.DARK_PURPLE).challengeFrame().icon(Material.CROSSBOW))
+		.withReward(rewards().withExp(65).addItems(ItemStack.of(Material.PHANTOM_MEMBRANE, 8)))
+		.requiredProgress(vanilla(
+			killedByArrow()
+				.withEntity(
+					EntityTriggerCondition.builder().withEntityType(EntityType.PHANTOM),
+					EntityTriggerCondition.builder().withEntityType(EntityType.PHANTOM)
+				)
+				.withWeapon(ItemTriggerCondition.of(Material.CROSSBOW))
+		))
+		.buildAndRegister();
+	public static final IAdvancement KILL_A_PHANTOM_IN_THE_NETHER = buildBase(SHOOT_TWO_PHANTOMS_AT_ONCE, "kill_a_phantom_in_the_nether").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.DARK_PURPLE).challengeFrame().icon(Material.NETHERRACK))
+		.withReward(rewards()
+			.withExp(100)
+			.addItems(ItemStack.of(Material.PHANTOM_MEMBRANE, 8))
+			.addItems(() -> {
+				var item = ItemStack.of(Material.ENCHANTED_BOOK);
+				item.setData(DataComponentTypes.STORED_ENCHANTMENTS, ItemEnchantments.itemEnchantments().add(Enchantment.FEATHER_FALLING, 3).build());
+				return item;
+			})
+		)
+		.requiredProgress(vanilla(
+			playerKilledEntity()
+				.withEntity(entity -> entity
+					.withEntityType(EntityType.PHANTOM)
+					.withLocation(loc -> loc.withDimension(World.Environment.NETHER))
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement CATCH_A_PHANTOM_WITH_A_FISHING_ROD = buildBase(GET_A_STACK_OF_PHANTOM_MEMBRANES, "catch_a_phantom_with_a_fishing_rod").display(display().xy(-1F, 0.5F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().icon(Material.FISHING_ROD))
+		.withReward(rewards().withExp(40).addItems(ItemStack.of(Material.PHANTOM_MEMBRANE, 4)))
+		.requiredProgress(vanilla(
+			fishingRodHooked()
+				.withEntity(entity -> entity
+					.withEntityType(EntityType.PHANTOM)
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement GET_KILLED_BY_A_PHANTOM_IN_THE_SKY = buildBase(CATCH_A_PHANTOM_WITH_A_FISHING_ROD, "get_killed_by_a_phantom_in_the_sky").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.DARK_PURPLE).challengeFrame().icon(Material.PHANTOM_MEMBRANE))
+		.withReward(rewards().withDeathExp(60))
+		.requiredProgress(vanilla(
+			entityKilledPlayer()
+				.withEntity(entity -> entity
+					.withEntityType(EntityType.PHANTOM)
+				)
+				.withPlayer(player -> player
+					.withLocation(loc -> loc
+						.minY(319D)
+					)
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement KILL_A_PHANTOM_UNDERGROUND_WITH_A_SHOVEL = buildBase(GET_KILLED_BY_A_PHANTOM_IN_THE_SKY, "kill_a_phantom_underground_with_a_shovel").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.DARK_PURPLE).challengeFrame().icon(ItemUtil.glint(Material.IRON_SHOVEL)))
+		.withReward(rewards()
+			.withExp(80)
+			.withTrophy(() -> {
+				var item = ItemStack.of(Material.IRON_SHOVEL);
+				item.addUnsafeEnchantment(Enchantment.SHARPNESS, 1);
+				return item;
+			})
+		)
+		.requiredProgress(vanilla(
+			playerKilledEntity()
+				.withEntity(entity -> entity
+					.withEntityType(EntityType.PHANTOM)
+					.withLocation(loc -> loc.maxY(Bukkit.getWorlds().getFirst().getMinHeight() + 5D))
+				)
+				.withPlayer(player -> player
+					.withEquipment(equipment -> equipment
+						.withMainHand(Material.IRON_SHOVEL)
+					)
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement KILL_A_ZOMBIE = buildBase(KILL_A_HOSTILE_MOB, "kill_a_zombie").display(display().xy(0F, 4F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.ROTTEN_FLESH))
+		.withReward(rewards().addItems(ItemStack.of(Material.ROTTEN_FLESH, 3)))
+		.requiredProgress(vanilla(
+			playerKilledEntity()
+				.withEntity(entity -> entity.withEntityType(EntityType.ZOMBIE))
+		))
+		.buildAndRegister();
+	public static final IAdvancement GET_A_STACK_OF_ROTTEN_FLESH = buildBase(KILL_A_ZOMBIE, "get_a_stack_of_rotten_flesh").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().icon(Material.ZOMBIE_SPAWN_EGG))
+		.withReward(rewards().withExp(50).addItems(ItemStack.of(Material.ROTTEN_FLESH, 8)).addItems(() -> {
+			var item = ItemStack.of(Material.ENCHANTED_BOOK);
+			item.setData(DataComponentTypes.STORED_ENCHANTMENTS, ItemEnchantments.itemEnchantments().add(Enchantment.SHARPNESS, 2).build());
+			return item;
+		}))
+		.requiredProgress(vanilla(inventoryChanged().withItems(ItemTriggerCondition.of(Material.ROTTEN_FLESH).withAmount(64))))
+		.buildAndRegister();
+	public static final IAdvancement KILL_A_ZOMBIE_VILLAGER = buildBase(GET_A_STACK_OF_ROTTEN_FLESH, "kill_a_zombie_villager").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.IRON_NUGGET))
+		.withReward(rewards().addItems(ItemStack.of(Material.ROTTEN_FLESH, 3)))
+		.requiredProgress(vanilla(
+			playerKilledEntity()
+				.withEntity(entity -> entity.withEntityType(EntityType.ZOMBIE_VILLAGER))
+		))
+		.buildAndRegister();
+	public static final IAdvancement KILL_ALL_ZOMBIE_VILLAGERS = buildBase(KILL_A_ZOMBIE_VILLAGER, "kill_all_zombie_villagers").display(display().x(-1F).withAdvancementFrame(AdvancementFrame.BUTTERFLY).fancyDescriptionParent(NamedTextColor.DARK_RED).torture().icon(ItemUtil.glint(Material.DRAGON_BREATH)))
+		.withReward(rewards()
+			.withTrophy(VILLAGER_HEAD)
+		)
+		.buildAndRegister(KillAllZombieVillagersAdvancement::new);
+	public static final IAdvancement KILL_A_BABY_ZOMBIE = buildBase(KILL_ALL_ZOMBIE_VILLAGERS, "kill_a_baby_zombie").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.PAPER))
+			.requiredProgress(vanilla(
+				playerKilledEntity()
+					.withEntity(entity -> entity
+						.withEntityType(Tag.ENTITY_TYPES_ZOMBIES)
+						.withState(EntityStateTriggerCondition::baby)
+					)
+			))
+			.buildAndRegister();
+	public static final IAdvancement KILL_ALL_BABY_ZOMBIES = buildBase(KILL_A_BABY_ZOMBIE, "kill_all_baby_zombies").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().icon(Material.LEVER))
+		.withReward(rewards().withExp(50))
+		.buildAndRegister(KillAllBabyZombiesAdvancement::new);
+	public static final IAdvancement KILL_A_CHICKEN_JOCKEY = buildBase(KILL_ALL_BABY_ZOMBIES, "kill_a_chicken_jockey").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().icon(ItemUtil.texturedHead(MoreMobHeads.TEMPERATE_CHICKEN)))
+		.withReward(rewards().withExp(50).addItems(ItemStack.of(Material.CHICKEN, 8), ItemStack.of(Material.FEATHER, 8)))
+		.requiredProgress(vanillaAny(
+			playerKilledEntity("chicken")
+				.withEntity(entity -> entity
+					.withEntityType(EntityType.CHICKEN)
+					.withPassenger(passenger -> passenger
+						.withEntityType(Tag.ENTITY_TYPES_ZOMBIES)
+						.withState(EntityStateTriggerCondition::baby)
+					)
+				),
+			playerKilledEntity("zombie")
+				.withEntity(entity -> entity
+					.withEntityType(Tag.ENTITY_TYPES_ZOMBIES)
+					.withState(EntityStateTriggerCondition::baby)
+					.withVehicle(vehicle -> vehicle
+						.withEntityType(EntityType.CHICKEN)
+					)
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement KILL_A_CHICKEN_JOCKEY_IN_A_MANSION = buildBase(KILL_A_CHICKEN_JOCKEY, "kill_a_chicken_jockey_in_a_mansion").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.DARK_PURPLE).challengeFrame().icon(Material.PLAYER_HEAD))
+		.withReward(rewards()
+			.withExp(100)
+			.withTrophy(ItemStack.of(Material.COOKED_CHICKEN))
+		)
+		.requiredProgress(vanillaAny(
+			playerKilledEntity("chicken")
+				.withEntity(entity -> entity
+					.withEntityType(EntityType.CHICKEN)
+					.withPassenger(passenger -> passenger
+						.withEntityType(Tag.ENTITY_TYPES_ZOMBIES)
+						.withState(EntityStateTriggerCondition::baby)
+					)
+					.withLocation(loc -> loc.withStructure(Structure.MANSION))
+				),
+			playerKilledEntity("zombie")
+				.withEntity(entity -> entity
+					.withEntityType(Tag.ENTITY_TYPES_ZOMBIES)
+					.withState(EntityStateTriggerCondition::baby)
+					.withVehicle(vehicle -> vehicle
+						.withEntityType(EntityType.CHICKEN)
+					)
+					.withLocation(loc -> loc.withStructure(Structure.MANSION))
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement KILL_ALL_JOCKEYS = buildBase(KILL_A_CHICKEN_JOCKEY_IN_A_MANSION, "kill_all_jockeys").display(display().x(-1F).challengeFrame().fancyDescriptionParent(NamedTextColor.DARK_RED).torture().icon(Material.ZOMBIE_HEAD))
+		.withReward(rewards().withExp(100))
+		.buildAndRegister(KillAllJockeysAdvancement::new);
+	public static final IAdvancement KILL_ALL_ALL_JOCKEYS = buildBase(KILL_ALL_JOCKEYS, "kill_all_all_jockeys").display(display().x(-1F).withAdvancementFrame(AdvancementFrame.BUTTERFLY).fancyDescriptionParent(NamedTextColor.BLACK).superTorture().icon(Material.SKELETON_SKULL))
+		.withReward(rewards()
+			.withExp(100)
+			.withTrophy(ItemStack.of(Material.BOW))
+		)
+		.buildAndRegister(KillAllAllJockeysAdvancement::new);
+	public static final IAdvancement KILL_A_HUSK = buildBase(GET_A_STACK_OF_ROTTEN_FLESH, "kill_a_husk").display(display().xy(1F, 1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.DEAD_BUSH))
+		.requiredProgress(vanilla(
+			playerKilledEntity()
+				.withEntity(entity -> entity.withEntityType(EntityType.HUSK))
+		))
+		.buildAndRegister();
+	public static final IAdvancement GET_KILLED_BY_A_HUSK_WHILE_RIDING_A_CAMEL = buildBase(GET_A_STACK_OF_ROTTEN_FLESH, "get_killed_by_a_husk_while_riding_a_camel").display(display().xy(0F, 1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().icon(DESERT_HEAD))
+		.withReward(rewards().withExp(40).addItems(ItemStack.of(Material.ROTTEN_FLESH, 4)))
+		.requiredProgress(vanilla(
+			entityKilledPlayer()
+				.withEntity(entity -> entity.withEntityType(EntityType.HUSK))
+				.withPlayer(player -> player
+					.withVehicle(vehicle -> vehicle.withEntityType(EntityType.CAMEL))
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement KILL_A_HUSK_IN_TUNDRA = buildBase(GET_KILLED_BY_A_HUSK_WHILE_RIDING_A_CAMEL, "kill_a_husk_in_tundra").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.DARK_PURPLE).challengeFrame().icon(Material.SNOW_BLOCK))
+		.withReward(rewards()
+			.withExp(100)
+			.addItems(ItemStack.of(Material.SAND, 32))
+			.addItems(() -> {
+				var item = ItemStack.of(Material.ENCHANTED_BOOK);
+				item.setData(DataComponentTypes.STORED_ENCHANTMENTS, ItemEnchantments.itemEnchantments().add(Enchantment.SMITE, 2).build());
+				return item;
+			})
+			.withTrophy(ItemStack.of(Material.PACKED_ICE))
+		)
+		.requiredProgress(vanilla(
+			playerKilledEntity()
+				.withEntity(entity -> entity
+					.withEntityType(EntityType.HUSK)
+					.withLocation(loc -> loc
+						.withBiome(List.of(Biome.SNOWY_PLAINS, Biome.ICE_SPIKES))
+						.minY(64D)
+					)
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement FROZEN_HEART = buildBase(KILL_A_HUSK_IN_TUNDRA, "frozen_heart").display(display().x(-1F).withAdvancementFrame(AdvancementFrame.STAR).fancyDescriptionParent(NamedTextColor.DARK_RED).torture().icon(FROZEN_HEART_HEAD))
+		.withReward(rewards().withExp(200).addItems(ItemStack.of(Material.SNOWBALL, 64)))
+		.buildAndRegister(FrozenHeartAdvancement::new);
+	public static final IAdvancement GIVE_A_ZOMBIE_A_TOTEM_OF_UNDYING = buildBase(FROZEN_HEART, "give_a_zombie_a_totem_of_undying").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().icon(Material.TOTEM_OF_UNDYING))
+		.requiredProgress(vanilla(
+			thrownItemPickedUpByEntity()
+				.withItem(ItemTriggerCondition.of(Material.TOTEM_OF_UNDYING))
+				.withEntity(entity -> entity.withEntityType(Tag.ENTITY_TYPES_ZOMBIES))
+		))
+		.buildAndRegister();
+	public static final IAdvancement KILL_A_MOB_WEARING_A_PUMPKIN = buildBase(GIVE_A_ZOMBIE_A_TOTEM_OF_UNDYING, "kill_a_mob_wearing_a_pumpkin").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().icon(Material.CARVED_PUMPKIN))
+		.withReward(rewards().addItems(ItemStack.of(Material.CARVED_PUMPKIN, 8)))
+		.requiredProgress(vanilla(
+			playerKilledEntity()
+				.withEntity(entity -> entity
+					.withEquipment(equipment -> equipment
+						.withHelmet(Material.CARVED_PUMPKIN)
+					)
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement KILL_A_MOB_WEARING_A_JACK_O_LANTERN = buildBase(KILL_A_MOB_WEARING_A_PUMPKIN, "kill_a_mob_wearing_a_jack_o_lantern").display(display().x(-1F).withAdvancementFrame(AdvancementFrame.STAR).fancyDescriptionParent(NamedTextColor.AQUA).icon(Material.JACK_O_LANTERN))
+		.withReward(rewards()
+			.withExp(100)
+			.addItems(ItemStack.of(Material.JACK_O_LANTERN, 64))
+			.withTrophy(ItemStack.of(Material.CARVED_PUMPKIN))
+		)
+		.requiredProgress(vanilla(
+			playerKilledEntity()
+				.withEntity(entity -> entity
+					.withEquipment(equipment -> equipment
+						.withHelmet(Material.JACK_O_LANTERN)
+					)
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement KILL_ALL_MOBS_WEARING_A_JACK_O_LANTERN = buildBase(KILL_A_MOB_WEARING_A_JACK_O_LANTERN, "kill_all_mobs_wearing_a_jack_o_lantern").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.DARK_RED).challengeFrame().icon(Material.JACK_O_LANTERN))
+		.withReward(rewards()
+			.withTrophy(JACK_O_LANTERN_HEAD)
+		)
+		.buildAndRegister(KillAllPumpkinMobsAdvancement::new);
+	public static final IAdvancement KILL_1K_MOBS_WEARING_A_JACK_O_LANTERN = buildBase(KILL_ALL_MOBS_WEARING_A_JACK_O_LANTERN, "kill_1k_mobs_wearing_a_jack_o_lantern").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.DARK_RED).challengeFrame().icon(ItemUtil.glint(Material.JACK_O_LANTERN)))
+		.withReward(rewards()
+			.withTrophy(ItemStack.of(Material.SKELETON_SKULL))
+		)
+		.requiredProgress(simple(1000))
+		.buildAndRegister();
+	public static final IAdvancement KILL_A_DROWNED = buildBase(GET_A_STACK_OF_ROTTEN_FLESH, "kill_a_drowned").display(display().xy(1F, -1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.SEAGRASS))
+		.requiredProgress(vanilla(
+			playerKilledEntity()
+				.withEntity(entity -> entity.withEntityType(EntityType.DROWNED))
+		))
+		.buildAndRegister();
+	public static final IAdvancement BLOCK_A_DROWNED_TRIDENT = buildBase(GET_A_STACK_OF_ROTTEN_FLESH, "block_a_drowned_trident").display(display().xy(0F, -1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(() -> {
+			ItemStack item = shield(DyeColor.CYAN);
+			item.setData(DataComponentTypes.BANNER_PATTERNS, BannerPatternLayers.bannerPatternLayers(List.of(
+				new Pattern(DyeColor.LIGHT_BLUE, PatternType.STRIPE_MIDDLE),
+				new Pattern(DyeColor.CYAN, PatternType.STRIPE_CENTER),
+				new Pattern(DyeColor.GREEN, PatternType.TRIANGLES_TOP),
+				new Pattern(DyeColor.LIGHT_BLUE, PatternType.STRIPE_BOTTOM),
+				new Pattern(DyeColor.BROWN, PatternType.TRIANGLES_BOTTOM)
+			)));
+			return item;
+		}))
+		.requiredProgress(vanilla(
+			entityHurtPlayer()
+				.withDamage(damage -> damage
+					.blocked()
+					.withDamageSource(source -> source
+						.withTag(DamageTypeTagKeys.IS_PROJECTILE, true)
+						.withDirectEntity(entity -> entity
+							.withEntityType(EntityType.TRIDENT)
+						)
+					)
+					.withSourceEntity(entity -> entity.withEntityType(EntityType.DROWNED))
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement OBTAIN_A_TRIDENT = buildBase(BLOCK_A_DROWNED_TRIDENT, "obtain_a_trident").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().icon(Material.TRIDENT))
+		.requiredProgress(vanilla(inventoryChanged().withItems(ItemTriggerCondition.of(Material.TRIDENT))))
+		.buildAndRegister();
+	public static final IAdvancement KILL_A_DROWNED_HOLDING_A_NAUTILUS_SHELL = buildBase(OBTAIN_A_TRIDENT, "kill_a_drowned_holding_a_nautilus_shell").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().icon(Material.NAUTILUS_SHELL))
+		.withReward(rewards().addItems(ItemStack.of(Material.NAUTILUS_SHELL)))
+		.requiredProgress(vanillaAny(
+			playerKilledEntity()
+				.withEntity(entity -> entity
+					.withEntityType(EntityType.DROWNED)
+					.withEquipment(equipment -> equipment
+						.withMainHand(Material.NAUTILUS_SHELL)
+					)
+				),
+			playerKilledEntity()
+				.withEntity(entity -> entity
+					.withEntityType(EntityType.DROWNED)
+					.withEquipment(equipment -> equipment
+						.withOffHand(Material.NAUTILUS_SHELL)
+					)
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement KILL_A_DROWNED_HOLDING_A_NAUTILUS_SHELL_AND_A_TRIDENT = buildBase(KILL_A_DROWNED_HOLDING_A_NAUTILUS_SHELL, "kill_a_drowned_holding_a_nautilus_shell_and_a_trident").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.DARK_PURPLE).challengeFrame().icon(ItemUtil.glint(Material.TRIDENT)))
+		.withReward(rewards().withExp(50).addItems(ItemStack.of(Material.TRIDENT)))
+		.requiredProgress(vanillaAny(
+			playerKilledEntity()
+				.withEntity(entity -> entity
+					.withEntityType(EntityType.DROWNED)
+					.withEquipment(equipment -> equipment
+						.withMainHand(Material.TRIDENT)
+						.withOffHand(Material.NAUTILUS_SHELL)
+					)
+				),
+			playerKilledEntity()
+				.withEntity(entity -> entity
+					.withEntityType(EntityType.DROWNED)
+					.withEquipment(equipment -> equipment
+						.withMainHand(Material.NAUTILUS_SHELL)
+						.withOffHand(Material.TRIDENT)
+					)
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement KILL_ALL_DIAMOND_ZOMBIE = buildBase(KILL_A_DROWNED_HOLDING_A_NAUTILUS_SHELL_AND_A_TRIDENT, "kill_all_diamond_zombie").display(display().x(-1F).challengeFrame().fancyDescriptionParent(NamedTextColor.DARK_PURPLE).icon(Material.DIAMOND_HELMET))
+		.withReward(rewards()
+			.withExp(100)
+			.addItems(ItemStack.of(Material.DIAMOND, 9))
+			.withTrophy(ItemStack.of(Material.LIME_STAINED_GLASS_PANE))
+		)
+		.requiredProgress(vanilla(
+			playerKilledEntity()
+				.withEntity(entity -> entity
+					.withEntityType(UtilizerTags.HUMAN_LIKE_ZOMBIES)
+					.withEquipment(equipment -> equipment
+						.withHelmet(Material.DIAMOND_HELMET)
+						.withChestplate(Material.DIAMOND_CHESTPLATE)
+						.withLeggings(Material.DIAMOND_LEGGINGS)
+						.withBoots(Material.DIAMOND_BOOTS)
+						.withMainHand(Material.DIAMOND_SWORD)
+					)
+				)
+		))
+		.buildAndRegister();
+	// MCCheck: 1.21.8, nbt
+	public static final IAdvancement KILL_ALL_DIAMOND_ZOMBIE_BUT_HARD = buildBase(KILL_ALL_DIAMOND_ZOMBIE, "kill_all_diamond_zombie_but_hard").display(display().x(-1F).withAdvancementFrame(AdvancementFrame.BUTTERFLY).fancyDescriptionParent(NamedTextColor.BLACK).cheat().icon(ASSASSIN_HEAD))
+		.withReward(rewards()
+			.withTrophy(ItemStack.of(Material.PLAYER_HEAD))
+		)
+		.requiredProgress(vanilla(
+			playerKilledEntity()
+				.withEntity(entity -> entity
+					.withEntityType(UtilizerTags.HUMAN_LIKE_ZOMBIES)
+					.withEquipment(equipment -> equipment
+						.withHelmet(Material.DIAMOND_HELMET)
+						.withChestplate(Material.DIAMOND_CHESTPLATE)
+						.withLeggings(Material.DIAMOND_LEGGINGS)
+						.withBoots(Material.DIAMOND_BOOTS)
+						.withMainHand(Material.IRON_SWORD)
+					)
+					.withNbt("{CanPickUpLoot:0b}")
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement ZOMBIE_FAMILY_REUNION = buildBase(KILL_ALL_DIAMOND_ZOMBIE_BUT_HARD, "zombie_family_reunion").display(display().x(-1F).challengeFrame().fancyDescriptionParent(NamedTextColor.DARK_PURPLE).torture().icon(ItemUtil.texturedHead(MoreMobHeads.ZOMBIFIED_PIGLIN)))
+		.withReward(rewards()
+			.withExp(100)
+			.addItems(ItemStack.of(Material.ROTTEN_FLESH, 64))
+			.withTrophy(THE_WALKING_HEAD)
+		)
+		.buildAndRegister();
+	public static final IAdvancement COMMUNISM = buildBase(ZOMBIE_FAMILY_REUNION, "communism").display(display().x(-1F).withAdvancementFrame(AdvancementFrame.BUTTERFLY).fancyDescriptionParent(NamedTextColor.DARK_RED).torture().icon(Material.GOLDEN_HOE))
+		.withReward(rewards()
+			.withTrophy(ItemStack.of(Material.BOOK))
+		)
+		.buildAndRegister(CommunismAdvancement::new);
+	public static final IAdvancement KILL_A_SPIDER = buildBase(KILL_A_HOSTILE_MOB, "kill_a_spider").display(display().xy(0F, -1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.STRING))
+		.withReward(rewards().addItems(ItemStack.of(Material.STRING, 3)))
+		.requiredProgress(vanilla(
+			playerKilledEntity()
+				.withEntity(entity -> entity.withEntityType(EntityType.SPIDER))
+		))
+		.buildAndRegister();
+	public static final IAdvancement KILL_A_CAVE_SPIDER = buildBase(KILL_A_SPIDER, "kill_a_cave_spider").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.SPIDER_EYE))
+		.withReward(rewards().addItems(ItemStack.of(Material.STRING, 3), ItemStack.of(Material.SPIDER_EYE)))
+		.requiredProgress(vanilla(
+			playerKilledEntity()
+				.withEntity(entity -> entity.withEntityType(EntityType.CAVE_SPIDER))
+		))
+		.buildAndRegister();
+	public static final IAdvancement GET_A_STACK_OF_STRINGS = buildBase(KILL_A_CAVE_SPIDER, "get_a_stack_of_strings").display(display().x(-1F).goalFrame().fancyDescriptionParent(NamedTextColor.AQUA).icon(Material.SPIDER_SPAWN_EGG))
+		.withReward(rewards().withExp(50).addItems(ItemStack.of(Material.STRING, 8), ItemStack.of(Material.SPIDER_EYE, 3)).addItems(() -> {
+			var item = ItemStack.of(Material.ENCHANTED_BOOK);
+			item.setData(DataComponentTypes.STORED_ENCHANTMENTS, ItemEnchantments.itemEnchantments().add(Enchantment.PROTECTION, 2).build());
+			return item;
+		}))
+		.requiredProgress(vanilla(
+			inventoryChanged()
+				.withItems(ItemTriggerCondition.of(Material.STRING).withAmount(64))
+		))
+		.buildAndRegister();
+	public static final IAdvancement KILL_A_SPIDER_SKELETON_JOCKEY = buildBase(GET_A_STACK_OF_STRINGS, "kill_a_spider_skeleton_jockey").display(display().x(-1F).goalFrame().fancyDescriptionParent(NamedTextColor.AQUA).icon(Material.COBWEB))
+		.withReward(rewards().withExp(50).addItems(ItemStack.of(Material.STRING, 8), ItemStack.of(Material.BONE, 8)))
+		.requiredProgress(vanillaAny(
+			playerKilledEntity("spider")
+				.withEntity(entity -> entity
+					.withEntityType(EntityType.SPIDER)
+					.withPassenger(passenger -> passenger
+						.withEntityType(Tag.ENTITY_TYPES_SKELETONS)
+					)
+				),
+			playerKilledEntity("skeleton")
+				.withEntity(entity -> entity
+					.withEntityType(Tag.ENTITY_TYPES_SKELETONS)
+					.withVehicle(vehicle -> vehicle
+						.withEntityType(EntityType.SPIDER)
+					)
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement KILL_500_JOCKEYS = buildBase(KILL_A_SPIDER_SKELETON_JOCKEY, "kill_500_jockeys").display(display().x(-1F).withAdvancementFrame(AdvancementFrame.STAR).fancyDescriptionParent(NamedTextColor.DARK_RED).torture().icon(Material.SKELETON_SKULL))
+		.withReward(rewards().withTrophy(ItemStack.of(Material.EMERALD)))
+		.requiredProgress(simple(500))
+		.buildAndRegister();
+	public static final IAdvancement KILL_INVISIBLE_SPIDER = buildBase(KILL_500_JOCKEYS, "kill_invisible_spider").display(display().x(-1F).challengeFrame().fancyDescriptionParent(NamedTextColor.DARK_PURPLE).icon(Material.FERMENTED_SPIDER_EYE))
+		.withReward(rewards().withExp(50).addItems(ItemStack.of(Material.FERMENTED_SPIDER_EYE), ItemStack.of(Material.GOLDEN_CARROT)))
+		.requiredProgress(vanilla(
+			playerKilledEntity()
+				.withEntity(entity -> entity
+					.withEntityType(UtilizerTags.SPIDERS)
+					.withEffects(PotionEffectType.INVISIBILITY)
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement KILL_ALL_SPIDERS_WITH_EFFECTS = buildBase(KILL_INVISIBLE_SPIDER, "kill_all_spiders_with_effects").display(display().x(-1F).withAdvancementFrame(AdvancementFrame.STAR).fancyDescriptionParent(NamedTextColor.DARK_RED).torture().icon(ARACHNOPHOBIA_HEAD))
+		.withReward(rewards().withExp(140).addItems(ItemStack.of(Material.STRING, 16)))
+		.requiredProgress(vanilla(
+			killedByArrow()
+				.withWeapon(ItemTriggerCondition.of(Material.CROSSBOW))
+				.withEntity(
+					EntityTriggerCondition.builder().withEntityType(EntityType.SPIDER).withEffects(PotionEffectType.INVISIBILITY),
+					EntityTriggerCondition.builder().withEntityType(EntityType.SPIDER).withEffects(PotionEffectType.REGENERATION),
+					EntityTriggerCondition.builder().withEntityType(EntityType.SPIDER).withEffects(PotionEffectType.STRENGTH),
+					EntityTriggerCondition.builder().withEntityType(EntityType.SPIDER).withEffects(PotionEffectType.SPEED)
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement KILL_A_SKELETON = buildBase(KILL_A_HOSTILE_MOB, "kill_a_skeleton").display(display().xy(0F, -3F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.BONE))
+		.withReward(rewards().addItems(ItemStack.of(Material.BONE, 3), ItemStack.of(Material.ARROW, 8)))
+		.requiredProgress(vanilla(
+			playerKilledEntity()
+				.withEntity(entity -> entity.withEntityType(EntityType.SKELETON))
+		))
+		.buildAndRegister();
+	public static final IAdvancement GET_A_BONE_MEAL = buildBase(KILL_A_SKELETON, "get_a_bone_meal").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.BONE_MEAL))
+		.withReward(rewards().addItems(ItemStack.of(Material.BONE_MEAL, 8)))
+		.requiredProgress(vanilla(inventoryChanged().withItems(ItemTriggerCondition.of(Material.BONE_MEAL))))
+		.buildAndRegister();
+	public static final IAdvancement DEFLECT_A_SKELETON_ARROW = buildBase(GET_A_BONE_MEAL, "deflect_a_skeleton_arrow").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(() -> {
+			var item = ItemStack.of(Material.SHIELD);
+			item.setData(DataComponentTypes.BANNER_PATTERNS, BannerPatternLayers.bannerPatternLayers(List.of(
+				new Pattern(DyeColor.LIGHT_GRAY, PatternType.TRIANGLE_BOTTOM),
+				new Pattern(DyeColor.LIGHT_GRAY, PatternType.TRIANGLE_TOP),
+				new Pattern(DyeColor.LIGHT_GRAY, PatternType.RHOMBUS),
+				new Pattern(DyeColor.LIGHT_GRAY, PatternType.CURLY_BORDER),
+				new Pattern(DyeColor.WHITE, PatternType.SKULL)
+			)));
+			return item;
+		}))
+		.requiredProgress(vanilla(
+			entityHurtPlayer()
+				.withDamage(damage -> damage
+					.blocked()
+					.withDamageSource(source -> source
+						.withTag(DamageTypeTagKeys.IS_PROJECTILE, true)
+					)
+					.withSourceEntity(source -> source
+						.withEntityType(Tag.ENTITY_TYPES_SKELETONS)
+					)
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement GET_A_STACK_OF_BONES = buildBase(DEFLECT_A_SKELETON_ARROW, "get_a_stack_of_bones").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.SKELETON_SPAWN_EGG))
+		.withReward(rewards().withExp(50).addItems(ItemStack.of(Material.BONE, 8), ItemStack.of(Material.ARROW, 16)).addItems(() -> {
+				var item = ItemStack.of(Material.ENCHANTED_BOOK);
+				item.setData(DataComponentTypes.STORED_ENCHANTMENTS, ItemEnchantments.itemEnchantments().add(Enchantment.POWER, 2).build());
+				return item;
+			})
+		)
+		.requiredProgress(vanilla(inventoryChanged().withItems(ItemTriggerCondition.of(Material.BONE).withAmount(64))))
+		.buildAndRegister();
+	public static final IAdvancement GET_A_STACK_OF_BONE_BLOCKS = buildBase(GET_A_STACK_OF_BONES, "get_a_stack_of_bone_blocks").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.BONE_BLOCK))
+		.withReward(rewards().withExp(50).addItems(ItemStack.of(Material.BONE_BLOCK, 8)))
+		.requiredProgress(vanilla(inventoryChanged().withItems(ItemTriggerCondition.of(Material.BONE_BLOCK).withAmount(64))))
+		.buildAndRegister();
+	public static final IAdvancement BONE_TO_PARTY = buildBase(GET_A_STACK_OF_BONE_BLOCKS, "bone_to_party").display(display().x(-1F).challengeFrame().fancyDescriptionParent(NamedTextColor.DARK_PURPLE).icon(ItemUtil.texturedHead("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZWExNWQwNWQwYTg2ODk2OGM2NjhiNWQ4NmM0MDgzMDUzZWJlOWZkZWE5Y2U0YWExMzE1MDM1ZDNiYTg4NDNkIn19fQ==")))
+		.withReward(rewards()
+			.withExp(50)
+			.addItems(ItemStack.of(Material.BONE, 64))
+			.withTrophy(SANS_HEAD)
+		)
+		.buildAndRegister();
+	public static final IAdvancement KILL_A_STRAY = buildBase(GET_A_BONE_MEAL, "kill_a_stray").display(display().xy(1F, 1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.SNOWBALL))
+		.withReward(rewards().addItems(ItemStack.of(Material.BONE, 3)).addItems(potionItem(Material.TIPPED_ARROW, PotionType.SLOWNESS).asQuantity(8)))
+		.requiredProgress(vanilla(
+			playerKilledEntity()
+				.withEntity(entity -> entity.withEntityType(EntityType.STRAY))
+		))
+		.buildAndRegister();
+	public static final IAdvancement KILL_A_STRAY_IN_A_DESERT = buildBase(GET_A_BONE_MEAL, "kill_a_stray_in_a_desert").display(display().y(1F).challengeFrame().fancyDescriptionParent(NamedTextColor.DARK_PURPLE).icon(Material.SAND))
+		.withReward(rewards()
+			.withExp(100)
+			.addItems(potionItem(Material.TIPPED_ARROW, PotionType.SLOWNESS).asQuantity(32))
+			.addItems(() -> {
+				var item = ItemStack.of(Material.ENCHANTED_BOOK);
+				item.setData(DataComponentTypes.STORED_ENCHANTMENTS, ItemEnchantments.itemEnchantments().add(Enchantment.PROJECTILE_PROTECTION, 2).build());
+				return item;
+			})
+			.withTrophy(ItemStack.of(Material.MAGMA_BLOCK))
+		)
+		.requiredProgress(vanilla(
+			playerKilledEntity()
+				.withEntity(entity -> entity
+					.withEntityType(EntityType.STRAY)
+					.withLocation(loc -> loc
+						.withBiome(Biome.DESERT)
+					)
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement RIDE_A_SKELETON_HORSE = buildBase(KILL_A_STRAY_IN_A_DESERT, "ride_a_skeleton_horse").display(display().x(-1F).goalFrame().fancyDescriptionParent(NamedTextColor.AQUA).icon(Material.BONE))
+		.withReward(rewards()
+			.addItems(ItemStack.of(Material.ARROW, 32))
+			.addItems(() -> {
+				var item = ItemStack.of(Material.ENCHANTED_BOOK);
+				item.setData(DataComponentTypes.STORED_ENCHANTMENTS, ItemEnchantments.itemEnchantments().add(Enchantment.POWER, 3).build());
+				return item;
+			})
+		)
+		.requiredProgress(vanilla(
+			startedRiding()
+				.withPlayer(player -> player
+					.withVehicle(vehicle -> vehicle
+						.withEntityType(EntityType.SKELETON_HORSE)
+					)
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement KILL_400_SKELETON_HORSES = buildBase(RIDE_A_SKELETON_HORSE, "kill_400_skeleton_horses").display(display().x(-1F).withAdvancementFrame(AdvancementFrame.BUTTERFLY).fancyDescriptionParent(NamedTextColor.BLACK).cheat().icon(ItemUtil.glint(Material.IRON_HELMET)))
+		.withReward(rewards()
+			.withTrophy(ItemStack.of(Material.BONE))
+		)
+		.requiredProgress(simple(400))
+		.buildAndRegister();
+	public static final IAdvancement KILL_AN_ELDER_GUARDIAN_IN_A_DESERT = buildBase(KILL_400_SKELETON_HORSES, "kill_an_elder_guardian_in_a_desert").display(display().x(-1F).challengeFrame().fancyDescriptionParent(NamedTextColor.DARK_PURPLE).icon(ItemUtil.glint(Material.CACTUS)))
+		.withReward(rewards().withExp(200))
+		.requiredProgress(vanilla(
+			playerKilledEntity()
+				.withEntity(entity -> entity
+					.withEntityType(EntityType.ELDER_GUARDIAN)
+					.withLocation(loc -> loc
+						.withBiome(Biome.DESERT)
+					)
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement KILL_A_BOGGED = buildBase(GET_A_BONE_MEAL, "kill_a_bogged").display(display().xy(1F, -1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.SLIME_BALL))
+		.withReward(rewards().addItems(ItemStack.of(Material.BONE, 3)))
+		.requiredProgress(vanilla(
+			playerKilledEntity()
+				.withEntity(entity -> entity.withEntityType(EntityType.BOGGED))
+		))
+		.buildAndRegister();
+	public static final IAdvancement SHOOT_A_MOB_WITH_A_POISON_ARROW = buildBase(GET_A_BONE_MEAL, "shoot_a_mob_with_a_poison_arrow").display(display().y(-1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(potionItem(Material.TIPPED_ARROW, PotionType.POISON)))
+		.withReward(rewards().addItems(potionItem(Material.TIPPED_ARROW, PotionType.POISON).asQuantity(8)))
+		.requiredProgress(vanillaAny(
+			playerHurtEntity(PotionType.POISON.key().value())
+				.withDamage(damage -> damage
+					.withDamageSource(source -> source
+						.withTag(DamageTypeTagKeys.IS_PROJECTILE, true)
+						.withDirectEntity(entity -> entity
+							.withEntityType(EntityType.ARROW)
+							.withNbt("{item:{components:{\"%s\":{potion:\"%s\"}}}}".formatted(DataComponentTypes.POTION_CONTENTS.key(), PotionType.POISON.key()))
+						)
+					)
+				),
+			playerHurtEntity(PotionType.LONG_POISON.key().value())
+				.withDamage(damage -> damage
+					.withDamageSource(source -> source
+						.withTag(DamageTypeTagKeys.IS_PROJECTILE, true)
+						.withDirectEntity(entity -> entity
+							.withEntityType(EntityType.ARROW)
+							.withNbt("{item:{components:{\"%s\":{potion:\"%s\"}}}}".formatted(DataComponentTypes.POTION_CONTENTS.key(), PotionType.LONG_POISON.key()))
+						)
+					)
+				),
+			playerHurtEntity(PotionType.STRONG_POISON.key().value())
+				.withDamage(damage -> damage
+					.withDamageSource(source -> source
+						.withTag(DamageTypeTagKeys.IS_PROJECTILE, true)
+						.withDirectEntity(entity -> entity
+							.withEntityType(EntityType.ARROW)
+							.withNbt("{item:{components:{\"%s\":{potion:\"%s\"}}}}".formatted(DataComponentTypes.POTION_CONTENTS.key(), PotionType.STRONG_POISON.key()))
+						)
+					)
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement SUSPICIOUS_DUEL = buildBase(SHOOT_A_MOB_WITH_A_POISON_ARROW, "suspicious_duel").display(display().x(-1F).goalFrame().fancyDescriptionParent(NamedTextColor.AQUA).icon(ItemUtil.glint(Material.BOW)))
+		.withReward(rewards().withExp(50))
+		.requiredProgress(vanilla(
+			usingItem()
+				.withItem(ItemTriggerCondition.of(Material.SPYGLASS))
+				.withPlayer(player -> player
+					.withLookingAt(entity -> entity
+						.withEntityType(UtilizerTags.BOW_SKELETONS)
+						.withTargetedEntity(targetEntity -> targetEntity
+							.withEntityType(UtilizerTags.BOW_SKELETONS)
+							.withTargetedEntity(targetEntity2 -> targetEntity2
+								.withEntityType(UtilizerTags.BOW_SKELETONS)
+							)
+						)
+					)
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement GET_A_SKELETON_SKULL = buildBase(SUSPICIOUS_DUEL, "get_a_skeleton_skull").display(display().x(-1F).challengeFrame().fancyDescriptionParent(NamedTextColor.DARK_PURPLE).icon(Material.SKELETON_SKULL))
+		.withReward(rewards().withExp(250))
+		.requiredProgress(vanilla(inventoryChanged().withItems(ItemTriggerCondition.of(Material.SKELETON_SKULL))))
+		.buildAndRegister();
+	public static final IAdvancement CHESTFUL_OF_SKELETON_SKULLS = buildBase(GET_A_SKELETON_SKULL, "chestful_of_skeleton_skulls").display(display().x(-1F).withAdvancementFrame(AdvancementFrame.STAR).fancyDescriptionParent(NamedTextColor.DARK_RED).torture().icon(Material.SKELETON_SKULL))
+		.withReward(rewards()
+			.withTrophy(ItemStack.of(Material.DIRT))
+		)
+		.buildAndRegister();
+	public static final IAdvancement KILL_A_CREEPER = buildBase(KILL_A_HOSTILE_MOB, "kill_a_creeper").display(display().xy(0F, -6F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.GUNPOWDER))
+		.withReward(rewards().addItems(ItemStack.of(Material.GUNPOWDER, 3)))
+		.requiredProgress(vanilla(
+			playerKilledEntity()
+				.withEntity(entity -> entity.withEntityType(EntityType.CREEPER))
+		))
+		.buildAndRegister();
+	public static final IAdvancement SHOOT_A_CREEPER = buildBase(KILL_A_CREEPER, "shoot_a_creeper").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.BOW))
+		.withReward(rewards().addItems(ItemStack.of(Material.GUNPOWDER, 4)))
+		.requiredProgress(vanilla(
+			playerKilledEntity()
+				.withEntity(entity -> entity.withEntityType(EntityType.CREEPER))
+				.withDamage(damage -> damage
+					.withTag(DamageTypeTagKeys.IS_PROJECTILE, true)
+					.withDirectEntity(entity -> entity
+						.withEntityType(Tag.ENTITY_TYPES_ARROWS)
+					)
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement BLOCK_A_CREEPER = buildBase(SHOOT_A_CREEPER, "block_a_creeper").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(() -> {
+			ItemStack item = shield(DyeColor.LIME);
+			item.setData(DataComponentTypes.BANNER_PATTERNS, BannerPatternLayers.bannerPatternLayers(List.of(
+				new Pattern(DyeColor.LIME, PatternType.HALF_HORIZONTAL),
+				new Pattern(DyeColor.LIME, PatternType.HALF_HORIZONTAL_BOTTOM),
+				new Pattern(DyeColor.BLACK, PatternType.CREEPER),
+				new Pattern(DyeColor.BLACK, PatternType.CREEPER),
+				new Pattern(DyeColor.BLACK, PatternType.CREEPER)
+			)));
+			return item;
+		}))
+		.withReward(rewards().addItems(ItemStack.of(Material.GUNPOWDER, 8)))
+		.requiredProgress(vanilla(
+			entityHurtPlayer()
+				.withDamage(damage -> damage
+					.blocked()
+					.withSourceEntity(entity -> entity
+						.withEntityType(EntityType.CREEPER)
+					)
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement IGNITE_A_CREEPER = buildBase(BLOCK_A_CREEPER, "ignite_a_creeper").display(display().xy(-1F, 0.5F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.FLINT_AND_STEEL))
+		.withReward(rewards().addItems(ItemStack.of(Material.GUNPOWDER, 4)))
+		.requiredProgress(vanilla(
+			playerInteractedWithEntity()
+				.withItem(ItemTriggerCondition.of(Tag.ITEMS_CREEPER_IGNITERS))
+				.withEntity(entity -> entity.withEntityType(EntityType.CREEPER))
+		))
+		.buildAndRegister();
+	public static final IAdvancement DIE_FROM_A_CREEPER = buildBase(BLOCK_A_CREEPER, "die_from_a_creeper").display(display().xy(-1F, -0.5F).fancyDescriptionParent(NamedTextColor.GREEN).icon(ItemUtil.texturedHead("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOTY4MzI1MzQ4YmI4MzEwZjFkNzQ4ZmRjYWFiZjQzZGNmOWJkMjQ0ZDE4OWNjYjE4ZDZhYzU0N2ZiMDA0NzhhNCJ9fX0=")))
+		.requiredProgress(vanilla(
+			entityKilledPlayer()
+				.withEntity(entity -> entity.withEntityType(EntityType.CREEPER))
+		))
+		.buildAndRegister();
+	public static final IAdvancement GET_A_STACK_OF_GUNPOWDER = buildBase(IGNITE_A_CREEPER, "get_a_stack_of_gunpowder").display(display().xy(-1F, -0.5F).goalFrame().fancyDescriptionParent(NamedTextColor.AQUA).icon(Material.CREEPER_SPAWN_EGG))
+		.withReward(rewards().withExp(50).addItems(ItemStack.of(Material.GUNPOWDER, 8)).addItems(() -> {
+			var item = ItemStack.of(Material.ENCHANTED_BOOK);
+			item.setData(DataComponentTypes.STORED_ENCHANTMENTS, ItemEnchantments.itemEnchantments().add(Enchantment.LOOTING, 1).build());
+			return item;
+		}))
+		.requiredProgress(vanilla(inventoryChanged().withItems(ItemTriggerCondition.of(Material.GUNPOWDER).withAmount(Material.GUNPOWDER.getMaxStackSize()))))
+		.buildAndRegister();
+	public static final IAdvancement LOOK_AT_A_CREEPER_CLOSELY = buildBase(IGNITE_A_CREEPER, "look_at_a_creeper_closely").display(display().xy(1F, 0.5F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.SPYGLASS))
+		.requiredProgress(vanilla(
+			usingItem()
+				.withItem(ItemTriggerCondition.of(Material.SPYGLASS))
+				.withPlayer(player -> player
+					.withLookingAt(entity -> entity
+						.withEntityType(EntityType.CREEPER)
+						.withDistanceToPlayer(distance -> distance
+							.maxAbsolute(1D)
+						)
+					)
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement BARRELFUL_OF_GUNPOWDER = buildBase(GET_A_STACK_OF_GUNPOWDER, "barrelful_of_gunpowder").display(display().xy(-1F, 0.5F).challengeFrame().fancyDescriptionParent(NamedTextColor.DARK_PURPLE).icon(ItemUtil.texturedHead("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvODIyYTQ4YTU3NTllZGRlZjllMjkxOGZjODU5OTZmODQ5MWNjOTI1NzhkNTRkY2Q2MmUyYjZkOTEzYmZiNDIxZSJ9fX0=")))
+		.withReward(rewards().withExp(150))
+		.buildAndRegister();
+	public static final IAdvancement GET_A_CREEPER_HEAD = buildBase(GET_A_STACK_OF_GUNPOWDER, "get_a_creeper_head").display(display().xy(-1F, -0.5F).challengeFrame().fancyDescriptionParent(NamedTextColor.DARK_PURPLE).icon(Material.CREEPER_HEAD))
+		.withReward(rewards().withExp(250))
+		.requiredProgress(vanilla(inventoryChanged().withItems(ItemTriggerCondition.of(Material.CREEPER_HEAD))))
+		.buildAndRegister();
+	public static final IAdvancement KILL_A_MOB_WEARING_ITS_HEAD = buildBase(GET_A_CREEPER_HEAD, "kill_a_mob_wearing_its_head").display(display().x(-1F).challengeFrame().fancyDescriptionParent(NamedTextColor.DARK_PURPLE).icon(Material.WITHER_SKELETON_SKULL))
+		.withReward(rewards()
+			.withExp(100)
+			.addItems(() -> {
+				var item = ItemStack.of(Material.ENCHANTED_BOOK);
+				item.setData(DataComponentTypes.STORED_ENCHANTMENTS, ItemEnchantments.itemEnchantments().add(Enchantment.CHANNELING, 1).build());
+				return item;
+			})
+			.withTrophy(ItemStack.of(Material.LEATHER_LEGGINGS).withColor(TextColor.color(13665433)))
+		)
+		.buildAndRegister();
+	public static final IAdvancement KILL_A_MOB_THAT_IS_WEARING_ITS_HEAD = buildBase(KILL_A_MOB_WEARING_ITS_HEAD, "kill_a_mob_that_is_wearing_its_head").display(display().x(-1F).withAdvancementFrame(AdvancementFrame.STAR).fancyDescriptionParent(NamedTextColor.DARK_RED).torture().icon(Material.PLAYER_HEAD))
+		.withReward(rewards()
+			.withTrophy(ItemStack.of(Material.PLAYER_HEAD))
+		)
+		.buildAndRegister(KillAMobThatIsWearingItsHeadAdvancement::new);
+	public static final IAdvancement KILL_A_SLIME = buildBase(KILL_A_HOSTILE_MOB, "kill_a_slime").display(display().xy(0F, -7.5F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.SLIME_BALL))
+		.withReward(rewards().addItems(ItemStack.of(Material.SLIME_BALL, 3)))
+		.requiredProgress(vanilla(
+			playerKilledEntity()
+				.withEntity(entity -> entity.withEntityType(EntityType.SLIME))
+		))
+		.buildAndRegister();
+	public static final IAdvancement BOUNCE_FROM_A_SLIME_BLOCK = buildBase(KILL_A_SLIME, "bounce_from_a_slime_block").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.SLIME_BLOCK))
+		.requiredProgress(vanilla(
+			fallFromHeight()
+				.withDistance(distance -> distance.minY(29.9))
+				.withPlayer(player -> player
+					.withSteppingLocation(loc -> loc
+						.withBlock(block -> block.withBlocks(Material.SLIME_BLOCK))
+					)
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement GET_A_STACK_OF_SLIME_BALLS = buildBase(BOUNCE_FROM_A_SLIME_BLOCK, "get_a_stack_of_slime_balls").display(display().x(-1F).goalFrame().fancyDescriptionParent(NamedTextColor.AQUA).icon(Material.SLIME_SPAWN_EGG))
+		.withReward(rewards().withExp(50).addItems(ItemStack.of(Material.SLIME_BALL, 8)))
+		.requiredProgress(vanilla(inventoryChanged().withItems(ItemTriggerCondition.of(Material.SLIME_BALL).withAmount(Material.SLIME_BALL.getMaxStackSize()))))
+		.buildAndRegister();
+	public static final IAdvancement GET_A_STACK_OF_SLIME_BLOCKS = buildBase(GET_A_STACK_OF_SLIME_BALLS, "get_a_stack_of_slime_blocks").display(display().x(-1F).challengeFrame().fancyDescriptionParent(NamedTextColor.DARK_PURPLE).icon(ItemUtil.texturedHead(MoreMobHeads.SLIME)))
+		.withReward(rewards().withExp(200).addItems(ItemStack.of(Material.SLIME_BLOCK, 8)))
+		.requiredProgress(vanilla(inventoryChanged().withItems(ItemTriggerCondition.of(Material.SLIME_BLOCK).withAmount(Material.SLIME_BLOCK.getMaxStackSize()))))
+		.buildAndRegister();
+	public static final IAdvancement KILL_AN_ENDERMAN = buildBase(KILL_A_HOSTILE_MOB, "kill_an_enderman").display(display().xy(0F, -9F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.ENDER_PEARL))
+		.withReward(rewards().addItems(ItemStack.of(Material.ENDER_PEARL)))
+		.requiredProgress(vanilla(
+			playerKilledEntity()
+				.withEntity(entity -> entity.withEntityType(EntityType.ENDERMAN))
+		))
+		.buildAndRegister();
+	public static final IAdvancement KILL_AN_ENDERMITE = buildBase(KILL_AN_ENDERMAN, "kill_an_endermite").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.PURPLE_DYE))
+		.withReward(rewards().addItems(ItemStack.of(Material.ENDER_PEARL)))
+		.requiredProgress(vanilla(
+			playerKilledEntity()
+				.withEntity(entity -> entity.withEntityType(EntityType.ENDERMITE))
+		))
+		.buildAndRegister();
+	public static final IAdvancement KILL_10K_ENDERMITES = buildBase(KILL_AN_ENDERMITE, "kill_10k_endermites").display(display().xy(-1F, 0.5F).withAdvancementFrame(AdvancementFrame.STAR).fancyDescriptionParent(NamedTextColor.DARK_RED).torture().icon(Material.ENDER_PEARL))
+		.withReward(rewards()
+			.withTrophy(ItemStack.of(Material.ENDERMITE_SPAWN_EGG))
+		)
+		.requiredProgress(simple(10_000, 100))
+		.buildAndRegister();
+	public static final IAdvancement ENDER_PEARL_DAMAGE = buildBase(KILL_AN_ENDERMITE, "ender_pearl_damage").display(display().xy(-1F, -0.5F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.ENDER_PEARL))
+		.withReward(rewards().addItems(ItemStack.of(Material.ENDER_PEARL, 2)))
+		.requiredProgress(vanilla(
+			playerHurtEntity()
+				.withDamage(damage -> damage
+					.withDamageSource(source -> source
+						.withTag(DamageTypeTagKeys.IS_PROJECTILE, true)
+						.withDirectEntity(entity -> entity
+							.withEntityType(EntityType.ENDER_PEARL)
+						)
+					)
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement GET_A_STACK_OF_ENDER_PEARLS = buildBase(ENDER_PEARL_DAMAGE, "get_a_stack_of_ender_pearls").display(display().xy(-1F, 0.5F).goalFrame().fancyDescriptionParent(NamedTextColor.AQUA).icon(Material.ENDERMAN_SPAWN_EGG))
+		.withReward(rewards().withExp(50).addItems(ItemStack.of(Material.ENDER_PEARL, 4))
+			.addItems(() -> {
+				var item = ItemStack.of(Material.ENCHANTED_BOOK);
+				item.setData(DataComponentTypes.STORED_ENCHANTMENTS, ItemEnchantments.itemEnchantments().add(Enchantment.KNOCKBACK, 1).build());
+				return item;
+			}))
+		.requiredProgress(vanilla(inventoryChanged().withItems(ItemTriggerCondition.of(Material.ENDER_PEARL).withAmount(Material.ENDER_PEARL.getMaxStackSize()))))
+		.buildAndRegister();
+	public static final IAdvancement USE_100_STACKS_OF_ENDER_PEARLS = buildBase(GET_A_STACK_OF_ENDER_PEARLS, "use_100_stacks_of_ender_pearls").display(display().xy(-1F, 0.5F).withAdvancementFrame(AdvancementFrame.STAR).fancyDescriptionParent(NamedTextColor.DARK_RED).torture().icon(Material.ENDER_EYE))
+		.withReward(rewards()
+			.withTrophy(ItemStack.of(Material.ENDER_PEARL))
+		)
+		.requiredProgress(simple(100 * Material.ENDER_PEARL.getMaxStackSize()))
+		.buildAndRegister();
+	public static final IAdvancement KILL_AN_ENDERMAN_IN_EACH_DIMENSION = buildBase(GET_A_STACK_OF_ENDER_PEARLS, "kill_an_enderman_in_each_dimension").display(display().xy(-1F, -0.5F).goalFrame().fancyDescriptionParent(NamedTextColor.AQUA).icon(Material.ENDER_EYE))
+		.withReward(rewards().withExp(50).addItems(ItemStack.of(Material.ENDER_PEARL, 4)))
+		.requiredProgress(vanilla(
+			playerKilledEntity()
+				.withEntity(entity -> entity
+					.withEntityType(EntityType.ENDERMAN)
+					.withLocation(loc -> loc.withDimension(World.Environment.NORMAL))
+				),
+			playerKilledEntity()
+				.withEntity(entity -> entity
+					.withEntityType(EntityType.ENDERMAN)
+					.withLocation(loc -> loc.withDimension(World.Environment.NETHER))
+				),
+			playerKilledEntity()
+				.withEntity(entity -> entity
+					.withEntityType(EntityType.ENDERMAN)
+					.withLocation(loc -> loc.withDimension(World.Environment.THE_END))
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement KILL_AN_ENDERMAN_WITH_AN_ARROW = buildMulti(KILL_AN_ENDERMAN_IN_EACH_DIMENSION, "kill_an_enderman_with_an_arrow", USE_100_STACKS_OF_ENDER_PEARLS).display(display().xy(-1F, 0.5F).challengeFrame().fancyDescriptionParent(NamedTextColor.DARK_PURPLE).icon(Material.ARROW))
+		.withReward(rewards()
+			.withExp(100)
+			.addItems(ItemStack.of(Material.ENDER_PEARL, 6))
+			.withTrophy(ItemStack.of(Material.ARROW))
+		)
+		.requiredProgress(vanilla(
+			playerKilledEntity()
+				.withEntity(entity -> entity
+					.withEntityType(EntityType.ENDERMAN)
+				)
+				.withDamage(damage -> damage
+					.withTag(DamageTypeTagKeys.IS_PLAYER_ATTACK, true)
+					.withSourceEntity(entity -> entity
+						.withEquipment(equipment -> equipment
+							.withMainHand(Tag.ITEMS_ARROWS)
+						)
+					)
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement KILL_A_WITHER_WITH_AN_ARROW = buildBase(KILL_AN_ENDERMAN_WITH_AN_ARROW, "kill_a_wither_with_an_arrow").display(display().xy(-1F, 0.5F).withAdvancementFrame(AdvancementFrame.STAR).fancyDescriptionParent(NamedTextColor.DARK_RED).torture().icon(potionItem(Material.TIPPED_ARROW, PotionType.WEAKNESS)))
+		.withReward(rewards()
+			.withExp(70)
+			.withTrophy(ItemStack.of(Material.ARROW))
+		)
+		.requiredProgress(vanilla(
+			playerKilledEntity()
+				.withEntity(entity -> entity
+					.withEntityType(EntityType.WITHER)
+				)
+				.withDamage(damage -> damage
+					.withTag(DamageTypeTagKeys.IS_PLAYER_ATTACK, true)
+					.withSourceEntity(entity -> entity
+						.withEquipment(equipment -> equipment
+							.withMainHand(Tag.ITEMS_ARROWS)
+						)
+					)
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement KILL_ENDERMEN_WITH_THEIR_ITEMS = buildBase(KILL_AN_ENDERMAN_WITH_AN_ARROW, "kill_endermen_with_their_items").display(display().xy(-1F, -0.5F).challengeFrame().fancyDescriptionParent(NamedTextColor.DARK_PURPLE).icon(Material.RED_SAND))
+		.withReward(rewards()
+			.withExp(200)
+			.withTrophy(ItemStack.of(Material.ORANGE_WOOL))
+		)
+		.buildAndRegister(KillEndermenWithTheirItemsAdvancement::new);
+	public static final IAdvancement KILL_A_WITCH = buildBase(KILL_A_HOSTILE_MOB, "kill_a_witch").display(display().xy(0F, 6.5F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.SUGAR))
+		.requiredProgress(vanilla(
+			playerKilledEntity()
+				.withEntity(entity -> entity.withEntityType(EntityType.WITCH))
+		))
+		.buildAndRegister();
+	public static final IAdvancement MIRACLE_DRINK = buildBase(KILL_A_WITCH, "miracle_drink").display(display().x(-1F).goalFrame().fancyDescriptionParent(NamedTextColor.AQUA).icon(Material.HONEY_BOTTLE))
+		.withReward(rewards().withExp(50))
+		.buildAndRegister();
+	public static final IAdvancement KILL_A_WITCH_WITH_A_SPLASH_POTION = buildBase(MIRACLE_DRINK, "kill_a_witch_with_a_splash_potion").display(display().x(-1F).challengeFrame().fancyDescriptionParent(NamedTextColor.DARK_PURPLE).icon(potionItem(Material.SPLASH_POTION, PotionType.POISON)))
+		.withReward(rewards().withExp(50))
+		.requiredProgress(vanilla(
+			playerKilledEntity()
+				.withEntity(entity -> entity.withEntityType(EntityType.WITCH))
+				.withDamage(damage -> damage
+					.withDirectEntity(entity -> entity
+						.withEntityType(EntityType.SPLASH_POTION)
+					)
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement THE_INQUISITION = buildBase(KILL_A_WITCH_WITH_A_SPLASH_POTION, "the_inquisition").display(display().xy(-1F, 0.5F).withAdvancementFrame(AdvancementFrame.STAR).fancyDescriptionParent(NamedTextColor.DARK_PURPLE).torture().icon(() -> {
+			var item = ItemStack.of(Material.CAMPFIRE);
+			item.setBlockData(Material.CAMPFIRE.createBlockData(data -> ((Campfire) data).setLit(true)));
+			return item;
+		}))
+		.withReward(rewards().withExp(60).addItems(() -> {
+			var item = ItemStack.of(Material.CAMPFIRE);
+			item.setBlockData(Material.CAMPFIRE.createBlockData(data -> ((Campfire) data).setLit(true)));
+			return item;
+		}))
+		.requiredProgress(vanilla(
+			playerKilledEntity()
+				.withEntity(entity -> entity.withEntityType(EntityType.WITCH))
+				.withDamage(damage -> damage
+					.withTag(UtilizerTags.IS_CAMPFIRE, true)
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement KILL_500_WITCHES_WITH_LINGERING_POTIONS = buildBase(KILL_A_WITCH_WITH_A_SPLASH_POTION, "kill_500_witches_with_lingering_potions").display(display().xy(-1F, -0.5F).withAdvancementFrame(AdvancementFrame.STAR).fancyDescriptionParent(NamedTextColor.DARK_RED).torture().icon(Material.LINGERING_POTION))
+		.withReward(rewards()
+			.withTrophy(ItemStack.of(Material.TRIPWIRE_HOOK))
+		)
+		.requiredProgress(simple(500))
+		.buildAndRegister();
+	public static final IAdvancement KILL_A_SILVERFISH = buildBase(KILL_A_HOSTILE_MOB, "kill_a_silverfish").display(display().xy(0F, 8F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.CRACKED_STONE_BRICKS))
+		.requiredProgress(vanilla(
+			playerKilledEntity()
+				.withEntity(entity -> entity.withEntityType(EntityType.SILVERFISH))
+		))
+		.buildAndRegister();
+	public static final IAdvancement KILL_10K_SILVERFISHES = buildBase(KILL_A_SILVERFISH, "kill_10k_silverfishes").display(display().x(-1F).withAdvancementFrame(AdvancementFrame.BUTTERFLY).fancyDescriptionParent(NamedTextColor.DARK_RED).torture().icon(Material.COBBLESTONE))
+		.requiredProgress(simple(10_000, 100))
+		.buildAndRegister();
+	public static final IAdvancement STAND_ON_ALL_NATURAL_SPAWNERS = buildBase(KILL_10K_SILVERFISHES, "stand_on_all_natural_spawners").display(display().x(-1F).challengeFrame().fancyDescriptionParent(NamedTextColor.DARK_PURPLE).icon(Material.SPAWNER))
+		.withReward(rewards().withExp(110))
+		.requiredProgress(requirements(UtilizerTags.NATURAL_SPAWNERS.getValues().stream().map(entityType -> List.of(entityType.key().value())).toList()))
+		.buildAndRegister();
+	public static final IAdvancement STAND_ON_A_MANSION_SPIDER_SPAWNER = buildBase(STAND_ON_ALL_NATURAL_SPAWNERS, "stand_on_a_mansion_spider_spawner").display(display().x(-1F).withAdvancementFrame(AdvancementFrame.STAR).fancyDescriptionParent(PURPLE).superChallenge().icon(ItemUtil.glint(Material.SPAWNER)))
+		.withReward(rewards().withExp(600))
+		.buildAndRegister();
+	public static final IAdvancement GET_KILLED_BY_A_WARDEN = buildBase(KILL_A_HOSTILE_MOB, "get_killed_by_a_warden").display(display().xy(0F, 9.5F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.SCULK_CATALYST))
+		.requiredProgress(vanilla(
+			entityKilledPlayer()
+				.withEntity(entity -> entity.withEntityType(EntityType.WARDEN))
+		))
+		.buildAndRegister();
+	public static final IAdvancement LOOK_AT_A_WARDEN_WITH_A_SPYGLASS = buildBase(GET_KILLED_BY_A_WARDEN, "look_at_a_warden_with_a_spyglass").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.SPYGLASS))
+		.requiredProgress(vanilla(
+			usingItem()
+				.withItem(ItemTriggerCondition.of(Material.SPYGLASS))
+				.withPlayer(player -> player
+					.withLookingAt(entity -> entity.withEntityType(EntityType.WARDEN))
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement KILL_A_WARDEN = buildBase(LOOK_AT_A_WARDEN_WITH_A_SPYGLASS, "kill_a_warden").display(display().x(-1F).goalFrame().fancyDescriptionParent(NamedTextColor.AQUA).icon(Material.SCULK_SENSOR))
+		.withReward(rewards()
+			.withExp(50)
+			.withTrophy(ItemUtil.texturedHead("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNmNmMzY3NGIyZGRjMGVmN2MzOWUzYjljNmI1ODY3N2RlNWNmMzc3ZDJlYjA3M2YyZjNmZTUwOTE5YjFjYTRjOSJ9fX0="))
+		)
+		.requiredProgress(vanilla(
+			playerKilledEntity()
+				.withEntity(entity -> entity.withEntityType(EntityType.WARDEN))
+		))
+		.buildAndRegister();
+	public static final IAdvancement GET_A_WARDEN_TO_THE_HEIGHT_LIMIT = buildBase(KILL_A_WARDEN, "get_a_warden_to_the_height_limit").display(display().xy(-1F, 0.5F).challengeFrame().fancyDescriptionParent(NamedTextColor.DARK_PURPLE).icon(Material.BLACK_CONCRETE_POWDER))
+		.withReward(rewards()
+			.withExp(100)
+			.addItems(ItemStack.of(Material.SCULK_CATALYST, 4))
+			.withTrophy(ItemStack.of(Material.WARPED_SIGN))
+		)
+		.buildAndRegister();
+	public static final IAdvancement BE_NEAR_FIVE_WARDENS = buildBase(GET_A_WARDEN_TO_THE_HEIGHT_LIMIT, "be_near_five_wardens").display(display().x(-1F).challengeFrame().fancyDescriptionParent(NamedTextColor.DARK_PURPLE).icon(Material.SCULK_SHRIEKER))
+		.withReward(rewards().withExp(200).addItems(ItemStack.of(Material.SCULK_SHRIEKER, 5)))
+		.buildAndRegister();
+	public static final IAdvancement BE_NEAR_20_RAVAGERS = buildBase(BE_NEAR_FIVE_WARDENS, "be_near_20_ravagers").display(display().x(-1F).challengeFrame().fancyDescriptionParent(NamedTextColor.DARK_PURPLE).icon(ItemUtil.glint(Material.COMPOSTER)))
+		.withReward(rewards()
+			.withExp(180)
+			.withTrophy(() -> {
+				ItemStack item = ItemUtil.texturedHead("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvODQ0YWU5MmJiNDM0N2RlOWVhNWI2MzAwOGM0NDZiMzQwOWEwMjVkODU0N2M4OWFlOThiZTVjYWU4ZDAxMjFjNyJ9fX0=");
+				item.setData(DataComponentTypes.DAMAGE_RESISTANT, DamageResistant.damageResistant(DamageTypeTagKeys.IS_FIRE));
+				return item;
+			})
+		)
+		.buildAndRegister();
+	public static final IAdvancement KILL_A_WARDEN_IN_A_SNOW_BIOME = buildBase(KILL_A_WARDEN, "kill_a_warden_in_a_snow_biome").display(display().xy(-1F, -0.5F).challengeFrame().fancyDescriptionParent(NamedTextColor.DARK_PURPLE).icon(Material.CYAN_STAINED_GLASS))
+		.withReward(rewards().withExp(100))
+		.requiredProgress(vanilla(
+			playerKilledEntity()
+				.withEntity(entity -> entity
+					.withEntityType(EntityType.WARDEN)
+					.withLocation(loc -> loc
+						.withBiome(List.of(Biome.SNOWY_PLAINS, Biome.ICE_SPIKES))
+					)
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement TAKE_A_HIT_FROM_A_WARDEN_WITH_PROTECTION = buildBase(KILL_A_WARDEN_IN_A_SNOW_BIOME, "take_a_hit_from_a_warden_with_protection").display(display().x(-1F).challengeFrame().fancyDescriptionParent(NamedTextColor.DARK_PURPLE).icon(ItemUtil.glint(Material.NETHERITE_CHESTPLATE)))
+		.withReward(rewards()
+			.withExp(200)
+			.addItems(ItemStack.of(Material.NETHERITE_INGOT))
+			.withTrophy(ItemStack.of(Material.POLISHED_DEEPSLATE_SLAB))
+		)
+		.requiredProgress(vanilla(
+			entityHurtPlayer()
+				.withDamage(damage -> damage
+					.notBlocked()
+					.withSourceEntity(entity -> entity.withEntityType(EntityType.WARDEN))
+				)
+				.withPlayer(player -> player
+					.withEffects(effects -> effects.with(PotionEffectType.RESISTANCE, e -> e.withAmplifier(3, null)))
+					.withEquipment(equipment -> equipment
+						.withHelmet(ItemTriggerCondition.of(Material.NETHERITE_HELMET)
+							.withRawComponents("""
+								{
+									"predicates": {
+										"enchantments": [
+											{
+												"enchantments": "%s",
+												"levels": {
+													"min": 4
+												}
+											}
+										]
+									}
+								}
+								""".formatted(Enchantment.PROTECTION.key()))
+						)
+						.withChestplate(ItemTriggerCondition.of(Material.NETHERITE_CHESTPLATE)
+							.withRawComponents("""
+								{
+									"predicates": {
+										"enchantments": [
+											{
+												"enchantments": "%s",
+												"levels": {
+													"min": 4
+												}
+											}
+										]
+									}
+								}
+								""".formatted(Enchantment.PROTECTION.key()))
+						)
+						.withLeggings(ItemTriggerCondition.of(Material.NETHERITE_LEGGINGS)
+							.withRawComponents("""
+								{
+									"predicates": {
+										"enchantments": [
+											{
+												"enchantments": "%s",
+												"levels": {
+													"min": 4
+												}
+											}
+										]
+									}
+								}
+								""".formatted(Enchantment.PROTECTION.key()))
+						)
+						.withBoots(ItemTriggerCondition.of(Material.NETHERITE_BOOTS)
+							.withRawComponents("""
+								{
+									"predicates": {
+										"enchantments": [
+											{
+												"enchantments": "%s",
+												"levels": {
+													"min": 4
+												}
+											}
+										]
+									}
+								}
+								""".formatted(Enchantment.PROTECTION.key()))
+						)
+					)
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement HUG_A_WARDEN_FOR_A_MINUTE = buildBase(TAKE_A_HIT_FROM_A_WARDEN_WITH_PROTECTION, "hug_a_warden_for_a_minute").display(display().x(-1F).challengeFrame().fancyDescriptionParent(NamedTextColor.DARK_PURPLE).icon(ItemUtil.texturedHead("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTVmZWJhMzc1MGNhZjNkODFiNjQ1ZjdhMzhlYWRkYTk2NjUzZDdiM2NhMjg0MzliNDUxNTE0ZTRmYWFmNDg2NCJ9fX0=")))
+		.withReward(rewards()
+			.withExp(120)
+			.withTrophy(ItemUtil.texturedHead("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOGEwMzZjZTkzN2ZhYWNiMTcyMGQ4MTgxMGQwMGNhMmI4ZjMzMTc5MDk2N2YzMzQxMTRmMDFiZDQ1YTlkOTQzYiJ9fX0="))
+		)
+		.buildAndRegister();
 
 	public static final AdvancementTab STATISTICS_TAB = buildTab("statistics", MANAGER).inverseY().backgroundPathTexture("block/loom_side").build();
 	public static final IRootAdvancement STATISTICS_ROOT = buildRoot(STATISTICS_TAB).display(display().xy(0F, 0F).withAdvancementFrame(AdvancementFrame.SQUIRCLE).fancyDescriptionParent(GRAY).icon(Material.WRITABLE_BOOK))
@@ -1137,15 +2349,24 @@ public class TrappedNewbieAdvancements {
 		.buildAndRegister();
 	// Down
 	public static final IAdvancement GAME_LEAVES_1 = buildBase(STATISTICS_DOWN_LINKER, "game_leaves_1").display(display().xy(0.5F, -1.25F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.OAK_LEAVES)).buildAndRegister();
-	public static final IAdvancement GAME_LEAVES_10 = buildBase(STATISTICS_DOWN_LINKER, "game_leaves_10").display(display().xy(0.5F, -2.25F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().icon(Material.SPRUCE_LEAVES)).buildAndRegister();
+	public static final IAdvancement GAME_LEAVES_10 = buildBase(STATISTICS_DOWN_LINKER, "game_leaves_10").display(display().xy(0.5F, -2.25F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().icon(Material.SPRUCE_LEAVES))
+		.requiredProgress(simple(10))
+		.buildAndRegister();
 	public static final IAdvancement GAME_LEAVES_100 = buildBase(STATISTICS_DOWN_LINKER, "game_leaves_100").display(display().xy(0.5F, -3.25F).fancyDescriptionParent(NamedTextColor.DARK_PURPLE).challengeFrame().icon(Material.DARK_OAK_LEAVES))
 		.withReward(rewards()
 			.withTrophy(ItemStack.of(Material.OAK_LEAVES))
 		)
+		.requiredProgress(simple(100))
 		.buildAndRegister();
-	public static final IAdvancement GAME_LEAVES_1K = buildBase(STATISTICS_DOWN_LINKER, "game_leaves_1k").display(display().xy(0.5F, -4.25F).fancyDescriptionParent(NamedTextColor.DARK_RED).challengeFrame().torture().icon(Material.JUNGLE_LEAVES)).buildAndRegister();
-	public static final IAdvancement GAME_LEAVES_5K = buildBase(STATISTICS_DOWN_LINKER, "game_leaves_5k").display(display().xy(0.5F, -5.25F).fancyDescriptionParent(PURPLE).challengeFrame().superTorture().icon(Material.ACACIA_LEAVES)).buildAndRegister();
-	public static final IAdvancement GAME_LEAVES_10K = buildBase(STATISTICS_DOWN_LINKER, "game_leaves_10k").display(display().xy(0.5F, -6.25F).fancyDescriptionParent(NamedTextColor.BLACK).withAdvancementFrame(AdvancementFrame.BUTTERFLY).cheat().icon(Material.BIRCH_LEAVES)).buildAndRegister();
+	public static final IAdvancement GAME_LEAVES_1K = buildBase(STATISTICS_DOWN_LINKER, "game_leaves_1k").display(display().xy(0.5F, -4.25F).fancyDescriptionParent(NamedTextColor.DARK_RED).challengeFrame().torture().icon(Material.JUNGLE_LEAVES))
+		.requiredProgress(simple(1000, 100))
+		.buildAndRegister();
+	public static final IAdvancement GAME_LEAVES_5K = buildBase(STATISTICS_DOWN_LINKER, "game_leaves_5k").display(display().xy(0.5F, -5.25F).fancyDescriptionParent(PURPLE).challengeFrame().superTorture().icon(Material.ACACIA_LEAVES))
+		.requiredProgress(simple(5000, 100))
+		.buildAndRegister();
+	public static final IAdvancement GAME_LEAVES_10K = buildBase(STATISTICS_DOWN_LINKER, "game_leaves_10k").display(display().xy(0.5F, -6.25F).fancyDescriptionParent(NamedTextColor.BLACK).withAdvancementFrame(AdvancementFrame.BUTTERFLY).cheat().icon(Material.BIRCH_LEAVES))
+		.requiredProgress(simple(10_000, 100))
+		.buildAndRegister();
 	// Right top
 	public static final IAdvancement BELL_100 = buildBase(STATISTICS_RIGHT_LINKER, "bell_100").display(display().x(1).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.STICK)).buildAndRegister();
 	public static final IAdvancement BELL_1K = buildBase(BELL_100, "bell_1k").display(display().x(1).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().icon(Material.MUSIC_DISC_13)).buildAndRegister();
@@ -1276,42 +2497,52 @@ public class TrappedNewbieAdvancements {
 	public static final IAdvancement EAT_50K = buildBase(EAT_25K, "eat_50k").display(display().x(1F).fancyDescriptionParent(NamedTextColor.BLACK).withAdvancementFrame(AdvancementFrame.BUTTERFLY).cheat().icon(Material.CAKE)).requiredProgress(simple(50000, 1)).buildAndRegister();
 	public static final IAdvancement TOTEM_5 = buildBase(STATISTICS_RIGHT_LINKER, "totem_5").display(display().xy(1F, 6F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.GOLD_NUGGET))
 		.withReward(rewards().withExp(15).addItems(ItemStack.of(Material.EMERALD, 4)))
+		.requiredProgress(simple(5))
 		.buildAndRegister();
 	public static final IAdvancement TOTEM_10 = buildBase(TOTEM_5, "totem_10").display(display().x(1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.TOTEM_OF_UNDYING))
 		.withReward(rewards().withExp(25).addItems(ItemStack.of(Material.TOTEM_OF_UNDYING)))
+		.requiredProgress(simple(10))
 		.buildAndRegister();
 	public static final IAdvancement TOTEM_25 = buildBase(TOTEM_10, "totem_25").display(display().x(1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().icon(Material.RAW_GOLD))
 		.withReward(rewards().withExp(50))
+		.requiredProgress(simple(25))
 		.buildAndRegister();
 	public static final IAdvancement TOTEM_50 = buildBase(TOTEM_25, "totem_50").display(display().x(1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().icon(Material.PLAYER_HEAD))
 		.withReward(rewards().withExp(75))
+		.requiredProgress(simple(50))
 		.buildAndRegister();
 	public static final IAdvancement TOTEM_100 = buildBase(TOTEM_50, "totem_100").display(display().x(1F).fancyDescriptionParent(NamedTextColor.DARK_PURPLE).challengeFrame().icon(Material.ZOMBIE_HEAD))
 		.withReward(rewards()
 			.withExp(100)
 			.withTrophy(ItemStack.of(Material.TOTEM_OF_UNDYING))
 		)
+		.requiredProgress(simple(100))
 		.buildAndRegister();
 	public static final IAdvancement TOTEM_250 = buildBase(TOTEM_100, "totem_250").display(display().x(1F).fancyDescriptionParent(NamedTextColor.DARK_PURPLE).challengeFrame().icon(Material.SKELETON_SKULL))
 		.withReward(rewards().withExp(150))
+		.requiredProgress(simple(250, 25))
 		.buildAndRegister();
 	public static final IAdvancement TOTEM_500 = buildBase(TOTEM_250, "totem_500").display(display().x(1F).fancyDescriptionParent(NamedTextColor.LIGHT_PURPLE).challengeFrame().superChallenge().icon(Material.WITHER_SKELETON_SKULL))
-			.withReward(rewards().withExp(250))
-			.buildAndRegister();
+		.withReward(rewards().withExp(250))
+		.requiredProgress(simple(500, 50))
+		.buildAndRegister();
 	public static final IAdvancement TOTEM_1000 = buildBase(TOTEM_500, "totem_1000").display(display().x(1F).fancyDescriptionParent(NamedTextColor.DARK_RED).challengeFrame().torture().icon(Material.EVOKER_SPAWN_EGG))
 		.withReward(rewards()
 			.withExp(350)
 			.withTrophy(ItemStack.of(Material.TOTEM_OF_UNDYING))
 		)
+		.requiredProgress(simple(1000, 10))
 		.buildAndRegister();
 	public static final IAdvancement TOTEM_2500 = buildBase(TOTEM_1000, "totem_2500").display(display().x(1F).fancyDescriptionParent(PURPLE).challengeFrame().superTorture().icon(Material.END_CRYSTAL))
 		.withReward(rewards()
 			.withExp(500)
 			.withTrophy(ItemUtil.texturedHead("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZDI2ODg1N2JmYzJmMWI5YjA2MzZlMTVlNGYwN2Q3MWM5YmIyNjhjYjc5YzNkNDdmNTU3OTk2MzBkNmFiMDgzMCJ9fX0=")) // todo textured heads
 		)
+		.requiredProgress(simple(2500, 5))
 		.buildAndRegister();
 	public static final IAdvancement TOTEM_5000 = buildBase(TOTEM_2500, "totem_5000").display(display().x(1F).fancyDescriptionParent(NamedTextColor.BLACK).withAdvancementFrame(AdvancementFrame.BUTTERFLY).cheat().icon(ItemUtil.glint(Material.TOTEM_OF_UNDYING)))
 		.withReward(rewards().withExp(1000))
+		.requiredProgress(simple(5000, 5))
 		.buildAndRegister();
 	public static final IAdvancement RAID_5 = buildBase(STATISTICS_RIGHT_LINKER, "raid_5").display(display().xy(1F, 7F).fancyDescriptionParent(NamedTextColor.GREEN).challengeFrame().icon(Material.CROSSBOW))
 		.withReward(rewards().withExp(50).addItems(ItemStack.of(Material.EMERALD, 4)))
@@ -1449,63 +2680,77 @@ public class TrappedNewbieAdvancements {
 	public static final IAdvancement LOOT_10K = buildBase(LOOT_5K, "loot_10k").display(display().x(1F).fancyDescriptionParent(NamedTextColor.BLACK).withAdvancementFrame(AdvancementFrame.BUTTERFLY).cheat().icon(Material.FLINT_AND_STEEL)).requiredProgress(simple(10000, 1)).buildAndRegister();
 	public static final IAdvancement OPEN_CHEST_100 = buildBase(STATISTICS_RIGHT_LINKER, "open_chest_100").display(display().xy(1F, -5F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.CHEST))
 		.withReward(rewards().withExp(15))
+		.requiredProgress(simple(100))
 		.buildAndRegister();
 	public static final IAdvancement OPEN_CHEST_1K = buildBase(OPEN_CHEST_100, "open_chest_1k").display(display().x(1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().icon(Material.CHEST_MINECART))
 		.withReward(rewards().withExp(30))
+		.requiredProgress(simple(1000, 100))
 		.buildAndRegister();
 	public static final IAdvancement OPEN_CHEST_10K = buildBase(OPEN_CHEST_1K, "open_chest_10k").display(display().x(1F).fancyDescriptionParent(NamedTextColor.DARK_PURPLE).challengeFrame().icon(CHEST_HEAD))
 		.withReward(rewards()
 			.withExp(80)
 			.withTrophy(ItemStack.of(Material.CHEST))
 		)
+		.requiredProgress(simple(10_000, 100))
 		.buildAndRegister();
 	public static final IAdvancement OPEN_CHEST_25K = buildBase(OPEN_CHEST_10K, "open_chest_25k").display(display().x(1F).fancyDescriptionParent(NamedTextColor.LIGHT_PURPLE).withAdvancementFrame(AdvancementFrame.BUTTERFLY).icon(CHRISTMAS_CHEST_HEAD))
 		.withReward(rewards()
 			.withExp(150)
 			.withTrophy(ItemUtil.texturedHead("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYzZkZjQ3YzMwYjFlM2RiNTJlNDFmNWVlYjgwNmM2OWZlZjgwNTk1NTBlOGY1N2IwYTgzYjIyNjBhNjZkOTI3ZSJ9fX0=")) // todo textured heads
 		)
+		.requiredProgress(simple(25_000, 25))
 		.buildAndRegister();
 	public static final IAdvancement OPEN_SHULKER_100 = buildBase(OPEN_CHEST_25K, "open_shulker_100").display(display().x(1.5F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.WHITE_SHULKER_BOX))
 		.withReward(rewards().withExp(25))
+		.requiredProgress(simple(100))
 		.buildAndRegister();
 	public static final IAdvancement OPEN_SHULKER_1K = buildBase(OPEN_SHULKER_100, "open_shulker_1k").display(display().x(1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().icon(Material.LIGHT_GRAY_SHULKER_BOX))
 		.withReward(rewards().withExp(30))
+		.requiredProgress(simple(1000, 100))
 		.buildAndRegister();
 	public static final IAdvancement OPEN_SHULKER_10K = buildBase(OPEN_SHULKER_1K, "open_shulker_10k").display(display().x(1F).fancyDescriptionParent(NamedTextColor.DARK_PURPLE).challengeFrame().icon(Material.GRAY_SHULKER_BOX))
 		.withReward(rewards()
 			.withExp(100)
 			.withTrophy(ItemStack.of(Material.PINK_SHULKER_BOX))
 		)
+		.requiredProgress(simple(10_000, 100))
 		.buildAndRegister();
 	public static final IAdvancement OPEN_SHULKER_100K = buildBase(OPEN_SHULKER_10K, "open_shulker_100k").display(display().x(1F).fancyDescriptionParent(NamedTextColor.LIGHT_PURPLE).withAdvancementFrame(AdvancementFrame.BUTTERFLY).icon(Material.BLACK_SHULKER_BOX))
 		.withReward(rewards()
 			.withExp(300)
 			.withTrophy(ItemUtil.texturedHead("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZjA4OGNjODJhNTk3NGYxMWYxYjg4ZGRjMTE0YjI2MjE2MWE0ZmJjMDkwZDIxMzQ0OTAzNTlhMjFlNDEyYSJ9fX0=")) // todo textured heads
 		)
+		.requiredProgress(simple(100_000, 100))
 		.buildAndRegister();
 	public static final IAdvancement OPEN_CRAFTING_TABLE_15 = buildBase(STATISTICS_RIGHT_LINKER, "open_crafting_table_15").display(display().xy(1F, -6F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.OAK_LOG))
 		.withReward(rewards().withExp(5))
+		.requiredProgress(simple(15))
 		.buildAndRegister();
 	public static final IAdvancement OPEN_CRAFTING_TABLE_100 = buildBase(OPEN_CRAFTING_TABLE_15, "open_crafting_table_100").display(display().x(1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().icon(Material.OAK_PLANKS))
 		.withReward(rewards().withExp(15))
+		.requiredProgress(simple(100))
 		.buildAndRegister();
 	public static final IAdvancement OPEN_CRAFTING_TABLE_500 = buildBase(OPEN_CRAFTING_TABLE_100, "open_crafting_table_500").display(display().x(1F).fancyDescriptionParent(NamedTextColor.DARK_PURPLE).challengeFrame().icon(ItemUtil.glint(Material.CRAFTING_TABLE)))
 		.withReward(rewards()
 			.withExp(50)
 			.withTrophy(ItemStack.of(Material.CRAFTING_TABLE))
 		)
+		.requiredProgress(simple(500, 100))
 		.buildAndRegister();
 	public static final IAdvancement OPEN_CRAFTING_TABLE_2500 = buildBase(OPEN_CRAFTING_TABLE_500, "open_crafting_table_2500").display(display().x(1F).fancyDescriptionParent(NamedTextColor.LIGHT_PURPLE).withAdvancementFrame(AdvancementFrame.BUTTERFLY).icon(CRAFTING_TABLE_HEAD))
 		.withReward(rewards()
 			.withExp(130)
 			.withTrophy(ItemUtil.texturedHead("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYmYyNTc3MjY5MzdiYTE4MTQwOTYyMDllYjdiNTE2OGM2NjU1MmQyNWU0MWIxZTUxNGFhNmQzMWM0ZDNhYTZkYyJ9fX0="))
 		)
+		.requiredProgress(simple(2500, 25))
 		.buildAndRegister();
 	public static final IAdvancement BREAK_100_IRON = buildBase(STATISTICS_RIGHT_LINKER, "break_100_iron").display(display().xy(1F, -7F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.IRON_PICKAXE))
 		.withReward(rewards().withExp(20).addItems(ItemStack.of(Material.COBBLESTONE, 16)))
+		.requiredProgress(simple(100))
 		.buildAndRegister();
 	public static final IAdvancement BREAK_2500_DIAMOND = buildBase(BREAK_100_IRON, "break_2500_diamond").display(display().x(1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().icon(Material.DIAMOND_PICKAXE))
 		.withReward(rewards().withExp(35).addItems(ItemStack.of(Material.IRON_INGOT, 16)))
+		.requiredProgress(simple(2500, 25))
 		.buildAndRegister();
 	public static final IAdvancement BREAK_10K_NETHERITE = buildBase(BREAK_2500_DIAMOND, "break_10k_netherite").display(display().x(1F).fancyDescriptionParent(NamedTextColor.DARK_PURPLE).challengeFrame().icon(Material.NETHERITE_PICKAXE))
 		.withReward(rewards()
@@ -1513,6 +2758,7 @@ public class TrappedNewbieAdvancements {
 			.addItems(ItemStack.of(Material.DIAMOND, 5))
 			.withTrophy(ItemStack.of(Material.DIAMOND_ORE))
 		)
+		.requiredProgress(simple(10_000, 100))
 		.buildAndRegister();
 	public static final IAdvancement BREAK_100K_NETHERITE = buildBase(BREAK_10K_NETHERITE, "break_100k_netherite").display(display().x(1F).fancyDescriptionParent(NamedTextColor.LIGHT_PURPLE).withAdvancementFrame(AdvancementFrame.BUTTERFLY).icon(ItemUtil.glint(Material.NETHERITE_PICKAXE)))
 		.withReward(rewards()
@@ -1524,6 +2770,7 @@ public class TrappedNewbieAdvancements {
 				return item;
 			})
 		)
+		.requiredProgress(simple(100_000, 100))
 		.buildAndRegister();
 	public static final IAdvancement SURVIVE_1H = buildBase(STATISTICS_RIGHT_LINKER, "survive_1h").display(display().xy(1F, -8F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.CLOCK))
 		.withReward(rewards().withExp(30))
@@ -1544,9 +2791,15 @@ public class TrappedNewbieAdvancements {
 		)
 		.buildAndRegister();
 	public static final IAdvancement DEATHS_1 = buildBase(SURVIVE_200H, "deaths_1").display(display().x(1.5F).fancyDescriptionParent(NamedTextColor.DARK_RED).icon(RequiemItems.HEART)).buildAndRegister();
-	public static final IAdvancement DEATHS_50 = buildBase(DEATHS_1, "deaths_50").display(display().x(1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().icon(Material.BONE)).buildAndRegister();
-	public static final IAdvancement DEATHS_250 = buildBase(DEATHS_50, "deaths_250").display(display().x(1F).fancyDescriptionParent(NamedTextColor.DARK_PURPLE).challengeFrame().icon(RequiemItems.SPINE)).buildAndRegister();
-	public static final IAdvancement DEATHS_1000 = buildBase(DEATHS_250, "deaths_1000").display(display().x(1F).fancyDescriptionParent(NamedTextColor.LIGHT_PURPLE).withAdvancementFrame(AdvancementFrame.BUTTERFLY).icon(Material.SKELETON_SKULL)).buildAndRegister();
+	public static final IAdvancement DEATHS_50 = buildBase(DEATHS_1, "deaths_50").display(display().x(1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().icon(Material.BONE))
+		.requiredProgress(simple(50))
+		.buildAndRegister();
+	public static final IAdvancement DEATHS_250 = buildBase(DEATHS_50, "deaths_250").display(display().x(1F).fancyDescriptionParent(NamedTextColor.DARK_PURPLE).challengeFrame().icon(RequiemItems.SPINE))
+		.requiredProgress(simple(250, 25))
+		.buildAndRegister();
+	public static final IAdvancement DEATHS_1000 = buildBase(DEATHS_250, "deaths_1000").display(display().x(1F).fancyDescriptionParent(NamedTextColor.LIGHT_PURPLE).withAdvancementFrame(AdvancementFrame.BUTTERFLY).icon(Material.SKELETON_SKULL))
+		.requiredProgress(simple(1000, 100))
+		.buildAndRegister();
 //	public static final IAdvancement HORSE_SPEED_1 = buildBase(STATISTICS_RIGHT_LINKER, "horse_speed_1").display(display().xy(1F, -9F).fancyDescriptionParent(NamedTextColor.GREEN).icon(ItemStack.of(Material.LEATHER_HORSE_ARMOR).withColor(TextColor.color(16707753))))
 //		.withReward(rewards().withExp(10))
 //		.buildAndRegister();

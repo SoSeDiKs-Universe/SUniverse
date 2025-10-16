@@ -98,6 +98,7 @@ public class SugarEater {
 
 		DelightfulFarming.scheduler().sync(task -> {
 			if (!this.player.isOnline()) return true;
+			if (!isActive()) return false;
 
 			this.timer = (int) this.player.getWorld().getTime();
 			if (!this.mealTime.is(this.timer)) {
@@ -236,7 +237,7 @@ public class SugarEater {
 		this.dynamicMealCalories = 0;
 		this.dynamicDailyCumulativeCalories = 0;
 		this.dailyTotalStaticCalories = 0;
-		player.sendMessage("Daily calories reset (fat: +%s ; muscles: +%s)".formatted(fatBonus, musclesBonus)); // todo debug remove
+		this.player.sendMessage("Daily calories reset (fat: +%s ; muscles: +%s)".formatted(fatBonus, musclesBonus)); // todo debug remove
 	}
 
 	public int getHungerPoints() {

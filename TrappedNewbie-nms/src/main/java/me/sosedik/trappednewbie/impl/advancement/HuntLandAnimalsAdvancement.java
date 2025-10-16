@@ -6,6 +6,7 @@ import me.sosedik.packetadvancements.api.progression.RequiredAdvancementProgress
 import me.sosedik.packetadvancements.imlp.advancement.base.BaseAdvancement;
 import me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData;
 import me.sosedik.utilizer.dataset.UtilizerTags;
+import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.entity.EntityType;
 import org.jspecify.annotations.NullMarked;
@@ -39,7 +40,7 @@ public class HuntLandAnimalsAdvancement extends BaseAdvancement {
 					.withTag(DamageTypeTagKeys.IS_PROJECTILE, true)
 					.withDirectEntity(direct -> direct
 						.withEntityType(Tag.ENTITY_TYPES_ARROWS)
-						.withNbt("{weapon:{id:\"minecraft:bow\"}}")
+						.withNbt("{weapon:{id:\"%s\"}}".formatted(Material.BOW.getKey()))
 					)
 				);
 	}

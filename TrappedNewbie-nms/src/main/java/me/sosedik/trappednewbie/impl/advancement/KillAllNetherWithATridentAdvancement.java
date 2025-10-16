@@ -4,6 +4,8 @@ import io.papermc.paper.registry.keys.tags.DamageTypeTagKeys;
 import me.sosedik.packetadvancements.api.advancement.base.BaseAdvancementBuilder;
 import me.sosedik.packetadvancements.api.progression.RequiredAdvancementProgress;
 import me.sosedik.packetadvancements.imlp.advancement.base.BaseAdvancement;
+import me.sosedik.packetadvancements.imlp.progress.vanilla.conditions.EntityTriggerCondition;
+import me.sosedik.packetadvancements.imlp.progress.vanilla.conditions.context.ContextAwareCondition;
 import me.sosedik.packetadvancements.imlp.progress.vanilla.types.PlayerKilledEntityTriggerData;
 import me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData;
 import me.sosedik.utilizer.dataset.UtilizerTags;
@@ -25,7 +27,7 @@ public class KillAllNetherWithATridentAdvancement extends BaseAdvancement {
 	}
 
 	private static RequiredAdvancementProgress getProgress() {
-		List<List<String>> requirements = new ArrayList<>(UtilizerTags.LAND_ANIMALS.getValues().size());
+		List<List<String>> requirements = new ArrayList<>(UtilizerTags.NATIVE_NETHER_MOBS.getValues().size() + UtilizerTags.NON_NATIVE_NETHER_MOBS.getValues().size());
 		List<VanillaTriggerData<?>> triggerDatas = new ArrayList<>();
 		for (EntityType type : UtilizerTags.NATIVE_NETHER_MOBS.getValues()) {
 			requirements.add(List.of(type.key().value()));
@@ -53,8 +55,8 @@ public class KillAllNetherWithATridentAdvancement extends BaseAdvancement {
 
 	private static PlayerKilledEntityTriggerData triggerDataWithDimension(EntityType type) {
 		PlayerKilledEntityTriggerData triggerData = triggerData(type);
-		Objects.requireNonNull(triggerData.getEntityTriggerConditions()).getFirst()
-				.withLocation(loc -> loc.withDimension(World.Environment.NETHER));
+		ContextAwareCondition first = Objects.requireNonNull(triggerData.getEntityTriggerConditions()).getFirst();
+		((EntityTriggerCondition) first).withLocation(loc -> loc.withDimension(World.Environment.NETHER));
 		return triggerData;
 	}
 

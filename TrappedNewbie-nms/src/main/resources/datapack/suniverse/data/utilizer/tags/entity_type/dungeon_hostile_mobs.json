@@ -1,0 +1,19 @@
+{
+	"replace": false,
+	"values": [
+		"minecraft:cave_spider",
+		"minecraft:silverfish",
+		"minecraft:guardian",
+		"minecraft:elder_guardian",
+		"minecraft:vex",
+		"minecraft:blaze",
+		"minecraft:wither_skeleton",
+		"minecraft:shulker",
+		"minecraft:piglin_brute",
+		"minecraft:warden",
+		"minecraft:breeze",
+		"minecraft:pillager",
+		"minecraft:vindicator",
+		"minecraft:evoker"
+	]
+}

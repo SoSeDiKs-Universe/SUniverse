@@ -5,6 +5,7 @@ import me.sosedik.trappednewbie.TrappedNewbie;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieAdvancements;
 import org.bukkit.Bukkit;
 import org.bukkit.Statistic;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -27,12 +28,14 @@ public class StatisticAdvancements implements Listener {
 	public void onJoin(PlayerJoinEvent event) {
 		Player player = event.getPlayer();
 		int statValue = player.getStatistic(Statistic.LEAVE_GAME);
-		if (statValue >= 1) TrappedNewbieAdvancements.GAME_LEAVES_1.awardAllCriteria(player);
-		if (statValue >= 10) TrappedNewbieAdvancements.GAME_LEAVES_10.awardAllCriteria(player);
-		if (statValue >= 100) TrappedNewbieAdvancements.GAME_LEAVES_100.awardAllCriteria(player);
-		if (statValue >= 1000) TrappedNewbieAdvancements.GAME_LEAVES_1K.awardAllCriteria(player);
-		if (statValue >= 5000) TrappedNewbieAdvancements.GAME_LEAVES_5K.awardAllCriteria(player);
-		if (statValue >= 10_000) TrappedNewbieAdvancements.GAME_LEAVES_10K.awardAllCriteria(player);
+		if (statValue == 0) return;
+
+		TrappedNewbieAdvancements.GAME_LEAVES_1.awardAllCriteria(player);
+		TrappedNewbieAdvancements.GAME_LEAVES_10.modifySimpleProgress(player, p -> p.setGained(statValue));
+		TrappedNewbieAdvancements.GAME_LEAVES_100.modifySimpleProgress(player, p -> p.setGained(statValue));
+		TrappedNewbieAdvancements.GAME_LEAVES_1K.modifySimpleProgress(player, p -> p.setGained(statValue));
+		TrappedNewbieAdvancements.GAME_LEAVES_5K.modifySimpleProgress(player, p -> p.setGained(statValue));
+		TrappedNewbieAdvancements.GAME_LEAVES_10K.modifySimpleProgress(player, p -> p.setGained(statValue));
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -43,53 +46,56 @@ public class StatisticAdvancements implements Listener {
 			case USE_ITEM -> {
 				switch (event.getMaterial()) {
 					case TOTEM_OF_UNDYING -> {
-						if (statValue >= 5) TrappedNewbieAdvancements.TOTEM_5.awardAllCriteria(player);
-						if (statValue >= 10) TrappedNewbieAdvancements.TOTEM_10.awardAllCriteria(player);
-						if (statValue >= 25) TrappedNewbieAdvancements.TOTEM_25.awardAllCriteria(player);
-						if (statValue >= 50) TrappedNewbieAdvancements.TOTEM_50.awardAllCriteria(player);
-						if (statValue >= 100) TrappedNewbieAdvancements.TOTEM_100.awardAllCriteria(player);
-						if (statValue >= 250) TrappedNewbieAdvancements.TOTEM_250.awardAllCriteria(player);
-						if (statValue >= 500) TrappedNewbieAdvancements.TOTEM_500.awardAllCriteria(player);
-						if (statValue >= 1000) TrappedNewbieAdvancements.TOTEM_1000.awardAllCriteria(player);
-						if (statValue >= 2500) TrappedNewbieAdvancements.TOTEM_2500.awardAllCriteria(player);
-						if (statValue >= 5000) TrappedNewbieAdvancements.TOTEM_5000.awardAllCriteria(player);
+						TrappedNewbieAdvancements.TOTEM_5.modifySimpleProgress(player, p -> p.setGained(statValue));
+						TrappedNewbieAdvancements.TOTEM_10.modifySimpleProgress(player, p -> p.setGained(statValue));
+						TrappedNewbieAdvancements.TOTEM_25.modifySimpleProgress(player, p -> p.setGained(statValue));
+						TrappedNewbieAdvancements.TOTEM_50.modifySimpleProgress(player, p -> p.setGained(statValue));
+						TrappedNewbieAdvancements.TOTEM_100.modifySimpleProgress(player, p -> p.setGained(statValue));
+						TrappedNewbieAdvancements.TOTEM_250.modifySimpleProgress(player, p -> p.setGained(statValue));
+						TrappedNewbieAdvancements.TOTEM_500.modifySimpleProgress(player, p -> p.setGained(statValue));
+						TrappedNewbieAdvancements.TOTEM_1000.modifySimpleProgress(player, p -> p.setGained(statValue));
+						TrappedNewbieAdvancements.TOTEM_2500.modifySimpleProgress(player, p -> p.setGained(statValue));
+						TrappedNewbieAdvancements.TOTEM_5000.modifySimpleProgress(player, p -> p.setGained(statValue));
 					}
 					case IRON_PICKAXE -> {
-						if (statValue >= 100) TrappedNewbieAdvancements.BREAK_100_IRON.awardAllCriteria(player);
+						TrappedNewbieAdvancements.BREAK_100_IRON.modifySimpleProgress(player, p -> p.setGained(statValue));
 					}
 					case DIAMOND_PICKAXE -> {
-						if (statValue >= 2500) TrappedNewbieAdvancements.BREAK_2500_DIAMOND.awardAllCriteria(player);
+						TrappedNewbieAdvancements.BREAK_2500_DIAMOND.modifySimpleProgress(player, p -> p.setGained(statValue));
 					}
 					case NETHERITE_PICKAXE -> {
-						if (statValue >= 10_000) TrappedNewbieAdvancements.BREAK_10K_NETHERITE.awardAllCriteria(player);
-						if (statValue >= 100_000) TrappedNewbieAdvancements.BREAK_100K_NETHERITE.awardAllCriteria(player);
+						TrappedNewbieAdvancements.BREAK_10K_NETHERITE.modifySimpleProgress(player, p -> p.setGained(statValue));
+						TrappedNewbieAdvancements.BREAK_100K_NETHERITE.modifySimpleProgress(player, p -> p.setGained(statValue));
+					}
+					case ENDER_PEARL -> {
+						TrappedNewbieAdvancements.USE_100_STACKS_OF_ENDER_PEARLS.modifySimpleProgress(player, p -> p.setGained(statValue));
 					}
 					case null, default -> {}
 				}
 			}
 			case CHEST_OPENED -> {
-				if (statValue >= 100) TrappedNewbieAdvancements.OPEN_CHEST_100.awardAllCriteria(player);
-				if (statValue >= 1000) TrappedNewbieAdvancements.OPEN_CHEST_1K.awardAllCriteria(player);
-				if (statValue >= 10_000) TrappedNewbieAdvancements.OPEN_CHEST_10K.awardAllCriteria(player);
-				if (statValue >= 25_000) TrappedNewbieAdvancements.OPEN_CHEST_25K.awardAllCriteria(player);
+				TrappedNewbieAdvancements.OPEN_CHEST_100.modifySimpleProgress(player, p -> p.setGained(statValue));
+				TrappedNewbieAdvancements.OPEN_CHEST_1K.modifySimpleProgress(player, p -> p.setGained(statValue));
+				TrappedNewbieAdvancements.OPEN_CHEST_10K.modifySimpleProgress(player, p -> p.setGained(statValue));
+				TrappedNewbieAdvancements.OPEN_CHEST_25K.modifySimpleProgress(player, p -> p.setGained(statValue));
 			}
 			case SHULKER_BOX_OPENED -> {
-				if (statValue >= 100) TrappedNewbieAdvancements.OPEN_SHULKER_100.awardAllCriteria(player);
-				if (statValue >= 1000) TrappedNewbieAdvancements.OPEN_SHULKER_1K.awardAllCriteria(player);
-				if (statValue >= 10_000) TrappedNewbieAdvancements.OPEN_SHULKER_10K.awardAllCriteria(player);
-				if (statValue >= 100_000) TrappedNewbieAdvancements.OPEN_SHULKER_100K.awardAllCriteria(player);
+				TrappedNewbieAdvancements.OPEN_SHULKER_100.modifySimpleProgress(player, p -> p.setGained(statValue));
+				TrappedNewbieAdvancements.OPEN_SHULKER_1K.modifySimpleProgress(player, p -> p.setGained(statValue));
+				TrappedNewbieAdvancements.OPEN_SHULKER_10K.modifySimpleProgress(player, p -> p.setGained(statValue));
+				TrappedNewbieAdvancements.OPEN_SHULKER_100K.modifySimpleProgress(player, p -> p.setGained(statValue));
 			}
 			case CRAFTING_TABLE_INTERACTION -> {
-				if (statValue >= 15) TrappedNewbieAdvancements.OPEN_CRAFTING_TABLE_15.awardAllCriteria(player);
-				if (statValue >= 100) TrappedNewbieAdvancements.OPEN_CRAFTING_TABLE_100.awardAllCriteria(player);
-				if (statValue >= 500) TrappedNewbieAdvancements.OPEN_CRAFTING_TABLE_500.awardAllCriteria(player);
-				if (statValue >= 2500) TrappedNewbieAdvancements.OPEN_CRAFTING_TABLE_2500.awardAllCriteria(player);
+				TrappedNewbieAdvancements.OPEN_CRAFTING_TABLE_15.modifySimpleProgress(player, p -> p.setGained(statValue));
+				TrappedNewbieAdvancements.OPEN_CRAFTING_TABLE_100.modifySimpleProgress(player, p -> p.setGained(statValue));
+				TrappedNewbieAdvancements.OPEN_CRAFTING_TABLE_500.modifySimpleProgress(player, p -> p.setGained(statValue));
+				TrappedNewbieAdvancements.OPEN_CRAFTING_TABLE_2500.modifySimpleProgress(player, p -> p.setGained(statValue));
 			}
 			case DEATHS -> {
 				TrappedNewbieAdvancements.DEATHS_1.awardAllCriteria(player);
-				if (statValue >= 50) TrappedNewbieAdvancements.DEATHS_50.awardAllCriteria(player);
-				if (statValue >= 250) TrappedNewbieAdvancements.DEATHS_250.awardAllCriteria(player);
-				if (statValue >= 1000) TrappedNewbieAdvancements.DEATHS_1000.awardAllCriteria(player);
+				TrappedNewbieAdvancements.DEATHS_50.modifySimpleProgress(player, p -> p.setGained(statValue));
+				TrappedNewbieAdvancements.DEATHS_250.modifySimpleProgress(player, p -> p.setGained(statValue));
+				TrappedNewbieAdvancements.DEATHS_1000.modifySimpleProgress(player, p -> p.setGained(statValue));
 			}
 			case JUMP -> {
 				if (statValue >= 1000) TrappedNewbieAdvancements.JUMP_1K.awardAllCriteria(player);
@@ -126,6 +132,12 @@ public class StatisticAdvancements implements Listener {
 				if (statValue >= 100_000) TrappedNewbieAdvancements.KILL_100K.awardAllCriteria(player);
 				if (statValue >= 250_000) TrappedNewbieAdvancements.KILL_250K.awardAllCriteria(player);
 				if (statValue >= 500_000) TrappedNewbieAdvancements.KILL_500K.awardAllCriteria(player);
+			}
+			case KILL_ENTITY -> {
+				EntityType entityType = event.getEntityType();
+				if (entityType == EntityType.SKELETON_HORSE) TrappedNewbieAdvancements.KILL_400_SKELETON_HORSES.modifySimpleProgress(player, p -> p.setGained(statValue));
+				else if (entityType == EntityType.ENDERMITE) TrappedNewbieAdvancements.KILL_10K_ENDERMITES.modifySimpleProgress(player, p -> p.setGained(statValue));
+				else if (entityType == EntityType.SILVERFISH) TrappedNewbieAdvancements.KILL_10K_SILVERFISHES.modifySimpleProgress(player, p -> p.setGained(statValue));
 			}
 			case TRADED_WITH_VILLAGER -> {
 				if (statValue >= 100) TrappedNewbieAdvancements.TRADE_100.awardAllCriteria(player);

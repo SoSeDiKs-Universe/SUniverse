@@ -1,299 +1,472 @@
 {
-	"trophy.not_spawn_camping.name": "<gray><b>Не спавнский компас",
-	"trophy.not_spawn_camping.lore": "<gray><!i>В основном не указывает на спавн",
-	"trophy.corner_camping.name": "<dark_red><b>Оружие углового кемпера",
+	"trophy.kill_all_hostile_mobs.name": "<#6D864C>Мобестиарий",
+	"trophy.kill_all_hostile_mobs.lore": "<#6D864C>Теперь во всех магазинах",
+	"trophy.kill_a_phantom_underground_with_a_shovel.name": "<#DDD9DA>Лопата гробовщика",
+	"trophy.kill_a_phantom_underground_with_a_shovel.lore": "<#DDD9DA>Используйте для закапывания врагов",
+	"trophy.kill_all_zombie_villagers.name": "<dark_green>Есть ещё один",
+	"trophy.kill_all_zombie_villagers.lore": "<dark_green>Дезомбификация сквозь лечение",
+	"trophy.kill_a_chicken_jockey_in_a_mansion.name": "<#ba5d41>Ла-ла-ла-лава, ци-ци-ци-ципа",
+	"trophy.kill_a_chicken_jockey_in_a_mansion.lore": [
+		"<#ba5d41>Вы когда-нибудь задумывались, что происходит,",
+		"<#ba5d41>когда Вы смешиваете горячую лаву и курицу?"
+	],
+	"trophy.kill_all_jockeys.name": "<gold>Лук поджога",
+	"trophy.kill_all_jockeys.lore": "<gold>Используется единственным и неповторимым Джеки Дауном",
+	"trophy.kill_a_husk_in_tundra.name": "<#C8DCFF>Ванильное мороженое",
+	"trophy.kill_a_husk_in_tundra.lore": [
+		"<#C8DCFF>Жизнь была бы ванильным мороженым",
+		"<#C8DCFF>без 31 вкуса индивидуальности"
+	],
+	"trophy.kill_a_mob_wearing_a_jack_o_lantern.name": "<#E3901D>Красивая тыква",
+	"trophy.kill_a_mob_wearing_a_jack_o_lantern.lore": "<#E3901D>Этот парень кидается в меня ложкой… Долбаной ложкой!",
+	"trophy.kill_all_mobs_wearing_a_jack_o_lantern.name": "<gold>Ваша собственная шляпа из светильника Джека",
+	"trophy.kill_all_mobs_wearing_a_jack_o_lantern.lore": [
+		"<gold><i>Вы на это заслужили!",
+		"<gold><i>Значит ли это теперь, что нужно",
+		"<gold><i>убить и себя ради этого достижения?"
+	],
+	"trophy.kill_1k_mobs_wearing_a_jack_o_lantern.name": "<#DCD9C0>Голова Джека Скеллингтона",
+	"trophy.kill_1k_mobs_wearing_a_jack_o_lantern.lore": "<#DCD9C0>Что это? Что это?",
+	"trophy.kill_all_diamond_zombie.name": "<#7FCC19>Гиперссылка",
+	"trophy.kill_all_diamond_zombie.lore": "<#7FCC19>Это достижение спонсировалось «MCStacker»",
+	"trophy.kill_all_diamond_zombie_but_hard.name": "<dark_red>Голова Стива",
+	"trophy.kill_all_diamond_zombie_but_hard.lore": "<dark_red>Лицо твоего убийцы идентично моему",
+	"trophy.zombie_family_reunion.name": "<#4E7B36>Ходячая голова",
+	"trophy.zombie_family_reunion.lore": "<#4E7B36>Да, у этой головы есть ноги",
+	"trophy.communism.name": "<red>Коммунистический манифест",
+	"trophy.communism.lore": "<red>НАШИ предметы",
+	"trophy.kill_500_jockeys.name": "<green>Изумрудная дружба",
+	"trophy.kill_500_jockeys.lore": [
+		"<green>Все они",
+		"<green>вместе навсегда",
+		"<green>в вечном покое"
+	],
+	"trophy.eat_1k_spider_eyes.name": "<#668674>Сильная жвачка",
+	"trophy.eat_1k_spider_eyes.lore": [
+		"<#668674>Вручается всем, кому нужно перебить",
+		"<#668674>вкус глаз после этого испытания"
+	],
+	"trophy.kill_a_stray_in_a_desert.name": "<#F48522>Расплавленное мороженое",
+	"trophy.kill_a_stray_in_a_desert.lore": "<#F48522>Не-е-ет! Моё мороженое! T_T",
+	"trophy.kill_400_skeleton_horses.name": "<#DCD9C0>Кость последней лошади",
+	"trophy.kill_400_skeleton_horses.lore": [
+		"<#DCD9C0>После резни лошадей-скелетов",
+		"<#DCD9C0>от них ничего не осталось…",
+		"<#DCD9C0>Лишь одиночная кость, напоминающая",
+		"<#DCD9C0>нам о временах, когда…"
+	],
+	"trophy.chestful_of_skeleton_skulls.name": "<gray>Конечная скелетов",
+	"trophy.chestful_of_skeleton_skulls.lore": [
+		"<gray>Эта земля представляет собой",
+		"<gray>окончательное место покоя скелетов"
+	],
+	"trophy.bone_to_party.name": "<#8DA9D8>Голова Санса",
+	"trophy.bone_to_party.lore": "<#8DA9D8>Вы начинаете слышать далёкие звуки МАГАЛОВАНИИ",
+	"trophy.kill_a_mob_that_is_wearing_its_head.name": "<blue><lang:block.minecraft.player_head>",
+	"trophy.kill_a_mob_that_is_wearing_its_head.lore": "<blue>Ваша очередь носить голову на голове",
+	"trophy.kill_10k_endermites.name": "<dark_purple>Домашний эндермит",
+	"trophy.kill_10k_endermites.lore": [
+		"<dark_purple>После резни эндермитов у Вас",
+		"<dark_purple>осталось лишь это единственное яйцо.",
+		"<dark_purple>Используйте с умом."
+	],
+	"trophy.use_100_stacks_of_ender_pearls.name": "<dark_aqua>СТАРТРЕККИНГ",
+	"trophy.use_100_stacks_of_ender_pearls.lore": [
+		"<dark_aqua>Через Вселенную,",
+		"<dark_aqua>на звездолёте «Энтерпрайз» под командованием капитана Кирка.",
+		"<dark_aqua>Звёздный путь по Вселенной,",
+		"<dark_aqua>идём только вперед, потому что не можем найти «Реверс».",
+		"<dark_aqua>Клингонцы на правом борту, правый борт, правый борт;",
+		"<dark_aqua>клингонцы на правом борту, правый борт, Джим.",
+		"<dark_aqua>Это жизнь, Джим, но не такая, как мы знаем, не такая, как мы знаем, не такая, как мы знаем;",
+		"<dark_aqua>это жизнь, Джим, но не такая, как мы знаем, не такая, как мы знаем, капитан.",
+		"<dark_aqua>Клингонцы на правом борту, правый борт, правый борт;",
+		"<dark_aqua>клингонцы на правом борту, правый борт, Джим.",
+		"<dark_aqua>Звёздный путь по Вселенной,",
+		"<dark_aqua>на звездолёте «Энтерпрайз» под командованием капитана Кирка.",
+		"<dark_aqua>Звёздный путь по Вселенной,",
+		"<dark_aqua>идём только вперёд, всё ещё не можем найти «Реверс».",
+		"<dark_aqua>Хуже того, он мёртв, Джим, мёртв, Джим, мёртв, Джим;",
+		"<dark_aqua>хуже того, он мёртв, Джим, мёртв, Джим, мёртв.",
+		"<dark_aqua>Это жизнь, Джим, но не такая, как мы знаем, не такая, как мы знаем, не такая, как мы знаем;",
+		"<dark_aqua>это жизнь, Джим, но не такая, как мы знаем, не такая, как мы знаем, капитан.",
+		"<dark_aqua>Клингонцы на правом борту, правый борт, правый борт;",
+		"<dark_aqua>клингонцы на правом борту, правый борт, Джим.",
+		"<dark_aqua>Звёздный путь по Вселенной,",
+		"<dark_aqua>на звездолёте «Энтерпрайз» под командованием капитана Кирка.",
+		"<dark_aqua>Звёздный путь по Вселенной,",
+		"<dark_aqua>идём только вперёд, и дела становятся хуже!",
+		"<dark_aqua>Вы не можете изменить законы физики, законы физики, законы физики;",
+		"<dark_aqua>Вы не можете изменить законы физики, законы физики, Джим.",
+		"<dark_aqua>Ах! Мы пришли с миром, стреляйте на поражение, стреляйте на поражение, стреляйте на поражение;",
+		"<dark_aqua>мы пришли с миром, стреляйте на поражение;",
+		"<dark_aqua>Скотти, поднимите меня на борт!",
+		"<dark_aqua>Хуже того, он мёртв, Джим, мёртв, Джим, мёртв, Джим;",
+		"<dark_aqua>хуже того, он мёртв, Джим, мёртв, Джим, мёртв.",
+		"<dark_aqua>Ну, это жизнь, Джим, но не такая, как мы знаем, не такая, как мы знаем, не такая, как мы знаем;",
+		"<dark_aqua>это жизнь, Джим, но не такая, как мы знаем, не такая, как мы знаем, капитан.",
+		"<dark_aqua>Клингонцы на правом борту, правый борт, правый борт;",
+		"<dark_aqua>клингонцы на правом борту, лучше успокойтесь!",
+		"<dark_aqua>Вы не можете изменить сценарий, Джим.",
+		"<dark_aqua>Хуже того, это физика, Джим.",
+		"<dark_aqua>Мост в машинное отделение, варп-фактор 9.",
+		"<dark_aqua>Ох, если дам ей ещё больше, она взорвется, капитан!",
+		"<dark_aqua>Звёздный путь по Вселенной,",
+		"<dark_aqua>на звездолёте «Энтерпрайз» под командованием капитана Кирка.",
+		"<dark_aqua>Звёздный путь по Вселенной,",
+		"<dark_aqua>идём только вперед, потому что не можем найти «Реверс».",
+		"<dark_aqua>Звёздный путь по Вселенной,",
+		"<dark_aqua>на звездолёте «Энтерпрайз» под командованием капитана Кирка.",
+		"<dark_aqua>Звёздный путь по Вселенной,",
+		"<dark_aqua>идём только вперед, потому что не можем найти «Реверс».",
+		"<dark_aqua>Звёздный путь по Вселенной,",
+		"<dark_aqua>на звездолёте «Энтерпрайз» под командованием капитана Кирка.",
+		"<dark_aqua>Звёздный путь по Вселенной,",
+		"<dark_aqua>идём только вперед, потому что не можем найти «Реверс»."
+	],
+	"trophy.kill_an_enderman_with_an_arrow.name": "<#CC00FA>Эндер-стрела",
+	"trophy.kill_an_enderman_with_an_arrow.lore": [
+		"<#CC00FA>Эта стрела положила конец эндермену.",
+		"<#CC00FA>Кажется невозможным…"
+	],
+	"trophy.kill_a_wither_with_an_arrow.name": "<dark_gray>Стрела, которая всё заканчивает",
+	"trophy.kill_a_wither_with_an_arrow.lore": [
+		"<dark_gray>Озриэль сделал это, он создал",
+		"<dark_gray>стрелу чистого уничтожения…",
+		"<dark_gray>Он называет её «Покаянием»."
+	],
+	"trophy.kill_endermen_with_their_items.name": "<#F37513>Баскетблок",
+	"trophy.kill_endermen_with_their_items.lore": "<#F37513>Правильно, номер 7, это куб!",
+	"trophy.kill_500_witches_with_lingering_potions.name": "<light_purple>Ключ",
+	"trophy.kill_500_witches_with_lingering_potions.lore": "<light_purple>Вы знаете, как говорят! Постоянство — ключ к успеху!",
+	"trophy.kill_10k_silverfishes.name": "<gray>Добыча из чешуйниц",
+	"trophy.kill_10k_silverfishes.lore": [
+		"<gray>После всего этого Вам удалось объединить всё железо",
+		"<gray>и чешуйку из тех чешуйниц в один блок"
+	],
+	"trophy.stand_on_a_mansion_spider_spawner.name": "<#D9CACF>Трон паукообразного",
+	"trophy.stand_on_a_mansion_spider_spawner.lore": [
+		"<#D9CACF>Надеемся, Вы не боитесь",
+		"<#D9CACF>восьминогих соседей!"
+	],
+	"trophy.kill_a_warden.name": "<#074A5A>Голова хранителя",
+	"trophy.kill_a_warden.lore": [
+		"<#074A5A>Игроки: Как мы должны убить хранителя?",
+		"<#074A5A>Mojang: В том-то и дело, что никак!",
+		"<#074A5A>Вы: Подержите мою золотую морковку."
+	],
+	"trophy.get_a_warden_to_the_height_limit.name": "<#1C99A1>Табличка хранителя",
+	"trophy.get_a_warden_to_the_height_limit.lore": "<#1C99A1>Эта табличка не остановит меня, потому что я её не вижу!",
+	"trophy.be_near_20_ravagers.name": "<#7F8399>Плюшевый разоритель",
+	"trophy.be_near_20_ravagers.lore": [
+		"<#7F8399>Вы привыкли к этому, и теперь это",
+		"<#7F8399>Ваша личная игрушка для мучений"
+	],
+	"trophy.take_a_hit_from_a_warden_with_protection.name": "<#2B2936>Нокия 3310",
+	"trophy.take_a_hit_from_a_warden_with_protection.lore": [
+		"<#2B2936>Ею награждаются игроки, которые доказали, что",
+		"<#2B2936>они такие же несокрушимые, как и эта вещь"
+	],
+	"trophy.hug_a_warden_for_a_minute.name": "<#046578>Жрица-хранительница",
+	"trophy.hug_a_warden_for_a_minute.lore": [
+		"<#046578>Оставайтесь в пределах 5 блоков от тюремного",
+		"<#046578>хранителя в течение 1 минуты"
+	],
+	"trophy.not_spawn_camping.name": "<gray>Не спавнский компас",
+	"trophy.not_spawn_camping.lore": "<gray>В основном не указывает на спавн",
+	"trophy.corner_camping.name": "<dark_red>Оружие углового кемпера",
 	"trophy.corner_camping.lore": [
-		"<dark_red><!i>Просто стоять и ждать.",
-		"<dark_red><!i>В конце концов, они выйдут с угла…"
+		"<dark_red>Просто стоять и ждать.",
+		"<dark_red>В конце концов, они выйдут с угла…"
 	],
-	"trophy.master_shieldsman.name": "<#1A308C><b>Гилианский щит",
+	"trophy.master_shieldsman.name": "<#1A308C>Гилианский щит",
 	"trophy.master_shieldsman.lore": [
-		"<#1A308C><!i>Надо было поговорить с солдатом в маске Китона,",
-		"<#1A308C><!i>чтобы получить скидку на базаре"
+		"<#1A308C>Надо было поговорить с солдатом в маске Китона,",
+		"<#1A308C>чтобы получить скидку на базаре"
 	],
-	"trophy.when_pigs_finally_fly.name": "<#EB9492><b>Рубен, сокрушитель визер-шторма",
-	"trophy.when_pigs_finally_fly.lore": "<#EB9492><!i>Он был отличным свином",
-	"trophy.kill_mobs_using_their_items.name": "<white><b>Зеркало",
-	"trophy.kill_mobs_using_their_items.lore": "<white><!i>Возвращает атаку отправителю",
-	"trophy.kill_a_baby_turtle_with_a_trident_from_a_height.name": "<#D6137A><b>Портативный телескоп",
-	"trophy.kill_a_baby_turtle_with_a_trident_from_a_height.lore": "<#D6137A><!i>Позволяет увидеть больше",
-	"trophy.mace_500_damage.name": "<#819988><b>Скалковый метеорит",
+	"trophy.when_pigs_finally_fly.name": "<#EB9492>Рубен, сокрушитель визер-шторма",
+	"trophy.when_pigs_finally_fly.lore": "<#EB9492>Он был отличным свином",
+	"trophy.kill_mobs_using_their_items.name": "<white>Зеркало",
+	"trophy.kill_mobs_using_their_items.lore": "<white>Возвращает атаку отправителю",
+	"trophy.kill_a_baby_turtle_with_a_trident_from_a_height.name": "<#D6137A>Портативный телескоп",
+	"trophy.kill_a_baby_turtle_with_a_trident_from_a_height.lore": "<#D6137A>Позволяет увидеть больше",
+	"trophy.mace_500_damage.name": "<#819988>Скалковый метеорит",
 	"trophy.mace_500_damage.lore": [
-		"<#819988><!i>На самом деле это привело к увеличению",
-		"<#819988><!i>популяции хранителей, а не к их вымиранию"
+		"<#819988>На самом деле это привело к увеличению",
+		"<#819988>популяции хранителей, а не к их вымиранию"
 	],
-	"trophy.kill_10_chicken_in_air.name": "<#C1D9D8><b>Пернатое безумие",
+	"trophy.kill_10_chicken_in_air.name": "<#C1D9D8>Пернатое безумие",
 	"trophy.kill_10_chicken_in_air.lore": [
-		"<#C1D9D8><!i>Кто бы мог подумать, что воздушный",
-		"<#C1D9D8><!i>бой может быть таким… грязным?"
+		"<#C1D9D8>Кто бы мог подумать, что воздушный",
+		"<#C1D9D8>бой может быть таким… грязным?"
 	],
-	"trophy.blow_up_all_monsters_with_tnt.name": "<#DB2F1A><b>Бумерская футболка",
-	"trophy.blow_up_all_monsters_with_tnt.lore": "<#DB2F1A><!i>Ошибок не бывает, только счастливые бум-бумы",
-	"trophy.more_shields.name": "<#67FF6D><b>Древесный щит",
-	"trophy.more_shields.lore": "<#67FF6D><!i>Вы потратили на это 3 стака досок",
-	"trophy.die_twice_within_5s.name": "<#F6FFDF><b>Неудачник",
-	"trophy.die_twice_within_5s.lore": "<#F6FFDF><!i>Используйте, чтобы не умирать",
-	"trophy.die_from_skeleton_not_from_an_arrow.name": "<gray><b>Бесполезная мишень",
-	"trophy.die_from_skeleton_not_from_an_arrow.lore": "<gray><!i>Этому скелету больше не нужна практика",
-	"trophy.there_it_goes.name": "<#dab930><b>Действительно очень острая стрела",
-	"trophy.there_it_goes.lore": "<#dab930><!i>Наносит больше урона, чем кажется",
-	"trophy.hunt_land_animals.name": "<#FE4952><b>1000-градусный нож",
-	"trophy.hunt_land_animals.lore": "<#FE4952><!i>(ЧТО-ТО ПОШЛО НЕ ТАК) (НЕ КЛИКБЕЙТ)",
-	"trophy.you_monster.name": "<dark_red><b>Кровь младенцев",
-	"trophy.you_monster.lore": "<red><!i>Это всё, что осталось от этих маленьких беспомощных существ",
-	"trophy.bat_duel.name": "<dark_gray><b>Мышелук",
+	"trophy.blow_up_all_monsters_with_tnt.name": "<#DB2F1A>Бумерская футболка",
+	"trophy.blow_up_all_monsters_with_tnt.lore": "<#DB2F1A>Ошибок не бывает, только счастливые бум-бумы",
+	"trophy.more_shields.name": "<#67FF6D>Древесный щит",
+	"trophy.more_shields.lore": "<#67FF6D>Вы потратили на это 3 стака досок",
+	"trophy.die_twice_within_5s.name": "<#F6FFDF>Неудачник",
+	"trophy.die_twice_within_5s.lore": "<#F6FFDF>Используйте, чтобы не умирать",
+	"trophy.die_from_skeleton_not_from_an_arrow.name": "<gray>Бесполезная мишень",
+	"trophy.die_from_skeleton_not_from_an_arrow.lore": "<gray>Этому скелету больше не нужна практика",
+	"trophy.there_it_goes.name": "<#dab930>Действительно очень острая стрела",
+	"trophy.there_it_goes.lore": "<#dab930>Наносит больше урона, чем кажется",
+	"trophy.hunt_land_animals.name": "<#FE4952>1000-градусный нож",
+	"trophy.hunt_land_animals.lore": "<#FE4952>(ЧТО-ТО ПОШЛО НЕ ТАК) (НЕ КЛИКБЕЙТ)",
+	"trophy.you_monster.name": "<dark_red>Кровь младенцев",
+	"trophy.you_monster.lore": "<red>Это всё, что осталось от этих маленьких беспомощных существ",
+	"trophy.bat_duel.name": "<dark_gray>Мышелук",
 	"trophy.bat_duel.lore": [
-		"<dark_gray><!i>Бэтмен III",
-		"<dark_gray><!i>Вы использовали мышелук вместо мышеранга"
+		"<dark_gray>Бэтмен III",
+		"<dark_gray>Вы использовали мышелук вместо мышеранга"
 	],
-	"trophy.attack_with_all_weapons.name": "<#DBB364><b>Многооружие",
+	"trophy.attack_with_all_weapons.name": "<#DBB364>Многооружие",
 	"trophy.attack_with_all_weapons.lore": [
-		"<#DBB364><!i>Это меч, топор и…",
-		"<#DBB364><!i>Неважно, оно сломалось"
+		"<#DBB364>Это меч, топор и…",
+		"<#DBB364>Неважно, оно сломалось"
 	],
-	"trophy.half_a_heart_1h.name": "<gray><b>Энергия Dark Souls",
+	"trophy.half_a_heart_1h.name": "<gray>Энергия Dark Souls",
 	"trophy.half_a_heart_1h.lore": [
-		"<gray><!i>Какой смысл носить доспехи, если",
-		"<gray><!i>Вы не получаете урона?"
+		"<gray>Какой смысл носить доспехи, если",
+		"<gray>Вы не получаете урона?"
 	],
-	"trophy.half_a_heart_6h.name": "<dark_gray><b>Дыра",
+	"trophy.half_a_heart_6h.name": "<dark_gray>Дыра",
 	"trophy.half_a_heart_6h.lore": [
-		"<dark_gray><!i>Вы просидели в дыре 6 часов. Теперь она просидит",
-		"<dark_gray><!i>в Вашем инвентаре до конца Вашей жизни."
+		"<dark_gray>Вы просидели в дыре 6 часов. Теперь она просидит",
+		"<dark_gray>в Вашем инвентаре до конца Вашей жизни."
 	],
-	"trophy.deflect_200.name": "<#BF7960><b>Несокрушимый барьер",
+	"trophy.deflect_200.name": "<#BF7960>Несокрушимый барьер",
 	"trophy.deflect_200.lore": [
-		"<#BF7960><!i>Вы не просто заблокировали удар,",
-		"<#BF7960><!i>Вы его высмеяли."
+		"<#BF7960>Вы не просто заблокировали удар,",
+		"<#BF7960>Вы его высмеяли."
 	],
-	"trophy.deflect_shield.name": "<#D6B169><b>Деревянный обломок",
+	"trophy.deflect_shield.name": "<#D6B169>Деревянный обломок",
 	"trophy.deflect_shield.lore": [
-		"<#D6B169><!i>Кому нужна прочность, если можно",
-		"<#D6B169><!i>сломать всё одним ударом?"
+		"<#D6B169>Кому нужна прочность, если можно",
+		"<#D6B169>сломать всё одним ударом?"
 	],
-	"trophy.play_365d.name": "<#B92929><b>Новогодний фейерверк",
-	"trophy.play_365d.lore": "<#B92929><!i>Бьёт обратный отсчёт!",
-	"trophy.play_1000d.name": "<#FFFFEA><b>Золотые песочные часы",
+	"trophy.play_365d.name": "<#B92929>Новогодний фейерверк",
+	"trophy.play_365d.lore": "<#B92929>Бьёт обратный отсчёт!",
+	"trophy.play_1000d.name": "<#FFFFEA>Золотые песочные часы",
 	"trophy.play_1000d.lore": [
-		"<#FFFFEA><!i>Вы провели довольно долгое время",
-		"<#FFFFEA><!i>в психиатрической больнице"
+		"<#FFFFEA>Вы провели довольно долгое время",
+		"<#FFFFEA>в психиатрической больнице"
 	],
-	"trophy.level_300.name": "<#967441><b>Ферма нулевого тика",
+	"trophy.level_300.name": "<#967441>Ферма нулевого тика",
 	"trophy.level_300.lore": [
-		"<#967441><!i>Покойся с миром",
-		"<#967441><!i>2013 – 2020"
+		"<#967441>Покойся с миром",
+		"<#967441>2013 – 2020"
 	],
-	"trophy.level_1000.name": "<#e8f46a><b>Частица Бога",
+	"trophy.level_1000.name": "<#e8f46a>Частица Бога",
 	"trophy.level_1000.lore": [
-		"<#e8f46a><!i>Этот бозон занимает столь важное место в современной физике,",
-		"<#e8f46a><!i>так важен для нашего окончательного понимания структуры материи,",
-		"<#e8f46a><!i>но так неуловим…"
+		"<#e8f46a>Этот бозон занимает столь важное место в современной физике,",
+		"<#e8f46a>так важен для нашего окончательного понимания структуры материи,",
+		"<#e8f46a>но так неуловим…"
 	],
-	"trophy.enchant_250.name": "<#891F3D><b>Том чародея",
-	"trophy.enchant_250.lore": "<#891F3D><!i>Используется иллюзорами для зачарования сущностей",
-	"trophy.enchant_5k.name": "<#673A93><b>Хороший стол",
+	"trophy.enchant_250.name": "<#891F3D>Том чародея",
+	"trophy.enchant_250.lore": "<#891F3D>Используется иллюзорами для зачарования сущностей",
+	"trophy.enchant_5k.name": "<#673A93>Хороший стол",
 	"trophy.enchant_5k.lore": [
-		"<#673A93><!i>Чародейский стол в качестве",
-		"<#673A93><!i>персонального столика"
+		"<#673A93>Чародейский стол в качестве",
+		"<#673A93>персонального столика"
 	],
-	"trophy.eat_2500.name": "<#C1793A><b>Стейк из мамонта",
-	"trophy.eat_2500.lore": "<#C1793A><!i>Давно вымерший, с незабываемым вкусом",
-	"trophy.eat_10k.name": "<#176B2E><b>Низкокалорийный продукт",
-	"trophy.eat_10k.lore": "<#176B2E><!i>Вам бы не помешало сесть на диету",
-	"trophy.breed_2500.name": "<#1604FF><b>Ноев ковчег",
-	"trophy.breed_2500.lore": "<#1604FF><!i>Потоп надвигается",
-	"trophy.kill_25k.name": "<#FFE70F><b>Цветок по имени Флауи",
-	"trophy.kill_25k.lore": "<#FFE70F><!i>Всё, что осталось от Азриэля, принца монстров",
-	"trophy.kill_500k.name": "<#FF5359><b>Кровавая Луна",
-	"trophy.kill_500k.lore": "<#FF5359><!i>Станьте кошмаром",
-	"trophy.trade_2500.name": "<#FDD744><b>Большая заострённая стрела",
-	"trophy.trade_2500.lore": "<#FDD744><!i>Дела идут всё лучше и лучше!",
-	"trophy.trade_10k.name": "<#FFFCEC><b>ПРИБЫЛЬ!",
-	"trophy.trade_10k.lore": "<#FFFCEC><!i>Станьте богаче Рокфеллера",
-	"trophy.loot_500.name": "<#784112><b>Мимик",
+	"trophy.eat_2500.name": "<#C1793A>Стейк из мамонта",
+	"trophy.eat_2500.lore": "<#C1793A>Давно вымерший, с незабываемым вкусом",
+	"trophy.eat_10k.name": "<#176B2E>Низкокалорийный продукт",
+	"trophy.eat_10k.lore": "<#176B2E>Вам бы не помешало сесть на диету",
+	"trophy.breed_2500.name": "<#1604FF>Ноев ковчег",
+	"trophy.breed_2500.lore": "<#1604FF>Потоп надвигается",
+	"trophy.kill_25k.name": "<#FFE70F>Цветок по имени Флауи",
+	"trophy.kill_25k.lore": "<#FFE70F>Всё, что осталось от Азриэля, принца монстров",
+	"trophy.kill_500k.name": "<#FF5359>Кровавая Луна",
+	"trophy.kill_500k.lore": "<#FF5359>Станьте кошмаром",
+	"trophy.trade_2500.name": "<#FDD744>Большая заострённая стрела",
+	"trophy.trade_2500.lore": "<#FDD744>Дела идут всё лучше и лучше!",
+	"trophy.trade_10k.name": "<#FFFCEC>ПРИБЫЛЬ!",
+	"trophy.trade_10k.lore": "<#FFFCEC>Станьте богаче Рокфеллера",
+	"trophy.loot_500.name": "<#784112>Мимик",
 	"trophy.loot_500.lore": [
-		"<#784112><!i>Вы же не думали, что сможете открыть столько сундуков",
-		"<#784112><!i>и не столкнуться с ним?"
+		"<#784112>Вы же не думали, что сможете открыть столько сундуков",
+		"<#784112>и не столкнуться с ним?"
 	],
-	"trophy.loot_2500.name": "<#FFC975><b>Сокровищница",
+	"trophy.loot_2500.name": "<#FFC975>Сокровищница",
 	"trophy.loot_2500.lore": [
-		"<#FFC975><!i>Миниатюрный трофей-сундук,",
-		"<#FFC975><!i>который на удивление пуст"
+		"<#FFC975>Миниатюрный трофей-сундук,",
+		"<#FFC975>который на удивление пуст"
 	],
-	"trophy.walk_250km.name": "<#955E3B><b>Самая надёжная обувь в мире",
+	"trophy.walk_250km.name": "<#955E3B>Самая надёжная обувь в мире",
 	"trophy.walk_250km.lore": [
-		"<#955E3B><!i>Достаточно надёжная, чтобы выдержать все пройденное Вами расстояние.",
-		"<#955E3B><!i>Соедините с другой обувью, чтобы изменить свойства."
+		"<#955E3B>Достаточно надёжная, чтобы выдержать все пройденное Вами расстояние.",
+		"<#955E3B>Соедините с другой обувью, чтобы изменить свойства."
 	],
-	"trophy.walk_1000km.name": "<#D28037><b>Машина времени",
+	"trophy.walk_1000km.name": "<#D28037>Машина времени",
 	"trophy.walk_1000km.lore": [
-		"<#D28037><!i>Понадобится, чтобы вернуть всё то время, которое Вы потратили.",
-		"<#D28037><!i>Время от времени может спасти Вам жизнь."
+		"<#D28037>Понадобится, чтобы вернуть всё то время, которое Вы потратили.",
+		"<#D28037>Время от времени может спасти Вам жизнь."
 	],
-	"trophy.sprint_250km.name": "<#0090FF><b>Освежитель",
+	"trophy.sprint_250km.name": "<#0090FF>Освежитель",
 	"trophy.sprint_250km.lore": [
-		"<#0090FF><!i>Он Вам явно понадобится после ТАКОГО расстояния.",
-		"<#0090FF><!i>Автоматически очищает воду."
+		"<#0090FF>Он Вам явно понадобится после ТАКОГО расстояния.",
+		"<#0090FF>Автоматически очищает воду."
 	],
-	"trophy.sprint_1000km.name": "<#F4FFA7><b>Беговая обувь",
+	"trophy.sprint_1000km.name": "<#F4FFA7>Беговая обувь",
 	"trophy.sprint_1000km.lore": [
-		"<#F4FFA7><!i>Это всего лишь 1/40 периметра",
-		"<#F4FFA7><!i>нашей планеты"
+		"<#F4FFA7>Это всего лишь 1/40 периметра",
+		"<#F4FFA7>нашей планеты"
 	],
-	"trophy.jump_50k.name": "<#73C262><b>Портативный трамплин",
-	"trophy.jump_50k.lore": "<#73C262><!i>Часы безумного веселья для всей семьи!",
-	"trophy.jump_250k.name": "<#FFD9E2><b>Корзина с кроликом для угощений",
+	"trophy.jump_50k.name": "<#73C262>Портативный трамплин",
+	"trophy.jump_50k.lore": "<#73C262>Часы безумного веселья для всей семьи!",
+	"trophy.jump_250k.name": "<#FFD9E2>Корзина с кроликом для угощений",
 	"trophy.jump_250k.lore": [
-		"<#FFD9E2><!i>Передаёт дух задорной радости, превращая",
-		"<#FFD9E2><!i>каждый прыжок в кучу восторга"
+		"<#FFD9E2>Передаёт дух задорной радости, превращая",
+		"<#FFD9E2>каждый прыжок в кучу восторга"
 	],
-	"trophy.sneak_10km.name": "<#4D3A3A><b>Чёрный пояс",
-	"trophy.sneak_10km.lore": "<#4D3A3A><!i>Кто величайший человек?",
-	"trophy.sneak_100km.name": "<#E6FDFF><b>Катана",
-	"trophy.sneak_100km.lore": "<#E6FDFF><!i>Мастерство не терпит спешки",
-	"trophy.boat_25km.name": "<#333333><b>Чёрная жемчужина",
-	"trophy.boat_25km.lore": "<#333333><!i>Куда захотим, туда и отправимся",
-	"trophy.boat_500km.name": "<#FFD2E9><b>Моторная лодка",
-	"trophy.boat_500km.lore": "<#FFD2E9><!i>Быстрая, как скорость света",
-	"trophy.horse_25km.name": "<dark_aqua><b>Огнестрельное оружие",
-	"trophy.horse_25km.lore": "<dark_aqua><!i>Как это сюда попало? Серьёзно?",
-	"trophy.horse_250km.name": "<#FFD700><b>Золотая лошадь",
+	"trophy.sneak_10km.name": "<#4D3A3A>Чёрный пояс",
+	"trophy.sneak_10km.lore": "<#4D3A3A>Кто величайший человек?",
+	"trophy.sneak_100km.name": "<#E6FDFF>Катана",
+	"trophy.sneak_100km.lore": "<#E6FDFF>Мастерство не терпит спешки",
+	"trophy.boat_25km.name": "<#333333>Чёрная жемчужина",
+	"trophy.boat_25km.lore": "<#333333>Куда захотим, туда и отправимся",
+	"trophy.boat_500km.name": "<#FFD2E9>Моторная лодка",
+	"trophy.boat_500km.lore": "<#FFD2E9>Быстрая, как скорость света",
+	"trophy.horse_25km.name": "<dark_aqua>Огнестрельное оружие",
+	"trophy.horse_25km.lore": "<dark_aqua>Как это сюда попало? Серьёзно?",
+	"trophy.horse_250km.name": "<#FFD700>Золотая лошадь",
 	"trophy.horse_250km.lore": [
-		"<#FFD700><!i>Элегантность в лошадиной форме, величественный",
-		"<#FFD700><!i>конь, который не просто скачет, а сверкает,",
-		"<#FFD700><!i>грациозно пересекая царство роскоши",
-		"<#FFD700><!i>и экстравагантности"
+		"<#FFD700>Элегантность в лошадиной форме, величественный",
+		"<#FFD700>конь, который не просто скачет, а сверкает,",
+		"<#FFD700>грациозно пересекая царство роскоши",
+		"<#FFD700>и экстравагантности"
 	],
-	"trophy.pig_10km.name": "<#E4493E><b>Поршневая чаша",
-	"trophy.pig_10km.lore": "<#E4493E><!i>Это просто пустая чаша",
-	"trophy.pig_100km.name": "<#FFA3AC><b>Свинопоезд",
-	"trophy.pig_100km.lore": "<#FFA3AC><!i>У Вас специфический вкус к транспорту",
-	"trophy.elytra_1000km.name": "<#D71E24><b>Плащ Супермена",
+	"trophy.pig_10km.name": "<#E4493E>Поршневая чаша",
+	"trophy.pig_10km.lore": "<#E4493E>Это просто пустая чаша",
+	"trophy.pig_100km.name": "<#FFA3AC>Свинопоезд",
+	"trophy.pig_100km.lore": "<#FFA3AC>У Вас специфический вкус к транспорту",
+	"trophy.elytra_1000km.name": "<#D71E24>Плащ Супермена",
 	"trophy.elytra_1000km.lore": [
-		"<#D71E24><!i>Это птица?",
-		"<#D71E24><!i>Это самолёт?",
-		"<#D71E24><!i>Это бутерброд с яичным салатом?",
-		"<#D71E24><!i>Не может быть, это же Чаризард!"
+		"<#D71E24>Это птица?",
+		"<#D71E24>Это самолёт?",
+		"<#D71E24>Это бутерброд с яичным салатом?",
+		"<#D71E24>Не может быть, это же Чаризард!"
 	],
-	"trophy.elytra_15000km.name": "<#78FFC0><b>Большая пиротехническая звезда",
+	"trophy.elytra_15000km.name": "<#78FFC0>Большая пиротехническая звезда",
 	"trophy.elytra_15000km.lore": [
-		"<#78FFC0><!i>Создайте большой фейерверк,",
-		"<#78FFC0><!i>Вы заслужили"
+		"<#78FFC0>Создайте большой фейерверк,",
+		"<#78FFC0>Вы заслужили"
 	],
-	"trophy.swim_50km.name": "<#E4493E><b>Золотая медаль",
-	"trophy.swim_50km.lore": "<#E4493E><!i>Вероятно, не из настоящего золота",
-	"trophy.swim_250km.name": "<#A2D5FF><b>Частный бассейн",
+	"trophy.swim_50km.name": "<#E4493E>Золотая медаль",
+	"trophy.swim_50km.lore": "<#E4493E>Вероятно, не из настоящего золота",
+	"trophy.swim_250km.name": "<#A2D5FF>Частный бассейн",
 	"trophy.swim_250km.lore": [
-		"<#A2D5FF><!i>Эксклюзивный оазис водной роскоши, этот",
-		"<#A2D5FF><!i>частный бассейн — Ваше личное пристанище,",
-		"<#A2D5FF><!i>где расслабление сочетается с роскошью в",
-		"<#A2D5FF><!i>комфорте Вашего личного пространства"
+		"<#A2D5FF>Эксклюзивный оазис водной роскоши, этот",
+		"<#A2D5FF>частный бассейн — Ваше личное пристанище,",
+		"<#A2D5FF>где расслабление сочетается с роскошью в",
+		"<#A2D5FF>комфорте Вашего личного пространства"
 	],
-	"trophy.minecart_50km.name": "<#2AB9E5><b>Паравозик Томас",
-	"trophy.minecart_50km.lore": "<#2AB9E5><!i>Он — настоящий номер один",
-	"trophy.minecart_250km.name": "<#FFE56B><b>Эмблема железнодорожного барона",
+	"trophy.minecart_50km.name": "<#2AB9E5>Паравозик Томас",
+	"trophy.minecart_50km.lore": "<#2AB9E5>Он — настоящий номер один",
+	"trophy.minecart_250km.name": "<#FFE56B>Эмблема железнодорожного барона",
 	"trophy.minecart_250km.lore": [
-		"<#FFE56B><!i>Гладкий золотой кубок, напоминающий",
-		"<#FFE56B><!i>переплетённые железнодорожные рельсы"
+		"<#FFE56B>Гладкий золотой кубок, напоминающий",
+		"<#FFE56B>переплетённые железнодорожные рельсы"
 	],
-	"trophy.strider_10km.name": "<#14B485><b>Лакомство для лавомерки",
-	"trophy.strider_10km.lore": "<#14B485><!i>Ваша лавомерка заслужила это",
-	"trophy.strider_250km.name": "<#E5535C><b>Лавомерка",
+	"trophy.strider_10km.name": "<#14B485>Лакомство для лавомерки",
+	"trophy.strider_10km.lore": "<#14B485>Ваша лавомерка заслужила это",
+	"trophy.strider_250km.name": "<#E5535C>Лавомерка",
 	"trophy.strider_250km.lore": [
-		"<#E5535C><!i>Ваш личный лавоход и аттракцион",
-		"<#E5535C><!i>спонтанных острых ощущений"
+		"<#E5535C>Ваш личный лавоход и аттракцион",
+		"<#E5535C>спонтанных острых ощущений"
 	],
-	"trophy.happy_ghast_10km.name": "<#2ec9f9><b>М.В.Б.",
+	"trophy.happy_ghast_10km.name": "<#2ec9f9>М.В.Б.",
 	"trophy.happy_ghast_10km.lore": [
-		"<#2ec9f9><!i>М.В.Б. значит «Массивный воздушный бомбардировщик», а не «Мать всех бомб»",
-		"<#2ec9f9><!i>В любом случае, эта штука приносит боль"
+		"<#2ec9f9>М.В.Б. значит «Массивный воздушный бомбардировщик», а не «Мать всех бомб»",
+		"<#2ec9f9>В любом случае, эта штука приносит боль"
 	],
-	"trophy.happy_ghast_50km.name": "<#28BBC5><b>Алмазная упряжь",
-	"trophy.happy_ghast_50km.lore": "<#28BBC5><!i>Крепче, чем другие",
-	"trophy.bell_10000k.name": "<#0090FF><b>Небесный колокол",
-	"trophy.bell_10000k.lore": "<#0090FF><!i>динь-динь-динь-динь-динь-динь-динь-динь-динь-динь-динь-динь-динь-динь-динь",
-	"trophy.fish_250.name": "<#C8C7BF><b>Невероятно большой лосось",
-	"trophy.fish_250.lore": "<#C8C7BF><!i>Стоит ли его есть?",
-	"trophy.fish_1k.name": "<#BFB773><b>Профессиональная удочка",
-	"trophy.fish_1k.lore": "<#BFB773><!i>Для настоящих мастеров",
-	"trophy.fish_2500.name": "<#DCD9C0><b>Беззаботная удочка",
-	"trophy.fish_2500.lore": "<#DCD9C0><!i>Не волнуйтесь, ловите рыбу",
-	"trophy.totem_100.name": "<#FCD05C><b>Тотем тотемов",
-	"trophy.totem_100.lore": "<#FCD05C><!i>Может, хватит умирать?",
-	"trophy.totem_1000.name": "<#DCD9C0><b>Волшебство, которое не смогло тебя спасти",
+	"trophy.happy_ghast_50km.name": "<#28BBC5>Алмазная упряжь",
+	"trophy.happy_ghast_50km.lore": "<#28BBC5>Крепче, чем другие",
+	"trophy.bell_10000k.name": "<#0090FF>Небесный колокол",
+	"trophy.bell_10000k.lore": "<#0090FF>динь-динь-динь-динь-динь-динь-динь-динь-динь-динь-динь-динь-динь-динь-динь",
+	"trophy.fish_250.name": "<#C8C7BF>Невероятно большой лосось",
+	"trophy.fish_250.lore": "<#C8C7BF>Стоит ли его есть?",
+	"trophy.fish_1k.name": "<#BFB773>Профессиональная удочка",
+	"trophy.fish_1k.lore": "<#BFB773>Для настоящих мастеров",
+	"trophy.fish_2500.name": "<#DCD9C0>Беззаботная удочка",
+	"trophy.fish_2500.lore": "<#DCD9C0>Не волнуйтесь, ловите рыбу",
+	"trophy.totem_100.name": "<#FCD05C>Тотем тотемов",
+	"trophy.totem_100.lore": "<#FCD05C>Может, хватит умирать?",
+	"trophy.totem_1000.name": "<#DCD9C0>Волшебство, которое не смогло тебя спасти",
 	"trophy.totem_1000.lore": [
-		"<#DCD9C0><!i>Как это произошло?",
-		"<#DCD9C0><!i>Давным-давно, фактически никогда, а также сейчас, ничего — нигде",
-		"<#DCD9C0><!i>Логично, правда?"
+		"<#DCD9C0>Как это произошло?",
+		"<#DCD9C0>Давным-давно, фактически никогда, а также сейчас, ничего — нигде",
+		"<#DCD9C0>Логично, правда?"
 	],
-	"trophy.totem_2500.name": "<#FCD05C><b>Тотем тотема тотемов",
-	"trophy.totem_2500.lore": "<#FCD05C><!i>ХВАТИТ УМИРАТЬ!",
-	"trophy.climb_3km.name": "<#EFD267><b>Лестница",
-	"trophy.climb_3km.lore": "<#EFD267><!i>Обычная лестница, можете использовать",
-	"trophy.climb_10km.name": "<#FFC975><b>Высокая лестница",
+	"trophy.totem_2500.name": "<#FCD05C>Тотем тотема тотемов",
+	"trophy.totem_2500.lore": "<#FCD05C>ХВАТИТ УМИРАТЬ!",
+	"trophy.climb_3km.name": "<#EFD267>Лестница",
+	"trophy.climb_3km.lore": "<#EFD267>Обычная лестница, можете использовать",
+	"trophy.climb_10km.name": "<#FFC975>Высокая лестница",
 	"trophy.climb_10km.lore": [
-		"<#FFC975><!i>Покоряя высоты, как опытный альпинист,",
-		"<#FFC975><!i>Вы преодолели 10км при помощи всего лишь",
-		"<#FFC975><!i>лестницы или лиан"
+		"<#FFC975>Покоряя высоты, как опытный альпинист,",
+		"<#FFC975>Вы преодолели 10км при помощи всего лишь",
+		"<#FFC975>лестницы или лиан"
 	],
-	"trophy.break_10k_netherite.name": "<#ADF3FD><b>Высококачественная алмазная руда",
-	"trophy.break_10k_netherite.lore": "<#ADF3FD><!i>Ваша гордость",
-	"trophy.break_100k_netherite.name": "<#F6FFBC><b>Кирка с золотым напылением",
+	"trophy.break_10k_netherite.name": "<#ADF3FD>Высококачественная алмазная руда",
+	"trophy.break_10k_netherite.lore": "<#ADF3FD>Ваша гордость",
+	"trophy.break_100k_netherite.name": "<#F6FFBC>Кирка с золотым напылением",
 	"trophy.break_100k_netherite.lore": [
-		"<#F6FFBC><!i>Мастер, создавший её, вложил все",
-		"<#F6FFBC><!i>свои силы в эффективность"
+		"<#F6FFBC>Мастер, создавший её, вложил все",
+		"<#F6FFBC>свои силы в эффективность"
 	],
-	"trophy.survive_50h.name": "<#FFDE00><b>Ваши часы",
-	"trophy.survive_50h.lore": "<#FFDE00><!i>Вы знаете, который час?",
-	"trophy.survive_200h.name": "<#EE505F><b>Ваше сердце",
-	"trophy.survive_200h.lore": "<#EE505F><!i>Бьётся во всю силу",
-	"trophy.open_chest_10k.name": "<#FF9D00><b>Личный сундук",
-	"trophy.open_chest_10k.lore": "<#FF9D00><!i>Я знаю, ты любишь сундуки",
-	"trophy.open_chest_25k.name": "<#FF8E27><b>Рождественский сундук",
+	"trophy.survive_50h.name": "<#FFDE00>Ваши часы",
+	"trophy.survive_50h.lore": "<#FFDE00>Вы знаете, который час?",
+	"trophy.survive_200h.name": "<#EE505F>Ваше сердце",
+	"trophy.survive_200h.lore": "<#EE505F>Бьётся во всю силу",
+	"trophy.open_chest_10k.name": "<#FF9D00>Личный сундук",
+	"trophy.open_chest_10k.lore": "<#FF9D00>Я знаю, ты любишь сундуки",
+	"trophy.open_chest_25k.name": "<#FF8E27>Рождественский сундук",
 	"trophy.open_chest_25k.lore": [
-		"<#FF8E27><!i>Праздничный трофей в форме мешка Санты,",
-		"<#FF8E27><!i>переполненного добычей. В комплект входит",
-		"<#FF8E27><!i>специальный рождественский сундук для",
-		"<#FF8E27><!i>истинных ценителей открывания сундуков!"
+		"<#FF8E27>Праздничный трофей в форме мешка Санты,",
+		"<#FF8E27>переполненного добычей. В комплект входит",
+		"<#FF8E27>специальный рождественский сундук для",
+		"<#FF8E27>истинных ценителей открывания сундуков!"
 	],
-	"trophy.open_crafting_table_500.name": "<#EF8310><b>Ремесленный стол",
-	"trophy.open_crafting_table_500.lore": "<#EF8310><!i>Постарайтесь не крафтить на нём",
-	"trophy.open_crafting_table_2500.name": "<#FFF665><b>Золотой сундук",
+	"trophy.open_crafting_table_500.name": "<#EF8310>Ремесленный стол",
+	"trophy.open_crafting_table_500.lore": "<#EF8310>Постарайтесь не крафтить на нём",
+	"trophy.open_crafting_table_2500.name": "<#FFF665>Золотой сундук",
 	"trophy.open_crafting_table_2500.lore": [
-		"<#FFF665><!i>Вы проложили себе путь в",
-		"<#FFF665><!i>легендарную лигу ремесленников!"
+		"<#FFF665>Вы проложили себе путь в",
+		"<#FFF665>легендарную лигу ремесленников!"
 	],
-	"trophy.horse_speed_3.name": "<#FFA66D><b>Лёгкое седло",
-	"trophy.horse_speed_3.lore": "<#FFA66D><!i>Идеально для быстрых лошадей",
-	"trophy.horse_speed_4.name": "<#FFB09C><b>Лошадка",
+	"trophy.horse_speed_3.name": "<#FFA66D>Лёгкое седло",
+	"trophy.horse_speed_3.lore": "<#FFA66D>Идеально для быстрых лошадей",
+	"trophy.horse_speed_4.name": "<#FFB09C>Лошадка",
 	"trophy.horse_speed_4.lore": [
-		"<#FFB09C><!i>Вы слышали об этой лошади? Говорят,",
-		"<#FFB09C><!i>она превысила скорость света!"
+		"<#FFB09C>Вы слышали об этой лошади? Говорят,",
+		"<#FFB09C>она превысила скорость света!"
 	],
-	"trophy.raid_100.name": "<#CFD4D7><b>Железный топор",
-	"trophy.raid_100.lore": "<#CFD4D7><!i>Тяжелее обычного топора",
-	"trophy.raid_2000.name": "<#8D8D8D><b>Голова разорителя",
-	"trophy.raid_2000.lore": "<#8D8D8D><!i>Трофей, добытый силой",
-	"trophy.open_shulker_10k.name": "<#FF8DC9><b>Freebox",
+	"trophy.raid_100.name": "<#CFD4D7>Железный топор",
+	"trophy.raid_100.lore": "<#CFD4D7>Тяжелее обычного топора",
+	"trophy.raid_2000.name": "<#8D8D8D>Голова разорителя",
+	"trophy.raid_2000.lore": "<#8D8D8D>Трофей, добытый силой",
+	"trophy.open_shulker_10k.name": "<#FF8DC9>Freebox",
 	"trophy.open_shulker_10k.lore": [
-		"<#FF8DC9><!i>Freebox — это ADSL-VDSL-FTTH модем",
-		"<#FF8DC9><!i>и приставка, которые французский",
-		"<#FF8DC9><!i>интернет-провайдер Free",
-		"<#FF8DC9><!i>(входит в группу Iliad) предоставляет",
-		"<#FF8DC9><!i>своим DSL-FTTH абонентам"
+		"<#FF8DC9>Freebox — это ADSL-VDSL-FTTH модем",
+		"<#FF8DC9>и приставка, которые французский",
+		"<#FF8DC9>интернет-провайдер Free",
+		"<#FF8DC9>(входит в группу Iliad) предоставляет",
+		"<#FF8DC9>своим DSL-FTTH абонентам"
 	],
-	"trophy.open_shulker_100k.name": "<#FFBAE3><b>Бесконечный шалкеровый ящик",
+	"trophy.open_shulker_100k.name": "<#FFBAE3>Бесконечный шалкеровый ящик",
 	"trophy.open_shulker_100k.lore": [
-		"<#FFBAE3><!i>Безграничные возможности хранения,",
-		"<#FFBAE3><!i>улучшенная организация и неземной",
-		"<#FFBAE3><!i>дизайн для удобного и компактного",
-		"<#FFBAE3><!i>управления инвентарём"
+		"<#FFBAE3>Безграничные возможности хранения,",
+		"<#FFBAE3>улучшенная организация и неземной",
+		"<#FFBAE3>дизайн для удобного и компактного",
+		"<#FFBAE3>управления инвентарём"
 	],
-	"trophy.wash_250.name": "<#DCD9C0><b>Носки",
-	"trophy.wash_250.lore": "<#DCD9C0><!i>Даже после 250 стирок они всё ещё пахнут…",
-	"trophy.game_leaves_100.name": "<#DCD9C0><b>Лист бросающего",
+	"trophy.wash_250.name": "<#DCD9C0>Носки",
+	"trophy.wash_250.lore": "<#DCD9C0>Даже после 250 стирок они всё ещё пахнут…",
+	"trophy.game_leaves_100.name": "<#DCD9C0>Лист бросающего",
 	"trophy.game_leaves_100.lore": [
-		"<#DCD9C0><!i>Выдано Вам за то, что Вы бросили в ярости игру 100 раз.",
-		"<#DCD9C0><!i>Вам следует пройти курс лечения от гнева."
+		"<#DCD9C0>Выдано Вам за то, что Вы бросили в ярости игру 100 раз.",
+		"<#DCD9C0>Вам следует пройти курс лечения от гнева."
 	]
 }

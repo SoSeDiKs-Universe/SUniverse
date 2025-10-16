@@ -35,10 +35,6 @@ public class EventUtil {
 					Utilizer.logger().warn("Couldn't register events in {} for {}: must have only 1 constructor", listenerClass, plugin.getName());
 					continue;
 				}
-				if (!isValidListener(listenerClass)) {
-					Utilizer.logger().warn("Couldn't register events in {} for {} (class does not implement supported listener)", listenerClass, plugin.getName());
-					continue;
-				}
 				Object listener = null;
 				Constructor<?> constructor = listenerClass.getDeclaredConstructors()[0];
 				int paramCount = constructor.getParameterCount();
@@ -68,11 +64,6 @@ public class EventUtil {
 		} catch (SecurityException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
 			Utilizer.logger().error("Couldn't register listeners for {}", plugin.getName(), e);
 		}
-	}
-
-	private static boolean isValidListener(Class<?> listenerClass) {
-		return Listener.class.isAssignableFrom(listenerClass)
-			|| PacketListener.class.isAssignableFrom(listenerClass);
 	}
 
 }

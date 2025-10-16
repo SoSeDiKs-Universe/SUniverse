@@ -2,6 +2,8 @@ package me.sosedik.trappednewbie.listener.advancement.dedicated;
 
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieAdvancements;
+import me.sosedik.utilizer.dataset.UtilizerTags;
+import org.bukkit.Material;
 import org.bukkit.Statistic;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -10,18 +12,37 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerStatisticIncrementEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffectType;
 import org.jspecify.annotations.NullMarked;
 
 /**
  * Advancements for eating food
  */
 @NullMarked
-public class FoodConsumingAdvancement implements Listener {
+public class FoodConsumingAdvancements implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onEat(PlayerItemConsumeEvent event) {
-		if (isFood(event.getItem()))
-			increaseStats(event.getPlayer());
+		ItemStack item = event.getItem();
+		if (!isFood(item)) return;
+
+		Player player = event.getPlayer();
+		increaseStats(player);
+
+		if (item.getType() == Material.SPIDER_EYE)
+			TrappedNewbieAdvancements.EAT_1K_SPIDER_EYES.awardNextCriterion(player);
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onMiracleDrink(PlayerItemConsumeEvent event) {
+		ItemStack item = event.getItem();
+		if (!UtilizerTags.POISON_CURES.isTagged(item.getType())) return;
+
+		Player player = event.getPlayer();
+		if (player.getHealth() > 1) return;
+		if (!player.hasPotionEffect(PotionEffectType.POISON)) return;
+
+		TrappedNewbieAdvancements.MIRACLE_DRINK.awardAllCriteria(player);
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

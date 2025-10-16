@@ -116,7 +116,7 @@ public class ItemUtil {
 	 * @param item item
 	 * @return whether this item is a lit campfire
 	 */
-	public static boolean isLitCampfire(ItemStack item) {
+	public static boolean isLitCampfire(ItemStack item) { // TODO remove meta usage
 		return Tag.CAMPFIRES.isTagged(item.getType())
 				&& item.hasItemMeta()
 				&& item.getItemMeta() instanceof BlockStateMeta meta

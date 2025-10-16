@@ -5,7 +5,6 @@ import me.sosedik.packetadvancements.api.advancement.base.BaseAdvancementBuilder
 import me.sosedik.packetadvancements.api.progression.RequiredAdvancementProgress;
 import me.sosedik.packetadvancements.imlp.advancement.base.BaseAdvancement;
 import me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData;
-import me.sosedik.utilizer.dataset.UtilizerTags;
 import org.bukkit.Tag;
 import org.bukkit.entity.EntityType;
 import org.jspecify.annotations.NullMarked;
@@ -23,7 +22,7 @@ public class KillAllAquaticWithATridentAdvancement extends BaseAdvancement {
 	}
 
 	private static RequiredAdvancementProgress getProgress() {
-		List<List<String>> requirements = new ArrayList<>(UtilizerTags.LAND_ANIMALS.getValues().size());
+		List<List<String>> requirements = new ArrayList<>(Tag.ENTITY_TYPES_AQUATIC.getValues().size());
 		List<VanillaTriggerData<?>> triggerDatas = new ArrayList<>();
 		for (EntityType type : Tag.ENTITY_TYPES_AQUATIC.getValues()) {
 			requirements.add(List.of(type.key().value()));

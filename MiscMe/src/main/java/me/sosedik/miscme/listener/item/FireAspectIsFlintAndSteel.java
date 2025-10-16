@@ -3,6 +3,8 @@ package me.sosedik.miscme.listener.item;
 import me.sosedik.miscme.listener.projectile.BurningProjectileCreatesFire;
 import me.sosedik.utilizer.dataset.UtilizerTags;
 import me.sosedik.utilizer.util.DurabilityUtil;
+import me.sosedik.utilizer.util.EntityUtil;
+import org.bukkit.FluidCollisionMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
@@ -23,7 +25,9 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.RayTraceResult;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Fire aspect can be used as flint and steel
@@ -103,20 +107,48 @@ public class FireAspectIsFlintAndSteel implements Listener {
 		if (ItemStack.isEmpty(item)) return false;
 		if (!item.hasEnchant(Enchantment.FIRE_ASPECT)) return false;
 		if (player.hasCooldown(item)) return false;
-		return mimicFlintAndSteel(player, action, block, blockFace, hand);
+		return mimicFlintAndSteel(player, null, action, block, blockFace, hand);
 	}
 
-	public static boolean mimicFlintAndSteel(LivingEntity livingEntity, Action action, Block block, BlockFace blockFace, EquipmentSlot hand) {
+	public static boolean mimicFlintAndSteelRightClick(LivingEntity livingEntity, EquipmentSlot hand) {
+		Entity targetEntity = livingEntity.getTargetEntity(EntityUtil.PLAYER_REACH);
+		if (targetEntity != null) return mimicFlintAndSteel(livingEntity, targetEntity, null, null, null, hand);
+
+		RayTraceResult rayTraceResult = livingEntity.rayTraceBlocks(EntityUtil.PLAYER_REACH - 1D, FluidCollisionMode.ALWAYS);
+		if (rayTraceResult == null) return false;
+
+		Block block = rayTraceResult.getHitBlock();
+		if (block == null) return false;
+
+		BlockFace blockFace = rayTraceResult.getHitBlockFace();
+		if (blockFace == null) return false;
+
+		return mimicFlintAndSteel(livingEntity, null, Action.RIGHT_CLICK_BLOCK, block, blockFace, hand);
+	}
+
+	public static boolean mimicFlintAndSteel(LivingEntity livingEntity, @Nullable Entity targetEntity, @Nullable Action action, @Nullable Block block, @Nullable BlockFace blockFace, EquipmentSlot hand) {
 		if (livingEntity.getEquipment() == null) return false;
 
 		ItemStack item = livingEntity.getEquipment().getItem(hand);
-		ItemStack flintAndSteel = ItemStack.of(Material.FLINT_AND_STEEL);
+		var flintAndSteel = ItemStack.of(Material.FLINT_AND_STEEL);
 		livingEntity.getEquipment().setItem(hand, flintAndSteel);
 		boolean actionApplied = false;
 		if (livingEntity instanceof Player player) {
-			var interactEvent = new PlayerInteractEvent(player, action, flintAndSteel, block, blockFace, hand, null);
-			interactEvent.callEvent();
-			actionApplied = interactEvent.useItemInHand() == Event.Result.DENY;
+			if (action != null && block != null && blockFace != null) {
+				var interactEvent1 = new PlayerInteractEvent(player, action, flintAndSteel, block, blockFace, hand, null);
+				interactEvent1.callEvent();
+				var interactEvent2 = new PlayerInteractEvent(player, action, player.getInventory().getItem(hand.getOppositeHand()), block, blockFace, hand.getOppositeHand(), null);
+				interactEvent2.callEvent();
+				actionApplied = interactEvent1.useItemInHand() == Event.Result.DENY || interactEvent2.useItemInHand() == Event.Result.DENY;
+			}
+
+			if (targetEntity != null) {
+				var interactEntityEvent1 = new PlayerInteractEntityEvent(player, targetEntity, hand);
+				interactEntityEvent1.callEvent();
+				var interactEntityEvent2 = new PlayerInteractEntityEvent(player, targetEntity, hand.getOppositeHand());
+				interactEntityEvent2.callEvent();
+				if (!actionApplied) actionApplied = interactEntityEvent1.isCancelled() || interactEntityEvent2.isCancelled();
+			}
 		}
 		flintAndSteel = livingEntity.getEquipment().getItem(hand);
 
@@ -129,13 +161,15 @@ public class FireAspectIsFlintAndSteel implements Listener {
 			return true;
 		}
 
-		if (!BurningProjectileCreatesFire.createFireOrIgnite(block, blockFace, livingEntity, BlockIgniteEvent.IgniteCause.FLINT_AND_STEEL)) {
+		if (block != null && blockFace != null && !BurningProjectileCreatesFire.createFireOrIgnite(block, blockFace, livingEntity, BlockIgniteEvent.IgniteCause.FLINT_AND_STEEL)) {
 			livingEntity.getEquipment().setItem(hand, item);
 			return false;
 		}
 
-		block.emitSound(Sound.ITEM_FLINTANDSTEEL_USE, SoundCategory.BLOCKS, 1F, (float) Math.random() * 0.4F + 0.8F);
-		item.damage(1, livingEntity);
+		if (block != null) {
+			block.emitSound(Sound.ITEM_FLINTANDSTEEL_USE, SoundCategory.BLOCKS, 1F, (float) Math.random() * 0.4F + 0.8F);
+			item.damage(1, livingEntity);
+		}
 		livingEntity.getEquipment().setItem(hand, item);
 		livingEntity.swingHand(hand);
 

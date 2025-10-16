@@ -242,7 +242,8 @@ public class EntityUtil {
 		return cause == EntityDamageEvent.DamageCause.FIRE
 				|| cause == EntityDamageEvent.DamageCause.FIRE_TICK
 				|| cause == EntityDamageEvent.DamageCause.LAVA
-				|| cause == EntityDamageEvent.DamageCause.HOT_FLOOR;
+				|| cause == EntityDamageEvent.DamageCause.HOT_FLOOR
+				|| cause == EntityDamageEvent.DamageCause.CAMPFIRE;
 	}
 
 	/**

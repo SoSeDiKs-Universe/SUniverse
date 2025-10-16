@@ -7,7 +7,6 @@ import me.sosedik.packetadvancements.api.progression.RequiredAdvancementProgress
 import me.sosedik.packetadvancements.imlp.advancement.base.BaseAdvancement;
 import me.sosedik.packetadvancements.imlp.progress.vanilla.conditions.EntityStateTriggerCondition;
 import me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData;
-import me.sosedik.utilizer.dataset.UtilizerTags;
 import net.kyori.adventure.key.Key;
 import org.bukkit.DyeColor;
 import org.bukkit.entity.Axolotl;
@@ -37,7 +36,7 @@ public class YouMonsterAdvancement extends BaseAdvancement {
 	}
 
 	private static RequiredAdvancementProgress getProgress() {
-		List<List<String>> requirements = new ArrayList<>(UtilizerTags.LAND_ANIMALS.getValues().size());
+		List<List<String>> requirements = new ArrayList<>();
 		List<VanillaTriggerData<?>> triggerDatas = new ArrayList<>();
 
 		for (EntityType type : List.of(
@@ -56,21 +55,21 @@ public class YouMonsterAdvancement extends BaseAdvancement {
 			String criterion = Key.MINECRAFT_NAMESPACE.equals(key.namespace()) ? key.value() : key.namespace() + "_" + key.value();
 			criterion = "chicken_" + criterion;
 			requirements.add(List.of(criterion));
-			triggerDatas.add(triggerData(EntityType.CHICKEN, criterion, "{variant:\"%s\"}".formatted(key.toString())));
+			triggerDatas.add(triggerData(EntityType.CHICKEN, criterion, "{variant:\"%s\"}".formatted(key)));
 		});
 		RegistryAccess.registryAccess().getRegistry(RegistryKey.PIG_VARIANT).forEach(tag -> {
 			Key key = tag.key();
 			String criterion = Key.MINECRAFT_NAMESPACE.equals(key.namespace()) ? key.value() : key.namespace() + "_" + key.value();
 			criterion = "pig_" + criterion;
 			requirements.add(List.of(criterion));
-			triggerDatas.add(triggerData(EntityType.PIG, criterion, "{variant:\"%s\"}".formatted(key.toString())));
+			triggerDatas.add(triggerData(EntityType.PIG, criterion, "{variant:\"%s\"}".formatted(key)));
 		});
 		RegistryAccess.registryAccess().getRegistry(RegistryKey.COW_VARIANT).forEach(tag -> {
 			Key key = tag.key();
 			String criterion = Key.MINECRAFT_NAMESPACE.equals(key.namespace()) ? key.value() : key.namespace() + "_" + key.value();
 			criterion = "cow_" + criterion;
 			requirements.add(List.of(criterion));
-			triggerDatas.add(triggerData(EntityType.COW, criterion, "{variant:\"%s\"}".formatted(key.toString())));
+			triggerDatas.add(triggerData(EntityType.COW, criterion, "{variant:\"%s\"}".formatted(key)));
 		});
 		for (MushroomCow.Variant value : MushroomCow.Variant.values()) {
 			String criterion = "mooshroom_" + value.name().toLowerCase(Locale.US);

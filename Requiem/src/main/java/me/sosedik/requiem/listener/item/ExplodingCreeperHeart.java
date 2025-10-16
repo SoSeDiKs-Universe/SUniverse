@@ -94,7 +94,6 @@ public class ExplodingCreeperHeart implements Listener {
 					.build();
 				locHolder.damage(Double.MAX_VALUE, damageSource);
 			}
-			// KittenAdvancements.GREEN_FOOL.awardAllCriteria(this.player); // TODO advancement
 		}
 
 		@Override

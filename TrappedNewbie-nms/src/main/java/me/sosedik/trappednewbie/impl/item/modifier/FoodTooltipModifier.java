@@ -62,11 +62,13 @@ public class FoodTooltipModifier extends ItemModifier {
 						else display.add(SATURATION_ICON_3);
 					}
 					for (int i = 0; i < fulls; i++) display.add(SATURATION_ICON_4);
-					int hungerWidth = ICON_WIDTH * foodValue;
+					int hungerWidth = ICON_WIDTH * (int) Math.ceil(foodValue / 2D) + 1;
 					int satIcons = leftover > 0 ? fulls + 1 : fulls;
 					int saturationWidth = ICON_WIDTH * satIcons + 1;
 					Component saturationDisplay = combine(SpacingUtil.getNegativePixel(), display);
 					hungerDisplay = Component.textOfChildren(hungerDisplay, SpacingUtil.getOffset(-hungerWidth + (hungerWidth - saturationWidth), saturationWidth, saturationDisplay));
+					if (saturationWidth > hungerWidth)
+						hungerDisplay = Component.textOfChildren(SpacingUtil.getSpacing(saturationWidth - hungerWidth - 1), hungerDisplay);
 				}
 				contextBox.addLore(hungerDisplay.shadowColor(ShadowColor.none()));
 			}

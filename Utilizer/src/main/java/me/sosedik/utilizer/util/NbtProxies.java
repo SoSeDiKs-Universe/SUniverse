@@ -22,29 +22,33 @@ public class NbtProxies {
 		}
 
 		@Override
-		public void set(ReadWriteNBT nbt, String key, Location value) {
-			nbt.removeKey(key);
-			ReadWriteNBT tag = nbt.getOrCreateCompound(key);
+		public void set(ReadWriteNBT nbt, @Nullable String key, Location value) {
+			if (key != null) {
+				nbt.removeKey(key);
+				nbt = nbt.getOrCreateCompound(key);
+			}
 			World world = value.getWorld();
-			if (world != null) tag.setUUID("world", world.getUID());
-			tag.setDouble("x", value.getX());
-			tag.setDouble("y", value.getY());
-			tag.setDouble("z", value.getZ());
-			tag.setFloat("yaw", value.getYaw());
-			tag.setFloat("pitch", value.getPitch());
+			if (world != null) nbt.setUUID("world", world.getUID());
+			nbt.setDouble("x", value.getX());
+			nbt.setDouble("y", value.getY());
+			nbt.setDouble("z", value.getZ());
+			nbt.setFloat("yaw", value.getYaw());
+			nbt.setFloat("pitch", value.getPitch());
 		}
 
 		@Override
-		public @Nullable Location get(ReadableNBT nbt, String key) {
-			ReadableNBT tag = nbt.getCompound(key);
-			if (tag == null) return null;
+		public @Nullable Location get(ReadableNBT nbt, @Nullable String key) {
+			if (key != null) {
+				nbt = nbt.getCompound(key);
+				if (nbt == null) return null;
+			}
 
-			World world = tag.hasTag("world") ? Bukkit.getWorld(Objects.requireNonNull(tag.getUUID("world"))) : null;
-			double x = tag.getDouble("x");
-			double y = tag.getDouble("y");
-			double z = tag.getDouble("z");
-			float yaw = tag.getFloat("yaw");
-			float pitch = tag.getFloat("pitch");
+			World world = nbt.hasTag("world") ? Bukkit.getWorld(Objects.requireNonNull(nbt.getUUID("world"))) : null;
+			double x = nbt.getDouble("x");
+			double y = nbt.getDouble("y");
+			double z = nbt.getDouble("z");
+			float yaw = nbt.getFloat("yaw");
+			float pitch = nbt.getFloat("pitch");
 			return new Location(world, x, y, z, yaw, pitch);
 		}
 

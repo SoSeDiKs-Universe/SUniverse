@@ -249,7 +249,7 @@ public class PerPlayerWorlds implements Listener {
 	public static @Nullable World getPersonalWorld(UUID playerUuid, boolean load) {
 		return getWorld("worlds-personal/", playerUuid,
 				(levelName, worldKey) -> requireNonNull(
-					new WorldCreator(levelName, worldKey)
+					 WorldCreator.ofNameAndKey(levelName, worldKey)
 						.keepSpawnLoaded(TriState.FALSE)
 						.generator(VoidChunkGenerator.GENERATOR)
 						.createWorld()

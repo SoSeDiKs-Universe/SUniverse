@@ -12,6 +12,9 @@ import org.bukkit.Tag;
 import org.bukkit.entity.EntityType;
 import org.jspecify.annotations.NullMarked;
 
+import java.util.ArrayList;
+import java.util.List;
+
 // MCCheck: 1.21.8, new weapons / attack opportunities
 @NullMarked
 public class AttackWithAllWeaponsAdvancement extends BaseAdvancement {
@@ -21,7 +24,26 @@ public class AttackWithAllWeaponsAdvancement extends BaseAdvancement {
 	}
 
 	private static RequiredAdvancementProgress getProgress() {
-		return RequiredAdvancementProgress.vanilla(
+		List<List<String>> requirements = List.of(
+			List.of("axe"),
+			List.of("shovel"),
+			List.of("pickaxe"),
+			List.of("hoe"),
+			List.of("sword"),
+			List.of("bow"),
+			List.of("crossbow"),
+			List.of("firework_rocket"),
+			List.of("trident_melee", "trident_thrown"),
+			List.of("tnt"),
+			List.of("snowball"),
+			List.of("egg"),
+			List.of("fishing_rod"),
+			List.of("splash_potion"),
+			List.of("lingering_potion"),
+			List.of("mace", "mace_smash"),
+			List.of("wind_charge")
+		);
+		List<VanillaTriggerData<?>> triggerDatas = new ArrayList<>(List.of(
 			VanillaTriggerData.playerHurtEntity("axe")
 				.withDamage(damage -> damage
 					.withDamageSource(source -> source
@@ -83,7 +105,7 @@ public class AttackWithAllWeaponsAdvancement extends BaseAdvancement {
 						.withTag(DamageTypeTagKeys.IS_PROJECTILE, true)
 						.withDirectEntity(entity -> entity
 							.withEntityType(Tag.ENTITY_TYPES_ARROWS)
-							.withNbt("{weapon:{id:\"minecraft:bow\"}}")
+							.withNbt("{weapon:{id:\"%s\"}}".formatted(Material.BOW.getKey()))
 						)
 					)
 				),
@@ -93,7 +115,7 @@ public class AttackWithAllWeaponsAdvancement extends BaseAdvancement {
 						.withTag(DamageTypeTagKeys.IS_PROJECTILE, true)
 						.withDirectEntity(entity -> entity
 							.withEntityType(Tag.ENTITY_TYPES_ARROWS)
-							.withNbt("{weapon:{id:\"minecraft:crossbow\"}}")
+							.withNbt("{weapon:{id:\"%s\"}}".formatted(Material.CROSSBOW.getKey()))
 						)
 					)
 				),
@@ -184,6 +206,17 @@ public class AttackWithAllWeaponsAdvancement extends BaseAdvancement {
 						)
 					)
 				),
+			VanillaTriggerData.playerHurtEntity("mace_smash")
+				.withDamage(damage -> damage
+					.withDamageSource(source -> source
+						.withTag(DamageTypeTagKeys.MACE_SMASH, true)
+						.withSourceEntity(entity -> entity
+							.withEquipment(equipment -> equipment
+								.withMainHand(ItemTriggerCondition.of(Material.MACE))
+							)
+						)
+					)
+				),
 			VanillaTriggerData.playerHurtEntity("wind_charge")
 				.withDamage(damage -> damage
 					.withDamageSource(source -> source
@@ -193,7 +226,8 @@ public class AttackWithAllWeaponsAdvancement extends BaseAdvancement {
 						)
 					)
 				)
-		);
+		));
+		return RequiredAdvancementProgress.vanilla(requirements, triggerDatas);
 	}
 
 }

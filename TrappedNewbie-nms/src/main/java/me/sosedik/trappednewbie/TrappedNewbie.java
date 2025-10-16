@@ -46,19 +46,23 @@ import me.sosedik.trappednewbie.listener.advancement.AdvancementRecipes;
 import me.sosedik.trappednewbie.listener.advancement.AdvancementTrophies;
 import me.sosedik.trappednewbie.listener.advancement.AdvancementsLocalizer;
 import me.sosedik.trappednewbie.listener.advancement.LoadSaveAdvancementsOnJoinQuit;
+import me.sosedik.trappednewbie.listener.advancement.dedicated.BlockMoveAdvancements;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.CampfirePlacingAdvancements;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.CrossbowWithFireworkAdvancement;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.CrossbowsHotbarAdvancement;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.FindGravelAdvancement;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.FirstPossessionAdvancement;
-import me.sosedik.trappednewbie.listener.advancement.dedicated.FoodConsumingAdvancement;
+import me.sosedik.trappednewbie.listener.advancement.dedicated.FoodConsumingAdvancements;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.GoodAsNewAdvancement;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.HalfAHeartAdvancements;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.HorseStatsAdvancements;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.IHateSandAdvancement;
+import me.sosedik.trappednewbie.listener.advancement.dedicated.IgniteACreeperCompatAdvancement;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.IgniteChargedCreeperMidairAdvancement;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.InventoryAdvancements;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.Kill10ChickensInAirAdvancement;
+import me.sosedik.trappednewbie.listener.advancement.dedicated.KillAMobWearingItsHeadAdvancement;
+import me.sosedik.trappednewbie.listener.advancement.dedicated.KillMobsAdvancements;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.KungFuPandaAdvancement;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.LevelAdvancements;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.LootOpensAdvancements;
@@ -67,6 +71,7 @@ import me.sosedik.trappednewbie.listener.advancement.dedicated.PathwaysAdvanceme
 import me.sosedik.trappednewbie.listener.advancement.dedicated.QuickDeathAdvancements;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.StatisticAdvancements;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.TNTPrimesAdvancement;
+import me.sosedik.trappednewbie.listener.advancement.dedicated.TickerAdvancements;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.WashAdvancements;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.YouMonsterAdvancement;
 import me.sosedik.trappednewbie.listener.block.BlockBreakHurts;
@@ -254,19 +259,23 @@ public final class TrappedNewbie extends JavaPlugin {
 			AdvancementTrophies.class,
 			LoadSaveAdvancementsOnJoinQuit.class,
 			/// dedicated advancement
+			BlockMoveAdvancements.class,
 			CampfirePlacingAdvancements.class,
 			CrossbowsHotbarAdvancement.class,
 			CrossbowWithFireworkAdvancement.class,
 			FindGravelAdvancement.class,
 			FirstPossessionAdvancement.class,
-			FoodConsumingAdvancement.class,
+			FoodConsumingAdvancements.class,
 			GoodAsNewAdvancement.class,
 			HalfAHeartAdvancements.class,
 			HorseStatsAdvancements.class,
+			IgniteACreeperCompatAdvancement.class,
 			IgniteChargedCreeperMidairAdvancement.class,
 			IHateSandAdvancement.class,
 			InventoryAdvancements.class,
 			Kill10ChickensInAirAdvancement.class,
+			KillAMobWearingItsHeadAdvancement.class,
+			KillMobsAdvancements.class,
 			KungFuPandaAdvancement.class,
 			LevelAdvancements.class,
 			LootOpensAdvancements.class,
@@ -274,6 +283,7 @@ public final class TrappedNewbie extends JavaPlugin {
 			PathwaysAdvancement.class,
 			QuickDeathAdvancements.class,
 			StatisticAdvancements.class,
+			TickerAdvancements.class,
 			TNTPrimesAdvancement.class,
 			WashAdvancements.class,
 			YouMonsterAdvancement.class,

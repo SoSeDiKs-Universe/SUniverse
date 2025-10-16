@@ -1,5 +1,6 @@
 package me.sosedik.trappednewbie.impl.advancement;
 
+import io.papermc.paper.datacomponent.DataComponentTypes;
 import me.sosedik.packetadvancements.api.progression.RequiredAdvancementProgress;
 import me.sosedik.packetadvancements.imlp.advancement.base.BaseAdvancement;
 import me.sosedik.packetadvancements.imlp.advancement.base.BaseAdvancementBuilderImpl;
@@ -35,10 +36,10 @@ public class GetABannerShieldAdvancement extends BaseAdvancement {
 		String components = """
 			{
 				"components": {
-					"minecraft:base_color": "%s"
+					"%s": "%s"
 				}
 			}
-			""".formatted(name);
+			""".formatted(DataComponentTypes.BASE_COLOR.key(), name);
 		return VanillaTriggerData.inventoryChanged(name)
 			.withItems(
 				ItemTriggerCondition.of(Material.SHIELD)

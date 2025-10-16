@@ -1,7 +1,6 @@
 package me.sosedik.requiem.listener.entity;
 
 import de.tr7zw.nbtapi.NBT;
-import io.papermc.paper.tag.EntityTags;
 import me.sosedik.requiem.Requiem;
 import me.sosedik.utilizer.util.EntityUtil;
 import org.bukkit.Location;
@@ -42,7 +41,7 @@ public class UndeadConsecration implements Listener {
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onSpawn(EntitySpawnEvent event) {
 		if (!(event.getEntity() instanceof LivingEntity entity)) return;
-		if (!EntityTags.UNDEADS.isTagged(entity.getType())) return;
+		if (!Tag.ENTITY_TYPES_UNDEAD.isTagged(entity.getType())) return;
 
 		UNDEAD_MOBS.put(entity.getUniqueId(), new HealTask(entity));
 	}
@@ -51,7 +50,7 @@ public class UndeadConsecration implements Listener {
 	public void onSpawn(EntitiesLoadEvent event) {
 		for (Entity entity : event.getEntities()) {
 			if (!(entity instanceof LivingEntity livingEntity)) continue;
-			if (!EntityTags.UNDEADS.isTagged(livingEntity.getType())) continue;
+			if (!Tag.ENTITY_TYPES_UNDEAD.isTagged(livingEntity.getType())) continue;
 
 			UNDEAD_MOBS.put(entity.getUniqueId(), new HealTask(livingEntity));
 		}
@@ -76,7 +75,7 @@ public class UndeadConsecration implements Listener {
 		if (healTask == null) return;
 		if (healTask.isVulnerable()) return;
 
-		if (!EntityUtil.isFireDamageCause(event.getCause())) {
+		if (EntityUtil.isFireDamageCause(event.getCause())) {
 			if (entity.isImmuneToFire()) {
 				event.setCancelled(true);
 			} else {

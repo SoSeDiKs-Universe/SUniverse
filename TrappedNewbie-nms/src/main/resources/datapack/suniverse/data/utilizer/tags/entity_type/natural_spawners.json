@@ -1,0 +1,12 @@
+{
+	"replace": false,
+	"values": [
+		"minecraft:blaze",
+		"minecraft:zombie",
+		"minecraft:skeleton",
+		"minecraft:spider",
+		"minecraft:cave_spider",
+		"minecraft:silverfish",
+		"minecraft:magma_cube"
+	]
+}

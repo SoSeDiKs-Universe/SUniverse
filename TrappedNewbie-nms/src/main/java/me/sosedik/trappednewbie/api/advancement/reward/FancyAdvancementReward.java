@@ -79,6 +79,7 @@ public class FancyAdvancementReward extends SimpleAdvancementRewardBuilder<Fancy
 		if (noDrop) return this;
 
 		return withExtraAction(data -> {
+			if (true) return; // TODO re-enable trophies
 			Player completer = data.completer();
 			if (completer == null) return;
 

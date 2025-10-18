@@ -51,6 +51,7 @@ public class ResourceLib extends JavaPlugin {
 	@Override
 	public void onLoad() {
 		ResourceLib.instance = this;
+		ResourceLibBootstrap.runPostInitActions();
 		this.scheduler = new Scheduler(this);
 		this.storage = new ResourcePackStorage(this);
 

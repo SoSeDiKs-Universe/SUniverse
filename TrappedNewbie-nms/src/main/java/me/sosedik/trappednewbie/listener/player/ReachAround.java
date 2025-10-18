@@ -3,14 +3,15 @@ package me.sosedik.trappednewbie.listener.player;
 import io.papermc.paper.event.player.PlayerClientLoadedWorldEvent;
 import me.sosedik.trappednewbie.TrappedNewbie;
 import me.sosedik.trappednewbie.api.event.player.PlaceableBlockHighlightEvent;
-import me.sosedik.trappednewbie.util.NMesSUtil;
 import me.sosedik.utilizer.util.LocationUtil;
 import me.sosedik.utilizer.util.MathUtil;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.type.Slab;
+import org.bukkit.entity.BlockDisplay;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -66,11 +67,11 @@ public class ReachAround implements Listener {
 	}
 
 	private boolean tryPlacingBlock(Player player, EquipmentSlot hand) {
-		Location target = getPlaceableTarget(player, hand);
-		if (target == null) return false;
-		if (!player.placeBlock(hand, target, BlockFace.UP)) return false;
+		ReachAroundData reachAroundData = getPlaceableTarget(player, hand);
+		if (reachAroundData == null) return false;
+		if (!player.placeBlock(hand, reachAroundData.loc(), BlockFace.UP)) return false;
 
-		Block block = target.getBlock();
+		Block block = reachAroundData.loc().getBlock();
 		// Place slabs at top if player is higher
 		if (block.getBlockData() instanceof Slab slab && slab.getType() == Slab.Type.BOTTOM
 				&& LocationUtil.isBlockHigher(block, (float) MathUtil.getDecimalPartAbs(player.getLocation().getY()))) {
@@ -102,16 +103,24 @@ public class ReachAround implements Listener {
 		}
 
 		private boolean tryPlaceBlockPreview(EquipmentSlot hand) {
-			Location target = getPlaceableTarget(this.player, hand);
-			if (target == null) return false;
+			ReachAroundData reachAroundData = getPlaceableTarget(this.player, hand);
+			if (reachAroundData == null) return false;
 
-			NMesSUtil.sendBlockHighlight(this.player, target, "", Color.fromARGB(100, 0, 16, 0), 200);
+			reachAroundData.loc().getWorld().spawn(reachAroundData.loc(), BlockDisplay.class, bd -> {
+				bd.setVisibleByDefault(false);
+				bd.setPersistent(false);
+				bd.setBlock(reachAroundData.blockData());
+				bd.setGlowing(true);
+				this.player.showEntity(TrappedNewbie.instance(), bd);
+				TrappedNewbie.scheduler().sync(bd::remove, 5L);
+			});
 			return true;
 		}
 
 	}
 
-	private static @Nullable Location getPlaceableTarget(Player player, EquipmentSlot hand) {
+	private record ReachAroundData(Location loc, BlockData blockData) {}
+	private static @Nullable ReachAroundData getPlaceableTarget(Player player, EquipmentSlot hand) {
 		ItemStack item = player.getInventory().getItem(hand);
 		if (ItemStack.isEmpty(item)) return null;
 		if (!item.getType().isBlock()) return null;
@@ -122,9 +131,11 @@ public class ReachAround implements Listener {
 		Location target = event.getPlaceTarget();
 		if (target == null) return null;
 		if (!target.getBlock().getRelative(BlockFace.DOWN).isEmpty()) return null;
-		if (!player.canPlaceBlock(hand, item, target, BlockFace.UP)) return null;
 
-		return target;
+		BlockData blockData = player.getPlacedState(hand, item, target, BlockFace.UP);
+		if (blockData == null) return null;
+
+		return new ReachAroundData(target, blockData);
 	}
 
 	/**

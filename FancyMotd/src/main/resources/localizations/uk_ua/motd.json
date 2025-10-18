@@ -20,11 +20,11 @@
   ],
   "motd.header": {
     "0r": "",
-    "1-100r": "<#37BBF5>Всесвіт <#ECF3FC>Сусіда <random_color>♥                                   <clock_time>",
-    "101r": "<random_color>♥ <#ECF3FC>адісуС <#37BBF5>тівсесВ                                   <clock_time>",
-    "102r": "<#37BBF5>Містер <#ECF3FC>Робот <random_color>♥                                     <clock_time>",
-    "103r": "<#37BBF5>Коров’яче <#ECF3FC>Вим’я <random_color>♥                                 <clock_time>",
-    "104r": "<#37BBF5>Люблю <#ECF3FC>Тебе <random_color>♥<random_color>♥<random_color>♥                                   <clock_time>"
+    "1-100r": "<#37BBF5>Всесвіт <#ECF3FC>Сусіда <random_color>♥                                  <clock_time>",
+    "101r": "<random_color>♥ <#ECF3FC>адісуС <#37BBF5>тівсесВ                                  <clock_time>",
+    "102r": "<#37BBF5>Містер <#ECF3FC>Робот <random_color>♥                                    <clock_time>",
+    "103r": "<#37BBF5>Коров’яче <#ECF3FC>Вим’я <random_color>♥                                <clock_time>",
+    "104r": "<#37BBF5>Люблю <#ECF3FC>Тебе <random_color>♥<random_color>♥<random_color>♥                                  <clock_time>"
   },
   "motd.splash.r": [
     "<#0057B8>Слава <#FFD700>Україні!",

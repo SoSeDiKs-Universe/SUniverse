@@ -20,11 +20,11 @@
   ],
   "motd.header": {
     "0r": "",
-    "1-100r": "<#37BBF5>Вселенная <#ECF3FC>Соседа <random_color>♥                              <clock_time>",
-    "101r": "<random_color>♥ <#ECF3FC>адесоС <#37BBF5>яаннелесВ                              <clock_time>",
-    "102r": "<#37BBF5>Мистер <#ECF3FC>Робот <random_color>♥                                    <clock_time>",
-    "103r": "<#37BBF5>Коровье <#ECF3FC>Вымя <random_color>♥                                    <clock_time>",
-    "104r": "<#37BBF5>Люблю <#ECF3FC>Тебя <random_color>♥<random_color>♥<random_color>♥                                   <clock_time>"
+    "1-100r": "<#37BBF5>Вселенная <#ECF3FC>Соседа <random_color>♥                             <clock_time>",
+    "101r": "<random_color>♥ <#ECF3FC>адесоС <#37BBF5>яаннелесВ                             <clock_time>",
+    "102r": "<#37BBF5>Мистер <#ECF3FC>Робот <random_color>♥                                   <clock_time>",
+    "103r": "<#37BBF5>Коровье <#ECF3FC>Вымя <random_color>♥                                   <clock_time>",
+    "104r": "<#37BBF5>Люблю <#ECF3FC>Тебя <random_color>♥<random_color>♥<random_color>♥                                  <clock_time>"
   },
   "motd.splash.r": [
     "<gray>Обновление завтра",

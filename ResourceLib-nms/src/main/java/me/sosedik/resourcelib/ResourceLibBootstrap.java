@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import io.papermc.paper.adventure.PaperAdventure;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
@@ -12,15 +13,20 @@ import io.papermc.paper.registry.RegistryKey;
 import io.papermc.paper.registry.TypedKey;
 import io.papermc.paper.registry.event.RegistryComposeEvent;
 import io.papermc.paper.registry.event.RegistryEvents;
+import it.unimi.dsi.fastutil.objects.Reference2ObjectMap;
 import me.sosedik.kiterino.registry.data.BlockRegistryEntity;
 import me.sosedik.kiterino.registry.data.ItemRegistryEntity;
 import me.sosedik.kiterino.registry.data.MobEffectRegistryEntity;
 import me.sosedik.kiterino.registry.wrapper.KiterinoMobEffectBehaviourWrapper;
+import me.sosedik.kiterino.util.KiterinoUnsafeUtil;
 import me.sosedik.kiterino.world.block.KiterinoBlock;
 import me.sosedik.utilizer.util.FileUtil;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -32,12 +38,16 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.component.Consumable;
 import net.minecraft.world.item.component.Consumables;
 import net.minecraft.world.item.component.DyedItemColor;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.minecraft.world.item.component.UseRemainder;
 import net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect;
+import net.minecraft.world.item.enchantment.Repairable;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -81,6 +91,8 @@ import static java.util.Objects.requireNonNull;
 
 @NullMarked
 public class ResourceLibBootstrap implements PluginBootstrap {
+
+	private static List<Runnable> postActions = new ArrayList<>();
 
 	@Override
 	public void bootstrap(BootstrapContext context) {
@@ -170,14 +182,17 @@ public class ResourceLibBootstrap implements PluginBootstrap {
 		var typedKey = TypedKey.create(RegistryKey.ITEM, itemKey);
 		event.registry().register(typedKey, b -> {
 			Object nmsItem = null;
+			Item.Properties properties = null;
 			if (itemsProvider != null) {
-				nmsItem = itemsProvider.apply(itemKey.toString(), applyItemProperties(json, b.constructItemProperties()));
+				properties = applyItemProperties(context, itemKey, json, b.constructItemProperties());
+				nmsItem = itemsProvider.apply(itemKey.toString(), properties);
 			}
 			if (nmsItem == null) {
+				if (properties == null) properties = applyItemProperties(context, itemKey, json, b.constructItemProperties());
 				if (b.hasAttachedBlock()) {
-					b.nmsItem(new BlockItem((Block) b.asBlockOrThrow(), applyItemProperties(json, b.constructItemProperties())));
+					b.nmsItem(new BlockItem((Block) b.asBlockOrThrow(), properties));
 				} else {
-					b.nmsItem(new Item(applyItemProperties(json, b.constructItemProperties())));
+					b.nmsItem(new Item(properties));
 				}
 			} else {
 				b.nmsItem(nmsItem);
@@ -206,18 +221,76 @@ public class ResourceLibBootstrap implements PluginBootstrap {
 		});
 	}
 
-	private static Item.Properties applyItemProperties(JsonObject json, Object props) {
+	private static Reference2ObjectMap<DataComponentType<?>, Object> getComponentsMap(Item item) {
+		if (!(item.components() instanceof DataComponentMap.Builder.SimpleMap(
+			Reference2ObjectMap<DataComponentType<?>, Object> map
+		)))
+			throw new RuntimeException("Couldn't get Item's components map");
+		return map;
+	}
+
+	private static Item.Properties applyItemProperties(BootstrapContext context, Key itemKey, JsonObject json, Object props) {
 		Item.Properties properties = (Item.Properties) props;
 		if (json.has("durability")) properties.durability(json.get("durability").getAsInt());
 		if (json.has("repairable")) {
 			String tag = json.get("repairable").getAsString();
-			if (tag.charAt(0) == '#')
+			if (tag.charAt(0) == '#') {
 				properties.repairable(TagKey.create(Registries.ITEM, ResourceLocation.parse(tag.substring(1))));
-			else
-				properties.repairable(BuiltInRegistries.ITEM.getValue(ResourceLocation.parse(tag)));
+			} else {
+				Item item = BuiltInRegistries.ITEM.getValue(ResourceLocation.parse(tag));
+				if (item == Items.AIR) {
+					postActions.add(() -> {
+						Item repairItem = BuiltInRegistries.ITEM.getValue(ResourceLocation.parse(tag));
+						if (repairItem == Items.AIR) {
+							ResourceLib.logger().error("Couldn't set repairable ({} -> {}): missing item", itemKey, tag);
+							return;
+						}
+						Item ogItem = BuiltInRegistries.ITEM.getValue(PaperAdventure.asVanilla(itemKey));
+						getComponentsMap(ogItem).put(DataComponents.REPAIRABLE, new Repairable(HolderSet.direct(repairItem.builtInRegistryHolder())));
+					});
+				} else {
+					properties.repairable(item);
+				}
+			}
 		}
-		if (json.has("remaining_item")) properties.craftRemainder(BuiltInRegistries.ITEM.getValue(ResourceLocation.parse(json.get("remaining_item").getAsString())));
-		if (json.has("using_converts_to")) properties.usingConvertsTo(BuiltInRegistries.ITEM.getValue(ResourceLocation.parse(json.get("using_converts_to").getAsString())));
+		if (json.has("remaining_item")) {
+			String itemId = json.get("remaining_item").getAsString();
+			Item item = BuiltInRegistries.ITEM.getValue(ResourceLocation.parse(itemId));
+			if (item == Items.AIR) {
+				postActions.add(() -> {
+					Item remainingItem = BuiltInRegistries.ITEM.getValue(ResourceLocation.parse(itemId));
+					if (remainingItem == Items.AIR) {
+						ResourceLib.logger().error("Couldn't set remaining_item ({} -> {}): missing item", itemKey, itemId);
+						return;
+					}
+					Item ogItem = BuiltInRegistries.ITEM.getValue(PaperAdventure.asVanilla(itemKey));
+					try {
+						KiterinoUnsafeUtil.getField(Item.class, "craftingRemainingItem").set(ogItem, remainingItem);
+					} catch (IllegalAccessException e) {
+						throw new RuntimeException(e);
+					}
+				});
+			} else {
+				properties.craftRemainder(item);
+			}
+		}
+		if (json.has("using_converts_to")) {
+			String itemId = json.get("using_converts_to").getAsString();
+			Item item = BuiltInRegistries.ITEM.getValue(ResourceLocation.parse(itemId));
+			if (item == Items.AIR) {
+				postActions.add(() -> {
+					Item usingConvertsTo = BuiltInRegistries.ITEM.getValue(ResourceLocation.parse(itemId));
+					if (usingConvertsTo == Items.AIR) {
+						ResourceLib.logger().error("Couldn't set using_converts_to ({} -> {}): missing item", itemKey, itemId);
+						return;
+					}
+					Item ogItem = BuiltInRegistries.ITEM.getValue(PaperAdventure.asVanilla(itemKey));
+					getComponentsMap(ogItem).put(DataComponents.USE_REMAINDER, new UseRemainder(new ItemStack(usingConvertsTo)));
+				});
+			} else {
+				properties.usingConvertsTo(item);
+			}
+		}
 		if (json.has("stack_size")) properties.stacksTo(json.get("stack_size").getAsInt());
 		if (json.has("fire_resistance") && json.get("fire_resistance").getAsBoolean()) properties.fireResistant();
 		if (json.has("rarity")) properties.rarity(Rarity.valueOf(json.get("rarity").getAsString().toUpperCase(Locale.ROOT)));
@@ -412,6 +485,11 @@ public class ResourceLibBootstrap implements PluginBootstrap {
 
 	private static TypedKey<PotionEffectType> potionEffectKey(Key key) {
 		return TypedKey.create(RegistryKey.MOB_EFFECT, key);
+	}
+
+	public static void runPostInitActions() {
+		postActions.forEach(Runnable::run);
+		postActions = null;
 	}
 
 }

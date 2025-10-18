@@ -1,7 +1,5 @@
 package me.sosedik.trappednewbie.util;
 
-import net.minecraft.network.protocol.common.ClientboundCustomPayloadPacket;
-import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.CraftingMenu;
 import net.minecraft.world.item.ItemStack;
@@ -10,12 +8,9 @@ import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
 import org.bukkit.Bukkit;
-import org.bukkit.Color;
-import org.bukkit.Location;
 import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
-import org.bukkit.craftbukkit.util.CraftLocation;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.CraftItemEvent;
@@ -67,21 +62,6 @@ public class NMesSUtil {
 		}
 
 		return null;
-	}
-
-	public static void sendBlockHighlight(Player player, Location loc, String text, Color color, int time) {
-		if (!(player instanceof CraftPlayer craftPlayer)) return;
-		ServerGamePacketListenerImpl connection = craftPlayer.getHandle().connection;
-		if (connection == null) return;
-
-		var payload = new GameTestAddMarkerDebugPayload(
-			CraftLocation.toBlockPosition(loc),
-			color.asARGB(),
-			text,
-			time
-		);
-		var packet = new ClientboundCustomPayloadPacket(payload);
-		connection.send(packet);
 	}
 
 }

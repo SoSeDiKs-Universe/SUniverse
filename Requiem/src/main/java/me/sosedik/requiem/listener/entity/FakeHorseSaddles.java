@@ -28,7 +28,7 @@ import java.util.UUID;
  * Fakes saddles for clients to allow controlling horses without actual saddles.
  * <br>This only allows access to the inventory, the riding itself requires {@link FakeHorseSaddlesModifier}.
  */
-// MCCheck: 1.21.8, abstract horse metadata index for saddles
+// MCCheck: 1.21.10, abstract horse metadata index for saddles
 @NullMarked
 public class FakeHorseSaddles implements PacketListener, Listener {
 

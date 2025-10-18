@@ -20,11 +20,11 @@
   ],
   "motd.header": {
     "0r": "",
-    "1-100r": "<#37BBF5>SoSeDiK's <#ECF3FC>Universe <random_color>♥                              <clock_time>",
-    "101r": "<random_color>♥ <#ECF3FC>esrevinU <#37BBF5>s'KiDeSoS                              <clock_time>",
-    "102r": "<#37BBF5>Mister <#ECF3FC>Robot <random_color>♥                                      <clock_time>",
-    "103r": "<#37BBF5>Holy <#ECF3FC>Cows <random_color>♥                                         <clock_time>",
-    "104r": "<#37BBF5>Love <#ECF3FC>You <random_color>♥<random_color>♥<random_color>♥                                        <clock_time>"
+    "1-100r": "<#37BBF5>SoSeDiK's <#ECF3FC>Universe <random_color>♥                             <clock_time>",
+    "101r": "<random_color>♥ <#ECF3FC>esrevinU <#37BBF5>s'KiDeSoS                             <clock_time>",
+    "102r": "<#37BBF5>Mister <#ECF3FC>Robot <random_color>♥                                     <clock_time>",
+    "103r": "<#37BBF5>Holy <#ECF3FC>Cows <random_color>♥                                        <clock_time>",
+    "104r": "<#37BBF5>Love <#ECF3FC>You <random_color>♥<random_color>♥<random_color>♥                                       <clock_time>"
   },
   "motd.splash.r": [
     "<gray>Update tomorrow (question mark?)",

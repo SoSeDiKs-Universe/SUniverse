@@ -147,7 +147,7 @@ public class DynamicMovingSpeed implements Listener {
 		} else {
 			downBlock = block.getRelative(BlockFace.DOWN);
 		}
-		if (!block.getType().isAir() && block.getBoundingBox().getHeight() > 0.085F)
+		if (!block.getType().isAir() && block.getBoundingBox().getHeight() > 0.095F)
 			slowness += 0.05F;
 		if (!block.getRelative(BlockFace.UP).getType().isAir())
 			slowness += 0.05F;

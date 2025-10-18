@@ -18,18 +18,24 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BedBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BedPart;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.type.Bed;
+import org.bukkit.craftbukkit.block.CraftBlockEntityState;
+import org.bukkit.craftbukkit.block.CraftBlockStates;
 import org.bukkit.craftbukkit.block.impl.CraftBed;
 import org.bukkit.craftbukkit.util.CraftLocation;
 import org.bukkit.inventory.EquipmentSlot;
+import org.jetbrains.annotations.UnknownNullability;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -39,11 +45,22 @@ import static java.util.Objects.requireNonNull;
 public class SleepingBagBlock extends BedBlock implements KiterinoBlock {
 
 	private static final VoxelShape SHAPE = Block.column(16.0, 1.0, 2.5);
+	private static @UnknownNullability BlockEntityType<SleepingBagBlockEntity> SLEEPING_BAG;
 
 	private org.bukkit.block.@Nullable BlockState bukkitState;
 
 	public SleepingBagBlock(Object properties) {
 		super(DyeColor.WHITE, ((Properties) properties).noOcclusion());
+		if (SLEEPING_BAG == null) {
+			SLEEPING_BAG = BlockEntityType.register("sleeping_bag", (p, s) -> new SleepingBagBlockEntity(SLEEPING_BAG, p, s), this);
+		} else {
+			SLEEPING_BAG.validBlocks.add(this);
+		}
+	}
+
+	@Override
+	public void postInit() {
+		CraftBlockStates.register(SLEEPING_BAG, SleepingBagCraftEntityState.class, SleepingBagCraftEntityState::new);
 	}
 
 	@Override
@@ -102,7 +119,7 @@ public class SleepingBagBlock extends BedBlock implements KiterinoBlock {
 
 	@Override
 	public @Nullable BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-		return null;
+		return new SleepingBagBlockEntity(SLEEPING_BAG, pos, state);
 	}
 
 	@Override
@@ -122,6 +139,36 @@ public class SleepingBagBlock extends BedBlock implements KiterinoBlock {
 	@Override
 	public Pair<Class<?>, Class<?>> getBlockDataClasses() {
 		return Pair.of(SleepingBagBed.class, CraftSleepingBagBed.class);
+	}
+
+	public static class SleepingBagCraftEntityState extends CraftBlockEntityState<SleepingBagBlockEntity> {
+
+		public SleepingBagCraftEntityState(World world, SleepingBagBlockEntity blockEntity) {
+			super(world, blockEntity);
+		}
+
+		protected SleepingBagCraftEntityState(SleepingBagCraftEntityState state, @Nullable Location location) {
+			super(state, location);
+		}
+
+		@Override
+		public SleepingBagCraftEntityState copy() {
+			return new SleepingBagCraftEntityState(this, null);
+		}
+
+		@Override
+		public SleepingBagCraftEntityState copy(Location location) {
+			return new SleepingBagCraftEntityState(this, location);
+		}
+
+	}
+
+	public static class SleepingBagBlockEntity extends BlockEntity {
+
+		public SleepingBagBlockEntity(BlockEntityType<?> blockEntityType, BlockPos pos, BlockState blockState) {
+			super(blockEntityType, pos, blockState);
+		}
+
 	}
 
 	public interface SleepingBagBed extends Bed {}

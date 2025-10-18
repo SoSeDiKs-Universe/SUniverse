@@ -4,13 +4,13 @@ import com.destroystokyo.paper.event.player.PlayerConnectionCloseEvent;
 import io.papermc.paper.connection.PlayerConfigurationConnection;
 import io.papermc.paper.event.connection.PlayerConnectionValidateLoginEvent;
 import io.papermc.paper.event.entity.EntityPortalReadyEvent;
+import io.papermc.paper.event.player.AsyncPlayerSpawnLocationEvent;
 import me.sosedik.delightfulfarming.feature.sugar.MealTime;
 import me.sosedik.limboworldgenerator.VoidChunkGenerator;
 import me.sosedik.miscme.task.CustomDayCycleTask;
 import me.sosedik.trappednewbie.TrappedNewbie;
 import me.sosedik.utilizer.util.FileUtil;
 import me.sosedik.utilizer.util.MiscUtil;
-import net.kyori.adventure.util.TriState;
 import org.bukkit.Bukkit;
 import org.bukkit.Difficulty;
 import org.bukkit.GameRule;
@@ -24,16 +24,20 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityPortalEnterEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
-import org.spigotmc.event.player.PlayerSpawnLocationEvent;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.function.BiFunction;
 
 import static java.util.Objects.requireNonNull;
@@ -51,9 +55,20 @@ public class PerPlayerWorlds implements Listener {
 		World.Environment.NORMAL, World.Environment.NETHER, World.Environment.THE_END
 	);
 
+	private static final Set<UUID> DELAYED_FALLS = new HashSet<>();
+
+	@EventHandler
+	public void onJoin(PlayerJoinEvent event) {
+		Player player = event.getPlayer();
+		if (!DELAYED_FALLS.remove(player.getUniqueId())) return;
+
+		LimboWorldFall.spawnTeleport(player, player.getWorld());
+	}
+
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onWorldLeave(PlayerConnectionCloseEvent event) {
 		UUID playerUuid = event.getPlayerUniqueId();
+		DELAYED_FALLS.remove(playerUuid);
 		TrappedNewbie.scheduler().sync(() -> unloadIfEmpty(playerUuid), 1L);
 	}
 
@@ -71,7 +86,7 @@ public class PerPlayerWorlds implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
-	public void onJoin(PlayerSpawnLocationEvent event) {
+	public void onJoin(AsyncPlayerSpawnLocationEvent event) throws ExecutionException, InterruptedException {
 		if (!event.isInitiallyInUnloadedWorld()) return;
 
 		NamespacedKey dimensionId = event.getInitialDimensionId();
@@ -95,14 +110,17 @@ public class PerPlayerWorlds implements Listener {
 			}
 			boolean rtp = !new File(Bukkit.getWorldContainer(), worldKey).exists();
 			World.Environment environment = MiscUtil.parseOr(split[1], World.Environment.NORMAL);
-			world = getResourceWorld(uuid, environment);
+			CompletableFuture<World> worldGetter = new CompletableFuture<>();
+			TrappedNewbie.scheduler().sync(() -> worldGetter.complete(getResourceWorld(uuid, environment)));
+			world = worldGetter.get();
 			if (!rtp) {
 				event.setSpawnLocation(event.getInitialLocation().world(world));
 				return;
 			}
 			event.setSpawnLocation(new Location(world, 0, world.getMaxHeight() + 50, 0));
-			World finalWorld = world;
-			TrappedNewbie.scheduler().sync(() -> LimboWorldFall.spawnTeleport(event.getPlayer(), finalWorld), 1L);
+			UUID playerUuid = event.getConnection().getProfile().getId();
+			if (playerUuid != null)
+				DELAYED_FALLS.add(playerUuid);
 		} else if (worldKey.startsWith("worlds-personal/")) {
 			if (!new File(Bukkit.getWorldContainer(), worldKey).exists()) return;
 
@@ -250,7 +268,6 @@ public class PerPlayerWorlds implements Listener {
 		return getWorld("worlds-personal/", playerUuid,
 				(levelName, worldKey) -> requireNonNull(
 					 WorldCreator.ofNameAndKey(levelName, worldKey)
-						.keepSpawnLoaded(TriState.FALSE)
 						.generator(VoidChunkGenerator.GENERATOR)
 						.createWorld()
 				), load
@@ -295,7 +312,6 @@ public class PerPlayerWorlds implements Listener {
 					}
 					return requireNonNull(
 						new WorldCreator(levelName, worldKey)
-							.keepSpawnLoaded(TriState.FALSE)
 							.environment(environment)
 							.createWorld()
 					);

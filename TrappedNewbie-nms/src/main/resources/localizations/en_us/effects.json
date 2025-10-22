@@ -1,5 +1,15 @@
 {
-	"effect.trapped_newbie.thirst.name": "Thirst",
+	"effect.trapped_newbie.bone_breaking.name": "Bone Breaking",
+	"effect.trapped_newbie.bouncy.name": "Bouncy",
+	"effect.trapped_newbie.climbing.name": "Spider Legs",
+	"effect.trapped_newbie.comfort.name": "Comfort",
+	"effect.trapped_newbie.firefingers.name": "Firefingers",
+	"effect.trapped_newbie.hot_potato.name": "Hot Potato",
+	"effect.trapped_newbie.life_leech.name": "Life Leech",
+	"effect.trapped_newbie.paralyzed.name": "Paralyzed",
 	"effect.trapped_newbie.quenched.name": "Quenched",
-	"effect.trapped_newbie.comfort.name": "Comfort"
+	"effect.trapped_newbie.rotten_bite.name": "Rotten Bite",
+	"effect.trapped_newbie.scary.name": "Scary",
+	"effect.trapped_newbie.thirst.name": "Thirst",
+	"effect.trapped_newbie.waterbolt.name": "Waterbolt"
 }

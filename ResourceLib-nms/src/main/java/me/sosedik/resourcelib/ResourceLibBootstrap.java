@@ -361,8 +361,8 @@ public class ResourceLibBootstrap implements PluginBootstrap {
 						return new PotionEffect(potionEffectType, duration, amplifier);
 					}).toList();
 					consumable.onConsume(new ApplyStatusEffectsConsumeEffect(
-							new ArrayList<>(Lists.transform(effectList, CraftPotionUtil::fromBukkit)),
-							probability
+						new ArrayList<>(Lists.transform(effectList, CraftPotionUtil::fromBukkit)),
+						probability
 					));
 				}
 			}

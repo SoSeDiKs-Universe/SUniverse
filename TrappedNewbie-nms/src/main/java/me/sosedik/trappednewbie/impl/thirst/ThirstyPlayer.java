@@ -2,14 +2,12 @@ package me.sosedik.trappednewbie.impl.thirst;
 
 import de.tr7zw.nbtapi.NBT;
 import de.tr7zw.nbtapi.iface.ReadableNBT;
-import io.papermc.paper.registry.RegistryAccess;
-import io.papermc.paper.registry.RegistryKey;
 import me.sosedik.trappednewbie.TrappedNewbie;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieAdvancements;
+import me.sosedik.trappednewbie.dataset.TrappedNewbieDamageTypes;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieEffects;
 import me.sosedik.trappednewbie.listener.thirst.ThirstOnJoinLeave;
 import org.bukkit.damage.DamageSource;
-import org.bukkit.damage.DamageType;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitTask;
@@ -19,7 +17,6 @@ import org.jspecify.annotations.Nullable;
 @NullMarked
 public final class ThirstyPlayer {
 
-	public static final DamageType THIRST_DAMAGE = RegistryAccess.registryAccess().getRegistry(RegistryKey.DAMAGE_TYPE).getOrThrow(TrappedNewbie.trappedNewbieKey("thirst"));
 	public static final int MAX_THIRST = 20;
 	public static final int MIN_THIRST = 0;
 
@@ -95,7 +92,7 @@ public final class ThirstyPlayer {
 			if (this.player.isDead()) return true;
 			if (!this.player.isOnline()) return true;
 
-			this.player.damage(1, DamageSource.builder(THIRST_DAMAGE).build());
+			this.player.damage(1, DamageSource.builder(TrappedNewbieDamageTypes.THIRST_DAMAGE).build());
 			return false;
 		}, 3 * 20L, 3 * 20L);
 	}

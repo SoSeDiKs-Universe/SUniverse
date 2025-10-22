@@ -4,7 +4,6 @@ import me.sosedik.requiem.Requiem;
 import me.sosedik.requiem.api.event.player.PlayerStartGhostingEvent;
 import me.sosedik.requiem.api.event.player.PlayerStopGhostingEvent;
 import me.sosedik.requiem.dataset.RequiemItems;
-import me.sosedik.requiem.listener.entity.PrepareGhostMobs;
 import me.sosedik.requiem.task.GhostAuraTask;
 import me.sosedik.requiem.task.GhostMobVisionTask;
 import me.sosedik.utilizer.util.EntityUtil;
@@ -68,16 +67,23 @@ public class GhostyPlayer {
 		EntityUtil.clearTargets(player);
 
 		// Hide player from non-ghosts
-		PrepareGhostMobs.hideVisibility(player, true);
-		for (UUID uuid : GHOSTS) {
-			Player onlinePlayer = Bukkit.getPlayer(uuid);
-			if (onlinePlayer == null) continue;
-			if (onlinePlayer == player) continue;
-			if (!isGhost(onlinePlayer)) continue;
-
-			PrepareGhostMobs.addVisible(player, onlinePlayer);
-			PrepareGhostMobs.addVisible(onlinePlayer, player);
-		}
+//		Bukkit.getOnlinePlayers().forEach(onlinePlayer -> {
+//			if (isGhost(onlinePlayer))
+//				player.showPlayer(Requiem.instance(), onlinePlayer);
+//			else
+//				onlinePlayer.hidePlayer(Requiem.instance(), player); // TODO this hides from tab :/
+//		});
+		// Legacy, remove? (clashes with no player nametags)
+//		PrepareGhostMobs.hideVisibility(player, true);
+//		for (UUID uuid : GHOSTS) {
+//			Player onlinePlayer = Bukkit.getPlayer(uuid);
+//			if (onlinePlayer == null) continue;
+//			if (onlinePlayer == player) continue;
+//			if (!isGhost(onlinePlayer)) continue;
+//
+//			PrepareGhostMobs.addVisible(player, onlinePlayer);
+//			PrepareGhostMobs.addVisible(onlinePlayer, player);
+//		}
 
 		// Ghost attributes
 		player.setHealth(player.getMaxHealth());
@@ -120,7 +126,13 @@ public class GhostyPlayer {
 		cancelTask(player, AURA_TASK_KEY);
 		cancelTask(player, VISION_TASK_KEY);
 
-		PrepareGhostMobs.hideVisibility(player, false);
+//		Bukkit.getOnlinePlayers().forEach(onlinePlayer -> {
+//			onlinePlayer.showPlayer(Requiem.instance(), player);
+//			if (isGhost(onlinePlayer))
+//				player.hidePlayer(Requiem.instance(), onlinePlayer); // TODO this hides from tab :/
+//		});
+		// Legacy, remove?
+//		PrepareGhostMobs.hideVisibility(player, false);
 
 		// Restore attributes
 		player.setCollidable(true);

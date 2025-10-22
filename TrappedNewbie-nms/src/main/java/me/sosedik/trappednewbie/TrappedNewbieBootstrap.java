@@ -15,11 +15,23 @@ import me.sosedik.trappednewbie.entity.craft.CraftPaperPlane;
 import me.sosedik.trappednewbie.impl.block.nms.ClayKilnBlock;
 import me.sosedik.trappednewbie.impl.block.nms.SleepingBagBlock;
 import me.sosedik.trappednewbie.impl.block.nms.TotemBaseBlock;
+import me.sosedik.trappednewbie.impl.effect.BoneBreakingEffect;
+import me.sosedik.trappednewbie.impl.effect.BouncyEffect;
+import me.sosedik.trappednewbie.impl.effect.ClimbingEffect;
 import me.sosedik.trappednewbie.impl.effect.ComfortEffect;
+import me.sosedik.trappednewbie.impl.effect.FirefingersEffect;
+import me.sosedik.trappednewbie.impl.effect.HotPotatoEffect;
+import me.sosedik.trappednewbie.impl.effect.LifeLeechEffect;
+import me.sosedik.trappednewbie.impl.effect.ParalyzedEffect;
 import me.sosedik.trappednewbie.impl.effect.QuenchedEffect;
+import me.sosedik.trappednewbie.impl.effect.RottenBiteEffect;
+import me.sosedik.trappednewbie.impl.effect.ScaryEffect;
 import me.sosedik.trappednewbie.impl.effect.ThirstEffect;
+import me.sosedik.trappednewbie.impl.effect.WaterboltEffect;
+import me.sosedik.trappednewbie.impl.item.nms.KnifeItem;
 import me.sosedik.trappednewbie.impl.item.nms.PaperPlaneItem;
 import me.sosedik.trappednewbie.impl.item.nms.ThrowableRockItem;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.EntityType;
@@ -27,6 +39,7 @@ import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ShovelItem;
 import net.minecraft.world.item.ToolMaterial;
+import net.minecraft.world.item.component.Weapon;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DispenserBlock;
 import org.bukkit.Material;
@@ -44,9 +57,19 @@ public class TrappedNewbieBootstrap implements PluginBootstrap {
 	@Override
 	public void bootstrap(BootstrapContext context) {
 		Function<String, KiterinoMobEffectBehaviourWrapper> effectsProvider = key -> switch (key.substring("trapped_newbie:".length())) {
-			case "thirst" -> new ThirstEffect();
-			case "quenched" -> new QuenchedEffect();
+			case "bone_breaking" -> new BoneBreakingEffect();
+			case "bouncy" -> new BouncyEffect();
+			case "climbing" -> new ClimbingEffect();
 			case "comfort" -> new ComfortEffect();
+			case "firefingers" -> new FirefingersEffect();
+			case "hot_potato" -> new HotPotatoEffect();
+			case "life_leech" -> new LifeLeechEffect();
+			case "paralyzed" -> new ParalyzedEffect();
+			case "quenched" -> new QuenchedEffect();
+			case "rotten_bite" -> new RottenBiteEffect();
+			case "scary" -> new ScaryEffect();
+			case "thirst" -> new ThirstEffect();
+			case "waterbolt" -> new WaterboltEffect();
 			default -> throw new RuntimeException("Unknown effect: %s".formatted(key));
 		};
 		ResourceLibBootstrap.parseResources(context, effectsProvider);
@@ -76,11 +99,14 @@ public class TrappedNewbieBootstrap implements PluginBootstrap {
 				yield item;
 			}
 			case "firestriker", "trumpet", "canteen", "reinforced_canteen", "dragon_flask" -> ItemCreator.crossbowItem(properties, (item, entity, timeLeft) -> true);
-			case String k when k.endsWith("glass_shard") -> ItemCreator.crossbowItem(properties, (item, entity, timeLeft) -> true);
+			case String k when k.endsWith("glass_shard") || k.endsWith("goodie_bag") -> ItemCreator.crossbowItem(properties, (item, entity, timeLeft) -> true);
 			case "flint_axe" -> new AxeItem(dummyMaterial, 6F, -3.2F, (Item.Properties) properties);
 			case "flint_pickaxe" -> new Item(((Item.Properties) properties).pickaxe(dummyMaterial, 1F, -3F));
 			case "flint_shovel" -> new ShovelItem(dummyMaterial, 1.5F, -3F, (Item.Properties) properties);
 			case "flint_shears" -> ItemCreator.shearsItem(properties);
+			case "flint_knife" -> new KnifeItem(((Item.Properties) properties)
+				.component(DataComponents.TOOL, KnifeItem.createToolProperties())
+				.component(DataComponents.WEAPON, new Weapon(1)));
 			default -> null;
 		});
 

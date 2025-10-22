@@ -9,5 +9,6 @@
 	"death.attack.thirst": [
 		"<entity> помер від зневоднення",
 		"<entity> забув пити воду"
-	]
+	],
+	"death.attack.hot_potato": "<entity> не зміг позбутися гарячої кортоплі"
 }

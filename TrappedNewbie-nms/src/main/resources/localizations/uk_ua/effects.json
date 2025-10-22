@@ -1,5 +1,15 @@
 {
-	"effect.trapped_newbie.thirst.name": "Спрага",
+	"effect.trapped_newbie.bone_breaking.name": "Кістколам",
+	"effect.trapped_newbie.bouncy.name": "Пружинка",
+	"effect.trapped_newbie.climbing.name": "Павучі лапки",
+	"effect.trapped_newbie.comfort.name": "Комфорт",
+	"effect.trapped_newbie.firefingers.name": "Вогняні пальчики",
+	"effect.trapped_newbie.hot_potato.name": "Гаряча картопля",
+	"effect.trapped_newbie.life_leech.name": "П'явка",
+	"effect.trapped_newbie.paralyzed.name": "Паралізація",
 	"effect.trapped_newbie.quenched.name": "Охолодження",
-	"effect.trapped_newbie.comfort.name": "Комфорт"
+	"effect.trapped_newbie.rotten_bite.name": "Напівмертвий",
+	"effect.trapped_newbie.scary.name": "Пугало",
+	"effect.trapped_newbie.thirst.name": "Спрага",
+	"effect.trapped_newbie.waterbolt.name": "Водостійкість"
 }

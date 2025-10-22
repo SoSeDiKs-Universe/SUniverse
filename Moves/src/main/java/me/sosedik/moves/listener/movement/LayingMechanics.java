@@ -84,6 +84,7 @@ public class LayingMechanics implements Listener {
 		nearbyPlayers.forEach(np -> np.sendBlockChange(bedLoc, fakeBedBlockData));
 
 		player.lay(loc, bedLoc);
+		player.setSleepingLocation(loc);
 	}
 
 }

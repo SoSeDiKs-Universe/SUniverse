@@ -1,4 +1,4 @@
-package me.sosedik.trappednewbie.listener.misc;
+package me.sosedik.trappednewbie.listener.effect;
 
 import me.sosedik.moves.api.event.PlayerStartSittingEvent;
 import me.sosedik.moves.listener.movement.SittingMechanics;

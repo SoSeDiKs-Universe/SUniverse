@@ -9,5 +9,6 @@
 	"death.attack.thirst": [
 		"<entity> died of dehydration",
 		"<entity> forgot to drink water"
-	]
+	],
+	"death.attack.hot_potato": "<entity> couldn't get rid of that hot potato"
 }

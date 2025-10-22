@@ -1,0 +1,8 @@
+{
+	"client_type": "minecraft:golden_apple",
+	"food": {
+		"nutrition": 1,
+		"saturation": 0.1,
+		"always_edible": true
+	}
+}

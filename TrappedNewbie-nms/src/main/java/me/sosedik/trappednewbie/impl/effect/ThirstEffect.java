@@ -10,7 +10,7 @@ public class ThirstEffect implements KiterinoMobEffectBehaviourWrapper {
 
 	@Override
 	public boolean applyEffectTick(LivingEntity entity, int amplifier) {
-		return entity instanceof Player player;
+		return entity instanceof Player;
 	}
 
 	@Override

@@ -1,6 +1,7 @@
 package me.sosedik.miscme.listener.player;
 
 import me.sosedik.utilizer.util.ScoreboardUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -19,6 +20,14 @@ public class HidePlayerNameTags implements Listener {
 		Player player = event.getPlayer();
 		Team team = ScoreboardUtil.getPlayerTeam(player);
 		team.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.NEVER);
+
+		for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+			if (onlinePlayer == player) continue;
+
+			team.addPlayer(onlinePlayer);
+			Team otherTeam = ScoreboardUtil.getPlayerTeam(onlinePlayer);
+			otherTeam.addPlayer(player);
+		}
 	}
 
 }

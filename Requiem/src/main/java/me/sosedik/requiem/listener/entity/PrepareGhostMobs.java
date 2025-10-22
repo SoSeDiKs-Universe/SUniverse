@@ -57,9 +57,8 @@ public class PrepareGhostMobs implements Listener {
 			Team team = ScoreboardUtil.getPlayerTeam(onlinePlayer);
 			if (onlinePlayer == player) {
 				team.setCanSeeFriendlyInvisibles(selfVisible);
-				return;
 			}
-			team.removePlayer(player);
+			// team.removePlayer(player);
 		});
 	}
 
@@ -70,8 +69,8 @@ public class PrepareGhostMobs implements Listener {
 	 * @param other player that should be visible
 	 */
 	public static void addVisible(Player player, Player other) {
-		Team team = ScoreboardUtil.getPlayerTeam(player);
-		team.addPlayer(other);
+//		Team team = ScoreboardUtil.getPlayerTeam(player);
+//		team.addPlayer(other);
 	}
 
 	/**

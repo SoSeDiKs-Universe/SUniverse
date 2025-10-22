@@ -97,7 +97,7 @@ public class DisplayCustomPotionEffectsOnHud implements Listener {
 			Component icon = getBigIcon(effect.getType());
 			if (icon == null) icon = SpacingUtil.ICON_SPACE;
 			if (effect.getType().getEffectCategory() == PotionEffectType.Category.BENEFICIAL)
-				beneficialEffects.add(SpacingUtil.getOffset(++beneficialPotions * -24, 0, icon));
+				beneficialEffects.add(SpacingUtil.getOffset(++beneficialPotions * -25, 0, icon));
 			else
 				harmfulEffects.add(SpacingUtil.getOffset(++harmfulPotions * -25, 0, icon));
 		}

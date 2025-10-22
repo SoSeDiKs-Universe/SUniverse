@@ -32,6 +32,8 @@ import me.sosedik.trappednewbie.impl.item.modifier.AdvancementTrophyModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.AdvancementTrophyNameLoreModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.DirtyWaterModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.FoodTooltipModifier;
+import me.sosedik.trappednewbie.impl.item.modifier.GoodieBagModifier;
+import me.sosedik.trappednewbie.impl.item.modifier.HalloweenCandyModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.ItemModelModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.ItemOverlayToggleModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.LetterModifier;
@@ -80,25 +82,38 @@ import me.sosedik.trappednewbie.listener.block.CustomBlockBreaking;
 import me.sosedik.trappednewbie.listener.block.LogStrippingGivesBarks;
 import me.sosedik.trappednewbie.listener.block.SoftBlockHandBreaking;
 import me.sosedik.trappednewbie.listener.block.UnlitCampfireByDefault;
+import me.sosedik.trappednewbie.listener.effect.BoneBreakerFreezing;
+import me.sosedik.trappednewbie.listener.effect.BouncyEffectHandler;
+import me.sosedik.trappednewbie.listener.effect.ComfortEffectHandler;
+import me.sosedik.trappednewbie.listener.effect.FirefingersFire;
+import me.sosedik.trappednewbie.listener.effect.HotPotatoHalloween;
+import me.sosedik.trappednewbie.listener.effect.LifeLeechLifeSteal;
+import me.sosedik.trappednewbie.listener.effect.RottenBiteConvertsVillagers;
+import me.sosedik.trappednewbie.listener.effect.UndeadIgnoreRottenBite;
 import me.sosedik.trappednewbie.listener.entity.AngryAnimals;
 import me.sosedik.trappednewbie.listener.entity.BabierBabyMobs;
 import me.sosedik.trappednewbie.listener.entity.CreepersLoveCrawlers;
+import me.sosedik.trappednewbie.listener.entity.FleeFromScaryEffect;
 import me.sosedik.trappednewbie.listener.entity.LimboEntities;
 import me.sosedik.trappednewbie.listener.entity.LimboWandererTrades;
 import me.sosedik.trappednewbie.listener.entity.ShearableCreepers;
 import me.sosedik.trappednewbie.listener.item.BlackBeltSpeed;
 import me.sosedik.trappednewbie.listener.item.CanteenInteractions;
+import me.sosedik.trappednewbie.listener.item.EyeceCreamCandyVisual;
 import me.sosedik.trappednewbie.listener.item.FillingBowlWithMilk;
 import me.sosedik.trappednewbie.listener.item.FillingBowlWithWater;
 import me.sosedik.trappednewbie.listener.item.FirestrikerFire;
+import me.sosedik.trappednewbie.listener.item.FizzlersCandyExplosion;
 import me.sosedik.trappednewbie.listener.item.FlintToFlakedFlint;
 import me.sosedik.trappednewbie.listener.item.FlowerBouquetAttackEffects;
 import me.sosedik.trappednewbie.listener.item.FriendshipLetters;
 import me.sosedik.trappednewbie.listener.item.GlassShardCuts;
+import me.sosedik.trappednewbie.listener.item.GoodieBagsGiveCandies;
 import me.sosedik.trappednewbie.listener.item.HammerBlockRepair;
 import me.sosedik.trappednewbie.listener.item.KnifeCarvesTotemBases;
 import me.sosedik.trappednewbie.listener.item.MeshSifting;
 import me.sosedik.trappednewbie.listener.item.PaperPlanes;
+import me.sosedik.trappednewbie.listener.item.PearlPopCandyTeleportation;
 import me.sosedik.trappednewbie.listener.item.QuenchedFromDrinkingCacti;
 import me.sosedik.trappednewbie.listener.item.RoughSticksCreateFire;
 import me.sosedik.trappednewbie.listener.item.ScrapOnItemBreak;
@@ -109,7 +124,7 @@ import me.sosedik.trappednewbie.listener.item.TimeMachineClockIsTotemOfUndying;
 import me.sosedik.trappednewbie.listener.item.TrumpetScare;
 import me.sosedik.trappednewbie.listener.item.VisualPumpkin;
 import me.sosedik.trappednewbie.listener.misc.AllRecipesInRecipeBook;
-import me.sosedik.trappednewbie.listener.misc.ComfortEffectHandler;
+import me.sosedik.trappednewbie.listener.misc.CandiesDropOnHalloween;
 import me.sosedik.trappednewbie.listener.misc.CustomHudRenderer;
 import me.sosedik.trappednewbie.listener.misc.DisableJoinQuitMessages;
 import me.sosedik.trappednewbie.listener.misc.DynamicInventoryInfoGatherer;
@@ -235,6 +250,8 @@ public final class TrappedNewbie extends JavaPlugin {
 		new AdvancementTrophyNameLoreModifier(trappedNewbieKey("advancement_trophy_name_lore")).register();
 		new DirtyWaterModifier(trappedNewbieKey("dirty_water")).register();
 		new FoodTooltipModifier(trappedNewbieKey("food_tooltip")).register();
+		new GoodieBagModifier(trappedNewbieKey("goodie_bag")).register();
+		new HalloweenCandyModifier(trappedNewbieKey("halloween_candy")).register();
 		new ItemModelModifier(trappedNewbieKey("item_model")).register();
 		ItemModelModifier.addReplacement(TrappedNewbieItems.SLEEPING_BAG, ResourceLib.storage().getItemModelMapping(trappedNewbieKey("sleeping_bag_item")));
 		ItemModelModifier.addReplacement(TrappedNewbieItems.CLAY_KILN, contextBox -> {
@@ -294,27 +311,41 @@ public final class TrappedNewbie extends JavaPlugin {
 			LogStrippingGivesBarks.class,
 			SoftBlockHandBreaking.class,
 			UnlitCampfireByDefault.class,
+			// effect
+			BoneBreakerFreezing.class,
+			BouncyEffectHandler.class,
+			ComfortEffectHandler.class,
+			FirefingersFire.class,
+			HotPotatoHalloween.class,
+			LifeLeechLifeSteal.class,
+			RottenBiteConvertsVillagers.class,
+			UndeadIgnoreRottenBite.class,
 			// entity
 			AngryAnimals.class,
 			BabierBabyMobs.class,
 			CreepersLoveCrawlers.class,
+			FleeFromScaryEffect.class,
 			LimboEntities.class,
 			LimboWandererTrades.class,
 			ShearableCreepers.class,
 			// item
 			BlackBeltSpeed.class,
 			CanteenInteractions.class,
+			EyeceCreamCandyVisual.class,
 			FillingBowlWithMilk.class,
 			FillingBowlWithWater.class,
 			FirestrikerFire.class,
+			FizzlersCandyExplosion.class,
 			FlintToFlakedFlint.class,
 			FlowerBouquetAttackEffects.class,
 			FriendshipLetters.class,
 			GlassShardCuts.class,
+			GoodieBagsGiveCandies.class,
 			HammerBlockRepair.class,
 			KnifeCarvesTotemBases.class,
 			MeshSifting.class,
 			PaperPlanes.class,
+			PearlPopCandyTeleportation.class,
 			QuenchedFromDrinkingCacti.class,
 			RoughSticksCreateFire.class,
 			ScrapOnItemBreak.class,
@@ -326,7 +357,7 @@ public final class TrappedNewbie extends JavaPlugin {
 			VisualPumpkin.class,
 			// misc
 			AllRecipesInRecipeBook.class,
-			ComfortEffectHandler.class,
+			CandiesDropOnHalloween.class,
 			CustomHudRenderer.class,
 			DisableJoinQuitMessages.class,
 			DynamicInventoryInfoGatherer.class,

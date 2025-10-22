@@ -27,6 +27,8 @@ public class TrappedNewbieTags {
 	public static final Tag<Material> SCRAPPABLE = itemTag("scrappable");
 	public static final Tag<Material> CANTEENS = itemTag("canteens");
 	public static final Tag<Material> DEHYDRATING_FOOD = itemTag("dehydrating_food");
+	public static final Tag<Material> GOODIE_BAGS = itemTag("goodie_bags");
+	public static final Tag<Material> HALLOWEEN_CANDIES = itemTag("halloween_candies");
 
 	// blocks
 	public static final Tag<Material> MINEABLE_BY_HAND = blockTag("mineable/hand");

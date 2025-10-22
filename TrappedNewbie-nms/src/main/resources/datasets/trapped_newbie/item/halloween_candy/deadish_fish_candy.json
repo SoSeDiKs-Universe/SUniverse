@@ -1,0 +1,22 @@
+{
+	"client_type": "minecraft:golden_apple",
+	"food": {
+		"nutrition": 1,
+		"saturation": 0.1,
+		"always_edible": true
+	},
+	"consumable": {
+		"effects": [
+			{
+				"type": "apply_status_effects",
+				"effects": [
+					{
+						"type": "trapped_newbie:waterbolt",
+						"duration": 1600,
+						"amplifier": 0
+					}
+				]
+			}
+		]
+	}
+}

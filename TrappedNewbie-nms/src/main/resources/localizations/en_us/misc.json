@@ -33,5 +33,8 @@
 	"ritual.instruments.drum": "Drums",
 	"ritual.instruments.trumpet": "Trumpet",
 	"recipes.potion.extended": "<icon:trapped_newbie:info> Extends potion",
-	"recipes.potion.upgraded": "<icon:trapped_newbie:info> Upgrades potion"
+	"recipes.potion.upgraded": "<icon:trapped_newbie:info> Upgrades potion",
+	"item.modifier.halloween_candy": "<gradient:gold:dark_gray>Halloween candy",
+	"item.modifier.goodie_bag": "<dark_gray>Sharing is caring!",
+	"item.modifier.goodie_bag.looter": "<gray><player>'s Goodie Bag"
 }

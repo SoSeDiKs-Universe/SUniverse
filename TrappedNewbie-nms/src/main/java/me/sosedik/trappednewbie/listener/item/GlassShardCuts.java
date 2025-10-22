@@ -1,16 +1,14 @@
 package me.sosedik.trappednewbie.listener.item;
 
-import io.papermc.paper.registry.RegistryAccess;
-import io.papermc.paper.registry.RegistryKey;
 import me.sosedik.kiterino.event.entity.EntityItemConsumeEvent;
 import me.sosedik.kiterino.event.entity.ItemConsumeEvent;
 import me.sosedik.trappednewbie.TrappedNewbie;
+import me.sosedik.trappednewbie.dataset.TrappedNewbieDamageTypes;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieTags;
 import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.damage.DamageSource;
-import org.bukkit.damage.DamageType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -27,19 +25,17 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public class GlassShardCuts implements Listener {
 
-	public static final DamageType GLASS_SHARD = RegistryAccess.registryAccess().getRegistry(RegistryKey.DAMAGE_TYPE).getOrThrow(TrappedNewbie.trappedNewbieKey("glass_shard"));
-
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onUse(PlayerItemConsumeEvent event) {
-		tryToUseGlassShard(event);
+		tryToUse(event);
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onUse(EntityItemConsumeEvent event) {
-		tryToUseGlassShard(event);
+		tryToUse(event);
 	}
 
-	public void tryToUseGlassShard(ItemConsumeEvent event) {
+	public void tryToUse(ItemConsumeEvent event) {
 		if (!TrappedNewbieTags.GLASS_SHARDS.isTagged(event.getItem().getType())) return;
 
 		LivingEntity entity = event.getEntity();
@@ -50,14 +46,14 @@ public class GlassShardCuts implements Listener {
 			double health = entity.getHealth();
 			double damage = Math.max(1, health - 0.5);
 
-			entity.damage(damage, DamageSource.builder(GLASS_SHARD).build());
+			entity.damage(damage, DamageSource.builder(TrappedNewbieDamageTypes.GLASS_SHARD).build());
 		}, 1L);
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onDamage(EntityDamageEvent event) {
 		if (!(event.getEntity() instanceof LivingEntity entity)) return;
-		if (event.getDamageSource().getDamageType() != GLASS_SHARD) return;
+		if (event.getDamageSource().getDamageType() != TrappedNewbieDamageTypes.GLASS_SHARD) return;
 
 		entity.emitSound(Sound.ENTITY_GHAST_SCREAM,1F, 0.9F + (float) Math.random() * 0.2F);
 		entity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 10 * 20, 4));

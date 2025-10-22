@@ -1,0 +1,32 @@
+{
+	"client_type": "minecraft:golden_apple",
+	"food": {
+		"nutrition": 1,
+		"saturation": 0.1,
+		"always_edible": true
+	},
+	"consumable": {
+		"effects": [
+			{
+				"type": "apply_status_effects",
+				"effects": [
+					{
+						"type": "minecraft:haste",
+						"duration": 2400,
+						"amplifier": 1
+					},
+					{
+						"type": "minecraft:speed",
+						"duration": 2400,
+						"amplifier": 1
+					},
+					{
+						"type": "minecraft:strength",
+						"duration": 2400,
+						"amplifier": 1
+					}
+				]
+			}
+		]
+	}
+}

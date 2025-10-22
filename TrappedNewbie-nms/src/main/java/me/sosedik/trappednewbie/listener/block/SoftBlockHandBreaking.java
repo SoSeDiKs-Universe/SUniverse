@@ -22,6 +22,7 @@ import org.jspecify.annotations.Nullable;
 /**
  * Some blocks can be broken by "hand" in some cases
  */
+// MCCheck: 1.21.10, new blocks
 @NullMarked
 public class SoftBlockHandBreaking implements Listener {
 
@@ -36,7 +37,7 @@ public class SoftBlockHandBreaking implements Listener {
 			}
 
 			return switch (blockType) {
-				case GRASS_BLOCK -> 3F;
+				case GRASS_BLOCK, PODZOL, MYCELIUM -> 3F;
 				case DIRT -> 2.5F;
 				case COARSE_DIRT -> 4.5F;
 				case GRAVEL, SUSPICIOUS_GRAVEL -> 1.5F;
@@ -81,7 +82,7 @@ public class SoftBlockHandBreaking implements Listener {
 
 	public static @Nullable Material getConverted(Material blockType) {
 		return switch (blockType) {
-			case GRASS_BLOCK -> Material.DIRT;
+			case GRASS_BLOCK, PODZOL, MYCELIUM -> Material.DIRT;
 			case DIRT -> Material.COARSE_DIRT;
 			case COARSE_DIRT -> Material.GRAVEL;
 			default -> null;

@@ -8,6 +8,7 @@
     "trapped_newbie:canteen",
     "trapped_newbie:reinforced_canteen",
     "trapped_newbie:dragon_flask",
-    "#trapped_newbie:glass_shards"
+    "#trapped_newbie:glass_shards",
+    "#trapped_newbie:goodie_bags"
   ]
 }

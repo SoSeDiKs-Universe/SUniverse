@@ -199,6 +199,30 @@ public class TrappedNewbieItems {
 	public static final Material CRIMSON_TOTEM_BASE = byKey("crimson_totem_base");
 	public static final Material WARPED_TOTEM_BASE = byKey("warped_totem_base");
 
+	public static final Material BLAZE_GOODIE_BAG = byKey("blaze_goodie_bag");
+	public static final Material CREEPER_GOODIE_BAG = byKey("creeper_goodie_bag");
+	public static final Material DROWNED_GOODIE_BAG = byKey("drowned_goodie_bag");
+	public static final Material ENDERMAN_GOODIE_BAG = byKey("enderman_goodie_bag");
+	public static final Material GHAST_GOODIE_BAG = byKey("ghast_goodie_bag");
+	public static final Material GUARDIAN_GOODIE_BAG = byKey("guardian_goodie_bag");
+	public static final Material PHANTOM_GOODIE_BAG = byKey("phantom_goodie_bag");
+	public static final Material SKELETON_GOODIE_BAG = byKey("skeleton_goodie_bag");
+	public static final Material SLIME_GOODIE_BAG = byKey("slime_goodie_bag");
+	public static final Material SPIDER_GOODIE_BAG = byKey("spider_goodie_bag");
+	public static final Material ZOMBIE_GOODIE_BAG = byKey("zombie_goodie_bag");
+
+	public static final Material BONEBREAKER_CANDY = byKey("bonebreaker_candy");
+	public static final Material CHOCOLATE_SPIDER_EYE_CANDY = byKey("chocolate_spider_eye_candy");
+	public static final Material DEADISH_FISH_CANDY = byKey("deadish_fish_candy");
+	public static final Material EYECE_CREAM_CANDY = byKey("eyece_cream_candy");
+	public static final Material FIREFINGERS_CANDY = byKey("firefingers_candy");
+	public static final Material FIZZLERS_CANDY = byKey("fizzlers_candy");
+	public static final Material MEMBRANE_BUTTER_CUPS_CANDY = byKey("membrane_butter_cups_candy");
+	public static final Material PEARL_POP_CANDY = byKey("pearl_pop_candy");
+	public static final Material SCREAMBURSTS_CANDY = byKey("screambursts_candy");
+	public static final Material SLIME_GUM_CANDY = byKey("slime_gum_candy");
+	public static final Material SOUR_PATCH_ZOMBIES_CANDY = byKey("sour_patch_zombies_candy");
+
 	public static final Material DESTROY_STAGE_0 = byKey("destroy_stage_0");
 	public static final Material DESTROY_STAGE_1 = byKey("destroy_stage_1");
 	public static final Material DESTROY_STAGE_2 = byKey("destroy_stage_2");

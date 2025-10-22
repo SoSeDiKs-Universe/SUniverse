@@ -31,7 +31,7 @@ public class MinecraftChatLinker implements Listener {
 				.setUsername(nickname)
 				.setContent(DiscordUtil.formatGameMessage(who, message));
 
-		DiscordBot.sendMessage(who.getName(), who.getUniqueId().toString(), builder);
+		DiscordBot.sendMessage(who.getName(), who.getUniqueId().toString(), builder, false);
 	}
 
 }

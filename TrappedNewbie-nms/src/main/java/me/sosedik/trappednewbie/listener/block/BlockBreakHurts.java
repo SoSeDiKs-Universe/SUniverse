@@ -33,6 +33,8 @@ public class BlockBreakHurts implements Listener {
 		if (!player.getInventory().getItemInMainHand().isEmpty()) return;
 
 		VisualArmor visualArmor = VisualArmorLayer.getVisualArmor(player);
+		if (!visualArmor.canUseVisualArmor()) return;
+
 		if (visualArmor.hasNonBrokenGloves()) {
 			if (Math.random() < 0.15)
 				visualArmor.setGloves(visualArmor.getGloves().damage(1, player));

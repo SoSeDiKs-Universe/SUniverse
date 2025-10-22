@@ -1,6 +1,5 @@
 package me.sosedik.trappednewbie.listener.world;
 
-import io.papermc.paper.entity.TeleportFlag;
 import me.sosedik.moves.listener.movement.FreeFall;
 import me.sosedik.trappednewbie.TrappedNewbie;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieAdvancements;
@@ -10,6 +9,7 @@ import me.sosedik.trappednewbie.impl.item.modifier.LetterModifier;
 import me.sosedik.utilizer.api.message.Messenger;
 import me.sosedik.utilizer.api.message.Mini;
 import me.sosedik.utilizer.util.InventoryUtil;
+import me.sosedik.utilizer.util.LocationUtil;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -45,7 +45,7 @@ public class LimboWorldFall implements Listener {
 			spawnTeleport(player, world);
 		} else {
 			player.setVelocity(new Vector());
-			player.teleportAsync(TrappedNewbie.limboWorld().getSpawnLocation().add(0.5, 1, 0.5));
+			LocationUtil.smartTeleport(player, TrappedNewbie.limboWorld().getSpawnLocation().add(0.5, 1, 0.5));
 			player.sendMessage(Mini.combine(Component.space(), TrappedNewbieFonts.WANDERING_TRADER_HEAD.mapping(), Messenger.messenger(player).getMessage("limbo.welcome.ignored")));
 		}
 	}
@@ -72,7 +72,7 @@ public class LimboWorldFall implements Listener {
 	 * @param world world
 	 */
 	public static void spawnTeleport(Player player, World world) {
-		player.teleportAsync(world.getSpawnLocation().center().y(world.getMaxHeight() + 50))
+		LocationUtil.smartTeleport(player, world.getSpawnLocation().center().y(world.getMaxHeight() + 50))
 			.thenRun(() -> {
 				Entity vehicle = player.getVehicle();
 				if (vehicle == null) {
@@ -81,7 +81,7 @@ public class LimboWorldFall implements Listener {
 					vehicle.setFallDistance(0F);
 					player.setFallDistance(0F);
 					Location loc = player.getLocation().toHighestLocation().above();
-					player.teleportAsync(loc, PlayerTeleportEvent.TeleportCause.PLUGIN, TeleportFlag.Relative.VELOCITY_ROTATION, TeleportFlag.EntityState.RETAIN_VEHICLE, TeleportFlag.EntityState.RETAIN_PASSENGERS);
+					LocationUtil.smartTeleport(player, loc);
 				}
 			});
 	}

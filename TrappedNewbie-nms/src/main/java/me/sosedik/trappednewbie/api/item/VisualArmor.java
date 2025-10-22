@@ -1,5 +1,7 @@
 package me.sosedik.trappednewbie.api.item;
 
+import me.sosedik.requiem.feature.GhostyPlayer;
+import me.sosedik.requiem.feature.PossessingPlayer;
 import me.sosedik.trappednewbie.listener.player.VisualArmorLayer;
 import me.sosedik.utilizer.util.DurabilityUtil;
 import me.sosedik.utilizer.util.InventoryUtil;
@@ -38,6 +40,10 @@ public class VisualArmor {
 		this.leggings = leggings;
 		this.boots = boots;
 		this.gloves = gloves;
+	}
+
+	public boolean canUseVisualArmor() {
+		return !GhostyPlayer.isGhost(this.player) && !PossessingPlayer.isPossessing(this.player);
 	}
 
 	public boolean hasItem(EquipmentSlot slot) {

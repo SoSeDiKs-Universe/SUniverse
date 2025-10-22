@@ -29,6 +29,7 @@ import java.util.Objects;
 import static me.sosedik.utilizer.api.message.Mini.combine;
 import static me.sosedik.utilizer.api.message.Mini.combined;
 
+// MCCheck: 1.21.10, new armor
 @NullMarked
 public class ArmorRenderer extends SimpleHudRenderer {
 
@@ -39,8 +40,10 @@ public class ArmorRenderer extends SimpleHudRenderer {
 	private static final Component[] DEFENCE_POINTS = new Component[] {mapping("armor/defence_points"), mapping("armor/defence_points_up")};
 	private static final Component[] ELYTRA = new Component[] {mapping("armor/elytra"), mapping("armor/elytra_up")};
 	private static final Component[] TURTLE_HELMET = new Component[] {mapping("armor/turtle_helmet"), mapping("armor/turtle_helmet_up")};
+	private static final Component[] CARVED_PUMPKIN = new Component[] {mapping("armor/carved_pumpkin"), mapping("armor/carved_pumpkin_up")};
 	private static final Component[][] LEATHER_ARMOR = armor("leather");
 	private static final Component[][] CHAINMAIL_ARMOR = armor("chainmail");
+	private static final Component[][] COPPER_ARMOR = armor("copper");
 	private static final Component[][] IRON_ARMOR = armor("iron");
 	private static final Component[][] GOLDEN_ARMOR = armor("golden");
 	private static final Component[][] DIAMOND_ARMOR = armor("diamond");
@@ -192,6 +195,7 @@ public class ArmorRenderer extends SimpleHudRenderer {
 		return switch (item.getType()) {
 			case ELYTRA -> ELYTRA[up ? 1 : 0];
 			case TURTLE_HELMET -> TURTLE_HELMET[up ? 1 : 0];
+			case CARVED_PUMPKIN -> CARVED_PUMPKIN[up ? 1 : 0];
 			case LEATHER_HELMET -> getArmorIcon(LEATHER_ARMOR, up, 0).color(color(item));
 			case LEATHER_CHESTPLATE -> getArmorIcon(LEATHER_ARMOR, up, 1).color(color(item));
 			case LEATHER_LEGGINGS -> getArmorIcon(LEATHER_ARMOR, up, 2).color(color(item));
@@ -200,6 +204,10 @@ public class ArmorRenderer extends SimpleHudRenderer {
 			case CHAINMAIL_CHESTPLATE -> getArmorIcon(CHAINMAIL_ARMOR, up, 1);
 			case CHAINMAIL_LEGGINGS -> getArmorIcon(CHAINMAIL_ARMOR, up, 2);
 			case CHAINMAIL_BOOTS -> getArmorIcon(CHAINMAIL_ARMOR, up, 3);
+			case COPPER_HELMET -> getArmorIcon(COPPER_ARMOR, up, 0);
+			case COPPER_CHESTPLATE -> getArmorIcon(COPPER_ARMOR, up, 1);
+			case COPPER_LEGGINGS -> getArmorIcon(COPPER_ARMOR, up, 2);
+			case COPPER_BOOTS -> getArmorIcon(COPPER_ARMOR, up, 3);
 			case IRON_HELMET -> getArmorIcon(IRON_ARMOR, up, 0);
 			case IRON_CHESTPLATE -> getArmorIcon(IRON_ARMOR, up, 1);
 			case IRON_LEGGINGS -> getArmorIcon(IRON_ARMOR, up, 2);

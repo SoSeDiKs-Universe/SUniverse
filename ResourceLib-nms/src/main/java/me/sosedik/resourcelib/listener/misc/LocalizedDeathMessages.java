@@ -37,11 +37,13 @@ public class LocalizedDeathMessages implements Listener {
 		String localeKey = component.key();
 		if (!TranslationHolder.translationHolder().hasMessage(localeKey)) return;
 
-		event.deathMessage(null);
 		localeKey = getLocaleKey(component);
 		TagResolver[] tagResolvers = tagResolvers(component);
 		for (Player player : Bukkit.getOnlinePlayers())
 			Messenger.messenger(player).sendMessage(localeKey, tagResolvers);
+
+		event.deathMessage(null);
+		event.originalDeathMessage(Messenger.messenger(LangOptionsStorage.getDefaultLangOptions()).getMessage(localeKey, tagResolvers));
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

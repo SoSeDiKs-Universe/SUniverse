@@ -113,7 +113,7 @@ public class DiscordChatLinker extends ListenerAdapter {
 			webhookMessageBuilder.append("\n       " + DiscordUtil.LARGE_EMOJI_DISABLER).append(lines[i]);
 
 		try {
-			DiscordBot.sendMessage(nickname, null, webhookMessageBuilder);
+			DiscordBot.sendMessage(nickname, null, webhookMessageBuilder, false);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

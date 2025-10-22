@@ -1,7 +1,9 @@
 package me.sosedik.requiem.listener.player.possessed;
 
+import com.destroystokyo.paper.event.server.ServerTickEndEvent;
 import me.sosedik.requiem.Requiem;
 import me.sosedik.requiem.feature.PossessingPlayer;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -34,6 +36,16 @@ public class PossessorMimicsPossessed implements Listener {
 		}
 
 		Requiem.scheduler().sync(() -> rider.addPotionEffect(newEffect.withDuration(newEffect.getDuration() - 1)), 1L);
+	}
+
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onTick(ServerTickEndEvent event) {
+		Bukkit.getOnlinePlayers().forEach(player -> {
+			LivingEntity possessed = PossessingPlayer.getPossessed(player);
+			if (possessed == null) return;
+
+			PossessingPlayer.migrateInvFromEntity(player, possessed);
+		});
 	}
 
 }

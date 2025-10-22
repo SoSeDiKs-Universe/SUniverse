@@ -2,6 +2,7 @@ package me.sosedik.essence.command;
 
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import me.sosedik.essence.Essence;
+import me.sosedik.utilizer.util.LocationUtil;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -47,7 +48,7 @@ public class UpCommand {
 				target.sendBlockChange(block.getLocation(), Material.GLASS.createBlockData());
 			}
 
-			target.teleportAsync(loc);
+			LocationUtil.smartTeleport(target, loc);
 		});
 	}
 

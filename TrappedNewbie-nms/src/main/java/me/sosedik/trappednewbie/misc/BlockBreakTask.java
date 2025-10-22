@@ -292,7 +292,7 @@ public class BlockBreakTask extends BukkitRunnable {
 			ItemStack helmet = this.player.getInventory().getHelmet();
 			if (ItemStack.isEmpty(helmet) || !helmet.containsEnchantment(Enchantment.AQUA_AFFINITY)) {
 				VisualArmor visualArmor = VisualArmorLayer.getVisualArmor(this.player);
-				helmet = visualArmor.hasHelmet() ? visualArmor.getHelmet() : null;
+				helmet = visualArmor.canUseVisualArmor() && visualArmor.hasHelmet() ? visualArmor.getHelmet() : null;
 			}
 			if (ItemStack.isEmpty(helmet) || !helmet.containsEnchantment(Enchantment.AQUA_AFFINITY))
 				seconds *= 5F;

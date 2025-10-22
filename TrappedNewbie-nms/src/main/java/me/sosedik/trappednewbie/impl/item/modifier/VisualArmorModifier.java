@@ -62,6 +62,7 @@ public class VisualArmorModifier extends ItemModifier {
 		var messenger = Messenger.messenger(player);
 		EquipmentSlot equipmentSlot = InventoryUtil.getBySlot(slot);
 		var visualArmor = VisualArmor.of(target);
+		if (!visualArmor.canUseVisualArmor()) return ModificationResult.PASS;
 
 		if (visualArmor.isArmorPreview()) {
 			if (equipmentSlot == EquipmentSlot.OFF_HAND) {

@@ -1,10 +1,9 @@
 package me.sosedik.essence.command;
 
 import io.papermc.paper.command.brigadier.CommandSourceStack;
-import io.papermc.paper.entity.TeleportFlag;
 import me.sosedik.essence.Essence;
+import me.sosedik.utilizer.util.LocationUtil;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerTeleportEvent;
 import org.incendo.cloud.annotations.Argument;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.Permission;
@@ -31,7 +30,7 @@ public class TopCommand {
 			target = player;
 		}
 
-		Essence.scheduler().sync(() -> target.teleportAsync(target.getLocation().toHighestLocation().addY(1), PlayerTeleportEvent.TeleportCause.COMMAND, TeleportFlag.Relative.VELOCITY_ROTATION, TeleportFlag.EntityState.RETAIN_VEHICLE, TeleportFlag.EntityState.RETAIN_PASSENGERS));
+		Essence.scheduler().sync(() -> LocationUtil.smartTeleport(target, target.getLocation().toHighestLocation().addY(1)));
 	}
 
 }

@@ -82,7 +82,10 @@ public class HalfAHeartAdvancements implements Listener {
 			if (!ItemStack.isEmpty(item))
 				return true;
 		}
+
 		VisualArmor visualArmor = VisualArmorLayer.getVisualArmor(player);
+		if (!visualArmor.canUseVisualArmor()) return false;
+
 		for (ItemStack item : visualArmor.getArmorContents()) {
 			if (item.isEmpty())
 				return true;

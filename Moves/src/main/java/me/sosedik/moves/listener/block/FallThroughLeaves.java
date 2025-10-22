@@ -213,7 +213,7 @@ public class FallThroughLeaves implements Listener {
 		Vector velocity = PlayerFallTicker.getStoredPreVelocity(player);
 		if (velocity.getY() < 0.6) return;
 
-		player.teleportAsync(player.getLocation().addY(1.5)).thenRun(() -> {
+		LocationUtil.smartTeleport(player, player.getLocation().addY(1.5)).thenRun(() -> {
 			player.setVelocity(velocity);
 			Moves.scheduler().sync(() -> player.setVelocity(velocity), 1L);
 		});

@@ -3,6 +3,7 @@ package me.sosedik.essence.command;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import me.sosedik.essence.Essence;
 import me.sosedik.utilizer.api.message.Messenger;
+import me.sosedik.utilizer.util.LocationUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -45,7 +46,7 @@ public class BedSpawnCommand {
 				World world = Bukkit.getWorlds().getFirst();
 				loc = new Location(world, 0, world.getMaxHeight() + 200, 0);
 			}
-			target.teleportAsync(loc).thenRun(() -> target.addPotionEffect(new PotionEffect(PotionEffectType.RESISTANCE, 25 * 20, 10)));
+			LocationUtil.smartTeleport(target, loc).thenRun(() -> target.addPotionEffect(new PotionEffect(PotionEffectType.RESISTANCE, 25 * 20, 10)));
 		});
 
 		if (!silent) Messenger.messenger(target).sendMessage("command.bedspawn");

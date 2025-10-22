@@ -249,21 +249,28 @@ public class PossessingPlayer {
 	}
 
 	/**
-	 * Migrates stats (including equipment) from entity to the player
+	 * Migrates stats (including equipment) from entity to the player.
+	 * This will erase the player's current inventory!
 	 *
 	 * @param player player
 	 * @param entity entity
 	 */
 	public static void migrateStatsToPlayer(Player player, LivingEntity entity) {
+		player.getInventory().clear();
 		migrateInvFromEntity(player, entity);
 	}
 
-	private static void migrateInvFromEntity(Player player, LivingEntity entity) {
+	/**
+	 * Migrates entity's equipment to player
+	 *
+	 * @param player player
+	 * @param entity entity
+	 */
+	public static void migrateInvFromEntity(Player player, LivingEntity entity) {
 		EntityEquipment entityEquipment = entity.getEquipment();
 		if (entityEquipment == null) return;
 
 		PlayerInventory playerInventory = player.getInventory();
-		playerInventory.clear();
 		playerInventory.setItemInMainHand(entityEquipment.getItemInMainHand());
 		playerInventory.setItemInOffHand(entityEquipment.getItemInOffHand());
 		playerInventory.setHelmet(entityEquipment.getHelmet());

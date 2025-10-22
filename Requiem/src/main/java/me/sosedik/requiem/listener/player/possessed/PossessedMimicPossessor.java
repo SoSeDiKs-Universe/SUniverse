@@ -5,6 +5,7 @@ import io.papermc.paper.event.entity.EntityEquipmentChangedEvent;
 import io.papermc.paper.event.player.PlayerArmSwingEvent;
 import io.papermc.paper.event.player.PlayerInventorySlotChangeEvent;
 import me.sosedik.requiem.feature.PossessingPlayer;
+import me.sosedik.utilizer.util.LocationUtil;
 import org.bukkit.entity.Enderman;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -17,6 +18,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NullMarked;
@@ -30,6 +32,18 @@ import java.util.Map;
  */
 @NullMarked
 public class PossessedMimicPossessor implements Listener {
+
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	public void onPearl(PlayerTeleportEvent event) {
+		if (event.getCause() != PlayerTeleportEvent.TeleportCause.ENDER_PEARL) return;
+
+		Player player = event.getPlayer();
+		LivingEntity entity = PossessingPlayer.getPossessed(player);
+		if (entity == null) return;
+
+		event.setCancelled(true);
+		LocationUtil.smartTeleport(entity, event.getTo(), PlayerTeleportEvent.TeleportCause.ENDER_PEARL);
+	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onTarget(EntityTargetEvent event) {

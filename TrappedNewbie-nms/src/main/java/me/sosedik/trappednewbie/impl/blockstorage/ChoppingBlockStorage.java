@@ -7,6 +7,7 @@ import me.sosedik.trappednewbie.dataset.TrappedNewbieItems;
 import me.sosedik.trappednewbie.impl.recipe.ChoppingBlockCrafting;
 import me.sosedik.utilizer.api.storage.block.BlockDataStorageHolder;
 import me.sosedik.utilizer.util.DurabilityUtil;
+import me.sosedik.utilizer.util.LocationUtil;
 import me.sosedik.utilizer.util.RecipeManager;
 import net.kyori.adventure.sound.Sound;
 import org.bukkit.Location;
@@ -154,7 +155,7 @@ public class ChoppingBlockStorage extends BlockDataStorageHolder {
 	@Override
 	public void onMove(Location from, Location to) {
 		super.onMove(from, to);
-		this.display.teleportAsync(calcDisplayLocation());
+		LocationUtil.smartTeleport(this.display, calcDisplayLocation());
 	}
 
 	private ItemDisplay createDisplay() {

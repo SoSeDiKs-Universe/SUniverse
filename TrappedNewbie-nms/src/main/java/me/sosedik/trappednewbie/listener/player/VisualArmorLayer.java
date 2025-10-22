@@ -22,6 +22,7 @@ import me.sosedik.utilizer.util.InventoryUtil;
 import me.sosedik.utilizer.util.ItemUtil;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.Tag;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -81,6 +82,7 @@ public class VisualArmorLayer implements Listener {
 		if (!event.isShiftClick()) return;
 		if (player.getOpenInventory().getTopInventory().getType() != InventoryType.CRAFTING) return;
 		if (!ItemStack.isEmpty(event.getCursor())) return;
+		if (!getVisualArmor(player).canUseVisualArmor()) return;
 
 		int rawSlot = event.getRawSlot();
 		if (rawSlot < 5) return;
@@ -89,22 +91,22 @@ public class VisualArmorLayer implements Listener {
 		if (item == null) return;
 		if (!TrappedNewbieTags.COSMETIC_ARMOR.isTagged(item.getType())) return;
 
-		if (MaterialTags.HELMETS.isTagged(item) || isEquipable(item, EquipmentSlot.HEAD, false)) {
+		if (Tag.ITEMS_HEAD_ARMOR.isTagged(item.getType()) || isEquipable(item, EquipmentSlot.HEAD, false)) {
 			if (tryToEquip(player, item, EquipmentSlot.HEAD)) {
 				event.setCurrentItem(null);
 				event.setCancelled(true);
 			}
-		} else if (MaterialTags.CHESTPLATES.isTagged(item) || item.getType() == Material.ELYTRA || isEquipable(item, EquipmentSlot.CHEST, false)) {
+		} else if (Tag.ITEMS_CHEST_ARMOR.isTagged(item.getType()) || item.getType() == Material.ELYTRA || isEquipable(item, EquipmentSlot.CHEST, false)) {
 			if (tryToEquip(player, item, EquipmentSlot.CHEST)) {
 				event.setCurrentItem(null);
 				event.setCancelled(true);
 			}
-		} else if (MaterialTags.LEGGINGS.isTagged(item) || isEquipable(item, EquipmentSlot.LEGS, false)) {
+		} else if (Tag.ITEMS_LEG_ARMOR.isTagged(item.getType()) || isEquipable(item, EquipmentSlot.LEGS, false)) {
 			if (tryToEquip(player, item, EquipmentSlot.LEGS)) {
 				event.setCurrentItem(null);
 				event.setCancelled(true);
 			}
-		} else if (MaterialTags.BOOTS.isTagged(item) || isEquipable(item, EquipmentSlot.FEET, false)) {
+		} else if (Tag.ITEMS_FOOT_ARMOR.isTagged(item.getType()) || isEquipable(item, EquipmentSlot.FEET, false)) {
 			if (tryToEquip(player, item, EquipmentSlot.FEET)) {
 				event.setCurrentItem(null);
 				event.setCancelled(true);
@@ -147,6 +149,7 @@ public class VisualArmorLayer implements Listener {
 		if (ItemStack.isEmpty(item)) return;
 
 		VisualArmor visualArmor = getVisualArmor(player);
+		if (!visualArmor.canUseVisualArmor()) return;
 		if (visualArmor.isArmorPreview()) return;
 		if (visualArmor.hasHelmet()) return;
 
@@ -167,6 +170,9 @@ public class VisualArmorLayer implements Listener {
 		int rawSlot = event.getRawSlot();
 		if (rawSlot < 5) return;
 		if (rawSlot > 8 && rawSlot != InventorySlotHelper.OFF_HAND) return;
+
+		VisualArmor visualArmor = getVisualArmor(player);
+		if (!visualArmor.canUseVisualArmor()) return;
 
 		event.setCancelled(true);
 		ClickType clickType = event.getClick();
@@ -190,8 +196,6 @@ public class VisualArmorLayer implements Listener {
 			player.updateInventory();
 			return;
 		}
-
-		VisualArmor visualArmor = getVisualArmor(player);
 
 		if (action == InventoryAction.DROP_ALL_SLOT) {
 			if (visualArmor.isArmorPreview()) {
@@ -265,10 +269,10 @@ public class VisualArmorLayer implements Listener {
 		if (player.getItemOnCursor().getType() != Material.AIR) {
 			ItemStack cursor = event.getCursor();
 			boolean canEquip = switch (equipmentSlot) {
-				case HEAD -> MaterialTags.HEAD_EQUIPPABLE.isTagged(cursor) || isEquipable(cursor, EquipmentSlot.HEAD, false);
-				case CHEST -> MaterialTags.CHEST_EQUIPPABLE.isTagged(cursor) || isEquipable(cursor, EquipmentSlot.CHEST, false);
-				case LEGS -> MaterialTags.LEGGINGS.isTagged(cursor) || isEquipable(cursor, EquipmentSlot.LEGS, false);
-				case FEET -> MaterialTags.BOOTS.isTagged(cursor) || isEquipable(cursor, EquipmentSlot.BODY, false);
+				case HEAD -> isEquipable(cursor, EquipmentSlot.HEAD, false);
+				case CHEST -> isEquipable(cursor, EquipmentSlot.CHEST, false);
+				case LEGS -> isEquipable(cursor, EquipmentSlot.LEGS, false);
+				case FEET -> isEquipable(cursor, EquipmentSlot.BODY, false);
 				case OFF_HAND -> TrappedNewbieTags.GLOVES.isTagged(cursor.getType());
 				default -> false;
 			};
@@ -355,21 +359,22 @@ public class VisualArmorLayer implements Listener {
 		if (event.isBlockInHand() && event.getAction() == Action.RIGHT_CLICK_BLOCK) return;
 
 		Player player = event.getPlayer();
+		if (!getVisualArmor(player).canUseVisualArmor()) return;
 		if (event.getClickedBlock() != null && !player.isSneaking() && event.getClickedBlock().getType().isInteractable()) return;
 
 		ItemStack item = player.getInventory().getItemInMainHand();
 		if (item.getAmount() > 1) return;
 
-		if (MaterialTags.HEAD_EQUIPPABLE.isTagged(item) || isEquipable(item, EquipmentSlot.HEAD, true)) {
+		if (Tag.ITEMS_HEAD_ARMOR.isTagged(item.getType()) || isEquipable(item, EquipmentSlot.HEAD, true)) {
 			if (swapItems(player, item, EquipmentSlot.HEAD))
 				event.setCancelled(true);
-		} else if (MaterialTags.CHEST_EQUIPPABLE.isTagged(item) || isEquipable(item, EquipmentSlot.CHEST, true)) {
+		} else if (Tag.ITEMS_CHEST_ARMOR.isTagged(item.getType()) || isEquipable(item, EquipmentSlot.CHEST, true)) {
 			if (swapItems(player, item, EquipmentSlot.CHEST))
 				event.setCancelled(true);
-		} else if (MaterialTags.LEGGINGS.isTagged(item) || isEquipable(item, EquipmentSlot.LEGS, true)) {
+		} else if (Tag.ITEMS_LEG_ARMOR.isTagged(item.getType()) || isEquipable(item, EquipmentSlot.LEGS, true)) {
 			if (swapItems(player, item, EquipmentSlot.LEGS))
 				event.setCancelled(true);
-		} else if (MaterialTags.BOOTS.isTagged(item) || isEquipable(item, EquipmentSlot.FEET, true)) {
+		} else if (Tag.ITEMS_FOOT_ARMOR.isTagged(item.getType()) || isEquipable(item, EquipmentSlot.FEET, true)) {
 			if (swapItems(player, item, EquipmentSlot.FEET))
 				event.setCancelled(true);
 		} else if (TrappedNewbieTags.GLOVES.isTagged(item.getType())) {
@@ -429,12 +434,14 @@ public class VisualArmorLayer implements Listener {
 		return true;
 	}
 
+	// MCCheck: 1.21.10, new armor
 	private Sound getEquipSound(ItemStack item) {
 		return switch (item.getType()) {
 			case ELYTRA -> Sound.ITEM_ARMOR_EQUIP_ELYTRA;
 			case TURTLE_HELMET -> Sound.ITEM_ARMOR_EQUIP_TURTLE;
 			case LEATHER_HELMET, LEATHER_CHESTPLATE, LEATHER_LEGGINGS, LEATHER_BOOTS -> Sound.ITEM_ARMOR_EQUIP_LEATHER;
 			case CHAINMAIL_HELMET, CHAINMAIL_CHESTPLATE, CHAINMAIL_LEGGINGS, CHAINMAIL_BOOTS -> Sound.ITEM_ARMOR_EQUIP_CHAIN;
+			case COPPER_HELMET, COPPER_CHESTPLATE, COPPER_LEGGINGS, COPPER_BOOTS -> Sound.ITEM_ARMOR_EQUIP_COPPER;
 			case IRON_HELMET, IRON_CHESTPLATE, IRON_LEGGINGS, IRON_BOOTS -> Sound.ITEM_ARMOR_EQUIP_IRON;
 			case GOLDEN_HELMET, GOLDEN_CHESTPLATE, GOLDEN_LEGGINGS, GOLDEN_BOOTS -> Sound.ITEM_ARMOR_EQUIP_GOLD;
 			case DIAMOND_HELMET, DIAMOND_CHESTPLATE, DIAMOND_LEGGINGS, DIAMOND_BOOTS -> Sound.ITEM_ARMOR_EQUIP_DIAMOND;
@@ -447,6 +454,8 @@ public class VisualArmorLayer implements Listener {
 	public void onTombstone(TombstoneDestroyEvent event) {
 		Player player = event.getPlayer();
 		VisualArmor visualArmor = player == null ? null : getVisualArmor(player);
+		if (visualArmor != null && !visualArmor.canUseVisualArmor()) visualArmor = null;
+
 		for (ReadWriteNBT data : event.getStorages()) {
 			if (!data.hasTag(ARMOR_BUNDLE_TAG)) continue;
 
@@ -530,12 +539,12 @@ public class VisualArmorLayer implements Listener {
 
 	private static VisualArmor load(Player player, ReadableNBT nbt) {
 		return new VisualArmor(
-				player,
-				nbt.hasTag(HELMET_TAG) ? nbt.getItemStack(HELMET_TAG) : null,
-				nbt.hasTag(CHESTPLATE_TAG) ? nbt.getItemStack(CHESTPLATE_TAG) : null,
-				nbt.hasTag(LEGGINGS_TAG) ? nbt.getItemStack(LEGGINGS_TAG) : null,
-				nbt.hasTag(BOOTS_TAG) ? nbt.getItemStack(BOOTS_TAG) : null,
-				nbt.hasTag(GLOVES_TAG) ? nbt.getItemStack(GLOVES_TAG) : null
+			player,
+			nbt.hasTag(HELMET_TAG) ? nbt.getItemStack(HELMET_TAG) : null,
+			nbt.hasTag(CHESTPLATE_TAG) ? nbt.getItemStack(CHESTPLATE_TAG) : null,
+			nbt.hasTag(LEGGINGS_TAG) ? nbt.getItemStack(LEGGINGS_TAG) : null,
+			nbt.hasTag(BOOTS_TAG) ? nbt.getItemStack(BOOTS_TAG) : null,
+			nbt.hasTag(GLOVES_TAG) ? nbt.getItemStack(GLOVES_TAG) : null
 		);
 	}
 

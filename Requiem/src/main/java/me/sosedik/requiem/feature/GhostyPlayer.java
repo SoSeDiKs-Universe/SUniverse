@@ -68,10 +68,11 @@ public class GhostyPlayer {
 
 		// Hide player from non-ghosts
 //		Bukkit.getOnlinePlayers().forEach(onlinePlayer -> {
-//			if (isGhost(onlinePlayer))
+//			if (isGhost(onlinePlayer)) {
 //				player.showPlayer(Requiem.instance(), onlinePlayer);
-//			else
+//			} else {
 //				onlinePlayer.hidePlayer(Requiem.instance(), player); // TODO this hides from tab :/
+//			}
 //		});
 		// Legacy, remove? (clashes with no player nametags)
 //		PrepareGhostMobs.hideVisibility(player, true);
@@ -128,8 +129,9 @@ public class GhostyPlayer {
 
 //		Bukkit.getOnlinePlayers().forEach(onlinePlayer -> {
 //			onlinePlayer.showPlayer(Requiem.instance(), player);
-//			if (isGhost(onlinePlayer))
+//			if (isGhost(onlinePlayer)) {
 //				player.hidePlayer(Requiem.instance(), onlinePlayer); // TODO this hides from tab :/
+//			}
 //		});
 		// Legacy, remove?
 //		PrepareGhostMobs.hideVisibility(player, false);

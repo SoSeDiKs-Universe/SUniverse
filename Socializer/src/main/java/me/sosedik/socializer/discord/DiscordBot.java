@@ -25,6 +25,7 @@ public class DiscordBot {
 	private static @Nullable JDA discordBot;
 	private static Guild guild;
 	private static WebhookClient chatHook;
+	private static @Nullable WebhookClient chatThreadHook;
 
 	/**
 	 * Setups a Discord bot
@@ -44,7 +45,10 @@ public class DiscordBot {
 				.build();
 			discordBot.awaitReady();
 			guild = discordBot.getGuildById(config.getLong("guild"));
-			chatHook = WebhookClient.withUrl(config.getString("chat-hook", ""));
+			String chatHookUrl = config.getString("chat-hook", "");
+			chatHook = WebhookClient.withUrl(chatHookUrl);
+			long threadId = config.getLong("chat-hook-thread-id", -1L);
+			chatThreadHook = threadId == -1L ? null : WebhookClient.withUrl(chatHookUrl).onThread(threadId);
 
 			DiscordUtil.setupUtils(plugin);
 			Discorder.setupDatabase();
@@ -70,10 +74,14 @@ public class DiscordBot {
 	 * @param uuid sender's in-game uuid
 	 * @param builder message
 	 */
-	public static void sendMessage(String nickname, @Nullable String uuid, WebhookMessageBuilder builder) {
+	public static void sendMessage(String nickname, @Nullable String uuid, WebhookMessageBuilder builder, boolean thread) {
+		if (thread && chatThreadHook == null) return;
 		// Setting chat hook's avatar seems to break things :(
 		builder.setAvatarUrl("https://minotar.net/helm/" + Objects.requireNonNullElse(uuid, nickname));
-		chatHook.send(builder.build());
+		if (thread)
+			chatThreadHook.send(builder.build());
+		else
+			chatHook.send(builder.build());
 	}
 
 	/**

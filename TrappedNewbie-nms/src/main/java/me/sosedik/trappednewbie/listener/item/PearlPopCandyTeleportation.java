@@ -60,9 +60,8 @@ public class PearlPopCandyTeleportation implements Listener {
 			.count(32)
 			.spawn();
 		entity.emitSound(Sound.ITEM_CHORUS_FRUIT_TELEPORT, 1F, 1F);
-		entity.teleportAsync(block.getLocation().center(1).setDirection(entity.getLocation().getDirection()))
+		LocationUtil.smartTeleport(entity, block.getLocation().center(1).setDirection(entity.getLocation().getDirection()))
 			.thenAccept((r) -> entity.emitSound(Sound.ITEM_CHORUS_FRUIT_TELEPORT, 1F, 1F));
-
 	}
 
 }

@@ -5,6 +5,8 @@ import me.sosedik.requiem.Requiem;
 import me.sosedik.requiem.dataset.RequiemItems;
 import me.sosedik.requiem.feature.GhostyPlayer;
 import me.sosedik.requiem.task.GoingThroughWallsTask;
+import me.sosedik.utilizer.impl.item.modifier.CustomTotemOfUndyingModifier;
+import me.sosedik.utilizer.util.LocationUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -42,7 +44,8 @@ public class GhostsPhaseThroughWalls implements Listener {
 
 		event.setCancelled(true);
 
-		player.teleportAsync(player.getWorld().getSpawnLocation().center(1));
+		CustomTotemOfUndyingModifier.playTotemEffect(player, event.getBow());
+		LocationUtil.smartTeleport(player, player.getWorld().getSpawnLocation().center(1));
 	}
 
 }

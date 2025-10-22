@@ -78,7 +78,7 @@ public class HotPotatoEffect implements KiterinoMobEffectBehaviourWrapper {
 		if (player.getInventory().getItemInOffHand().getType() == Material.BAKED_POTATO) return true;
 
 		VisualArmor visualArmor = VisualArmorLayer.getVisualArmor(player);
-		return visualArmor.hasHelmet() && visualArmor.getHelmet().getType() == Material.BAKED_POTATO;
+		return visualArmor.canUseVisualArmor() && visualArmor.hasHelmet() && visualArmor.getHelmet().getType() == Material.BAKED_POTATO;
 	}
 
 }

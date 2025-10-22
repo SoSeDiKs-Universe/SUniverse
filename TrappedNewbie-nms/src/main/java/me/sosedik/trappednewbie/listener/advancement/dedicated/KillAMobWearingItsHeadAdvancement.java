@@ -51,7 +51,7 @@ public class KillAMobWearingItsHeadAdvancement implements Listener {
 			return true;
 
 		VisualArmor visualArmor = VisualArmorLayer.getVisualArmor(player);
-		return visualArmor.hasHelmet() && visualArmor.getHelmet().getType() == type;
+		return visualArmor.canUseVisualArmor() && visualArmor.hasHelmet() && visualArmor.getHelmet().getType() == type;
 	}
 
 	/**

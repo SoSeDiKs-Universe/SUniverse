@@ -30,7 +30,6 @@ public class TestCommand {
 //				e1.getEquipment().setHelmet(ItemStack.of(Material.JACK_O_LANTERN));
 //			});
 //			player.getInventory().addItem(AdvancementTrophies.produceTrophy(TrappedNewbieAdvancements.KILL_ALL_MOBS_WEARING_A_JACK_O_LANTERN, player));
-//			player.getInventory().addItem(AdvancementTrophies.produceTrophy(TrappedNewbieAdvancements.USE_100_STACKS_OF_ENDER_PEARLS, player));
 		});
 	}
 

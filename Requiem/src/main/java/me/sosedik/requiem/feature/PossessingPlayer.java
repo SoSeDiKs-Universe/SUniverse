@@ -3,7 +3,6 @@ package me.sosedik.requiem.feature;
 import de.tr7zw.nbtapi.NBT;
 import de.tr7zw.nbtapi.NBTType;
 import de.tr7zw.nbtapi.iface.ReadWriteNBT;
-import io.papermc.paper.tag.EntityTags;
 import me.sosedik.requiem.Requiem;
 import me.sosedik.requiem.api.event.player.PlayerStartPossessingEntityEvent;
 import me.sosedik.requiem.api.event.player.PlayerStopPossessingEntityEvent;
@@ -14,6 +13,7 @@ import me.sosedik.requiem.task.PoseMimicingTask;
 import me.sosedik.utilizer.api.storage.player.PlayerDataStorage;
 import me.sosedik.utilizer.util.EntityUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.Tag;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.AbstractHorse;
 import org.bukkit.entity.Ageable;
@@ -309,7 +309,7 @@ public class PossessingPlayer {
 			case Golem golem -> true;
 			default -> {
 				EntityType entityType = entity.getType();
-				yield EntityTags.UNDEADS.isTagged(entityType);
+				yield Tag.ENTITY_TYPES_UNDEAD.isTagged(entityType);
 			}
 		};
 	}

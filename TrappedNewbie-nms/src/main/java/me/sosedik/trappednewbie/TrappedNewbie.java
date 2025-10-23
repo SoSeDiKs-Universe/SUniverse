@@ -81,6 +81,7 @@ import me.sosedik.trappednewbie.listener.block.BlockChoppingViaSwing;
 import me.sosedik.trappednewbie.listener.block.CustomBlockBreaking;
 import me.sosedik.trappednewbie.listener.block.LogStrippingGivesBarks;
 import me.sosedik.trappednewbie.listener.block.SoftBlockHandBreaking;
+import me.sosedik.trappednewbie.listener.block.TreePhysics;
 import me.sosedik.trappednewbie.listener.block.UnlitCampfireByDefault;
 import me.sosedik.trappednewbie.listener.effect.BoneBreakerFreezing;
 import me.sosedik.trappednewbie.listener.effect.BouncyEffectHandler;
@@ -310,6 +311,7 @@ public final class TrappedNewbie extends JavaPlugin {
 			CustomBlockBreaking.class,
 			LogStrippingGivesBarks.class,
 			SoftBlockHandBreaking.class,
+			TreePhysics.class,
 			UnlitCampfireByDefault.class,
 			// effect
 			BoneBreakerFreezing.class,

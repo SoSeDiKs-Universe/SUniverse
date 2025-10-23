@@ -248,5 +248,6 @@
 	"item.trapped_newbie.slime_gum_candy.name": "Слизнежвачка",
 	"item.trapped_newbie.slime_gum_candy.lore": "Каждому в жизни нужна пружинка",
 	"item.trapped_newbie.trapped_newbie.sour_patch_zombies_candy.name": "Кислинка",
-	"item.trapped_newbie.sour_patch_zombies_candy.lore": "Присоединяйтесь к орде!"
+	"item.trapped_newbie.sour_patch_zombies_candy.lore": "Присоединяйтесь к орде!",
+	"item.trapped_newbie.ash.name": "Пепел"
 }

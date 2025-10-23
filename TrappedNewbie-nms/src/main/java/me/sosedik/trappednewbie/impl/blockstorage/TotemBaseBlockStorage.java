@@ -133,6 +133,7 @@ public class TotemBaseBlockStorage extends DisplayBlockStorage {
 				if (!UtilizerTags.HUMAN_LIKE_ZOMBIES.isTagged(possessed.getType())) return;
 
 				PossessingPlayer.stopPossessing(player);
+				possessed.remove();
 			});
 		}
 

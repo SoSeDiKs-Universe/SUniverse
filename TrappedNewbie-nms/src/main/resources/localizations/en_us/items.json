@@ -248,5 +248,6 @@
 	"item.trapped_newbie.slime_gum_candy.name": "Slime Gum",
 	"item.trapped_newbie.slime_gum_candy.lore": "Makes life a little bouncier!",
 	"item.trapped_newbie.sour_patch_zombies_candy.name": "Sour Patch Zombies",
-	"item.trapped_newbie.sour_patch_zombies_candy.lore": "Join the horde"
+	"item.trapped_newbie.sour_patch_zombies_candy.lore": "Join the horde",
+	"item.trapped_newbie.ash.name": "Ash"
 }

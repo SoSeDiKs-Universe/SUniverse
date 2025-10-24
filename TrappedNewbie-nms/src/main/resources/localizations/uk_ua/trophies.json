@@ -1,4 +1,20 @@
 {
+	"trophy.collect_a_stack_of_pottery_sherds.name": "<#BC855E>Черепок мудрості",
+	"trophy.collect_a_stack_of_pottery_sherds.lore": [
+		"<#BC855E>Ви офіційно зібрали достатньо керамічних",
+		"<#BC855E>черепків, щоб відкрити музей"
+	],
+	"trophy.get_a_stack_of_sniffer_eggs.name": "<#E6F7FF>Сіль",
+	"trophy.get_a_stack_of_sniffer_eggs.lore": "<#E6F7FF>Вам подобається?",
+	"trophy.collect_all_pottery_sherds.name": "<#F5E1A2>Золотий ідол",
+	"trophy.collect_all_pottery_sherds.lore": [
+		"<#F5E1A2>Крадіжка може призвести до того, що",
+		"<#F5E1A2>за Вами покотиться гігантський валун"
+	],
+	"trophy.break_a_stack_of_suspicious_blocks.name": "<#E58850>Незграбна лопата",
+	"trophy.break_a_stack_of_suspicious_blocks.lore": "<#E58850>Для підозрілого копання",
+	"trophy.get_a_stack_of_suspicious_blocks.name": "<#C61111>Вентиляція",
+	"trophy.get_a_stack_of_suspicious_blocks.lore": "<#C61111>Червоний сус, я його бачив у венті",
 	"trophy.kill_all_hostile_mobs.name": "<#6D864C>Мобестіарій",
 	"trophy.kill_all_hostile_mobs.lore": "<#6D864C>Тепер доступний у магазинах",
 	"trophy.kill_a_phantom_underground_with_a_shovel.name": "<#DDD9DA>Лопата могильника",

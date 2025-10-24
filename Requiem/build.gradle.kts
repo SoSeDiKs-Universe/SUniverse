@@ -3,7 +3,7 @@ import net.minecrell.pluginyml.paper.PaperPluginDescription
 description = "The burden of life"
 
 dependencies {
-    compileOnly(project(":Utilizer"))
+    compileOnly(project(":Utilizer-nms"))
     compileOnly(project(":ResourceLib-nms"))
 
     compileOnly("org.incendo:cloud-paper:${project.property("cloudImplVersion")}")

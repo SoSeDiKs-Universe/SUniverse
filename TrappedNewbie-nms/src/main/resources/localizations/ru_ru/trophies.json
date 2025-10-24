@@ -1,4 +1,20 @@
 {
+	"trophy.collect_a_stack_of_pottery_sherds.name": "<#BC855E>Черепок мудрости",
+	"trophy.collect_a_stack_of_pottery_sherds.lore": [
+		"<#BC855E>Вы собрали достаточно глиняных",
+		"<#BC855E>черепков, чтобы основать музей"
+	],
+	"trophy.get_a_stack_of_sniffer_eggs.name": "<#E6F7FF>Соль",
+	"trophy.get_a_stack_of_sniffer_eggs.lore": "<#E6F7FF>Вам нравится?",
+	"trophy.collect_all_pottery_sherds.name": "<#F5E1A2>Золотой идол",
+	"trophy.collect_all_pottery_sherds.lore": [
+		"<#F5E1A2>Воровство может привести к тому,",
+		"<#F5E1A2>что за Вами покатится огромный валун"
+	],
+	"trophy.break_a_stack_of_suspicious_blocks.name": "<#E58850>Неуклюжая лопата",
+	"trophy.break_a_stack_of_suspicious_blocks.lore": "<#E58850>Для подозрительного копания",
+	"trophy.get_a_stack_of_suspicious_blocks.name": "<#C61111>Вентиляция",
+	"trophy.get_a_stack_of_suspicious_blocks.lore": "<#C61111>Красный пред, я его видел в венте",
 	"trophy.kill_all_hostile_mobs.name": "<#6D864C>Мобестиарий",
 	"trophy.kill_all_hostile_mobs.lore": "<#6D864C>Теперь во всех магазинах",
 	"trophy.kill_a_phantom_underground_with_a_shovel.name": "<#DDD9DA>Лопата гробовщика",

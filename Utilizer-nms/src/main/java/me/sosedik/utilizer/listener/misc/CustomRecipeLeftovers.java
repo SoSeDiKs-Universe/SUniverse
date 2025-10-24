@@ -1,12 +1,17 @@
 package me.sosedik.utilizer.listener.misc;
 
+import io.papermc.paper.adventure.PaperAdventure;
 import me.sosedik.utilizer.api.event.recipe.ItemCraftEvent;
 import me.sosedik.utilizer.api.event.recipe.RemainingItemEvent;
 import me.sosedik.utilizer.util.DurabilityUtil;
 import me.sosedik.utilizer.util.InventoryUtil;
+import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import org.bukkit.Keyed;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -21,7 +26,9 @@ import org.jetbrains.annotations.UnknownNullability;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.BiPredicate;
 
@@ -114,7 +121,20 @@ public class CustomRecipeLeftovers implements Listener {
 		}
 	}
 
+	private void callTrigger(CraftItemEvent event, NamespacedKey key, Player player) {
+		if (!(player instanceof CraftPlayer craftPlayer)) return;
+		List<net.minecraft.world.item.ItemStack> ingredients = new ArrayList<>();
+		for (ItemStack item : event.getInventory().getMatrix()) {
+			if (ItemStack.isEmpty(item)) continue;
+
+			ingredients.add(net.minecraft.world.item.ItemStack.fromBukkitCopy(item));
+		}
+		CriteriaTriggers.RECIPE_CRAFTED.trigger(craftPlayer.getHandle(), ResourceKey.create(Registries.RECIPE, PaperAdventure.asVanilla(key)), ingredients);
+	}
+
 	private void updateMatrix(CraftItemEvent event, NamespacedKey key, Player player, int amount) {
+		callTrigger(event, key, player);
+
 		CraftingInventory inv = event.getInventory();
 		BiPredicate<RemainingItemEvent, ItemStack> exemptCheck = LEFTOVER_EXEMPTS.get(key);
 		@UnknownNullability ItemStack[] matrix = inv.getMatrix();

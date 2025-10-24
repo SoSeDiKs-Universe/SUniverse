@@ -3,7 +3,8 @@ import net.minecrell.pluginyml.paper.PaperPluginDescription
 description = "Endless farming simulator (so fun!) for sweet-sweet sugar eaters"
 
 dependencies {
-    compileOnly(project(":Utilizer"))
+
+    compileOnly(project(":Utilizer-nms"))
     compileOnly(project(":ResourceLib-nms"))
     compileOnly(project(":MiscMe"))
 

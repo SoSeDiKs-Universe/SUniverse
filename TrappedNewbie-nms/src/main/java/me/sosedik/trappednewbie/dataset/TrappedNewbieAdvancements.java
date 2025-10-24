@@ -3,6 +3,7 @@ package me.sosedik.trappednewbie.dataset;
 import de.tr7zw.nbtapi.NBT;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.BannerPatternLayers;
+import io.papermc.paper.datacomponent.item.BundleContents;
 import io.papermc.paper.datacomponent.item.ChargedProjectiles;
 import io.papermc.paper.datacomponent.item.DamageResistant;
 import io.papermc.paper.datacomponent.item.DyedItemColor;
@@ -10,6 +11,7 @@ import io.papermc.paper.datacomponent.item.Fireworks;
 import io.papermc.paper.datacomponent.item.ItemArmorTrim;
 import io.papermc.paper.datacomponent.item.ItemContainerContents;
 import io.papermc.paper.datacomponent.item.ItemEnchantments;
+import io.papermc.paper.datacomponent.item.PotDecorations;
 import io.papermc.paper.datacomponent.item.PotionContents;
 import io.papermc.paper.datacomponent.item.UseCooldown;
 import io.papermc.paper.registry.keys.tags.DamageTypeTagKeys;
@@ -37,6 +39,8 @@ import me.sosedik.trappednewbie.impl.advancement.AttackWithAllWeaponsAdvancement
 import me.sosedik.trappednewbie.impl.advancement.AttackWithAnEggAdvancement;
 import me.sosedik.trappednewbie.impl.advancement.AttackZombieWithAnEggAdvancement;
 import me.sosedik.trappednewbie.impl.advancement.BlowUpAllMonstersWithTNTAdvancement;
+import me.sosedik.trappednewbie.impl.advancement.CollectAStackOfPotterySherdsAdvancement;
+import me.sosedik.trappednewbie.impl.advancement.CollectAllPotterySherdsAdvancement;
 import me.sosedik.trappednewbie.impl.advancement.CommunismAdvancement;
 import me.sosedik.trappednewbie.impl.advancement.FrozenHeartAdvancement;
 import me.sosedik.trappednewbie.impl.advancement.GetABannerShieldAdvancement;
@@ -76,7 +80,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.FireworkEffect;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Tag;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
@@ -87,6 +93,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.generator.structure.Structure;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ItemType;
 import org.bukkit.inventory.meta.trim.ArmorTrim;
 import org.bukkit.inventory.meta.trim.TrimMaterial;
 import org.bukkit.inventory.meta.trim.TrimPattern;
@@ -115,6 +122,7 @@ import static me.sosedik.packetadvancements.imlp.display.AdvancementVisibilities
 import static me.sosedik.packetadvancements.imlp.display.AdvancementVisibilities.ifDone;
 import static me.sosedik.packetadvancements.imlp.display.AdvancementVisibilities.ifVisible;
 import static me.sosedik.packetadvancements.imlp.display.AdvancementVisibilities.parentGranted;
+import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.bredAnimals;
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.consumeItem;
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.entityHurtPlayer;
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.entityKilledPlayer;
@@ -122,9 +130,12 @@ import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaT
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.fishingRodHooked;
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.inventoryChanged;
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.killedByArrow;
+import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.location;
+import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.placedBlock;
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.playerHurtEntity;
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.playerInteractedWithEntity;
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.playerKilledEntity;
+import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.recipeCrafted;
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.shotCrossbow;
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.startedRiding;
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.thrownItemPickedUpByEntity;
@@ -389,6 +400,205 @@ public class TrappedNewbieAdvancements {
 	public static final IRootAdvancement ADVENTURE_ROOT = buildRoot(ADVENTURE_TAB).display(display().xy(0F, 0F).withAdvancementFrame(AdvancementFrame.SQUIRCLE).fancyDescriptionParent(GRAY).icon(Material.MAP))
 		.visibilityRule(ifDone(false, FIRST_POSSESSION))
 		.requiredProgress(alwaysDone())
+		.buildAndRegister();
+	// MCCheck: 1.21.10, new ruined portals
+	public static final IAdvancement FIND_A_BROKEN_NETHER_PORTAL = buildBase(ADVENTURE_ROOT, "find_a_broken_nether_portal")
+		.display(display().x(1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.CRYING_OBSIDIAN))
+		.requiredProgress(vanilla(
+			location()
+				.withLocation(loc -> loc
+					.withDimension(World.Environment.NORMAL)
+					.withStructure(List.of(Structure.RUINED_PORTAL, Structure.RUINED_PORTAL_NETHER, Structure.RUINED_PORTAL_DESERT, Structure.RUINED_PORTAL_JUNGLE, Structure.RUINED_PORTAL_MOUNTAIN, Structure.RUINED_PORTAL_OCEAN, Structure.RUINED_PORTAL_SWAMP))
+				)
+				.withPlayer(player -> player.inverted().withGameModes(GameMode.SPECTATOR))
+		))
+		.buildAndRegister();
+	public static final IAdvancement FIND_A_DESERT_PYRAMID = buildBase(FIND_A_BROKEN_NETHER_PORTAL, "find_a_desert_pyramid")
+		.display(display().x(1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.CHISELED_SANDSTONE))
+		.requiredProgress(vanilla(
+			location()
+				.withLocation(loc -> loc
+					.withStructure(Structure.DESERT_PYRAMID)
+				)
+				.withPlayer(player -> player.inverted().withGameModes(GameMode.SPECTATOR))
+		))
+		.buildAndRegister();
+	public static final IAdvancement GET_A_BRUSH = buildBase(FIND_A_DESERT_PYRAMID, "get_a_brush")
+		.display(display().xy(0.5F, 1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.BRUSH))
+		.requiredProgress(vanilla(
+			inventoryChanged().withItems(ItemTriggerCondition.of(Material.BRUSH))
+		))
+		.buildAndRegister();
+	public static final IAdvancement GET_A_SNIFFER_EGG = buildBase(GET_A_BRUSH, "get_a_sniffer_egg")
+		.display(display().x(1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.SNIFFER_EGG))
+		.requiredProgress(vanilla(
+			inventoryChanged().withItems(ItemTriggerCondition.of(Material.SNIFFER_EGG))
+		))
+		.buildAndRegister();
+	public static final IAdvancement GET_A_SNIFFER_SEED = buildBase(GET_A_SNIFFER_EGG, "get_a_sniffer_seed")
+		.display(display().x(1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.PITCHER_POD))
+		.requiredProgress(vanilla(
+			inventoryChanged().withItems(ItemTriggerCondition.of(Material.TORCHFLOWER_SEEDS, Material.PITCHER_POD))
+		))
+		.buildAndRegister();
+	public static final IAdvancement BREED_SNIFFERS = buildBase(GET_A_SNIFFER_SEED, "breed_sniffers")
+		.display(display().x(1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.TORCHFLOWER_SEEDS))
+		.withReward(rewards().addItems(ItemStack.of(Material.TORCHFLOWER_SEEDS, 4)))
+		.requiredProgress(vanilla(
+			bredAnimals()
+				.withParent(entity -> entity.withEntityType(EntityType.SNIFFER))
+				.withPartner(entity -> entity.withEntityType(EntityType.SNIFFER))
+		))
+		.buildAndRegister();
+	public static final IAdvancement FEED_A_SNIFFLET = buildBase(BREED_SNIFFERS, "feed_a_snifflet")
+		.display(display().x(1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.SNIFFER_SPAWN_EGG))
+		.requiredProgress(vanilla(
+			playerInteractedWithEntity()
+				.withEntity(entity -> entity
+					.withState(EntityStateTriggerCondition::baby)
+					.withEntityType(EntityType.SNIFFER)
+				)
+				.withItem(ItemTriggerCondition.of(Tag.ITEMS_SNIFFER_FOOD))
+		))
+		.buildAndRegister();
+	public static final IAdvancement PLANT_A_SNIFFER_SEED = buildBase(FEED_A_SNIFFLET, "plant_a_sniffer_seed")
+		.display(display().x(1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.TORCHFLOWER))
+		.requiredProgress(vanillaAny(
+			placedBlock().withBlock(Material.PITCHER_CROP),
+			placedBlock().withBlock(Material.TORCHFLOWER_CROP)
+		))
+		.buildAndRegister();
+	public static final IAdvancement WATER_A_FLOWER_POT = buildBase(PLANT_A_SNIFFER_SEED, "water_a_flower_pot")
+		.display(display().x(1F).goalFrame().fancyDescriptionParent(NamedTextColor.AQUA).icon(ItemUtil.glint(Material.ALLIUM)))
+		.withReward(rewards().withExp(25))
+		.buildAndRegister();
+	public static final IAdvancement GET_A_STACK_OF_SNIFFER_PLANTS = buildBase(WATER_A_FLOWER_POT, "get_a_stack_of_sniffer_plants")
+		.display(display().x(1F).challengeFrame().fancyDescriptionParent(NamedTextColor.DARK_PURPLE).icon(ItemUtil.glint(Material.PITCHER_PLANT)))
+		.withReward(rewards().withExp(110).addItems(ItemStack.of(Material.SNIFFER_EGG, 4)))
+		.requiredProgress(vanilla(
+			inventoryChanged(Material.TORCHFLOWER.key().value()).withItems(ItemTriggerCondition.of(Material.TORCHFLOWER).withMinAmount(Material.TORCHFLOWER.getMaxStackSize())),
+			inventoryChanged(Material.PITCHER_PLANT.key().value()).withItems(ItemTriggerCondition.of(Material.PITCHER_PLANT).withMinAmount(Material.PITCHER_PLANT.getMaxStackSize()))
+		))
+		.buildAndRegister();
+	public static final IAdvancement GET_A_STACK_OF_SNIFFER_EGGS = buildBase(GET_A_STACK_OF_SNIFFER_PLANTS, "get_a_stack_of_sniffer_eggs")
+		.display(display().x(1F).challengeFrame().fancyDescriptionParent(NamedTextColor.DARK_PURPLE).icon(ItemUtil.glint(Material.SUGAR)))
+		.withReward(rewards()
+			.withExp(200)
+			.addItems(ItemStack.of(Material.SNIFFER_EGG, 16))
+			.withTrophy(ItemStack.of(Material.SUGAR))
+		)
+		.requiredProgress(vanilla(
+			inventoryChanged().withItems(ItemTriggerCondition.of(Material.SNIFFER_EGG).withMinAmount(Material.SNIFFER_EGG.getMaxStackSize()))
+		))
+		.buildAndRegister();
+	public static final IAdvancement GET_A_POTTERY_SHERD = buildBase(GET_A_BRUSH, "get_a_pottery_sherd")
+		.display(display().xy(1F, 1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.SUSPICIOUS_SAND))
+		.requiredProgress(vanilla(
+			inventoryChanged().withItems(ItemTriggerCondition.of(Tag.ITEMS_DECORATED_POT_SHERDS))
+		))
+		.buildAndRegister();
+	public static final IAdvancement CRAFT_A_DECORATED_POT_FROM_SHERDS = buildBase(GET_A_POTTERY_SHERD, "craft_a_decorated_pot_from_sherds")
+		.display(display().x(1F).goalFrame().fancyDescriptionParent(NamedTextColor.AQUA).icon(() -> {
+			var item = ItemStack.of(Material.DECORATED_POT);
+			item.setData(DataComponentTypes.POT_DECORATIONS, PotDecorations.potDecorations(ItemType.BRICK, ItemType.HEART_POTTERY_SHERD, ItemType.BRICK, ItemType.EXPLORER_POTTERY_SHERD));
+			return item;
+		}))
+		.withReward(rewards().withExp(50))
+		.requiredProgress(vanilla(
+			recipeCrafted(NamespacedKey.minecraft("decorated_pot"))
+				.withIngredients(
+					ItemTriggerCondition.of(Tag.ITEMS_DECORATED_POT_SHERDS),
+					ItemTriggerCondition.of(Tag.ITEMS_DECORATED_POT_SHERDS),
+					ItemTriggerCondition.of(Tag.ITEMS_DECORATED_POT_SHERDS),
+					ItemTriggerCondition.of(Tag.ITEMS_DECORATED_POT_SHERDS)
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement COLLECT_ALL_POTTERY_SHERDS = buildBase(CRAFT_A_DECORATED_POT_FROM_SHERDS, "collect_all_pottery_sherds")
+		.display(display().x(1F).challengeFrame().fancyDescriptionParent(NamedTextColor.DARK_PURPLE).icon(Material.PRIZE_POTTERY_SHERD))
+		.withReward(rewards()
+			.withExp(200)
+			.addItems(() -> {
+				var item = ItemStack.of(Material.BROWN_BUNDLE);
+				item.setData(DataComponentTypes.BUNDLE_CONTENTS, BundleContents.bundleContents(
+					Tag.ITEMS_DECORATED_POT_SHERDS.getValues().stream().map(ItemStack::of).toList()
+				));
+				return item;
+			})
+			.withTrophy(ItemStack.of(Material.YELLOW_GLAZED_TERRACOTTA))
+			.withExtraMessage(p -> Messenger.messenger(p).getMessage("advancement.reward.pottery_sherds"))
+		)
+		.buildAndRegister(CollectAllPotterySherdsAdvancement::new);
+	public static final IAdvancement COLLECT_A_STACK_OF_POTTERY_SHERDS = buildBase(COLLECT_ALL_POTTERY_SHERDS, "collect_a_stack_of_pottery_sherds")
+		.display(display().x(1F).challengeFrame().fancyDescriptionParent(NamedTextColor.LIGHT_PURPLE).icon(ItemUtil.glint(Material.ARMS_UP_POTTERY_SHERD)))
+		.withReward(rewards()
+			.withExp(700)
+			.withTrophy(ItemStack.of(Material.ANGLER_POTTERY_SHERD))
+		)
+		.buildAndRegister(CollectAStackOfPotterySherdsAdvancement::new);
+	public static final IAdvancement BREAK_A_SUSPICIOUS_BLOCK = buildBase(COLLECT_A_STACK_OF_POTTERY_SHERDS, "break_a_suspicious_block")
+		.display(display().x(1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(ItemUtil.glint(Material.WOODEN_SHOVEL)))
+		.withReward(rewards().withExp(20))
+		.buildAndRegister();
+	public static final IAdvancement GET_A_SUSPICIOUS_BLOCK = buildBase(BREAK_A_SUSPICIOUS_BLOCK, "get_a_suspicious_block")
+		.display(display().x(1F).goalFrame().fancyDescriptionParent(NamedTextColor.AQUA).icon(Material.SUSPICIOUS_GRAVEL))
+		.withReward(rewards().withExp(50))
+		.requiredProgress(vanilla(
+			inventoryChanged().withItems(ItemTriggerCondition.of(Material.SUSPICIOUS_SAND, Material.SUSPICIOUS_GRAVEL))
+		))
+		.buildAndRegister();
+	public static final IAdvancement BREAK_A_STACK_OF_SUSPICIOUS_BLOCKS = buildBase(GET_A_SUSPICIOUS_BLOCK, "break_a_stack_of_suspicious_blocks")
+		.display(display().x(1F).challengeFrame().fancyDescriptionParent(NamedTextColor.DARK_PURPLE).icon(ItemUtil.glint(Material.SUSPICIOUS_GRAVEL)))
+		.withReward(rewards()
+			.withExp(110)
+			.withTrophy(ItemStack.of(Material.WOODEN_SHOVEL))
+		)
+		.requiredProgress(simple(Material.SUSPICIOUS_SAND.getMaxStackSize()))
+		.buildAndRegister();
+	public static final IAdvancement GET_A_STACK_OF_SUSPICIOUS_BLOCKS = buildBase(BREAK_A_STACK_OF_SUSPICIOUS_BLOCKS, "get_a_stack_of_suspicious_blocks")
+		.display(display().x(1F).challengeFrame().fancyDescriptionParent(NamedTextColor.LIGHT_PURPLE).icon(Material.SUSPICIOUS_SAND))
+		.withReward(rewards()
+			.withExp(505)
+			.withTrophy(ItemStack.of(Material.IRON_TRAPDOOR))
+		)
+		.requiredProgress(vanilla(
+			inventoryChanged(Material.SUSPICIOUS_SAND.key().value()).withItems(ItemTriggerCondition.of(Material.SUSPICIOUS_SAND).withMinAmount(Material.SUSPICIOUS_SAND.getMaxStackSize())),
+			inventoryChanged(Material.SUSPICIOUS_GRAVEL.key().value()).withItems(ItemTriggerCondition.of(Material.SUSPICIOUS_GRAVEL).withMinAmount(Material.SUSPICIOUS_GRAVEL.getMaxStackSize()))
+		))
+		.buildAndRegister();
+	public static final IAdvancement FIND_TRAIL_RUINS = buildBase(GET_A_BRUSH, "find_trail_ruins")
+		.display(display().xy(1F, 2F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.WHITE_GLAZED_TERRACOTTA))
+		.requiredProgress(vanilla(
+			location()
+				.withLocation(loc -> loc
+					.withStructure(Structure.TRAIL_RUINS)
+				)
+				.withPlayer(player -> player.inverted().withGameModes(GameMode.SPECTATOR))
+		))
+		.buildAndRegister();
+	public static final IAdvancement GET_A_TRIM_SMITHING_TEMPLATE = buildBase(FIND_TRAIL_RUINS, "get_a_trim_smithing_template")
+		.display(display().x(1F).goalFrame().fancyDescriptionParent(NamedTextColor.AQUA).icon(Material.WAYFINDER_ARMOR_TRIM_SMITHING_TEMPLATE))
+		.withReward(rewards().withExp(50))
+		.requiredProgress(vanilla(
+			inventoryChanged().withItems(ItemTriggerCondition.of(Material.WAYFINDER_ARMOR_TRIM_SMITHING_TEMPLATE, Material.RAISER_ARMOR_TRIM_SMITHING_TEMPLATE, Material.SHAPER_ARMOR_TRIM_SMITHING_TEMPLATE, Material.HOST_ARMOR_TRIM_SMITHING_TEMPLATE))
+		))
+		.buildAndRegister();
+	public static final IAdvancement GET_A_MUSIC_DISC_RELIC = buildBase(GET_A_TRIM_SMITHING_TEMPLATE, "get_a_music_disc_relic")
+		.display(display().x(1F).goalFrame().fancyDescriptionParent(NamedTextColor.AQUA).icon(Material.MUSIC_DISC_RELIC))
+		.withReward(rewards().withExp(50))
+		.requiredProgress(vanilla(
+			inventoryChanged().withItems(ItemTriggerCondition.of(Material.MUSIC_DISC_RELIC))
+		))
+		.buildAndRegister();
+	public static final IAdvancement FIND_A_JUNGLE_PYRAMID = buildBase(FIND_A_DESERT_PYRAMID, "find_a_jungle_pyramid")
+		.display(display().x(1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.MOSSY_COBBLESTONE))
+		.requiredProgress(vanilla(
+			location()
+				.withLocation(loc -> loc
+					.withStructure(Structure.JUNGLE_PYRAMID)
+				)
+				.withPlayer(player -> player.inverted().withGameModes(GameMode.SPECTATOR))
+		))
 		.buildAndRegister();
 
 	public static final AdvancementTab NATURE_TAB = buildTab("nature", MANAGER).inverseY().backgroundPathTexture("block/green_concrete_powder").build();

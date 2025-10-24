@@ -4,7 +4,7 @@ import net.minecrell.pluginyml.paper.PaperPluginDescription
 description = "Server resource pack generator"
 
 dependencies {
-    compileOnly(project(":Utilizer"))
+    compileOnly(project(":Utilizer-nms"))
     compileOnly(project(":FancyMotd"))
 
     paperLibrary("net.lingala.zip4j:zip4j:2.11.5")

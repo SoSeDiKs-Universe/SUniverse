@@ -3,7 +3,7 @@ import net.minecrell.pluginyml.paper.PaperPluginDescription
 description = "Because community is good"
 
 dependencies {
-    compileOnly(project(":Utilizer"))
+    compileOnly(project(":Utilizer-nms"))
     compileOnly(project(":ResourceLib-nms"))
     compileOnly(project(":UglyChatter"))
 

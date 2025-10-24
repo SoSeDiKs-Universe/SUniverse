@@ -4,6 +4,7 @@ import me.sosedik.packetadvancements.api.advancement.IAdvancement;
 import me.sosedik.trappednewbie.TrappedNewbie;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieAdvancements;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.Statistic;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -173,6 +174,13 @@ public class StatisticAdvancements implements Listener {
 				if (statValue >= 5000) TrappedNewbieAdvancements.FISH_5K.awardAllCriteria(player);
 				if (statValue >= 10_000) TrappedNewbieAdvancements.FISH_10K.awardAllCriteria(player);
 				if (statValue >= 50_000) TrappedNewbieAdvancements.FISH_50K.awardAllCriteria(player);
+			}
+			case MINE_BLOCK -> {
+				Material type = event.getMaterial();
+				if (type == Material.SUSPICIOUS_SAND || type == Material.SUSPICIOUS_GRAVEL) {
+					TrappedNewbieAdvancements.BREAK_A_SUSPICIOUS_BLOCK.awardAllCriteria(player);
+					TrappedNewbieAdvancements.BREAK_A_STACK_OF_SUSPICIOUS_BLOCKS.modifySimpleProgress(player, p -> p.setGained(Math.max(statValue, p.getGained())));
+				}
 			}
 		}
 	}

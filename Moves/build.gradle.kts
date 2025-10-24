@@ -3,7 +3,7 @@ import net.minecrell.pluginyml.paper.PaperPluginDescription
 description = "Shake your booty"
 
 dependencies {
-    compileOnly(project(":Utilizer"))
+    compileOnly(project(":Utilizer-nms"))
 
     compileOnly("org.incendo:cloud-paper:${project.property("cloudImplVersion")}")
     compileOnly("org.incendo:cloud-annotations:${project.property("cloudVersion")}")

@@ -1,4 +1,20 @@
 {
+	"trophy.collect_a_stack_of_pottery_sherds.name": "<#BC855E>Sherd of Wisdom",
+	"trophy.collect_a_stack_of_pottery_sherds.lore": [
+		"<#BC855E>You've officially collected enough",
+		"<#BC855E>Pottery Sherds to open a museum"
+	],
+	"trophy.get_a_stack_of_sniffer_eggs.name": "<#E6F7FF>Salt",
+	"trophy.get_a_stack_of_sniffer_eggs.lore": "<#E6F7FF>Do you like it?",
+	"trophy.collect_all_pottery_sherds.name": "<#F5E1A2>Golden Idol",
+	"trophy.collect_all_pottery_sherds.lore": [
+		"<#F5E1A2>Stealing this may result in",
+		"<#F5E1A2>a giant boulder rolling after you"
+	],
+	"trophy.break_a_stack_of_suspicious_blocks.name": "<#E58850>Awkward Shovel",
+	"trophy.break_a_stack_of_suspicious_blocks.lore": "<#E58850>To dig suspiciously",
+	"trophy.get_a_stack_of_suspicious_blocks.name": "<#C61111>Vent",
+	"trophy.get_a_stack_of_suspicious_blocks.lore": "<#C61111>red is sus i saw them vent",
 	"trophy.kill_all_hostile_mobs.name": "<#6D864C>Mobestiary",
 	"trophy.kill_all_hostile_mobs.lore": "<#6D864C>Available at stores now",
 	"trophy.kill_a_phantom_underground_with_a_shovel.name": "<#DDD9DA>The Undertaker's Shovel",

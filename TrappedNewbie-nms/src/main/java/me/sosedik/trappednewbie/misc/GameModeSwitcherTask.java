@@ -73,16 +73,16 @@ public class GameModeSwitcherTask extends BukkitRunnable {
 		if (isInteractable(blockType)) return true;
 		if (isApplicableTool(blockType, mainHand)) return true;
 		if (targetBlockFace == BlockFace.UP && UtilizerTags.TILLABLES.isTagged(blockType)) {
-			if (MaterialTags.HOES.isTagged(mainHand)) return true;
-			if (MaterialTags.HOES.isTagged(offHand)) return true;
+			if (Tag.ITEMS_HOES.isTagged(mainHand.getType())) return true;
+			if (Tag.ITEMS_HOES.isTagged(offHand.getType())) return true;
 		}
 		if (Tag.RAILS.isTagged(blockType)) {
 			if (MaterialTags.MINECARTS.isTagged(mainHand)) return true;
 			if (MaterialTags.MINECARTS.isTagged(offHand)) return true;
 		}
 		if (blockType == Material.FARMLAND) return true;
-		if (mainHand.getType() == Material.BONE_MEAL) return true;
-		if (offHand.getType() == Material.BONE_MEAL) return true;
+		if (isBothHandsUsable(mainHand.getType())) return true;
+		if (isBothHandsUsable(offHand.getType())) return true;
 		if (Tag.JUNGLE_LOGS.isTagged(blockType) && mainHand.getType() == Material.COCOA_BEANS) return true;
 		if (!new PlayerTargetBlockEvent(this.player, targetBlock, targetBlockFace).callEvent()) return true;
 
@@ -90,6 +90,10 @@ public class GameModeSwitcherTask extends BukkitRunnable {
 		if (entityTarget == null) return false;
 		// Armor stands can't be broken in adventure
 		return entityTarget.getType() == EntityType.ARMOR_STAND;
+	}
+
+	private boolean isBothHandsUsable(Material type) {
+		return type == Material.BONE_MEAL || type == Material.BRUSH;
 	}
 
 	private boolean isInteractable(Material blockType) {

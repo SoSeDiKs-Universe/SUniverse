@@ -5,7 +5,7 @@ description = "Once you're in, there's no way out"
 
 dependencies {
     compileOnly(project(":LimboWorldGenerator"))
-    compileOnly(project(":Utilizer"))
+    compileOnly(project(":Utilizer-nms"))
     compileOnly(project(":ResourceLib-nms"))
     compileOnly(project(":Essence"))
     compileOnly(project(":MiscMe"))

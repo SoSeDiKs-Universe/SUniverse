@@ -3,7 +3,7 @@ import net.minecrell.pluginyml.paper.PaperPluginDescription
 description = "Shared dumping ground for SoSeDiK's Universe witchery"
 
 dependencies {
-    paperLibrary("com.zaxxer:HikariCP:5.1.0")
+    paperLibrary("com.zaxxer:HikariCP:7.0.2")
 
     paperLibrary("org.incendo:cloud-paper:${project.property("cloudImplVersion")}")
     paperLibrary("org.incendo:cloud-annotations:${project.property("cloudVersion")}")

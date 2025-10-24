@@ -9,6 +9,7 @@ import me.sosedik.moves.listener.movement.CrawlingMechanics;
 import me.sosedik.moves.listener.movement.PlayerFallTicker;
 import me.sosedik.utilizer.util.LocationUtil;
 import me.sosedik.utilizer.util.MathUtil;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
@@ -48,6 +49,7 @@ public class FallThroughLeaves implements Listener {
 		Player player = event.getPlayer();
 		if (player.isInsideVehicle()) return;
 		if (player.isFlying() && !player.isSneaking()) return;
+		if (player.getGameMode() == GameMode.SPECTATOR) return;
 
 		Block block = to.getBlock().getRelative(BlockFace.DOWN);
 		if (!MovesTags.FALL_THROUGH_BLOCKS.isTagged(block.getType())) return;
@@ -67,6 +69,7 @@ public class FallThroughLeaves implements Listener {
 		if (!player.isFlying()) return;
 		if (player.isInsideVehicle()) return;
 		if (player.isSneaking()) return;
+		if (player.getGameMode() == GameMode.SPECTATOR) return;
 
 		Location to = event.getTo();
 		double decY = MathUtil.getDecimalPartAbs(to.getY());
@@ -89,6 +92,7 @@ public class FallThroughLeaves implements Listener {
 
 		Player player = event.getPlayer();
 		if (player.isInsideVehicle()) return;
+		if (player.getGameMode() == GameMode.SPECTATOR) return;
 		// Check if not moving backwards
 		if (to.toVector().subtract(from.toVector()).normalize().dot(player.getLocation().getDirection()) <= 0) return;
 

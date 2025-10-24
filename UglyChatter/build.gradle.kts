@@ -3,7 +3,7 @@ import net.minecrell.pluginyml.paper.PaperPluginDescription
 description = "Uglifies everything to make you look beautiful"
 
 dependencies {
-    compileOnly(project(":Utilizer"))
+    compileOnly(project(":Utilizer-nms"))
     compileOnly(project(":ResourceLib-nms"))
 
     paperLibrary("org.commonmark:commonmark:${project.property("commonmarkVersion")}")

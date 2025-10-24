@@ -20,6 +20,7 @@
 	"break.light": "Здесь слишком темно, чтобы ломать блоки",
 	"advancement.reward.exp": "<blue><exp> <plural:ru_ru:единица|единицы|единиц:'<exp_raw>'> опыта",
 	"advancement.reward.shearable_creepers": "<yellow>+ Способность стричь незаряженных криперов",
+	"advancement.reward.pottery_sherds": "<green>+1 каждого глиняного черепка",
 	"advancement.announcement.super_challenge": "Игрок <player> завершил супериспытание <advancement>",
 	"advancement.announcement.torture": "Игрок <player> завершил мучительное достижение <advancement>",
 	"advancement.announcement.super_torture": "Игрок <player> завершил сверхмучительное достижение <advancement>",

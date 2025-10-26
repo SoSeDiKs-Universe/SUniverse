@@ -8,6 +8,7 @@ import me.sosedik.requiem.task.GhostAuraTask;
 import me.sosedik.requiem.task.GhostMobVisionTask;
 import me.sosedik.utilizer.util.EntityUtil;
 import me.sosedik.utilizer.util.MetadataUtil;
+import me.sosedik.utilizer.util.ScoreboardUtil;
 import net.kyori.adventure.util.TriState;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -75,6 +76,7 @@ public class GhostyPlayer {
 //			}
 //		});
 		// Legacy, remove? (clashes with no player nametags)
+		ScoreboardUtil.getPlayerTeam(player).setCanSeeFriendlyInvisibles(false);
 //		PrepareGhostMobs.hideVisibility(player, true);
 //		for (UUID uuid : GHOSTS) {
 //			Player onlinePlayer = Bukkit.getPlayer(uuid);
@@ -134,6 +136,7 @@ public class GhostyPlayer {
 //			}
 //		});
 		// Legacy, remove?
+		ScoreboardUtil.getPlayerTeam(player).setCanSeeFriendlyInvisibles(true);
 //		PrepareGhostMobs.hideVisibility(player, false);
 
 		// Restore attributes

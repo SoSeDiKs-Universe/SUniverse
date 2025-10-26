@@ -10,7 +10,7 @@ tasks {
     runServer {
         minecraftVersion(rootProject.property("mcVersion").toString())
         runDirectory = rootProject.projectDir.resolve("server")
-        serverJar(rootProject.projectDir.resolve("server/kiterino.jar"))
+        serverJar(rootProject.projectDir.resolve("server/server.jar"))
         repositories {
             mavenLocal()
         }

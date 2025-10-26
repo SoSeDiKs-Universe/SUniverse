@@ -142,7 +142,11 @@ public class LocationUtil {
 	 * @return teleport result
 	 */
 	public static CompletableFuture<Boolean> smartTeleport(Entity entity, Location loc, PlayerTeleportEvent.TeleportCause cause) {
-		return entity.teleportAsync(loc, cause, TeleportFlag.Relative.VELOCITY_ROTATION, TeleportFlag.EntityState.RETAIN_VEHICLE, TeleportFlag.EntityState.RETAIN_PASSENGERS);
+		Entity teleportingEntity = entity;
+		Entity nextEntity;
+		while ((nextEntity = teleportingEntity.getVehicle()) != null)
+			teleportingEntity = nextEntity;
+		return teleportingEntity.teleportAsync(loc, cause, TeleportFlag.Relative.VELOCITY_ROTATION);
 	}
 
 	/**

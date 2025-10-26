@@ -72,9 +72,13 @@ public class FoodTooltipModifier extends ItemModifier {
 				}
 				contextBox.addLore(hungerDisplay.shadowColor(ShadowColor.none()));
 			}
-		}
 
-		item.unsetData(DataComponentTypes.FOOD);
+			item.setData(DataComponentTypes.FOOD, FoodProperties.food().canAlwaysEat(data.canAlwaysEat()).build());
+		} else if (item.hasData(DataComponentTypes.FOOD)) {
+			FoodProperties data = item.getData(DataComponentTypes.FOOD);
+			assert data != null;
+			item.setData(DataComponentTypes.FOOD, FoodProperties.food().canAlwaysEat(data.canAlwaysEat()).build());
+		}
 
 		return ModificationResult.OK;
 	}

@@ -1,9 +1,7 @@
 package me.sosedik.miscme.listener.player;
 
 import me.sosedik.miscme.MiscMe;
-import me.sosedik.utilizer.api.message.Messenger;
 import me.sosedik.utilizer.util.MathUtil;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -19,8 +17,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-
-import static me.sosedik.utilizer.api.message.Mini.raw;
 
 /**
  * Tracks player's movement speed
@@ -51,11 +47,17 @@ public class PlayerSpeedTracker implements Listener {
 		return getSpeedometerTracker(player).getSpeed();
 	}
 
-	private static SpeedometerTracker getSpeedometerTracker(Player player) {
+	/**
+	 * Gets the player's speedometer tracker
+	 *
+	 * @param player player
+	 * @return speedometer tracker
+	 */
+	public static SpeedometerTracker getSpeedometerTracker(Player player) {
 		return TRACKERS.computeIfAbsent(player.getUniqueId(), k -> new SpeedometerTracker(player));
 	}
 
-	private static class SpeedometerTracker extends BukkitRunnable {
+	public static class SpeedometerTracker extends BukkitRunnable {
 
 		private final Player player;
 		private final List<Double> speeds = new ArrayList<>();
@@ -116,10 +118,6 @@ public class PlayerSpeedTracker implements Listener {
 			if (this.lastSpeed == 0) return 0;
 			if (this.speeds.size() < 10) return 0;
 			return MathUtil.round(speed, 3);
-		}
-
-		private Component getSpeed(Player player) {
-			return Messenger.messenger(player).getMessage("item.speedometer.speed", raw("speed", getSpeed()));
 		}
 
 	}

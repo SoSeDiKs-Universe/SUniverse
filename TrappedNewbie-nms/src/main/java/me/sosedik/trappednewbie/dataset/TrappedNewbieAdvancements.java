@@ -7,6 +7,7 @@ import io.papermc.paper.datacomponent.item.BundleContents;
 import io.papermc.paper.datacomponent.item.ChargedProjectiles;
 import io.papermc.paper.datacomponent.item.DamageResistant;
 import io.papermc.paper.datacomponent.item.DyedItemColor;
+import io.papermc.paper.datacomponent.item.Equippable;
 import io.papermc.paper.datacomponent.item.Fireworks;
 import io.papermc.paper.datacomponent.item.ItemArmorTrim;
 import io.papermc.paper.datacomponent.item.ItemContainerContents;
@@ -32,6 +33,7 @@ import me.sosedik.trappednewbie.api.advancement.display.AnnouncementMessage;
 import me.sosedik.trappednewbie.api.advancement.display.FancierAdvancementDisplay;
 import me.sosedik.trappednewbie.api.advancement.display.OpeningHolderAdvancementDisplay;
 import me.sosedik.trappednewbie.api.advancement.reward.FancyAdvancementReward;
+import me.sosedik.trappednewbie.impl.advancement.ApplyAllSmithingTemplatesAdvancement;
 import me.sosedik.trappednewbie.impl.advancement.AttackSquidInTheAirWithASnowballAdvancement;
 import me.sosedik.trappednewbie.impl.advancement.AttackWithAllAxesAdvancement;
 import me.sosedik.trappednewbie.impl.advancement.AttackWithAllShovelsAdvancement;
@@ -44,6 +46,7 @@ import me.sosedik.trappednewbie.impl.advancement.CollectAllPotterySherdsAdvancem
 import me.sosedik.trappednewbie.impl.advancement.CommunismAdvancement;
 import me.sosedik.trappednewbie.impl.advancement.FrozenHeartAdvancement;
 import me.sosedik.trappednewbie.impl.advancement.GetABannerShieldAdvancement;
+import me.sosedik.trappednewbie.impl.advancement.GetAStackOfAllSmithingTemplatesAdvancement;
 import me.sosedik.trappednewbie.impl.advancement.GiveWindMaceToAFoxAdvancement;
 import me.sosedik.trappednewbie.impl.advancement.HuntLandAnimalsAdvancement;
 import me.sosedik.trappednewbie.impl.advancement.InspectorGadgetAdvancement;
@@ -92,6 +95,7 @@ import org.bukkit.block.data.type.Campfire;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.generator.structure.Structure;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ItemType;
 import org.bukkit.inventory.meta.trim.ArmorTrim;
@@ -590,8 +594,54 @@ public class TrappedNewbieAdvancements {
 			inventoryChanged().withItems(ItemTriggerCondition.of(Material.MUSIC_DISC_RELIC))
 		))
 		.buildAndRegister();
+	public static final IAdvancement GET_A_SMITHING_TEMPLATE = buildBase(FIND_A_DESERT_PYRAMID, "get_a_smithing_template")
+		.display(display().x(1.5F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.SENTRY_ARMOR_TRIM_SMITHING_TEMPLATE))
+		.requiredProgress(vanilla(
+			inventoryChanged().withItems(ItemTriggerCondition.of(UtilizerTags.SMITHING_TEMPLATES))
+		))
+		.buildAndRegister();
+	public static final IAdvancement GET_AN_EYE_ARMOR_TRIM_SMITHING_TEMPLATE = buildBase(GET_A_SMITHING_TEMPLATE, "get_an_eye_armor_trim_smithing_template")
+		.display(display().x(1F).goalFrame().fancyDescriptionParent(NamedTextColor.AQUA).icon(Material.EYE_ARMOR_TRIM_SMITHING_TEMPLATE))
+		.withReward(rewards().withExp(50).addItems(ItemStack.of(Material.ENDER_PEARL, 4)))
+		.requiredProgress(vanilla(
+			inventoryChanged().withItems(ItemTriggerCondition.of(Material.EYE_ARMOR_TRIM_SMITHING_TEMPLATE))
+		))
+		.buildAndRegister();
+	public static final IAdvancement GET_A_VEX_ARMOR_TRIM_SMITHING_TEMPLATE = buildBase(GET_AN_EYE_ARMOR_TRIM_SMITHING_TEMPLATE, "get_a_vex_armor_trim_smithing_template")
+		.display(display().x(1F).goalFrame().fancyDescriptionParent(NamedTextColor.AQUA).icon(Material.VEX_ARMOR_TRIM_SMITHING_TEMPLATE))
+		.withReward(rewards().withExp(50).addItems(ItemStack.of(Material.TOTEM_OF_UNDYING)))
+		.requiredProgress(vanilla(
+			inventoryChanged().withItems(ItemTriggerCondition.of(Material.VEX_ARMOR_TRIM_SMITHING_TEMPLATE))
+		))
+		.buildAndRegister();
+	public static final IAdvancement GET_A_SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE = buildBase(GET_A_VEX_ARMOR_TRIM_SMITHING_TEMPLATE, "get_a_silence_armor_trim_smithing_template")
+		.display(display().x(1F).goalFrame().fancyDescriptionParent(NamedTextColor.AQUA).icon(Material.SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE))
+		.withReward(rewards().withExp(50).addItems(ItemStack.of(Material.ECHO_SHARD, 6)))
+		.requiredProgress(vanilla(
+			inventoryChanged().withItems(ItemTriggerCondition.of(Material.SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE))
+		))
+		.buildAndRegister();
+	public static final IAdvancement APPLY_ALL_SMITHING_TEMPLATES = buildBase(GET_A_SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE, "apply_all_smithing_templates")
+		.display(display().x(1F).challengeFrame().fancyDescriptionParent(NamedTextColor.DARK_PURPLE).icon(Material.SPIRE_ARMOR_TRIM_SMITHING_TEMPLATE))
+		.withReward(rewards()
+			.withExp(150)
+			.addItems(() -> {
+				var item = ItemStack.of(Material.GRAY_SHULKER_BOX);
+				item.setData(DataComponentTypes.CONTAINER, ItemContainerContents.containerContents(
+					UtilizerTags.SMITHING_TEMPLATES.getValues().stream().filter(type -> type != Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE).map(ItemStack::of).toList()
+				));
+				return item;
+			})
+			.withTrophy(ItemStack.of(Material.LEATHER_CHESTPLATE).withColor(Color.fromRGB(12200224)))
+			.withExtraMessage(p -> Messenger.messenger(p).getMessage("advancement.reward.smithing_templates"))
+		)
+		.buildAndRegister(ApplyAllSmithingTemplatesAdvancement::new);
+	public static final IAdvancement GET_A_STACK_OF_ALL_SMITHING_TEMPLATES = buildBase(APPLY_ALL_SMITHING_TEMPLATES, "get_a_stack_of_all_smithing_templates")
+		.display(display().x(1F).withAdvancementFrame(AdvancementFrame.STAR).fancyDescriptionParent(NamedTextColor.LIGHT_PURPLE).icon(Material.RIB_ARMOR_TRIM_SMITHING_TEMPLATE))
+		.withReward(rewards().withExp(833).addItems(ItemStack.of(Material.DIAMOND_BLOCK, 16)))
+		.buildAndRegister(GetAStackOfAllSmithingTemplatesAdvancement::new);
 	public static final IAdvancement FIND_A_JUNGLE_PYRAMID = buildBase(FIND_A_DESERT_PYRAMID, "find_a_jungle_pyramid")
-		.display(display().x(1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.MOSSY_COBBLESTONE))
+		.display(display().xy(0.5F, -1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.MOSSY_COBBLESTONE))
 		.requiredProgress(vanilla(
 			location()
 				.withLocation(loc -> loc
@@ -1585,10 +1635,19 @@ public class TrappedNewbieAdvancements {
 				)
 		))
 		.buildAndRegister();
-	public static final IAdvancement KILL_ALL_JOCKEYS = buildBase(KILL_A_CHICKEN_JOCKEY_IN_A_MANSION, "kill_all_jockeys").display(display().x(-1F).challengeFrame().fancyDescriptionParent(NamedTextColor.DARK_RED).torture().icon(Material.ZOMBIE_HEAD))
-		.withReward(rewards().withExp(100))
+	public static final IAdvancement KILL_ALL_JOCKEYS = buildBase(KILL_A_CHICKEN_JOCKEY_IN_A_MANSION, "kill_all_jockeys")
+		.display(display().x(-1F).challengeFrame().fancyDescriptionParent(NamedTextColor.DARK_RED).torture().icon(Material.ZOMBIE_HEAD))
+		.withReward(rewards()
+			.withExp(100)
+			.withTrophy(() -> {
+				var item = ItemStack.of(Material.HORN_CORAL);
+				item.setData(DataComponentTypes.EQUIPPABLE, Equippable.equippable(EquipmentSlot.HEAD).build());
+				return item;
+			})
+		)
 		.buildAndRegister(KillAllJockeysAdvancement::new);
-	public static final IAdvancement KILL_ALL_ALL_JOCKEYS = buildBase(KILL_ALL_JOCKEYS, "kill_all_all_jockeys").display(display().x(-1F).withAdvancementFrame(AdvancementFrame.BUTTERFLY).fancyDescriptionParent(NamedTextColor.BLACK).superTorture().icon(Material.SKELETON_SKULL))
+	public static final IAdvancement KILL_ALL_ALL_JOCKEYS = buildBase(KILL_ALL_JOCKEYS, "kill_all_all_jockeys")
+		.display(display().x(-1F).withAdvancementFrame(AdvancementFrame.BUTTERFLY).fancyDescriptionParent(NamedTextColor.BLACK).superTorture().icon(Material.SKELETON_SKULL))
 		.withReward(rewards()
 			.withExp(100)
 			.withTrophy(ItemStack.of(Material.BOW))
@@ -2286,7 +2345,7 @@ public class TrappedNewbieAdvancements {
 			.withExp(70)
 			.withTrophy(ItemStack.of(Material.ARROW))
 		)
-		.requiredProgress(vanilla(
+		.requiredProgress(vanillaAny(
 			playerKilledEntity()
 				.withEntity(entity -> entity
 					.withEntityType(EntityType.WITHER)
@@ -2297,6 +2356,15 @@ public class TrappedNewbieAdvancements {
 						.withEquipment(equipment -> equipment
 							.withMainHand(Tag.ITEMS_ARROWS)
 						)
+					)
+				),
+			playerKilledEntity("supersonic_arrow")
+				.withEntity(entity -> entity
+					.withEntityType(EntityType.WITHER)
+				)
+				.withDamage(damage -> damage
+					.withDirectEntity(entity -> entity
+						.withEntityType(Tag.ENTITY_TYPES_ARROWS)
 					)
 				)
 		))

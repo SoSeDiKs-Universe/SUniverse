@@ -42,7 +42,7 @@ public class PossessedMimicPossessor implements Listener {
 		if (entity == null) return;
 
 		event.setCancelled(true);
-		LocationUtil.smartTeleport(entity, event.getTo(), PlayerTeleportEvent.TeleportCause.ENDER_PEARL);
+		LocationUtil.smartTeleport(entity, event.getTo());
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)

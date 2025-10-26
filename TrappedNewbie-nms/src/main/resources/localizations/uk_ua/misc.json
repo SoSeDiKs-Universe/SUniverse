@@ -21,6 +21,7 @@
 	"advancement.reward.exp": "<blue><exp> <plural:uk_ua:одиниця|одиниці|одиниць:'<exp_raw>'> досвіду",
 	"advancement.reward.shearable_creepers": "<yellow>+ Здатність стригти незаряджених кріперів",
 	"advancement.reward.pottery_sherds": "<green>+1 кожного гончарського черепка",
+	"advancement.reward.smithing_templates": "<green>+1 кожного ковальського шаблону",
 	"advancement.announcement.super_challenge": "Гравець <player> завершив надвипробування <advancement>",
 	"advancement.announcement.torture": "Гравець <player> завершив виснажливе досягнення <advancement>",
 	"advancement.announcement.super_torture": "Гравець <player> завершив надвиснажливе досягнення <advancement>",

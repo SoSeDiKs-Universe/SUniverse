@@ -1,4 +1,9 @@
 {
+	"trophy.apply_all_smithing_templates.name": "<#BA2920>Костюм железного человека",
+	"trophy.apply_all_smithing_templates.lore": [
+		"<#BA2920>Он сошёл с ума?",
+		"<#BA2920>Он может видеть или всё вокруг лишь тьма?"
+	],
 	"trophy.collect_a_stack_of_pottery_sherds.name": "<#BC855E>Черепок мудрости",
 	"trophy.collect_a_stack_of_pottery_sherds.lore": [
 		"<#BC855E>Вы собрали достаточно глиняных",
@@ -26,8 +31,14 @@
 		"<#ba5d41>Вы когда-нибудь задумывались, что происходит,",
 		"<#ba5d41>когда Вы смешиваете горячую лаву и курицу?"
 	],
-	"trophy.kill_all_jockeys.name": "<gold>Лук поджога",
-	"trophy.kill_all_jockeys.lore": "<gold>Используется единственным и неповторимым Джеки Дауном",
+	"trophy.kill_all_jockeys.name": "<#9B111E>Корона жокеев",
+	"trophy.kill_all_jockeys.lore": [
+		"<#9B111E>Надев эту корону,",
+		"<#9B111E>Вы становитесь правителем жокеев,",
+		"<#9B111E>потому что да, коралл — это животное"
+	],
+	"trophy.kill_all_all_jockeys.name": "<gold>Лук поджога",
+	"trophy.kill_all_all_jockeys.lore": "<gold>Используется единственным и неповторимым Джеки Дауном",
 	"trophy.kill_a_husk_in_tundra.name": "<#C8DCFF>Ванильное мороженое",
 	"trophy.kill_a_husk_in_tundra.lore": [
 		"<#C8DCFF>Жизнь была бы ванильным мороженым",

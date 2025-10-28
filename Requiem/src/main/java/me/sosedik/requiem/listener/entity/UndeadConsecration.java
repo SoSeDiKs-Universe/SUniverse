@@ -2,6 +2,7 @@ package me.sosedik.requiem.listener.entity;
 
 import de.tr7zw.nbtapi.NBT;
 import me.sosedik.requiem.Requiem;
+import me.sosedik.requiem.feature.PossessingPlayer;
 import me.sosedik.utilizer.util.EntityUtil;
 import org.bukkit.Location;
 import org.bukkit.Particle;
@@ -11,6 +12,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Golem;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.ThrownPotion;
 import org.bukkit.entity.Wolf;
@@ -73,7 +75,6 @@ public class UndeadConsecration implements Listener {
 		Entity entity = event.getEntity();
 		HealTask healTask = UNDEAD_MOBS.get(entity.getUniqueId());
 		if (healTask == null) return;
-		if (healTask.isVulnerable()) return;
 
 		if (EntityUtil.isFireDamageCause(event.getCause())) {
 			if (entity.isImmuneToFire()) {
@@ -83,14 +84,30 @@ public class UndeadConsecration implements Listener {
 			}
 			return;
 		}
-		if (isExplosionDamageCause(event.getCause())) return;
+		if (isExplosionDamageCause(event.getCause())) {
+			healTask.updateNoHealTime(10);
+			return;
+		}
 
 		if (event instanceof EntityDamageByEntityEvent damageEvent) {
+			Entity causingEntity = damageEvent.getDamageSource().getCausingEntity();
+			if (causingEntity == null) causingEntity = damageEvent.getDamager();
+			if (causingEntity instanceof Player player) {
+				LivingEntity possessed = PossessingPlayer.getPossessed(player);
+				if (possessed != null) causingEntity = possessed;
+			}
+			if (Tag.ENTITY_TYPES_UNDEAD.isTagged(causingEntity.getType())) {
+				healTask.updateNoHealTime(5);
+				return;
+			}
+
 			switch (damageEvent.getDamager()) {
 				case Golem golem -> {
+					healTask.updateNoHealTime(5);
 					return;
 				}
 				case Wolf wolf when Tag.ENTITY_TYPES_SKELETONS.isTagged(entity.getType()) -> {
+					healTask.updateNoHealTime(5);
 					return;
 				}
 				case Projectile projectile -> {
@@ -118,8 +135,9 @@ public class UndeadConsecration implements Listener {
 				}
 				default -> {}
 			}
-
 		}
+
+		if (healTask.isVulnerable()) return;
 
 		event.setDamage(event.getDamage() * 0.2);
 	}
@@ -137,13 +155,16 @@ public class UndeadConsecration implements Listener {
 
 	private static class HealTask extends BukkitRunnable {
 
+		private static final String NO_HEAL_TIME_TAG = "undead_no_heal_time";
 		private static final String INVULNERABILITY_TAG = "undead_invulnerability";
 
 		private final LivingEntity entity;
+		private int noHealTime;
 		private int vulnerabilityTime;
 
 		public HealTask(LivingEntity entity) {
 			this.entity = entity;
+			this.noHealTime = NBT.getPersistentData(entity, nbt -> nbt.getOrDefault(NO_HEAL_TIME_TAG, 0));
 			this.vulnerabilityTime = NBT.getPersistentData(entity, nbt -> nbt.getOrDefault(INVULNERABILITY_TAG, 0));
 
 			runTaskTimer(Requiem.instance(), 20L, 20L);
@@ -160,6 +181,9 @@ public class UndeadConsecration implements Listener {
 				updateVulnerabilityTime(20);
 			}
 
+			if (this.noHealTime > 0)
+				this.noHealTime--;
+
 			if (this.vulnerabilityTime > 0) {
 				if (this.entity.isWet()) {
 					this.vulnerabilityTime = 0;
@@ -167,7 +191,6 @@ public class UndeadConsecration implements Listener {
 					this.vulnerabilityTime--;
 
 					vulnerabilityTick();
-					return;
 				}
 			}
 
@@ -178,10 +201,18 @@ public class UndeadConsecration implements Listener {
 			double width = this.entity.getWidth() / 2.5;
 			double height = this.entity.getHeight() / 3.5;
 			Location loc = this.entity.getEyeLocation().addY(-0.5);
-			this.entity.getWorld().spawnParticle(Particle.CRIT, loc, 20, width, height, width, 0.3);
+			this.entity.getWorld().spawnParticle(Particle.FLAME, loc, 5, width, height, width, 0.01);
 		}
 
 		public void healTick() {
+			if (hasNoHealTime()) {
+				double width = this.entity.getWidth() / 2.5;
+				double height = this.entity.getHeight() / 3.5;
+				Location loc = this.entity.getEyeLocation().addY(-0.5);
+				this.entity.getWorld().spawnParticle(Particle.CRIT, loc, 10, width, height, width, 0.3);
+				return;
+			}
+
 			if (this.entity.getHealth() >= this.entity.getMaxHealth()) return;
 
 			this.entity.setHealth(Math.min(this.entity.getHealth() + 1, this.entity.getMaxHealth()));
@@ -197,8 +228,17 @@ public class UndeadConsecration implements Listener {
 			});
 		}
 
+		public void updateNoHealTime(int time) {
+			this.noHealTime = Math.max(0, Math.max(this.noHealTime, time));
+		}
+
 		public void updateVulnerabilityTime(int time) {
 			this.vulnerabilityTime = Math.max(0, Math.max(this.vulnerabilityTime, time));
+			updateNoHealTime(this.vulnerabilityTime);
+		}
+
+		public boolean hasNoHealTime() {
+			return this.noHealTime > 0;
 		}
 
 		public boolean isVulnerable() {

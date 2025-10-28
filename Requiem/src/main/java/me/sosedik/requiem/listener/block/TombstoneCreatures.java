@@ -19,6 +19,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Random;
 import java.util.function.Consumer;
@@ -107,10 +108,11 @@ public class TombstoneCreatures implements Listener {
 		return item;
 	}
 
-	private <T extends Entity> T spawnCreature(Block block, Class<T> creatureClass, Consumer<T> function) {
+	private <T extends Entity> T spawnCreature(Block block, Class<T> creatureClass, @Nullable Consumer<T> function) {
 		return block.getWorld().spawn(block.getLocation().center(0.1), creatureClass, mob -> {
 			mob.setPersistent(true);
-			function.accept(mob);
+			if (function != null)
+				function.accept(mob);
 		});
 	}
 

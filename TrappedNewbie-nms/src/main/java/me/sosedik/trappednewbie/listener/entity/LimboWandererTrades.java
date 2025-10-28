@@ -46,6 +46,8 @@ public class LimboWandererTrades implements Listener {
 
 		if (!TrappedNewbieAdvancements.BRAVE_NEW_WORLD.isDone(player)) {
 			openFreeFriendshipTradeScreen(player);
+		} else {
+			TrappedNewbieAdvancements.REQUIEM_ROOT.awardAllCriteria(player); // Just in case
 		}
 	}
 

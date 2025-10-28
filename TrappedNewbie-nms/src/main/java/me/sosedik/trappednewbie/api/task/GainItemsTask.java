@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerAdvancementDoneEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -66,6 +67,14 @@ public abstract class GainItemsTask extends Task implements Listener {
 					raw("required", this.required))
 				)
 			);
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onSkip(PlayerAdvancementDoneEvent event) {
+		if (event.getPlayer() != getPlayer()) return;
+		if (event.getAdvancement() != this.advancement) return;
+
+		finish();
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)

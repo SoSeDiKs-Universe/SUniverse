@@ -1,5 +1,9 @@
 package me.sosedik.trappednewbie.dataset;
 
+import io.papermc.paper.datacomponent.DataComponentTypes;
+import io.papermc.paper.datacomponent.item.Repairable;
+import io.papermc.paper.registry.RegistryKey;
+import io.papermc.paper.registry.TypedKey;
 import me.sosedik.delightfulfarming.dataset.DelightfulFarmingItems;
 import me.sosedik.miscme.api.event.player.PlayerIgniteExplosiveMinecartEvent;
 import me.sosedik.miscme.listener.misc.WaterAwarePotionReset;
@@ -22,6 +26,7 @@ import org.bukkit.Keyed;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Tag;
+import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.entity.minecart.ExplosiveMinecart;
 import org.bukkit.inventory.ItemStack;
@@ -52,7 +57,70 @@ public class TrappedNewbieRecipes {
 		throw new IllegalStateException("Utility class");
 	}
 
+	private static final Map<Material, Integer> REPAIR_VALUES = new HashMap<>();
+
 	public static void addRecipes() {
+		new ShapelessCraft(ItemStack.of(TrappedNewbieItems.SCRAP), trappedNewbieKey("inv_repair")).special().ignoreTypeCheck(true).withExemptLeftovers()
+			.addIngredients(TrappedNewbieItems.SCRAP, i -> i.hasData(DataComponentTypes.REPAIRABLE) || (i.getType() == TrappedNewbieItems.SCRAP && !ScrapModifier.extractScrap(i).isEmpty()))
+			.addIngredients(TrappedNewbieItems.SCRAP, i -> i.getType() != TrappedNewbieItems.SCRAP && !i.hasData(DataComponentTypes.REPAIRABLE))
+			.withPreCheck(event -> {
+				Player player = event.getPlayer();
+				if (player == null) {
+					event.setResult(null);
+					return;
+				}
+
+				ItemStack scrap = null;
+				ItemStack ingredient = null;
+				for (ItemStack item : event.getMatrix()) {
+					if (ItemStack.isEmpty(item)) continue;
+
+					if (item.getType() == TrappedNewbieItems.SCRAP || item.hasData(DataComponentTypes.REPAIRABLE))
+						scrap = item;
+					else
+						ingredient = item;
+
+					if (ingredient != null && scrap != null)
+						break;
+				}
+
+				if (ingredient == null || scrap == null) {
+					event.setResult(null);
+					return;
+				}
+
+				ItemStack brokenItem = scrap.getType() == TrappedNewbieItems.SCRAP ? ScrapModifier.extractScrap(scrap) : scrap;
+				if (brokenItem.isEmpty()
+					|| !brokenItem.hasData(DataComponentTypes.REPAIRABLE)
+					|| !brokenItem.hasData(DataComponentTypes.DAMAGE)
+					|| !brokenItem.hasData(DataComponentTypes.MAX_DAMAGE)
+					|| !brokenItem.hasDamage()) {
+					event.setResult(null);
+					return;
+				}
+
+				Repairable data = brokenItem.getData(DataComponentTypes.REPAIRABLE);
+				assert data != null;
+				if (!data.types().contains(TypedKey.create(RegistryKey.ITEM, ingredient.getType().asItemType().key()))) {
+					event.setResult(null);
+					return;
+				}
+
+				int repair = REPAIR_VALUES.containsKey(brokenItem.getType()) ? REPAIR_VALUES.get(brokenItem.getType()) : (int) Math.floor(brokenItem.getData(DataComponentTypes.MAX_DAMAGE) * 0.25);
+
+				brokenItem = brokenItem.clone();
+				brokenItem.repair(repair);
+
+				event.setResult(brokenItem);
+			})
+			.register();
+		REPAIR_VALUES.put(TrappedNewbieItems.FLINT_AXE, 16);
+		REPAIR_VALUES.put(TrappedNewbieItems.FLINT_SHOVEL, 16);
+		REPAIR_VALUES.put(TrappedNewbieItems.FLINT_KNIFE, 16);
+		REPAIR_VALUES.put(TrappedNewbieItems.FLINT_SHEARS, 16);
+		REPAIR_VALUES.put(TrappedNewbieItems.FLINT_PICKAXE, 45);
+		REPAIR_VALUES.put(TrappedNewbieItems.GRASS_MESH, 16);
+
 		new ShapedCraft(ItemStack.of(TrappedNewbieItems.PAPER_PLANE, 3), trappedNewbieKey("paper_plane"), "P P", " P ")
 			.withGroup("paper_plane")
 			.addIngredients('P', Material.PAPER)

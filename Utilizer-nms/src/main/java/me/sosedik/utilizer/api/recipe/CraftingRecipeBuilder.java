@@ -29,6 +29,7 @@ public abstract class CraftingRecipeBuilder<T extends CraftingRecipeBuilder<T>> 
 	protected final ItemStack result;
 	protected String group = "";
 	protected boolean special = false;
+	protected boolean ignoreTypeCheck = false;
 	protected final Map<Character, List<ItemStack>> ingredients = new HashMap<>();
 	protected final Map<Character, Predicate<ItemStack>> validators = new HashMap<>();
 
@@ -74,6 +75,26 @@ public abstract class CraftingRecipeBuilder<T extends CraftingRecipeBuilder<T>> 
 	 */
 	public T special(boolean special) {
 		this.special = special;
+		return builder();
+	}
+
+	/**
+	 * Checks whether to ignore the item type check
+	 *
+	 * @return whether to ignore the item type check
+	 */
+	public boolean isIgnoreTypeCheck() {
+		return this.ignoreTypeCheck;
+	}
+
+	/**
+	 * Sets whether to ignore the item type check
+	 *
+	 * @param ignoreTypeCheck whether to ignore the item type check
+	 * @return this builder
+	 */
+	public T ignoreTypeCheck(boolean ignoreTypeCheck) {
+		this.ignoreTypeCheck = ignoreTypeCheck;
 		return builder();
 	}
 
@@ -234,7 +255,7 @@ public abstract class CraftingRecipeBuilder<T extends CraftingRecipeBuilder<T>> 
 
 		Predicate<ItemStack> validator = this.validators.get(key);
 		for (ItemStack variant : ingredients) {
-			if (variant.getType() == item.getType())
+			if (isIgnoreTypeCheck() || variant.getType() == item.getType())
 				return validator == null || validator.test(item);
 		}
 

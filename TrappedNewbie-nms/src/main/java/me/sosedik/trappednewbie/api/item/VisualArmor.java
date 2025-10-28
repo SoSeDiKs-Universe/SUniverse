@@ -43,7 +43,7 @@ public class VisualArmor {
 	}
 
 	public boolean canUseVisualArmor() {
-		return !GhostyPlayer.isGhost(this.player) && !PossessingPlayer.isPossessing(this.player);
+		return !GhostyPlayer.isGhost(this.player) && !PossessingPlayer.isPossessingSoft(this.player);
 	}
 
 	public boolean hasItem(EquipmentSlot slot) {

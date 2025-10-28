@@ -18,7 +18,6 @@ import io.papermc.paper.datacomponent.item.UseCooldown;
 import io.papermc.paper.registry.keys.tags.DamageTypeTagKeys;
 import me.sosedik.miscme.dataset.MoreMobHeads;
 import me.sosedik.packetadvancements.api.advancement.IAdvancement;
-import me.sosedik.packetadvancements.api.advancement.root.IRootAdvancement;
 import me.sosedik.packetadvancements.api.tab.AdvancementManager;
 import me.sosedik.packetadvancements.api.tab.AdvancementTab;
 import me.sosedik.packetadvancements.imlp.progress.vanilla.conditions.DamageTriggerCondition;
@@ -120,12 +119,12 @@ import static me.sosedik.packetadvancements.imlp.advancement.base.BaseAdvancemen
 import static me.sosedik.packetadvancements.imlp.advancement.fake.FakeAdvancement.buildFake;
 import static me.sosedik.packetadvancements.imlp.advancement.linking.LinkingAdvancement.buildLinking;
 import static me.sosedik.packetadvancements.imlp.advancement.multi.MultiParentAdvancement.buildMulti;
-import static me.sosedik.packetadvancements.imlp.advancement.root.RootAdvancement.buildRoot;
 import static me.sosedik.packetadvancements.imlp.display.AdvancementVisibilities.grandParentGranted;
 import static me.sosedik.packetadvancements.imlp.display.AdvancementVisibilities.hidden;
 import static me.sosedik.packetadvancements.imlp.display.AdvancementVisibilities.ifDone;
 import static me.sosedik.packetadvancements.imlp.display.AdvancementVisibilities.ifVisible;
 import static me.sosedik.packetadvancements.imlp.display.AdvancementVisibilities.parentGranted;
+import static me.sosedik.packetadvancements.imlp.display.SimpleAdvancementTabDisplay.simpleTabDisplay;
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.bredAnimals;
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.consumeItem;
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.entityHurtPlayer;
@@ -179,8 +178,10 @@ public class TrappedNewbieAdvancements {
 
 	public static final AdvancementManager MANAGER = new AdvancementManager(new JsonStorage(TrappedNewbie.instance()));
 
-	public static final AdvancementTab REQUIEM_TAB = buildTab("requiem", MANAGER).inverseY().backgroundPathBlock(Material.SOUL_SAND).icon(Material.SKELETON_SKULL).build();
-	public static final IRootAdvancement REQUIEM_ROOT = buildRoot(REQUIEM_TAB).display(display().xy(0F, 0F).noAnnounceChat().withAdvancementFrame(AdvancementFrame.SQUIRCLE).icon(Material.SUNFLOWER)).requiredProgress(requirements("interact", "open", "letter", "friendship"))
+	public static final AdvancementTab REQUIEM_TAB = buildTab("requiem", MANAGER)
+		.display(simpleTabDisplay().inverseY().display(display().backgroundPathBlock(Material.SOUL_SAND).icon(Material.SKELETON_SKULL)))
+		.build();
+	public static final IAdvancement REQUIEM_ROOT = buildBase(REQUIEM_TAB, "visual_root").display(display().noAnnounceChat().withAdvancementFrame(AdvancementFrame.SQUIRCLE).icon(Material.SUNFLOWER)).requiredProgress(requirements("interact", "open", "letter", "friendship"))
 		.visibilityRule(hidden())
 		.buildAndRegister();
 	public static final IAdvancement OPENING_HOLDER = buildFake(REQUIEM_ROOT, "holder").display(new OpeningHolderAdvancementDisplay().x(-1.25F).noAnnounceChat().withAdvancementFrame(AdvancementFrame.SPEECH_BUBBLE).icon(WANDERING_TRADER_HEAD))
@@ -203,8 +204,10 @@ public class TrappedNewbieAdvancements {
 		.visibilityRule(grandParentGranted())
 		.buildAndRegister();
 
-	public static final AdvancementTab BASICS_TAB = buildTab("basics", MANAGER).inverseY().backgroundPathBlock(Material.GRAVEL).build();
-	public static final IRootAdvancement BASICS_ROOT = buildRoot(BASICS_TAB).display(display().xy(0F, 0F).withAdvancementFrame(AdvancementFrame.SQUIRCLE).icon(Material.ROOTED_DIRT))
+	public static final AdvancementTab BASICS_TAB = buildTab("basics", MANAGER)
+		.display(simpleTabDisplay().inverseY().display(display().backgroundPathBlock(Material.GRAVEL).icon(Material.ROOTED_DIRT)))
+		.build();
+	public static final IAdvancement BASICS_ROOT = buildBase(BASICS_TAB, "visual_root").display(display().withAdvancementFrame(AdvancementFrame.SQUIRCLE).icon(Material.ROOTED_DIRT))
 			.visibilityRule(ifDone(false, BRAVE_NEW_WORLD))
 			.requiredProgress(alwaysDone())
 			.buildAndRegister();
@@ -400,8 +403,11 @@ public class TrappedNewbieAdvancements {
 	private static final IAdvancement MAKE_FLINT_SHEARS_TO_GET_A_BRANCH_LINKER = buildLinking(MAKE_FLINT_SHEARS, GET_A_BRANCH).buildAndRegister();
 //	private static final IAdvancement EAT_A_ROASTED_SPIDER_EYE_TO_LUCID_DREAMING_LINKER = buildLinking(EAT_A_ROASTED_SPIDER_EYE, LUCID_DREAMING).buildAndRegister();
 
-	public static final AdvancementTab ADVENTURE_TAB = buildTab("adventure", MANAGER).inverseY().backgroundPathTexture("block/sandstone_top").build();
-	public static final IRootAdvancement ADVENTURE_ROOT = buildRoot(ADVENTURE_TAB).display(display().xy(0F, 0F).withAdvancementFrame(AdvancementFrame.SQUIRCLE).fancyDescriptionParent(GRAY).icon(Material.MAP))
+	public static final AdvancementTab ADVENTURE_TAB = buildTab("adventure", MANAGER)
+		.display(simpleTabDisplay().inverseY().display(display().backgroundPathTexture("block/sandstone_top").icon(Material.MAP)))
+		.build();
+	public static final IAdvancement ADVENTURE_ROOT = buildBase(ADVENTURE_TAB, "visual_root")
+		.display(display().withAdvancementFrame(AdvancementFrame.SQUIRCLE).fancyDescriptionParent(GRAY).icon(Material.MAP))
 		.visibilityRule(ifDone(false, FIRST_POSSESSION))
 		.requiredProgress(alwaysDone())
 		.buildAndRegister();
@@ -651,8 +657,11 @@ public class TrappedNewbieAdvancements {
 		))
 		.buildAndRegister();
 
-	public static final AdvancementTab NATURE_TAB = buildTab("nature", MANAGER).inverseY().backgroundPathTexture("block/green_concrete_powder").build();
-	public static final IRootAdvancement NATURE_ROOT = buildRoot(NATURE_TAB).display(display().xy(0F, 0F).withAdvancementFrame(AdvancementFrame.SQUIRCLE).fancyDescriptionParent(GRAY).icon(Material.PUMPKIN_PIE))
+	public static final AdvancementTab NATURE_TAB = buildTab("nature", MANAGER)
+		.display(simpleTabDisplay().inverseY().display(display().backgroundPathTexture("block/green_concrete_powder").icon(Material.PUMPKIN_PIE)))
+		.build();
+	public static final IAdvancement NATURE_ROOT = buildBase(NATURE_TAB, "visual_root")
+		.display(display().withAdvancementFrame(AdvancementFrame.SQUIRCLE).fancyDescriptionParent(GRAY).icon(Material.PUMPKIN_PIE))
 		.visibilityRule(ifDone(false, FIRST_POSSESSION))
 		.requiredProgress(alwaysDone())
 		.buildAndRegister();
@@ -671,14 +680,20 @@ public class TrappedNewbieAdvancements {
 		.requiredProgress(simple(1000))
 		.buildAndRegister();
 
-	public static final AdvancementTab BUILDING_TAB = buildTab("building", MANAGER).inverseY().backgroundPathTexture("block/oak_planks").build();
-	public static final IRootAdvancement BUILDING_ROOT = buildRoot(BUILDING_TAB).display(display().xy(0F, 0F).withAdvancementFrame(AdvancementFrame.SQUIRCLE).fancyDescriptionParent(GRAY).icon(Material.OAK_PLANKS))
+	public static final AdvancementTab BUILDING_TAB = buildTab("building", MANAGER)
+		.display(simpleTabDisplay().inverseY().display(display().backgroundPathTexture("block/oak_planks").icon(Material.OAK_PLANKS)))
+		.build();
+	public static final IAdvancement BUILDING_ROOT = buildBase(BUILDING_TAB, "visual_root")
+		.display(display().withAdvancementFrame(AdvancementFrame.SQUIRCLE).fancyDescriptionParent(GRAY).icon(Material.OAK_PLANKS))
 		.visibilityRule(ifDone(false, FIRST_POSSESSION))
 		.requiredProgress(alwaysDone())
 		.buildAndRegister();
 
-	public static final AdvancementTab WEAPONRY_TAB = buildTab("weaponry", MANAGER).inverseY().backgroundPathTexture("block/smithing_table_top").build();
-	public static final IRootAdvancement WEAPONRY_ROOT = buildRoot(WEAPONRY_TAB).display(display().xy(0F, 0F).withAdvancementFrame(AdvancementFrame.SQUIRCLE).fancyDescriptionParent(GRAY).icon(Material.STONE_SWORD))
+	public static final AdvancementTab WEAPONRY_TAB = buildTab("weaponry", MANAGER)
+		.display(simpleTabDisplay().inverseY().display(display().backgroundPathTexture("block/smithing_table_top").icon(Material.STONE_SWORD)))
+		.build();
+	public static final IAdvancement WEAPONRY_ROOT = buildBase(WEAPONRY_TAB, "visual_root").
+		display(display().withAdvancementFrame(AdvancementFrame.SQUIRCLE).fancyDescriptionParent(GRAY).icon(Material.STONE_SWORD))
 		.visibilityRule(ifDone(false, FIRST_POSSESSION))
 		.requiredProgress(vanilla(
 			inventoryChanged()
@@ -1349,26 +1364,38 @@ public class TrappedNewbieAdvancements {
 		))
 		.buildAndRegister();
 
-	public static final AdvancementTab MAGIC_TAB = buildTab("magic", MANAGER).inverseY().backgroundPathTexture("block/obsidian").build();
-	public static final IRootAdvancement MAGIC_ROOT = buildRoot(MAGIC_TAB).display(display().xy(0F, 0F).withAdvancementFrame(AdvancementFrame.SQUIRCLE).fancyDescriptionParent(GRAY).icon(Material.ENCHANTING_TABLE))
+	public static final AdvancementTab MAGIC_TAB = buildTab("magic", MANAGER)
+		.display(simpleTabDisplay().inverseY().display(display().backgroundPathTexture("block/obsidian").icon(Material.ENCHANTING_TABLE)))
+		.build();
+	public static final IAdvancement MAGIC_ROOT = buildBase(MAGIC_TAB, "visual_root")
+		.display(display().withAdvancementFrame(AdvancementFrame.SQUIRCLE).fancyDescriptionParent(GRAY).icon(Material.ENCHANTING_TABLE))
 		.visibilityRule(ifDone(false, FIRST_POSSESSION))
 		.requiredProgress(alwaysDone())
 		.buildAndRegister();
 
-	public static final AdvancementTab NETHER_TAB = buildTab("nether", MANAGER).inverseY().backgroundPathTexture("block/netherrack").build();
-	public static final IRootAdvancement NETHER_ROOT = buildRoot(NETHER_TAB).display(display().xy(0F, 0F).withAdvancementFrame(AdvancementFrame.SQUIRCLE).fancyDescriptionParent(GRAY).icon(Material.RED_NETHER_BRICKS))
+	public static final AdvancementTab NETHER_TAB = buildTab("nether", MANAGER)
+		.display(simpleTabDisplay().inverseY().display(display().backgroundPathTexture("block/netherrack").icon(Material.RED_NETHER_BRICKS)))
+		.build();
+	public static final IAdvancement NETHER_ROOT = buildBase(NETHER_TAB, "visual_root")
+		.display(display().withAdvancementFrame(AdvancementFrame.SQUIRCLE).fancyDescriptionParent(GRAY).icon(Material.RED_NETHER_BRICKS))
 		.visibilityRule(ifDone(false, FIRST_POSSESSION))
 		.requiredProgress(alwaysDone())
 		.buildAndRegister();
 
-	public static final AdvancementTab THE_END_TAB = buildTab("the_end", MANAGER).inverseY().backgroundPathTexture("block/end_stone").build();
-	public static final IRootAdvancement THE_END_ROOT = buildRoot(THE_END_TAB).display(display().xy(0F, 0F).withAdvancementFrame(AdvancementFrame.SQUIRCLE).fancyDescriptionParent(GRAY).icon(Material.END_STONE))
+	public static final AdvancementTab THE_END_TAB = buildTab("the_end", MANAGER)
+		.display(simpleTabDisplay().inverseY().display(display().backgroundPathTexture("block/end_stone").icon(Material.END_STONE)))
+		.build();
+	public static final IAdvancement THE_END_ROOT = buildBase(THE_END_TAB, "visual_root")
+		.display(display().withAdvancementFrame(AdvancementFrame.SQUIRCLE).fancyDescriptionParent(GRAY).icon(Material.END_STONE))
 		.visibilityRule(ifDone(false, FIRST_POSSESSION))
 		.requiredProgress(alwaysDone())
 		.buildAndRegister();
 
-	public static final AdvancementTab CHALLENGES_TAB = buildTab("challenges", MANAGER).inverseY().backgroundPathBlock(Material.BEDROCK).build();
-	public static final IRootAdvancement CHALLENGES_ROOT = buildRoot(CHALLENGES_TAB).display(display().xy(0F, 0F).withAdvancementFrame(AdvancementFrame.SQUIRCLE).fancyDescriptionParent(GRAY).icon(Material.ENDER_EYE))
+	public static final AdvancementTab CHALLENGES_TAB = buildTab("challenges", MANAGER)
+		.display(simpleTabDisplay().inverseY().display(display().backgroundPathBlock(Material.BEDROCK).icon(Material.ENDER_EYE)))
+		.build();
+	public static final IAdvancement CHALLENGES_ROOT = buildBase(CHALLENGES_TAB, "visual_root")
+		.display(display().withAdvancementFrame(AdvancementFrame.SQUIRCLE).fancyDescriptionParent(GRAY).icon(Material.ENDER_EYE))
 		.visibilityRule(ifDone(false, FIRST_POSSESSION))
 		.requiredProgress(alwaysDone())
 		.buildAndRegister();
@@ -2583,8 +2610,11 @@ public class TrappedNewbieAdvancements {
 		)
 		.buildAndRegister();
 
-	public static final AdvancementTab STATISTICS_TAB = buildTab("statistics", MANAGER).inverseY().backgroundPathTexture("block/loom_side").build();
-	public static final IRootAdvancement STATISTICS_ROOT = buildRoot(STATISTICS_TAB).display(display().xy(0F, 0F).withAdvancementFrame(AdvancementFrame.SQUIRCLE).fancyDescriptionParent(GRAY).icon(Material.WRITABLE_BOOK))
+	public static final AdvancementTab STATISTICS_TAB = buildTab("statistics", MANAGER)
+		.display(simpleTabDisplay().inverseY().display(display().backgroundPathTexture("block/loom_side").icon(Material.WRITABLE_BOOK)))
+		.build();
+	public static final IAdvancement STATISTICS_ROOT = buildBase(STATISTICS_TAB, "visual_root")
+		.display(display().withAdvancementFrame(AdvancementFrame.SQUIRCLE).fancyDescriptionParent(GRAY).icon(Material.WRITABLE_BOOK))
 		.visibilityRule(ifDone(false, BRAVE_NEW_WORLD))
 		.requiredProgress(alwaysDone())
 		.buildAndRegister();

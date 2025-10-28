@@ -14,6 +14,7 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Custom visuals for scrap
@@ -85,7 +86,7 @@ public class ScrapModifier extends ItemModifier {
 		});
 	}
 
-	public static @NullMarked ItemStack extractScrap(ItemStack scrapItem, Material brokenType) {
+	public static @Nullable ItemStack extractScrap(ItemStack scrapItem, Material brokenType) {
 		return NBT.get(scrapItem, nbt -> {
 			if (!nbt.hasTag(ITEM_TAG)) return null;
 

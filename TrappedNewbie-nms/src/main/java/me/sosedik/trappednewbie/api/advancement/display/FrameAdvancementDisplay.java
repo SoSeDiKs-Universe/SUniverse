@@ -7,7 +7,6 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -28,7 +27,7 @@ public class FrameAdvancementDisplay extends FancyAdvancementDisplay<FrameAdvanc
 
 		boolean obtained = this.advancement.isDone(viewer);
 		NamespacedKey itemModelKey = getAdvancementFrame().getItemModelKey(obtained);
-		if (itemModelKey == null) return super.advancementIcon();
+		if (itemModelKey == null) return super.advancementIcon(viewer);
 
 		var icon = ItemStack.of(Material.LIGHT_GRAY_STAINED_GLASS_PANE);
 		icon.setData(DataComponentTypes.ITEM_MODEL, itemModelKey);
@@ -41,7 +40,7 @@ public class FrameAdvancementDisplay extends FancyAdvancementDisplay<FrameAdvanc
 	}
 
 	@Override
-	public @NotNull FrameAdvancementDisplay clone() {
+	public FrameAdvancementDisplay clone() {
 		return copyFrom(this);
 	}
 

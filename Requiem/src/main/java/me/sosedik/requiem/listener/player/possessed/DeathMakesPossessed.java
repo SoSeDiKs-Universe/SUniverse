@@ -4,6 +4,7 @@ import me.sosedik.requiem.api.event.player.PlayerResurrectEvent;
 import me.sosedik.requiem.feature.PossessingPlayer;
 import me.sosedik.utilizer.util.BiomeTags;
 import me.sosedik.utilizer.util.EntityUtil;
+import org.bukkit.Statistic;
 import org.bukkit.Tag;
 import org.bukkit.World;
 import org.bukkit.damage.DamageType;
@@ -89,6 +90,7 @@ public class DeathMakesPossessed implements Listener {
 	}
 
 	private <T extends LivingEntity> void migrateAndPosses(Player player, Class<T> entityClass) {
+		player.setStatistic(Statistic.TIME_SINCE_DEATH, 0);
 		LivingEntity possessed = player.getWorld().spawn(player.getLocation(), entityClass, entity -> {
 			PossessingPlayer.migrateStatsToEntity(player, entity);
 			PossessingPlayer.markResurrected(entity);

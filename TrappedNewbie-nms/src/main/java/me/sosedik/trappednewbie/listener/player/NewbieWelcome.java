@@ -1,9 +1,11 @@
 package me.sosedik.trappednewbie.listener.player;
 
+import me.sosedik.trappednewbie.TrappedNewbie;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieAdvancements;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieFonts;
 import me.sosedik.utilizer.api.message.Messenger;
 import me.sosedik.utilizer.api.message.Mini;
+import me.sosedik.utilizer.util.LocationUtil;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -24,6 +26,9 @@ public class NewbieWelcome implements Listener {
 
 		var messenger = Messenger.messenger(player);
 		player.sendMessage(Mini.combine(Component.space(), TrappedNewbieFonts.WANDERING_TRADER_HEAD.mapping(), messenger.getMessage("limbo.welcome")));
+
+		if (player.getWorld() != TrappedNewbie.limboWorld())
+			LocationUtil.smartTeleport(player, TrappedNewbie.limboWorld().getSpawnLocation().center(1));
 	}
 
 }

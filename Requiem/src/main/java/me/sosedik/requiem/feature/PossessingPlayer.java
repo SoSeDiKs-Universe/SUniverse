@@ -124,6 +124,7 @@ public class PossessingPlayer {
 //		EffectManager.addEffect(player, KittenEffects.ATTRITION, -1, 0); // TODO
 		player.setInvisible(true);
 		player.setInvulnerable(false); // Prevents mobs from targeting the player if true
+		player.setSleepingIgnored(true);
 		player.setRemainingAir(entity.getRemainingAir());
 
 		checkPossessedExtraItems(player);
@@ -176,6 +177,7 @@ public class PossessingPlayer {
 		}
 
 		player.setInvisible(false);
+		player.setSleepingIgnored(false);
 
 //		TemperaturedPlayer.of(player).removeFlag(TempFlag.GHOST_IMMUNE); // TODO
 

@@ -1,7 +1,7 @@
 {
 	"adv.trappednewbie.requiem.tab.title": "Stillborn",
-	"adv.trappednewbie.requiem.root.title": "Meeting on the other side",
-	"adv.trappednewbie.requiem.root.description": [
+	"adv.trappednewbie.requiem.visual_root.title": "Meeting on the other side",
+	"adv.trappednewbie.requiem.visual_root.description": [
 		"Welcome aboard, wandering soul!",
 		"",
 		"Befriend the <icon:trapped_newbie:wandering_trader_head> <gold>Wandering Trader</gold> by using a Friendship Letter on them.",
@@ -63,8 +63,8 @@
 	"adv.trappednewbie.requiem.drink_pure_water.description": "Drink some purified water (a Charcoal Filter can be applied to the dirty water)",
 
 	"adv.trappednewbie.basics.tab.title": "Back to the roots",
-	"adv.trappednewbie.basics.root.title": "Back to the roots",
-	"adv.trappednewbie.basics.root.description": "Gotta do the dirty work!",
+	"adv.trappednewbie.basics.visual_root.title": "Back to the roots",
+	"adv.trappednewbie.basics.visual_root.description": "Gotta do the dirty work!",
 	"adv.trappednewbie.basics.get_a_branch.title": "Going further",
 	"adv.trappednewbie.basics.get_a_branch.description": "Get some Branches from the Leaves or a Deadbush",
 	"adv.trappednewbie.basics.get_a_fiber.title": "Feeling green",
@@ -173,8 +173,8 @@
 	"adv.trappednewbie.basics.perform_a_ritual.description": "Use a Totemic Staff on a Totem Base and successfully finish a ritual",
 
 	"adv.trappednewbie.adventure.tab.title": "Adventure",
-	"adv.trappednewbie.adventure.root.title": "Adventure",
-	"adv.trappednewbie.adventure.root.description": "Village, pillage and exploration",
+	"adv.trappednewbie.adventure.visual_root.title": "Adventure",
+	"adv.trappednewbie.adventure.visual_root.description": "Village, pillage and exploration",
 	"adv.trappednewbie.adventure.find_a_broken_nether_portal.title": "Now You’re Thinking With Portals",
 	"adv.trappednewbie.adventure.find_a_broken_nether_portal.description": "Find a broken Nether Portal in the Overworld",
 	"adv.trappednewbie.adventure.find_a_desert_pyramid.title": "Grave Robber",
@@ -235,8 +235,8 @@
 	"adv.trappednewbie.adventure.get_a_stack_of_all_smithing_templates.description": "Obtain a stack of every Smithing Template",
 
 	"adv.trappednewbie.nature.tab.title": "Nature's Paradise",
-	"adv.trappednewbie.nature.root.title": "Nature's Paradise",
-	"adv.trappednewbie.nature.root.description": "The world is full of friends and food",
+	"adv.trappednewbie.nature.visual_root.title": "Nature's Paradise",
+	"adv.trappednewbie.nature.visual_root.description": "The world is full of friends and food",
 	"adv.trappednewbie.nature.eat_rotten_flesh.title": "Iron Belly",
 	"adv.trappednewbie.nature.eat_rotten_flesh.description": "Stop starvation using Rotten Flesh",
 	"adv.trappednewbie.nature.eat_creeper_heart.title": "Green Fool",
@@ -245,12 +245,12 @@
 	"adv.trappednewbie.nature.eat_1k_spider_eyes.description": "Eat 1000 Spider Eyes",
 
 	"adv.trappednewbie.building.tab.title": "Building",
-	"adv.trappednewbie.building.root.title": "Building",
-	"adv.trappednewbie.building.root.description": "Your only limit is your imagination… and resources",
+	"adv.trappednewbie.building.visual_root.title": "Building",
+	"adv.trappednewbie.building.visual_root.description": "Your only limit is your imagination… and resources",
 
 	"adv.trappednewbie.weaponry.tab.title": "Weaponry & Monsters",
-	"adv.trappednewbie.weaponry.root.title": "Weaponry & Monsters",
-	"adv.trappednewbie.weaponry.root.description": "Weapons of choice for combat in a battle against the monsters of the darkness",
+	"adv.trappednewbie.weaponry.visual_root.title": "Weaponry & Monsters",
+	"adv.trappednewbie.weaponry.visual_root.description": "Weapons of choice for combat in a battle against the monsters of the darkness",
 	"adv.trappednewbie.weaponry.expelliarmus.title": "Expelliarmus!",
 	"adv.trappednewbie.weaponry.expelliarmus.description": "Hit a mob with your Stick",
 	"adv.trappednewbie.weaponry.slapfish.title": "Slapfish",
@@ -615,28 +615,28 @@
 	"adv.trappednewbie.weaponry.hug_a_warden_for_a_minute.description": "Stay within 5 blocks of a Warden for 1 minute",
 
 	"adv.trappednewbie.magic.tab.title": "Imaginary Realm",
-	"adv.trappednewbie.magic.root.title": "Magic",
-	"adv.trappednewbie.magic.root.description": "Sometimes things just… are",
+	"adv.trappednewbie.magic.visual_root.title": "Magic",
+	"adv.trappednewbie.magic.visual_root.description": "Sometimes things just… are",
 
 	"adv.trappednewbie.nether.tab.title": "Nether",
-	"adv.trappednewbie.nether.root.title": "Nether",
-	"adv.trappednewbie.nether.root.description": "Bring summer clothes",
+	"adv.trappednewbie.nether.visual_root.title": "Nether",
+	"adv.trappednewbie.nether.visual_root.description": "Bring summer clothes",
 
 	"adv.trappednewbie.the_end.tab.title": "The End",
-	"adv.trappednewbie.the_end.root.title": "The End",
-	"adv.trappednewbie.the_end.root.description": "Or the beginning?",
+	"adv.trappednewbie.the_end.visual_root.title": "The End",
+	"adv.trappednewbie.the_end.visual_root.description": "Or the beginning?",
 
 	"adv.trappednewbie.challenges.tab.title": "Super Challenges",
-	"adv.trappednewbie.challenges.root.title": "Super Challenges",
-	"adv.trappednewbie.challenges.root.description": "Good luck completing… any of these ;)",
+	"adv.trappednewbie.challenges.visual_root.title": "Super Challenges",
+	"adv.trappednewbie.challenges.visual_root.description": "Good luck completing… any of these ;)",
 	"adv.trappednewbie.challenges.deflect_200.title": "Shield of Achilles",
 	"adv.trappednewbie.challenges.deflect_200.description": "Deflect a blow that does at least 200 damage with your Shield",
 	"adv.trappednewbie.challenges.deflect_shield.title": "No Shield, Please",
 	"adv.trappednewbie.challenges.deflect_shield.description": "Break a fully durable Shield by blocking a single blow",
 
 	"adv.trappednewbie.statistics.tab.title": "Various statistics",
-	"adv.trappednewbie.statistics.root.title": "Various statistics",
-	"adv.trappednewbie.statistics.root.description": "If your numbers go up, you're having more fun",
+	"adv.trappednewbie.statistics.visual_root.title": "Various statistics",
+	"adv.trappednewbie.statistics.visual_root.description": "If your numbers go up, you're having more fun",
 	"adv.trappednewbie.statistics.walk_10km.title": "Out for a stroll",
 	"adv.trappednewbie.statistics.walk_10km.description": "Walk 10km",
 	"adv.trappednewbie.statistics.walk_50km.title": "Who needs cars?",

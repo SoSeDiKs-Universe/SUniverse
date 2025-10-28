@@ -1,7 +1,7 @@
 {
 	"adv.trappednewbie.requiem.tab.title": "Мертворождённый",
-	"adv.trappednewbie.requiem.root.title": "Встреча по ту сторону",
-	"adv.trappednewbie.requiem.root.description": [
+	"adv.trappednewbie.requiem.visual_root.title": "Встреча по ту сторону",
+	"adv.trappednewbie.requiem.visual_root.description": [
 		"Добро пожаловать на борт, странствующая душа!",
 		"",
 		"Подружитесь со <icon:trapped_newbie:wandering_trader_head> <gold>странствующим торговцем</gold> при помощи письма дружбы.",
@@ -49,8 +49,8 @@
 	"adv.trappednewbie.requiem.kung_fu_panda.description": "Будучи пандой, ударьте кого-нибудь деревянным мечом",
 
 	"adv.trappednewbie.basics.tab.title": "Возвращение к истокам",
-	"adv.trappednewbie.basics.root.title": "Возвращение к истокам",
-	"adv.trappednewbie.basics.root.description": "Опять за грязную работу!",
+	"adv.trappednewbie.basics.visual_root.title": "Возвращение к истокам",
+	"adv.trappednewbie.basics.visual_root.description": "Опять за грязную работу!",
 	"adv.trappednewbie.basics.get_a_branch.title": "Продвигаемся",
 	"adv.trappednewbie.basics.get_a_branch.description": "Добудьте ветки из листвы или мёртвого куста",
 	"adv.trappednewbie.basics.get_a_fiber.title": "Озеленение",
@@ -159,8 +159,8 @@
 	"adv.trappednewbie.basics.perform_a_ritual.description": "Используйте тотемный посох на тотемной основе и успешно завершите ритуал",
 
 	"adv.trappednewbie.adventure.tab.title": "Приключения",
-	"adv.trappednewbie.adventure.root.title": "Приключения",
-	"adv.trappednewbie.adventure.root.description": "Деревни, рейды и путешествия",
+	"adv.trappednewbie.adventure.visual_root.title": "Приключения",
+	"adv.trappednewbie.adventure.visual_root.description": "Деревни, рейды и путешествия",
 	"adv.trappednewbie.adventure.find_a_broken_nether_portal.title": "Портальное мышление",
 	"adv.trappednewbie.adventure.find_a_broken_nether_portal.description": "Найдите сломанный портал в надземном измерении",
 	"adv.trappednewbie.adventure.find_a_desert_pyramid.title": "Расхититель гробниц",
@@ -221,8 +221,8 @@
 	"adv.trappednewbie.adventure.get_a_stack_of_all_smithing_templates.description": "Заполучите по стаку всех кузнечных шаблонов",
 
 	"adv.trappednewbie.nature.tab.title": "Природный рай",
-	"adv.trappednewbie.nature.root.title": "Природный рай",
-	"adv.trappednewbie.nature.root.description": "Мир друзей, добра и еды",
+	"adv.trappednewbie.nature.visual_root.title": "Природный рай",
+	"adv.trappednewbie.nature.visual_root.description": "Мир друзей, добра и еды",
 	"adv.trappednewbie.nature.eat_rotten_flesh.title": "Железный желудок",
 	"adv.trappednewbie.nature.eat_rotten_flesh.description": "Остановите голод при помощи гнилой плоти",
 	"adv.trappednewbie.nature.eat_creeper_heart.title": "Зелёный олух",
@@ -231,12 +231,12 @@
 	"adv.trappednewbie.nature.eat_1k_spider_eyes.description": "Съешьте 1000 паучьих глаз",
 
 	"adv.trappednewbie.building.tab.title": "Строительство",
-	"adv.trappednewbie.building.root.title": "Строительство",
-	"adv.trappednewbie.building.root.description": "Единственный предел — Ваше воображение… и ресурсы",
+	"adv.trappednewbie.building.visual_root.title": "Строительство",
+	"adv.trappednewbie.building.visual_root.description": "Единственный предел — Ваше воображение… и ресурсы",
 
 	"adv.trappednewbie.weaponry.tab.title": "Во всеоружии и монстры",
-	"adv.trappednewbie.weaponry.root.title": "Во всеоружии и монстры",
-	"adv.trappednewbie.weaponry.root.description": "Всё об орудиях для сражений против монстров во тьме",
+	"adv.trappednewbie.weaponry.visual_root.title": "Во всеоружии и монстры",
+	"adv.trappednewbie.weaponry.visual_root.description": "Всё об орудиях для сражений против монстров во тьме",
 	"adv.trappednewbie.weaponry.expelliarmus.title": "Экспеллиармус!",
 	"adv.trappednewbie.weaponry.expelliarmus.description": "Ударьте моба палкой",
 	"adv.trappednewbie.weaponry.slapfish.title": "Дать леща",
@@ -601,28 +601,28 @@
 	"adv.trappednewbie.weaponry.hug_a_warden_for_a_minute.description": "Находитесь на расстоянии не более 5 блоков от хранителя в течение минуты",
 
 	"adv.trappednewbie.magic.tab.title": "Воображаемый мир",
-	"adv.trappednewbie.magic.root.title": "Магия",
-	"adv.trappednewbie.magic.root.description": "Иногда вещи просто… есть",
+	"adv.trappednewbie.magic.visual_root.title": "Магия",
+	"adv.trappednewbie.magic.visual_root.description": "Иногда вещи просто… есть",
 
 	"adv.trappednewbie.nether.tab.title": "Незер",
-	"adv.trappednewbie.nether.root.title": "Незер",
-	"adv.trappednewbie.nether.root.description": "Захватите летнюю одежду",
+	"adv.trappednewbie.nether.visual_root.title": "Незер",
+	"adv.trappednewbie.nether.visual_root.description": "Захватите летнюю одежду",
 
 	"adv.trappednewbie.the_end.tab.title": "Энд",
-	"adv.trappednewbie.the_end.root.title": "Энд",
-	"adv.trappednewbie.the_end.root.description": "Конец… или начало?",
+	"adv.trappednewbie.the_end.visual_root.title": "Энд",
+	"adv.trappednewbie.the_end.visual_root.description": "Конец… или начало?",
 
 	"adv.trappednewbie.challenges.tab.title": "Сверхвызовы",
-	"adv.trappednewbie.challenges.root.title": "Сверхвызовы",
-	"adv.trappednewbie.challenges.root.description": "Удачи в исполнении… хотя бы одного ;)",
+	"adv.trappednewbie.challenges.visual_root.title": "Сверхвызовы",
+	"adv.trappednewbie.challenges.visual_root.description": "Удачи в исполнении… хотя бы одного ;)",
 	"adv.trappednewbie.challenges.deflect_200.title": "Щит Ахиллеса",
 	"adv.trappednewbie.challenges.deflect_200.description": "Отразите щитом удар, наносящий не менее 200 единиц урона",
 	"adv.trappednewbie.challenges.deflect_shield.title": "Без щита, пожалуйста",
 	"adv.trappednewbie.challenges.deflect_shield.description": "Сломайте полностью целый щит, заблокировав всего один удар",
 
 	"adv.trappednewbie.statistics.tab.title": "Различная статистика",
-	"adv.trappednewbie.statistics.root.title": "Различная статистика",
-	"adv.trappednewbie.statistics.root.description": "Если числа возрастают, то Вам действительно весело",
+	"adv.trappednewbie.statistics.visual_root.title": "Различная статистика",
+	"adv.trappednewbie.statistics.visual_root.description": "Если числа возрастают, то Вам действительно весело",
 	"adv.trappednewbie.statistics.walk_10km.title": "Лёгкая прогулка",
 	"adv.trappednewbie.statistics.walk_10km.description": "Пройдите 10км",
 	"adv.trappednewbie.statistics.walk_50km.title": "Кому нужны машины?",

@@ -263,7 +263,7 @@ public class RainRefillsWaterAndMakesPuddles implements Listener {
 			if (!block.isEmpty()) return false;
 
 			for (Block nearbyBlock : LocationUtil.getBlocksAround(block, 1, 1)) {
-				if (nearbyBlock.isLiquid())
+				if (!nearbyBlock.getChunk().isLoaded() || nearbyBlock.isLiquid())
 					return false;
 			}
 

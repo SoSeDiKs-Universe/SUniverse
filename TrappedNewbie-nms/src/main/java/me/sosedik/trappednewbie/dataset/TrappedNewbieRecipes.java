@@ -114,12 +114,13 @@ public class TrappedNewbieRecipes {
 				event.setResult(brokenItem);
 			})
 			.register();
-		REPAIR_VALUES.put(TrappedNewbieItems.FLINT_AXE, 16);
-		REPAIR_VALUES.put(TrappedNewbieItems.FLINT_SHOVEL, 16);
-		REPAIR_VALUES.put(TrappedNewbieItems.FLINT_KNIFE, 16);
-		REPAIR_VALUES.put(TrappedNewbieItems.FLINT_SHEARS, 16);
-		REPAIR_VALUES.put(TrappedNewbieItems.FLINT_PICKAXE, 45);
-		REPAIR_VALUES.put(TrappedNewbieItems.GRASS_MESH, 16);
+		REPAIR_VALUES.put(TrappedNewbieItems.FLINT_AXE, (int) TrappedNewbieItems.FLINT_AXE.getMaxDurability());
+		REPAIR_VALUES.put(TrappedNewbieItems.FLINT_SHOVEL, (int) TrappedNewbieItems.FLINT_SHOVEL.getMaxDurability());
+		REPAIR_VALUES.put(TrappedNewbieItems.FLINT_KNIFE, (int) TrappedNewbieItems.FLINT_KNIFE.getMaxDurability());
+		REPAIR_VALUES.put(TrappedNewbieItems.FLINT_SHEARS, (int) TrappedNewbieItems.FLINT_SHEARS.getMaxDurability());
+		REPAIR_VALUES.put(TrappedNewbieItems.FLINT_PICKAXE, (int) TrappedNewbieItems.FLINT_PICKAXE.getMaxDurability());
+		REPAIR_VALUES.put(TrappedNewbieItems.GRASS_MESH, (int) TrappedNewbieItems.GRASS_MESH.getMaxDurability());
+		REPAIR_VALUES.put(TrappedNewbieItems.FIRESTRIKER, (int) TrappedNewbieItems.FIRESTRIKER.getMaxDurability());
 
 		new ShapedCraft(ItemStack.of(TrappedNewbieItems.PAPER_PLANE, 3), trappedNewbieKey("paper_plane"), "P P", " P ")
 			.withGroup("paper_plane")

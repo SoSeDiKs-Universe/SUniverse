@@ -248,7 +248,7 @@ public class RainRefillsWaterAndMakesPuddles implements Listener {
 			if (!tryToRefillWaterLevel(highestBlock)) {
 				for (BlockFace blockFace : LocationUtil.SURROUNDING_BLOCKS) {
 					Block relativeBlock = highestBlock.getRelative(blockFace);
-					if (!relativeBlock.getChunk().isLoaded()) continue;
+					if (!relativeBlock.getLocation().isChunkLoaded()) continue;
 					if (tryToRefillWaterLevel(relativeBlock))
 						return;
 				}
@@ -263,7 +263,9 @@ public class RainRefillsWaterAndMakesPuddles implements Listener {
 			if (!block.isEmpty()) return false;
 
 			for (Block nearbyBlock : LocationUtil.getBlocksAround(block, 1, 1)) {
-				if (!nearbyBlock.getChunk().isLoaded() || nearbyBlock.isLiquid())
+				if (!nearbyBlock.getLocation().isChunkLoaded())
+					return false;
+				if (nearbyBlock.isLiquid())
 					return false;
 			}
 

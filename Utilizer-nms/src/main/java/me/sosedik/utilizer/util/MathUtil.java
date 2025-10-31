@@ -53,6 +53,18 @@ public class MathUtil {
 	}
 
 	/**
+	 * Gets a random int value withing the specified range
+	 *
+	 * @param min min value
+	 * @param max max value
+	 * @return a random int value withing the specified range
+	 */
+	public static int getRandomIntInRange(int min, int max) {
+		if (min == max) return min;
+		return min + RANDOM.nextInt(max - min);
+	}
+
+	/**
 	 * Gets a random double value withing the specified range
 	 *
 	 * @param min min value

@@ -23,7 +23,6 @@ public class TrappedNewbieTags {
 	public static final Tag<Material> GLASS_SHARDS = itemTag("glass_shards");
 	public static final Tag<Material> PLACEABLE_ITEMS = itemTag("placeable_items");
 	public static final Tag<Material> PAPERS = itemTag("papers");
-	public static final Tag<Material> HIDES = itemTag("hides");
 	public static final Tag<Material> SCRAPPABLE = itemTag("scrappable");
 	public static final Tag<Material> CANTEENS = itemTag("canteens");
 	public static final Tag<Material> DEHYDRATING_FOOD = itemTag("dehydrating_food");

@@ -2,7 +2,7 @@ package me.sosedik.resourcelib.util;
 
 import me.sosedik.resourcelib.impl.item.nms.AbstractBowItem;
 import me.sosedik.resourcelib.impl.item.nms.AbstractCrossbowItem;
-import me.sosedik.resourcelib.impl.item.nms.AbstractShearstItem;
+import me.sosedik.resourcelib.impl.item.nms.AbstractShearsItem;
 import me.sosedik.resourcelib.impl.item.nms.AbstractTridentItem;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.Item;
@@ -38,7 +38,7 @@ public class ItemCreator {
 	}
 
 	public static Object shearsItem(Object properties) {
-		return new AbstractShearstItem(((Item.Properties) properties).component(DataComponents.TOOL, ShearsItem.createToolProperties()));
+		return new AbstractShearsItem(((Item.Properties) properties).component(DataComponents.TOOL, ShearsItem.createToolProperties()));
 	}
 
 }

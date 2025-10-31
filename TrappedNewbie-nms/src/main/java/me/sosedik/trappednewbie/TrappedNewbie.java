@@ -4,6 +4,7 @@ import io.leangen.geantyref.TypeToken;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import me.sosedik.delightfulfarming.dataset.DelightfulFarmingRecipes;
 import me.sosedik.limboworldgenerator.VoidChunkGenerator;
+import me.sosedik.miscme.listener.entity.ShearableEntities;
 import me.sosedik.miscme.task.CustomDayCycleTask;
 import me.sosedik.requiem.feature.GhostyPlayer;
 import me.sosedik.requiem.feature.PossessingPlayer;
@@ -177,6 +178,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.Tag;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.incendo.cloud.bukkit.internal.BukkitBrigadierMapper;
@@ -411,6 +413,19 @@ public final class TrappedNewbie extends JavaPlugin {
 		GhostyPlayer.addFlightDenyRule(player -> player.getWorld() == limboWorld());
 		GhostyPlayer.addItemsDenyRule(player -> player.getWorld() == limboWorld());
 		PossessingPlayer.addItemsDenyRule(player -> player.getWorld() == limboWorld());
+
+		new ShearableEntities.ShearableBehavior()
+			.withDrop(TrappedNewbieItems.HORSEHAIR, 2, 4)
+			.registerFor(EntityType.HORSE);
+		new ShearableEntities.ShearableBehavior()
+			.withDrop(TrappedNewbieItems.HORSEHAIR, 1, 2)
+			.registerFor(EntityType.MULE);
+		new ShearableEntities.ShearableBehavior()
+			.withDrop(Material.ROTTEN_FLESH, 1, 2)
+			.registerFor(EntityType.ZOMBIE_HORSE);
+		new ShearableEntities.ShearableBehavior()
+			.withDrop(Material.BONE_MEAL, 1, 1)
+			.registerFor(EntityType.SKELETON_HORSE);
 	}
 
 	@Override

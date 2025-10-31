@@ -53,6 +53,7 @@ import me.sosedik.miscme.listener.entity.MovingMinecartsHurtEntities;
 import me.sosedik.miscme.listener.entity.PrimingExplosiveMinecart;
 import me.sosedik.miscme.listener.entity.RainbowSheepDropRandomWool;
 import me.sosedik.miscme.listener.entity.ReleaseEntityFromVehicle;
+import me.sosedik.miscme.listener.entity.ShearableEntities;
 import me.sosedik.miscme.listener.entity.SheepBurnableWool;
 import me.sosedik.miscme.listener.entity.SheepRegrowNaturalWool;
 import me.sosedik.miscme.listener.entity.SnowmanPumpkin;
@@ -96,7 +97,9 @@ import me.sosedik.utilizer.api.language.TranslationHolder;
 import me.sosedik.utilizer.util.EventUtil;
 import me.sosedik.utilizer.util.Scheduler;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.UnknownNullability;
 import org.jspecify.annotations.NullMarked;
@@ -179,6 +182,7 @@ public final class MiscMe extends JavaPlugin {
 			PrimingExplosiveMinecart.class,
 			RainbowSheepDropRandomWool.class,
 			ReleaseEntityFromVehicle.class,
+			ShearableEntities.class,
 			SheepBurnableWool.class,
 			SheepRegrowNaturalWool.class,
 			SnowmanPumpkin.class,
@@ -224,6 +228,10 @@ public final class MiscMe extends JavaPlugin {
 			// world
 			CustomDayCycleCleanup.class
 		);
+
+		new ShearableEntities.ShearableBehavior()
+			.withDrop(Material.FEATHER, 1, 2)
+			.registerFor(EntityType.CHICKEN);
 
 		new TrailPaths();
 	}

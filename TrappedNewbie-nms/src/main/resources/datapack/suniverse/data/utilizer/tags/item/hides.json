@@ -1,0 +1,27 @@
+{
+  "values": [
+    "minecraft:rabbit_hide",
+    "trapped_newbie:bat_hide",
+    "trapped_newbie:camel_hide",
+    "trapped_newbie:red_cat_hide",
+    "trapped_newbie:cow_hide",
+    "trapped_newbie:donkey_hide",
+    "trapped_newbie:fox_hide",
+    "trapped_newbie:snow_fox_hide",
+    "trapped_newbie:goat_hide",
+    "trapped_newbie:mule_hide",
+    "trapped_newbie:ocelot_hide",
+    "trapped_newbie:panda_hide",
+    "trapped_newbie:pig_hide",
+    "trapped_newbie:polar_bear_hide",
+    "trapped_newbie:sheep_hide",
+    "trapped_newbie:wolf_hide",
+    "trapped_newbie:creamy_horse_hide",
+		"trapped_newbie:brown_llama_hide",
+		"trapped_newbie:creamy_llama_hide",
+		"trapped_newbie:gray_llama_hide",
+		"trapped_newbie:white_llama_hide",
+		"trapped_newbie:brown_mooshroom_hide",
+		"trapped_newbie:red_mooshroom_hide"
+	]
+}

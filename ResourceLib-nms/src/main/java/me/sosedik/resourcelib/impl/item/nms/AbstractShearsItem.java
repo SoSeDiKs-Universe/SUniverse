@@ -4,9 +4,9 @@ import net.minecraft.world.item.ShearsItem;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
-public class AbstractShearstItem extends ShearsItem {
+public class AbstractShearsItem extends ShearsItem {
 
-	public AbstractShearstItem(Object properties) {
+	public AbstractShearsItem(Object properties) {
 		super((Properties) properties);
 	}
 

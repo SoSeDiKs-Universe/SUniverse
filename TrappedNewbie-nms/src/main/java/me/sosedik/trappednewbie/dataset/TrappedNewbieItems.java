@@ -60,6 +60,7 @@ public class TrappedNewbieItems {
 	public static final Material TWINE = byKey("twine");
 	public static final Material ROUGH_STICK = byKey("rough_stick");
 	public static final Material FLAKED_FLINT = byKey("flaked_flint");
+	public static final Material HORSEHAIR = byKey("horsehair");
 
 	public static final Material FLINT_KNIFE = byKey("flint_knife");
 	public static final Material FLINT_AXE = byKey("flint_axe");
@@ -145,6 +146,29 @@ public class TrappedNewbieItems {
 	public static final Material LIGHT_GRAY_GLASS_SHARD = byKey("light_gray_glass_shard");
 	public static final Material WHITE_GLASS_SHARD = byKey("white_glass_shard");
 	public static final Material YELLOW_GLASS_SHARD = byKey("yellow_glass_shard");
+
+	public static final Material BAT_HIDE = byKey("bat_hide");
+	public static final Material CAMEL_HIDE = byKey("camel_hide");
+	public static final Material RED_CAT_HIDE = byKey("red_cat_hide");
+	public static final Material COW_HIDE = byKey("cow_hide");
+	public static final Material DONKEY_HIDE = byKey("donkey_hide");
+	public static final Material FOX_HIDE = byKey("fox_hide");
+	public static final Material SNOW_FOX_HIDE = byKey("snow_fox_hide");
+	public static final Material GOAT_HIDE = byKey("goat_hide");
+	public static final Material MULE_HIDE = byKey("mule_hide");
+	public static final Material OCELOT_HIDE = byKey("ocelot_hide");
+	public static final Material PANDA_HIDE = byKey("panda_hide");
+	public static final Material PIG_HIDE = byKey("pig_hide");
+	public static final Material POLAR_BEAR_HIDE = byKey("polar_bear_hide");
+	public static final Material SHEEP_HIDE = byKey("sheep_hide");
+	public static final Material WOLF_HIDE = byKey("wolf_hide");
+	public static final Material CREAMY_HORSE_HIDE = byKey("creamy_horse_hide");
+	public static final Material BROWN_LLAMA_HIDE = byKey("brown_llama_hide");
+	public static final Material CREAMY_LLAMA_HIDE = byKey("creamy_llama_hide");
+	public static final Material GRAY_LLAMA_HIDE = byKey("gray_llama_hide");
+	public static final Material WHITE_LLAMA_HIDE = byKey("white_llama_hide");
+	public static final Material BROWN_MOOSHROOM_HIDE = byKey("brown_mooshroom_hide");
+	public static final Material RED_MOOSHROOM_HIDE = byKey("red_mooshroom_hide");
 
 	public static final Material CLAY_KILN = byKey("clay_kiln");
 	public static final Material SLEEPING_BAG = byKey("sleeping_bag");

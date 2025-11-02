@@ -5,16 +5,21 @@ import org.bukkit.HeightMap;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Tag;
 import org.bukkit.World;
+import org.bukkit.entity.AbstractHorse;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Chicken;
 import org.bukkit.entity.Drowned;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Goat;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
+import org.bukkit.entity.Rabbit;
 import org.bukkit.entity.Turtle;
 import org.bukkit.entity.WaterMob;
+import org.bukkit.entity.Zombie;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -256,6 +261,23 @@ public class EntityUtil {
 		EntityTargetEvent event = new EntityTargetLivingEntityEvent(mob, target, EntityTargetEvent.TargetReason.CUSTOM);
 		if (event.callEvent() && event.getTarget() instanceof LivingEntity living)
 			mob.setTarget(living);
+	}
+
+	/**
+	 * Gets opinionated entity attack speed bonuses
+	 *
+	 * @param entity entity
+	 * @return speed bonus during attack
+	 */
+	public static double getAttackSpeedBonus(LivingEntity entity) {
+		return switch (entity) {
+			case Chicken chicken -> 2.3;
+			case AbstractHorse abstractHorse -> 1.5;
+			case Rabbit rabbit -> 1.8;
+			case Goat goat -> 2.2;
+			case Zombie zombie -> 1.5;
+			default -> 1.25;
+		};
 	}
 
 }

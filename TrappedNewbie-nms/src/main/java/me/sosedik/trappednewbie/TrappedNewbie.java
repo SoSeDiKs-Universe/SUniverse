@@ -95,10 +95,13 @@ import me.sosedik.trappednewbie.listener.effect.RottenBiteConvertsVillagers;
 import me.sosedik.trappednewbie.listener.effect.UndeadIgnoreRottenBite;
 import me.sosedik.trappednewbie.listener.entity.AngryAnimals;
 import me.sosedik.trappednewbie.listener.entity.BabierBabyMobs;
+import me.sosedik.trappednewbie.listener.entity.BetterPillagers;
 import me.sosedik.trappednewbie.listener.entity.CreepersLoveCrawlers;
+import me.sosedik.trappednewbie.listener.entity.ExtraMobGoals;
 import me.sosedik.trappednewbie.listener.entity.FleeFromScaryEffect;
 import me.sosedik.trappednewbie.listener.entity.LimboEntities;
 import me.sosedik.trappednewbie.listener.entity.LimboWandererTrades;
+import me.sosedik.trappednewbie.listener.entity.NerfedBabies;
 import me.sosedik.trappednewbie.listener.entity.ShearableCreepers;
 import me.sosedik.trappednewbie.listener.item.BlackBeltSpeed;
 import me.sosedik.trappednewbie.listener.item.CanteenInteractions;
@@ -329,10 +332,13 @@ public final class TrappedNewbie extends JavaPlugin {
 			// entity
 			AngryAnimals.class,
 			BabierBabyMobs.class,
+			BetterPillagers.class,
 			CreepersLoveCrawlers.class,
+			ExtraMobGoals.class,
 			FleeFromScaryEffect.class,
 			LimboEntities.class,
 			LimboWandererTrades.class,
+			NerfedBabies.class,
 			ShearableCreepers.class,
 			// item
 			BlackBeltSpeed.class,
@@ -416,10 +422,7 @@ public final class TrappedNewbie extends JavaPlugin {
 
 		new ShearableEntities.ShearableBehavior()
 			.withDrop(TrappedNewbieItems.HORSEHAIR, 2, 4)
-			.registerFor(EntityType.HORSE);
-		new ShearableEntities.ShearableBehavior()
-			.withDrop(TrappedNewbieItems.HORSEHAIR, 1, 2)
-			.registerFor(EntityType.MULE);
+			.registerFor(EntityType.HORSE, EntityType.MULE);
 		new ShearableEntities.ShearableBehavior()
 			.withDrop(Material.ROTTEN_FLESH, 1, 2)
 			.registerFor(EntityType.ZOMBIE_HORSE);

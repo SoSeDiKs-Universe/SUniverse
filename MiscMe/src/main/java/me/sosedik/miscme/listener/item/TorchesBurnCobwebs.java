@@ -17,6 +17,7 @@ import java.util.Random;
 /**
  * RMB click with a torch removes cobwebs
  */
+// MCCheck: 1.21.10, new torches
 @NullMarked
 public class TorchesBurnCobwebs implements Listener {
 
@@ -47,7 +48,9 @@ public class TorchesBurnCobwebs implements Listener {
 	}
 
 	private boolean isTorch(Material type) {
-		return type == Material.TORCH || type == Material.SOUL_TORCH || type == Material.COPPER_TORCH;
+		return type == Material.TORCH
+			|| type == Material.SOUL_TORCH
+			|| type == Material.COPPER_TORCH;
 	}
 
 }

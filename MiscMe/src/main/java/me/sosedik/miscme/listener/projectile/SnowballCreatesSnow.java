@@ -6,6 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.Levelled;
 import org.bukkit.block.data.type.Snow;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -65,8 +66,13 @@ public class SnowballCreatesSnow implements Listener {
 	}
 
 	private void setOrDropSnow(Block block, BlockFace blockFace, Vector preVelocity) {
-		if (block.isReplaceable()) {
+		if (block.isReplaceable() && !block.isLiquid()) {
 			block.setType(Material.SNOW);
+			block.emitSound(Sound.BLOCK_SNOW_PLACE, 1F, 1F);
+			return;
+		}
+		if (block.getType() == Material.WATER && block.getRelative(BlockFace.UP).isEmpty() && block.getBlockData() instanceof Levelled levelled && levelled.getLevel() == 0) { // Source water block
+			block.setType(Material.ICE);
 			block.emitSound(Sound.BLOCK_SNOW_PLACE, 1F, 1F);
 			return;
 		}
@@ -85,8 +91,8 @@ public class SnowballCreatesSnow implements Listener {
 		Location playerLoc = player.getLocation();
 		Location blockLoc = block.getLocation();
 		if (playerLoc.getBlockX() == blockLoc.getBlockX()
-				&& playerLoc.getBlockZ() == blockLoc.getBlockZ()
-				&& playerLoc.getY() - blockLoc.getBlockY() < 1
+			&& playerLoc.getBlockZ() == blockLoc.getBlockZ()
+			&& playerLoc.getY() - blockLoc.getBlockY() < 1
 		) {
 			player.setVelocity(new Vector(0, 0.3, 0));
 		}

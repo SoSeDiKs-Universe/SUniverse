@@ -21,6 +21,7 @@ import org.bukkit.entity.Creature;
 import org.bukkit.entity.Dolphin;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Fox;
+import org.bukkit.entity.Goat;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Mob;
 import org.bukkit.entity.Panda;
@@ -74,46 +75,49 @@ public class AngryAnimals implements Listener {
 		setAttribute(mob, Attribute.ATTACK_SPEED, 1);
 		setAttribute(mob, Attribute.ATTACK_KNOCKBACK, 0.1);
 
-		if (!(mob instanceof Rabbit rabbit && rabbit.getRabbitType() == Rabbit.Type.THE_KILLER_BUNNY)
-			&& !(mob instanceof Bee)
-			&& !(mob instanceof Panda)
-			&& !(mob instanceof PolarBear)
-		) {
+		if (!isAngryTowardPlayer(mob)) {
 			Bukkit.getMobGoals().addGoal(mob, 1, new PaperGoal<>(new HurtByTargetGoal(nms)));
 			if (!(mob instanceof Fox) && !(!(mob instanceof Creature creature) || Bukkit.getMobGoals().hasGoal(creature, VanillaGoal.MELEE_ATTACK))) {
-				Bukkit.getMobGoals().addGoal(mob, 1, new PaperGoal<>(new MeleeAttackGoal(nms, getAttackSpeed(mob), shouldFollowTarget(mob))));
+				Bukkit.getMobGoals().addGoal(mob, 1, new PaperGoal<>(new MeleeAttackGoal(nms, EntityUtil.getAttackSpeedBonus(mob), shouldFollowTarget(mob))));
 			}
 		}
 		if (mob instanceof Chicken || mob instanceof Rabbit) Bukkit.getMobGoals().addGoal(mob, 4, new PaperGoal<>(new LeapAtTargetGoal(nms, 0.3F)));
 	}
 
-	private double getAttackSpeed(Mob mob) {
-		if (mob instanceof Chicken) return 0.95;
-		if (mob instanceof AbstractHorse) return 1.5;
-		if (mob instanceof Rabbit) return 1.8;
-		return 1;
+	private boolean isAngryTowardPlayer(Mob mob) {
+		if (mob instanceof Rabbit rabbit) return rabbit.getRabbitType() == Rabbit.Type.THE_KILLER_BUNNY;
+		return mob instanceof Bee
+			|| mob instanceof Panda
+			|| mob instanceof PolarBear;
 	}
 
 	private double getAttackDamage(Mob mob) {
-		if (mob instanceof AbstractCow) return 2;
-		if (mob instanceof Pig) return 2;
-		if (mob instanceof Sheep) return 2;
-		if (mob instanceof AbstractHorse) return 3;
-		return 1;
+		if (mob instanceof AbstractCow) return 3;
+		if (mob instanceof Pig) return 3;
+		if (mob instanceof Sheep) return 3;
+		if (mob instanceof AbstractHorse) return 4;
+		if (mob instanceof Goat) return 5;
+		return 2;
 	}
 
 	private boolean shouldFollowTarget(Mob mob) {
-		return mob instanceof Dolphin;
+		return mob instanceof Dolphin
+			|| mob instanceof Chicken;
 	}
 
 	private void setAttribute(Mob mob, Attribute attribute, double value) {
-		if (mob.getAttribute(attribute) != null) return;
+		AttributeInstance mobAttribute = mob.getAttribute(attribute);
+		if (mobAttribute != null) {
+			// Some entities may already have the attribute, but equal to 0
+			// (e.g., chickens have attack damage, due to Purpur's "chickens can retaliate" feature)
+			if (mobAttribute.getBaseValue() != 0) return;
+		} else {
+			mob.registerAttribute(attribute);
+			mobAttribute = mob.getAttribute(attribute);
+			if (mobAttribute == null) return;
+		}
 
-		mob.registerAttribute(attribute);
-		AttributeInstance attributeInstance = mob.getAttribute(attribute);
-		if (attributeInstance == null) return;
-
-		attributeInstance.setBaseValue(value);
+		mobAttribute.setBaseValue(value);
 	}
 
 	private void aggro(Mob entity) {

@@ -27,6 +27,7 @@ public class MoreBabyMobs implements Listener {
 	private static final double SPEED_MODIFIER = 1.5;
 	private static final String BABY_TAG = "baby";
 
+	// Randomly spawn babies
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onSpawn(EntitySpawnEvent event) {
 		if (!(event.getEntity() instanceof LivingEntity entity)) return;
@@ -40,6 +41,7 @@ public class MoreBabyMobs implements Listener {
 		}, 1L);
 	}
 
+	// Re-apply attributes to custom babies on load
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onLoad(EntitiesLoadEvent event) {
 		for (Entity entity : event.getEntities()) {

@@ -39,12 +39,16 @@ import me.sosedik.miscme.listener.entity.ArmorStandBedrockPoses;
 import me.sosedik.miscme.listener.entity.ArmorStandSpawnsWithArms;
 import me.sosedik.miscme.listener.entity.BetterEntitySuffocation;
 import me.sosedik.miscme.listener.entity.BurningSpreadsWhenAttacking;
+import me.sosedik.miscme.listener.entity.ChickenEggsHatch;
+import me.sosedik.miscme.listener.entity.ChickensBreedEggs;
 import me.sosedik.miscme.listener.entity.ColoredShulkerUponSpawn;
 import me.sosedik.miscme.listener.entity.DeadLivingsIgnoreCactiAndSweetBushes;
 import me.sosedik.miscme.listener.entity.DyeableShulkers;
 import me.sosedik.miscme.listener.entity.DynamicCreeperExplosion;
 import me.sosedik.miscme.listener.entity.DynamicMovingSpeed;
+import me.sosedik.miscme.listener.entity.DynamicVisibilityRange;
 import me.sosedik.miscme.listener.entity.EndermanTeleportsPlayers;
+import me.sosedik.miscme.listener.entity.ExtraPigsOnBreeding;
 import me.sosedik.miscme.listener.entity.ItemFrameFallables;
 import me.sosedik.miscme.listener.entity.ItemFrameReverseRotate;
 import me.sosedik.miscme.listener.entity.MinecartSlimeBoost;
@@ -88,6 +92,7 @@ import me.sosedik.miscme.listener.projectile.ArrowsBreakFragileBlocks;
 import me.sosedik.miscme.listener.projectile.BurningLitsProjectiles;
 import me.sosedik.miscme.listener.projectile.BurningProjectileCreatesFire;
 import me.sosedik.miscme.listener.projectile.SnowballCreatesSnow;
+import me.sosedik.miscme.listener.projectile.SnowballFreezesEntities;
 import me.sosedik.miscme.listener.projectile.WaterPotionSplashesTorches;
 import me.sosedik.miscme.listener.vehicle.JumpyBoats;
 import me.sosedik.miscme.listener.world.CustomDayCycleCleanup;
@@ -168,12 +173,16 @@ public final class MiscMe extends JavaPlugin {
 			ArmorStandSpawnsWithArms.class,
 			BetterEntitySuffocation.class,
 			BurningSpreadsWhenAttacking.class,
+			ChickenEggsHatch.class,
+			ChickensBreedEggs.class,
 			ColoredShulkerUponSpawn.class,
 			DeadLivingsIgnoreCactiAndSweetBushes.class,
 			DyeableShulkers.class,
 			DynamicCreeperExplosion.class,
 			DynamicMovingSpeed.class,
+			DynamicVisibilityRange.class,
 			EndermanTeleportsPlayers.class,
+			ExtraPigsOnBreeding.class,
 			ItemFrameFallables.class,
 			ItemFrameReverseRotate.class,
 			MinecartSlimeBoost.class,
@@ -222,6 +231,7 @@ public final class MiscMe extends JavaPlugin {
 			BurningLitsProjectiles.class,
 			BurningProjectileCreatesFire.class,
 			SnowballCreatesSnow.class,
+			SnowballFreezesEntities.class,
 			WaterPotionSplashesTorches.class,
 			// vehicle
 			JumpyBoats.class,

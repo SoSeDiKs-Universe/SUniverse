@@ -28,7 +28,6 @@ public class TrumpetAttackGoal<T extends Monster & RangedAttackMob> extends Rang
 
 	protected boolean isHoldingTrumpet() {
 		EntityEquipment equipment = this.mob.getBukkitLivingEntity().getEquipment();
-		if (equipment == null) return false;
 		return equipment.getItemInMainHand().getType() == TrappedNewbieItems.TRUMPET
 				|| equipment.getItemInOffHand().getType() == TrappedNewbieItems.TRUMPET;
 	}

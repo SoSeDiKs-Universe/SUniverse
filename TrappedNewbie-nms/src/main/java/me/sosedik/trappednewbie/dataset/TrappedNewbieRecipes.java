@@ -368,6 +368,14 @@ public class TrappedNewbieRecipes {
 				.register();
 		});
 
+		new ShapelessCraft(ItemStack.of(Material.GREEN_DYE), trappedNewbieKey("green_dye"))
+			.addIngredients(Material.BLUE_DYE, Material.YELLOW_DYE)
+			.register();
+
+		new ShapelessCraft(ItemStack.of(Material.BROWN_DYE), trappedNewbieKey("brown_dye"))
+			.addIngredients(Material.ORANGE_DYE, Material.BLACK_DYE)
+			.register();
+
 		addDrinkRecipes();
 
 		addFlowerBouquetRecipe();

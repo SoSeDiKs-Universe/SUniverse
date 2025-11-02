@@ -16,6 +16,7 @@ import org.jspecify.annotations.NullMarked;
 /**
  * Throwable water potions splash torches
  */
+// MCCheck: 1.21.10, new torches
 @NullMarked
 public class WaterPotionSplashesTorches implements Listener {
 
@@ -28,13 +29,18 @@ public class WaterPotionSplashesTorches implements Listener {
 		if (hitBlock == null) return;
 
 		for (Block block : LocationUtil.getBlocksAround(hitBlock, 1, 1)) {
-			Material type = block.getType();
-			if (!MaterialTags.TORCH.isTagged(type) && !MaterialTags.SOUL_TORCH.isTagged(type)) continue;
+			if (!isSplashableTorch(block.getType())) continue;
 
 			block.setType(Material.AIR);
 			block.getWorld().dropItemNaturally(block.getLocation().center(), ItemStack.of(Material.STICK));
 			block.emitSound(Sound.BLOCK_FIRE_EXTINGUISH, 1F, 1F);
 		}
+	}
+
+	private boolean isSplashableTorch(Material type) {
+		return MaterialTags.TORCH.isTagged(type)
+			|| MaterialTags.SOUL_TORCH.isTagged(type)
+			|| MaterialTags.COPPER_TORCH.isTagged(type);
 	}
 
 }

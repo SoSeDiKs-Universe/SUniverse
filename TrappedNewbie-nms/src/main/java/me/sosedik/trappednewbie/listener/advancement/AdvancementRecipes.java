@@ -47,9 +47,11 @@ public class AdvancementRecipes implements Listener {
 			trappedNewbieKey("spruce_sapling_to_spruce_branch"),
 			trappedNewbieKey("dead_bush_to_dead_branch")
 		);
+		addRecipe(TrappedNewbieAdvancements.MAKE_FLINT_SHEARS,
+			trappedNewbieKey("rough_stick")
+		);
 		addRecipe(TrappedNewbieAdvancements.MAKE_ROUGH_STICKS,
 			trappedNewbieKey("stick"),
-			trappedNewbieKey("rough_stick"),
 			trappedNewbieKey("firestriker")
 		);
 		addRecipe(TrappedNewbieAdvancements.MAKE_A_TWINE, trappedNewbieKey("grass_mesh"));

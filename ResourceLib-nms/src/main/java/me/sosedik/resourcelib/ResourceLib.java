@@ -24,9 +24,14 @@ import me.sosedik.utilizer.api.message.Mini;
 import me.sosedik.utilizer.util.EventUtil;
 import me.sosedik.utilizer.util.FileUtil;
 import me.sosedik.utilizer.util.Scheduler;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
+import net.kyori.adventure.text.object.ObjectContents;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Registry;
+import org.bukkit.inventory.ItemType;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.UnknownNullability;
@@ -240,6 +245,25 @@ public class ResourceLib extends JavaPlugin {
 	 */
 	public static NamespacedKey getSound(NamespacedKey key) {
 		return storage().getSoundMapping(key);
+	}
+
+	/**
+	 * Gets the item icon
+	 *
+	 * @param key item key
+	 * @return item icon
+	 */
+	public static Component getItemIcon(Key key) {
+		ItemType itemType = Registry.ITEM.get(key);
+		if (itemType == null) return Component.space();
+
+		FakeItemData fakeItemData = storage().getFakeItemData(new NamespacedKey(key.namespace(), key.value()));
+		if (fakeItemData != null && fakeItemData.model() != null)
+			key = Key.key(fakeItemData.model().namespace(), fakeItemData.model().value());
+
+		boolean blocksAtlas = itemType.hasBlockType();
+		Key texture = Key.key(key.namespace(), (blocksAtlas ? "block/" : "item/") + key.value());
+		return Mini.asIcon(Component.object(ObjectContents.sprite(texture)));
 	}
 
 }

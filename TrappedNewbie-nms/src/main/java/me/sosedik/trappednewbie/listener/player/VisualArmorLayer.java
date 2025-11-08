@@ -219,7 +219,7 @@ public class VisualArmorLayer implements Listener {
 			}
 
 			if (!player.hasPotionEffect(PotionEffectType.WEAKNESS)
-					|| Objects.requireNonNull(player.getPotionEffect(PotionEffectType.WEAKNESS)).getAmplifier() < 1) {
+				|| Objects.requireNonNull(player.getPotionEffect(PotionEffectType.WEAKNESS)).getAmplifier() < 1) {
 				if (visualArmor.hasGloves() && visualArmor.getGloves().containsEnchantment(Enchantment.BINDING_CURSE)) return;
 			}
 

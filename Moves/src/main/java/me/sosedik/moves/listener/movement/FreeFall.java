@@ -2,7 +2,6 @@ package me.sosedik.moves.listener.movement;
 
 import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import io.papermc.paper.block.fluid.FluidData;
-import io.papermc.paper.entity.TeleportFlag;
 import me.sosedik.moves.Moves;
 import me.sosedik.utilizer.api.event.player.PlayerDataLoadedEvent;
 import me.sosedik.utilizer.api.event.player.PlayerDataSaveEvent;
@@ -136,7 +135,7 @@ public class FreeFall implements Listener {
 				Moves.scheduler().sync(() -> {
 					player.emitSound(Sound.BLOCK_GRASS_STEP, 1F, 1F);
 					Location loc = player.getLocation().getBlock().getLocation().add(0.5, -1, 0.5);
-					player.teleport(loc, TeleportFlag.Relative.VELOCITY_ROTATION, TeleportFlag.EntityState.RETAIN_PASSENGERS);
+					LocationUtil.smartTeleport(player, loc, false);
 				}, j * 3L);
 			}
 		}
@@ -200,8 +199,10 @@ public class FreeFall implements Listener {
 
 		player.setGliding(true);
 		Location loc = player.getLocation().center().pitch(90F);
-		player.teleport(loc, TeleportFlag.Relative.VELOCITY_ROTATION, TeleportFlag.EntityState.RETAIN_PASSENGERS);
-		player.emitSound(Sound.ENTITY_ENDER_DRAGON_FLAP, 1F, 1.5F);
+		LocationUtil.smartTeleport(player, loc, false).thenAccept(tp -> {
+			if (tp)
+				player.emitSound(Sound.ENTITY_ENDER_DRAGON_FLAP, 1F, 1.5F);
+		});
 
 		Moves.scheduler().sync(task -> {
 			if (!isLeaping(player)) return true;

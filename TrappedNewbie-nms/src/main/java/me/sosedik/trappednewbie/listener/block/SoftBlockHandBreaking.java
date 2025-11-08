@@ -16,6 +16,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDamageEvent;
+import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -29,8 +30,7 @@ public class SoftBlockHandBreaking implements Listener {
 	public SoftBlockHandBreaking() {
 		BlockBreakTask.addBreakingRule((task, seconds) -> {
 			Material blockType = task.getBlock().getType();
-			Material toolType = task.getTool().getType();
-			if (!TrappedNewbieTags.ROCKS.isTagged(toolType)) {
+			if (!isRocky(task.getTool())) {
 				if (blockType == Material.GRAVEL) return 1.75F;
 				if (blockType == Material.SUSPICIOUS_GRAVEL) return 1.75F;
 				return null;
@@ -51,7 +51,7 @@ public class SoftBlockHandBreaking implements Listener {
 		if (getConverted(event.getBlock().getType()) == null) return;
 
 		Player player = event.getPlayer();
-		if (!TrappedNewbieTags.ROCKS.isTagged(player.getInventory().getItemInMainHand().getType())) return;
+		if (!isRocky(player.getInventory().getItemInMainHand())) return;
 
 		event.setCancelled(true);
 	}
@@ -63,7 +63,7 @@ public class SoftBlockHandBreaking implements Listener {
 		if (replacement == null) return;
 
 		Player player = event.getPlayer();
-		if (!TrappedNewbieTags.ROCKS.isTagged(player.getInventory().getItemInMainHand().getType())) return;
+		if (!isRocky(player.getInventory().getItemInMainHand())) return;
 
 		event.setCancelled(true);
 
@@ -78,6 +78,11 @@ public class SoftBlockHandBreaking implements Listener {
 
 		// Continue breaking
 		new BlockDamageEvent(player, block, blockFace, player.getInventory().getItemInMainHand(), false).callEvent();
+	}
+
+	private boolean isRocky(ItemStack item) {
+		return TrappedNewbieTags.ROCKS.isTagged(item.getType())
+			|| item.getType() == Material.FLINT;
 	}
 
 	public static @Nullable Material getConverted(Material blockType) {

@@ -15,6 +15,7 @@ import com.github.retrooper.packetevents.protocol.world.states.type.StateTypes;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerBlockChange;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerChunkData;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerMultiBlockChange;
+import me.sosedik.trappednewbie.dataset.TrappedNewbieAdvancements;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieEffects;
 import me.sosedik.trappednewbie.impl.thirst.ThirstData;
 import me.sosedik.utilizer.util.MathUtil;
@@ -76,10 +77,12 @@ public class QuenchedFromDrinkingCacti implements PacketListener, Listener {
 	public void onConsume(PlayerItemConsumeEvent event) {
 		if (ThirstData.DrinkType.fromItem(event.getItem()) != ThirstData.DrinkType.CACTUS_JUICE) return;
 
-		event.getPlayer().addPotionEffect(new PotionEffect(TrappedNewbieEffects.QUENCHED, 300 * 20, 0));
+		Player player = event.getPlayer();
+		player.addPotionEffect(new PotionEffect(TrappedNewbieEffects.QUENCHED, 300 * 20, 0));
+		TrappedNewbieAdvancements.DRINK_CACTUS_JUICE.awardAllCriteria(player);
 	}
 
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	public void onEffectEnd(EntityPotionEffectEvent event) {
 		if (!(event.getEntity() instanceof Player player)) return;
 

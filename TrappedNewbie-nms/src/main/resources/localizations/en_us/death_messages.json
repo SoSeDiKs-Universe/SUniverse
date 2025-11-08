@@ -6,6 +6,7 @@
 		"<entity>'s reckless breaking led to a painful end",
 		"<entity> was caught off guard by the sharp edges of their surroundings"
 	],
+	"death.attack.suicide": "<entity> decided to leave this world",
 	"death.attack.thirst": [
 		"<entity> died of dehydration",
 		"<entity> forgot to drink water"

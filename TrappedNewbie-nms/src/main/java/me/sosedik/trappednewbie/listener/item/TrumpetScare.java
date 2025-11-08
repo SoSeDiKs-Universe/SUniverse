@@ -2,12 +2,10 @@ package me.sosedik.trappednewbie.listener.item;
 
 import me.sosedik.kiterino.event.entity.EntityItemConsumeEvent;
 import me.sosedik.kiterino.event.entity.ItemConsumeEvent;
-import me.sosedik.resourcelib.ResourceLib;
-import me.sosedik.trappednewbie.TrappedNewbie;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieItems;
+import me.sosedik.trappednewbie.dataset.TrappedNewbieSoundKeys;
 import me.sosedik.trappednewbie.listener.player.TotemRituals;
 import net.kyori.adventure.sound.Sound;
-import org.bukkit.NamespacedKey;
 import org.bukkit.Tag;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -23,8 +21,6 @@ import org.bukkit.util.Vector;
  */
 public class TrumpetScare implements Listener {
 
-	private static final NamespacedKey SOUND = ResourceLib.getSound(TrappedNewbie.trappedNewbieKey("item/doot_doot"));
-
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onUse(PlayerItemConsumeEvent event) {
 		tryToUse(event);
@@ -39,7 +35,7 @@ public class TrumpetScare implements Listener {
 		if (!ItemStack.isType(event.getItem(), TrappedNewbieItems.TRUMPET)) return;
 
 		LivingEntity livingEntity = event.getEntity();
-		livingEntity.emitSound(Sound.sound(SOUND, Sound.Source.HOSTILE, 1F, 0.9F + (float) Math.random() * 0.2F));
+		livingEntity.emitSound(Sound.sound(TrappedNewbieSoundKeys.TRUMPET_DOOT, Sound.Source.HOSTILE, 1F, 0.9F + (float) Math.random() * 0.2F));
 		if (livingEntity instanceof Player player)
 			TotemRituals.playedInstrument(player, TrappedNewbieItems.TRUMPET, player.getLocation());
 		boolean undead = Tag.ENTITY_TYPES_UNDEAD.isTagged(livingEntity.getType());

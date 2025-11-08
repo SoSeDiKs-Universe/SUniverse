@@ -48,7 +48,7 @@ public class UpCommand {
 				target.sendBlockChange(block.getLocation(), Material.GLASS.createBlockData());
 			}
 
-			LocationUtil.smartTeleport(target, loc);
+			LocationUtil.smartTeleport(target, loc, false);
 		});
 	}
 

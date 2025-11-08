@@ -3,11 +3,11 @@ package me.sosedik.trappednewbie.entity.nms;
 import de.tr7zw.nbtapi.NBT;
 import io.papermc.paper.adventure.PaperAdventure;
 import io.papermc.paper.datacomponent.DataComponentTypes;
-import io.papermc.paper.entity.TeleportFlag;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieEntities;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieItems;
 import me.sosedik.trappednewbie.entity.api.PaperPlane;
 import me.sosedik.utilizer.impl.item.modifier.GlowingItemModifier;
+import me.sosedik.utilizer.util.LocationUtil;
 import net.kyori.adventure.util.TriState;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerLevel;
@@ -234,7 +234,7 @@ public class PaperPlaneImpl extends ThrowableItemProjectile {
 		newLocation.setRotation(currentRotationYaw, currentRotationPitch);
 		setPos(CraftLocation.toVec3(newLocation));
 		assert this.itemDisplay != null;
-		this.itemDisplay.teleport(newLocation, TeleportFlag.EntityState.RETAIN_PASSENGERS);
+		LocationUtil.smartTeleport(this.itemDisplay, newLocation, false);
 	}
 
 	private void setupInitialData(Vector baseVelocity) {
@@ -315,7 +315,7 @@ public class PaperPlaneImpl extends ThrowableItemProjectile {
 		boolean waterBlazedDeath = blazed && cause == EntityRemoveEvent.Cause.DEATH && isInWaterOrRain();
 		if (!isOnFire() && (!blazed || waterBlazedDeath)) {
 			boolean fragile = NBT.get(this.pickupItemStack.asBukkitMirror(), nbt -> (boolean) nbt.getOrDefault(PaperPlane.FRAGILE_TAG, false));
-			getBukkitEntity().getWorld().dropItemNaturally(CraftLocation.toBukkit(loc), fragile ? new org.bukkit.inventory.ItemStack(Material.PAPER) : this.pickupItemStack.asBukkitMirror());
+			getBukkitEntity().getWorld().dropItemNaturally(CraftLocation.toBukkit(loc), fragile ? org.bukkit.inventory.ItemStack.of(Material.PAPER) : this.pickupItemStack.asBukkitMirror());
 		} else {
 			getBukkitEntity().emitSound(Sound.BLOCK_FIRE_EXTINGUISH, 1F, 1F);
 			getBukkitEntity().getWorld().spawnParticle(Particle.SMOKE, getBukkitEntity().getLocation(), 3, 0.2, 0.2, 0.2, 0.01);

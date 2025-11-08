@@ -1,10 +1,11 @@
 package me.sosedik.trappednewbie.impl.blockstorage;
 
 import de.tr7zw.nbtapi.iface.ReadWriteNBT;
-import me.sosedik.resourcelib.ResourceLib;
 import me.sosedik.trappednewbie.TrappedNewbie;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieItems;
+import me.sosedik.trappednewbie.dataset.TrappedNewbieSoundKeys;
 import me.sosedik.trappednewbie.impl.recipe.ChoppingBlockCrafting;
+import me.sosedik.utilizer.api.event.player.PlayerPlaceItemEvent;
 import me.sosedik.utilizer.api.storage.block.BlockDataStorageHolder;
 import me.sosedik.utilizer.util.DurabilityUtil;
 import me.sosedik.utilizer.util.LocationUtil;
@@ -12,7 +13,6 @@ import me.sosedik.utilizer.util.RecipeManager;
 import net.kyori.adventure.sound.Sound;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.Tag;
 import org.bukkit.block.Block;
@@ -29,9 +29,6 @@ import org.jspecify.annotations.Nullable;
 
 @NullMarked
 public class ChoppingBlockStorage extends BlockDataStorageHolder {
-
-	public static final NamespacedKey SUCCESS_SOUND = ResourceLib.getSound(TrappedNewbie.trappedNewbieKey("block/wood_chop"));
-	public static final NamespacedKey FAIL_SOUND = ResourceLib.getSound(TrappedNewbie.trappedNewbieKey("block/wood_chop_fail"));
 
 	private static final String STORED_ITEM_KEY = "item";
 
@@ -86,6 +83,7 @@ public class ChoppingBlockStorage extends BlockDataStorageHolder {
 	private boolean tryToPlace(Player player, EquipmentSlot hand) {
 		ItemStack item = player.getInventory().getItem(hand);
 		if (RecipeManager.getRecipe(ChoppingBlockCrafting.class, new ItemStack[]{item}) == null) return false;
+		if (!new PlayerPlaceItemEvent(player, item).callEvent()) return false;
 
 		this.currentItem = item.asOne();
 		this.display.setItemStack(this.currentItem);
@@ -134,13 +132,13 @@ public class ChoppingBlockStorage extends BlockDataStorageHolder {
 		item.damage(1, player);
 		if (DurabilityUtil.isBroken(item) || this.chops++ < 2) {
 			Tag.ITEMS_AXES.getValues().forEach(axe -> player.setCooldown(axe, 10));
-			TrappedNewbie.scheduler().sync(() -> getBlock().emitSound(Sound.sound(FAIL_SOUND, Sound.Source.BLOCK, 1F, 1F)), delay);
+			TrappedNewbie.scheduler().sync(() -> getBlock().emitSound(Sound.sound(TrappedNewbieSoundKeys.WOOD_CHOP_FAIL_SOUND, Sound.Source.BLOCK, 1F, 1F)), delay);
 			return true;
 		}
 
 		Tag.ITEMS_AXES.getValues().forEach(axe -> player.setCooldown(axe, 20));
 		this.chops = 0;
-		TrappedNewbie.scheduler().sync(() -> getBlock().emitSound(Sound.sound(SUCCESS_SOUND, Sound.Source.BLOCK, 1F, 1F)), delay);
+		TrappedNewbie.scheduler().sync(() -> getBlock().emitSound(Sound.sound(TrappedNewbieSoundKeys.WOOD_CHOP_SUCCESS_SOUND, Sound.Source.BLOCK, 1F, 1F)), delay);
 		if (this.currentItem.getType().isBlock())
 			getBlock().getWorld().spawnParticle(Particle.BLOCK_CRUMBLE, getBlock().getLocation().center(), 100, 0.3, 0.3, 0.3, 1, this.currentItem.getType().createBlockData());
 		ItemStack result = RecipeManager.getResult(ChoppingBlockCrafting.class, new ItemStack[]{this.currentItem});
@@ -155,7 +153,7 @@ public class ChoppingBlockStorage extends BlockDataStorageHolder {
 	@Override
 	public void onMove(Location from, Location to) {
 		super.onMove(from, to);
-		LocationUtil.smartTeleport(this.display, calcDisplayLocation());
+		LocationUtil.smartTeleport(this.display, calcDisplayLocation(), false);
 	}
 
 	private ItemDisplay createDisplay() {

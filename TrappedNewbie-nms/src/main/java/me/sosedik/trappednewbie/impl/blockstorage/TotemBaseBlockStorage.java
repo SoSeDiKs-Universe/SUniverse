@@ -2,6 +2,7 @@ package me.sosedik.trappednewbie.impl.blockstorage;
 
 import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import me.sosedik.requiem.feature.PossessingPlayer;
+import me.sosedik.resourcelib.feature.HudMessenger;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieAdvancements;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieItems;
 import me.sosedik.trappednewbie.listener.player.TotemRituals;
@@ -9,6 +10,7 @@ import me.sosedik.utilizer.api.message.Messenger;
 import me.sosedik.utilizer.dataset.UtilizerTags;
 import net.kyori.adventure.inventory.Book;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickCallback;
 import net.kyori.adventure.text.event.ClickEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -22,6 +24,7 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -88,15 +91,15 @@ public class TotemBaseBlockStorage extends DisplayBlockStorage {
 				Component requirementsText = messenger.getMessage("ritual.required_instruments");
 				List<Component> instrumentNames = new ArrayList<>();
 				ritual.getRequirements().keySet().forEach(instrument -> instrumentNames.add(Component.text("- ").append(messenger.getMessage(instrument.getLocaleId()))));
+				if (ritual.getRequiredExtraPoints() > 0) instrumentNames.add(Component.text("- ").append(messenger.getMessage("ritual.instruments.any")));
 				hoverText = combined(hoverText, Component.newline(), Component.newline(), requirementsText, Component.newline(), combine(Component.newline(), instrumentNames));
 			}
 			ritualText = ritualText.hoverEvent(hoverText);
 			ritualText = ritualText.clickEvent(ClickEvent.callback(audience -> {
-				if (this.ritualData == null)
-					this.ritualData = new TotemRituals.RitualData(ritual, this);
-
-				abortPickers();
-			}));
+				if (audience instanceof Player p)
+					p.closeInventory();
+				onRitualPick(ritual);
+			}, ClickCallback.Options.builder().uses(1).lifetime(Duration.ofMinutes(10L)).build()));
 			ritualText = Component.textOfChildren(Component.newline(), Component.text("・"), ritualText);
 			texts.add(ritualText);
 		}
@@ -104,6 +107,15 @@ public class TotemBaseBlockStorage extends DisplayBlockStorage {
 		Book.Builder builder = Book.builder().title(Component.empty()).author(Component.empty())
 			.addPage(combine(Component.newline(), texts));
 		player.openBook(builder);
+	}
+
+	public void onRitualPick(TotemRituals.Ritual ritual) {
+		if (this.ritualData != null)
+			abortRitual();
+
+		this.ritualData = new TotemRituals.RitualData(ritual, this);
+
+		abortPickers();
 	}
 	
 	public void spawnMusic(boolean saturated) {
@@ -115,10 +127,11 @@ public class TotemBaseBlockStorage extends DisplayBlockStorage {
 
 	public void successRitual() {
 		if (this.ritualData == null) return;
+
 		this.ritualData.getPerformers().forEach(uuid -> {
-				Player player = Bukkit.getPlayer(uuid);
-				if (player != null)
-					TrappedNewbieAdvancements.PERFORM_A_RITUAL.awardAllCriteria(player);
+			Player player = Bukkit.getPlayer(uuid);
+			if (player != null)
+				TrappedNewbieAdvancements.PERFORM_A_RITUAL.awardAllCriteria(player);
 		});
 
 		getBlock().getWorld().strikeLightning(getBlock().getLocation().center());
@@ -141,6 +154,13 @@ public class TotemBaseBlockStorage extends DisplayBlockStorage {
 	}
 
 	public void failRitual() {
+		if (this.ritualData != null) {
+			this.ritualData.getPerformers().forEach(uuid -> {
+				Player player = Bukkit.getPlayer(uuid);
+				if (player != null)
+					HudMessenger.of(player).displayMessage(Messenger.messenger(player).getMessage("ritual.failed"));
+			});
+		}
 		stopRitual();
 	}
 

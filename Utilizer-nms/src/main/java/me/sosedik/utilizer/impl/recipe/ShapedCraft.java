@@ -9,6 +9,8 @@ import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.recipe.CraftingBookCategory;
 import org.jspecify.annotations.NullMarked;
 
+import java.util.function.Supplier;
+
 /**
  * Builder for {@link ShapedRecipe}
  */
@@ -16,6 +18,10 @@ import org.jspecify.annotations.NullMarked;
 public final class ShapedCraft extends ShapedRecipeBuilder<ShapedCraft> {
 
 	private CraftingBookCategory category;
+
+	public ShapedCraft(Supplier<ItemStack> result, NamespacedKey key, String... shape) {
+		this(result.get(), key, shape);
+	}
 
 	public ShapedCraft(ItemStack result, NamespacedKey key, String... shape) {
 		super(result, key, shape);

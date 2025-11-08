@@ -3,12 +3,10 @@ package me.sosedik.trappednewbie.listener.item;
 import de.tr7zw.nbtapi.NBT;
 import me.sosedik.kiterino.event.entity.EntityItemConsumeEvent;
 import me.sosedik.kiterino.event.entity.ItemConsumeEvent;
-import me.sosedik.resourcelib.ResourceLib;
-import me.sosedik.trappednewbie.TrappedNewbie;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieItems;
+import me.sosedik.trappednewbie.dataset.TrappedNewbieSoundKeys;
 import me.sosedik.trappednewbie.listener.misc.CandiesDropOnHalloween;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -30,7 +28,6 @@ import java.util.UUID;
 public class GoodieBagsGiveCandies implements Listener {
 
 	private static final Map<Material, Material> CANDIES = new HashMap<>();
-	private static final NamespacedKey OPEN_SOUND = ResourceLib.getSound(TrappedNewbie.trappedNewbieKey("item/goodie_bag_open"));
 
 	static {
 		addGoodieCandie(TrappedNewbieItems.BLAZE_GOODIE_BAG, TrappedNewbieItems.FIREFINGERS_CANDY);
@@ -75,7 +72,7 @@ public class GoodieBagsGiveCandies implements Listener {
 			return Math.random() > 0.7 ? 3 : 2;
 		});
 
-		entity.emitSound(OPEN_SOUND, 1F, 0.9F + (float) Math.random() * 0.2F);
+		entity.emitSound(TrappedNewbieSoundKeys.GOODIE_BAG_OPEN_SOUND, 1F, 0.9F + (float) Math.random() * 0.2F);
 		if (entity instanceof Player player)
 			player.getInventory().addItem(ItemStack.of(candyType, amount));
 		// TODO else? consume candy item?

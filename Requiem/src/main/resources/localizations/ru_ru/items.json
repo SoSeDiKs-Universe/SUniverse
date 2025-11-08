@@ -6,10 +6,13 @@
 	],
 	"item.requiem.ghost_motivator.name": "Искривитель пространства",
 	"item.requiem.ghost_motivator.lore": "Позволяет проходить сквозь стены",
-	"item.requiem.host_revocator.name": "Отзыв хоста",
+	"item.requiem.host_revocator.name": "Абиссальный отзыв хоста",
 	"item.requiem.host_revocator.lore": [
-		"Используйте, чтобы покинуть тело хоста,",
-		"потенциально убив его"
+		"Используйте (<yellow><key:key.use></yellow>), чтобы покинуть тело хоста,",
+		"уничтожив все неэкипированные предметы в процессе",
+		"",
+		"Бросьте (<yellow><key:key.use></yellow>) сюда предмет из инвентаря,",
+		"чтобы отправить его в Бездну"
 	],
 	"item.requiem.creeper_heart.name": "Сердце крипера",
 	"item.requiem.acrobat_skeleton_tombstone.name": "Скелет акробата",
@@ -60,5 +63,6 @@
 	"item.requiem.vines_tangled_skeleton_tombstone.name": "Обвитый лианами скелет",
 	"item.requiem.waterdrop_skeleton_tombstone.name": "Приземлившийся скелет",
 	"item.requiem.webbed_skeleton_tombstone.name": "Опутанный скелет",
-	"item.requiem.winter_skeleton_tombstone.name": "Зимний скелет"
+	"item.requiem.winter_skeleton_tombstone.name": "Зимний скелет",
+	"item.requiem.necronomicon.name": "Некрономикон"
 }

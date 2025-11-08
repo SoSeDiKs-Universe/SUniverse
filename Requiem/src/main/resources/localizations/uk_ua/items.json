@@ -6,10 +6,13 @@
 	],
 	"item.requiem.ghost_motivator.name": "Викривлювач простору",
 	"item.requiem.ghost_motivator.lore": "Дозволяє проходити крізь стіни",
-	"item.requiem.host_revocator.name": "Відкликання хосту",
+	"item.requiem.host_revocator.name": "Абісальний відгук хоста",
 	"item.requiem.host_revocator.lore": [
-		"Використайте, щоб покинути тіло хосту,",
-		"потенційно вбивши його"
+		"Використайте (<yellow><key:key.use></yellow>), щоб покинути тіло хосту,",
+		"знищивши всі неекіпіровані предмети в процесі",
+		"",
+		"Киньте (<yellow><key:key.use></yellow>) сюди предмет із інвентаря,",
+		"щоб відправити його в Безодню"
 	],
 	"item.requiem.creeper_heart.name": "Серце кріпера",
 	"item.requiem.acrobat_skeleton_tombstone.name": "Скелет акробата",
@@ -60,6 +63,6 @@
 	"item.requiem.vines_tangled_skeleton_tombstone.name": "Обв'язаний лозами скелет",
 	"item.requiem.waterdrop_skeleton_tombstone.name": "Скелет, що приземлився",
 	"item.requiem.webbed_skeleton_tombstone.name": "Опутаний скелет",
-	"item.requiem.winter_skeleton_tombstone.name": "Зимовий скелет"
-
+	"item.requiem.winter_skeleton_tombstone.name": "Зимовий скелет",
+	"item.requiem.necronomicon.name": "Некрономікон"
 }

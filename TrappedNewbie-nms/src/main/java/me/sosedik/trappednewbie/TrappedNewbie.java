@@ -14,6 +14,7 @@ import me.sosedik.trappednewbie.api.item.VisualArmor;
 import me.sosedik.trappednewbie.api.task.BossBarTask;
 import me.sosedik.trappednewbie.command.MigrateCommand;
 import me.sosedik.trappednewbie.command.SpitCommand;
+import me.sosedik.trappednewbie.command.SuicideCommand;
 import me.sosedik.trappednewbie.command.TestCommand;
 import me.sosedik.trappednewbie.command.ThirstCommand;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieAdvancements;
@@ -85,6 +86,7 @@ import me.sosedik.trappednewbie.listener.block.LogStrippingGivesBarks;
 import me.sosedik.trappednewbie.listener.block.SoftBlockHandBreaking;
 import me.sosedik.trappednewbie.listener.block.TreePhysics;
 import me.sosedik.trappednewbie.listener.block.UnlitCampfireByDefault;
+import me.sosedik.trappednewbie.listener.effect.AttritionLimitations;
 import me.sosedik.trappednewbie.listener.effect.BoneBreakerFreezing;
 import me.sosedik.trappednewbie.listener.effect.BouncyEffectHandler;
 import me.sosedik.trappednewbie.listener.effect.ComfortEffectHandler;
@@ -99,6 +101,7 @@ import me.sosedik.trappednewbie.listener.entity.BetterPillagers;
 import me.sosedik.trappednewbie.listener.entity.CreepersLoveCrawlers;
 import me.sosedik.trappednewbie.listener.entity.ExtraMobGoals;
 import me.sosedik.trappednewbie.listener.entity.FleeFromScaryEffect;
+import me.sosedik.trappednewbie.listener.entity.GliderInteraction;
 import me.sosedik.trappednewbie.listener.entity.LimboEntities;
 import me.sosedik.trappednewbie.listener.entity.LimboWandererTrades;
 import me.sosedik.trappednewbie.listener.entity.NerfedBabies;
@@ -129,6 +132,7 @@ import me.sosedik.trappednewbie.listener.item.ThrowableRockBehavior;
 import me.sosedik.trappednewbie.listener.item.TimeMachineClockIsTotemOfUndying;
 import me.sosedik.trappednewbie.listener.item.TrumpetScare;
 import me.sosedik.trappednewbie.listener.item.VisualPumpkin;
+import me.sosedik.trappednewbie.listener.item.WindInABottleInteractions;
 import me.sosedik.trappednewbie.listener.misc.AllRecipesInRecipeBook;
 import me.sosedik.trappednewbie.listener.misc.CandiesDropOnHalloween;
 import me.sosedik.trappednewbie.listener.misc.CustomHudRenderer;
@@ -141,6 +145,7 @@ import me.sosedik.trappednewbie.listener.misc.TemporaryScoreboardAdvancementMess
 import me.sosedik.trappednewbie.listener.player.DisableNaturalRespawn;
 import me.sosedik.trappednewbie.listener.player.DynamicGameMode;
 import me.sosedik.trappednewbie.listener.player.ExtraPossessedDrops;
+import me.sosedik.trappednewbie.listener.player.MilkHelpsSkeletons;
 import me.sosedik.trappednewbie.listener.player.NewbieWelcome;
 import me.sosedik.trappednewbie.listener.player.PossessingRegeneration;
 import me.sosedik.trappednewbie.listener.player.ReachAround;
@@ -321,6 +326,7 @@ public final class TrappedNewbie extends JavaPlugin {
 			TreePhysics.class,
 			UnlitCampfireByDefault.class,
 			// effect
+			AttritionLimitations.class,
 			BoneBreakerFreezing.class,
 			BouncyEffectHandler.class,
 			ComfortEffectHandler.class,
@@ -336,6 +342,7 @@ public final class TrappedNewbie extends JavaPlugin {
 			CreepersLoveCrawlers.class,
 			ExtraMobGoals.class,
 			FleeFromScaryEffect.class,
+			GliderInteraction.class,
 			LimboEntities.class,
 			LimboWandererTrades.class,
 			NerfedBabies.class,
@@ -367,6 +374,7 @@ public final class TrappedNewbie extends JavaPlugin {
 			TimeMachineClockIsTotemOfUndying.class,
 			TrumpetScare.class,
 			VisualPumpkin.class,
+			WindInABottleInteractions.class,
 			// misc
 			AllRecipesInRecipeBook.class,
 			CandiesDropOnHalloween.class,
@@ -381,6 +389,7 @@ public final class TrappedNewbie extends JavaPlugin {
 			DisableNaturalRespawn.class,
 			DynamicGameMode.class,
 			ExtraPossessedDrops.class,
+			MilkHelpsSkeletons.class,
 			NewbieWelcome.class,
 			PossessingRegeneration.class,
 			ReachAround.class,
@@ -409,6 +418,7 @@ public final class TrappedNewbie extends JavaPlugin {
 			// command
 			MigrateCommand.class
 		);
+		SuicideCommand.init(this);
 
 		TrappedNewbieTags.ROCKS.getValues().forEach(rock -> {
 			Material pebble = Material.getMaterial(rock.name().replace("ROCK", "PEBBLE"));

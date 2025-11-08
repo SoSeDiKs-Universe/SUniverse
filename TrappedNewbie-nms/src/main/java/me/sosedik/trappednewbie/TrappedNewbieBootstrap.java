@@ -10,7 +10,9 @@ import me.sosedik.resourcelib.util.ItemCreator;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieEntities;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieEntityTypes;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieItems;
+import me.sosedik.trappednewbie.entity.api.Glider;
 import me.sosedik.trappednewbie.entity.api.PaperPlane;
+import me.sosedik.trappednewbie.entity.craft.CraftGlider;
 import me.sosedik.trappednewbie.entity.craft.CraftPaperPlane;
 import me.sosedik.trappednewbie.impl.block.nms.ClayKilnBlock;
 import me.sosedik.trappednewbie.impl.block.nms.SleepingBagBlock;
@@ -28,6 +30,7 @@ import me.sosedik.trappednewbie.impl.effect.RottenBiteEffect;
 import me.sosedik.trappednewbie.impl.effect.ScaryEffect;
 import me.sosedik.trappednewbie.impl.effect.ThirstEffect;
 import me.sosedik.trappednewbie.impl.effect.WaterboltEffect;
+import me.sosedik.trappednewbie.impl.item.nms.HangGliderItem;
 import me.sosedik.trappednewbie.impl.item.nms.KnifeItem;
 import me.sosedik.trappednewbie.impl.item.nms.PaperPlaneItem;
 import me.sosedik.trappednewbie.impl.item.nms.ThrowableRockItem;
@@ -98,6 +101,7 @@ public class TrappedNewbieBootstrap implements PluginBootstrap {
 				DispenserBlock.registerProjectileBehavior(item);
 				yield item;
 			}
+			case String k when k.endsWith("hang_glider") -> new HangGliderItem(properties);
 			case "firestriker", "trumpet", "canteen", "reinforced_canteen", "dragon_flask" -> ItemCreator.crossbowItem(properties, (item, entity, timeLeft) -> true);
 			case String k when k.endsWith("glass_shard") || k.endsWith("goodie_bag") -> ItemCreator.crossbowItem(properties, (item, entity, timeLeft) -> true);
 			case "flint_axe" -> new AxeItem(dummyMaterial, 6F, -3.2F, (Item.Properties) properties);
@@ -113,11 +117,13 @@ public class TrappedNewbieBootstrap implements PluginBootstrap {
 		context.injectEntityTypes(TrappedNewbieEntityTypes.class, TrappedNewbieEntities.class,
 			key -> switch (key.value()) {
 				case "paper_plane" -> new CraftEntityTypes.EntityTypeData<>(TrappedNewbieEntityTypes.PAPER_PLANE, PaperPlane.class, CraftPaperPlane::new, createAndMoveEmptyRot(TrappedNewbieEntities.PAPER_PLANE));
+				case "glider" -> new CraftEntityTypes.EntityTypeData<>(TrappedNewbieEntityTypes.GLIDER, Glider.class, CraftGlider::new, createAndMoveEmptyRot(TrappedNewbieEntities.GLIDER));
 				default -> throw new IllegalArgumentException();
 			},
 			key -> {
 				switch (key.value()) {
 					case "paper_plane" -> KiterinoBootstrapEntityTypeInjectorImpl.ENTITY_TYPE_REPLACEMENTS.put(TrappedNewbieEntities.PAPER_PLANE, EntityType.SNOWBALL);
+					case "glider" -> KiterinoBootstrapEntityTypeInjectorImpl.ENTITY_TYPE_REPLACEMENTS.put(TrappedNewbieEntities.GLIDER, EntityType.ITEM_DISPLAY);
 					default -> throw new IllegalArgumentException();
 				}
 			}

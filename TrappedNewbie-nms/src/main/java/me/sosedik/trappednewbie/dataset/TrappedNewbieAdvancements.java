@@ -72,6 +72,7 @@ import me.sosedik.trappednewbie.impl.advancement.RockPaperShearsAdvancement;
 import me.sosedik.trappednewbie.impl.advancement.Walk10KKMAdvancement;
 import me.sosedik.trappednewbie.impl.advancement.YouMonsterAdvancement;
 import me.sosedik.trappednewbie.impl.item.modifier.LetterModifier;
+import me.sosedik.trappednewbie.impl.thirst.ThirstData;
 import me.sosedik.utilizer.api.message.Messenger;
 import me.sosedik.utilizer.dataset.UtilizerTags;
 import me.sosedik.utilizer.util.ItemUtil;
@@ -181,26 +182,35 @@ public class TrappedNewbieAdvancements {
 	public static final AdvancementTab REQUIEM_TAB = buildTab("requiem", MANAGER)
 		.display(simpleTabDisplay().inverseY().display(display().backgroundPathBlock(Material.SOUL_SAND).icon(Material.SKELETON_SKULL)))
 		.build();
-	public static final IAdvancement REQUIEM_ROOT = buildBase(REQUIEM_TAB, "visual_root").display(display().noAnnounceChat().withAdvancementFrame(AdvancementFrame.SQUIRCLE).icon(Material.SUNFLOWER)).requiredProgress(requirements("interact", "open", "letter", "friendship"))
+	public static final IAdvancement REQUIEM_ROOT = buildBase(REQUIEM_TAB, "visual_root")
+		.display(display().noAnnounceChat().withAdvancementFrame(AdvancementFrame.SQUIRCLE).icon(Material.SUNFLOWER)).requiredProgress(requirements("interact", "open", "letter", "friendship"))
 		.visibilityRule(hidden())
 		.buildAndRegister();
-	public static final IAdvancement OPENING_HOLDER = buildFake(REQUIEM_ROOT, "holder").display(new OpeningHolderAdvancementDisplay().x(-1.25F).noAnnounceChat().withAdvancementFrame(AdvancementFrame.SPEECH_BUBBLE).icon(WANDERING_TRADER_HEAD))
+	public static final IAdvancement OPENING_HOLDER = buildFake(REQUIEM_ROOT, "holder")
+		.display(new OpeningHolderAdvancementDisplay().x(-1.25F).noAnnounceChat().withAdvancementFrame(AdvancementFrame.SPEECH_BUBBLE).icon(WANDERING_TRADER_HEAD))
 		.requiredProgress(alwaysDone())
 		.buildAndRegister();
-	public static final IAdvancement BRAVE_NEW_WORLD = buildBase(REQUIEM_ROOT, "brave_new_world").display(display().x(1F).noAnnounceChat().icon(braveNewWorldItem())).buildAndRegister();
-	public static final IAdvancement FIRST_POSSESSION = buildBase(BRAVE_NEW_WORLD, "first_possession").display(display().x(1.25F).withAdvancementFrame(AdvancementFrame.SHARP).icon(RequiemItems.HOST_REVOCATOR))
+	public static final IAdvancement BRAVE_NEW_WORLD = buildBase(REQUIEM_ROOT, "brave_new_world")
+		.display(display().x(1F).noAnnounceChat().icon(braveNewWorldItem())).buildAndRegister();
+	public static final IAdvancement FIRST_POSSESSION = buildBase(BRAVE_NEW_WORLD, "first_possession")
+		.display(display().x(1.25F).withAdvancementFrame(AdvancementFrame.SHARP).icon(RequiemItems.HOST_REVOCATOR))
 		.visibilityRule(parentGranted())
 		.buildAndRegister();
-	public static final IAdvancement GOOD_AS_NEW = buildBase(FIRST_POSSESSION, "good_as_new").display(display().x(1.2F).withAdvancementFrame(AdvancementFrame.SHARP).icon(ItemUtil.texturedHead(MoreMobHeads.ZOMBIE_VILLAGER_PLAINS_ARMORER)))
+	public static final IAdvancement GOOD_AS_NEW = buildBase(FIRST_POSSESSION, "good_as_new")
+		.display(display().x(1.2F).withAdvancementFrame(AdvancementFrame.SHARP).icon(ItemUtil.texturedHead(MoreMobHeads.ZOMBIE_VILLAGER_PLAINS_ARMORER)))
 		.buildAndRegister();
-	public static final IAdvancement MERE_MORTAL = buildBase(GOOD_AS_NEW, "mere_mortal").display(display().x(1F).icon(Material.PLAYER_HEAD)).visibilityRule(hidden())
+	public static final IAdvancement MERE_MORTAL = buildBase(GOOD_AS_NEW, "mere_mortal")
+		.display(display().x(1F).icon(Material.PLAYER_HEAD)).visibilityRule(hidden())
 		.buildAndRegister(MereMortalAdvancement::new); // ToDo
-	public static final IAdvancement I_HATE_SAND = buildBase(GOOD_AS_NEW, "i_hate_sand").display(display().xy(1F, 1F).withAdvancementFrame(AdvancementFrame.CIRCLE).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.SAND))
+	public static final IAdvancement I_HATE_SAND = buildBase(GOOD_AS_NEW, "i_hate_sand")
+		.display(display().xy(1F, 1F).withAdvancementFrame(AdvancementFrame.CIRCLE).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.SAND))
 		.buildAndRegister();
-	public static final IAdvancement KUNG_FU_PANDA = buildBase(FIRST_POSSESSION, "kung_fu_panda").display(display().xy(1F, -1F).withAdvancementFrame(AdvancementFrame.CIRCLE).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.BAMBOO))
+	public static final IAdvancement KUNG_FU_PANDA = buildBase(FIRST_POSSESSION, "kung_fu_panda")
+		.display(display().xy(0.5F, -1F).withAdvancementFrame(AdvancementFrame.CIRCLE).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.BAMBOO))
 		.visibilityRule(parentGranted())
 		.buildAndRegister();
-	public static final IAdvancement FIRST_DRINK = buildBase(GOOD_AS_NEW, "first_drink").display(display().xy(1F, -1F).fancyDescriptionParent(NamedTextColor.GRAY).icon(Material.DRAGON_BREATH))
+	public static final IAdvancement FIRST_DRINK = buildBase(GOOD_AS_NEW, "first_drink")
+		.display(display().xy(1F, -1F).fancyDescriptionParent(NamedTextColor.GRAY).icon(Material.DRAGON_BREATH))
 		.visibilityRule(grandParentGranted())
 		.buildAndRegister();
 
@@ -663,21 +673,27 @@ public class TrappedNewbieAdvancements {
 	public static final IAdvancement NATURE_ROOT = buildBase(NATURE_TAB, "visual_root")
 		.display(display().withAdvancementFrame(AdvancementFrame.SQUIRCLE).fancyDescriptionParent(GRAY).icon(Material.PUMPKIN_PIE))
 		.visibilityRule(ifDone(false, FIRST_POSSESSION))
-		.requiredProgress(alwaysDone())
+		.requiredProgress(vanilla(consumeItem()))
 		.buildAndRegister();
-	public static final IAdvancement EAT_ROTTEN_FLESH = buildBase(NATURE_ROOT, "eat_rotten_flesh").display(display().x(1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.ROTTEN_FLESH))
+	public static final IAdvancement EAT_ROTTEN_FLESH = buildBase(NATURE_ROOT, "eat_rotten_flesh")
+		.display(display().x(1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.ROTTEN_FLESH))
 		.requiredProgress(vanilla(consumeItem().withItem(ItemTriggerCondition.of(Material.ROTTEN_FLESH))))
 		.buildAndRegister();
-	public static final IAdvancement EAT_CREEPER_HEART = buildBase(EAT_ROTTEN_FLESH, "eat_creeper_heart").display(display().x(1F).fancyDescriptionParent(NamedTextColor.DARK_PURPLE).challengeFrame().icon(RequiemItems.CREEPER_HEART))
+	public static final IAdvancement EAT_CREEPER_HEART = buildBase(EAT_ROTTEN_FLESH, "eat_creeper_heart")
+		.display(display().x(1F).fancyDescriptionParent(NamedTextColor.DARK_PURPLE).challengeFrame().icon(RequiemItems.CREEPER_HEART))
 		.requiredProgress(vanilla(consumeItem().withItem(ItemTriggerCondition.of(RequiemItems.CREEPER_HEART))))
 		.buildAndRegister();
-	public static final IAdvancement EAT_1K_SPIDER_EYES = buildBase(EAT_CREEPER_HEART, "eat_1k_spider_eyes").display(display().x(1F).fancyDescriptionParent(NamedTextColor.DARK_PURPLE).challengeFrame().icon(Material.SPIDER_EYE))
+	public static final IAdvancement EAT_1K_SPIDER_EYES = buildBase(EAT_CREEPER_HEART, "eat_1k_spider_eyes")
+		.display(display().x(1F).fancyDescriptionParent(NamedTextColor.DARK_PURPLE).challengeFrame().icon(Material.SPIDER_EYE))
 		.withReward(rewards()
 			.withExp(500)
 			.addItems(ItemStack.of(Material.DIAMOND, 77))
 			.withTrophy(ItemStack.of(Material.CHIPPED_ANVIL))
 		)
 		.requiredProgress(simple(1000))
+		.buildAndRegister();
+	public static final IAdvancement DRINK_CACTUS_JUICE = buildBase(NATURE_ROOT, "drink_cactus_juice")
+		.display(display().x(-1F).goalFrame().fancyDescriptionParent(NamedTextColor.AQUA).icon(TrappedNewbieRecipes.getFilled(ItemStack.of(TrappedNewbieItems.CACTUS_BOWL), ThirstData.DrinkType.CACTUS_JUICE)))
 		.buildAndRegister();
 
 	public static final AdvancementTab BUILDING_TAB = buildTab("building", MANAGER)

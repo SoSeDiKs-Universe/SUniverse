@@ -1,5 +1,7 @@
 {
 	"command.migrate.migrating": "Ваш прогресс в процессе очистки, пожалуйста, зайдите чуть позже!",
 	"command.thirst": "Ваша жажда была установлена на <yellow><amount>",
-	"command.thirst.other": "Вы установили жажду на <yellow><amount></yellow> для игрока <yellow><player>"
+	"command.thirst.other": "Вы установили жажду на <yellow><amount></yellow> для игрока <yellow><player>",
+	"command.suicide": "<icon:trapped_newbie:warn> Вы уверены? Введите <red><command></red>, чтобы продолжить.",
+	"command.suicide.hover": "Нажмите, чтобы УМЕРЕТЬ! >:D"
 }

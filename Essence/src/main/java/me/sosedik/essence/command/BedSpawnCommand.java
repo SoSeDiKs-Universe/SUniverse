@@ -46,7 +46,7 @@ public class BedSpawnCommand {
 				World world = Bukkit.getWorlds().getFirst();
 				loc = new Location(world, 0, world.getMaxHeight() + 200, 0);
 			}
-			LocationUtil.smartTeleport(target, loc).thenRun(() -> target.addPotionEffect(new PotionEffect(PotionEffectType.RESISTANCE, 25 * 20, 10)));
+			LocationUtil.smartTeleport(target, loc, false).thenRun(() -> target.addPotionEffect(new PotionEffect(PotionEffectType.RESISTANCE, 25 * 20, 10)));
 		});
 
 		if (!silent) Messenger.messenger(target).sendMessage("command.bedspawn");

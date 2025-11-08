@@ -14,12 +14,16 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Makes specified effect immune to milk
+ * Makes specified effects immune to milk
  */
 @NullMarked
 public class MilkImmuneEffects implements Listener {
 
 	private static final Set<NamespacedKey> IMMUNE_EFFECTS = new HashSet<>();
+
+	static {
+		addMilkImmune(PotionEffectType.UNLUCK);
+	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onEffect(EntityPotionEffectEvent event) {

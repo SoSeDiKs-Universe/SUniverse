@@ -178,9 +178,9 @@ public class EntityUtil {
 	public static boolean isFireImmune(EntityType type) {
 		return switch (type) {
 			case WITHER, ENDER_DRAGON, WITHER_SKULL,
-					BLAZE, GHAST, MAGMA_CUBE, STRIDER,
-					WITHER_SKELETON, ZOGLIN, ZOMBIFIED_PIGLIN,
-					WARDEN -> true;
+				BLAZE, GHAST, MAGMA_CUBE, STRIDER,
+				WITHER_SKELETON, ZOGLIN, ZOMBIFIED_PIGLIN,
+				WARDEN -> true;
 			default -> false;
 		};
 	}
@@ -245,10 +245,10 @@ public class EntityUtil {
 	 */
 	public static boolean isFireDamageCause(EntityDamageEvent.DamageCause cause) {
 		return cause == EntityDamageEvent.DamageCause.FIRE
-				|| cause == EntityDamageEvent.DamageCause.FIRE_TICK
-				|| cause == EntityDamageEvent.DamageCause.LAVA
-				|| cause == EntityDamageEvent.DamageCause.HOT_FLOOR
-				|| cause == EntityDamageEvent.DamageCause.CAMPFIRE;
+			|| cause == EntityDamageEvent.DamageCause.FIRE_TICK
+			|| cause == EntityDamageEvent.DamageCause.LAVA
+			|| cause == EntityDamageEvent.DamageCause.HOT_FLOOR
+			|| cause == EntityDamageEvent.DamageCause.CAMPFIRE;
 	}
 
 	/**

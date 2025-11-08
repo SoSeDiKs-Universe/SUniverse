@@ -100,7 +100,7 @@ public class TotemRituals implements Listener {
 			pickRitual(player, ritualData);
 		}
 
-		ritualData.playedInstrument(type);
+		ritualData.playedInstrument(player, type);
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -227,7 +227,7 @@ public class TotemRituals implements Listener {
 			return this.timerText;
 		}
 
-		public void playedInstrument(Material item) {
+		public void playedInstrument(Player player, Material item) {
 			RitualInstrument ritualInstrument = RitualInstrument.of(item);
 			if (ritualInstrument == null) return;
 
@@ -235,10 +235,12 @@ public class TotemRituals implements Listener {
 			if (req > 0) {
 				int points = this.progress.getOrDefault(ritualInstrument, 0) + 1;
 				this.progress.put(ritualInstrument, points);
-				this.totem.spawnMusic(points >= req);
+				boolean reachedLimit = points >= req;
+				this.totem.spawnMusic(reachedLimit);
 			} else {
 				this.extraPoints += ritualInstrument.getExtraPoints();
-				this.totem.spawnMusic(this.extraPoints >= this.ritual.getRequiredExtraPoints());
+				boolean reachedLimit = this.extraPoints >= this.ritual.getRequiredExtraPoints();
+				this.totem.spawnMusic(reachedLimit);
 			}
 			this.progressText = progressText();
 		}

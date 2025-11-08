@@ -247,6 +247,14 @@ public class TrappedNewbieItems {
 	public static final Material SLIME_GUM_CANDY = byKey("slime_gum_candy");
 	public static final Material SOUR_PATCH_ZOMBIES_CANDY = byKey("sour_patch_zombies_candy");
 
+	public static final Material WIND_IN_A_BOTTLE = byKey("wind_in_a_bottle");
+	public static final Material HANG_GLIDER = byKey("hang_glider");
+	public static final Material CHERRY_HANG_GLIDER = byKey("cherry_hang_glider");
+	public static final Material SCULK_HANG_GLIDER = byKey("sculk_hang_glider");
+	public static final Material AZALEA_HANG_GLIDER = byKey("azalea_hang_glider");
+	public static final Material TATER_HANG_GLIDER = byKey("tater_hang_glider");
+	public static final Material PHANTOM_HANG_GLIDER = byKey("phantom_hang_glider");
+
 	public static final Material DESTROY_STAGE_0 = byKey("destroy_stage_0");
 	public static final Material DESTROY_STAGE_1 = byKey("destroy_stage_1");
 	public static final Material DESTROY_STAGE_2 = byKey("destroy_stage_2");

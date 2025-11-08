@@ -94,8 +94,8 @@ public class ItemUtil {
 	 */
 	public static boolean isLightSource(ItemStack item) {
 		return UtilizerTags.LIGHT_SOURCES.isTagged(item.getType())
-				|| item.hasEnchant(Enchantment.FIRE_ASPECT)
-				|| isLitCampfire(item);
+			|| item.hasEnchant(Enchantment.FIRE_ASPECT)
+			|| isLitCampfire(item);
 	}
 
 	/**
@@ -119,11 +119,11 @@ public class ItemUtil {
 	 */
 	public static boolean isLitCampfire(ItemStack item) { // TODO remove meta usage
 		return Tag.CAMPFIRES.isTagged(item.getType())
-				&& item.hasItemMeta()
-				&& item.getItemMeta() instanceof BlockStateMeta meta
-				&& meta.hasBlockState()
-				&& meta.getBlockState().getBlockData() instanceof Campfire campfire
-				&& campfire.isLit();
+			&& item.hasItemMeta()
+			&& item.getItemMeta() instanceof BlockStateMeta meta
+			&& meta.hasBlockState()
+			&& meta.getBlockState().getBlockData() instanceof Campfire campfire
+			&& campfire.isLit();
 	}
 
 	/**

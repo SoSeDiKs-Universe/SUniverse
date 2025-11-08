@@ -6,20 +6,15 @@ import me.sosedik.kiterino.modifier.item.ItemContextBox;
 import me.sosedik.kiterino.modifier.item.ItemModifier;
 import me.sosedik.kiterino.modifier.item.ModificationResult;
 import me.sosedik.resourcelib.ResourceLib;
-import me.sosedik.resourcelib.api.item.FakeItemData;
 import me.sosedik.resourcelib.util.SpacingUtil;
 import me.sosedik.utilizer.api.language.LangOptionsStorage;
 import me.sosedik.utilizer.api.message.Messenger;
 import me.sosedik.utilizer.api.message.Mini;
-import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
-import net.kyori.adventure.text.object.ObjectContents;
 import org.bukkit.NamespacedKey;
-import org.bukkit.Registry;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.ItemType;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
@@ -56,19 +51,7 @@ public class RepairableTooltipModifier extends ItemModifier {
 		assert data != null;
 
 		List<Component> icons = new ArrayList<>();
-		data.types().forEach(type -> {
-			Key key = type.key();
-			ItemType itemType = Registry.ITEM.get(key);
-			if (itemType == null) return;
-
-			FakeItemData fakeItemData = ResourceLib.storage().getFakeItemData(new NamespacedKey(key.namespace(), key.value()));
-			if (fakeItemData != null && fakeItemData.model() != null)
-				key = Key.key(fakeItemData.model().namespace(), fakeItemData.model().value());
-
-			boolean blocksAtlas = itemType.hasBlockType();
-			Key texture = Key.key(key.namespace(), (blocksAtlas ? "block/" : "item/") + key.value());
-			icons.add(Mini.asIcon(Component.object(ObjectContents.sprite(texture))));
-		});
+		data.types().forEach(type -> icons.add(ResourceLib.getItemIcon(type.key())));
 		if (icons.isEmpty()) return ModificationResult.PASS;
 
 		var messenger = Messenger.messenger(LangOptionsStorage.getByLocale(contextBox.getLocale()));

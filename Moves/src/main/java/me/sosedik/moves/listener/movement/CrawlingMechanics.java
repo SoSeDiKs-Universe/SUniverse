@@ -99,7 +99,7 @@ public class CrawlingMechanics implements Listener {
 
 			locTo.addY(LocationUtil.getMaxYPoint(locTo.getBlock())).addY(0.3).shiftTowards(player.getFacing(), 0.15);
 
-			Moves.scheduler().sync(() -> player.teleport(locTo), 1L);
+			Moves.scheduler().sync(() -> LocationUtil.smartTeleport(player, locTo, true), 1L);
 			return;
 		}
 
@@ -109,7 +109,7 @@ public class CrawlingMechanics implements Listener {
 		locTo.addY(LocationUtil.getMaxYPoint(locTo.getBlock())).addY(0.2).shiftTowards(player.getFacing(), 0.15);
 		if (LocationUtil.isTrulySolid(player, locTo.getBlock())) return;
 
-		Moves.scheduler().sync(() -> player.teleport(locTo), 1L);
+		Moves.scheduler().sync(() -> LocationUtil.smartTeleport(player, locTo, true), 1L);
 	}
 
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
@@ -190,7 +190,7 @@ public class CrawlingMechanics implements Listener {
 		Location finalLoc = loc;
 		boolean finalSlide = slide;
 		Moves.scheduler().sync(() -> {
-			player.teleport(finalLoc);
+			LocationUtil.smartTeleport(player, finalLoc, true);
 			if (finalSlide)
 				slide(player);
 		}, 1L);

@@ -1,0 +1,16 @@
+{
+	"client_type": "minecraft:iron_nugget",
+	"model": "trapped_newbie:item/gliders/hang_glider",
+	"tints": [
+		{
+			"type": "minecraft:constant",
+			"value": 16777215
+		},
+		{
+			"type": "minecraft:dye",
+			"default": -1
+		}
+	],
+	"durability": 300,
+	"repairable": "minecraft:phantom_membrane"
+}

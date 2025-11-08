@@ -1,5 +1,7 @@
 package me.sosedik.miscme.listener.misc;
 
+import io.papermc.paper.datacomponent.DataComponentTypes;
+import io.papermc.paper.datacomponent.item.PotionContents;
 import me.sosedik.miscme.MiscMe;
 import me.sosedik.miscme.dataset.MiscMeTags;
 import me.sosedik.utilizer.api.event.recipe.ItemCraftPrepareEvent;
@@ -14,7 +16,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionType;
 import org.jspecify.annotations.NullMarked;
 
@@ -23,9 +24,9 @@ import org.jspecify.annotations.NullMarked;
  * and allows converting potions to water bottles
  */
 @NullMarked
-public class WaterAwarePotionReset implements Listener {
+public class WaterAwareBottleReset implements Listener {
 
-	public WaterAwarePotionReset() {
+	public WaterAwareBottleReset() {
 		addPotionResetRecipe();
 	}
 
@@ -69,16 +70,16 @@ public class WaterAwarePotionReset implements Listener {
 	}
 
 	private void addPotionResetRecipe() {
-		new ShapelessCraft(ItemStack.of(Material.GLASS_BOTTLE), MiscMe.miscMeKey("potion_reset"))
+		new ShapelessCraft(ItemStack.of(Material.GLASS_BOTTLE), MiscMe.miscMeKey("bottle_reset"))
 			.special()
-			.withExemptLeftovers()
 			.addIngredients(MiscMeTags.RESETTABLE_BOTTLE_ITEMS.getValues())
+			.withExemptLeftovers()
 			.register();
 	}
 
 	public static ItemStack getWaterBottle(int amount) {
 		var item = ItemStack.of(Material.POTION, amount);
-		item.editMeta(PotionMeta.class, meta -> meta.setBasePotionType(PotionType.WATER));
+		item.setData(DataComponentTypes.POTION_CONTENTS, PotionContents.potionContents().potion(PotionType.WATER).build());
 		return item;
 	}
 

@@ -232,7 +232,7 @@ public class ImmersiveDyes implements Listener {
 				return Material.GLASS_PANE;
 			if (MaterialTags.STAINED_TERRACOTTA.isTagged(dyingItem))
 				return Material.TERRACOTTA;
-			if (MaterialTags.SHULKER_BOXES.isTagged(dyingItem))
+			if (Tag.SHULKER_BOXES.isTagged(dyingItem))
 				return Material.SHULKER_BOX;
 			if (Tag.CANDLES.isTagged(dyingItem))
 				return Material.CANDLE;
@@ -245,11 +245,11 @@ public class ImmersiveDyes implements Listener {
 			return dyingItem == Material.TINTED_GLASS ? null : Material.getMaterial(dyeItem.name().replace("DYE", "STAINED_GLASS"));
 		if (MaterialTags.GLASS_PANES.isTagged(dyingItem))
 			return Material.getMaterial(dyeItem.name().replace("DYE", "STAINED_GLASS_PANE"));
-		if (MaterialTags.SHULKER_BOXES.isTagged(dyingItem))
+		if (Tag.SHULKER_BOXES.isTagged(dyingItem))
 			return Material.getMaterial(dyeItem.name().replace("DYE", "SHULKER_BOX"));
 		if (MaterialTags.CONCRETES.isTagged(dyingItem))
 			return Material.getMaterial(dyeItem.name().replace("DYE", "CONCRETE"));
-		if (MaterialTags.CONCRETE_POWDER.isTagged(dyingItem))
+		if (Tag.CONCRETE_POWDER.isTagged(dyingItem))
 			return Material.getMaterial(dyeItem.name().replace("DYE", "CONCRETE_POWDER"));
 		if (MaterialTags.GLAZED_TERRACOTTA.isTagged(dyingItem))
 			return Material.getMaterial(dyeItem.name().replace("DYE", "GLAZED_TERRACOTTA"));

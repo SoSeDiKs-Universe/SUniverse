@@ -17,6 +17,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerPickupArrowEvent;
 import org.bukkit.event.player.PlayerStatisticIncrementEvent;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.jspecify.annotations.NullMarked;
 
 /**
@@ -92,12 +93,18 @@ public class NoGhostInteractions implements Listener {
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onEffect(EntityPotionEffectEvent event) {
-		if (event.getNewEffect() == null) return;
-		if (event.getNewEffect().getDuration() == PotionEffect.INFINITE_DURATION) return;
+		PotionEffect newEffect = event.getNewEffect();
+		if (newEffect == null) return;
+		if (newEffect.getDuration() == PotionEffect.INFINITE_DURATION) return;
+		if (isWhitelisted(newEffect.getType())) return;
 		if (!(event.getEntity() instanceof Player player)) return;
 		if (!GhostyPlayer.isGhost(player)) return;
 
 		event.setCancelled(true);
+	}
+
+	private boolean isWhitelisted(PotionEffectType effectType) {
+		return effectType == PotionEffectType.LUCK || effectType == PotionEffectType.UNLUCK;
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)

@@ -1,4 +1,5 @@
 {
 	"client_type": "minecraft:bow",
-	"stack_size": 1
+	"stack_size": 1,
+	"rarity": "rare"
 }

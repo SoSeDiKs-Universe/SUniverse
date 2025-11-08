@@ -9,6 +9,7 @@ import org.jspecify.annotations.NullMarked;
 public class TrappedNewbieEntityTypes {
 
 	public static final EntityType PAPER_PLANE = byKey("paper_plane");
+	public static final EntityType GLIDER = byKey("glider");
 
 	private static EntityType byKey(String value) {
 		return KiterinoBootstrapEntityTypeInjector.injectEntityType(TrappedNewbie.trappedNewbieKey(value));

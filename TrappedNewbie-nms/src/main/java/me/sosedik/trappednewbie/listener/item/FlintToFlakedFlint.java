@@ -1,16 +1,15 @@
 package me.sosedik.trappednewbie.listener.item;
 
 import io.papermc.paper.event.player.PlayerArmSwingEvent;
-import me.sosedik.resourcelib.ResourceLib;
 import me.sosedik.trappednewbie.TrappedNewbie;
 import me.sosedik.trappednewbie.api.event.player.PlayerTargetBlockEvent;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieAdvancements;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieItems;
+import me.sosedik.trappednewbie.dataset.TrappedNewbieSoundKeys;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieTags;
 import net.kyori.adventure.sound.Sound;
 import org.bukkit.FluidCollisionMode;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
@@ -29,9 +28,6 @@ import java.util.UUID;
  * Creating flaked flint from flint
  */
 public class FlintToFlakedFlint implements Listener {
-
-	private static final NamespacedKey SUCCESS_SOUND = ResourceLib.getSound(TrappedNewbie.trappedNewbieKey("item/craft_flake_success"));
-	private static final NamespacedKey FAIL_SOUND = ResourceLib.getSound(TrappedNewbie.trappedNewbieKey("item/craft_flake_fail"));
 
 	private final Map<UUID, Integer> usesMap = new HashMap<>();
 	private final Set<UUID> onCooldown = new HashSet<>();
@@ -68,11 +64,11 @@ public class FlintToFlakedFlint implements Listener {
 			TrappedNewbieAdvancements.GET_A_FLAKED_FLINT.awardAllCriteria(player);
 			this.usesMap.remove(player.getUniqueId());
 			item.subtract();
-			player.emitSound(Sound.sound(SUCCESS_SOUND, Sound.Source.PLAYER, 1F, 0.9F + (float) Math.random() * 0.2F));
+			player.emitSound(Sound.sound(TrappedNewbieSoundKeys.FLAKE_SUCCESS_SOUND, Sound.Source.PLAYER, 1F, 0.9F + (float) Math.random() * 0.2F));
 			block.getWorld().dropItemNaturally(block.getLocation().center(), ItemStack.of(TrappedNewbieItems.FLAKED_FLINT, Math.random() < 0.25 ? 3 : 2));
 		} else {
 			this.usesMap.replace(player.getUniqueId(), currentUse);
-			player.emitSound(Sound.sound(FAIL_SOUND, Sound.Source.PLAYER, 1F, 0.9F + (float) Math.random() * 0.2F));
+			player.emitSound(Sound.sound(TrappedNewbieSoundKeys.FLAKE_FAIL_SOUND, Sound.Source.PLAYER, 1F, 0.9F + (float) Math.random() * 0.2F));
 		}
 	}
 

@@ -272,5 +272,13 @@
 	"item.trapped_newbie.gray_llama_hide.name": "Шкура серой ламы",
 	"item.trapped_newbie.white_llama_hide.name": "Шкура белой ламы",
 	"item.trapped_newbie.brown_mooshroom_hide.name": "Шкура коричневой грибной коровы",
-	"item.trapped_newbie.red_mooshroom_hide.name": "Шкура красной грибной коровы"
+	"item.trapped_newbie.red_mooshroom_hide.name": "Шкура красной грибной коровы",
+	"item.trapped_newbie.wind_in_a_bottle.name": "Ветер в бутылочке",
+	"item.trapped_newbie.hang_glider.name": "Дельтаплан",
+	"item.trapped_newbie.cherry_hang_glider.name": "Вишнёвый дельтаплан",
+	"item.trapped_newbie.sculk_hang_glider.name": "Скалковый дельтаплан",
+	"item.trapped_newbie.azalea_hang_glider.name": "залиевый дельтаплан",
+	"item.trapped_newbie.tater_hang_glider.name": "Упоротый дельтаплан",
+	"item.trapped_newbie.phantom_hang_glider.name": "Фантомовый дельтаплан",
+	"item.trapped_newbie.inventory_fire.name": "Огонь"
 }

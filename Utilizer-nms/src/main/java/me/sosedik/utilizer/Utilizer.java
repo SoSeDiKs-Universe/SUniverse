@@ -27,7 +27,9 @@ import me.sosedik.utilizer.listener.item.AutoReleasingItems;
 import me.sosedik.utilizer.listener.item.BowUsableWithoutArrows;
 import me.sosedik.utilizer.listener.item.NotDroppableItems;
 import me.sosedik.utilizer.listener.item.PlaceableBlockItems;
+import me.sosedik.utilizer.listener.misc.CommandsHider;
 import me.sosedik.utilizer.listener.misc.CustomRecipeLeftovers;
+import me.sosedik.utilizer.listener.misc.DeathImmuneEffects;
 import me.sosedik.utilizer.listener.misc.DelayedActions;
 import me.sosedik.utilizer.listener.misc.DurabilityRecipeLeftovers;
 import me.sosedik.utilizer.listener.misc.ExtraChatTabSuggestions;
@@ -119,7 +121,9 @@ public final class Utilizer extends JavaPlugin {
 			NotDroppableItems.class,
 			PlaceableBlockItems.class,
 			// misc
+			CommandsHider.class,
 			CustomRecipeLeftovers.class,
+			DeathImmuneEffects.class,
 			DelayedActions.class,
 			DurabilityRecipeLeftovers.class,
 			ExtraChatTabSuggestions.class,

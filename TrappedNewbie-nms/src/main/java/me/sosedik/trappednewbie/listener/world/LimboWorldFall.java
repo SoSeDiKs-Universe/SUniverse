@@ -45,7 +45,7 @@ public class LimboWorldFall implements Listener {
 			spawnTeleport(player, world);
 		} else {
 			player.setVelocity(new Vector());
-			LocationUtil.smartTeleport(player, TrappedNewbie.limboWorld().getSpawnLocation().center(1));
+			LocationUtil.smartTeleport(player, TrappedNewbie.limboWorld().getSpawnLocation().center(1), false);
 			player.sendMessage(Mini.combine(Component.space(), TrappedNewbieFonts.WANDERING_TRADER_HEAD.mapping(), Messenger.messenger(player).getMessage("limbo.welcome.ignored")));
 		}
 	}
@@ -72,7 +72,7 @@ public class LimboWorldFall implements Listener {
 	 * @param world world
 	 */
 	public static void spawnTeleport(Player player, World world) {
-		LocationUtil.smartTeleport(player, world.getSpawnLocation().center().y(world.getMaxHeight() + 50))
+		LocationUtil.smartTeleport(player, world.getSpawnLocation().center().y(world.getMaxHeight() + 50), false)
 			.thenRun(() -> {
 				Entity vehicle = player.getVehicle();
 				if (vehicle == null) {
@@ -81,7 +81,7 @@ public class LimboWorldFall implements Listener {
 					vehicle.setFallDistance(0F);
 					player.setFallDistance(0F);
 					Location loc = player.getLocation().toHighestLocation().above();
-					LocationUtil.smartTeleport(player, loc);
+					LocationUtil.smartTeleport(player, loc, false);
 				}
 			});
 	}

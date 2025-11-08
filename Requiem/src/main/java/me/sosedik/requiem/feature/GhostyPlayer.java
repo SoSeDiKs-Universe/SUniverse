@@ -11,6 +11,7 @@ import me.sosedik.utilizer.util.MetadataUtil;
 import me.sosedik.utilizer.util.ScoreboardUtil;
 import net.kyori.adventure.util.TriState;
 import org.bukkit.Bukkit;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -60,9 +61,12 @@ public class GhostyPlayer {
 			for (ItemStack item : player.getInventory()) {
 				if (ItemStack.isEmpty(item)) continue;
 
-				player.dropItem(item, true, i -> i.setPickupDelay(5));
+				if (!item.hasEnchant(Enchantment.VANISHING_CURSE))
+					player.dropItem(item, true, i -> i.setPickupDelay(5));
 				item.setAmount(0);
 			}
+			player.setLevel(0);
+			player.setExp(0);
 		}
 
 		EntityUtil.clearTargets(player);
@@ -264,6 +268,7 @@ public class GhostyPlayer {
 
 		if (!player.getInventory().contains(RequiemItems.GHOST_MOTIVATOR)) player.getInventory().addItem(ItemStack.of(RequiemItems.GHOST_MOTIVATOR));
 		if (!player.getInventory().contains(RequiemItems.GHOST_RELOCATOR)) player.getInventory().addItem(ItemStack.of(RequiemItems.GHOST_RELOCATOR));
+
 		return true;
 	}
 

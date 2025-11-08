@@ -2,7 +2,7 @@ package me.sosedik.trappednewbie.listener.thirst;
 
 import io.papermc.paper.event.block.BlockFillBottleEvent;
 import io.papermc.paper.event.player.PlayerFillBottleEvent;
-import me.sosedik.miscme.listener.misc.WaterAwarePotionReset;
+import me.sosedik.miscme.listener.misc.WaterAwareBottleReset;
 import me.sosedik.trappednewbie.impl.thirst.ThirstData;
 import me.sosedik.utilizer.api.event.recipe.ItemCraftPrepareEvent;
 import me.sosedik.utilizer.api.event.recipe.RemainingItemEvent;
@@ -52,9 +52,9 @@ public class SavingThirstDataToWaterBottles implements Listener {
 
 		int amount = event.getAmount();
 		if (item.getAmount() == amount) {
-			event.setResult(ThirstData.of(block).saveInto(WaterAwarePotionReset.getWaterBottle(amount)));
+			event.setResult(ThirstData.of(block).saveInto(WaterAwareBottleReset.getWaterBottle(amount)));
 		} else {
-			InventoryUtil.addOrDrop(player, ThirstData.of(block).saveInto(WaterAwarePotionReset.getWaterBottle(amount)), true);
+			InventoryUtil.addOrDrop(player, ThirstData.of(block).saveInto(WaterAwareBottleReset.getWaterBottle(amount)), true);
 			item.subtract(amount);
 		}
 	}

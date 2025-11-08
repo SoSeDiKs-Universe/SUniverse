@@ -82,6 +82,7 @@ public class MinecraftEventLogger implements Listener {
 	}
 
 	private void sendDiscordMessage(Player who, String emote, String message) {
+		message = makeReplacements(message);
 		message = DiscordUtil.parseMentions(message);
 
 		String nickname = who.getName();
@@ -90,6 +91,12 @@ public class MinecraftEventLogger implements Listener {
 			.setContent(DiscordUtil.formatGameMessage(emote, message));
 
 		DiscordBot.sendMessage(who.getName(), who.getUniqueId().toString(), builder, true);
+	}
+
+	private static String makeReplacements(String message) {
+		return message
+			.replace("key.attack", "LMB")
+			.replace("key.use", "RMB");
 	}
 
 }

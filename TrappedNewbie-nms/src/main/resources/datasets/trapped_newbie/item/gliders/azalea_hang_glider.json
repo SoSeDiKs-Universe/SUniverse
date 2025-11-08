@@ -1,0 +1,7 @@
+{
+	"client_type": "minecraft:iron_nugget",
+	"model": "trapped_newbie:item/gliders/azalea_hang_glider",
+	"durability": 400,
+	"repairable": "minecraft:phantom_membrane",
+	"rarity": "uncommon"
+}

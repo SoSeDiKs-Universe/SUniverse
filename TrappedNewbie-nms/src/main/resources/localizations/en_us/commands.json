@@ -1,5 +1,7 @@
 {
 	"command.migrate.migrating": "Your progress is being reset, please, join a bit later!",
 	"command.thirst": "Your thirst was set to <yellow><amount>",
-	"command.thirst.other": "You've set thirst to <yellow><amount></yellow> for <yellow><player>"
+	"command.thirst.other": "You've set thirst to <yellow><amount></yellow> for <yellow><player>",
+	"command.suicide": "<icon:trapped_newbie:warn> Are you sure? Type <red><command></red> to continue.",
+	"command.suicide.hover": "Click to DIE! >:D"
 }

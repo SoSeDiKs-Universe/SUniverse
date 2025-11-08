@@ -4,6 +4,7 @@ import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import me.sosedik.trappednewbie.TrappedNewbie;
 import me.sosedik.trappednewbie.impl.block.nms.ClayKilnBlock;
 import me.sosedik.trappednewbie.util.NMesSUtil;
+import me.sosedik.utilizer.api.event.player.PlayerPlaceItemEvent;
 import me.sosedik.utilizer.api.storage.block.BlockDataStorageHolder;
 import me.sosedik.utilizer.util.ItemUtil;
 import me.sosedik.utilizer.util.LocationUtil;
@@ -71,6 +72,7 @@ public class ClayKilnBlockStorage extends BlockDataStorageHolder {
 		ItemStack item = player.getInventory().getItem(hand);
 		if (this.storedItem == null) {
 			if (item.isEmpty()) return false;
+			if (!new PlayerPlaceItemEvent(player, item).callEvent()) return false;
 
 			player.swingHand(hand);
 			this.storedItem = item.asOne();

@@ -4,7 +4,10 @@ import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.BundleContents;
 import io.papermc.paper.datacomponent.item.ItemContainerContents;
 import me.sosedik.kiterino.inventory.InventorySlotHelper;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -145,27 +148,66 @@ public class InventoryUtil {
 	/**
 	 * Replaces item if air or adds to inventory otherwise
 	 *
-	 * @param player player
+	 * @param entity entity
 	 * @param hand hand
 	 * @param item item
 	 */
-	public static void replaceOrAdd(Player player, EquipmentSlot hand, ItemStack item) {
-		ItemStack handItem = player.getInventory().getItem(hand);
-		if (handItem.isEmpty())
-			player.getInventory().setItem(hand, item);
-		else
-			addOrDrop(player, item, false);
+	public static void replaceOrAdd(Entity entity, EquipmentSlot hand, ItemStack item) {
+		if (entity instanceof Player player) {
+			EntityEquipment equipment = player.getEquipment();
+			if (equipment.getItem(hand).isEmpty()) {
+				equipment.setItem(hand, item);
+				return;
+			}
+		}
+		addOrDrop(entity, item, false);
 	}
 
 	/**
-	 * Adds items to player's inventory, or
+	 * Replaces item if air or adds to inventory otherwise
+	 *
+	 * @param entity entity
+	 * @param item item
+	 */
+	public static void replaceOrAdd(Entity entity, ItemStack item) {
+		if (entity instanceof Player player) {
+			EntityEquipment equipment = player.getEquipment();
+			if (equipment.getItemInMainHand().isEmpty()) {
+				equipment.setItemInMainHand(item);
+				return;
+			}
+			if (equipment.getItemInOffHand().isEmpty()) {
+				equipment.setItemInOffHand(item);
+				return;
+			}
+		}
+		addOrDrop(entity, item, false);
+	}
+
+	/**
+	 * Adds items to entity's inventory, or
 	 * drops if not enough space
 	 *
-	 * @param player player
+	 * @param entity entity
 	 * @param item item
 	 * @param shiftClickOrder whether to use the shift click item ordering
 	 */
-	public static void addOrDrop(Player player, ItemStack item, boolean shiftClickOrder) {
+	public static void addOrDrop(Entity entity, ItemStack item, boolean shiftClickOrder) {
+		if (!(entity instanceof Player player)) {
+			if (entity instanceof LivingEntity livingEntity && livingEntity.getEquipment() != null) {
+				EntityEquipment equipment = livingEntity.getEquipment();
+				if (equipment.getItemInMainHand().isEmpty()) {
+					equipment.setItemInMainHand(item);
+					return;
+				}
+				if (equipment.getItemInOffHand().isEmpty()) {
+					equipment.setItemInOffHand(item);
+					return;
+				}
+			}
+			entity.getWorld().dropItemNaturally(entity.getLocation(), item);
+			return;
+		}
 		PlayerInventory inv = player.getInventory();
 		if (shiftClickOrder) {
 			// Check all slots to see if the item fits into any

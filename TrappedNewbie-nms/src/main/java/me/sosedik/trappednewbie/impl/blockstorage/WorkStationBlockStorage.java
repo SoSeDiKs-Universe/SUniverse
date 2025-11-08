@@ -2,8 +2,10 @@ package me.sosedik.trappednewbie.impl.blockstorage;
 
 import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import me.sosedik.trappednewbie.TrappedNewbie;
+import me.sosedik.trappednewbie.dataset.TrappedNewbieSoundKeys;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieTags;
 import me.sosedik.trappednewbie.util.NMesSUtil;
+import me.sosedik.utilizer.api.event.player.PlayerPlaceItemEvent;
 import me.sosedik.utilizer.api.storage.block.BlockDataStorageHolder;
 import me.sosedik.utilizer.util.DurabilityUtil;
 import me.sosedik.utilizer.util.ItemUtil;
@@ -115,6 +117,8 @@ public class WorkStationBlockStorage extends BlockDataStorageHolder {
 				heldItem = player.getInventory().getItem(heldSlot);
 				if (heldItem.isEmpty()) return;
 			}
+			if (!new PlayerPlaceItemEvent(player, heldItem).callEvent()) return;
+
 			event.setCancelled(true);
 			currentItem = heldItem.asOne();
 			this.displayItems[slot] = currentItem;
@@ -172,6 +176,7 @@ public class WorkStationBlockStorage extends BlockDataStorageHolder {
 		ItemStack hand = player.getInventory().getItemInMainHand();
 		if (this.storedTool == null) {
 			if (!TrappedNewbieTags.HAMMERS.isTagged(hand.getType())) return;
+			if (!new PlayerPlaceItemEvent(player, hand).callEvent()) return;
 
 			player.swingMainHand();
 			this.storedTool = hand.asOne();
@@ -199,7 +204,7 @@ public class WorkStationBlockStorage extends BlockDataStorageHolder {
 
 		event.setCancelled(true);
 		if (DurabilityUtil.isBroken(item)) {
-			getBlock().emitSound(net.kyori.adventure.sound.Sound.sound(ChoppingBlockStorage.FAIL_SOUND, net.kyori.adventure.sound.Sound.Source.BLOCK, 1F, 1F));
+			getBlock().emitSound(net.kyori.adventure.sound.Sound.sound(TrappedNewbieSoundKeys.WOOD_CHOP_FAIL_SOUND, net.kyori.adventure.sound.Sound.Source.BLOCK, 1F, 1F));
 			applyRandomRotations();
 			return;
 		}

@@ -84,7 +84,7 @@ public class LocationUtil {
 	 */
 	public static CompletableFuture<Void> runRtp(Player player, World world, int range) {
 		if (player.getLocation().getBlockY() < 400) {
-			LocationUtil.smartTeleport(player, player.getLocation().addY(1600));
+			LocationUtil.smartTeleport(player, player.getLocation().addY(1600), false);
 		}
 		if (!player.isFlying()) {
 			Utilizer.scheduler().sync(() -> player.addPotionEffect(new PotionEffect(PotionEffectType.RESISTANCE, 25 * 20, 10)));
@@ -114,7 +114,7 @@ public class LocationUtil {
 				return;
 			}
 			Location preLoc = player.getLocation();
-			smartTeleport(player, loc).thenRun(() -> teleported.complete(null));
+			smartTeleport(player, loc, false).thenRun(() -> teleported.complete(null));
 			Utilizer.logger().info("Randomly teleporting %s from %s to %s".formatted(
 				player.getName(),
 				"%s[%s, %s, %s]".formatted(preLoc.getWorld().getName(), preLoc.getX(), preLoc.getY(), preLoc.getZ()),
@@ -130,8 +130,8 @@ public class LocationUtil {
 	 * @param loc location
 	 * @return teleport result
 	 */
-	public static CompletableFuture<Boolean> smartTeleport(Entity entity, Location loc) {
-		return smartTeleport(entity, loc, PlayerTeleportEvent.TeleportCause.PLUGIN);
+	public static CompletableFuture<Boolean> smartTeleport(Entity entity, Location loc, boolean retainVelocity) {
+		return smartTeleport(entity, loc, PlayerTeleportEvent.TeleportCause.PLUGIN, retainVelocity);
 	}
 
 	/**
@@ -141,11 +141,13 @@ public class LocationUtil {
 	 * @param loc location
 	 * @return teleport result
 	 */
-	public static CompletableFuture<Boolean> smartTeleport(Entity entity, Location loc, PlayerTeleportEvent.TeleportCause cause) {
+	public static CompletableFuture<Boolean> smartTeleport(Entity entity, Location loc, PlayerTeleportEvent.TeleportCause cause, boolean retainVelocity) {
 		Entity teleportingEntity = entity;
 		Entity nextEntity;
 		while ((nextEntity = teleportingEntity.getVehicle()) != null)
 			teleportingEntity = nextEntity;
+		if (retainVelocity)
+			return teleportingEntity.teleportAsync(loc, cause, TeleportFlag.Relative.VELOCITY_ROTATION, TeleportFlag.Relative.VELOCITY_X, TeleportFlag.Relative.VELOCITY_Y, TeleportFlag.Relative.VELOCITY_Z);
 		return teleportingEntity.teleportAsync(loc, cause, TeleportFlag.Relative.VELOCITY_ROTATION);
 	}
 

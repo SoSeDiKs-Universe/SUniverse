@@ -2,6 +2,7 @@ package me.sosedik.trappednewbie.command;
 
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import me.sosedik.trappednewbie.TrappedNewbie;
+import me.sosedik.trappednewbie.entity.api.Glider;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.Permission;
@@ -24,6 +25,7 @@ public class TestCommand {
 		}
 
 		TrappedNewbie.scheduler().sync(() -> {
+			player.getWorld().spawn(player.getLocation(), Glider.class, g -> g.addPassenger(player));
 			// Stuff!
 //			player.getWorld().spawn(player.getLocation(), Husk.class, e1 -> {
 //				e1.setCanPickupItems(true);

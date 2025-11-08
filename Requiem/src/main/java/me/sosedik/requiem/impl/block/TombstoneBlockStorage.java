@@ -127,7 +127,7 @@ public class TombstoneBlockStorage extends BlockDataStorageHolder {
 	@Override
 	public void onMove(Location from, Location to) {
 		super.onMove(from, to);
-		LocationUtil.smartTeleport(this.display, this.display.getLocation().set(to.x(), to.getBlockY() + 0.5, to.getBlockZ()));
+		LocationUtil.smartTeleport(this.display, this.display.getLocation().set(to.x(), to.getBlockY() + 0.5, to.getBlockZ()), false);
 	}
 
 	@Override

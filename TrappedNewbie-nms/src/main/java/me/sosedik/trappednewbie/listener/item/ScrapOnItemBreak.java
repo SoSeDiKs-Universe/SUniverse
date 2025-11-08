@@ -1,10 +1,10 @@
 package me.sosedik.trappednewbie.listener.item;
 
-import me.sosedik.trappednewbie.TrappedNewbie;
 import me.sosedik.trappednewbie.impl.item.modifier.ScrapModifier;
 import me.sosedik.utilizer.api.event.recipe.RemainingItemEvent;
 import me.sosedik.utilizer.util.DurabilityUtil;
 import me.sosedik.utilizer.util.InventoryUtil;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -25,6 +25,8 @@ public class ScrapOnItemBreak implements Listener {
 	public void onBreak(PlayerItemBreakEvent event) {
 		Player player = event.getPlayer();
 		ItemStack brokenItem = event.getBrokenItem();
+		if (brokenItem.hasEnchant(Enchantment.VANISHING_CURSE)) return;
+
 		ItemStack scrap = ScrapModifier.makeScrap(brokenItem);
 
 		for (EquipmentSlot slot : EquipmentSlot.values()) {
@@ -37,10 +39,7 @@ public class ScrapOnItemBreak implements Listener {
 			return;
 		}
 
-		if (InventoryUtil.tryToAdd(player, scrap))
-			InventoryUtil.addOrDrop(player, scrap, false);
-		else
-			TrappedNewbie.scheduler().sync(() -> InventoryUtil.addOrDrop(player, scrap, false));
+		InventoryUtil.replaceOrAdd(player, EquipmentSlot.HAND, scrap);
 	}
 
 	@EventHandler
@@ -48,6 +47,7 @@ public class ScrapOnItemBreak implements Listener {
 		if (event.getResult() != null) return;
 
 		ItemStack item = event.getItem();
+		if (item.hasEnchant(Enchantment.VANISHING_CURSE)) return;
 		if (!DurabilityUtil.hasDurability(item)) return;
 
 		int durability = DurabilityUtil.getDurability(item);

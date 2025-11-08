@@ -21,6 +21,8 @@ dependencies {
 
     compileOnly("org.incendo:cloud-paper:${project.property("cloudImplVersion")}")
     compileOnly("org.incendo:cloud-annotations:${project.property("cloudVersion")}")
+
+    compileOnly("dev.jorel:commandapi-paper-annotations:${project.property("commandApiVersion")}")
 }
 
 tasks.withType<ShadowJar> {
@@ -46,50 +48,67 @@ paper {
         register("NBTAPI") {
             load = PaperPluginDescription.RelativeLoadOrder.BEFORE
             required = true
+            joinClasspath = true
         }
         register("packetevents") {
             load = PaperPluginDescription.RelativeLoadOrder.BEFORE
             required = true
+            joinClasspath = true
+        }
+        register("CommandAPI") {
+            load = PaperPluginDescription.RelativeLoadOrder.BEFORE
+            required = true
+            joinClasspath = true
         }
         register("PacketAdvancements") {
             load = PaperPluginDescription.RelativeLoadOrder.BEFORE
             required = true
+            joinClasspath = true
         }
         register("LimboWorldGenerator") {
             load = PaperPluginDescription.RelativeLoadOrder.BEFORE
             required = true
+            joinClasspath = true
         }
         register("Utilizer") {
             load = PaperPluginDescription.RelativeLoadOrder.BEFORE
             required = true
+            joinClasspath = true
         }
         register("ResourceLib") {
             load = PaperPluginDescription.RelativeLoadOrder.BEFORE
             required = true
+            joinClasspath = true
         }
         register("Essence") {
             load = PaperPluginDescription.RelativeLoadOrder.AFTER
             required = false
+            joinClasspath = true
         }
         register("MiscMe") {
             load = PaperPluginDescription.RelativeLoadOrder.BEFORE
             required = true
+            joinClasspath = true
         }
         register("Moves") {
             load = PaperPluginDescription.RelativeLoadOrder.BEFORE
             required = true
+            joinClasspath = true
         }
         register("Requiem") {
             load = PaperPluginDescription.RelativeLoadOrder.BEFORE
             required = true
+            joinClasspath = true
         }
         register("Socializer") {
             load = PaperPluginDescription.RelativeLoadOrder.BEFORE
             required = true
+            joinClasspath = true
         }
         register("DelightfulFarming") {
             load = PaperPluginDescription.RelativeLoadOrder.BEFORE
             required = true
+            joinClasspath = true
         }
     }
 }

@@ -7,6 +7,7 @@ import me.sosedik.requiem.feature.GhostyPlayer;
 import me.sosedik.requiem.feature.PossessingPlayer;
 import me.sosedik.requiem.impl.block.TombstoneBlockStorage;
 import me.sosedik.requiem.impl.item.modifier.FakeHorseSaddlesModifier;
+import me.sosedik.requiem.impl.item.modifier.NecronomiconObfuscatorModifier;
 import me.sosedik.requiem.impl.item.modifier.TombstoneDeathMessageModifier;
 import me.sosedik.requiem.listener.block.TombstoneCreatures;
 import me.sosedik.requiem.listener.entity.CreepersDropCreeperHearts;
@@ -17,6 +18,8 @@ import me.sosedik.requiem.listener.entity.PrepareGhostMobs;
 import me.sosedik.requiem.listener.entity.UndeadConsecration;
 import me.sosedik.requiem.listener.item.ExplodingCreeperHeart;
 import me.sosedik.requiem.listener.item.HostRevocatorBodyLeaving;
+import me.sosedik.requiem.listener.item.HostRevocatorItemDestroying;
+import me.sosedik.requiem.listener.item.SoulboundNecronomicon;
 import me.sosedik.requiem.listener.player.LoadSavePlayers;
 import me.sosedik.requiem.listener.player.PlayerTombstones;
 import me.sosedik.requiem.listener.player.WorldAwareRequiemAbilities;
@@ -31,7 +34,6 @@ import me.sosedik.requiem.listener.player.ghost.MobsDontTargetGhosts;
 import me.sosedik.requiem.listener.player.ghost.NoDamageToOrFromGhosts;
 import me.sosedik.requiem.listener.player.ghost.NoGhostInteractions;
 import me.sosedik.requiem.listener.player.possessed.DeathMakesPossessed;
-import me.sosedik.requiem.listener.player.possessed.MilkHelpsSkeletons;
 import me.sosedik.requiem.listener.player.possessed.NoAirForWaterPossessing;
 import me.sosedik.requiem.listener.player.possessed.NoExpFromPossessedKill;
 import me.sosedik.requiem.listener.player.possessed.PossessedDismount;
@@ -91,6 +93,8 @@ public final class Requiem extends JavaPlugin {
 			// item
 			ExplodingCreeperHeart.class,
 			HostRevocatorBodyLeaving.class,
+			HostRevocatorItemDestroying.class,
+			SoulboundNecronomicon.class,
 			// player
 			LoadSavePlayers.class,
 			PlayerTombstones.class,
@@ -108,7 +112,6 @@ public final class Requiem extends JavaPlugin {
 			NoDamageToOrFromGhosts.class,
 			NoGhostInteractions.class,
 			/// possessed
-			MilkHelpsSkeletons.class,
 			DeathMakesPossessed.class,
 			NoAirForWaterPossessing.class,
 			NoExpFromPossessedKill.class,
@@ -124,6 +127,7 @@ public final class Requiem extends JavaPlugin {
 		);
 
 		new FakeHorseSaddlesModifier(requiemKey("fake_horse_saddles")).register();
+		new NecronomiconObfuscatorModifier(requiemKey("necronomicon_obfuscator")).register();
 		new TombstoneDeathMessageModifier(requiemKey("tombstone_death_message")).register();
 	}
 

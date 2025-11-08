@@ -1,6 +1,6 @@
 package me.sosedik.requiem.effect;
 
-import me.sosedik.requiem.feature.GhostyPlayer;
+import me.sosedik.requiem.feature.PossessingPlayer;
 import me.sosedik.resourcelib.api.effect.TickableCustomEffect;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -15,7 +15,7 @@ public final class AttritionEffect extends TickableCustomEffect {
 
 	@Override
 	public boolean applyEffectTick(LivingEntity entity, int amplifier) {
-		return entity instanceof Player player && GhostyPlayer.isGhost(player);
+		return entity instanceof Player player && PossessingPlayer.isPossessing(player);
 	}
 
 }

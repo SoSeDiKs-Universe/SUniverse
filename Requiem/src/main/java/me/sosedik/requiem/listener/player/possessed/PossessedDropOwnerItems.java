@@ -1,20 +1,22 @@
 package me.sosedik.requiem.listener.player.possessed;
 
 import me.sosedik.requiem.feature.PossessingPlayer;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Possessed mobs drop their owner's inventory on death
  */
+@NullMarked
 public class PossessedDropOwnerItems implements Listener {
 
 	@EventHandler(ignoreCancelled = true)
@@ -26,7 +28,11 @@ public class PossessedDropOwnerItems implements Listener {
 
 		List<ItemStack> drops = event.getDrops();
 		drops.clear();
-		drops.addAll(Arrays.stream(rider.getInventory().getContents()).filter(Objects::nonNull).toList());
+		List<ItemStack> newDrops = Arrays.stream(rider.getInventory().getContents())
+			.filter(item -> !ItemStack.isEmpty(item))
+			.filter(item -> !item.hasEnchant(Enchantment.VANISHING_CURSE))
+			.toList();
+		drops.addAll(newDrops);
 	}
 
 }

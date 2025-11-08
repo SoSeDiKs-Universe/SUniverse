@@ -1,7 +1,6 @@
 package me.sosedik.moves.listener.entity;
 
 import com.destroystokyo.paper.event.entity.EntityRemoveFromWorldEvent;
-import io.papermc.paper.entity.TeleportFlag;
 import me.sosedik.moves.Moves;
 import me.sosedik.moves.listener.movement.CrawlingMechanics;
 import me.sosedik.utilizer.util.LocationUtil;
@@ -54,7 +53,7 @@ public class ShulkerCrawlerHandler implements Listener {
 		ArmorStand holder = getHolder(player);
 		Shulker crawler = getCrawler(player, holder);
 		ArmorStand helperHolder = getHolder(player);
-		Shulker helperCrawler = getCrawler(player, holder);
+		Shulker helperCrawler = getCrawler(player, helperHolder);
 
 		var crawlers = new Crawlers(player, holder, crawler, helperHolder, helperCrawler);
 		crawlers.getEntities().forEach(entity -> KNOWN_CRAWLERS.put(entity.getUniqueId(), crawlers));
@@ -123,7 +122,7 @@ public class ShulkerCrawlerHandler implements Listener {
 				Vector direction = loc.getDirection().setY(0).normalize();
 				loc = loc.add(direction.clone().multiply(0.4));
 				if (loc.isBlockSame(this.player.getLocation())) {
-					this.holder.teleport(loc.addY(MathUtil.getDecimalPartAbs(loc.getY()) >= 0.5 ? 1.1 : 1), TeleportFlag.EntityState.RETAIN_PASSENGERS);
+					LocationUtil.smartTeleport(this.holder, loc.addY(MathUtil.getDecimalPartAbs(loc.getY()) >= 0.5 ? 1.1 : 1), false);
 					return false;
 				}
 
@@ -134,15 +133,15 @@ public class ShulkerCrawlerHandler implements Listener {
 				double playerY = MathUtil.getDecimalPartAbs(loc.getY());
 				double sub = playerY - maxY;
 				if (sub >= 0.5) {
-					this.holder.teleport(loc.addY(0.8), TeleportFlag.EntityState.RETAIN_PASSENGERS);
+					LocationUtil.smartTeleport(this.holder, loc.addY(0.8), false);
 					return false;
 				}
 				if (sub <= 0.5 && !LocationUtil.isTrulySolid(this.player, blockTo.getRelative(BlockFace.UP))) {
-					this.holder.teleport(loc.addY(1.1), TeleportFlag.EntityState.RETAIN_PASSENGERS);
+					LocationUtil.smartTeleport(this.holder, loc.addY(1.1), false);
 					return false;
 				}
 
-				this.holder.teleport(loc.addY(1), TeleportFlag.EntityState.RETAIN_PASSENGERS);
+				LocationUtil.smartTeleport(this.holder, loc.addY(1), false);
 				return false;
 			}, 0L, 1L);
 		}
@@ -154,7 +153,7 @@ public class ShulkerCrawlerHandler implements Listener {
 				Location loc = this.player.getLocation();
 				Vector direction = loc.getDirection().setY(0).normalize().multiply(1.4).setY(1);
 				loc = loc.add(direction);
-				this.helperHolder.teleport(loc, TeleportFlag.EntityState.RETAIN_PASSENGERS);
+				LocationUtil.smartTeleport(this.helperHolder, loc, false);
 
 				return false;
 			}, 0L, 1L);
@@ -179,7 +178,7 @@ public class ShulkerCrawlerHandler implements Listener {
 
 		private boolean isInFluid(Block block) {
 			return LocationUtil.isFluid(block)
-					&& (LocationUtil.isFluid(block.getRelative(BlockFace.UP)) || LocationUtil.isFluid(block.getRelative(BlockFace.DOWN)));
+				&& (LocationUtil.isFluid(block.getRelative(BlockFace.UP)) || LocationUtil.isFluid(block.getRelative(BlockFace.DOWN)));
 		}
 		
 	}

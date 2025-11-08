@@ -69,7 +69,7 @@ public class HudMessenger extends BukkitRunnable {
 
 	public synchronized Component getHudMessage() {
 		this.huds.clear();
-		this.huds.add(SpacingUtil.ZERO_SPACE);
+		this.huds.add(SpacingUtil.ZERO_SPACE); // Used to identify custom actionbar messages
 		for (HudProvider hudProvider : this.hudProviders.values()) {
 			Component hudElement = hudProvider.getHud();
 			if (hudElement != null)

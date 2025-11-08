@@ -5,20 +5,21 @@ import me.sosedik.trappednewbie.api.item.VisualArmor;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
 
 /**
  * Drop possessor's items outside vanilla inventory on possessed death
  */
+@NullMarked
 public class ExtraPossessedDrops implements Listener {
 
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	@EventHandler(ignoreCancelled = true)
 	public void onDeath(EntityDeathEvent event) {
 		LivingEntity entity = event.getEntity();
 		Player rider = entity.getRider();

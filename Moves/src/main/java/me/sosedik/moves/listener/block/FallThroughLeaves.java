@@ -1,7 +1,6 @@
 package me.sosedik.moves.listener.block;
 
 import com.destroystokyo.paper.event.player.PlayerJumpEvent;
-import io.papermc.paper.entity.TeleportFlag;
 import me.sosedik.moves.Moves;
 import me.sosedik.moves.api.event.PlayerStartFallingEvent;
 import me.sosedik.moves.dataset.MovesTags;
@@ -57,8 +56,10 @@ public class FallThroughLeaves implements Listener {
 		Block supportingBlock = player.getSupportingBlock();
 		if (supportingBlock != null && !MovesTags.FALL_THROUGH_BLOCKS.isTagged(supportingBlock.getType())) return;
 
-		player.teleport(to.clone().addY(-0.1), TeleportFlag.Relative.VELOCITY_ROTATION, TeleportFlag.EntityState.RETAIN_VEHICLE, TeleportFlag.EntityState.RETAIN_PASSENGERS);
-		player.emitSound(Sound.BLOCK_GRASS_STEP, 1F, 1F);
+		LocationUtil.smartTeleport(player, to.clone().addY(-0.1), false).thenAccept(tp -> {
+			if (tp)
+				player.emitSound(Sound.BLOCK_GRASS_STEP, 1F, 1F);
+		});
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -78,8 +79,10 @@ public class FallThroughLeaves implements Listener {
 		if (event.getFrom().getY() > to.getY()) return;
 		if (!MovesTags.FALL_THROUGH_BLOCKS.isTagged(player.getEyeLocation().addY(0.35).getBlock().getType())) return;
 
-		player.teleport(player.getLocation().addY(0.35), TeleportFlag.Relative.VELOCITY_ROTATION, TeleportFlag.EntityState.RETAIN_VEHICLE, TeleportFlag.EntityState.RETAIN_PASSENGERS);
-		player.emitSound(Sound.BLOCK_GRASS_STEP, 1F, 1F);
+		LocationUtil.smartTeleport(player, player.getLocation().addY(0.35), false).thenAccept(tp -> {
+			if (tp)
+				player.emitSound(Sound.BLOCK_GRASS_STEP, 1F, 1F);
+		});
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -123,8 +126,10 @@ public class FallThroughLeaves implements Listener {
 		// If crawling and the block has no collision
 		if (crawling && !lowerLeaves && !block.isCollidable()) return;
 
-		player.teleport(loc, TeleportFlag.Relative.VELOCITY_ROTATION, TeleportFlag.EntityState.RETAIN_VEHICLE, TeleportFlag.EntityState.RETAIN_PASSENGERS);
-		player.emitSound(Sound.BLOCK_GRASS_STEP, 1F, 1F);
+		LocationUtil.smartTeleport(player, loc, false).thenAccept(tp -> {
+			if (tp)
+				player.emitSound(Sound.BLOCK_GRASS_STEP, 1F, 1F);
+		});
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -137,8 +142,10 @@ public class FallThroughLeaves implements Listener {
 
 		// Deny jump if jumping from leaves
 		if (MovesTags.FALL_THROUGH_BLOCKS.isTagged(block.getType())) {
-			player.teleport(from.clone().addY(-0.1), TeleportFlag.Relative.VELOCITY_ROTATION, TeleportFlag.EntityState.RETAIN_VEHICLE, TeleportFlag.EntityState.RETAIN_PASSENGERS);
-			player.emitSound(Sound.BLOCK_GRASS_STEP, 1F, 1F);
+			LocationUtil.smartTeleport(player, from.clone().addY(-0.1), false).thenAccept(tp -> {
+				if (tp)
+					player.emitSound(Sound.BLOCK_GRASS_STEP, 1F, 1F);
+			});
 			return;
 		}
 
@@ -146,11 +153,13 @@ public class FallThroughLeaves implements Listener {
 		block = player.getEyeLocation().shiftTowards(BlockFace.UP).getBlock();
 		if (!MovesTags.FALL_THROUGH_BLOCKS.isTagged(block.getType())) return;
 
-		player.teleport(from.clone().addY(1.15), TeleportFlag.Relative.VELOCITY_ROTATION, TeleportFlag.EntityState.RETAIN_VEHICLE, TeleportFlag.EntityState.RETAIN_PASSENGERS);
-		player.emitSound(Sound.BLOCK_GRASS_STEP, 1F, 1F);
+		LocationUtil.smartTeleport(player, from.clone().addY(1.15), false).thenAccept(tp -> {
+			if (tp)
+				player.emitSound(Sound.BLOCK_GRASS_STEP, 1F, 1F);
+		});
 	}
 
-//	@EventHandler(ignoreCancelled = true) // TODO: does not teleport on the client for some reason since 1.20.4
+	@EventHandler(ignoreCancelled = true)
 	public void onMountMove(PlayerMoveEvent event) {
 		if (!event.hasExplicitlyChangedPosition()) return;
 
@@ -161,8 +170,10 @@ public class FallThroughLeaves implements Listener {
 
 		Location to = event.getTo();
 		if (MathUtil.getDecimalPartAbs(to.getY()) < 0.1 && MovesTags.FALL_THROUGH_BLOCKS.isTagged(entity.getLocation().getBlock().getRelative(BlockFace.DOWN).getType())) {
-			if (entity.teleport(entity.getLocation().addY(-0.2), TeleportFlag.Relative.VELOCITY_ROTATION, TeleportFlag.EntityState.RETAIN_VEHICLE, TeleportFlag.EntityState.RETAIN_PASSENGERS))
-				entity.emitSound(Sound.BLOCK_GRASS_STEP, 1F, 1F);
+			LocationUtil.smartTeleport(entity, entity.getLocation().addY(-0.2), true).thenAccept(tp -> {
+				if (tp)
+					entity.emitSound(Sound.BLOCK_GRASS_STEP, 1F, 1F);
+			});
 			return;
 		}
 
@@ -182,11 +193,13 @@ public class FallThroughLeaves implements Listener {
 
 		MOUNTS_ON_DELAY.add(entity.getUniqueId());
 		Moves.scheduler().async(() -> MOUNTS_ON_DELAY.remove(entity.getUniqueId()), 3L);
-		if (entity.teleport(loc, TeleportFlag.Relative.VELOCITY_ROTATION, TeleportFlag.EntityState.RETAIN_VEHICLE, TeleportFlag.EntityState.RETAIN_PASSENGERS))
-			entity.emitSound(Sound.BLOCK_GRASS_STEP, 1F, 1F);
+		LocationUtil.smartTeleport(entity, loc, true).thenAccept(tp -> {
+			if (tp)
+				entity.emitSound(Sound.BLOCK_GRASS_STEP, 1F, 1F);
+		});
 	}
 
-//	@EventHandler(ignoreCancelled = true) // TODO: does not teleport on the client for some reason since 1.20.4
+	@EventHandler(ignoreCancelled = true)
 	public void onMountJump(HorseJumpEvent event) {
 		Entity entity = event.getEntity();
 		List<Entity> passengers = entity.getPassengers();
@@ -203,8 +216,10 @@ public class FallThroughLeaves implements Listener {
 		if (LocationUtil.isTrulySolid(passenger, block.getRelative(BlockFace.UP))) return;
 
 		Moves.scheduler().sync(() -> {
-			if (entity.teleport(loc.center(0.1), TeleportFlag.Relative.VELOCITY_ROTATION, TeleportFlag.EntityState.RETAIN_VEHICLE, TeleportFlag.EntityState.RETAIN_PASSENGERS))
-				entity.emitSound(Sound.BLOCK_GRASS_STEP, 1F, 1F);
+			LocationUtil.smartTeleport(entity, loc.center(0.1), true).thenAccept(tp -> {
+				if (tp)
+					entity.emitSound(Sound.BLOCK_GRASS_STEP, 1F, 1F);
+			});
 		}, 1L);
 	}
 
@@ -217,7 +232,7 @@ public class FallThroughLeaves implements Listener {
 		Vector velocity = PlayerFallTicker.getStoredPreVelocity(player);
 		if (velocity.getY() < 0.6) return;
 
-		LocationUtil.smartTeleport(player, player.getLocation().addY(1.5)).thenRun(() -> {
+		LocationUtil.smartTeleport(player, player.getLocation().addY(1.5), false).thenRun(() -> {
 			player.setVelocity(velocity);
 			Moves.scheduler().sync(() -> player.setVelocity(velocity), 1L);
 		});

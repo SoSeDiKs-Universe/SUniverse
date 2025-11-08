@@ -45,7 +45,7 @@ public class GhostsPhaseThroughWalls implements Listener {
 		event.setCancelled(true);
 
 		CustomTotemOfUndyingModifier.playTotemEffect(player, event.getBow());
-		LocationUtil.smartTeleport(player, player.getWorld().getSpawnLocation().center(1));
+		LocationUtil.smartTeleport(player, player.getWorld().getSpawnLocation().center(1), false);
 	}
 
 }

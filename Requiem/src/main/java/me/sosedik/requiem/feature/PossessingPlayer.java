@@ -7,6 +7,7 @@ import me.sosedik.requiem.Requiem;
 import me.sosedik.requiem.api.event.player.PlayerStartPossessingEntityEvent;
 import me.sosedik.requiem.api.event.player.PlayerStopPossessingEntityEvent;
 import me.sosedik.requiem.api.event.player.PlayerTryPossessingEntityEvent;
+import me.sosedik.requiem.dataset.RequiemEffects;
 import me.sosedik.requiem.dataset.RequiemItems;
 import me.sosedik.requiem.task.DynamicScaleTask;
 import me.sosedik.requiem.task.PoseMimicingTask;
@@ -28,6 +29,7 @@ import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Squid;
 import org.bukkit.inventory.EntityEquipment;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.MainHand;
 import org.bukkit.inventory.PlayerInventory;
@@ -121,7 +123,8 @@ public class PossessingPlayer {
 			nbt.setBoolean(POSSESSED_PERSISTENT_TAG, persistent);
 		});
 
-//		EffectManager.addEffect(player, KittenEffects.ATTRITION, -1, 0); // TODO
+		int level = Math.min(player.getLevel(), 5);
+		player.addPotionEffect(new PotionEffect(RequiemEffects.ATTRITION, PotionEffect.INFINITE_DURATION, 5 - level));
 		player.setInvisible(true);
 		player.setInvulnerable(false); // Prevents mobs from targeting the player if true
 		player.setSleepingIgnored(true);
@@ -148,8 +151,8 @@ public class PossessingPlayer {
 	 *
 	 * @param player player
 	 */
-	public static void stopPossessing(Player player) {
-		stopPossessing(player, getPossessed(player), false);
+	public static @Nullable LivingEntity stopPossessing(Player player) {
+		return stopPossessing(player, getPossessed(player), false);
 	}
 
 	/**
@@ -158,8 +161,8 @@ public class PossessingPlayer {
 	 * @param player player
 	 * @param riding possessed entity
 	 */
-	public static void stopPossessing(Player player, @Nullable LivingEntity riding, boolean quit) {
-		if (!isPossessingSoft(player)) return;
+	public static @Nullable LivingEntity stopPossessing(Player player, @Nullable LivingEntity riding, boolean quit) {
+		if (!isPossessingSoft(player)) return null;
 
 		if (quit) {
 			if (riding != null) riding.remove();
@@ -184,16 +187,28 @@ public class PossessingPlayer {
 		POSSESSING.remove(player.getUniqueId());
 
 		checkPossessedExtraItems(player);
+
+		PotionEffect unluck = player.getPotionEffect(PotionEffectType.UNLUCK);
 		player.clearActivePotionEffects();
+		if (unluck != null)
+			player.addPotionEffect(unluck);
 
-		if (riding != null) new PlayerStopPossessingEntityEvent(player, riding).callEvent();
+		if (riding != null) {
+			removePossessedExtraItems(riding);
+			new PlayerStopPossessingEntityEvent(player, riding).callEvent();
+		}
 
-		if (quit) return;
+		if (quit) return riding;
+
+		player.setLevel(0);
+		player.setExp(0F);
 
 		player.leaveVehicle();
 
 		if (riding != null) Requiem.logger().info("Making " + player.getName() + " no longer possess " + riding.getType().name());
 		else Requiem.logger().info("Making " + player.getName() + " no longer possess an entity");
+
+		return riding;
 	}
 
 	/**
@@ -430,6 +445,18 @@ public class PossessingPlayer {
 				player.getInventory().addItem(ItemStack.of(RequiemItems.HOST_REVOCATOR));
 		}
 		return true;
+	}
+
+	private static void removePossessedExtraItems(LivingEntity entity) {
+		if (entity.getEquipment() == null) return;
+
+		for (EquipmentSlot slot : EquipmentSlot.values()) {
+			if (!entity.canUseEquipmentSlot(slot)) continue;
+
+			ItemStack item = entity.getEquipment().getItem(slot);
+			if (item.getType() == RequiemItems.HOST_REVOCATOR)
+				entity.getEquipment().setItem(slot, null);
+		}
 	}
 
 	/**

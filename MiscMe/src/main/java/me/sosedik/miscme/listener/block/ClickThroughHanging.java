@@ -34,8 +34,8 @@ public class ClickThroughHanging implements Listener {
 		Player player = event.getPlayer();
 		if (player.isSneaking()) return;
 
-		if (hanging instanceof ItemFrame itemFrame && itemFrame.getItem().getType() == Material.AIR
-				&& player.getInventory().getItemInMainHand().getType() != Material.AIR)
+		if (hanging instanceof ItemFrame itemFrame && itemFrame.getItem().isEmpty()
+			&& !player.getInventory().getItemInMainHand().isEmpty())
 			return;
 
 		Block container = hanging.getLocation().getBlock().getRelative(hanging.getFacing().getOppositeFace());

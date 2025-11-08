@@ -81,7 +81,7 @@ import me.sosedik.miscme.listener.item.ShovelsRemoveSnow;
 import me.sosedik.miscme.listener.item.SwordsSwingThroughGrass;
 import me.sosedik.miscme.listener.item.TorchesBurnCobwebs;
 import me.sosedik.miscme.listener.misc.BetterTimeSetCommand;
-import me.sosedik.miscme.listener.misc.WaterAwarePotionReset;
+import me.sosedik.miscme.listener.misc.WaterAwareBottleReset;
 import me.sosedik.miscme.listener.player.BurningForcesToRun;
 import me.sosedik.miscme.listener.player.FireExtinguishByHand;
 import me.sosedik.miscme.listener.player.HidePlayerNameTags;
@@ -218,7 +218,7 @@ public final class MiscMe extends JavaPlugin {
 			TorchesBurnCobwebs.class,
 			// misc
 			BetterTimeSetCommand.class,
-			WaterAwarePotionReset.class,
+			WaterAwareBottleReset.class,
 			// player
 			BurningForcesToRun.class,
 			FireExtinguishByHand.class,

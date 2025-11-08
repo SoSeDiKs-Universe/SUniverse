@@ -8,7 +8,7 @@ import me.sosedik.kiterino.modifier.item.ItemContextBox;
 import me.sosedik.kiterino.modifier.item.ItemModifier;
 import me.sosedik.kiterino.modifier.item.ModificationResult;
 import me.sosedik.kiterino.modifier.item.context.SlottedItemModifierContext;
-import me.sosedik.miscme.listener.misc.WaterAwarePotionReset;
+import me.sosedik.miscme.listener.misc.WaterAwareBottleReset;
 import me.sosedik.resourcelib.ResourceLib;
 import me.sosedik.resourcelib.impl.item.modifier.CustomLoreModifier;
 import me.sosedik.trappednewbie.TrappedNewbie;
@@ -194,7 +194,7 @@ public class AllRecipesInRecipeBook implements Listener {
 			if (shape[j].length() <= k) continue;
 
 			char ch = shape[j].charAt(k);
-			@Nullable RecipeChoice recipeChoice = shapedRecipe.getChoiceMap().get(ch);
+			RecipeChoice recipeChoice = shapedRecipe.getChoiceMap().get(ch);
 			int xOffset = addXOffset ? 1 : 0;
 			items.put(GRID_SLOTS[i + offset + xOffset], recipeChoice == null ? AIR : getFromChoice(recipeChoice));
 		}
@@ -213,8 +213,8 @@ public class AllRecipesInRecipeBook implements Listener {
 				items.put(GRID_SLOTS[i], AIR);
 				continue;
 			}
-			@Nullable RecipeChoice recipeChoice = choices.get(i);
-			items.put(GRID_SLOTS[i], recipeChoice == null ? AIR : getFromChoice(recipeChoice));
+			RecipeChoice recipeChoice = choices.get(i);
+			items.put(GRID_SLOTS[i], getFromChoice(recipeChoice));
 		}
 		VIEWERS.put(player.getUniqueId(), new RecipeDisplay(player, items));
 	}
@@ -234,7 +234,7 @@ public class AllRecipesInRecipeBook implements Listener {
 			ItemStack result = stonecuttingRecipe.getResult();
 			for (Recipe r : Bukkit.getRecipesFor(result)) {
 				if (!(r instanceof StonecuttingRecipe recipe)) continue;
-				inputs.add(getFromChoice(recipe.getInputChoice()).get(0));
+				inputs.add(getFromChoice(recipe.getInputChoice()).getFirst());
 				results.add(recipe.getResult());
 			}
 			items.put(1, getFromChoice(stonecuttingRecipe.getInputChoice()));
@@ -479,7 +479,7 @@ public class AllRecipesInRecipeBook implements Listener {
 	private static void addVanillaPotionMixes() { // From PotionBrewing class
 		addVanillaPotionMix("splash_potion", ItemStack.of(Material.SPLASH_POTION), new RecipeChoice.MaterialChoice(Material.GUNPOWDER), new RecipeChoice.MaterialChoice(Material.POTION), null, null);
 		addVanillaPotionMix("lingering_potion", ItemStack.of(Material.LINGERING_POTION), new RecipeChoice.MaterialChoice(Material.DRAGON_BREATH), new RecipeChoice.MaterialChoice(Material.SPLASH_POTION), null, null);
-		ItemStack waterPotion = ThirstData.of(WaterAwarePotionReset.getWaterBottle(1)).withThirstChance(0.5F).saveInto(WaterAwarePotionReset.getWaterBottle(1));
+		ItemStack waterPotion = ThirstData.of(WaterAwareBottleReset.getWaterBottle(1)).withThirstChance(0.5F).saveInto(WaterAwareBottleReset.getWaterBottle(1));
 		addVanillaPotionMix(PotionType.MUNDANE, potion(Material.POTION, PotionType.MUNDANE), new RecipeChoice.ExactChoice(BrewingCraft.MUNDANE_INGREDIENTS.stream().map(ItemStack::of).toList()), new RecipeChoice.ExactChoice(waterPotion), null, null);
 		addVanillaPotionMix(PotionType.THICK, potion(Material.POTION, PotionType.THICK), new RecipeChoice.MaterialChoice(Material.GLOWSTONE_DUST), new RecipeChoice.ExactChoice(waterPotion), null, null);
 		addVanillaPotionMix(PotionType.AWKWARD, potion(Material.POTION, PotionType.AWKWARD), new RecipeChoice.ExactChoice(ItemStack.of(Material.NETHER_WART)), new RecipeChoice.ExactChoice(waterPotion), null, null);

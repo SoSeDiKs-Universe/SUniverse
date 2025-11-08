@@ -1,7 +1,6 @@
 package me.sosedik.requiem.task;
 
 import com.destroystokyo.paper.MaterialTags;
-import io.papermc.paper.entity.TeleportFlag;
 import me.sosedik.requiem.Requiem;
 import me.sosedik.utilizer.util.LocationUtil;
 import org.bukkit.Location;
@@ -41,21 +40,21 @@ public class GoingThroughWallsTask extends BukkitRunnable {
 
 	@Override
 	public void run() {
-		Location loc = player.getLocation();
+		Location loc = this.player.getLocation();
 		if (isEmpty(loc.getBlock()))  {
 			if (isEmpty(loc.getBlock().getRelative(BlockFace.UP))) {
-				if (!item.isSimilar(player.getActiveItem())) {
+				if (!this.item.isSimilar(this.player.getActiveItem())) {
 					cancel();
 					restoreView();
 					return;
 				}
-				lastClearLoc = loc;
+				this.lastClearLoc = loc;
 				restoreView();
 				goForward();
 				return;
 			}
 
-			if (!item.isSimilar(player.getActiveItem())) {
+			if (!this.item.isSimilar(this.player.getActiveItem())) {
 				goBack();
 				return;
 			}
@@ -64,14 +63,14 @@ public class GoingThroughWallsTask extends BukkitRunnable {
 			return;
 		}
 
-		player.sendPotionEffectChange(player, INFINITE_BLINDNESS);
+		this.player.sendPotionEffectChange(this.player, INFINITE_BLINDNESS);
 
-		if (!isExempt(loc.getBlock().getType()) && lastClearLoc.getWorld() == loc.getWorld() && lastClearLoc.distanceSquared(loc) > 49) {
+		if (!isExempt(loc.getBlock().getType()) && this.lastClearLoc.getWorld() == loc.getWorld() && this.lastClearLoc.distanceSquared(loc) > 49) {
 			goBack();
 			return;
 		}
 
-		if (!item.isSimilar(player.getActiveItem())) {
+		if (!this.item.isSimilar(this.player.getActiveItem())) {
 			goBack();
 			return;
 		}
@@ -80,37 +79,38 @@ public class GoingThroughWallsTask extends BukkitRunnable {
 	}
 
 	private void restoreView() {
-		player.sendPotionEffectChangeRemove(player, PotionEffectType.BLINDNESS);
+		this.player.sendPotionEffectChangeRemove(this.player, PotionEffectType.BLINDNESS);
 	}
 
 	private void goForward() {
-		tries++;
-		Location forward = player.getLocation().add(player.getLocation().getDirection().normalize().multiply(tries > 10 ? (tries > 20 ? 0.3 : 0.2 ) : 0.1));
+		this.tries++;
+		Location forward = this.player.getLocation().add(this.player.getLocation().getDirection().normalize().multiply(this.tries > 10 ? (this.tries > 20 ? 0.3 : 0.2 ) : 0.1));
 		if (!isUnpassable(forward.getBlock()))
-			player.teleport(forward, TeleportFlag.Relative.VELOCITY_ROTATION, TeleportFlag.Relative.VELOCITY_X, TeleportFlag.Relative.VELOCITY_Y, TeleportFlag.Relative.VELOCITY_Z, TeleportFlag.EntityState.RETAIN_PASSENGERS);
+			LocationUtil.smartTeleport(this.player, forward, true);
 	}
 
 	private void goBack() {
 		cancel();
 		restoreView();
-		if (isEmpty(player.getEyeLocation().getBlock())) return;
-		lastClearLoc.center(0.1);
-		player.teleport(lastClearLoc, TeleportFlag.Relative.VELOCITY_ROTATION, TeleportFlag.EntityState.RETAIN_PASSENGERS);
-		player.playSound(lastClearLoc, Sound.ITEM_CHORUS_FRUIT_TELEPORT, 1F, 0F);
-		player.clearActiveItem();
-		player.setCooldown(item, 10);
+		if (isEmpty(this.player.getEyeLocation().getBlock())) return;
+		this.lastClearLoc.center(0.1);
+		LocationUtil.smartTeleport(this.player, this.lastClearLoc, false);
+		this.player.playSound(this.lastClearLoc, Sound.ITEM_CHORUS_FRUIT_TELEPORT, 1F, 0F);
+		this.player.clearActiveItem();
+		this.player.setCooldown(this.item, 10);
 	}
 
 	private boolean isEmpty(Block block) {
-		return !LocationUtil.isTrulySolid(player, block);
+		return !LocationUtil.isTrulySolid(this.player, block);
 	}
 
+	// MCCheck: 1.21.10, new blocks
 	private boolean isExempt(Material type) {
 		return Tag.SAND.isTagged(type)
-				|| type == Material.GRAVEL || type == Material.SUSPICIOUS_GRAVEL
-				|| MaterialTags.GLASS.isTagged(type)
-				|| MaterialTags.GLASS_PANES.isTagged(type)
-				|| Tag.WALLS.isTagged(type);
+			|| type == Material.GRAVEL || type == Material.SUSPICIOUS_GRAVEL
+			|| MaterialTags.GLASS.isTagged(type)
+			|| MaterialTags.GLASS_PANES.isTagged(type)
+			|| Tag.WALLS.isTagged(type);
 	}
 
 	private boolean isUnpassable(Block block) {

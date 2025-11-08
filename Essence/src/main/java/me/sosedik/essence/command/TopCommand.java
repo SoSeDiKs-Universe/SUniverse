@@ -30,7 +30,7 @@ public class TopCommand {
 			target = player;
 		}
 
-		Essence.scheduler().sync(() -> LocationUtil.smartTeleport(target, target.getLocation().toHighestLocation().addY(1)));
+		Essence.scheduler().sync(() -> LocationUtil.smartTeleport(target, target.getLocation().toHighestLocation().addY(1), false));
 	}
 
 }

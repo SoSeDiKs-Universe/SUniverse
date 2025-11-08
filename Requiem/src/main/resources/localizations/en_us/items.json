@@ -6,10 +6,13 @@
 	],
 	"item.requiem.ghost_motivator.name": "Space Warp",
 	"item.requiem.ghost_motivator.lore": "Allows going through walls",
-	"item.requiem.host_revocator.name": "Host Revocator",
+	"item.requiem.host_revocator.name": "Abyssal Host Revocator",
 	"item.requiem.host_revocator.lore": [
-		"Use this to leave the possessed host,",
-		"potentially killing it"
+		"Use (<yellow><key:key.use></yellow>) this to leave the possessed host,",
+		"destroying all non-equipped items in the process",
+		"",
+		"Drop (<yellow><key:key.use></yellow>) an item onto this",
+		"in inventory to send it into the Abyss"
 	],
 	"item.requiem.creeper_heart.name": "Creeper Heart",
 	"item.requiem.acrobat_skeleton_tombstone.name": "Acrobat Skeleton",
@@ -60,5 +63,6 @@
 	"item.requiem.vines_tangled_skeleton_tombstone.name": "Vine Tangled Skeleton",
 	"item.requiem.waterdrop_skeleton_tombstone.name": "Landed Skeleton",
 	"item.requiem.webbed_skeleton_tombstone.name": "Webbed Skeleton",
-	"item.requiem.winter_skeleton_tombstone.name": "Winter Skeleton"
+	"item.requiem.winter_skeleton_tombstone.name": "Winter Skeleton",
+	"item.requiem.necronomicon.name": "Necronomicon"
 }

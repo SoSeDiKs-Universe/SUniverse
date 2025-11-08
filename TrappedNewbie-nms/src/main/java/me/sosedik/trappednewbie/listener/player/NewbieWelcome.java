@@ -28,7 +28,7 @@ public class NewbieWelcome implements Listener {
 		player.sendMessage(Mini.combine(Component.space(), TrappedNewbieFonts.WANDERING_TRADER_HEAD.mapping(), messenger.getMessage("limbo.welcome")));
 
 		if (player.getWorld() != TrappedNewbie.limboWorld())
-			LocationUtil.smartTeleport(player, TrappedNewbie.limboWorld().getSpawnLocation().center(1));
+			LocationUtil.smartTeleport(player, TrappedNewbie.limboWorld().getSpawnLocation().center(1), false);
 	}
 
 }

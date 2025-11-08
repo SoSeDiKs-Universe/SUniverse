@@ -272,5 +272,13 @@
 	"item.trapped_newbie.gray_llama_hide.name": "Gray Llama Hide",
 	"item.trapped_newbie.white_llama_hide.name": "White Llama Hide",
 	"item.trapped_newbie.brown_mooshroom_hide.name": "Brown Mooshroom Hide",
-	"item.trapped_newbie.red_mooshroom_hide.name": "Red Mooshroom Hide"
+	"item.trapped_newbie.red_mooshroom_hide.name": "Red Mooshroom Hide",
+	"item.trapped_newbie.wind_in_a_bottle.name": "Wind in a Bottle",
+	"item.trapped_newbie.hang_glider.name": "Hang Glider",
+	"item.trapped_newbie.cherry_hang_glider.name": "Cherry Hang Glider",
+	"item.trapped_newbie.sculk_hang_glider.name": "Sculk Hang Glider",
+	"item.trapped_newbie.azalea_hang_glider.name": "Azalea Hang Glider",
+	"item.trapped_newbie.tater_hang_glider.name": "Tater Hang Glider",
+	"item.trapped_newbie.phantom_hang_glider.name": "Phantom Hang Glider",
+	"item.trapped_newbie.inventory_fire.name": "Fire"
 }

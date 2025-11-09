@@ -54,7 +54,7 @@ public class SuicideCommand {
 		}
 
 		player.setLevel(0);
-		player.setExp(0);
+		player.setExp(0F);
 		player.getInventory().clear();
 		player.damage(0, DamageSource.builder(TrappedNewbieDamageTypes.SUICIDE).build()); // Reset last damage cause
 		GhostyPlayer.markGhost(player);

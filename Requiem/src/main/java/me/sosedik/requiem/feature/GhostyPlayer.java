@@ -66,7 +66,7 @@ public class GhostyPlayer {
 				item.setAmount(0);
 			}
 			player.setLevel(0);
-			player.setExp(0);
+			player.setExp(0F);
 		}
 
 		EntityUtil.clearTargets(player);

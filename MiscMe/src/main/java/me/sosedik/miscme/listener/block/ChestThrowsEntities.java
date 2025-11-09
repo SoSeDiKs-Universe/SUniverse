@@ -101,7 +101,7 @@ public class ChestThrowsEntities implements Listener {
 		entities.removeIf(entity -> entity.getType() != EntityType.CAT);
 		if (entities.isEmpty()) return;
 
-		ClickThroughHanging.openContainer(player, block, true);
+		ClickThroughHanging.openContainer(player, block, event.getBlockFace(), true);
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)

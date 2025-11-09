@@ -10,6 +10,7 @@ import me.sosedik.requiem.impl.item.modifier.FakeHorseSaddlesModifier;
 import me.sosedik.requiem.impl.item.modifier.NecronomiconObfuscatorModifier;
 import me.sosedik.requiem.impl.item.modifier.TombstoneDeathMessageModifier;
 import me.sosedik.requiem.listener.block.TombstoneCreatures;
+import me.sosedik.requiem.listener.effect.AttritionEffectLevel;
 import me.sosedik.requiem.listener.entity.CreepersDropCreeperHearts;
 import me.sosedik.requiem.listener.entity.FakeHorseSaddles;
 import me.sosedik.requiem.listener.entity.InsectsPreventSunburning;
@@ -34,6 +35,7 @@ import me.sosedik.requiem.listener.player.ghost.MobsDontTargetGhosts;
 import me.sosedik.requiem.listener.player.ghost.NoDamageToOrFromGhosts;
 import me.sosedik.requiem.listener.player.ghost.NoGhostInteractions;
 import me.sosedik.requiem.listener.player.possessed.DeathMakesPossessed;
+import me.sosedik.requiem.listener.player.possessed.LimitedPossessedTrades;
 import me.sosedik.requiem.listener.player.possessed.NoAirForWaterPossessing;
 import me.sosedik.requiem.listener.player.possessed.NoExpFromPossessedKill;
 import me.sosedik.requiem.listener.player.possessed.PossessedDismount;
@@ -83,6 +85,8 @@ public final class Requiem extends JavaPlugin {
 		EventUtil.registerListeners(this,
 			// block
 			TombstoneCreatures.class,
+			// effect
+			AttritionEffectLevel.class,
 			// entity
 			CreepersDropCreeperHearts.class,
 			FakeHorseSaddles.class,
@@ -104,6 +108,7 @@ public final class Requiem extends JavaPlugin {
 			DamageModelLoadSave.class,
 			/// ghost
 			DeathMakesGhosts.class,
+			LimitedPossessedTrades.class,
 			GhostsDontSprint.class,
 			GhostsDontStarveOrChoke.class,
 			GhostsKeepNightVision.class,

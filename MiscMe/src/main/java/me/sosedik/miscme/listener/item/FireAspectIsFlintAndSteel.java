@@ -98,7 +98,7 @@ public class FireAspectIsFlintAndSteel implements Listener {
 		Action action = event.getAction();
 		BlockFace blockFace = event.getBlockFace();
 		if (useItem(player, action, block, blockFace, EquipmentSlot.HAND)
-				|| useItem(player, action, block, blockFace, EquipmentSlot.OFF_HAND))
+			|| useItem(player, action, block, blockFace, EquipmentSlot.OFF_HAND))
 			event.setCancelled(true);
 	}
 

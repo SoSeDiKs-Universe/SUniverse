@@ -123,8 +123,8 @@ public class PossessingPlayer {
 			nbt.setBoolean(POSSESSED_PERSISTENT_TAG, persistent);
 		});
 
-		int level = Math.min(player.getLevel(), 5);
-		player.addPotionEffect(new PotionEffect(RequiemEffects.ATTRITION, PotionEffect.INFINITE_DURATION, 5 - level));
+		int level = Math.clamp(5 - player.getLevel(), 0, 5);
+		player.addPotionEffect(new PotionEffect(RequiemEffects.ATTRITION, PotionEffect.INFINITE_DURATION, level));
 		player.setInvisible(true);
 		player.setInvulnerable(false); // Prevents mobs from targeting the player if true
 		player.setSleepingIgnored(true);
@@ -428,6 +428,14 @@ public class PossessingPlayer {
 	public static boolean checkPossessedExtraItems(Player player) {
 		if (!isPossessing(player)) {
 			player.getInventory().remove(RequiemItems.HOST_REVOCATOR);
+			return false;
+		}
+
+		if (player.getLevel() > 0) {
+			player.getInventory().remove(RequiemItems.HOST_REVOCATOR);
+			LivingEntity possessed = getPossessed(player);
+			if (possessed != null)
+				removePossessedExtraItems(possessed);
 			return false;
 		}
 

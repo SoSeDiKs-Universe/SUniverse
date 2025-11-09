@@ -140,13 +140,19 @@ public class TotemBaseBlockStorage extends DisplayBlockStorage {
 			case SOUL_MELANCHOLY -> this.ritualData.getPerformers().forEach(uuid -> {
 				Player player = Bukkit.getPlayer(uuid);
 				if (player == null) return;
+				if (!PossessingPlayer.isPossessing(player)) return;
+				if (player.getLevel() > 0) {
+					LivingEntity possessed = PossessingPlayer.getPossessed(player);
+					if (possessed == null) return;
+					if (!UtilizerTags.HUMAN_LIKE_ZOMBIES.isTagged(possessed.getType())) return;
 
-				LivingEntity possessed = PossessingPlayer.getPossessed(player);
-				if (possessed == null) return;
-				if (!UtilizerTags.HUMAN_LIKE_ZOMBIES.isTagged(possessed.getType())) return;
+					PossessingPlayer.stopPossessing(player);
+					possessed.remove();
+					return;
+				}
 
-				PossessingPlayer.stopPossessing(player);
-				possessed.remove();
+				player.setLevel(1);
+				player.setExp(0F);
 			});
 		}
 

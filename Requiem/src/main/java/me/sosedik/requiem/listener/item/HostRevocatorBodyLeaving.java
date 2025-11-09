@@ -25,7 +25,7 @@ public class HostRevocatorBodyLeaving implements Listener {
 
 		PossessingPlayer.stopPossessing(player);
 		player.setLevel(0);
-		player.setExp(0);
+		player.setExp(0F);
 		player.getInventory().clear();
 		GhostyPlayer.markGhost(player);
 	}

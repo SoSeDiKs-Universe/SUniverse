@@ -47,6 +47,22 @@
 	"adv.trappednewbie.requiem.i_hate_sand.description": "Воскресните в кадавра",
 	"adv.trappednewbie.requiem.kung_fu_panda.title": "Кунг-фу панда",
 	"adv.trappednewbie.requiem.kung_fu_panda.description": "Будучи пандой, ударьте кого-нибудь деревянным мечом",
+	"adv.trappednewbie.requiem.get_a_necronomicon.title": "<obfuscated>Некрономикон",
+	"adv.trappednewbie.requiem.get_a_necronomicon.description": [
+		"Заполучите <red>некрономикон",
+		"",
+		"<yellow>Может создаваться только людьми,",
+		"<yellow>позволяет путешествовать в пустоту"
+	],
+	"adv.trappednewbie.requiem.get_into_a_personal_void.title": "Пустотное существование",
+	"adv.trappednewbie.requiem.get_into_a_personal_void.description": [
+		"Пропутешествуйте в свою личную пустоту.",
+		"",
+		"Настоятельно рекомендуется взять с собой дельтаплан,",
+		"поскольку падение оттуда во плоти довольно смертельно."
+	],
+	"adv.trappednewbie.requiem.first_drink.title": "Реки слёз, лужи грёз",
+	"adv.trappednewbie.requiem.first_drink.description": "Выпейте немного воды (<key:key.use> пустой рукой по источнику воды в приседе)",
 
 	"adv.trappednewbie.basics.tab.title": "Возвращение к истокам",
 	"adv.trappednewbie.basics.visual_root.title": "Возвращение к истокам",
@@ -117,6 +133,8 @@
 		"",
 		"<red>Кровать будет использоваться в качестве точки выхода из осознанных снов"
 	],
+	"adv.trappednewbie.basics.glide_in_a_hang_glider.title": "В небо!",
+	"adv.trappednewbie.basics.glide_in_a_hang_glider.description": "Используйте дельтаплан впервые",
 	"adv.trappednewbie.basics.eat_a_roasted_spider_eye.title": "Головокружительный завтрак",
 	"adv.trappednewbie.basics.eat_a_roasted_spider_eye.description": "Приготовьте на костре и съешьте паучий глаз для получения слабости",
 	"adv.trappednewbie.basics.lucid_dreaming.title": "Осознанный сон",

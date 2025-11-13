@@ -37,7 +37,6 @@ import net.minecraft.world.phys.Vec3;
 import org.bukkit.Particle;
 import org.bukkit.craftbukkit.util.CraftLocation;
 import org.bukkit.entity.Interaction;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Transformation;
 import org.joml.Quaternionf;
@@ -125,10 +124,8 @@ public class GliderEntityImpl extends Display.ItemDisplay {
 		level.addFreshEntity(entity);
 		level.getWorld().playSound(Sound.sound(TrappedNewbieSoundKeys.HAND_GLIDER_OPEN, Sound.Source.NEUTRAL, 0.8F, entity.random.nextFloat() * 0.2F + 1.2F), entity.getBukkitEntity());
 
-		if (!rider.isShiftKeyDown()) {
+		if (!rider.isShiftKeyDown())
 			rider.startRiding(entity);
-			if (rider.getBukkitEntity() instanceof Player player) {} // todo advancement
-		}
 
 		return true;
 	}

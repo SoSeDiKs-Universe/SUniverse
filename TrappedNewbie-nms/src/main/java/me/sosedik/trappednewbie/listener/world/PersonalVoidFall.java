@@ -1,6 +1,7 @@
 package me.sosedik.trappednewbie.listener.world;
 
 import me.sosedik.trappednewbie.TrappedNewbie;
+import me.sosedik.trappednewbie.dataset.TrappedNewbieAdvancements;
 import me.sosedik.utilizer.util.LocationUtil;
 import org.bukkit.World;
 import org.bukkit.damage.DamageType;
@@ -9,6 +10,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.jspecify.annotations.NullMarked;
 
 /**
@@ -30,6 +32,16 @@ public class PersonalVoidFall implements Listener {
 		World newWorld = PerPlayerWorlds.resolveWorld(player, World.Environment.NORMAL);
 		LocationUtil.smartTeleport(player, player.getLocation().world(newWorld).y(320), false)
 			.thenRun(() -> player.setFallDistance(0F));
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onWorldChange(PlayerChangedWorldEvent event) {
+		Player player = event.getPlayer();
+		World world = player.getWorld();
+		if (!TrappedNewbie.NAMESPACE.equals(world.key().namespace())) return;
+		if (!world.key().value().startsWith("worlds-personal/")) return;
+
+		TrappedNewbieAdvancements.GET_INTO_A_PERSONAL_VOID.awardAllCriteria(player);
 	}
 
 }

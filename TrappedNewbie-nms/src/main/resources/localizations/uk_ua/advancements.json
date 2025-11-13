@@ -47,6 +47,22 @@
 	"adv.trappednewbie.requiem.i_hate_sand.description": "Воскресніть у висушня",
 	"adv.trappednewbie.requiem.kung_fu_panda.title": "Кунг-фу панда",
 	"adv.trappednewbie.requiem.kung_fu_panda.description": "Будучи пандою, вдарте когось дерев'яним мечем",
+	"adv.trappednewbie.requiem.get_a_necronomicon.title": "<obfuscated>Некрономікон",
+	"adv.trappednewbie.requiem.get_a_necronomicon.description": [
+		"Отримайте <red>некрономікон",
+		"",
+		"<yellow>Може виготовлятися лише людьми,",
+		"<yellow>дозволяє подорожувати в порожнечу"
+	],
+	"adv.trappednewbie.requiem.get_into_a_personal_void.title": "Порожнє існування",
+	"adv.trappednewbie.requiem.get_into_a_personal_void.description": [
+		"Подорожуйте у свою особисту порожнечу.",
+		"",
+		"Настійно рекомендується взяти з собою дельтаплан,",
+		"оскільки падіння звідти в плоті досить смертельне."
+	],
+	"adv.trappednewbie.requiem.first_drink.title": "Річки сліз, калюжі мрій",
+	"adv.trappednewbie.requiem.first_drink.description": "Випийте трішки води (<key:key.use> пустою рукою по джерелу води в присяді)",
 
 	"adv.trappednewbie.basics.tab.title": "Повернення до витоків",
 	"adv.trappednewbie.basics.visual_root.title": "Повернення до витоків",
@@ -117,6 +133,8 @@
 		"",
 		"<red>Ліжко буде використовуватись у якості точки виходу з усвідомлених снів"
 	],
+	"adv.trappednewbie.basics.glide_in_a_hang_glider.title": "У небо!",
+	"adv.trappednewbie.basics.glide_in_a_hang_glider.description": "Використайте дельтаплан вперше",
 	"adv.trappednewbie.basics.eat_a_roasted_spider_eye.title": "Запаморочливий сніданок",
 	"adv.trappednewbie.basics.eat_a_roasted_spider_eye.description": "Приготуйте на багатті та з'їжте павуче око для отримання слабкості",
 	"adv.trappednewbie.basics.lucid_dreaming.title": "Усвідомлений сон",

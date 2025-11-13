@@ -1,6 +1,8 @@
 package me.sosedik.trappednewbie.listener.entity;
 
 import me.sosedik.trappednewbie.TrappedNewbie;
+import me.sosedik.trappednewbie.dataset.TrappedNewbieAdvancements;
+import me.sosedik.trappednewbie.entity.api.Glider;
 import me.sosedik.trappednewbie.entity.craft.CraftGlider;
 import me.sosedik.trappednewbie.entity.nms.GliderEntityImpl;
 import net.minecraft.world.InteractionHand;
@@ -21,6 +23,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDismountEvent;
+import org.bukkit.event.entity.EntityMountEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
@@ -120,6 +123,14 @@ public class GliderInteraction implements Listener {
 
 		Vector velocity = craftGlider.getVelocity();
 		TrappedNewbie.scheduler().sync(() -> event.getEntity().setVelocity(velocity), 1L);
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onMount(EntityMountEvent event) {
+		if (!(event.getMount() instanceof Glider)) return;
+		if (!(event.getEntity() instanceof Player player)) return;
+
+		TrappedNewbieAdvancements.GLIDE_IN_A_HANG_GLIDER.awardAllCriteria(player);
 	}
 
 }

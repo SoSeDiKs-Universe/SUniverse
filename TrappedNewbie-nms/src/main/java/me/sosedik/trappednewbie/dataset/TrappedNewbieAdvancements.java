@@ -199,8 +199,15 @@ public class TrappedNewbieAdvancements {
 	public static final IAdvancement GOOD_AS_NEW = buildBase(FIRST_POSSESSION, "good_as_new")
 		.display(display().x(1.2F).withAdvancementFrame(AdvancementFrame.SHARP).icon(ItemUtil.texturedHead(MoreMobHeads.ZOMBIE_VILLAGER_PLAINS_ARMORER)))
 		.buildAndRegister();
+	public static final IAdvancement GET_A_NECRONOMICON = buildBase(GOOD_AS_NEW, "get_a_necronomicon")
+		.display(display().x(1.25F).withAdvancementFrame(AdvancementFrame.ARROW_RIGHT).icon(RequiemItems.NECRONOMICON))
+		.buildAndRegister();
+	public static final IAdvancement GET_INTO_A_PERSONAL_VOID = buildBase(GET_A_NECRONOMICON, "get_into_a_personal_void")
+		.display(display().x(1F).withAdvancementFrame(AdvancementFrame.SQUIRCLE).icon(Material.BEDROCK))
+		.buildAndRegister();
 	public static final IAdvancement MERE_MORTAL = buildBase(GOOD_AS_NEW, "mere_mortal")
-		.display(display().x(1F).icon(Material.PLAYER_HEAD)).visibilityRule(hidden())
+		.display(display().x(1F).icon(Material.PLAYER_HEAD))
+		.visibilityRule(hidden())
 		.buildAndRegister(MereMortalAdvancement::new); // ToDo
 	public static final IAdvancement I_HATE_SAND = buildBase(GOOD_AS_NEW, "i_hate_sand")
 		.display(display().xy(1F, 1F).withAdvancementFrame(AdvancementFrame.CIRCLE).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.SAND))
@@ -210,7 +217,7 @@ public class TrappedNewbieAdvancements {
 		.visibilityRule(parentGranted())
 		.buildAndRegister();
 	public static final IAdvancement FIRST_DRINK = buildBase(GOOD_AS_NEW, "first_drink")
-		.display(display().xy(1F, -1F).fancyDescriptionParent(NamedTextColor.GRAY).icon(Material.DRAGON_BREATH))
+		.display(display().xy(1F, -1.6F).fancyDescriptionParent(NamedTextColor.GRAY).icon(Material.DRAGON_BREATH))
 		.visibilityRule(grandParentGranted())
 		.buildAndRegister();
 
@@ -327,10 +334,11 @@ public class TrappedNewbieAdvancements {
 	public static final IAdvancement MAKE_A_WORK_STATION = buildBase(GET_A_LOG, "make_a_work_station").display(display().xy(0.5F, 1.5F).withAdvancementFrame(AdvancementFrame.BLOCK).icon(TrappedNewbieItems.OAK_WORK_STATION))
 			.requiredProgress(vanilla(inventoryChanged().withItems(ItemTriggerCondition.of(TrappedNewbieTags.ITEM_WORK_STATIONS))))
 			.buildAndRegister();
-	public static final IAdvancement MAKE_A_FLINT_KNIFE = buildBase(MAKE_ROUGH_STICKS, "make_a_flint_knife").display(display().xy(0.5F, -3.2F).goalFrame().icon(TrappedNewbieItems.FLINT_KNIFE))
-			.visibilityRule(parentGranted())
-			.requiredProgress(vanilla(inventoryChanged().withItems(ItemTriggerCondition.of(TrappedNewbieItems.FLINT_KNIFE))))
-			.buildAndRegister();
+	public static final IAdvancement MAKE_A_FLINT_KNIFE = buildBase(MAKE_ROUGH_STICKS, "make_a_flint_knife")
+		.display(display().xy(0.5F, -3.9F).goalFrame().icon(TrappedNewbieItems.FLINT_KNIFE))
+		.visibilityRule(parentGranted())
+		.requiredProgress(vanilla(inventoryChanged().withItems(ItemTriggerCondition.of(TrappedNewbieItems.FLINT_KNIFE))))
+		.buildAndRegister();
 	public static final IAdvancement MAKE_A_TOTEM_BASE = buildBase(MAKE_A_FLINT_KNIFE, "make_a_totem_base").display(display().xy(1F, 0.5F).icon(TrappedNewbieItems.OAK_TOTEM_BASE))
 			.visibilityRule(ifDone(MAKE_A_WORK_STATION))
 			.buildAndRegister();
@@ -363,6 +371,10 @@ public class TrappedNewbieAdvancements {
 	////			.requiredProgress(vanilla(consumeItem().withItem(ItemTriggerCondition.of(DelightfulFarmingItems.ROASTED_SPIDER_EYE))))
 //			.buildAndRegister();
 //	public static final IAdvancement LUCID_DREAMING = buildBase(SLEEP_IN_BED, "lucid_dreaming").display(display().xy(1.5F, 0.6F).challengeFrame().icon(Material.PHANTOM_SPAWN_EGG)).visibilityRule(parentGranted()).buildAndRegister(); // TODO
+	public static final IAdvancement GLIDE_IN_A_HANG_GLIDER = buildBase(GET_A_WOOL, "glide_in_a_hang_glider")
+		.display(display().xy(1.5F, 0.75F).withAdvancementFrame(AdvancementFrame.ARROW_UP).icon(TrappedNewbieItems.HANG_GLIDER))
+		.withReward(rewards().addItems(ItemStack.of(Material.PHANTOM_MEMBRANE, 3)))
+		.buildAndRegister();
 	public static final IAdvancement MAKE_A_FLINT_SHOVEL = buildBase(MAKE_ROUGH_STICKS, "make_a_flint_shovel").display(display().xy(1.25F, 1.5F).goalFrame().icon(TrappedNewbieItems.FLINT_SHOVEL))
 			.visibilityRule(parentGranted())
 			.requiredProgress(vanilla(inventoryChanged().withItems(ItemTriggerCondition.of(TrappedNewbieItems.FLINT_SHOVEL))))

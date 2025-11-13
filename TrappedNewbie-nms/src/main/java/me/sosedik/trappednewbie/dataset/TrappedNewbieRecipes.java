@@ -399,6 +399,7 @@ public class TrappedNewbieRecipes {
 				}
 				event.setResult(SoulboundNecronomicon.getNecronomicon(player));
 
+				TrappedNewbieAdvancements.GET_A_NECRONOMICON.awardAllCriteria(player);
 				LivingEntity target = PossessingPlayer.getPossessed(player);
 				if (target == null) target = player;
 				target.damage(Math.floor(player.getHealth() / 2), DamageSource.builder(TrappedNewbieDamageTypes.SUICIDE).build());

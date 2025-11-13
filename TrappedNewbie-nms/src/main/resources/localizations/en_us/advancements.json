@@ -47,8 +47,23 @@
 	"adv.trappednewbie.requiem.i_hate_sand.description": "Resurrect as a Husk",
 	"adv.trappednewbie.requiem.kung_fu_panda.title": "Kung Fu Panda",
 	"adv.trappednewbie.requiem.kung_fu_panda.description": "As a Panda, hit something with a Wooden Sword",
+	"adv.trappednewbie.requiem.get_a_necronomicon.title": "<obfuscated>Necronomicon",
+	"adv.trappednewbie.requiem.get_a_necronomicon.description": [
+		"Obtain a <red>Necronomicon",
+		"",
+		"<yellow>Only craftable by humans,",
+		"<yellow>can be used for void travel"
+	],
+	"adv.trappednewbie.requiem.get_into_a_personal_void.title": "Void Being",
+	"adv.trappednewbie.requiem.get_into_a_personal_void.description": [
+		"Travel into your personal Void.",
+		"",
+		"Highly recommended to bring a Hang Glider,",
+		"as falling out of there in flesh is rather deadly."
+	],
 	"adv.trappednewbie.requiem.first_drink.title": "Rivers of tears, puddles of dreams",
 	"adv.trappednewbie.requiem.first_drink.description": "Drink some water (use <key:key.use> with a bare hand on a water source while sneaking)",
+
 	"adv.trappednewbie.requiem.get_a_sugar_cane.title": "Sugar, sugar",
 	"adv.trappednewbie.requiem.get_a_sugar_cane.description": "Harvest some Sugar Canes, typically located nearby rivers or an ocean",
 	"adv.trappednewbie.requiem.get_a_birch_bark.title": "Naked Tree",
@@ -131,6 +146,8 @@
 		"",
 		"<red>The bed will act as an escape point from the lucid dreams"
 	],
+	"adv.trappednewbie.basics.glide_in_a_hang_glider.title": "Into The Skies!",
+	"adv.trappednewbie.basics.glide_in_a_hang_glider.description": "Use the Hang Glider for the first time",
 	"adv.trappednewbie.basics.eat_a_roasted_spider_eye.title": "Dizzy breakfast",
 	"adv.trappednewbie.basics.eat_a_roasted_spider_eye.description": "Cook a Spider Eye on a Campfire and eat it to obtain a Weakness effect",
 	"adv.trappednewbie.basics.lucid_dreaming.title": "Catch the Dream",

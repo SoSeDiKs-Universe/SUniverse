@@ -85,7 +85,10 @@ public class NecronomiconTravel implements Listener {
 		if (oldEffect.getType() != PotionEffectType.LEVITATION) return;
 		if (!PENDING.remove(player.getUniqueId())) return;
 
-		LocationUtil.smartTeleport(player, PerPlayerWorlds.resolveWorld(player, World.Environment.CUSTOM).getSpawnLocation().center(1), false);
+		LocationUtil.smartTeleport(player, PerPlayerWorlds.resolveWorld(player, World.Environment.CUSTOM).getSpawnLocation().center(1), false)
+			.thenRun(() -> {
+				CustomTotemOfUndyingModifier.playTotemEffect(player, ItemStack.of(RequiemItems.NECRONOMICON));
+			});
 	}
 
 	@EventHandler

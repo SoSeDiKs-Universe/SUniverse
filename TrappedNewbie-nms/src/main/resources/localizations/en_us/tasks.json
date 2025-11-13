@@ -21,11 +21,11 @@
 		"<gray>(fall into the void; optionally, make more friends for free while you can!)"
 	],
 	"task.ritual.rain_dance": "Rain Dance",
-	"task.ritual.rain_dance.description": "Make it rain",
+	"task.ritual.rain_dance.description": "Makes the sky cry",
 	"task.ritual.rain_dance.requirement": "Any raw fish",
 	"task.ritual.soul_melancholy": "Soul Melancholy",
 	"task.ritual.soul_melancholy.description": [
-		"If possessing an undead human-like mob,",
-		"links your soul to its body"
+		"Makes you body in peace with your soul.",
+		"Greatly removes a Weakness effect."
 	]
 }

@@ -634,7 +634,7 @@ public class TrappedNewbieRecipes {
 			.addIngredients('S', Material.STRING, TrappedNewbieItems.TWINE);
 		for (int i = 0; i < 7; i++)
 			recipe.addIngredients(MiscUtil.rotate(i, Tag.ITEMS_FLOWERS.getValues()));
-		recipe.withPreCheck(uniqueIngredientsCheck(4));
+		recipe.withPreCheck(uniqueIngredientsCheck(3));
 		recipe.register();
 	}
 

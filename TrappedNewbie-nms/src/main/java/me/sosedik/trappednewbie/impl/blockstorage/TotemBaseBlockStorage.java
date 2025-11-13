@@ -2,6 +2,7 @@ package me.sosedik.trappednewbie.impl.blockstorage;
 
 import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import me.sosedik.requiem.feature.PossessingPlayer;
+import me.sosedik.requiem.listener.player.possessed.PossessedUndeadZombieCuring;
 import me.sosedik.resourcelib.feature.HudMessenger;
 import me.sosedik.trappednewbie.TrappedNewbie;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieAdvancements;
@@ -9,7 +10,6 @@ import me.sosedik.trappednewbie.dataset.TrappedNewbieItems;
 import me.sosedik.trappednewbie.listener.player.TotemRituals;
 import me.sosedik.utilizer.api.event.recipe.RemainingItemEvent;
 import me.sosedik.utilizer.api.message.Messenger;
-import me.sosedik.utilizer.dataset.UtilizerTags;
 import me.sosedik.utilizer.util.InventoryUtil;
 import net.kyori.adventure.inventory.Book;
 import net.kyori.adventure.text.Component;
@@ -26,6 +26,8 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -183,20 +185,23 @@ public class TotemBaseBlockStorage extends DisplayBlockStorage {
 			case SOUL_MELANCHOLY -> this.ritualData.getPerformers().forEach(uuid -> {
 				Player player = Bukkit.getPlayer(uuid);
 				if (player == null) return;
-				if (!PossessingPlayer.isPossessing(player)) return;
-
-				if (true) { // TODO proper unpossessing
-					LivingEntity possessed = PossessingPlayer.getPossessed(player);
-					if (possessed == null) return;
-					if (!UtilizerTags.HUMAN_LIKE_ZOMBIES.isTagged(possessed.getType())) return;
-
-					PossessingPlayer.stopPossessing(player);
-					possessed.remove();
-					return;
+				LivingEntity possessed = PossessingPlayer.getPossessed(player);
+				if (possessed != null && player.getLevel() < 1) {
+					player.setLevel(1);
+					player.setExp(0F);
 				}
 
-				player.setLevel(1);
-				player.setExp(0F);
+				if (player.hasPotionEffect(PotionEffectType.WEAKNESS)) {
+					if (possessed == null) {
+						PotionEffect potionEffect = player.getPotionEffect(PotionEffectType.WEAKNESS);
+						player.removePotionEffect(PotionEffectType.WEAKNESS);
+						if (potionEffect != null)
+							player.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH, potionEffect.getDuration(), potionEffect.getAmplifier(), potionEffect.isAmbient(), potionEffect.hasParticles(), potionEffect.hasIcon()));
+					} else if (PossessedUndeadZombieCuring.canBeCured(possessed)) {
+						player.removePotionEffect(PotionEffectType.WEAKNESS);
+						PossessedUndeadZombieCuring.startCureTask(possessed);
+					}
+				}
 			});
 		}
 

@@ -288,7 +288,17 @@ public class TotemRituals implements Listener {
 			Map.entry(RitualInstrument.DRUM, 10), Map.entry(RitualInstrument.RATTLE, 5)
 		),
 		SOUL_MELANCHOLY(30, 50,
-			List.of(),
+			List.of(
+				RitualSacrifice.of(
+					player -> List.of(combined(
+						ResourceLib.getItemIcon(TrappedNewbieItems.FLOWER_BOUQUET.key()),
+						Component.space(),
+						Messenger.messenger(player).getMessage("item.trapped_newbie.flower_bouquet.name") // TODO figure out why the below line kicks the player
+//						ItemStack.of(TrappedNewbieItems.FLOWER_BOUQUET).effectiveName().hoverEvent(ItemStack.of(TrappedNewbieItems.FLOWER_BOUQUET))
+					)),
+					List.of(TrappedNewbieItems.FLOWER_BOUQUET)
+				)
+			),
 			Map.entry(RitualInstrument.FLUTE, 6)
 		);
 

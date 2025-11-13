@@ -1,5 +1,6 @@
 package me.sosedik.trappednewbie.listener.item;
 
+import me.sosedik.trappednewbie.api.event.player.PlayerTargetBlockEvent;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieAdvancements;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieItems;
 import me.sosedik.utilizer.dataset.UtilizerTags;
@@ -9,12 +10,14 @@ import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Knifes can create totem bases from logs
@@ -34,7 +37,16 @@ public class KnifeCarvesTotemBases implements Listener {
 		Block block = event.getClickedBlock();
 		if (block == null) return;
 
-		Material totemBase = switch (block.getType()) {
+		Material totemBase = getTotemBase(block.getType());
+		if (totemBase == null) return;
+
+		if (tryToCarve(player, block, totemBase, EquipmentSlot.HAND)
+			|| tryToCarve(player, block, totemBase, EquipmentSlot.OFF_HAND))
+			event.setCancelled(true);
+	}
+
+	private @Nullable Material getTotemBase(Material type) {
+		return switch (type) {
 			case ACACIA_LOG -> TrappedNewbieItems.ACACIA_TOTEM_BASE;
 			case BIRCH_LOG -> TrappedNewbieItems.BIRCH_TOTEM_BASE;
 			case CHERRY_LOG -> TrappedNewbieItems.CHERRY_TOTEM_BASE;
@@ -48,11 +60,6 @@ public class KnifeCarvesTotemBases implements Listener {
 			case WARPED_STEM -> TrappedNewbieItems.WARPED_TOTEM_BASE;
 			default -> null;
 		};
-		if (totemBase == null) return;
-
-		if (tryToCarve(player, block, totemBase, EquipmentSlot.HAND)
-			|| tryToCarve(player, block, totemBase, EquipmentSlot.OFF_HAND))
-			event.setCancelled(true);
 	}
 
 	private boolean tryToCarve(Player player, Block block, Material totemType, EquipmentSlot hand) {
@@ -68,6 +75,22 @@ public class KnifeCarvesTotemBases implements Listener {
 		TrappedNewbieAdvancements.MAKE_A_TOTEM_BASE.awardAllCriteria(player);
 
 		return true;
+	}
+
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+	public void onTarget(PlayerTargetBlockEvent event) {
+		if (getTotemBase(event.getBlock().getType()) == null) return;
+
+		Player player = event.getPlayer();
+		if (!player.isSneaking()) return;
+
+		ItemStack item = player.getInventory().getItemInMainHand();
+		if (!UtilizerTags.KNIFES.isTagged(item.getType())) {
+			item = player.getInventory().getItemInOffHand();
+			if (!UtilizerTags.KNIFES.isTagged(item.getType())) return;
+		}
+
+		event.setCancelled(true);
 	}
 
 }

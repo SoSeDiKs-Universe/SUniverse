@@ -21,11 +21,11 @@
 		"<gray>(стрибайте у прірву; за бажанням, поки є безкоштовна можливість, потоваришуйте з іншими гравцями!)"
 	],
 	"task.ritual.rain_dance": "Танець дощу",
-	"task.ritual.rain_dance.description": "Викликає дощ",
+	"task.ritual.rain_dance.description": "Змушує небо плакати",
 	"task.ritual.rain_dance.requirement": "Будь-яка сира риба",
 	"task.ritual.soul_melancholy": "Меланхолія душі",
 	"task.ritual.soul_melancholy.description": [
-		"Прив'язує Вашу душу до тіла людиноподібної",
-		"нежиті при управлінні нею"
+		"Приносить душевний спокій.",
+		"Значно усуває ефект слабкості."
 	]
 }

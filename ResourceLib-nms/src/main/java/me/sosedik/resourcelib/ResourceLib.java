@@ -261,9 +261,24 @@ public class ResourceLib extends JavaPlugin {
 		if (fakeItemData != null && fakeItemData.model() != null)
 			key = Key.key(fakeItemData.model().namespace(), fakeItemData.model().value());
 
-		boolean blocksAtlas = itemType.hasBlockType();
-		Key texture = Key.key(key.namespace(), (blocksAtlas ? "block/" : "item/") + key.value());
+		boolean blocksAtlas = itemType.hasBlockType() && !useItemTexture(itemType.asMaterial());
+		Key texture = Key.key(key.namespace(), (blocksAtlas ? "block/" : "item/") + getReplacement(key.value()));
 		return Mini.asIcon(Component.object(ObjectContents.sprite(texture)));
+	}
+
+	private static boolean useItemTexture(Material type) {
+		return type == Material.PITCHER_PLANT;
+	}
+
+	private static String getReplacement(String key) {
+		return switch (key) {
+			case "lilac" -> "lilac_top";
+			case "peony" -> "peony_top";
+			case "rose_bush" -> "rose_bush_top";
+			case "sunflower" -> "sunflower_front";
+			case "flowering_azalea" -> "flowering_azalea_top";
+			default -> key;
+		};
 	}
 
 }

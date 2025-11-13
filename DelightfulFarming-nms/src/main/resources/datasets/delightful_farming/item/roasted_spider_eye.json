@@ -1,0 +1,32 @@
+{
+	"client_type": "minecraft:iron_nugget",
+	"food": {
+		"nutrition": 3,
+		"saturation": 0.1,
+		"always_edible": true
+	},
+	"consumable": {
+		"effects": [
+			{
+				"type": "apply_status_effects",
+				"effects": [
+					{
+						"type": "minecraft:poison",
+						"duration": 100,
+						"amplifier": 0
+					}
+				]
+			},
+			{
+				"type": "apply_status_effects",
+				"effects": [
+					{
+						"type": "minecraft:weakness",
+						"duration": 300,
+						"amplifier": 0
+					}
+				]
+			}
+		]
+	}
+}

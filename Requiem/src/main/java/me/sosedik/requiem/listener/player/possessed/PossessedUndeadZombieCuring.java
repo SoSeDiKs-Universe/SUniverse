@@ -8,13 +8,13 @@ import me.sosedik.requiem.api.event.player.PlayerPossessedTransformEvent;
 import me.sosedik.requiem.api.event.player.PlayerStartPossessingEntityEvent;
 import me.sosedik.requiem.feature.GhostyPlayer;
 import me.sosedik.requiem.feature.PossessingPlayer;
+import me.sosedik.utilizer.dataset.UtilizerTags;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -50,7 +50,7 @@ public class PossessedUndeadZombieCuring implements Listener {
 		if (!NBT.getPersistentData(entity, nbt -> nbt.hasTag(CONVERSION_TAG))) return;
 		if (CURE_TASKS.containsKey(entity.getUniqueId())) return;
 
-		CURE_TASKS.put(entity.getUniqueId(), new CureTask(entity));
+		startCureTask(entity);
 	}
 
 	@EventHandler
@@ -89,7 +89,7 @@ public class PossessedUndeadZombieCuring implements Listener {
 		if (CURE_TASKS.containsKey(entity.getUniqueId())) return;
 
 		player.removePotionEffect(PotionEffectType.WEAKNESS);
-		CURE_TASKS.put(entity.getUniqueId(), new CureTask(entity));
+		startCureTask(entity);
 	}
 
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
@@ -115,11 +115,7 @@ public class PossessedUndeadZombieCuring implements Listener {
 			item.subtract();
 
 		rider.removePotionEffect(PotionEffectType.WEAKNESS);
-		CURE_TASKS.put(entity.getUniqueId(), new CureTask(entity));
-	}
-
-	private boolean canBeCured(LivingEntity entity) {
-		return entity instanceof Zombie;
+		startCureTask(entity);
 	}
 
 	private static final class CureTask extends BukkitRunnable {
@@ -145,8 +141,8 @@ public class PossessedUndeadZombieCuring implements Listener {
 				return;
 			}
 
-			cureTicks -= calcProgress();
-			if (cureTicks <= 0) {
+			this.cureTicks -= calcProgress();
+			if (this.cureTicks <= 0) {
 				cancel();
 				cure();
 			}
@@ -155,7 +151,7 @@ public class PossessedUndeadZombieCuring implements Listener {
 		// Mimics vanilla mechanic
 		private int calcProgress() {
 			int progress = 1;
-			if (RANDOM.nextFloat() < 0.01F) {
+			if (RANDOM.nextFloat() < 0.01F) { // So much for parity...
 				int hits = 0;
 				Location loc = this.entity.getLocation();
 				for (int x = loc.getBlockX() - 4; x < loc.getBlockX() + 4 && hits < 14; x++) {
@@ -183,9 +179,8 @@ public class PossessedUndeadZombieCuring implements Listener {
 			if (rider == null) return true;
 			if (!PossessingPlayer.isPossessing(rider)) return true;
 
-			if (!rider.hasPotionEffect(PotionEffectType.STRENGTH)) {
+			if (!rider.hasPotionEffect(PotionEffectType.STRENGTH))
 				rider.addPotionEffect(PotionEffectType.STRENGTH.createEffect(this.cureTicks, 0));
-			}
 
 			return false;
 		}
@@ -219,6 +214,14 @@ public class PossessedUndeadZombieCuring implements Listener {
 			this.entity = entity;
 		}
 
+	}
+
+	public static boolean canBeCured(LivingEntity entity) {
+		return UtilizerTags.HUMAN_LIKE_ZOMBIES.isTagged(entity.getType());
+	}
+
+	public static void startCureTask(LivingEntity entity) {
+		CURE_TASKS.putIfAbsent(entity.getUniqueId(), new CureTask(entity));
 	}
 
 }

@@ -7,6 +7,7 @@ import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import io.papermc.paper.loot.LootContextKey;
 import me.sosedik.requiem.api.event.player.TombstoneDestroyEvent;
 import me.sosedik.requiem.dataset.RequiemItems;
+import me.sosedik.requiem.feature.PossessingPlayer;
 import me.sosedik.utilizer.api.storage.block.BlockDataStorageHolder;
 import me.sosedik.utilizer.util.InventoryUtil;
 import me.sosedik.utilizer.util.LocationUtil;
@@ -259,7 +260,7 @@ public class TombstoneBlockStorage extends BlockDataStorageHolder {
 		Location loc = this.block.getLocation().center();
 		int exp = event.getExp();
 		if (exp > 0) {
-			if (player == null) {
+			if (player == null || PossessingPlayer.isPossessing(player)) {
 				this.block.getWorld().spawn(loc, ExperienceOrb.class, orb -> orb.setExperience(exp));
 			} else {
 				player.giveExp(exp);

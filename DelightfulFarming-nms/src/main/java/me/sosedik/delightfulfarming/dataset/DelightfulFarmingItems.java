@@ -21,6 +21,7 @@ public class DelightfulFarmingItems {
 	public static final Material BROKEN_TURTLE_EGG = byKey("broken_turtle_egg");
 	public static final Material CACTUS_FLESH = byKey("cactus_flesh");
 	public static final Material CACTUS_STEAK = byKey("cactus_steak");
+	public static final Material ROASTED_SPIDER_EYE = byKey("roasted_spider_eye");
 
 	public static final Material SWEET_BERRY_BASKET = byKey("sweet_berry_basket");
 	public static final Material GLOW_BERRY_BASKET = byKey("glow_berry_basket");

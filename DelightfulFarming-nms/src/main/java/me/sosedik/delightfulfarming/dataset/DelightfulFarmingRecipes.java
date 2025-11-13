@@ -91,11 +91,19 @@ public class DelightfulFarmingRecipes {
 			.addIngredients(Material.CACTUS)
 			.addIngredients(UtilizerTags.KNIFES.getValues())
 			.register();
+
 		new CampfireCraft(ItemStack.of(DelightfulFarmingItems.CACTUS_STEAK), 30 * 20, delightfulFarmingKey("cactus_steak"))
 			.addIngredients(DelightfulFarmingItems.CACTUS_FLESH)
 			.register();
 		new SmokingCraft(ItemStack.of(DelightfulFarmingItems.CACTUS_STEAK), 10 * 20, delightfulFarmingKey("cactus_steak"))
 			.addIngredients(DelightfulFarmingItems.CACTUS_FLESH)
+			.register();
+
+		new CampfireCraft(ItemStack.of(DelightfulFarmingItems.ROASTED_SPIDER_EYE), 12 * 20, delightfulFarmingKey("roasted_spider_eye"))
+			.addIngredients(Material.SPIDER_EYE)
+			.register();
+		new SmokingCraft(ItemStack.of(DelightfulFarmingItems.ROASTED_SPIDER_EYE), 4 * 20, delightfulFarmingKey("roasted_spider_eye"))
+			.addIngredients(Material.SPIDER_EYE)
 			.register();
 
 		Bukkit.addFuel(DelightfulFarmingItems.CHARCOAL_BLOCK, 80 * 200);

@@ -56,13 +56,17 @@ public class RepairableTooltipModifier extends ItemModifier {
 
 		var messenger = Messenger.messenger(LangOptionsStorage.getByLocale(contextBox.getLocale()));
 
-		Component itemsComponent = Mini.combine(SpacingUtil.getSpacing(1), icons);
 		boolean newLine = icons.size() > 5;
-		Component message = messenger.getMessage("attribute.repairable", component("items", newLine ? Component.empty() : itemsComponent));
+		Component message = messenger.getMessage("attribute.repairable", component("items", newLine ? Component.empty() : Mini.combine(SpacingUtil.getSpacing(1), icons)));
 
 		contextBox.addLore(combined(ICON, space(), message.decorationIfAbsent(TextDecoration.ITALIC, TextDecoration.State.FALSE)));
-		if (newLine)
-			contextBox.addLore(combined(SpacingUtil.ICON_SPACE, space(), itemsComponent));
+		if (newLine) {
+			for (int i = 0; i < icons.size(); i += 12) {
+				List<Component> chunk = icons.subList(i, Math.min(i + 12, icons.size()));
+				Component chunkComponent = Mini.combine(SpacingUtil.getSpacing(1), chunk);
+				contextBox.addLore(combined(SpacingUtil.ICON_SPACE, space(), chunkComponent));
+			}
+		}
 
 		return ModificationResult.OK;
 	}

@@ -21,11 +21,11 @@
 		"<gray>(прыгайте в бездну; по желанию, пока есть бесплатная возможность, подружитесь с другими игроками!)"
 	],
 	"task.ritual.rain_dance": "Танец дождя",
-	"task.ritual.rain_dance.description": "Призывает дождь",
+	"task.ritual.rain_dance.description": "Заставляет небо плакать",
 	"task.ritual.rain_dance.requirement": "Любая сырая рыба",
 	"task.ritual.soul_melancholy": "Меланхолия души",
 	"task.ritual.soul_melancholy.description": [
-		"Привязывает Вашу душу к человекоподобной",
-		"нежити при управлении ею"
+		"Приводит тело в гармонию с душой.",
+		"Значительно устраняет эффект слабости."
 	]
 }

@@ -16,6 +16,7 @@ import io.papermc.paper.datacomponent.item.PotDecorations;
 import io.papermc.paper.datacomponent.item.PotionContents;
 import io.papermc.paper.datacomponent.item.UseCooldown;
 import io.papermc.paper.registry.keys.tags.DamageTypeTagKeys;
+import me.sosedik.delightfulfarming.dataset.DelightfulFarmingItems;
 import me.sosedik.miscme.dataset.MoreMobHeads;
 import me.sosedik.packetadvancements.api.advancement.IAdvancement;
 import me.sosedik.packetadvancements.api.tab.AdvancementManager;
@@ -298,7 +299,7 @@ public class TrappedNewbieAdvancements {
 	public static final IAdvancement SPAWN_CAMPING = buildBase(CAMPING_OUT, "spawn_camping").display(display().xy(0.5F, 1F).withAdvancementFrame(AdvancementFrame.STAR).fancyDescriptionParent(NamedTextColor.AQUA).icon(Material.ENDER_EYE))
 			.withReward(rewards().withExp(50).addItems(ItemStack.of(Material.PORKCHOP, 16)))
 			.buildAndRegister();
-	public static final IAdvancement NOT_SPAWN_CAMPING = buildBase(SPAWN_CAMPING, "not_spawn_camping").display(display().xy(1F, 0.25F).challengeFrame().torture().fancyDescriptionParent(NamedTextColor.DARK_RED).icon(() -> {
+	public static final IAdvancement NOT_SPAWN_CAMPING = buildBase(SPAWN_CAMPING, "not_spawn_camping").display(display().xy(1F, 0.3F).challengeFrame().torture().fancyDescriptionParent(NamedTextColor.DARK_RED).icon(() -> {
 				var item = ItemStack.of(Material.CAMPFIRE);
 				item.setBlockData(Material.CAMPFIRE.createBlockData(data -> ((Campfire) data).setLit(true)));
 				return item;
@@ -307,7 +308,7 @@ public class TrappedNewbieAdvancements {
 				.withTrophy(ItemStack.of(Material.COMPASS))
 			)
 			.buildAndRegister();
-	public static final IAdvancement CORNER_CAMPING = buildBase(NOT_SPAWN_CAMPING, "corner_camping").display(display().xy(1F, 0.25F).withAdvancementFrame(AdvancementFrame.BUTTERFLY).torture().fancyDescriptionParent(NamedTextColor.DARK_RED).icon(() -> {
+	public static final IAdvancement CORNER_CAMPING = buildBase(NOT_SPAWN_CAMPING, "corner_camping").display(display().xy(1F, 0.3F).withAdvancementFrame(AdvancementFrame.BUTTERFLY).torture().fancyDescriptionParent(NamedTextColor.DARK_RED).icon(() -> {
 				var item = ItemStack.of(Material.SOUL_CAMPFIRE);
 				item.setBlockData(Material.SOUL_CAMPFIRE.createBlockData(data -> ((Campfire) data).setLit(true)));
 				return item;
@@ -321,6 +322,10 @@ public class TrappedNewbieAdvancements {
 	public static final IAdvancement MAKE_A_FIRE_FILLER = buildFake(MAKE_A_FIRE).display(display().x(0.5F).isHidden(true))
 			.requiredProgress(neverDone())
 			.buildAndRegister();
+	public static final IAdvancement EAT_A_ROASTED_SPIDER_EYE = buildBase(MAKE_A_FIRE, "eat_a_roasted_spider_eye")
+		.display(display().xy(0.5F, -1.25F).withAdvancementFrame(AdvancementFrame.SHARP).icon(DelightfulFarmingItems.ROASTED_SPIDER_EYE))
+		.requiredProgress(vanilla(consumeItem().withItem(ItemTriggerCondition.of(DelightfulFarmingItems.ROASTED_SPIDER_EYE))))
+		.buildAndRegister();
 	public static final IAdvancement GET_A_CHARCOAL = buildBase(MAKE_A_FIRE_FILLER, "get_a_charcoal").display(display().xy(1F, -0.55F).icon(Material.CHARCOAL))
 			.requiredProgress(vanilla(inventoryChanged().withItems(ItemTriggerCondition.of(Material.CHARCOAL))))
 			.buildAndRegister();
@@ -339,21 +344,18 @@ public class TrappedNewbieAdvancements {
 		.visibilityRule(parentGranted())
 		.requiredProgress(vanilla(inventoryChanged().withItems(ItemTriggerCondition.of(TrappedNewbieItems.FLINT_KNIFE))))
 		.buildAndRegister();
-	public static final IAdvancement MAKE_A_TOTEM_BASE = buildBase(MAKE_A_FLINT_KNIFE, "make_a_totem_base").display(display().xy(1F, 0.5F).icon(TrappedNewbieItems.OAK_TOTEM_BASE))
+	public static final IAdvancement MAKE_A_TOTEM_BASE = buildBase(MAKE_A_FLINT_KNIFE, "make_a_totem_base").display(display().x(1F).icon(TrappedNewbieItems.OAK_TOTEM_BASE))
 			.visibilityRule(ifDone(MAKE_A_WORK_STATION))
 			.buildAndRegister();
-	public static final IAdvancement PERFORM_A_RITUAL = buildBase(MAKE_A_FLINT_KNIFE, "perform_a_ritual").display(display().xy(1F, -0.5F).icon(TrappedNewbieItems.TOTEMIC_STAFF))
+	public static final IAdvancement PERFORM_A_RITUAL = buildBase(MAKE_A_TOTEM_BASE, "perform_a_ritual").display(display().x(1F).icon(TrappedNewbieItems.TOTEMIC_STAFF))
 			.visibilityRule(ifDone(MAKE_A_WORK_STATION))
 			.buildAndRegister();
-	public static final IAdvancement BODY_HELPER = buildFake(MAKE_A_TOTEM_BASE, "body_helper").display(display().xy(1F, -0.5F).noAnnounceChat().withAdvancementFrame(AdvancementFrame.SPEECH_BUBBLE).icon(WANDERING_TRADER_HEAD))
-			.requiredProgress(alwaysDone())
-			.buildAndRegister();
-	public static final IAdvancement PERFORM_A_RITUAL_TO_BODY_HELPER_LINKER = buildLinking(PERFORM_A_RITUAL, BODY_HELPER).buildAndRegister();
-	public static final IAdvancement GET_A_STRING = buildBase(BODY_HELPER, "get_a_string").display(display().xy(1.2F, -0.5F).icon(Material.STRING))
+
+	public static final IAdvancement GET_A_STRING = buildBase(PERFORM_A_RITUAL, "get_a_string").display(display().xy(1.3F, -0.5F).icon(Material.STRING))
 			.withReward(rewards().addItems(ItemStack.of(Material.STRING, 3)))
 			.requiredProgress(vanilla(inventoryChanged().withItems(ItemTriggerCondition.of(Material.STRING))))
 			.buildAndRegister();
-	public static final IAdvancement GET_A_WOOL = buildBase(BODY_HELPER, "get_a_wool").display(display().xy(1.2F, 0.5F).icon(Material.WHITE_WOOL))
+	public static final IAdvancement GET_A_WOOL = buildBase(PERFORM_A_RITUAL, "get_a_wool").display(display().xy(1.3F, 0.5F).icon(Material.WHITE_WOOL))
 			.withReward(rewards().addItems(ItemStack.of(Material.MUTTON, 2)).addItems(ItemStack.of(Material.WHITE_WOOL)))
 			.requiredProgress(vanilla(inventoryChanged().withItems(ItemTriggerCondition.of(Tag.WOOL))))
 			.buildAndRegister();
@@ -366,16 +368,12 @@ public class TrappedNewbieAdvancements {
 //	public static final IAdvancement SLEEP_IN_BED = buildBase(MAKE_A_SLEEPING_BAG, "sleep_in_bed").display(display().x(1F).challengeFrame().icon(Material.WHITE_BED)) // TODO
 //			.visibilityRule(grandParentGranted())
 //			.buildAndRegister();
-//	public static final IAdvancement EAT_A_ROASTED_SPIDER_EYE = buildBase(CAMPING_OUT, "eat_a_roasted_spider_eye").display(display().xy(1.2F, -0.6F).icon(Material.SPIDER_EYE/*DelightfulFarmingItems.ROASTED_SPIDER_EYE*/)) // TODO
-//			.visibilityRule(ifDone(SLEEP_IN_BED))
-	////			.requiredProgress(vanilla(consumeItem().withItem(ItemTriggerCondition.of(DelightfulFarmingItems.ROASTED_SPIDER_EYE))))
-//			.buildAndRegister();
 //	public static final IAdvancement LUCID_DREAMING = buildBase(SLEEP_IN_BED, "lucid_dreaming").display(display().xy(1.5F, 0.6F).challengeFrame().icon(Material.PHANTOM_SPAWN_EGG)).visibilityRule(parentGranted()).buildAndRegister(); // TODO
 	public static final IAdvancement GLIDE_IN_A_HANG_GLIDER = buildBase(GET_A_WOOL, "glide_in_a_hang_glider")
 		.display(display().xy(1.5F, 0.75F).withAdvancementFrame(AdvancementFrame.ARROW_UP).icon(TrappedNewbieItems.HANG_GLIDER))
 		.withReward(rewards().addItems(ItemStack.of(Material.PHANTOM_MEMBRANE, 3)))
 		.buildAndRegister();
-	public static final IAdvancement MAKE_A_FLINT_SHOVEL = buildBase(MAKE_ROUGH_STICKS, "make_a_flint_shovel").display(display().xy(1.25F, 1.5F).goalFrame().icon(TrappedNewbieItems.FLINT_SHOVEL))
+	public static final IAdvancement MAKE_A_FLINT_SHOVEL = buildBase(MAKE_ROUGH_STICKS, "make_a_flint_shovel").display(display().xy(1.25F, 1.75F).goalFrame().icon(TrappedNewbieItems.FLINT_SHOVEL))
 			.visibilityRule(parentGranted())
 			.requiredProgress(vanilla(inventoryChanged().withItems(ItemTriggerCondition.of(TrappedNewbieItems.FLINT_SHOVEL))))
 			.buildAndRegister();
@@ -423,7 +421,6 @@ public class TrappedNewbieAdvancements {
 
 	private static final IAdvancement GET_A_FLAKED_FLINT_TO_MAKE_A_TWINE_LINKER = buildLinking(GET_A_FLAKED_FLINT, MAKE_A_TWINE).visibilityRule(ifVisible(false, MAKE_FLINT_SHEARS)).buildAndRegister();
 	private static final IAdvancement MAKE_FLINT_SHEARS_TO_GET_A_BRANCH_LINKER = buildLinking(MAKE_FLINT_SHEARS, GET_A_BRANCH).buildAndRegister();
-//	private static final IAdvancement EAT_A_ROASTED_SPIDER_EYE_TO_LUCID_DREAMING_LINKER = buildLinking(EAT_A_ROASTED_SPIDER_EYE, LUCID_DREAMING).buildAndRegister();
 
 	public static final AdvancementTab ADVENTURE_TAB = buildTab("adventure", MANAGER)
 		.display(simpleTabDisplay().inverseY().display(display().backgroundPathTexture("block/sandstone_top").icon(Material.MAP)))

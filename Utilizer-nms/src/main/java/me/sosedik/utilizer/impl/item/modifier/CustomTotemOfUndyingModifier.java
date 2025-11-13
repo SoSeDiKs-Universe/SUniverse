@@ -77,7 +77,7 @@ public class CustomTotemOfUndyingModifier extends ItemModifier {
 		Utilizer.scheduler().sync(() -> {
 			TOTEM_CACHE.remove(player.getUniqueId());
 			player.updateInventory();
-		}, 5L);
+		}, 15L);
 	}
 
 }

@@ -8,6 +8,8 @@ dependencies {
     paperLibrary("org.incendo:cloud-paper:${project.property("cloudImplVersion")}")
     paperLibrary("org.incendo:cloud-annotations:${project.property("cloudVersion")}")
 
+    paperLibrary("xyz.xenondevs.invui:invui:${project.property("invApiVersion")}")
+
     compileOnly("de.tr7zw:item-nbt-api-plugin:${project.property("nbtApiVersion")}")
     compileOnly("com.github.retrooper:packetevents-spigot:${project.property("packeteventsVersion")}")
 }

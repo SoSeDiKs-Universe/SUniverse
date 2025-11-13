@@ -60,7 +60,7 @@ public class SuicideCommand {
 		GhostyPlayer.markGhost(player);
 		player.addPotionEffect(new PotionEffect(PotionEffectType.UNLUCK, 20 * 60 * 60 * 3, 0));
 
-		LocationUtil.smartTeleport(player, TrappedNewbie.limboWorld().getSpawnLocation(), false);
+		LocationUtil.smartTeleport(player, TrappedNewbie.limboWorld().getSpawnLocation().center(1), false);
 	}
 
 }

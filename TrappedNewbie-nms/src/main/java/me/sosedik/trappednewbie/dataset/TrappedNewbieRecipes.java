@@ -30,6 +30,7 @@ import org.bukkit.Keyed;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Tag;
+import org.bukkit.damage.DamageSource;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -153,7 +154,14 @@ public class TrappedNewbieRecipes {
 			.addIngredients('F', TrappedNewbieItems.FLAKED_FLINT)
 			.register();
 
-		new ShapedCraft(ItemStack.of(TrappedNewbieItems.FLINT_SHEARS), trappedNewbieKey("flint_shears"), "FT", " F")
+		new ShapedCraft(ItemStack.of(TrappedNewbieItems.FLINT_SHEARS), trappedNewbieKey("flint_shears_1"), "F ", "TF")
+			.withGroup("flint_shears")
+			.withCategory(CraftingBookCategory.EQUIPMENT)
+			.addIngredients('T', Material.STRING, TrappedNewbieItems.TWINE)
+			.addIngredients('F', TrappedNewbieItems.FLAKED_FLINT)
+			.register();
+		new ShapedCraft(ItemStack.of(TrappedNewbieItems.FLINT_SHEARS), trappedNewbieKey("flint_shears_2"), "FT", " F")
+			.withGroup("flint_shears")
 			.withCategory(CraftingBookCategory.EQUIPMENT)
 			.addIngredients('T', Material.STRING, TrappedNewbieItems.TWINE)
 			.addIngredients('F', TrappedNewbieItems.FLAKED_FLINT)
@@ -190,6 +198,7 @@ public class TrappedNewbieRecipes {
 			.register();
 
 		new ShapedCraft(ItemStack.of(TrappedNewbieItems.FLINT_SHOVEL), trappedNewbieKey("flint_shovel_2"), "F ", "ST")
+			.special()
 			.withGroup("flint_shovel")
 			.withCategory(CraftingBookCategory.EQUIPMENT)
 			.addIngredients('S', Material.STICK, TrappedNewbieItems.ROUGH_STICK)
@@ -212,18 +221,21 @@ public class TrappedNewbieRecipes {
 			.register();
 
 		new ShapedCraft(ItemStack.of(TrappedNewbieItems.STEEL_AND_FLINT), trappedNewbieKey("steel_and_flint_1"), "F ", " S")
+			.special()
 			.withGroup("steel_and_flint")
 			.withCategory(CraftingBookCategory.EQUIPMENT)
 			.addIngredients('F', Material.FLINT)
 			.addIngredients('S', Material.IRON_INGOT)
 			.register();
 		new ShapedCraft(ItemStack.of(TrappedNewbieItems.STEEL_AND_FLINT), trappedNewbieKey("steel_and_flint_2"), "F", "S")
+			.special()
 			.withGroup("steel_and_flint")
 			.withCategory(CraftingBookCategory.EQUIPMENT)
 			.addIngredients('F', Material.FLINT)
 			.addIngredients('S', Material.IRON_INGOT)
 			.register();
 		new ShapedCraft(ItemStack.of(TrappedNewbieItems.STEEL_AND_FLINT), trappedNewbieKey("steel_and_flint_3"), "FS")
+			.special()
 			.withGroup("steel_and_flint")
 			.withCategory(CraftingBookCategory.EQUIPMENT)
 			.addIngredients('F', Material.FLINT)
@@ -389,8 +401,7 @@ public class TrappedNewbieRecipes {
 
 				LivingEntity target = PossessingPlayer.getPossessed(player);
 				if (target == null) target = player;
-				else if (player.getLevel() == 0) player.setLevel(1);
-				target.damage(Math.floor(player.getHealth() / 2));
+				target.damage(Math.floor(player.getHealth() / 2), DamageSource.builder(TrappedNewbieDamageTypes.SUICIDE).build());
 			})
 			.register();
 
@@ -647,6 +658,7 @@ public class TrappedNewbieRecipes {
 
 	private static void removeRecipes() {
 		for (String recipe : new String[]{
+			"repair_item",
 			// Tweaked
 			"stick", "stick_from_bamboo_item", "campfire",// "soul_campfire",
 			"leather"
@@ -661,11 +673,11 @@ public class TrappedNewbieRecipes {
 	}
 
 	private static void makeIngredientReplacements() {
-		Map<Material, List<ItemStack>> replacements = new HashMap<>();
+		Map<Material, IngredientReplacement> replacements = new HashMap<>();
 
 		addReplacements(replacements, Material.STICK, TrappedNewbieTags.STICKS);
 		addReplacements(replacements, Material.SHEARS, UtilizerTags.SHEARS);
-		addReplacements(replacements, Material.STRING, List.of(Material.STRING, TrappedNewbieItems.HORSEHAIR));
+		addReplacements(replacements, Material.STRING, List.of(Material.STRING, TrappedNewbieItems.HORSEHAIR), NamespacedKey.minecraft("white_wool_from_string"));
 		addReplacements(replacements, Material.RABBIT_HIDE, UtilizerTags.HIDES);
 
 		TrappedNewbie.scheduler().sync(() -> {
@@ -682,6 +694,8 @@ public class TrappedNewbieRecipes {
 			});
 		}, 1L);
 	}
+
+	private record IngredientReplacement(List<ItemStack> ingredients, List<NamespacedKey> exclusions) {}
 
 	private static void addBarkRecipes(Material log, Material strippedLog, @Nullable Material wood, @Nullable Material strippedWood, Material bark) {
 		LogStrippingGivesBarks.addBark(log, strippedLog, ItemStack.of(bark, 4));
@@ -719,20 +733,22 @@ public class TrappedNewbieRecipes {
 			.register();
 	}
 
-	private static void addReplacements(Map<Material, List<ItemStack>> map, Material type, Collection<Material> replacements) {
-		map.computeIfAbsent(type, k -> new ArrayList<>()).addAll(replacements.stream().map(ItemStack::of).toList());
+	private static void addReplacements(Map<Material, IngredientReplacement> map, Material type, Tag<Material> replacements, NamespacedKey... exclusions) {
+		addReplacements(map, type, replacements.getValues(), exclusions);
 	}
 
-	private static void addReplacements(Map<Material, List<ItemStack>> map, Material type, Tag<Material> replacements) {
-		map.computeIfAbsent(type, k -> new ArrayList<>()).addAll(replacements.getValues().stream().map(ItemStack::of).toList());
+	private static void addReplacements(Map<Material, IngredientReplacement> map, Material type, Collection<Material> replacements, NamespacedKey... exclusions) {
+		IngredientReplacement replacement = map.computeIfAbsent(type, k -> new IngredientReplacement(new ArrayList<>(), new ArrayList<>()));
+		replacement.ingredients().addAll(replacements.stream().map(ItemStack::of).toList());
+		if (exclusions.length > 0) replacement.exclusions().addAll(List.of(exclusions));
 	}
 
-	private static boolean updateRecipe(Map<Material, List<ItemStack>> replacements, Recipe recipe) {
+	private static boolean updateRecipe(Map<Material, IngredientReplacement> replacements, Recipe recipe) {
 		boolean modified = false;
 		if (recipe instanceof ShapedRecipe shapedRecipe) {
 			Map<Character, RecipeChoice> choiceMap = shapedRecipe.getChoiceMap();
 			for (Map.Entry<Character, RecipeChoice> entry : choiceMap.entrySet()) {
-				RecipeChoice choice = updateChoice(replacements, entry.getValue());
+				RecipeChoice choice = updateChoice(replacements, entry.getValue(), ((Keyed) recipe).getKey());
 				if (choice == null) continue;
 
 				modified = true;
@@ -741,7 +757,7 @@ public class TrappedNewbieRecipes {
 		} else if (recipe instanceof ShapelessRecipe shapelessRecipe) {
 			List<RecipeChoice> choiceList = shapelessRecipe.getChoiceList();
 			for (RecipeChoice choice : choiceList) {
-				RecipeChoice recipeChoice = updateChoice(replacements, choice);
+				RecipeChoice recipeChoice = updateChoice(replacements, choice, ((Keyed) recipe).getKey());
 				if (recipeChoice == null) continue;
 
 				modified = true;
@@ -753,29 +769,29 @@ public class TrappedNewbieRecipes {
 		return modified;
 	}
 
-	private static @Nullable RecipeChoice updateChoice(Map<Material, List<ItemStack>> map, RecipeChoice recipeChoice) {
+	private static @Nullable RecipeChoice updateChoice(Map<Material, IngredientReplacement> map, RecipeChoice recipeChoice, NamespacedKey recipeKey) {
 		Set<ItemStack> items = new HashSet<>(); // Avoid duplicates if recipes already account for replacements
 		Predicate<ItemStack> predicate = null;
 		boolean modified = false;
 		if (recipeChoice instanceof RecipeChoice.MaterialChoice materialChoice) {
 			for (Material material : materialChoice.getChoices()) {
-				List<ItemStack> replacements = map.get(material);
-				if (replacements == null) {
+				IngredientReplacement replacements = map.get(material);
+				if (replacements == null || replacements.exclusions().contains(recipeKey)) {
 					items.add(ItemStack.of(material));
 				} else {
 					modified = true;
-					items.addAll(replacements);
+					items.addAll(replacements.ingredients());
 				}
 			}
 		} else if (recipeChoice instanceof RecipeChoice.ExactChoice exactChoice) {
 			predicate = exactChoice.getPredicate();
 			for (ItemStack item : exactChoice.getChoices()) {
-				List<ItemStack> replacements = map.get(item.getType());
-				if (replacements == null) {
+				IngredientReplacement replacements = map.get(item.getType());
+				if (replacements == null || replacements.exclusions().contains(recipeKey)) {
 					items.add(item);
 				} else {
 					modified = true;
-					items.addAll(replacements);
+					items.addAll(replacements.ingredients());
 				}
 			}
 		}

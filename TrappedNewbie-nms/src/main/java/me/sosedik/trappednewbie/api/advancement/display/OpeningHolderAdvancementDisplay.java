@@ -74,7 +74,7 @@ public class OpeningHolderAdvancementDisplay extends FancierAdvancementDisplay<O
 		World world = player.getWorld();
 		Key worldKey = world.key();
 		if (!TrappedNewbie.NAMESPACE.equals(worldKey.namespace())) {
-			if (Bukkit.getWorlds().getFirst() == world)
+			if (TrappedNewbie.limboWorld() == world)
 				return new WorldData("limbo", null);
 			return new WorldData(worldKey.value(), null);
 		}
@@ -96,7 +96,7 @@ public class OpeningHolderAdvancementDisplay extends FancierAdvancementDisplay<O
 		if (value.startsWith("worlds-resources/")) {
 			String[] split = value.split("/");
 			try {
-				UUID uuid = UUID.fromString(split[2]);
+				UUID uuid = UUID.fromString(split[split.length - 1]);
 				if (player.getUniqueId().equals(uuid))
 					return new WorldData("resource." + split[1], null);
 

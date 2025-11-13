@@ -109,4 +109,19 @@ public class MathUtil {
 		}
 	}
 
+	/**
+	 * Gets the exp needed to obtain the level from 0
+	 *
+	 *
+	 * @param level level
+	 * @return exp
+	 * @see <a href=http://minecraft.wiki/Experience#Leveling_up>Experience#Leveling_up</a>
+	 */
+	public static int getExpForLevel(int level) {
+		if (level < 1) return 0;
+		if (level < 17) return level * level + 6 * level;
+		if (level < 32) return (int) (2.5 * level * level - 40.5 * level + 360);
+		return (int) (4.5 * level * level - 162.5 * level + 2220);
+	}
+
 }

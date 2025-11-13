@@ -29,6 +29,7 @@
 	"advancement.trophy": "<gray><!i>Трофей <player> за <advancement>",
 	"preferences.preference.adv_helper": "Показывать помощник для достижений",
 	"ritual.picker": "Выберите ритуал:",
+	"ritual.required_items": "Требуемое пожертвование:",
 	"ritual.required_instruments": "Среди инструментов должны присутствовать:",
 	"ritual.instruments.rattle": "Трещотка",
 	"ritual.instruments.flute": "Флейта",
@@ -41,5 +42,11 @@
 	"item.modifier.halloween_candy": "<gradient:gold:dark_gray>Хэллоуинская конфета",
 	"item.modifier.goodie_bag": "<dark_gray>Важно делиться с друзьями!",
 	"item.modifier.goodie_bag.looter": "<gray>Мешочек игрока <player>",
-	"attrition.too_high": "Ваш уровень одержимости слишком высок"
+	"attrition.too_high": "Ваш уровень одержимости слишком высок",
+	"gui.soul_travel": "Душевный экспресс",
+	"gui.soul_travel.destination.void": "Персональная пустота",
+	"gui.soul_travel.travel": [
+		"Нажмите, чтобы начать перемещение",
+		"Стоимость: <color><level> <plural:ru_ru:уровень|уровня|уровней:'<level>'> (опыта)"
+	]
 }

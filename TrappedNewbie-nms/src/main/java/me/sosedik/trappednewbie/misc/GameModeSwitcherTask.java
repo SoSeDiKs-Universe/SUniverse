@@ -4,6 +4,7 @@ import com.destroystokyo.paper.MaterialTags;
 import me.sosedik.requiem.feature.GhostyPlayer;
 import me.sosedik.trappednewbie.TrappedNewbie;
 import me.sosedik.trappednewbie.api.event.player.PlayerTargetBlockEvent;
+import me.sosedik.trappednewbie.api.event.player.PlayerToolCheck;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieTags;
 import me.sosedik.trappednewbie.listener.block.SoftBlockHandBreaking;
 import me.sosedik.utilizer.dataset.UtilizerTags;
@@ -71,7 +72,7 @@ public class GameModeSwitcherTask extends BukkitRunnable {
 
 		Material blockType = targetBlock.getType();
 		if (isInteractable(blockType)) return true;
-		if (isApplicableTool(blockType, mainHand)) return true;
+		if (isApplicableTool(this.player, targetBlock, mainHand)) return true;
 		if (targetBlockFace == BlockFace.UP && UtilizerTags.TILLABLES.isTagged(blockType)) {
 			if (Tag.ITEMS_HOES.isTagged(mainHand.getType())) return true;
 			if (Tag.ITEMS_HOES.isTagged(offHand.getType())) return true;
@@ -108,13 +109,16 @@ public class GameModeSwitcherTask extends BukkitRunnable {
 		return TrappedNewbieTags.PLACEABLE_ITEMS.isTagged(itemType);
 	}
 
-	public static boolean isApplicableTool(Material type, ItemStack tool) {
+	public static boolean isApplicableTool(Player player, Block block, ItemStack tool) {
+		Material type = block.getType();
 		if (TrappedNewbieTags.MINEABLE_BY_HAND.isTagged(type)) return true;
 
 		if (tool.isEmpty()) {
 			if (Tag.WOODEN_BUTTONS.isTagged(type)) return true;
 			if (Tag.WOODEN_PRESSURE_PLATES.isTagged(type)) return true;
 		}
+
+		if (!new PlayerToolCheck(player, block, tool).callEvent()) return true;
 
 		Material toolType = tool.getType();
 		if (TrappedNewbieTags.ROCKS.isTagged(toolType) && SoftBlockHandBreaking.getConverted(type) != null) return true;

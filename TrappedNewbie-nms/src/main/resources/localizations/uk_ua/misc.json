@@ -29,6 +29,7 @@
 	"advancement.trophy": "<gray><!i>Трофей <player> за <advancement>",
 	"preferences.preference.adv_helper": "Показувати помічник для досягнень",
 	"ritual.picker": "Оберіть ритуал:",
+	"ritual.required_items": "Необхідна пожертва:",
 	"ritual.required_instruments": "Серед інструментів повинні бути:",
 	"ritual.instruments.rattle": "Брязкальце",
 	"ritual.instruments.flute": "Флейта",
@@ -41,5 +42,11 @@
 	"item.modifier.halloween_candy": "<gradient:gold:dark_gray>Гелловінський смаколик",
 	"item.modifier.goodie_bag": "<dark_gray>Важливо ділитись з друзями!",
 	"item.modifier.goodie_bag.looter": "<gray>Мішечок гравця <player>",
-	"attrition.too_high": "Ваш рівень одержимості занадто високий"
+	"attrition.too_high": "Ваш рівень одержимості занадто високий",
+	"gui.soul_travel": "Душевний експрес",
+	"gui.soul_travel.destination.void": "Особиста порожнеча",
+	"gui.soul_travel.travel": [
+		"Натисніть, щоб розпочати подорож",
+		"Вартість: <color><level> <plural:uk_ua:рівень|рівня|рівнів:'<level>'> (досвіду)"
+	]
 }

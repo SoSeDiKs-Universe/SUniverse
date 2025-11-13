@@ -3,17 +3,21 @@ package me.sosedik.trappednewbie.impl.blockstorage;
 import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import me.sosedik.requiem.feature.PossessingPlayer;
 import me.sosedik.resourcelib.feature.HudMessenger;
+import me.sosedik.trappednewbie.TrappedNewbie;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieAdvancements;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieItems;
 import me.sosedik.trappednewbie.listener.player.TotemRituals;
+import me.sosedik.utilizer.api.event.recipe.RemainingItemEvent;
 import me.sosedik.utilizer.api.message.Messenger;
 import me.sosedik.utilizer.dataset.UtilizerTags;
+import me.sosedik.utilizer.util.InventoryUtil;
 import net.kyori.adventure.inventory.Book;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickCallback;
 import net.kyori.adventure.text.event.ClickEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
@@ -21,6 +25,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -87,6 +92,14 @@ public class TotemBaseBlockStorage extends DisplayBlockStorage {
 		for (TotemRituals.Ritual ritual : TotemRituals.Ritual.values()) {
 			Component ritualText = messenger.getMessage("task.ritual." + ritual.getLocaleId());
 			Component hoverText = messenger.getMessage("task.ritual." + ritual.getLocaleId() + ".description");
+
+			if (!ritual.getSacrifices().isEmpty()) {
+				Component requirementsText = messenger.getMessage("ritual.required_items");
+				List<Component> sacrificesTexts = new ArrayList<>();
+				ritual.getSacrifices().forEach(sacrifice -> sacrificesTexts.add(Component.text("- ").append(sacrifice.messageProvider().apply(player))));
+				hoverText = combined(hoverText, Component.newline(), Component.newline(), requirementsText, Component.newline(), combine(Component.newline(), sacrificesTexts));
+			}
+
 			if (!ritual.getRequirements().isEmpty()) {
 				Component requirementsText = messenger.getMessage("ritual.required_instruments");
 				List<Component> instrumentNames = new ArrayList<>();
@@ -94,11 +107,12 @@ public class TotemBaseBlockStorage extends DisplayBlockStorage {
 				if (ritual.getRequiredExtraPoints() > 0) instrumentNames.add(Component.text("- ").append(messenger.getMessage("ritual.instruments.any")));
 				hoverText = combined(hoverText, Component.newline(), Component.newline(), requirementsText, Component.newline(), combine(Component.newline(), instrumentNames));
 			}
+
 			ritualText = ritualText.hoverEvent(hoverText);
 			ritualText = ritualText.clickEvent(ClickEvent.callback(audience -> {
 				if (audience instanceof Player p)
 					p.closeInventory();
-				onRitualPick(ritual);
+				onRitualPick(player, ritual);
 			}, ClickCallback.Options.builder().uses(1).lifetime(Duration.ofMinutes(10L)).build()));
 			ritualText = Component.textOfChildren(Component.newline(), Component.text("・"), ritualText);
 			texts.add(ritualText);
@@ -109,9 +123,38 @@ public class TotemBaseBlockStorage extends DisplayBlockStorage {
 		player.openBook(builder);
 	}
 
-	public void onRitualPick(TotemRituals.Ritual ritual) {
+	public void onRitualPick(Player player, TotemRituals.Ritual ritual) {
 		if (this.ritualData != null)
 			abortRitual();
+
+		boolean sacrificed = false;
+		List<TotemRituals.RitualSacrifice> sacrifices = ritual.getSacrifices();
+		s:
+		for (TotemRituals.RitualSacrifice sacrifice : sacrifices) {
+			for (ItemStack item : player.getInventory()) {
+				if (ItemStack.isEmpty(item)) continue;
+				if (!sacrifice.itemCheck().test(item)) continue;
+
+				var itemEvent = new RemainingItemEvent(null, player, null, TrappedNewbie.trappedNewbieKey("ritual_sacrifice"), item.asOne(), 1);
+				Material craftingRemainingItem = item.getType().getCraftingRemainingItem();
+				if (craftingRemainingItem != null)
+					itemEvent.setResult(ItemStack.of(craftingRemainingItem));
+				itemEvent.callEvent();
+
+				item.subtract();
+
+				ItemStack result = itemEvent.getResult();
+				if (!ItemStack.isEmpty(result))
+					InventoryUtil.replaceOrAdd(player, EquipmentSlot.HAND, result);
+
+				sacrificed = true;
+				break s;
+			}
+		}
+		if (!sacrificed) {
+			this.ritualData = null;
+			return;
+		}
 
 		this.ritualData = new TotemRituals.RitualData(ritual, this);
 
@@ -141,7 +184,8 @@ public class TotemBaseBlockStorage extends DisplayBlockStorage {
 				Player player = Bukkit.getPlayer(uuid);
 				if (player == null) return;
 				if (!PossessingPlayer.isPossessing(player)) return;
-				if (player.getLevel() > 0) {
+
+				if (true) { // TODO proper unpossessing
 					LivingEntity possessed = PossessingPlayer.getPossessed(player);
 					if (possessed == null) return;
 					if (!UtilizerTags.HUMAN_LIKE_ZOMBIES.isTagged(possessed.getType())) return;

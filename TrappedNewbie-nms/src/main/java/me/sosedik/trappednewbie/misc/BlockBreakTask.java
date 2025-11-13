@@ -86,7 +86,7 @@ public class BlockBreakTask extends BukkitRunnable {
 		sendBreak();
 
 		// Store needed values
-		this.properTool = GameModeSwitcherTask.isApplicableTool(block.getType(), this.tool);
+		this.properTool = GameModeSwitcherTask.isApplicableTool(player, block, this.tool);
 		this.brokenTool = DurabilityUtil.isBroken(this.tool);
 
 		// Hammer block replacing
@@ -96,7 +96,7 @@ public class BlockBreakTask extends BukkitRunnable {
 			float bestDestroyTime = Float.MAX_VALUE;
 			for (ItemStack invItem : player.getInventory().getContents()) {
 				if (ItemStack.isEmpty(invItem)) continue;
-				if (!GameModeSwitcherTask.isApplicableTool(block.getType(), this.tool)) continue;
+				if (!GameModeSwitcherTask.isApplicableTool(player, block, this.tool)) continue;
 				if (DurabilityUtil.isBroken(invItem)) continue;
 
 				this.tool = invItem;
@@ -123,8 +123,7 @@ public class BlockBreakTask extends BukkitRunnable {
 
 		// Insta-break
 		if (!this.brokenTool && canSee()) {
-			float hardness = getHardness();
-			if (hardness == 0 || hardness * 30 <= getDestroyDamage()) {
+			if (getDestroySpeed() == 0) {
 				if (this.properTool) {
 					clearBlock(block);
 					breakBlock();
@@ -225,10 +224,10 @@ public class BlockBreakTask extends BukkitRunnable {
 
 	private boolean shouldBeAborted() {
 		return !this.player.isOnline()
-				|| this.player.getGameMode() != GameMode.SURVIVAL
-				|| !this.player.getInventory().getItemInMainHand().isSimilar(this.hammer == null ? this.tool : this.hammer)
-				|| !checkBlockExistence()
-				|| !isPlayerTargetingThisBlock();
+			|| this.player.getGameMode() != GameMode.SURVIVAL
+			|| !this.player.getInventory().getItemInMainHand().isSimilar(this.hammer == null ? this.tool : this.hammer)
+			|| !checkBlockExistence()
+			|| !isPlayerTargetingThisBlock();
 	}
 
 	private void tryToCrack() {
@@ -257,6 +256,7 @@ public class BlockBreakTask extends BukkitRunnable {
 			if (next > this.destroyState.crack)
 				return -next;
 		}
+
 		return 0;
 	}
 
@@ -282,8 +282,18 @@ public class BlockBreakTask extends BukkitRunnable {
 
 	private float getDestroySpeed() {
 		float seconds = getHardness();
+		// Client-side insta-breakable block, can't do custom rules
+		if (seconds == 0) return 0;
+
 		float bonus = getDestroyDamage();
-		if (bonus >= seconds * 30) return 0;
+		if (bonus >= seconds * 30) {
+			for (var rule : BREAKING_RULES) {
+				Float s = rule.apply(this, seconds);
+				if (s != null)
+					return s;
+			}
+			return 0;
+		}
 
 		seconds *= this.properTool ? 1.5F : 5F; // Vanilla: multiply by 5 if not a proper tool
 		if (bonus != 0) seconds /= bonus;

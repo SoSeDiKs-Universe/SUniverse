@@ -29,6 +29,7 @@
 	"advancement.trophy": "<gray><!i><player>'s trophy for <advancement>",
 	"preferences.preference.adv_helper": "Show advancements helper",
 	"ritual.picker": "Choose a ritual:",
+	"ritual.required_items": "Required sacrifice:",
 	"ritual.required_instruments": "Instruments must include:",
 	"ritual.instruments.rattle": "Rattle",
 	"ritual.instruments.flute": "Flute",
@@ -41,5 +42,11 @@
 	"item.modifier.halloween_candy": "<gradient:gold:dark_gray>Halloween candy",
 	"item.modifier.goodie_bag": "<dark_gray>Sharing is caring!",
 	"item.modifier.goodie_bag.looter": "<gray><player>'s Goodie Bag",
-	"attrition.too_high": "Your attrition level is too high"
+	"attrition.too_high": "Your attrition level is too high",
+	"gui.soul_travel": "Soul Express",
+	"gui.soul_travel.destination.void": "Personal Void",
+	"gui.soul_travel.travel": [
+		"Click to initiate travel",
+		"Cost: <color><level> <plural:en_us:level|levels:'<level>'> (of exp)"
+	]
 }

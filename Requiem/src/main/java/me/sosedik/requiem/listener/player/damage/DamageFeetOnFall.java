@@ -21,7 +21,6 @@ public class DamageFeetOnFall implements Listener {
 		if (!(event.getEntity() instanceof Player player)) return;
 		if (event.getDamageSource().getDamageType() != DamageType.FALL) return;
 
-		player.sendMessage("Ouch!"); // TODO Ouch!
 		var damageModel = PlayerDamageModel.of(player);
 		damageModel.getState(BodyPart.LEFT_FOOT).damage(1);
 		damageModel.getState(BodyPart.RIGHT_FOOT).damage(1);

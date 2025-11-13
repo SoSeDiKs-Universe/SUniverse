@@ -23,6 +23,8 @@ dependencies {
     compileOnly("org.incendo:cloud-annotations:${project.property("cloudVersion")}")
 
     compileOnly("dev.jorel:commandapi-paper-annotations:${project.property("commandApiVersion")}")
+
+    compileOnly("xyz.xenondevs.invui:invui:${project.property("invApiVersion")}")
 }
 
 tasks.withType<ShadowJar> {

@@ -42,7 +42,7 @@ public class WorldCommand {
 		if (!silent) Messenger.messenger(target).sendMessage("command.world", raw("world", world.getName()));
 		if (stack.getSender() != target)
 			Messenger.messenger(stack.getSender()).sendMessage("command.world.other", raw("world", world.getName()), raw("player", target.displayName()));
-		Essence.scheduler().sync(() -> LocationUtil.smartTeleport(target, keepPos ? target.getLocation().world(world) : world.getSpawnLocation(), false));
+		Essence.scheduler().sync(() -> LocationUtil.smartTeleport(target, keepPos ? target.getLocation().world(world) : world.getSpawnLocation().center(1), false));
 	}
 
 }

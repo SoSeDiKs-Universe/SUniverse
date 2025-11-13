@@ -1,6 +1,8 @@
 package me.sosedik.trappednewbie.listener.player;
 
+import com.destroystokyo.paper.MaterialTags;
 import io.papermc.paper.event.player.PlayerClientLoadedWorldEvent;
+import me.sosedik.resourcelib.ResourceLib;
 import me.sosedik.resourcelib.util.SpacingUtil;
 import me.sosedik.trappednewbie.TrappedNewbie;
 import me.sosedik.trappednewbie.api.event.player.PlayerTargetBlockEvent;
@@ -10,6 +12,7 @@ import me.sosedik.trappednewbie.impl.blockstorage.TotemBaseBlockStorage;
 import me.sosedik.utilizer.api.message.Messenger;
 import me.sosedik.utilizer.listener.BlockStorage;
 import me.sosedik.utilizer.util.LocationUtil;
+import me.sosedik.utilizer.util.MiscUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Location;
@@ -32,6 +35,7 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -39,8 +43,11 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 import static me.sosedik.utilizer.api.message.Mini.combine;
+import static me.sosedik.utilizer.api.message.Mini.combined;
 
 @NullMarked
 public class TotemRituals implements Listener {
@@ -267,18 +274,35 @@ public class TotemRituals implements Listener {
 
 	public enum Ritual {
 
-		RAIN_DANCE(26, 40, Map.entry(RitualInstrument.DRUM, 10), Map.entry(RitualInstrument.RATTLE, 5)),
-		SOUL_MELANCHOLY(30, 50, Map.entry(RitualInstrument.FLUTE, 6));
+		RAIN_DANCE(26, 40,
+			List.of(
+				RitualSacrifice.of(
+					player -> List.of(combined(
+						ResourceLib.getItemIcon(Material.SALMON.key()),
+						Component.space(),
+						Messenger.messenger(player).getMessage("task.ritual.rain_dance.requirement")
+					)),
+					MiscUtil.combineToList(MaterialTags.RAW_FISH.getValues(), MaterialTags.FISH_BUCKETS.getValues())
+				)
+			),
+			Map.entry(RitualInstrument.DRUM, 10), Map.entry(RitualInstrument.RATTLE, 5)
+		),
+		SOUL_MELANCHOLY(30, 50,
+			List.of(),
+			Map.entry(RitualInstrument.FLUTE, 6)
+		);
 
 		private final String localeId;
+		private final List<RitualSacrifice> sacrifices;
 		private final Map<RitualInstrument, Integer> requirements;
 		private final int extraPoints;
 		private final int timeToPerform;
 		private final int totalPoints;
 
 		@SafeVarargs
-		Ritual(int timeToPerform, int extraPoints, Map.Entry<RitualInstrument, Integer>... requirements) {
+		Ritual(int timeToPerform, int extraPoints, List<RitualSacrifice> sacrifices, Map.Entry<RitualInstrument, Integer>... requirements) {
 			this.localeId = name().toLowerCase(Locale.US);
+			this.sacrifices = sacrifices;
 			this.requirements = Map.ofEntries(requirements);
 			this.extraPoints = extraPoints;
 			this.timeToPerform = timeToPerform;
@@ -291,6 +315,10 @@ public class TotemRituals implements Listener {
 
 		public String getLocaleId() {
 			return this.localeId;
+		}
+
+		public List<RitualSacrifice> getSacrifices() {
+			return this.sacrifices;
 		}
 
 		public Map<RitualInstrument, Integer> getRequirements() {
@@ -311,6 +339,19 @@ public class TotemRituals implements Listener {
 
 		public int getTotalPoints() {
 			return this.totalPoints;
+		}
+
+	}
+
+	public record RitualSacrifice(Predicate<ItemStack> itemCheck, Function<Player, List<Component>> messageProvider) {
+
+		public static RitualSacrifice of(Function<Player, List<Component>> messageProvider, Material... items) {
+			return of(messageProvider, List.of(items));
+		}
+
+		public static RitualSacrifice of(Function<Player, List<Component>> messageProvider, Collection<Material> items) {
+			Predicate<ItemStack> itemCheck = item -> items.contains(item.getType());
+			return new RitualSacrifice(itemCheck, messageProvider);
 		}
 
 	}

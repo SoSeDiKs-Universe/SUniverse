@@ -152,4 +152,19 @@ public class MiscUtil {
 		return combinedArray;
 	}
 
+	/**
+	 * Combines collections into list
+	 *
+	 * @param collections collections
+	 * @return list
+	 * @param <T> object type
+	 */
+	@SafeVarargs
+	public static <T> List<@UnknownNullability T> combineToList(Collection<@Nullable T>... collections) {
+		List<T> newList = new ArrayList<>();
+		for (Collection<T> collection : collections)
+			newList.addAll(collection);
+		return newList;
+	}
+
 }

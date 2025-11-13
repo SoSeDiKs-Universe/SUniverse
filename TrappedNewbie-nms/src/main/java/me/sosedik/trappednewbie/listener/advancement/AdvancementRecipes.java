@@ -65,7 +65,8 @@ public class AdvancementRecipes implements Listener {
 			trappedNewbieKey("flint_knife"),
 			trappedNewbieKey("flint_axe"),
 			trappedNewbieKey("flint_pickaxe"),
-			trappedNewbieKey("flint_shears"),
+			trappedNewbieKey("flint_shears_1"),
+			trappedNewbieKey("flint_shears_2"),
 			trappedNewbieKey("flint_shovel_1"),
 			trappedNewbieKey("flint_shovel_2")
 		);

@@ -59,6 +59,7 @@ import org.incendo.cloud.bukkit.internal.BukkitBrigadierMapper;
 import org.incendo.cloud.parser.ParserDescriptor;
 import org.jetbrains.annotations.UnknownNullability;
 import org.jspecify.annotations.NullMarked;
+import xyz.xenondevs.invui.InvUI;
 
 import java.net.URI;
 
@@ -83,6 +84,8 @@ public final class Utilizer extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
+		InvUI.getInstance().setPlugin(this);
+
 		CommandManager.init(this);
 
 		Mini.registerTagResolvers(

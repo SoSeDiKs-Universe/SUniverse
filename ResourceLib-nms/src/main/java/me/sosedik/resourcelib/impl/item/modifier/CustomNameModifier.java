@@ -1,5 +1,7 @@
 package me.sosedik.resourcelib.impl.item.modifier;
 
+import de.tr7zw.nbtapi.NBT;
+import de.tr7zw.nbtapi.iface.ReadWriteItemNBT;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import me.sosedik.kiterino.modifier.item.ItemContextBox;
 import me.sosedik.kiterino.modifier.item.ItemModifier;
@@ -7,13 +9,18 @@ import me.sosedik.kiterino.modifier.item.ModificationResult;
 import me.sosedik.utilizer.api.language.LangOptionsStorage;
 import me.sosedik.utilizer.api.message.Messenger;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Material;
+import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NullMarked;
 
+import java.util.function.Consumer;
+
 @NullMarked
 public class CustomNameModifier extends ItemModifier {
+
+	private static final String NAME_COMPONENT_TAG = "custom_name_component";
 
 	public CustomNameModifier(NamespacedKey modifierId) {
 		super(modifierId);
@@ -23,11 +30,21 @@ public class CustomNameModifier extends ItemModifier {
 	public ModificationResult modify(ItemContextBox contextBox) {
 		if (!contextBox.getContextType().hasVisibleName()) return ModificationResult.PASS;
 
-		Material type = contextBox.getInitialType();
-		if (NamespacedKey.MINECRAFT.equals(type.getKey().namespace())) return ModificationResult.PASS;
-
 		ItemStack item = contextBox.getItem();
-		NamespacedKey key = type.getKey();
+
+		boolean componentName = NBT.get(item, nbt -> {
+			if (!nbt.hasTag(NAME_COMPONENT_TAG)) return false;
+
+			Component name = GsonComponentSerializer.gson().deserialize(nbt.getString(NAME_COMPONENT_TAG))
+				.decorationIfAbsent(TextDecoration.ITALIC, TextDecoration.State.FALSE);
+			item.setData(DataComponentTypes.CUSTOM_NAME, name);
+			return true;
+		});
+		if (componentName) return ModificationResult.OK;
+
+		NamespacedKey key = contextBox.getInitialType().getKey();
+		if (NamespacedKey.MINECRAFT.equals(key.namespace())) return ModificationResult.PASS;
+
 		Component name = Messenger.messenger(LangOptionsStorage.getByLocale(contextBox.getLocale()))
 				.getMessageIfExists("item." + key.getNamespace() + "." + key.getKey() + ".name");
 		if (name == null) return ModificationResult.PASS;
@@ -35,6 +52,11 @@ public class CustomNameModifier extends ItemModifier {
 		item.setData(DataComponentTypes.ITEM_NAME, name);
 
 		return ModificationResult.OK;
+	}
+
+	public static ItemStack named(ItemStack item, Component name) {
+		NBT.modify(item, (Consumer<ReadWriteItemNBT>) nbt -> nbt.setString(NAME_COMPONENT_TAG, GsonComponentSerializer.gson().serialize(name)));
+		return item;
 	}
 
 }

@@ -307,7 +307,6 @@ public class AllRecipesInRecipeBook implements Listener {
 		if (player.getOpenInventory().getTopInventory().getType() != InventoryType.CRAFTING) return;
 
 		RecipeDisplay currentDisplay = VIEWERS.remove(player.getUniqueId());
-		if (currentDisplay != null) currentDisplay.cancel();
 
 		NamespacedKey recipeKey = event.getRecipe();
 		if (!FAKE_RECIPE_NAMESPACE.equals(recipeKey.getNamespace())) return;
@@ -318,7 +317,8 @@ public class AllRecipesInRecipeBook implements Listener {
 		event.setCancelled(true);
 
 		var originalKey = new NamespacedKey(keys[0], keys[1]);
-		TrappedNewbie.scheduler().sync(() -> displayRecipe(player, originalKey));
+		displayRecipe(player, originalKey);
+		if (currentDisplay != null) currentDisplay.cancel();
 	}
 
 	private void displayRecipe(Player player, NamespacedKey recipeKey) {

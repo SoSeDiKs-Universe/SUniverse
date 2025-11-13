@@ -22,6 +22,7 @@
 	],
 	"task.ritual.rain_dance": "Танец дождя",
 	"task.ritual.rain_dance.description": "Призывает дождь",
+	"task.ritual.rain_dance.requirement": "Любая сырая рыба",
 	"task.ritual.soul_melancholy": "Меланхолия души",
 	"task.ritual.soul_melancholy.description": [
 		"Привязывает Вашу душу к человекоподобной",

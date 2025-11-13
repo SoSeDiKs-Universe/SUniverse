@@ -81,6 +81,7 @@ import me.sosedik.trappednewbie.listener.advancement.dedicated.WaterAFlowerPotAd
 import me.sosedik.trappednewbie.listener.advancement.dedicated.YouMonsterAdvancement;
 import me.sosedik.trappednewbie.listener.block.BlockBreakHurts;
 import me.sosedik.trappednewbie.listener.block.BlockChoppingViaSwing;
+import me.sosedik.trappednewbie.listener.block.BreakableTombstones;
 import me.sosedik.trappednewbie.listener.block.CustomBlockBreaking;
 import me.sosedik.trappednewbie.listener.block.LogStrippingGivesBarks;
 import me.sosedik.trappednewbie.listener.block.SoftBlockHandBreaking;
@@ -112,6 +113,7 @@ import me.sosedik.trappednewbie.listener.item.EyeceCreamCandyVisual;
 import me.sosedik.trappednewbie.listener.item.FillingBowlWithMilk;
 import me.sosedik.trappednewbie.listener.item.FillingBowlWithWater;
 import me.sosedik.trappednewbie.listener.item.FirestrikerFire;
+import me.sosedik.trappednewbie.listener.item.FishBucketLeftovers;
 import me.sosedik.trappednewbie.listener.item.FizzlersCandyExplosion;
 import me.sosedik.trappednewbie.listener.item.FlintToFlakedFlint;
 import me.sosedik.trappednewbie.listener.item.FlowerBouquetAttackEffects;
@@ -121,6 +123,7 @@ import me.sosedik.trappednewbie.listener.item.GoodieBagsGiveCandies;
 import me.sosedik.trappednewbie.listener.item.HammerBlockRepair;
 import me.sosedik.trappednewbie.listener.item.KnifeCarvesTotemBases;
 import me.sosedik.trappednewbie.listener.item.MeshSifting;
+import me.sosedik.trappednewbie.listener.item.NecronomiconTravel;
 import me.sosedik.trappednewbie.listener.item.PaperPlanes;
 import me.sosedik.trappednewbie.listener.item.PearlPopCandyTeleportation;
 import me.sosedik.trappednewbie.listener.item.QuenchedFromDrinkingCacti;
@@ -168,6 +171,7 @@ import me.sosedik.trappednewbie.listener.world.LimboWorldFall;
 import me.sosedik.trappednewbie.listener.world.LimitedLimbo;
 import me.sosedik.trappednewbie.listener.world.NoDayChangeInLimbo;
 import me.sosedik.trappednewbie.listener.world.PerPlayerWorlds;
+import me.sosedik.trappednewbie.listener.world.PersonalVoidFall;
 import me.sosedik.trappednewbie.listener.world.RainRefillsWaterAndMakesPuddles;
 import me.sosedik.utilizer.CommandManager;
 import me.sosedik.utilizer.api.language.TranslationHolder;
@@ -320,6 +324,7 @@ public final class TrappedNewbie extends JavaPlugin {
 			// block
 			BlockBreakHurts.class,
 			BlockChoppingViaSwing.class,
+			BreakableTombstones.class,
 			CustomBlockBreaking.class,
 			LogStrippingGivesBarks.class,
 			SoftBlockHandBreaking.class,
@@ -354,6 +359,7 @@ public final class TrappedNewbie extends JavaPlugin {
 			FillingBowlWithMilk.class,
 			FillingBowlWithWater.class,
 			FirestrikerFire.class,
+			FishBucketLeftovers.class,
 			FizzlersCandyExplosion.class,
 			FlintToFlakedFlint.class,
 			FlowerBouquetAttackEffects.class,
@@ -363,6 +369,7 @@ public final class TrappedNewbie extends JavaPlugin {
 			HammerBlockRepair.class,
 			KnifeCarvesTotemBases.class,
 			MeshSifting.class,
+			NecronomiconTravel.class,
 			PaperPlanes.class,
 			PearlPopCandyTeleportation.class,
 			QuenchedFromDrinkingCacti.class,
@@ -414,6 +421,7 @@ public final class TrappedNewbie extends JavaPlugin {
 			LimitedLimbo.class,
 			NoDayChangeInLimbo.class,
 			PerPlayerWorlds.class,
+			PersonalVoidFall.class,
 			RainRefillsWaterAndMakesPuddles.class,
 			// command
 			MigrateCommand.class
@@ -455,7 +463,7 @@ public final class TrappedNewbie extends JavaPlugin {
 	}
 
 	private void setupLimboWorld() {
-		World world = Bukkit.getWorlds().getFirst();
+		World world = limboWorld();
 		if (!(world.getGenerator() instanceof VoidChunkGenerator)) {
 			getLogger().warning("Limbo world generator has changed!");
 			return;

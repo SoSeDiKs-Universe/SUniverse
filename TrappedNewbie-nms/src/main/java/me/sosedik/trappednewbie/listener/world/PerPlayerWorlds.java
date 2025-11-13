@@ -15,10 +15,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.Difficulty;
 import org.bukkit.GameRule;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.ServerTickManager;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -131,7 +133,9 @@ public class PerPlayerWorlds implements Listener {
 			} catch (IllegalArgumentException ignored) {
 				return;
 			}
-			world = getPersonalWorld(uuid);
+			CompletableFuture<World> worldGetter = new CompletableFuture<>();
+			TrappedNewbie.scheduler().sync(() -> worldGetter.complete(getPersonalWorld(uuid)));
+			world = worldGetter.get();
 			event.setSpawnLocation(event.getInitialLocation().world(world));
 		}
 	}
@@ -173,7 +177,7 @@ public class PerPlayerWorlds implements Listener {
 		String[] split = worldKey.split("/");
 		UUID playerUuid;
 		try {
-			playerUuid = UUID.fromString(split[2]);
+			playerUuid = UUID.fromString(split[split.length - 1]);
 		} catch (IndexOutOfBoundsException | IllegalArgumentException e) {
 			event.setTargetWorld(null);
 			event.setCancelled(true);
@@ -244,7 +248,55 @@ public class PerPlayerWorlds implements Listener {
 
 	private static boolean isSleepCounted(Player player) {
 		return !player.isSleepingIgnored()
-				&& !player.getGameMode().isInvulnerable();
+			&& !player.getGameMode().isInvulnerable();
+	}
+
+	/**
+	 * Resolves player's world for the environment
+	 *
+	 * @param player player
+	 * @param environment environment
+	 * @return world
+	 */
+	public static World resolveWorld(Player player, World.Environment environment) {
+		World world = player.getWorld();
+		if (world == TrappedNewbie.limboWorld() || NamespacedKey.MINECRAFT.equals(world.key().namespace()))
+			return resolveVanillaWorld(environment);
+
+		if (!TrappedNewbie.NAMESPACE.equals(world.key().namespace()))
+			return TrappedNewbie.limboWorld();
+
+		String worldKey = world.key().value();
+		if (!worldKey.startsWith("worlds-personal/") && !worldKey.startsWith("worlds-resources/"))
+			return TrappedNewbie.limboWorld();
+
+		String[] split = worldKey.split("/");
+		UUID playerUuid;
+		try {
+			playerUuid = UUID.fromString(split[split.length - 1]);
+		} catch (IndexOutOfBoundsException | IllegalArgumentException ignored) {
+			return TrappedNewbie.limboWorld();
+		}
+
+		return environment == World.Environment.CUSTOM
+			? getPersonalWorld(playerUuid)
+			: getResourceWorld(playerUuid, environment, true);
+	}
+
+	/**
+	 * Resolves vanilla world
+	 *
+	 * @param environment environment
+	 * @return vanilla world
+	 */
+	public static World resolveVanillaWorld(World.Environment environment) {
+		World world = switch (environment) {
+			case NORMAL -> Bukkit.getWorlds().getFirst();
+			case NETHER -> Bukkit.getWorld(NamespacedKey.minecraft("the_nether"));
+			case THE_END -> Bukkit.getWorld(NamespacedKey.minecraft("the_end"));
+			default -> TrappedNewbie.limboWorld();
+		};
+		return world == null ? TrappedNewbie.limboWorld() : world;
 	}
 
 	/**
@@ -332,12 +384,31 @@ public class PerPlayerWorlds implements Listener {
 		world.setGameRule(GameRule.REDUCED_DEBUG_INFO, true);
 	}
 
+	private static void applyVoidWorldRules(World world) {
+		world.setFullTime(0);
+		world.setGameRule(GameRule.DO_INSOMNIA, false);
+		world.setGameRule(GameRule.DO_MOB_SPAWNING, false);
+		world.setGameRule(GameRule.DO_PATROL_SPAWNING, false);
+		world.setGameRule(GameRule.DO_TRADER_SPAWNING, false);
+		world.setGameRule(GameRule.DO_WARDEN_SPAWNING, false);
+		world.setGameRule(GameRule.DO_VINES_SPREAD, false);
+		world.setGameRule(GameRule.MOB_GRIEFING, false);
+
+		Block block = world.getBlockAt(0, 120, 0);
+		if (block.isEmpty()) {
+			block.setType(Material.BEDROCK);
+			world.setSpawnLocation(0, 121, 0);
+		}
+	}
+
 	private static @Nullable World getWorld(String prefix, UUID playerUuid, BiFunction<String, NamespacedKey, World> worldCreator, boolean load) {
 		var worldKey = worldKey(prefix, playerUuid);
 		World world = Bukkit.getWorld(worldKey);
 		if (world == null && load) {
 			world = worldCreator.apply(prefix + playerUuid, worldKey);
 			applyWorldRules(world);
+			if (world.key().value().startsWith("worlds-personal/"))
+				applyVoidWorldRules(world);
 			startDayCycleTask(world);
 		}
 		return world;

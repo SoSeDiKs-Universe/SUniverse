@@ -3,6 +3,7 @@ package me.sosedik.trappednewbie.api.advancement.display;
 import io.papermc.paper.advancement.AdvancementDisplay;
 import me.sosedik.packetadvancements.api.advancement.IAdvancement;
 import me.sosedik.trappednewbie.TrappedNewbie;
+import me.sosedik.utilizer.Utilizer;
 import me.sosedik.utilizer.api.message.Messenger;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
@@ -74,7 +75,7 @@ public class OpeningHolderAdvancementDisplay extends FancierAdvancementDisplay<O
 		World world = player.getWorld();
 		Key worldKey = world.key();
 		if (!TrappedNewbie.NAMESPACE.equals(worldKey.namespace())) {
-			if (TrappedNewbie.limboWorld() == world)
+			if (Utilizer.limboWorld() == world)
 				return new WorldData("limbo", null);
 			return new WorldData(worldKey.value(), null);
 		}

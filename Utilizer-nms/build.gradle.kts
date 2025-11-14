@@ -3,6 +3,8 @@ import net.minecrell.pluginyml.paper.PaperPluginDescription
 description = "Shared dumping ground for SoSeDiK's Universe witchery"
 
 dependencies {
+    compileOnly(project(":LimboWorldGenerator"))
+
     paperLibrary("com.zaxxer:HikariCP:7.0.2")
 
     paperLibrary("org.incendo:cloud-paper:${project.property("cloudImplVersion")}")
@@ -29,6 +31,11 @@ paper {
         register("packetevents") {
             load = PaperPluginDescription.RelativeLoadOrder.BEFORE
             required = true
+        }
+        register("LimboWorldGenerator") {
+            load = PaperPluginDescription.RelativeLoadOrder.BEFORE
+            required = true
+            joinClasspath = true
         }
     }
 }

@@ -43,8 +43,19 @@
 	"item.modifier.goodie_bag": "<dark_gray>Важно делиться с друзьями!",
 	"item.modifier.goodie_bag.looter": "<gray>Мешочек игрока <player>",
 	"attrition.too_high": "Ваш уровень одержимости слишком высок",
+	"gui.next_page": "Следующая страница",
+	"gui.previous_page": "Предыдущая страница",
 	"gui.soul_travel": "Душевный экспресс",
-	"gui.soul_travel.destination.void": "Персональная пустота",
+	"gui.soul_travel.pick": "Куда Вы падаете?",
+	"gui.soul_travel.destination.limbo": "<icon:trapped_newbie:wandering_trader_head> Лимбо",
+	"gui.soul_travel.destination.void": "Персональная пустота игрока <owner>",
+	"gui.soul_travel.destination.overworld": "Надмирье (общее)",
+	"gui.soul_travel.destination.overworld.description": [
+		"Возможность встретить",
+		"других игроков, <red>опасно"
+	],
+	"gui.soul_travel.destination.poverworld": "Надмирье игрока <owner>",
+	"gui.soul_travel.destination.poverworld.description": "Личное мирное место обитания",
 	"gui.soul_travel.travel": [
 		"Нажмите, чтобы начать перемещение",
 		"Стоимость: <color><level> <plural:ru_ru:уровень|уровня|уровней:'<level>'> (опыта)"

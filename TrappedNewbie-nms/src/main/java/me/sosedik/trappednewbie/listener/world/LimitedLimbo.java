@@ -2,7 +2,7 @@ package me.sosedik.trappednewbie.listener.world;
 
 import io.papermc.paper.event.player.PrePlayerAttackEntityEvent;
 import me.sosedik.requiem.api.event.player.PlayerTryPossessingEntityEvent;
-import me.sosedik.trappednewbie.TrappedNewbie;
+import me.sosedik.utilizer.Utilizer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -48,30 +48,30 @@ public class LimitedLimbo implements Listener {
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onDamage(EntityDamageEvent event) {
-		if (event.getEntity().getWorld() == TrappedNewbie.limboWorld())
+		if (event.getEntity().getWorld() == Utilizer.limboWorld())
 			event.setCancelled(true);
 	}
 
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onAttack(PrePlayerAttackEntityEvent event) {
-		if (event.getPlayer().getWorld() == TrappedNewbie.limboWorld())
+		if (event.getPlayer().getWorld() == Utilizer.limboWorld())
 			event.setCancelled(true);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onMount(EntityMountEvent event) {
-		if (event.getEntity().getWorld() == TrappedNewbie.limboWorld())
+		if (event.getEntity().getWorld() == Utilizer.limboWorld())
 			event.setCancelled(true);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onPosses(PlayerTryPossessingEntityEvent event) {
-		if (event.getPlayer().getWorld() == TrappedNewbie.limboWorld())
+		if (event.getPlayer().getWorld() == Utilizer.limboWorld())
 			event.setCancelled(true);
 	}
 
 	private boolean shouldDeny(Player player) {
-		return !player.getGameMode().isInvulnerable() && player.getWorld() == TrappedNewbie.limboWorld();
+		return !player.getGameMode().isInvulnerable() && player.getWorld() == Utilizer.limboWorld();
 	}
 
 }

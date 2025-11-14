@@ -1,8 +1,8 @@
 package me.sosedik.trappednewbie.listener.world;
 
+import me.sosedik.requiem.feature.GhostyPlayer;
 import me.sosedik.trappednewbie.TrappedNewbie;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieAdvancements;
-import me.sosedik.utilizer.util.LocationUtil;
 import org.bukkit.World;
 import org.bukkit.damage.DamageType;
 import org.bukkit.entity.Player;
@@ -13,11 +13,17 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.jspecify.annotations.NullMarked;
 
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
+
 /**
  * Falling in personal void worlds
  */
 @NullMarked
 public class PersonalVoidFall implements Listener {
+
+	private static final Set<UUID> PENDING = new HashSet<>();
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onFall(EntityDamageEvent event) {
@@ -29,9 +35,11 @@ public class PersonalVoidFall implements Listener {
 		if (!world.key().value().startsWith("worlds-personal/")) return;
 
 		event.setCancelled(true);
+		if (!PENDING.add(player.getUniqueId())) return;
+
 		World newWorld = PerPlayerWorlds.resolveWorld(player, World.Environment.NORMAL);
-		LocationUtil.smartTeleport(player, player.getLocation().world(newWorld).y(320), false)
-			.thenRun(() -> player.setFallDistance(0F));
+		LimboWorldFall.runTeleport(player, newWorld, GhostyPlayer.isGhost(player))
+			.thenRun(() -> PENDING.remove(player.getUniqueId()));
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

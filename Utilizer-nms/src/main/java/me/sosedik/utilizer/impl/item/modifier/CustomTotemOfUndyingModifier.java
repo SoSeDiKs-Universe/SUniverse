@@ -50,6 +50,7 @@ public class CustomTotemOfUndyingModifier extends ItemModifier {
 		itemStack.setData(DataComponentTypes.CUSTOM_NAME, Component.empty());
 
 		contextBox.setItem(itemStack);
+		player.playEffect(EntityEffect.PROTECTED_FROM_DEATH);
 		player.updateInventory();
 
 		return ModificationResult.RETURN;
@@ -73,11 +74,10 @@ public class CustomTotemOfUndyingModifier extends ItemModifier {
 		}
 		TOTEM_CACHE.put(player.getUniqueId(), item);
 		player.sendItem(InventorySlotHelper.FIRST_HOTBAR_SLOT + player.getInventory().getHeldItemSlot(), item);
-		player.playEffect(EntityEffect.PROTECTED_FROM_DEATH);
 		Utilizer.scheduler().sync(() -> {
 			TOTEM_CACHE.remove(player.getUniqueId());
 			player.updateInventory();
-		}, 15L);
+		}, 10L);
 	}
 
 }

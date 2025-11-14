@@ -5,6 +5,7 @@ description = "The burden of life"
 dependencies {
     compileOnly(project(":Utilizer-nms"))
     compileOnly(project(":ResourceLib-nms"))
+    compileOnly(project(":Moves"))
 
     compileOnly("org.incendo:cloud-paper:${project.property("cloudImplVersion")}")
     compileOnly("org.incendo:cloud-annotations:${project.property("cloudVersion")}")
@@ -33,6 +34,11 @@ paper {
         register("ResourceLib") {
             load = PaperPluginDescription.RelativeLoadOrder.BEFORE
             required = true
+        }
+        register("Moves") {
+            load = PaperPluginDescription.RelativeLoadOrder.BEFORE
+            required = true
+            joinClasspath = true
         }
         register("NBTAPI") {
             load = PaperPluginDescription.RelativeLoadOrder.BEFORE

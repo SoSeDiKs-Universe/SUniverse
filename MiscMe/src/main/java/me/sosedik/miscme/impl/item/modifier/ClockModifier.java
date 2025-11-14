@@ -7,12 +7,12 @@ import me.sosedik.kiterino.modifier.item.ModificationResult;
 import me.sosedik.kiterino.modifier.item.context.SlottedItemModifierContext;
 import me.sosedik.miscme.MiscMe;
 import me.sosedik.resourcelib.ResourceLib;
+import me.sosedik.utilizer.Utilizer;
 import me.sosedik.utilizer.api.language.LangOptionsStorage;
 import me.sosedik.utilizer.api.message.Messenger;
 import me.sosedik.utilizer.listener.player.PlayerOptions;
 import me.sosedik.utilizer.util.ItemUtil;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
@@ -53,7 +53,7 @@ public class ClockModifier extends ItemModifier {
 		boolean updated = false;
 		World world = player.getWorld();
 		// Properly render clock in custom overworlds
-		if (world.getEnvironment() == World.Environment.NORMAL && world != Bukkit.getWorlds().getFirst() && !contextBox.getItem().isDataOverridden(DataComponentTypes.ITEM_MODEL)) {
+		if (world.getEnvironment() == World.Environment.NORMAL && world != Utilizer.limboWorld() && !contextBox.getItem().isDataOverridden(DataComponentTypes.ITEM_MODEL)) {
 			updated = true;
 			contextBox.getItem().setData(DataComponentTypes.ITEM_MODEL, CLOCK_MIMIC);
 		}

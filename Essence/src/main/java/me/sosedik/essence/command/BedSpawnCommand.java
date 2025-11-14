@@ -2,11 +2,10 @@ package me.sosedik.essence.command;
 
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import me.sosedik.essence.Essence;
+import me.sosedik.utilizer.Utilizer;
 import me.sosedik.utilizer.api.message.Messenger;
 import me.sosedik.utilizer.util.LocationUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -42,10 +41,8 @@ public class BedSpawnCommand {
 
 		Essence.scheduler().sync(() -> {
 			Location loc = target.getRespawnLocation();
-			if (loc == null) {
-				World world = Bukkit.getWorlds().getFirst();
-				loc = new Location(world, 0, world.getMaxHeight() + 200, 0);
-			}
+			if (loc == null)
+				loc = Utilizer.limboWorld().getSpawnLocation().center(1);
 			LocationUtil.smartTeleport(target, loc, false).thenRun(() -> target.addPotionEffect(new PotionEffect(PotionEffectType.RESISTANCE, 25 * 20, 10)));
 		});
 

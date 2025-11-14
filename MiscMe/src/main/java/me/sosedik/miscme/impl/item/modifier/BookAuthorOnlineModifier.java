@@ -5,6 +5,7 @@ import io.papermc.paper.datacomponent.item.WrittenBookContent;
 import me.sosedik.kiterino.modifier.item.ItemContextBox;
 import me.sosedik.kiterino.modifier.item.ItemModifier;
 import me.sosedik.kiterino.modifier.item.ModificationResult;
+import me.sosedik.utilizer.api.message.Mini;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.object.ObjectContents;
@@ -75,13 +76,13 @@ public class BookAuthorOnlineModifier extends ItemModifier {
 	public static @Nullable Component getStatus(String author) {
 		Player playerExact = Bukkit.getPlayerExact(author);
 		if (playerExact != null)
-			return combined(Component.object(ObjectContents.playerHead(playerExact.getUniqueId())), Component.space(), playerExact.displayName(), Component.space(), ONLINE);
+			return combined(Mini.asIcon(Component.object(ObjectContents.playerHead(playerExact.getUniqueId()))), Component.space(), playerExact.displayName(), Component.space(), ONLINE);
 
 		OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayerIfCached(author);
 		if (offlinePlayer == null) offlinePlayer = Bukkit.getOfflinePlayer(author);
 
 		if (offlinePlayer.hasPlayedBefore())
-			return combined(Component.object(ObjectContents.playerHead(offlinePlayer.getUniqueId())), Component.space(), Component.text(author), Component.space(), OFFLINE);
+			return combined(Mini.asIcon(Component.object(ObjectContents.playerHead(offlinePlayer.getUniqueId()))), Component.space(), Component.text(author), Component.space(), OFFLINE);
 
 		return null;
 	}
@@ -95,11 +96,11 @@ public class BookAuthorOnlineModifier extends ItemModifier {
 	public static @Nullable Component getStatus(UUID author) {
 		Player player = Bukkit.getPlayer(author);
 		if (player != null)
-			return combined(ONLINE, Component.space(), Component.object(ObjectContents.playerHead(author)), Component.space(), player.displayName());
+			return combined(ONLINE, Component.space(), Mini.asIcon(Component.object(ObjectContents.playerHead(author))), Component.space(), player.displayName());
 
 		OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(author);
 		String name = offlinePlayer.getName();
-		return name == null ? null : combined(OFFLINE, Component.space(), Component.object(ObjectContents.playerHead(author)), Component.space(), Component.text(name));
+		return name == null ? null : combined(OFFLINE, Component.space(), Mini.asIcon(Component.object(ObjectContents.playerHead(author))), Component.space(), Component.text(name));
 	}
 
 }

@@ -2,7 +2,7 @@
 	"item.requiem.ghost_relocator.name": "Пространственный вытеснитель",
 	"item.requiem.ghost_relocator.lore": [
 		"Освободите душу и появитесь снова",
-		"(телепортирует на спавн)"
+		"(телепортирует в случайную местность)"
 	],
 	"item.requiem.ghost_motivator.name": "Искривитель пространства",
 	"item.requiem.ghost_motivator.lore": "Позволяет проходить сквозь стены",

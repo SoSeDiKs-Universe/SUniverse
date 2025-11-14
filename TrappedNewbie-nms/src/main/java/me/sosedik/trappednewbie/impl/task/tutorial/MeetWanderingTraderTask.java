@@ -1,10 +1,10 @@
 package me.sosedik.trappednewbie.impl.task.tutorial;
 
 import io.papermc.paper.event.player.PrePlayerAttackEntityEvent;
-import me.sosedik.trappednewbie.TrappedNewbie;
 import me.sosedik.trappednewbie.api.task.ObtainAdvancementTask;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieAdvancements;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieFonts;
+import me.sosedik.utilizer.Utilizer;
 import me.sosedik.utilizer.api.message.Messenger;
 import me.sosedik.utilizer.api.message.Mini;
 import net.kyori.adventure.text.Component;
@@ -27,7 +27,7 @@ public class MeetWanderingTraderTask extends ObtainAdvancementTask implements Li
 		if (!(event.getAttacked() instanceof WanderingTrader)) return;
 
 		Player player = event.getPlayer();
-		if (player.getWorld() != TrappedNewbie.limboWorld()) return;
+		if (player.getWorld() != Utilizer.limboWorld()) return;
 		if (TrappedNewbieAdvancements.REQUIEM_ROOT.hasCriteria(player, "interact")) return;
 
 		event.setCancelled(true);

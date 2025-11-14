@@ -5,6 +5,11 @@ import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import me.sosedik.socializer.listener.FriendlyPlayers;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+
 public record FriendshipData(Player player, ReadWriteNBT data) {
 
 	private static final String DATE_TAG = "date";
@@ -29,6 +34,13 @@ public record FriendshipData(Player player, ReadWriteNBT data) {
 		ReadWriteNBT data = data().getOrCreateCompound(id);
 		long time = System.currentTimeMillis();
 		data.setLong(DATE_TAG, time);
+	}
+
+	public List<UUID> getFriends() {
+		Set<String> keys = this.data.getKeys();
+		List<UUID> uuids = new ArrayList<>(keys.size());
+		keys.forEach(key -> uuids.add(UUID.fromString(key)));
+		return uuids;
 	}
 
 }

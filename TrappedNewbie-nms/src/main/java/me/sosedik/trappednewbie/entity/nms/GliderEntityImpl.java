@@ -1,12 +1,12 @@
 package me.sosedik.trappednewbie.entity.nms;
 
 import com.destroystokyo.paper.ParticleBuilder;
-import me.sosedik.trappednewbie.TrappedNewbie;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieEntities;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieItems;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieSoundKeys;
 import me.sosedik.trappednewbie.entity.api.Glider;
 import me.sosedik.trappednewbie.impl.item.nms.HangGliderItem;
+import me.sosedik.utilizer.Utilizer;
 import me.sosedik.utilizer.util.InventoryUtil;
 import net.kyori.adventure.sound.Sound;
 import net.minecraft.core.BlockPos;
@@ -300,7 +300,7 @@ public class GliderEntityImpl extends Display.ItemDisplay {
 	}
 
 	private boolean hasLowGravity(ServerLevel level) {
-		return TrappedNewbie.limboWorld() == level.getWorld();
+		return Utilizer.limboWorld() == level.getWorld();
 	}
 
 	private void updateRoll(float roll) {

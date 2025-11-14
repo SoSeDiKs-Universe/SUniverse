@@ -6,8 +6,8 @@ import dev.jorel.commandapi.arguments.StringArgument;
 import dev.jorel.commandapi.executors.CommandArguments;
 import me.sosedik.requiem.feature.GhostyPlayer;
 import me.sosedik.requiem.feature.PossessingPlayer;
-import me.sosedik.trappednewbie.TrappedNewbie;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieDamageTypes;
+import me.sosedik.utilizer.Utilizer;
 import me.sosedik.utilizer.api.message.Messenger;
 import me.sosedik.utilizer.api.message.Mini;
 import me.sosedik.utilizer.util.LocationUtil;
@@ -60,7 +60,7 @@ public class SuicideCommand {
 		GhostyPlayer.markGhost(player);
 		player.addPotionEffect(new PotionEffect(PotionEffectType.UNLUCK, 20 * 60 * 60 * 3, 0));
 
-		LocationUtil.smartTeleport(player, TrappedNewbie.limboWorld().getSpawnLocation().center(1), false);
+		LocationUtil.smartTeleport(player, Utilizer.limboWorld().getSpawnLocation().center(1), false);
 	}
 
 }

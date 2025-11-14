@@ -6,7 +6,7 @@
 		"<!i><yellow><key:key.use><gray> on an empty-handed player",
 		"<!i><gray>to suggest a friendship"
 	],
-	"item.modifier.letter.friendship.bound": "<gray><!i><from>'s friendship request for <to>",
+	"item.modifier.letter.friendship.bound": "<gray><!i><from>'s friendship request to <to>",
 	"item.modifier.letter.friendship.bound.you": [
 		"<gray><!i><from>'s friendship request",
 		"<!i><yellow><key:key.use><gray> on them with this letter to accept! "
@@ -43,8 +43,19 @@
 	"item.modifier.goodie_bag": "<dark_gray>Sharing is caring!",
 	"item.modifier.goodie_bag.looter": "<gray><player>'s Goodie Bag",
 	"attrition.too_high": "Your attrition level is too high",
+	"gui.next_page": "Next Page",
+	"gui.previous_page": "Previous Page",
 	"gui.soul_travel": "Soul Express",
-	"gui.soul_travel.destination.void": "Personal Void",
+	"gui.soul_travel.pick": "Where are you falling to?",
+	"gui.soul_travel.destination.limbo": "<icon:trapped_newbie:wandering_trader_head> Limbo",
+	"gui.soul_travel.destination.void": "<owner>'s Personal Void",
+	"gui.soul_travel.destination.overworld": "Overworld (Shared)",
+	"gui.soul_travel.destination.overworld.description": [
+		"Possibility of meeting",
+		"other players, <red>dangerous"
+	],
+	"gui.soul_travel.destination.poverworld": "<owner>'s Overworld",
+	"gui.soul_travel.destination.poverworld.description": "Personal peaceful habitat",
 	"gui.soul_travel.travel": [
 		"Click to initiate travel",
 		"Cost: <color><level> <plural:en_us:level|levels:'<level>'> (of exp)"

@@ -1,5 +1,6 @@
 package me.sosedik.requiem.feature;
 
+import me.sosedik.moves.listener.movement.FreeFall;
 import me.sosedik.requiem.Requiem;
 import me.sosedik.requiem.api.event.player.PlayerStartGhostingEvent;
 import me.sosedik.requiem.api.event.player.PlayerStopGhostingEvent;
@@ -38,6 +39,10 @@ public class GhostyPlayer {
 	private static final List<Predicate<Player>> ITEM_RULES = new ArrayList<>();
 	private static final String AURA_TASK_KEY = "ghost_aura_task";
 	private static final String VISION_TASK_KEY = "ghost_vision_task";
+
+	static {
+		addFlightDenyRule(FreeFall::isLeaping);
+	}
 
 	/**
 	 * Checks whether this player is a ghost

@@ -43,8 +43,19 @@
 	"item.modifier.goodie_bag": "<dark_gray>Важливо ділитись з друзями!",
 	"item.modifier.goodie_bag.looter": "<gray>Мішечок гравця <player>",
 	"attrition.too_high": "Ваш рівень одержимості занадто високий",
+	"gui.next_page": "Наступна сторінка",
+	"gui.previous_page": "Попередня сторінка",
 	"gui.soul_travel": "Душевний експрес",
-	"gui.soul_travel.destination.void": "Особиста порожнеча",
+	"gui.soul_travel.pick": "Куди Ви падаєте?",
+	"gui.soul_travel.destination.limbo": "<icon:trapped_newbie:wandering_trader_head> Лімбо",
+	"gui.soul_travel.destination.void": "Особиста порожнеча гравця <owner>",
+	"gui.soul_travel.destination.overworld": "Надземний вимір (спільний)",
+	"gui.soul_travel.destination.overworld.description": [
+		"Можливість зустрічі з іншими",
+		"гравцями, <red>небезпечно"
+	],
+	"gui.soul_travel.destination.poverworld": "Надземний вимір гравця <owner>",
+	"gui.soul_travel.destination.poverworld.description": "Особисте спокійне місце проживання",
 	"gui.soul_travel.travel": [
 		"Натисніть, щоб розпочати подорож",
 		"Вартість: <color><level> <plural:uk_ua:рівень|рівня|рівнів:'<level>'> (досвіду)"

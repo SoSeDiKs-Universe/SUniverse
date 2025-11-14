@@ -194,12 +194,13 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.incendo.cloud.bukkit.internal.BukkitBrigadierMapper;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 import org.jspecify.annotations.NullMarked;
 
 import java.io.File;
 import java.util.List;
+
+import static me.sosedik.utilizer.Utilizer.limboWorld;
 
 @NullMarked
 public final class TrappedNewbie extends JavaPlugin {
@@ -208,7 +209,6 @@ public final class TrappedNewbie extends JavaPlugin {
 	private static final int CHUNK_RADIUS = 2;
 
 	private static @UnknownNullability TrappedNewbie instance;
-	private static @Nullable World limboWorld;
 
 	private @UnknownNullability Scheduler scheduler;
 
@@ -469,9 +469,11 @@ public final class TrappedNewbie extends JavaPlugin {
 			return;
 		}
 
+		world.setAutoSave(false);
 		world.setFullTime(0);
 		world.setDifficulty(Difficulty.PEACEFUL);
 		world.setGameRule(GameRule.SPAWN_RADIUS, 0);
+		world.setGameRule(GameRule.DO_WEATHER_CYCLE, false);
 		world.setGameRule(GameRule.DO_INSOMNIA, false);
 		world.setGameRule(GameRule.DO_MOB_SPAWNING, false);
 		world.setGameRule(GameRule.DO_PATROL_SPAWNING, false);
@@ -562,17 +564,6 @@ public final class TrappedNewbie extends JavaPlugin {
 	 */
 	public static NamespacedKey trappedNewbieKey(String value) {
 		return new NamespacedKey(NAMESPACE, value);
-	}
-
-	/**
-	 * Gets the Limbo world
-	 *
-	 * @return limbo world
-	 */
-	public static World limboWorld() {
-		if (limboWorld == null)
-			limboWorld = Bukkit.getWorlds().getFirst();
-		return limboWorld;
 	}
 
 }

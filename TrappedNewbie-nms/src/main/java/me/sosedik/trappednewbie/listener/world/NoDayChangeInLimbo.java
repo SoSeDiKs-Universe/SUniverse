@@ -2,6 +2,7 @@ package me.sosedik.trappednewbie.listener.world;
 
 import me.sosedik.miscme.api.event.world.DayChangeEvent;
 import me.sosedik.trappednewbie.TrappedNewbie;
+import me.sosedik.utilizer.Utilizer;
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -16,7 +17,7 @@ public class NoDayChangeInLimbo implements Listener {
 	@EventHandler
 	public void onDayChange(DayChangeEvent event) {
 		World world = event.getWorld();
-		if (TrappedNewbie.limboWorld() == world)
+		if (Utilizer.limboWorld() == world)
 			world.setFullTime(0L);
 	}
 

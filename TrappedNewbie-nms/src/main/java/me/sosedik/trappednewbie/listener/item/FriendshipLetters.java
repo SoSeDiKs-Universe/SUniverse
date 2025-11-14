@@ -48,7 +48,7 @@ public class FriendshipLetters implements Listener {
 		playerFrom.swingMainHand();
 		item.subtract();
 		playerTo.swingMainHand();
-		playerFrom.getInventory().setItemInMainHand(boundLetter);
+		playerTo.getInventory().setItemInMainHand(boundLetter);
 
 		event.setCancelled(true);
 	}

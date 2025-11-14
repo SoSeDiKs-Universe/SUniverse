@@ -6,11 +6,11 @@ import me.sosedik.kiterino.modifier.item.ItemModifier;
 import me.sosedik.kiterino.modifier.item.ModificationResult;
 import me.sosedik.kiterino.modifier.item.context.SlottedItemModifierContext;
 import me.sosedik.miscme.MiscMe;
+import me.sosedik.utilizer.Utilizer;
 import me.sosedik.utilizer.api.language.LangOptionsStorage;
 import me.sosedik.utilizer.api.message.Messenger;
 import me.sosedik.utilizer.util.ItemUtil;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -60,7 +60,7 @@ public class CompassModifier extends ItemModifier {
 		World world = player.getWorld();
 		if (contextBox.getInitialType() == Material.COMPASS
 				&& world.getEnvironment() == World.Environment.NORMAL
-				&& world != Bukkit.getWorlds().getFirst()
+				&& world != Utilizer.limboWorld()
 				&& !contextBox.getItem().isDataOverridden(DataComponentTypes.ITEM_MODEL)) {
 			updated = true;
 			contextBox.getItem().setData(DataComponentTypes.ITEM_MODEL, COMPASS_MIMIC);

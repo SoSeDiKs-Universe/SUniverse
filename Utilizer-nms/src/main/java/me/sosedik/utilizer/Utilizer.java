@@ -2,6 +2,7 @@ package me.sosedik.utilizer;
 
 import io.leangen.geantyref.TypeToken;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
+import me.sosedik.limboworldgenerator.VoidChunkGenerator;
 import me.sosedik.utilizer.api.command.parser.AnyString;
 import me.sosedik.utilizer.api.language.LangOptionsStorage;
 import me.sosedik.utilizer.api.language.TranslationHolder;
@@ -53,20 +54,25 @@ import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.ServerLinks;
+import org.bukkit.World;
+import org.bukkit.WorldCreator;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.incendo.cloud.bukkit.internal.BukkitBrigadierMapper;
 import org.incendo.cloud.parser.ParserDescriptor;
 import org.jetbrains.annotations.UnknownNullability;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 import xyz.xenondevs.invui.InvUI;
 
 import java.net.URI;
+import java.util.Objects;
 
 @NullMarked
 public final class Utilizer extends JavaPlugin {
 
 	private static @UnknownNullability Utilizer instance;
+	private static @Nullable World limboWorld;
 
 	private @UnknownNullability Scheduler scheduler;
 
@@ -84,6 +90,8 @@ public final class Utilizer extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
+		limboWorld(); // Init
+
 		InvUI.getInstance().setPlugin(this);
 
 		CommandManager.init(this);
@@ -215,6 +223,28 @@ public final class Utilizer extends JavaPlugin {
 	 */
 	public static NamespacedKey utilizerKey(String value) {
 		return new NamespacedKey("utilizer", value);
+	}
+
+	/**
+	 * Gets the Limbo world
+	 *
+	 * @return limbo world
+	 */
+	public static World limboWorld() {
+		if (limboWorld == null)
+			limboWorld = createLimboWorld();
+		return limboWorld;
+	}
+
+	private static World createLimboWorld() {
+		NamespacedKey worldKey = utilizerKey("limbo");
+		World world = Bukkit.getWorld(worldKey);
+		if (world == null) {
+			world = WorldCreator.ofNameAndKey("world_limbo", worldKey)
+				.generator(VoidChunkGenerator.GENERATOR)
+				.createWorld();
+		}
+		return Objects.requireNonNull(world);
 	}
 
 }

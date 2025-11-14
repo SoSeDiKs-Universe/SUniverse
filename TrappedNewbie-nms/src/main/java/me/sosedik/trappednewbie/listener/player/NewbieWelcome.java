@@ -1,8 +1,8 @@
 package me.sosedik.trappednewbie.listener.player;
 
-import me.sosedik.trappednewbie.TrappedNewbie;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieAdvancements;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieFonts;
+import me.sosedik.utilizer.Utilizer;
 import me.sosedik.utilizer.api.message.Messenger;
 import me.sosedik.utilizer.api.message.Mini;
 import me.sosedik.utilizer.util.LocationUtil;
@@ -27,8 +27,8 @@ public class NewbieWelcome implements Listener {
 		var messenger = Messenger.messenger(player);
 		player.sendMessage(Mini.combine(Component.space(), TrappedNewbieFonts.WANDERING_TRADER_HEAD.mapping(), messenger.getMessage("limbo.welcome")));
 
-		if (player.getWorld() != TrappedNewbie.limboWorld())
-			LocationUtil.smartTeleport(player, TrappedNewbie.limboWorld().getSpawnLocation().center(1), false);
+		if (player.getWorld() != Utilizer.limboWorld())
+			LocationUtil.smartTeleport(player, Utilizer.limboWorld().getSpawnLocation().center(1), false);
 	}
 
 }

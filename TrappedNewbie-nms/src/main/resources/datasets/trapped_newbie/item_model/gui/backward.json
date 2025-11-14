@@ -1,0 +1,10 @@
+{
+	"oversized": true,
+	"model_extras": {
+		"display": {
+			"gui": {
+				"scale": [1.14, 1.14, 1.14]
+			}
+		}
+	}
+}

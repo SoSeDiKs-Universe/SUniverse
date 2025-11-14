@@ -9,6 +9,7 @@ import me.sosedik.delightfulfarming.feature.sugar.MealTime;
 import me.sosedik.limboworldgenerator.VoidChunkGenerator;
 import me.sosedik.miscme.task.CustomDayCycleTask;
 import me.sosedik.trappednewbie.TrappedNewbie;
+import me.sosedik.utilizer.Utilizer;
 import me.sosedik.utilizer.util.FileUtil;
 import me.sosedik.utilizer.util.MiscUtil;
 import org.bukkit.Bukkit;
@@ -64,7 +65,7 @@ public class PerPlayerWorlds implements Listener {
 		Player player = event.getPlayer();
 		if (!DELAYED_FALLS.remove(player.getUniqueId())) return;
 
-		LimboWorldFall.spawnTeleport(player, player.getWorld());
+		LimboWorldFall.runTeleport(player, player.getWorld(), true);
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
@@ -108,6 +109,7 @@ public class PerPlayerWorlds implements Listener {
 			try {
 				uuid = UUID.fromString(split[split.length - 1]);
 			} catch (IllegalArgumentException ignored) {
+				event.setSpawnLocation(Utilizer.limboWorld().getSpawnLocation().center(1));
 				return;
 			}
 			boolean rtp = !new File(Bukkit.getWorldContainer(), worldKey).exists();
@@ -124,13 +126,17 @@ public class PerPlayerWorlds implements Listener {
 			if (playerUuid != null)
 				DELAYED_FALLS.add(playerUuid);
 		} else if (worldKey.startsWith("worlds-personal/")) {
-			if (!new File(Bukkit.getWorldContainer(), worldKey).exists()) return;
+			if (!new File(Bukkit.getWorldContainer(), worldKey).exists()) {
+				event.setSpawnLocation(Utilizer.limboWorld().getSpawnLocation().center(1));
+				return;
+			}
 
 			String[] split = worldKey.split("/");
 			UUID uuid;
 			try {
 				uuid = UUID.fromString(split[split.length - 1]);
 			} catch (IllegalArgumentException ignored) {
+				event.setSpawnLocation(Utilizer.limboWorld().getSpawnLocation().center(1));
 				return;
 			}
 			CompletableFuture<World> worldGetter = new CompletableFuture<>();
@@ -143,7 +149,7 @@ public class PerPlayerWorlds implements Listener {
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onPortal(EntityPortalEnterEvent event) {
 		World worldFrom = event.getEntity().getWorld();
-		if (NamespacedKey.MINECRAFT.equals(worldFrom.key().namespace())) {
+		if (worldFrom == Utilizer.limboWorld()) {
 			event.setCancelled(true);
 			return;
 		}
@@ -159,7 +165,7 @@ public class PerPlayerWorlds implements Listener {
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onPortal(EntityPortalReadyEvent event) {
 		World worldFrom = event.getEntity().getWorld();
-		if (NamespacedKey.MINECRAFT.equals(worldFrom.key().namespace())) {
+		if (worldFrom == Utilizer.limboWorld()) {
 			event.setTargetWorld(null);
 			event.setCancelled(true);
 			return;
@@ -260,22 +266,22 @@ public class PerPlayerWorlds implements Listener {
 	 */
 	public static World resolveWorld(Player player, World.Environment environment) {
 		World world = player.getWorld();
-		if (world == TrappedNewbie.limboWorld() || NamespacedKey.MINECRAFT.equals(world.key().namespace()))
+		if (world == Utilizer.limboWorld() || NamespacedKey.MINECRAFT.equals(world.key().namespace()))
 			return resolveVanillaWorld(environment);
 
 		if (!TrappedNewbie.NAMESPACE.equals(world.key().namespace()))
-			return TrappedNewbie.limboWorld();
+			return Utilizer.limboWorld();
 
 		String worldKey = world.key().value();
 		if (!worldKey.startsWith("worlds-personal/") && !worldKey.startsWith("worlds-resources/"))
-			return TrappedNewbie.limboWorld();
+			return Utilizer.limboWorld();
 
 		String[] split = worldKey.split("/");
 		UUID playerUuid;
 		try {
 			playerUuid = UUID.fromString(split[split.length - 1]);
 		} catch (IndexOutOfBoundsException | IllegalArgumentException ignored) {
-			return TrappedNewbie.limboWorld();
+			return Utilizer.limboWorld();
 		}
 
 		return environment == World.Environment.CUSTOM
@@ -294,9 +300,9 @@ public class PerPlayerWorlds implements Listener {
 			case NORMAL -> Bukkit.getWorlds().getFirst();
 			case NETHER -> Bukkit.getWorld(NamespacedKey.minecraft("the_nether"));
 			case THE_END -> Bukkit.getWorld(NamespacedKey.minecraft("the_end"));
-			default -> TrappedNewbie.limboWorld();
+			default -> Utilizer.limboWorld();
 		};
-		return world == null ? TrappedNewbie.limboWorld() : world;
+		return world == null ? Utilizer.limboWorld() : world;
 	}
 
 	/**

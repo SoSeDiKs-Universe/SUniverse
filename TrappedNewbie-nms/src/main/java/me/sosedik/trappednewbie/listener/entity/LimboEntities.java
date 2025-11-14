@@ -2,7 +2,7 @@ package me.sosedik.trappednewbie.listener.entity;
 
 import com.destroystokyo.paper.entity.ai.PaperGoal;
 import me.sosedik.requiem.feature.GhostyPlayer;
-import me.sosedik.trappednewbie.TrappedNewbie;
+import me.sosedik.utilizer.Utilizer;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.InteractGoal;
@@ -42,29 +42,29 @@ import java.util.List;
 public class LimboEntities implements Listener {
 
 	public LimboEntities() {
-		TrappedNewbie.limboWorld().getEntities().forEach(this::applyEntityRules);
-		Chunk[] loadedChunks = TrappedNewbie.limboWorld().getLoadedChunks();
+		Utilizer.limboWorld().getEntities().forEach(this::applyEntityRules);
+		Chunk[] loadedChunks = Utilizer.limboWorld().getLoadedChunks();
 		for (Chunk chunk : loadedChunks)
 			applyTileEntityRules(chunk);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onSpawn(EntitiesLoadEvent event) {
-		if (event.getWorld() != TrappedNewbie.limboWorld()) return;
+		if (event.getWorld() != Utilizer.limboWorld()) return;
 
 		event.getEntities().forEach(this::applyEntityRules);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onSpawn(EntitySpawnEvent event) {applyEntityRules(event.getEntity());
-		if (event.getEntity().getWorld() != TrappedNewbie.limboWorld()) return;
+		if (event.getEntity().getWorld() != Utilizer.limboWorld()) return;
 
 		applyEntityRules(event.getEntity());
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onUnleash(HangingBreakEvent event) {
-		if (event.getEntity().getWorld() != TrappedNewbie.limboWorld()) return;
+		if (event.getEntity().getWorld() != Utilizer.limboWorld()) return;
 		if (event.getEntity().getType() != EntityType.LEASH_KNOT) return;
 
 		event.setCancelled(true);
@@ -72,7 +72,7 @@ public class LimboEntities implements Listener {
 
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onLoad(ChunkLoadEvent event) {
-		if (event.getWorld() != TrappedNewbie.limboWorld()) return;
+		if (event.getWorld() != Utilizer.limboWorld()) return;
 
 		applyTileEntityRules(event.getChunk());
 	}

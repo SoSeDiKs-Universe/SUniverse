@@ -2,11 +2,11 @@ package me.sosedik.trappednewbie.listener.entity;
 
 import me.sosedik.miscme.dataset.MoreMobHeads;
 import me.sosedik.packetadvancements.util.ToastMessage;
-import me.sosedik.trappednewbie.TrappedNewbie;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieAdvancements;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieFonts;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieItems;
 import me.sosedik.trappednewbie.impl.item.modifier.LetterModifier;
+import me.sosedik.utilizer.Utilizer;
 import me.sosedik.utilizer.api.message.Messenger;
 import me.sosedik.utilizer.api.message.Mini;
 import me.sosedik.utilizer.util.ItemUtil;
@@ -39,7 +39,7 @@ public class LimboWandererTrades implements Listener {
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onInteract(PlayerInteractEntityEvent event) {
 		if (!(event.getRightClicked() instanceof WanderingTrader entity)) return;
-		if (entity.getWorld() != TrappedNewbie.limboWorld()) return;
+		if (entity.getWorld() != Utilizer.limboWorld()) return;
 
 		event.setCancelled(true);
 		Player player = event.getPlayer();
@@ -83,7 +83,7 @@ public class LimboWandererTrades implements Listener {
 	public void onTrade(TradeSelectEvent event) {
 		if (event.getMerchant() instanceof Entity) return;
 		if (!(event.getWhoClicked() instanceof Player player)) return;
-		if (player.getWorld() != TrappedNewbie.limboWorld()) return;
+		if (player.getWorld() != Utilizer.limboWorld()) return;
 
 		event.setCancelled(true);
 		if (TrappedNewbieAdvancements.BRAVE_NEW_WORLD.isDone(player)) return;

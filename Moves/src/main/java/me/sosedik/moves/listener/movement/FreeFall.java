@@ -3,6 +3,7 @@ package me.sosedik.moves.listener.movement;
 import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import io.papermc.paper.block.fluid.FluidData;
 import me.sosedik.moves.Moves;
+import me.sosedik.moves.api.event.PlayerStopLeapingEvent;
 import me.sosedik.utilizer.api.event.player.PlayerDataLoadedEvent;
 import me.sosedik.utilizer.api.event.player.PlayerDataSaveEvent;
 import me.sosedik.utilizer.util.LocationUtil;
@@ -73,7 +74,7 @@ public class FreeFall implements Listener {
 		if (event.getDamageSource().getDamageType() != DamageType.FALL) return;
 		if (!isLeaping(player)) return;
 
-		FreeFall.stopLeaping(player);
+		stopLeaping(player);
 
 		Block block = player.getSupportingBlock();
 		if (block == null) block = player.getLocation().getBlock();
@@ -234,8 +235,8 @@ public class FreeFall implements Listener {
 	private static boolean isSaveFallLocation(Player player) {
 		Block block = player.getLocation().getBlock();
 		return block.isLiquid()
-				|| block.getType() == Material.COBWEB
-				|| block.getType() == Material.SCAFFOLDING;
+			|| block.getType() == Material.COBWEB
+			|| block.getType() == Material.SCAFFOLDING;
 	}
 
 	/**
@@ -247,8 +248,11 @@ public class FreeFall implements Listener {
 		if (!LEAPING.remove(player.getUniqueId())) return;
 
 		var metadata = MetadataUtil.removeMetadata(player, WAS_FLYING_META);
-		if (metadata != null)
+		if (metadata != null && player.getAllowFlight())
 			player.setFlying(true);
+
+		if (player.isValid())
+			new PlayerStopLeapingEvent(player).callEvent();
 	}
 
 	/**

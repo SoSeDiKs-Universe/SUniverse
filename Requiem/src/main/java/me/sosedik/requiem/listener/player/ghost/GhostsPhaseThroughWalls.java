@@ -1,6 +1,7 @@
 package me.sosedik.requiem.listener.player.ghost;
 
 import me.sosedik.kiterino.event.entity.EntityStartUsingItemEvent;
+import me.sosedik.moves.listener.movement.FreeFall;
 import me.sosedik.requiem.Requiem;
 import me.sosedik.requiem.dataset.RequiemItems;
 import me.sosedik.requiem.feature.GhostyPlayer;
@@ -20,6 +21,8 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 public class GhostsPhaseThroughWalls implements Listener {
+
+	public static final int RTP_RANGE = 15_000;
 	
 	@EventHandler
 	public void onUse(EntityStartUsingItemEvent event) {
@@ -45,7 +48,12 @@ public class GhostsPhaseThroughWalls implements Listener {
 		event.setCancelled(true);
 
 		CustomTotemOfUndyingModifier.playTotemEffect(player, event.getBow());
-		LocationUtil.smartTeleport(player, player.getWorld().getSpawnLocation().center(1), false);
+		LocationUtil.smartTeleport(player, player.getLocation().y(320), false)
+			.thenRun(() -> LocationUtil.runRtp(player, player.getWorld(), RTP_RANGE, false)
+				.thenRun(() -> {
+					player.setFallDistance(0F);
+					FreeFall.startLeaping(player);
+				}));
 	}
 
 }

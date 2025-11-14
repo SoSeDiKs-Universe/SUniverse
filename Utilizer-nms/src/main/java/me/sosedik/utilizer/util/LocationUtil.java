@@ -26,6 +26,7 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.BoundingBox;
+import org.bukkit.util.Vector;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -41,6 +42,8 @@ import java.util.stream.Stream;
 
 @NullMarked
 public class LocationUtil {
+
+	public static final String PENDING_TP_META = "pending_tp";
 
 	private LocationUtil() {
 		throw new IllegalStateException("Utility class");
@@ -70,6 +73,7 @@ public class LocationUtil {
 	);
 
 	private static final Random RANDOM = new Random();
+	private static final Vector ZERO_VELOCITY = new Vector();
 	private static final Set<NamespacedKey> RTP_BLACKLISTED_BIOMES = new HashSet<>();
 
 	static {
@@ -82,39 +86,43 @@ public class LocationUtil {
 	 *
 	 * @param player player
 	 */
-	public static CompletableFuture<Void> runRtp(Player player, World world, int range) {
-		if (player.getLocation().getBlockY() < 400) {
-			LocationUtil.smartTeleport(player, player.getLocation().addY(1600), false);
-		}
-		if (!player.isFlying()) {
-			Utilizer.scheduler().sync(() -> player.addPotionEffect(new PotionEffect(PotionEffectType.RESISTANCE, 25 * 20, 10)));
-			Utilizer.scheduler().sync(task -> {
-				if (!player.isOnline()) return true;
-				if (player.isDead()) return true;
+	public static CompletableFuture<Void> runRtp(Player player, World world, int range, boolean safeFall) {
+		MetadataUtil.setMetadata(player, PENDING_TP_META, "rtp");
+		player.setVelocity(ZERO_VELOCITY);
+		if (safeFall && !player.isFlying()) {
+			Utilizer.scheduler().sync(() -> {
+				if (!player.addPotionEffect(new PotionEffect(PotionEffectType.RESISTANCE, 3 * 20, 10, false, false, false))) return;
 
-				player.addPotionEffect(new PotionEffect(PotionEffectType.RESISTANCE, 25 * 20, 10));
-				return player.isOnGround() || player.isInWater() || player.isFlying();
-			}, 20L, 20L);
+				Utilizer.scheduler().sync(task -> {
+					if (!player.isOnline()) return true;
+					if (player.isDead()) return true;
+					if (!player.addPotionEffect(new PotionEffect(PotionEffectType.RESISTANCE, 3 * 20, 10, false, false, false))) return true;
+					return player.isOnGround() || player.isInWater() || player.isFlying();
+				}, 20L, 20L);
+			});
 		}
 		var teleported = new CompletableFuture<Void>();
-		Utilizer.scheduler().async(() -> findLocation(player, new Location(world, 0, 600, 0), 0, range, teleported));
+		Utilizer.scheduler().async(() -> findLocation(player, new Location(world, 0, 0, 0), 0, range, teleported));
 		return teleported;
 	}
 
 	private static void findLocation(Player player, Location loc, int check, int range, CompletableFuture<@Nullable Void> teleported) {
 		if (check > 50) {
-			teleported.complete(null);
+			smartTeleport(player, loc.getWorld().getSpawnLocation().center(1), false)
+				.thenRun(() -> teleported.complete(null));
 			return;
 		}
 		loc.setX((RANDOM.nextBoolean() ? 1D : -1D) * RANDOM.nextInt(range));
 		loc.setZ((RANDOM.nextBoolean() ? 1D : -1D) * RANDOM.nextInt(range));
 		loc.getWorld().getChunkAtAsyncUrgently(loc).thenAccept(chunk -> {
-			if (RTP_BLACKLISTED_BIOMES.contains(loc.toHighestLocation().getBlock().getBiome().getKey())) {
+			Location tpLoc = loc.toHighestLocation(HeightMap.MOTION_BLOCKING);
+			if (RTP_BLACKLISTED_BIOMES.contains(tpLoc.getBlock().getBiome().getKey())) {
 				findLocation(player, loc, check + 1, range, teleported);
 				return;
 			}
 			Location preLoc = player.getLocation();
-			smartTeleport(player, loc, false).thenRun(() -> teleported.complete(null));
+			smartTeleport(player, tpLoc.addY(120), false)
+				.thenRun(() -> teleported.complete(null));
 			Utilizer.logger().info("Randomly teleporting %s from %s to %s".formatted(
 				player.getName(),
 				"%s[%s, %s, %s]".formatted(preLoc.getWorld().getName(), preLoc.getX(), preLoc.getY(), preLoc.getZ()),
@@ -142,13 +150,23 @@ public class LocationUtil {
 	 * @return teleport result
 	 */
 	public static CompletableFuture<Boolean> smartTeleport(Entity entity, Location loc, PlayerTeleportEvent.TeleportCause cause, boolean retainVelocity) {
+		if (!MetadataUtil.hasMetadata(entity, PENDING_TP_META))
+			MetadataUtil.setMetadata(entity, PENDING_TP_META, "smart_tp");
 		Entity teleportingEntity = entity;
 		Entity nextEntity;
 		while ((nextEntity = teleportingEntity.getVehicle()) != null)
 			teleportingEntity = nextEntity;
 		if (retainVelocity)
-			return teleportingEntity.teleportAsync(loc, cause, TeleportFlag.Relative.VELOCITY_ROTATION, TeleportFlag.Relative.VELOCITY_X, TeleportFlag.Relative.VELOCITY_Y, TeleportFlag.Relative.VELOCITY_Z);
-		return teleportingEntity.teleportAsync(loc, cause, TeleportFlag.Relative.VELOCITY_ROTATION);
+			return teleportingEntity.teleportAsync(loc, cause, TeleportFlag.Relative.VELOCITY_ROTATION, TeleportFlag.Relative.VELOCITY_X, TeleportFlag.Relative.VELOCITY_Y, TeleportFlag.Relative.VELOCITY_Z)
+				.thenApply((r) -> {
+					MetadataUtil.removeMetadata(entity, PENDING_TP_META);
+					return r;
+				});
+		return teleportingEntity.teleportAsync(loc, cause, TeleportFlag.Relative.VELOCITY_ROTATION)
+			.thenApply((r) -> {
+				MetadataUtil.removeMetadata(entity, PENDING_TP_META);
+				return r;
+			});
 	}
 
 	/**

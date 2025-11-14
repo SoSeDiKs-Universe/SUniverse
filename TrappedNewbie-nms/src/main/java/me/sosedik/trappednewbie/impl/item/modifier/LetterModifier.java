@@ -138,8 +138,19 @@ public class LetterModifier extends ItemModifier {
 		return NBT.get(letter, nbt -> {
 			if (!nbt.getOrDefault(FRIENDSHIP_TAG, false)) return false;
 			return from.getUniqueId().equals(nbt.getOrNull(FRIENDSHIP_FROM_TAG, UUID.class))
-					&& to.getUniqueId().equals(nbt.getOrNull(FRIENDSHIP_TO_TAG, UUID.class));
+				&& to.getUniqueId().equals(nbt.getOrNull(FRIENDSHIP_TO_TAG, UUID.class));
 		});
+	}
+
+	/**
+	 * Checks whether the letter is unbound.
+	 * <p>Expects the passed item to be a letter.
+	 *
+	 * @param letter letter item
+	 * @return whether the letter is unbound
+	 */
+	public static boolean isFriendshipLetter(ItemStack letter) {
+		return NBT.get(letter, nbt -> (boolean) nbt.getOrDefault(FRIENDSHIP_TAG, false));
 	}
 
 	/**

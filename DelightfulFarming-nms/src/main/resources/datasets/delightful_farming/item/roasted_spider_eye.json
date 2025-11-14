@@ -22,7 +22,7 @@
 				"effects": [
 					{
 						"type": "minecraft:weakness",
-						"duration": 300,
+						"duration": 1800,
 						"amplifier": 0
 					}
 				]

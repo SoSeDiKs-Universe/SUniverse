@@ -23,6 +23,7 @@ import me.sosedik.utilizer.util.InventoryUtil;
 import me.sosedik.utilizer.util.RecipeManager;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
+import org.bukkit.Keyed;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Tag;
@@ -103,29 +104,44 @@ public class AllRecipesInRecipeBook implements Listener {
 	}
 
 	private void addRecipes() {
+		List<Recipe> updatedRecipes = new ArrayList<>();
 		List<Recipe> fakedRecipes = new ArrayList<>();
 		for (Iterator<Recipe> it = Bukkit.recipeIterator(); it.hasNext(); ) {
 			Recipe recipe = it.next();
 			switch (recipe) {
-				case ShapedRecipe shapedRecipe when isCraftingTableRecipe(shapedRecipe) ->
-						fakedRecipes.add(getDummyRecipe(shapedRecipe.getKey(), shapedRecipe.getGroup(), shapedRecipe.getResult(), CRAFTING_TABLES_CHOICE));
-				case ShapelessRecipe shapelessRecipe when shapelessRecipe.getChoiceList().size() > 4 ->
-						fakedRecipes.add(getDummyRecipe(shapelessRecipe.getKey(), shapelessRecipe.getGroup(), shapelessRecipe.getResult(), CRAFTING_TABLES_CHOICE));
+				case ShapedRecipe shapedRecipe when isCraftingTableRecipe(shapedRecipe) -> {
+					if (shapedRecipe.getGroup().isEmpty()) {
+						shapedRecipe.setGroup(shapedRecipe.key().value());
+						updatedRecipes.add(shapedRecipe);
+					}
+					fakedRecipes.add(getDummyRecipe(shapedRecipe.getKey(), shapedRecipe.getGroup(), shapedRecipe.getResult(), CRAFTING_TABLES_CHOICE));
+				}
+				case ShapelessRecipe shapelessRecipe when shapelessRecipe.getChoiceList().size() > 4 -> {
+					if (shapelessRecipe.getGroup().isEmpty()) {
+						shapelessRecipe.setGroup(shapelessRecipe.key().value());
+						updatedRecipes.add(shapelessRecipe);
+					}
+					fakedRecipes.add(getDummyRecipe(shapelessRecipe.getKey(), shapelessRecipe.getGroup(), shapelessRecipe.getResult(), CRAFTING_TABLES_CHOICE));
+				}
 				case StonecuttingRecipe stonecuttingRecipe ->
-						fakedRecipes.add(getDummyRecipe(stonecuttingRecipe.getKey(), stonecuttingRecipe.getGroup(), stonecuttingRecipe.getResult(), new RecipeChoice.ExactChoice(ItemStack.of(Material.STONECUTTER))));
+					fakedRecipes.add(getDummyRecipe(stonecuttingRecipe.getKey(), stonecuttingRecipe.getGroup(), stonecuttingRecipe.getResult(), new RecipeChoice.ExactChoice(ItemStack.of(Material.STONECUTTER))));
 				case FurnaceRecipe furnaceRecipe ->
-						fakedRecipes.add(getDummyRecipe(furnaceRecipe.getKey(), furnaceRecipe.getGroup(), furnaceRecipe.getResult(), FURNACE_CHOICE));
+					fakedRecipes.add(getDummyRecipe(furnaceRecipe.getKey(), furnaceRecipe.getGroup(), furnaceRecipe.getResult(), FURNACE_CHOICE));
 				case BlastingRecipe blastingRecipe ->
-						fakedRecipes.add(getDummyRecipe(blastingRecipe.getKey(), blastingRecipe.getGroup(), blastingRecipe.getResult(), FURNACE_CHOICE));
+					fakedRecipes.add(getDummyRecipe(blastingRecipe.getKey(), blastingRecipe.getGroup(), blastingRecipe.getResult(), FURNACE_CHOICE));
 				case SmokingRecipe smokingRecipe ->
-						fakedRecipes.add(getDummyRecipe(smokingRecipe.getKey(), smokingRecipe.getGroup(), smokingRecipe.getResult(), FURNACE_CHOICE));
+					fakedRecipes.add(getDummyRecipe(smokingRecipe.getKey(), smokingRecipe.getGroup(), smokingRecipe.getResult(), FURNACE_CHOICE));
 				case CampfireRecipe campfireRecipe ->
-						fakedRecipes.add(getDummyRecipe(campfireRecipe.getKey(), campfireRecipe.getGroup(), campfireRecipe.getResult(), FURNACE_CHOICE));
+					fakedRecipes.add(getDummyRecipe(campfireRecipe.getKey(), campfireRecipe.getGroup(), campfireRecipe.getResult(), FURNACE_CHOICE));
 				default -> {}
 			}
 		}
 		RecipeManager.getRecipesFor(BrewingCraft.class).forEach(recipe -> fakedRecipes.add(getDummyRecipe(recipe.getKey(), recipe.getGroup(), recipe.getResult(), new RecipeChoice.ExactChoice(ItemStack.of(Material.BREWING_STAND)))));
-		fakedRecipes.forEach(Bukkit::addRecipe);
+		updatedRecipes.forEach(recipe -> {
+			Bukkit.removeRecipe(((Keyed) recipe).getKey(), false);
+			Bukkit.addRecipe(recipe, false);
+		});
+		fakedRecipes.forEach(recipe -> Bukkit.addRecipe(recipe, false));
 		addVanillaPotionMixes();
 	}
 
@@ -301,24 +317,38 @@ public class AllRecipesInRecipeBook implements Listener {
 		VIEWERS.put(player.getUniqueId(), new RecipeDisplay(player, items));
 	}
 
-	@EventHandler
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onRecipe(PlayerRecipeBookClickEvent event) {
 		Player player = event.getPlayer();
-		if (player.getOpenInventory().getTopInventory().getType() != InventoryType.CRAFTING) return;
+		InventoryType type = player.getOpenInventory().getTopInventory().getType();
+		if (type != InventoryType.CRAFTING) return;
+//		if (type != InventoryType.CRAFTING) {
+//			if (type != InventoryType.WORKBENCH) return;
+//
+//			NamespacedKey originalKey = getOriginalKey(event.getRecipe());
+//			if (originalKey == null) return;
+//
+//			event.setRecipe(originalKey); // TODO Some recipes are not WORKBENCH recipes and should be handled in some other way (otherwise server throws an exception)
+//			return;
+//		}
 
 		RecipeDisplay currentDisplay = VIEWERS.remove(player.getUniqueId());
 
-		NamespacedKey recipeKey = event.getRecipe();
-		if (!FAKE_RECIPE_NAMESPACE.equals(recipeKey.getNamespace())) return;
-
-		String[] keys = recipeKey.getKey().split("/", 2);
-		if (keys.length != 2) return;
+		NamespacedKey originalKey = getOriginalKey(event.getRecipe());
+		if (originalKey == null) return;
 
 		event.setCancelled(true);
-
-		var originalKey = new NamespacedKey(keys[0], keys[1]);
 		displayRecipe(player, originalKey);
 		if (currentDisplay != null) currentDisplay.cancel();
+	}
+
+	private @Nullable NamespacedKey getOriginalKey(NamespacedKey recipeKey) {
+		if (!FAKE_RECIPE_NAMESPACE.equals(recipeKey.getNamespace())) return null;
+
+		String[] keys = recipeKey.getKey().split("/", 2);
+		if (keys.length != 2) return null;
+
+		return new NamespacedKey(keys[0], keys[1]);
 	}
 
 	private void displayRecipe(Player player, NamespacedKey recipeKey) {
@@ -389,7 +419,7 @@ public class AllRecipesInRecipeBook implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onOpenForget(InventoryOpenEvent event) {
-		if (!hasRecipeBook(event.getInventory().getType())) return;
+		if (event.getInventory().getType() != InventoryType.WORKBENCH) return;
 		if (!(event.getPlayer() instanceof Player player)) return;
 
 		player.undiscoverRecipes(player.getDiscoveredRecipes().stream().filter(key -> FAKE_RECIPE_NAMESPACE.equals(key.getNamespace())).toList());
@@ -397,19 +427,11 @@ public class AllRecipesInRecipeBook implements Listener {
 
 	@EventHandler
 	public void onCloseDiscover(InventoryCloseEvent event) {
-		if (!hasRecipeBook(event.getInventory().getType())) return;
+		if (event.getInventory().getType() != InventoryType.WORKBENCH) return;
 		if (!(event.getPlayer() instanceof Player player)) return;
 
 		if (TrappedNewbieAdvancements.MAKE_A_WORK_STATION.isDone(player))
 			AdvancementRecipes.discoverRecipes(player);
-	}
-
-	// MCCheck: 1.21.10, new inventories
-	public static boolean hasRecipeBook(InventoryType type) {
-		return switch (type) {
-			case WORKBENCH, FURNACE, BLAST_FURNACE, SMOKER -> true;
-			default -> false;
-		};
 	}
 
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
@@ -579,7 +601,7 @@ public class AllRecipesInRecipeBook implements Listener {
 		}
 		NamespacedKey recipeKey = new NamespacedKey(FAKE_RECIPE_NAMESPACE, key);
 		VANILLA_POTION_RECIPES.put(recipeKey, new VanillaPotionMix(items));
-		Bukkit.addRecipe(getDummyRecipe(recipeKey, "", result, new RecipeChoice.ExactChoice(ItemStack.of(Material.BREWING_STAND))));
+		Bukkit.addRecipe(getDummyRecipe(recipeKey, "", result, new RecipeChoice.ExactChoice(ItemStack.of(Material.BREWING_STAND))), false);
 	}
 
 	private static ItemStack potion(Material type, PotionType base) {

@@ -4,14 +4,14 @@ import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.event.PacketListener;
 import com.github.retrooper.packetevents.event.PacketSendEvent;
 import com.github.retrooper.packetevents.protocol.nbt.NBTCompound;
-import com.github.retrooper.packetevents.protocol.nbt.NBTList;
-import com.github.retrooper.packetevents.protocol.nbt.NBTString;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
 import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import com.github.retrooper.packetevents.protocol.world.blockentity.BlockEntityType;
 import com.github.retrooper.packetevents.protocol.world.blockentity.BlockEntityTypes;
 import com.github.retrooper.packetevents.protocol.world.chunk.Column;
 import com.github.retrooper.packetevents.protocol.world.chunk.TileEntity;
+import com.github.retrooper.packetevents.util.adventure.AdventureSerializer;
+import com.github.retrooper.packetevents.wrapper.PacketWrapper;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerBlockEntityData;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerChunkData;
 import io.papermc.paper.event.player.PlayerOpenSignEvent;
@@ -20,7 +20,6 @@ import me.sosedik.uglychatter.api.chat.FancyRendererTag;
 import me.sosedik.utilizer.api.message.Messenger;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.bukkit.block.Sign;
 import org.bukkit.block.sign.Side;
 import org.bukkit.entity.Player;
@@ -94,8 +93,8 @@ public class SignBeautifier implements PacketListener, Listener {
 
 		MiniMessage miniMessage = Messenger.messenger(player).miniMessage();
 		NBTCompound nbt = wrapper.getNBT();
-		renderText(miniMessage, player, nbt, Side.FRONT);
-		renderText(miniMessage, player, nbt, Side.BACK);
+		renderText(wrapper, miniMessage, player, nbt, Side.FRONT);
+		renderText(wrapper, miniMessage, player, nbt, Side.BACK);
 	}
 
 	private void handleChunkData(Player player, WrapperPlayServerChunkData wrapper) {
@@ -109,8 +108,8 @@ public class SignBeautifier implements PacketListener, Listener {
 			if (miniMessage == null) miniMessage = Messenger.messenger(player).miniMessage();
 
 			NBTCompound nbt = tileEntity.getNBT();
-			renderText(miniMessage, player, nbt, Side.FRONT);
-			renderText(miniMessage, player, nbt, Side.BACK);
+			renderText(wrapper, miniMessage, player, nbt, Side.FRONT);
+			renderText(wrapper, miniMessage, player, nbt, Side.BACK);
 		}
 	}
 
@@ -118,30 +117,25 @@ public class SignBeautifier implements PacketListener, Listener {
 		return blockEntityType == BlockEntityTypes.SIGN || blockEntityType == BlockEntityTypes.HANGING_SIGN;
 	}
 
-	private void renderText(MiniMessage miniMessage, Player player, NBTCompound nbt, Side side) {
+	private void renderText(PacketWrapper<?> wrapper, MiniMessage miniMessage, Player player, NBTCompound nbt, Side side) {
 		String sideKey = side == Side.FRONT ? "front_text" : "back_text";
 		NBTCompound sideText = nbt.getCompoundTagOrNull(sideKey);
 		if (sideText == null) return;
 
-		NBTList<NBTString> messages = sideText.getStringListTagOrNull("messages");
+		List<Component> messages = sideText.getListOrNull("messages", AdventureSerializer.serializer(), wrapper);
 		if (messages == null) return;
 
 		for (int i = 0; i < messages.size(); i++) {
-			String serialized = messages.getTag(i).getValue();
+			Component line = messages.get(i);
+			player.sendMessage(line);
+			String serialized = FancyMessageRenderer.getRawInput(line);
 			if (serialized.isEmpty()) continue;
 
-			Component line;
-			// Raw text is wrapped in "
-			if (serialized.charAt(0) == '"' && serialized.charAt(serialized.length() - 1) == '"')
-				line = Component.text(serialized.substring(1, serialized.length() - 1));
-			else
-				line = GsonComponentSerializer.gson().deserialize(serialized);
-			serialized = FancyMessageRenderer.getRawInput(line);
-
 			Component rendered = FancyMessageRenderer.renderMessage(miniMessage, serialized, player, player);
-			serialized = GsonComponentSerializer.gson().serialize(rendered);
-			messages.setTag(i, new NBTString(serialized));
+			messages.set(i, rendered);
 		}
+
+		sideText.setList("messages", messages, AdventureSerializer.serializer(), wrapper); // TODO packetevents does not support mixed lists yet
 	}
 
 }

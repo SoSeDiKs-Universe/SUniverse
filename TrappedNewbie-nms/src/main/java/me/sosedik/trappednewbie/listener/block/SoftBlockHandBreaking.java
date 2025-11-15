@@ -31,8 +31,8 @@ public class SoftBlockHandBreaking implements Listener {
 		BlockBreakTask.addBreakingRule((task, seconds) -> {
 			Material blockType = task.getBlock().getType();
 			if (!isRocky(task.getTool())) {
-				if (blockType == Material.GRAVEL) return 1.75F;
-				if (blockType == Material.SUSPICIOUS_GRAVEL) return 1.75F;
+				if (blockType == Material.GRAVEL) return seconds == 0F ? 1.75F : seconds;
+				if (blockType == Material.SUSPICIOUS_GRAVEL) return seconds == 0F ? 1.75F : seconds;
 				return null;
 			}
 

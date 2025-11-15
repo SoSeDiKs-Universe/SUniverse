@@ -26,6 +26,13 @@ public class TestCommand {
 
 		TrappedNewbie.scheduler().sync(() -> {
 			player.getInventory().addItem(SoulboundNecronomicon.getNecronomicon(player));
+//			Block block = player.getLocation().getBlock();
+//			block.setType(Material.CHERRY_SIGN);
+//			if (block.getState() instanceof Sign sign) {
+//				sign.getSide(Side.FRONT).line(0, Component.text("text"));
+//				sign.getSide(Side.FRONT).line(1, Component.text("text, but red", NamedTextColor.RED).hoverEvent(Component.text("smh")));
+//				sign.update();
+//			}
 			// Stuff!
 //			player.getWorld().spawn(player.getLocation(), Husk.class, e1 -> {
 //				e1.setCanPickupItems(true);

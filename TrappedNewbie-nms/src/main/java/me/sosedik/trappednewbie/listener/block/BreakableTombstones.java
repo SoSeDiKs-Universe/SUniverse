@@ -21,7 +21,7 @@ public class BreakableTombstones implements Listener {
 			if (!(BlockStorage.getByLoc(task.getBlock()) instanceof TombstoneBlockStorage storage)) return null;
 			if (!storage.isPlayerTombstone()) return null;
 
-			return 2F;
+			return seconds == 0F ? 2F : seconds;
 		});
 	}
 

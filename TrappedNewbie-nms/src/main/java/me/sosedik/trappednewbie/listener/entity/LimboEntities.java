@@ -56,7 +56,7 @@ public class LimboEntities implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
-	public void onSpawn(EntitySpawnEvent event) {applyEntityRules(event.getEntity());
+	public void onSpawn(EntitySpawnEvent event) {
 		if (event.getEntity().getWorld() != Utilizer.limboWorld()) return;
 
 		applyEntityRules(event.getEntity());

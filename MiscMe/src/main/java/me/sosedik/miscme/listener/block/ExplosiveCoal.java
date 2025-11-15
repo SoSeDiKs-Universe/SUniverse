@@ -183,7 +183,7 @@ public class ExplosiveCoal implements Listener {
 		if (EXTRA_TOOL_TRIGGERS.isTagged(type)) return true;
 
 		return MaterialTags.IRON_TOOLS.isTagged(type)
-				|| MaterialTags.GOLDEN_TOOLS.isTagged(type);
+			|| MaterialTags.GOLDEN_TOOLS.isTagged(type);
 	}
 
 	private boolean isCoalOre(Material type) {

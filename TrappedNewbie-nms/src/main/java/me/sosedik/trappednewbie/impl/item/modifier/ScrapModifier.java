@@ -1,6 +1,7 @@
 package me.sosedik.trappednewbie.impl.item.modifier;
 
 import de.tr7zw.nbtapi.NBT;
+import io.papermc.paper.datacomponent.DataComponentType;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import me.sosedik.kiterino.modifier.item.ItemContextBox;
 import me.sosedik.kiterino.modifier.item.ItemModifier;
@@ -46,22 +47,35 @@ public class ScrapModifier extends ItemModifier {
 		scrapItem = modifyItem(contextBox.getViewer(), contextBox.getLocale(), scrapItem);
 		if (scrapItem == null) return ModificationResult.PASS;
 
-		scrapItem = scrapItem.withType(Material.IRON_NUGGET);
-		scrapItem.setData(DataComponentTypes.MAX_DAMAGE, 1000);
-		scrapItem.setData(DataComponentTypes.DAMAGE, 997);
+		ItemStack fakedScrap = scrapItem.withType(Material.IRON_NUGGET);
+		persistData(fakedScrap, scrapItem, item, DataComponentTypes.ITEM_MODEL);
+		persistData(fakedScrap, scrapItem, item, DataComponentTypes.ITEM_NAME);
+		fakedScrap.setData(DataComponentTypes.MAX_DAMAGE, 1000);
+		fakedScrap.setData(DataComponentTypes.DAMAGE, 997);
 
 		var messenger = Messenger.messenger(LangOptionsStorage.getByLocale(contextBox.getLocale()));
 		NamespacedKey key = scrapType.getKey();
 		Component name = messenger.getMessageIfExists("item." + key.namespace() + ".broken_" + key.value() + ".name");
 		if (name != null)
-			scrapItem.setData(DataComponentTypes.ITEM_NAME, name);
+			fakedScrap.setData(DataComponentTypes.ITEM_NAME, name);
 
 		if (TrappedNewbieTags.SCRAPPABLE.isTagged(scrapType))
-			scrapItem.setData(DataComponentTypes.ITEM_MODEL, new NamespacedKey(key.namespace(), "broken_" + key.value()));
+			fakedScrap.setData(DataComponentTypes.ITEM_MODEL, new NamespacedKey(key.namespace(), "broken_" + key.value()));
 
-		contextBox.setItem(scrapItem);
+		contextBox.setItem(fakedScrap);
 
 		return ModificationResult.RETURN;
+	}
+
+	@SuppressWarnings("unchecked")
+	private static void persistData(ItemStack fakedScrap, ItemStack scrapItem, ItemStack original, DataComponentType.Valued data) {
+		if (fakedScrap.isDataOverridden(data)) return;
+
+		if (scrapItem.hasData(data)) {
+			fakedScrap.setData(data, scrapItem.getData(data));
+		} else if (original.hasData(data)) {
+			fakedScrap.setData(data, original.getData(data));
+		}
 	}
 
 	public static ItemStack makeScrap(ItemStack item) {

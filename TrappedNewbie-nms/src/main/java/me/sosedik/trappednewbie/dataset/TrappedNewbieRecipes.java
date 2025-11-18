@@ -1,5 +1,8 @@
 package me.sosedik.trappednewbie.dataset;
 
+import de.tr7zw.nbtapi.NBT;
+import de.tr7zw.nbtapi.iface.ReadWriteNBT;
+import de.tr7zw.nbtapi.iface.ReadableNBT;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.DyedItemColor;
 import io.papermc.paper.datacomponent.item.Repairable;
@@ -18,14 +21,17 @@ import me.sosedik.trappednewbie.impl.item.modifier.ScrapModifier;
 import me.sosedik.trappednewbie.impl.thirst.ThirstData;
 import me.sosedik.trappednewbie.listener.block.LogStrippingGivesBarks;
 import me.sosedik.trappednewbie.listener.item.FillingBowlWithWater;
+import me.sosedik.trappednewbie.listener.misc.AllRecipesInRecipeBook;
 import me.sosedik.utilizer.api.event.recipe.ItemCraftPrepareEvent;
 import me.sosedik.utilizer.api.recipe.CraftingRecipeBuilder;
 import me.sosedik.utilizer.dataset.UtilizerTags;
+import me.sosedik.utilizer.impl.recipe.BrewingCraft;
 import me.sosedik.utilizer.impl.recipe.CampfireCraft;
 import me.sosedik.utilizer.impl.recipe.FireCraft;
 import me.sosedik.utilizer.impl.recipe.FurnaceCraft;
 import me.sosedik.utilizer.impl.recipe.ShapedCraft;
 import me.sosedik.utilizer.impl.recipe.ShapelessCraft;
+import me.sosedik.utilizer.impl.recipe.SmokingCraft;
 import me.sosedik.utilizer.impl.recipe.StonecuttingCraft;
 import me.sosedik.utilizer.impl.recipe.WaterCraft;
 import me.sosedik.utilizer.util.MiscUtil;
@@ -48,6 +54,7 @@ import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.recipe.CraftingBookCategory;
+import org.bukkit.potion.PotionType;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -496,6 +503,32 @@ public class TrappedNewbieRecipes {
 			.addIngredients(Material.ORANGE_DYE, Material.BLACK_DYE)
 			.register();
 
+		Consumer<ItemCraftPrepareEvent> preCheck = event -> {
+			ItemStack result = event.getResult();
+			if (ItemStack.isEmpty(result)) return;
+
+			for (ItemStack item : event.getMatrix()) {
+				if (!ItemStack.isType(item, Material.AXOLOTL_BUCKET)) continue;
+
+				NBT.getComponents(item, nbt -> {
+					ReadableNBT bucketEntityData = nbt.getCompound("minecraft:bucket_entity_data");
+					if (bucketEntityData == null) return;
+
+					NBT.modifyComponents(item, (Consumer<ReadWriteNBT>) itemNbt -> itemNbt.getOrCreateCompound("minecraft:bucket_entity_data").mergeCompound(bucketEntityData));
+				});
+
+				return;
+			}
+		};
+		new CampfireCraft(ItemStack.of(TrappedNewbieItems.BOILED_AXOLOTL_BUCKET), 40 * 20, trappedNewbieKey("boiled_axolotl"))
+			.addIngredients(Material.AXOLOTL_BUCKET)
+			.withPreCheck(preCheck)
+			.register();
+		new SmokingCraft(ItemStack.of(TrappedNewbieItems.BOILED_AXOLOTL_BUCKET), 12 * 20, trappedNewbieKey("boiled_axolotl"))
+			.addIngredients(Material.AXOLOTL_BUCKET)
+			.withPreCheck(preCheck)
+			.register();
+
 		addDrinkRecipes();
 
 		addFlowerBouquetRecipe();
@@ -622,6 +655,7 @@ public class TrappedNewbieRecipes {
 			.register();
 
 		addFuels();
+		addBrews();
 		removeRecipes();
 		makeIngredientReplacements();
 	}
@@ -712,8 +746,27 @@ public class TrappedNewbieRecipes {
 
 	private static void addFuels() {
 		Bukkit.addFuel(TrappedNewbieItems.ROUGH_STICK, 100);
+		Bukkit.addFuel(TrappedNewbieItems.MAGMA_CUBE_BUCKET, 1000 * 20);
 		TrappedNewbieTags.BRANCHES.getValues().forEach(material -> Bukkit.addFuel(material, 100));
 		TrappedNewbieTags.STICKS.getValues().forEach(material -> Bukkit.addFuel(material, 100));
+		UtilizerTags.LAVA_BUCKETS.getValues().forEach(material -> {
+			if (material != Material.LAVA_BUCKET)
+				Bukkit.addFuel(material, 1000 * 20);
+		});
+
+		Bukkit.addFuel(item -> {
+			BucketModifier.BucketType bucketType = BucketModifier.BucketType.fromBucket(item);
+			return bucketType != null && bucketType.isWooden() ? 10 * 20 : null;
+		});
+	}
+
+	private static void addBrews() {
+		new BrewingCraft(ItemStack.of(TrappedNewbieItems.MAGMA_CUBE_BUCKET), true, trappedNewbieKey("magma_cube_bucket"))
+			.asBrewIngredient(PotionType.WATER, PotionType.MUNDANE)
+			.asBrewIngredient(PotionType.AWKWARD, PotionType.FIRE_RESISTANCE, "fire_resistance_from_magma_cream")
+			.register();
+
+		AllRecipesInRecipeBook.addVanillaPotionMix("fire_resistance_from_magma_cream", PotionType.FIRE_RESISTANCE, TrappedNewbieItems.MAGMA_CUBE_BUCKET, null, PotionType.LONG_FIRE_RESISTANCE);
 	}
 
 	private static void removeRecipes() {
@@ -735,12 +788,14 @@ public class TrappedNewbieRecipes {
 	private static void makeIngredientReplacements() {
 		Map<Material, IngredientReplacement> replacements = new HashMap<>();
 
-		addReplacements(replacements, Material.STICK, TrappedNewbieTags.STICKS);
-		addReplacements(replacements, Material.SHEARS, UtilizerTags.SHEARS);
-		addReplacements(replacements, Material.STRING, List.of(Material.STRING, TrappedNewbieItems.HORSEHAIR), NamespacedKey.minecraft("white_wool_from_string"));
-		addReplacements(replacements, Material.RABBIT_HIDE, UtilizerTags.HIDES);
-		addReplacements(replacements, Material.SLIME_BALL, List.of(TrappedNewbieItems.SLIME_BUCKET));
-		addReplacements(replacements, Material.MAGMA_CREAM, List.of(TrappedNewbieItems.MAGMA_CUBE_BUCKET));
+		addReplacements(replacements, Material.STICK, TrappedNewbieTags.STICKS, null);
+		addReplacements(replacements, Material.SHEARS, UtilizerTags.SHEARS, null);
+		addReplacements(replacements, Material.STRING, List.of(Material.STRING, TrappedNewbieItems.HORSEHAIR), null, NamespacedKey.minecraft("white_wool_from_string"));
+		addReplacements(replacements, Material.RABBIT_HIDE, UtilizerTags.HIDES, null);
+		List<Material> slimes = List.of(Material.SLIME_BALL, TrappedNewbieItems.SLIME_BUCKET);
+		addReplacements(replacements, Material.SLIME_BALL, slimes, item -> slimes.contains(item.getType()));
+		List<Material> magmaCreams = List.of(Material.MAGMA_CREAM, TrappedNewbieItems.MAGMA_CUBE_BUCKET);
+		addReplacements(replacements, Material.MAGMA_CREAM, magmaCreams, item -> magmaCreams.contains(item.getType()));
 
 		TrappedNewbie.scheduler().sync(() -> {
 			List<Recipe> toReAdd = new ArrayList<>();
@@ -757,7 +812,7 @@ public class TrappedNewbieRecipes {
 		}, 1L);
 	}
 
-	private record IngredientReplacement(List<ItemStack> ingredients, List<NamespacedKey> exclusions) {}
+	private record IngredientReplacement(List<ItemStack> ingredients, List<NamespacedKey> exclusions, @Nullable Predicate<ItemStack> ingredientCheck) {}
 
 	private static void addBarkRecipes(Material log, Material strippedLog, @Nullable Material wood, @Nullable Material strippedWood, Material bark) {
 		LogStrippingGivesBarks.addBark(log, strippedLog, ItemStack.of(bark, 4));
@@ -795,14 +850,15 @@ public class TrappedNewbieRecipes {
 			.register();
 	}
 
-	private static void addReplacements(Map<Material, IngredientReplacement> map, Material type, Tag<Material> replacements, NamespacedKey... exclusions) {
-		addReplacements(map, type, replacements.getValues(), exclusions);
+	private static IngredientReplacement addReplacements(Map<Material, IngredientReplacement> map, Material type, Tag<Material> replacements, @Nullable Predicate<ItemStack> ingredientCheck, NamespacedKey... exclusions) {
+		return addReplacements(map, type, replacements.getValues(), ingredientCheck, exclusions);
 	}
 
-	private static void addReplacements(Map<Material, IngredientReplacement> map, Material type, Collection<Material> replacements, NamespacedKey... exclusions) {
-		IngredientReplacement replacement = map.computeIfAbsent(type, k -> new IngredientReplacement(new ArrayList<>(), new ArrayList<>()));
+	private static IngredientReplacement addReplacements(Map<Material, IngredientReplacement> map, Material type, Collection<Material> replacements, @Nullable Predicate<ItemStack> ingredientCheck, NamespacedKey... exclusions) {
+		IngredientReplacement replacement = map.computeIfAbsent(type, k -> new IngredientReplacement(new ArrayList<>(), new ArrayList<>(), ingredientCheck));
 		replacement.ingredients().addAll(replacements.stream().map(ItemStack::of).toList());
 		if (exclusions.length > 0) replacement.exclusions().addAll(List.of(exclusions));
+		return replacement;
 	}
 
 	private static boolean updateRecipe(Map<Material, IngredientReplacement> replacements, Recipe recipe) {
@@ -842,6 +898,7 @@ public class TrappedNewbieRecipes {
 					items.add(ItemStack.of(material));
 				} else {
 					modified = true;
+					predicate = replacements.ingredientCheck;
 					items.addAll(replacements.ingredients());
 				}
 			}
@@ -853,6 +910,8 @@ public class TrappedNewbieRecipes {
 					items.add(item);
 				} else {
 					modified = true;
+					if (predicate == null)
+						predicate = replacements.ingredientCheck;
 					items.addAll(replacements.ingredients());
 				}
 			}
@@ -866,6 +925,7 @@ public class TrappedNewbieRecipes {
 				recipe.getIngredients().put(key, new ArrayList<>(items));
 			updatedChoice.setPredicate(predicate);
 		}
+
 		return updatedChoice;
 	}
 

@@ -4,6 +4,7 @@ import com.destroystokyo.paper.MaterialTags;
 import me.sosedik.utilizer.api.event.recipe.RemainingItemEvent;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NullMarked;
@@ -14,7 +15,7 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public class FishBucketLeftovers implements Listener {
 
-	@EventHandler
+	@EventHandler(priority = EventPriority.LOW)
 	public void onRemain(RemainingItemEvent event) {
 		if (event.getResult() != null) return;
 

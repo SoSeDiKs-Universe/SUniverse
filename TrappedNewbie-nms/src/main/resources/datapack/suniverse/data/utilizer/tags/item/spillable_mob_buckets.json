@@ -5,6 +5,9 @@
     "minecraft:tropical_fish_bucket",
     "minecraft:pufferfish_bucket",
     "minecraft:axolotl_bucket",
-    "minecraft:tadpole_bucket"
+    "minecraft:tadpole_bucket",
+    "trapped_newbie:slime_bucket",
+    "trapped_newbie:magma_cube_bucket",
+    "trapped_newbie:frog_bucket"
   ]
 }

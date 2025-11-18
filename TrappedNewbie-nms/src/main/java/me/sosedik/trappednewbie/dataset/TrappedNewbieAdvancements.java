@@ -701,6 +701,10 @@ public class TrappedNewbieAdvancements {
 		)
 		.requiredProgress(simple(1000))
 		.buildAndRegister();
+	public static final IAdvancement EAT_BOILED_AXOLOTL = buildBase(NATURE_ROOT, "eat_boiled_axolotl")
+		.display(display().xy(1F, 1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(TrappedNewbieItems.BOILED_AXOLOTL_BUCKET))
+		.requiredProgress(vanilla(consumeItem().withItem(ItemTriggerCondition.of(TrappedNewbieItems.BOILED_AXOLOTL_BUCKET))))
+		.buildAndRegister();
 	public static final IAdvancement DRINK_CACTUS_JUICE = buildBase(NATURE_ROOT, "drink_cactus_juice")
 		.display(display().x(-1F).goalFrame().fancyDescriptionParent(NamedTextColor.AQUA).icon(TrappedNewbieRecipes.getFilled(ItemStack.of(TrappedNewbieItems.CACTUS_BOWL), ThirstData.DrinkType.CACTUS_JUICE)))
 		.buildAndRegister();

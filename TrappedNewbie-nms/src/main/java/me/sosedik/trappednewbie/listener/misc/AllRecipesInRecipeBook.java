@@ -23,6 +23,8 @@ import me.sosedik.trappednewbie.listener.advancement.AdvancementRecipes;
 import me.sosedik.utilizer.api.recipe.CustomRecipe;
 import me.sosedik.utilizer.impl.recipe.BrewingCraft;
 import me.sosedik.utilizer.util.InventoryUtil;
+import me.sosedik.utilizer.util.MathUtil;
+import me.sosedik.utilizer.util.MiscUtil;
 import me.sosedik.utilizer.util.RecipeManager;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -218,7 +220,7 @@ public class AllRecipesInRecipeBook implements Listener {
 			int xOffset = addXOffset ? 1 : 0;
 			items.put(GRID_SLOTS[i + offset + xOffset], recipeChoice == null ? AIR : getFromChoice(recipeChoice));
 		}
-		VIEWERS.put(player.getUniqueId(), new RecipeDisplay(player, items));
+		VIEWERS.put(player.getUniqueId(), new RecipeDisplay(player, items, 30));
 	}
 
 	private void handleShapelessRecipe(Player player, ShapelessRecipe shapelessRecipe) {
@@ -236,7 +238,7 @@ public class AllRecipesInRecipeBook implements Listener {
 			RecipeChoice recipeChoice = choices.get(i);
 			items.put(GRID_SLOTS[i], getFromChoice(recipeChoice));
 		}
-		VIEWERS.put(player.getUniqueId(), new RecipeDisplay(player, items));
+		VIEWERS.put(player.getUniqueId(), new RecipeDisplay(player, items, 30));
 	}
 
 	private void handleStonecuttingRecipe(Player player, StonecuttingRecipe stonecuttingRecipe) {
@@ -272,7 +274,7 @@ public class AllRecipesInRecipeBook implements Listener {
 				);
 			}
 		}
-		VIEWERS.put(player.getUniqueId(), new RecipeDisplay(player, items));
+		VIEWERS.put(player.getUniqueId(), new RecipeDisplay(player, items, 30));
 	}
 
 	private void handleFurnaceRecipe(Player player, FurnaceRecipe furnaceRecipe) {
@@ -283,7 +285,7 @@ public class AllRecipesInRecipeBook implements Listener {
 		items.put(21, FURNACE_CHOICE.getChoices());
 		items.put(23, getFromChoice(furnaceRecipe.getInputChoice()));
 		items.put(30, List.of(ItemStack.of(TrappedNewbieItems.INVENTORY_FIRE), FILLED.getFirst()));
-		VIEWERS.put(player.getUniqueId(), new RecipeDisplay(player, items));
+		VIEWERS.put(player.getUniqueId(), new RecipeDisplay(player, items, 30));
 	}
 
 	private void handleFurnaceRecipe(Player player, CookingRecipe<?> cookingRecipe, List<ItemStack> furnaces) {
@@ -293,7 +295,7 @@ public class AllRecipesInRecipeBook implements Listener {
 		for (int i = 0; i < 27; i++) items.put(i + 9, FILLED);
 		items.put(21, furnaces);
 		items.put(23, getFromChoice(cookingRecipe.getInputChoice()));
-		VIEWERS.put(player.getUniqueId(), new RecipeDisplay(player, items));
+		VIEWERS.put(player.getUniqueId(), new RecipeDisplay(player, items, 30));
 	}
 
 	private void handleBrewingRecipe(Player player, BrewingCraft brewingCraft) {
@@ -320,7 +322,7 @@ public class AllRecipesInRecipeBook implements Listener {
 //			items.put(17, List.of(CustomLoreModifier.lored(ItemStack.of(Material.DRAGON_BREATH), "recipes.potion.lingering")));
 //			items.put(26, List.of(Objects.requireNonNull(brewingCraft.getLingering())));
 //		}
-		VIEWERS.put(player.getUniqueId(), new RecipeDisplay(player, items));
+		VIEWERS.put(player.getUniqueId(), new RecipeDisplay(player, items, 50));
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
@@ -470,12 +472,13 @@ public class AllRecipesInRecipeBook implements Listener {
 
 		private final Player player;
 		private final Map<Integer, List<ItemStack>> items;
-		private int currentDisplay = 0;
+		private int currentDisplay;
 
-		public RecipeDisplay(Player player, Map<Integer, List<ItemStack>> items) {
+		public RecipeDisplay(Player player, Map<Integer, List<ItemStack>> items, int updatePeriod) {
 			this.player = player;
 			this.items = items;
-			TrappedNewbie.scheduler().async(this, 0L, 30L);
+			this.currentDisplay = MathUtil.getRandomIntInRange(0, items.size());
+			TrappedNewbie.scheduler().async(this, 0L, updatePeriod);
 		}
 
 		@Override
@@ -517,89 +520,82 @@ public class AllRecipesInRecipeBook implements Listener {
 
 	// MCCheck: 1.21.10, new potion mixes
 	private static void addVanillaPotionMixes() { // From PotionBrewing class
-		addVanillaPotionMix("splash_potion", ItemStack.of(Material.SPLASH_POTION), new RecipeChoice.MaterialChoice(Material.GUNPOWDER), new RecipeChoice.MaterialChoice(Material.POTION), null, null);
-		addVanillaPotionMix("lingering_potion", ItemStack.of(Material.LINGERING_POTION), new RecipeChoice.MaterialChoice(Material.DRAGON_BREATH), new RecipeChoice.MaterialChoice(Material.SPLASH_POTION), null, null);
+		addVanillaPotionMix("splash_potion", "", List.of(ItemStack.of(Material.SPLASH_POTION)), new RecipeChoice.MaterialChoice(Material.GUNPOWDER), new RecipeChoice.MaterialChoice(Material.POTION), null, null);
+		addVanillaPotionMix("lingering_potion", "", List.of(ItemStack.of(Material.LINGERING_POTION)), new RecipeChoice.MaterialChoice(Material.DRAGON_BREATH), new RecipeChoice.MaterialChoice(Material.SPLASH_POTION), null, null);
 		ItemStack waterPotion = ThirstData.of(WaterAwareBottleReset.getWaterBottle(1)).withThirstChance(0.5F).saveInto(WaterAwareBottleReset.getWaterBottle(1));
-		addVanillaPotionMix(PotionType.MUNDANE, potion(Material.POTION, PotionType.MUNDANE), new RecipeChoice.ExactChoice(BrewingCraft.MUNDANE_INGREDIENTS.stream().map(ItemStack::of).toList()), new RecipeChoice.ExactChoice(waterPotion), null, null);
-		addVanillaPotionMix(PotionType.THICK, potion(Material.POTION, PotionType.THICK), new RecipeChoice.MaterialChoice(Material.GLOWSTONE_DUST), new RecipeChoice.ExactChoice(waterPotion), null, null);
-		addVanillaPotionMix(PotionType.AWKWARD, potion(Material.POTION, PotionType.AWKWARD), new RecipeChoice.ExactChoice(ItemStack.of(Material.NETHER_WART)), new RecipeChoice.ExactChoice(waterPotion), null, null);
-		addVanillaPotionMix(PotionType.NIGHT_VISION, Material.GOLDEN_CARROT, null, PotionType.LONG_NIGHT_VISION);
-		addVanillaPotionMix(PotionType.INVISIBILITY, Material.FERMENTED_SPIDER_EYE, PotionType.NIGHT_VISION, null, PotionType.LONG_INVISIBILITY);
-		addVanillaPotionMix(PotionType.FIRE_RESISTANCE, Material.MAGMA_CREAM, null, PotionType.LONG_FIRE_RESISTANCE);
-		addVanillaPotionMix(PotionType.LEAPING, Material.RABBIT_FOOT, PotionType.STRONG_LEAPING, PotionType.LONG_LEAPING);
-		addVanillaPotionMix(PotionType.SLOWNESS, Material.FERMENTED_SPIDER_EYE,
+		addVanillaPotionMix("", PotionType.MUNDANE, potions(PotionType.MUNDANE), new RecipeChoice.ExactChoice(BrewingCraft.MUNDANE_INGREDIENTS.stream().map(ItemStack::of).toList()), new RecipeChoice.ExactChoice(waterPotion), null, null);
+		addVanillaPotionMix("", PotionType.THICK, potions(PotionType.THICK), new RecipeChoice.MaterialChoice(Material.GLOWSTONE_DUST), new RecipeChoice.ExactChoice(waterPotion), null, null);
+		addVanillaPotionMix("", PotionType.AWKWARD, potions(PotionType.AWKWARD), new RecipeChoice.ExactChoice(ItemStack.of(Material.NETHER_WART)), new RecipeChoice.ExactChoice(waterPotion), null, null);
+		addVanillaPotionMix("", PotionType.NIGHT_VISION, Material.GOLDEN_CARROT, null, PotionType.LONG_NIGHT_VISION);
+		addVanillaPotionMix("", PotionType.INVISIBILITY, Material.FERMENTED_SPIDER_EYE, PotionType.NIGHT_VISION, null, PotionType.LONG_INVISIBILITY);
+		addVanillaPotionMix("fire_resistance_from_magma_cream", PotionType.FIRE_RESISTANCE, Material.MAGMA_CREAM, null, PotionType.LONG_FIRE_RESISTANCE);
+		addVanillaPotionMix("", PotionType.LEAPING, Material.RABBIT_FOOT, PotionType.STRONG_LEAPING, PotionType.LONG_LEAPING);
+		addVanillaPotionMix("", PotionType.SLOWNESS, Material.FERMENTED_SPIDER_EYE,
 			List.of(potion(Material.POTION, PotionType.LEAPING), potion(Material.POTION, PotionType.LEAPING), potion(Material.POTION, PotionType.STRONG_LEAPING), potion(Material.POTION, PotionType.STRONG_LEAPING)),
 			PotionType.STRONG_SLOWNESS, PotionType.LONG_SLOWNESS
 		);
-		addVanillaPotionMix(PotionType.TURTLE_MASTER, Material.TURTLE_HELMET, PotionType.STRONG_TURTLE_MASTER, PotionType.LONG_TURTLE_MASTER);
-		addVanillaPotionMix(PotionType.SWIFTNESS, Material.SUGAR, PotionType.STRONG_SWIFTNESS, PotionType.LONG_SWIFTNESS);
-		addVanillaPotionMix(PotionType.WATER_BREATHING, Material.PUFFERFISH, null, PotionType.LONG_WATER_BREATHING);
-		addVanillaPotionMix(PotionType.HEALING, Material.GLISTERING_MELON_SLICE, PotionType.STRONG_HEALING, null);
-		addVanillaPotionMix(PotionType.HARMING, Material.FERMENTED_SPIDER_EYE,
+		addVanillaPotionMix("", PotionType.TURTLE_MASTER, Material.TURTLE_HELMET, PotionType.STRONG_TURTLE_MASTER, PotionType.LONG_TURTLE_MASTER);
+		addVanillaPotionMix("", PotionType.SWIFTNESS, Material.SUGAR, PotionType.STRONG_SWIFTNESS, PotionType.LONG_SWIFTNESS);
+		addVanillaPotionMix("", PotionType.WATER_BREATHING, Material.PUFFERFISH, null, PotionType.LONG_WATER_BREATHING);
+		addVanillaPotionMix("", PotionType.HEALING, Material.GLISTERING_MELON_SLICE, PotionType.STRONG_HEALING, null);
+		addVanillaPotionMix("", PotionType.HARMING, Material.FERMENTED_SPIDER_EYE,
 			List.of(potion(Material.POTION, PotionType.HEALING), potion(Material.POTION, PotionType.POISON), potion(Material.POTION, PotionType.STRONG_HEALING), potion(Material.POTION, PotionType.LONG_POISON)),
 			PotionType.STRONG_HARMING, null
 		);
-		addVanillaPotionMix(PotionType.POISON, Material.SPIDER_EYE, PotionType.STRONG_POISON, PotionType.LONG_POISON);
-		addVanillaPotionMix(PotionType.REGENERATION, Material.GHAST_TEAR, PotionType.STRONG_REGENERATION, PotionType.LONG_REGENERATION);
-		addVanillaPotionMix(PotionType.STRENGTH, Material.BLAZE_POWDER, PotionType.STRONG_STRENGTH, PotionType.LONG_STRENGTH);
-		addVanillaPotionMix(PotionType.WEAKNESS, Material.FERMENTED_SPIDER_EYE, null, PotionType.LONG_WEAKNESS);
-		addVanillaPotionMix(PotionType.SLOW_FALLING, Material.PHANTOM_MEMBRANE, null, PotionType.LONG_SLOW_FALLING);
+		addVanillaPotionMix("", PotionType.POISON, Material.SPIDER_EYE, PotionType.STRONG_POISON, PotionType.LONG_POISON);
+		addVanillaPotionMix("", PotionType.REGENERATION, Material.GHAST_TEAR, PotionType.STRONG_REGENERATION, PotionType.LONG_REGENERATION);
+		addVanillaPotionMix("", PotionType.STRENGTH, Material.BLAZE_POWDER, PotionType.STRONG_STRENGTH, PotionType.LONG_STRENGTH);
+		addVanillaPotionMix("", PotionType.WEAKNESS, Material.FERMENTED_SPIDER_EYE, null, PotionType.LONG_WEAKNESS);
+		addVanillaPotionMix("", PotionType.SLOW_FALLING, Material.PHANTOM_MEMBRANE, null, PotionType.LONG_SLOW_FALLING);
 	}
 
 	private record VanillaPotionMix(Map<Integer, List<ItemStack>> items) {
 
 		void handle(Player player) {
-			VIEWERS.put(player.getUniqueId(), new RecipeDisplay(player, this.items));
+			VIEWERS.put(player.getUniqueId(), new RecipeDisplay(player, this.items, 40));
 		}
 
 	}
 
-	private static void addVanillaPotionMix(PotionType type, Material ingredient, List<ItemStack> choices, @Nullable PotionType upgraded, @Nullable PotionType extended) {
+	private static List<ItemStack> potions(PotionType type) {
+		return List.of(potion(Material.POTION, type), potion(Material.SPLASH_POTION, type), potion(Material.LINGERING_POTION, type));
+	}
+
+	private static void addVanillaPotionMix(String group, PotionType type, Material ingredient, List<ItemStack> choices, @Nullable PotionType upgraded, @Nullable PotionType extended) {
 		addVanillaPotionMix(
-			type.name().toLowerCase(),
-			potion(Material.POTION, type),
+			type.key().value() + "_potion_from_" + ingredient.key().value(),
+			group,
+			potions(type),
 			new RecipeChoice.MaterialChoice(ingredient),
 			new RecipeChoice.ExactChoice(choices),
-			upgraded == null ? null : potion(Material.POTION, upgraded),
-			extended == null ? null : potion(Material.POTION, extended)
+			upgraded == null ? null : potions(upgraded),
+			extended == null ? null : potions(extended)
 		);
 	}
 
-	private static void addVanillaPotionMix(PotionType type, Material ingredient, @Nullable PotionType upgraded, @Nullable PotionType extended) {
-		var item = ItemStack.of(Material.POTION);
-		item.setData(DataComponentTypes.POTION_CONTENTS, PotionContents.potionContents().potion(PotionType.AWKWARD).build());
-		addVanillaPotionMix(type, ingredient, item, upgraded, extended);
+	public static void addVanillaPotionMix(String group, PotionType type, Material ingredient, @Nullable PotionType upgraded, @Nullable PotionType extended) {
+		addVanillaPotionMix(group, type, ingredient, potions(PotionType.AWKWARD), upgraded, extended);
 	}
 
-	private static void addVanillaPotionMix(PotionType type, Material ingredient, ItemStack base, @Nullable PotionType upgraded, @Nullable PotionType extended) {
+	private static void addVanillaPotionMix(String group, PotionType type, Material ingredient, PotionType base, @Nullable PotionType upgraded, @Nullable PotionType extended) {
 		addVanillaPotionMix(
-			type.name().toLowerCase() + "_potion",
-			potion(Material.POTION, type),
-			new RecipeChoice.ExactChoice(ItemStack.of(ingredient)),
-			new RecipeChoice.ExactChoice(base),
-			upgraded == null ? null : potion(Material.POTION, upgraded),
-			extended == null ? null : potion(Material.POTION, extended)
-		);
-	}
-
-	private static void addVanillaPotionMix(PotionType type, Material ingredient, PotionType base, @Nullable PotionType upgraded, @Nullable PotionType extended) {
-		addVanillaPotionMix(
-			type.name().toLowerCase() + "_potion",
-			potion(Material.POTION, type),
+			type.key().value() + "_potion_from_" + ingredient.key().value(),
+			group,
+			potions(type),
 			new RecipeChoice.MaterialChoice(ingredient),
-			new RecipeChoice.ExactChoice(potion(Material.POTION, base), upgraded == null ? potion(Material.POTION, extended) : potion(Material.POTION, upgraded)),
-			upgraded == null ? null : potion(Material.POTION, upgraded),
-			extended == null ? null : potion(Material.POTION, extended)
+			new RecipeChoice.ExactChoice(MiscUtil.combineToList(potions(base), upgraded == null ? potions(extended) : potions(upgraded))),
+			upgraded == null ? null : potions(upgraded),
+			extended == null ? null : potions(extended)
 		);
 	}
 
-	private static void addVanillaPotionMix(PotionType type, ItemStack result, RecipeChoice ingredient, RecipeChoice base, @Nullable ItemStack upgraded, @Nullable ItemStack extended) {
-		addVanillaPotionMix(type.name().toLowerCase() + "_potion", result, ingredient, base, upgraded, extended);
+	private static void addVanillaPotionMix(String group, PotionType type, List<ItemStack> result, RecipeChoice ingredient, RecipeChoice base, @Nullable List<ItemStack> upgraded, @Nullable List<ItemStack> extended) {
+		addVanillaPotionMix(type.key().value() + "_potion", group, result, ingredient, base, upgraded, extended);
 	}
 
-	private static void addVanillaPotionMix(String key, ItemStack result, RecipeChoice ingredient, RecipeChoice base, @Nullable ItemStack upgraded, @Nullable ItemStack extended) {
+	private static void addVanillaPotionMix(String key, String group, List<ItemStack> result, RecipeChoice ingredient, RecipeChoice base, @Nullable List<ItemStack> upgraded, @Nullable List<ItemStack> extended) {
 		Map<Integer, List<ItemStack>> items = new HashMap<>();
-		items.put(0, List.of(result));
+		items.put(0, result);
 		for (int i = 1; i < 5; i++) items.put(i, FILLED);
 		for (int i = 0; i < 27; i++) items.put(i + 9, FILLED);
 		items.put(9, List.of(ItemStack.of(Material.BLAZE_POWDER)));
@@ -611,15 +607,15 @@ public class AllRecipesInRecipeBook implements Listener {
 		items.put(32, basePotion);
 		if (upgraded != null) {
 			items.put(16, List.of(CustomLoreModifier.lored(ItemStack.of(Material.GLOWSTONE_DUST), "recipes.potion.upgraded")));
-			items.put(25, List.of(upgraded));
+			items.put(25, upgraded);
 		}
 		if (extended != null) {
 			items.put(17, List.of(CustomLoreModifier.lored(ItemStack.of(Material.REDSTONE), "recipes.potion.extended")));
-			items.put(26, List.of(extended));
+			items.put(26, extended);
 		}
 		NamespacedKey recipeKey = new NamespacedKey(FAKE_RECIPE_NAMESPACE, key);
 		VANILLA_POTION_RECIPES.put(recipeKey, new VanillaPotionMix(items));
-		Bukkit.addRecipe(getDummyRecipe(recipeKey, "", result, new RecipeChoice.ExactChoice(ItemStack.of(Material.BREWING_STAND))), false);
+		Bukkit.addRecipe(getDummyRecipe(recipeKey, group, result.getFirst(), new RecipeChoice.ExactChoice(ItemStack.of(Material.BREWING_STAND))), false);
 	}
 
 	private static ItemStack potion(Material type, PotionType base) {
@@ -653,7 +649,7 @@ public class AllRecipesInRecipeBook implements Listener {
 			if (recipeItem == null) return ModificationResult.PASS;
 
 			RecipeBookPacketContext.DisplayType displayType = RecipeBookPacketContext.DisplayType.INGREDIENT;
-			ItemStack item = modifyItem(new ItemContextBox(player, contextBox.getLocale(), new RecipeBookPacketContext(ItemModifierContextType.RECIPE_GHOST, context, context instanceof PacketItemModifierContext p ? p : context, displayType), recipeItem));
+			ItemStack item = modifyItem(new ItemContextBox(player, contextBox.getLocale(), new RecipeBookPacketContext(ItemModifierContextType.RECIPE_GHOST, context, context instanceof PacketItemModifierContext p ? p : context, displayType), recipeItem.clone()));
 
 			contextBox.setItem(item == null ? recipeItem.clone() : item);
 

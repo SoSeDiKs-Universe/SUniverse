@@ -1,6 +1,7 @@
 package me.sosedik.utilizer.listener.misc;
 
 import io.papermc.paper.adventure.PaperAdventure;
+import me.sosedik.utilizer.Utilizer;
 import me.sosedik.utilizer.api.event.recipe.ItemCraftEvent;
 import me.sosedik.utilizer.api.event.recipe.RemainingItemEvent;
 import me.sosedik.utilizer.util.DurabilityUtil;
@@ -17,8 +18,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.BrewEvent;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.CraftItemEvent;
+import org.bukkit.event.inventory.FurnaceBurnEvent;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -38,6 +41,9 @@ import java.util.function.BiPredicate;
  */
 @NullMarked
 public class CustomRecipeLeftovers implements Listener {
+
+	public static final NamespacedKey BURNT_FUEL_LEFTOVER = Utilizer.utilizerKey("burnt_fuel_leftover");
+	public static final NamespacedKey BREW_LEFTOVER = Utilizer.utilizerKey("brew_leftover");
 
 	private static final Map<NamespacedKey, @Nullable BiPredicate<RemainingItemEvent, ItemStack>> LEFTOVER_EXEMPTS = new HashMap<>();
 
@@ -121,6 +127,25 @@ public class CustomRecipeLeftovers implements Listener {
 		}
 	}
 
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onBurn(FurnaceBurnEvent event) {
+		RemainingItemEvent remainingItemEvent = new RemainingItemEvent(event, null, null, BURNT_FUEL_LEFTOVER, event.getFuel(), 1, false);
+		remainingItemEvent.setResult(event.getRemainingItem());
+		remainingItemEvent.callEvent();
+		event.setRemainingItem(remainingItemEvent.getResult());
+	}
+
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onBrew(BrewEvent event) {
+		ItemStack item = event.getContents().getItem(3);
+		if (ItemStack.isEmpty(item)) return;
+
+		RemainingItemEvent remainingItemEvent = new RemainingItemEvent(event, null, null, BREW_LEFTOVER, item, 1, false);
+		remainingItemEvent.setResult(event.getRemainingItem());
+		remainingItemEvent.callEvent();
+		event.setRemainingItem(remainingItemEvent.getResult());
+	}
+
 	private void callTrigger(CraftItemEvent event, NamespacedKey key, Player player) {
 		if (!(player instanceof CraftPlayer craftPlayer)) return;
 		List<net.minecraft.world.item.ItemStack> ingredients = new ArrayList<>();
@@ -152,15 +177,13 @@ public class CustomRecipeLeftovers implements Listener {
 				continue;
 			}
 
+			Material replacement = matrix[i].getType().getCraftingRemainingItem();
+			if (replacement != null)
+				itemEvent.setResult(ItemStack.of(replacement));
+
 			itemEvent.callEvent();
 			if (itemEvent.getResult() != null) {
 				matrix[i] = itemEvent.getResult();
-				continue;
-			}
-
-			Material replacement = matrix[i].getType().getCraftingRemainingItem();
-			if (replacement != null) {
-				matrix[i] = ItemStack.of(replacement);
 				continue;
 			}
 

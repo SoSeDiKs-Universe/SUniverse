@@ -42,7 +42,9 @@
 		"axolotl_cyan_bucket",
 		"axolotl_cyan_baby_bucket",
 		"axolotl_blue_bucket",
-		"axolotl_blue_baby_bucket"
+		"axolotl_blue_baby_bucket",
+		"axolotl_boiled_bucket",
+		"axolotl_boiled_baby_bucket"
 	],
 	"jumping_overlays": [
 		"slime_bucket",

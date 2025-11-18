@@ -7,9 +7,12 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
+import java.util.function.Function;
 
 @NullMarked
 public class DurabilityUtil {
+
+	public static Function<ItemStack, ItemStack> leftOverItem = item -> ItemStack.empty();
 
 	private DurabilityUtil() {
 		throw new IllegalStateException("Utility class");
@@ -74,6 +77,20 @@ public class DurabilityUtil {
 		if (!item.hasData(DataComponentTypes.DAMAGE)) return -1;
 
 		return Objects.requireNonNull(item.getData(DataComponentTypes.DAMAGE));
+	}
+
+	/**
+	 * Damages items and returns a leftover
+	 *
+	 * @param item item
+	 * @param amount damage amount
+	 * @return leftover item
+	 */
+	public static ItemStack damageItem(ItemStack item, int amount) {
+		ItemStack copy = item.clone();
+		if (item.damage(amount))
+			return leftOverItem.apply(copy);
+		return item;
 	}
 
 }

@@ -12,6 +12,7 @@ import me.sosedik.resourcelib.ResourceLib;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieItems;
 import me.sosedik.utilizer.api.language.LangOptionsStorage;
 import me.sosedik.utilizer.api.message.Messenger;
+import me.sosedik.utilizer.dataset.UtilizerTags;
 import me.sosedik.utilizer.util.ItemUtil;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -36,6 +37,8 @@ import static me.sosedik.trappednewbie.TrappedNewbie.trappedNewbieKey;
 @NullMarked
 public class BucketModifier extends ItemModifier {
 
+	private static final int MAX_WOODEN_USES = 32;
+	private static final int MAX_CERAMIC_USES = 64;
 	private static final DyedItemColor DEFAULT_CERAMIC_COLOR = DyedItemColor.dyedItemColor(Color.fromRGB(14975336));
 
 	public BucketModifier(NamespacedKey modifierId) {
@@ -95,13 +98,13 @@ public class BucketModifier extends ItemModifier {
 		BAMBOO,
 		BIRCH,
 		CHERRY,
-		CRIMSON,
 		DARK_OAK,
 		JUNGLE,
 		MANGROVE,
 		OAK,
 		PALE_OAK,
 		SPRUCE,
+		CRIMSON,
 		WARPED;
 
 		private final NamespacedKey key;
@@ -121,8 +124,28 @@ public class BucketModifier extends ItemModifier {
 		}
 
 		public boolean canHoldLava() {
-			return this == CLAY
+			return this == VANILLA
+				|| this == CLAY
 				|| this == CERAMIC
+				|| this == CRIMSON
+				|| this == WARPED;
+		}
+
+		public boolean canHoldHeat() {
+			return canHoldLava();
+		}
+
+		public boolean isWooden() {
+			return this == ACACIA
+				|| this == BAMBOO
+				|| this == BIRCH
+				|| this == CHERRY
+				|| this == DARK_OAK
+				|| this == JUNGLE
+				|| this == MANGROVE
+				|| this == OAK
+				|| this == PALE_OAK
+				|| this == SPRUCE
 				|| this == CRIMSON
 				|| this == WARPED;
 		}
@@ -131,14 +154,31 @@ public class BucketModifier extends ItemModifier {
 			return this == CERAMIC;
 		}
 
-		public ItemStack save(ItemStack item) {
-			NBT.modify(item, nbt -> {
+		public ItemStack save(ItemStack saveTo) {
+			return save(null, saveTo);
+		}
+
+		public ItemStack save(@Nullable ItemStack saveFrom, ItemStack saveTo) {
+			NBT.modify(saveTo, nbt -> {
 				if (this == VANILLA)
 					nbt.removeKey("bucket_type");
 				else
 					nbt.setEnum("bucket_type", this);
 			});
-			return item;
+
+			if (isWooden())
+				saveTo.setData(DataComponentTypes.MAX_DAMAGE, MAX_WOODEN_USES);
+			else if (this == CERAMIC)
+				saveTo.setData(DataComponentTypes.MAX_DAMAGE, MAX_CERAMIC_USES);
+
+			if (saveTo.hasData(DataComponentTypes.MAX_DAMAGE)) {
+				if (saveFrom != null && saveFrom.hasData(DataComponentTypes.DAMAGE))
+					saveTo.setData(DataComponentTypes.DAMAGE, saveFrom.getData(DataComponentTypes.DAMAGE));
+				else
+					saveTo.setData(DataComponentTypes.DAMAGE, 0);
+			}
+
+			return saveTo;
 		}
 
 		public static @Nullable BucketType fromBucket(ItemStack item) {
@@ -154,37 +194,41 @@ public class BucketModifier extends ItemModifier {
 
 	public enum BucketOverlay {
 
-		WATER(false, true),
-		LAVA(false, true),
-		MILK(false, true),
-		POWDER_SNOW(false, true),
-		COD(false, true),
-		SALMON(false, true),
-		TROPICAL_FISH(false, true),
-		PUFFERFISH(false, true),
-		FROG_COLD(false, false),
-		FROG_TEMPERATE(false, false),
-		FROG_WARM(false, false),
-		TADPOLE(false, true),
-		AXOLOTL_LEUCISTIC(false, false),
-		AXOLOTL_LEUCISTIC_BABY(false, false),
-		AXOLOTL_WILD(false, false),
-		AXOLOTL_WILD_BABY(false, false),
-		AXOLOTL_GOLD(false, false),
-		AXOLOTL_GOLD_BABY(false, false),
-		AXOLOTL_CYAN(false, false),
-		AXOLOTL_CYAN_BABY(false, false),
-		AXOLOTL_BLUE(false, false),
-		AXOLOTL_BLUE_BABY(false, false),
-		SLIME(true, false),
-		MAGMA_CUBE(true, false);
+		WATER(Material.WATER_BUCKET, false, true),
+		LAVA(Material.LAVA_BUCKET, false, true),
+		MILK(Material.MILK_BUCKET, false, true),
+		POWDER_SNOW(Material.POWDER_SNOW_BUCKET, false, true),
+		COD(Material.COD_BUCKET, false, true),
+		SALMON(Material.SALMON_BUCKET, false, true),
+		TROPICAL_FISH(Material.TROPICAL_FISH_BUCKET, false, true),
+		PUFFERFISH(Material.PUFFERFISH_BUCKET, false, true),
+		FROG_COLD(TrappedNewbieItems.FROG_BUCKET, false, false),
+		FROG_TEMPERATE(TrappedNewbieItems.FROG_BUCKET, false, false),
+		FROG_WARM(TrappedNewbieItems.FROG_BUCKET, false, false),
+		TADPOLE(Material.TADPOLE_BUCKET, false, true),
+		AXOLOTL_LEUCISTIC(Material.AXOLOTL_BUCKET, false, false),
+		AXOLOTL_LEUCISTIC_BABY(Material.AXOLOTL_BUCKET, false, false),
+		AXOLOTL_WILD(Material.AXOLOTL_BUCKET, false, false),
+		AXOLOTL_WILD_BABY(Material.AXOLOTL_BUCKET, false, false),
+		AXOLOTL_GOLD(Material.AXOLOTL_BUCKET, false, false),
+		AXOLOTL_GOLD_BABY(Material.AXOLOTL_BUCKET, false, false),
+		AXOLOTL_CYAN(Material.AXOLOTL_BUCKET, false, false),
+		AXOLOTL_CYAN_BABY(Material.AXOLOTL_BUCKET, false, false),
+		AXOLOTL_BLUE(Material.AXOLOTL_BUCKET, false, false),
+		AXOLOTL_BLUE_BABY(Material.AXOLOTL_BUCKET, false, false),
+		AXOLOTL_BOILED(TrappedNewbieItems.BOILED_AXOLOTL_BUCKET, false, false),
+		AXOLOTL_BOILED_BABY(TrappedNewbieItems.BOILED_AXOLOTL_BUCKET, false, false),
+		SLIME(TrappedNewbieItems.SLIME_BUCKET, true, false),
+		MAGMA_CUBE(TrappedNewbieItems.MAGMA_CUBE_BUCKET, true, false);
 
+		private final Material vanillaSample;
 		private final Map<BucketType, NamespacedKey> keys = new EnumMap<>(BucketType.class);
 		private final Map<BucketType, NamespacedKey> modelKeys = new EnumMap<>(BucketType.class);
 		private final Map<BucketType, NamespacedKey> jumpingModelKeys;
 		private final boolean vanillaModel;
 
-		BucketOverlay(boolean jumping, boolean vanillaModel) {
+		BucketOverlay(Material vanillaSample, boolean jumping, boolean vanillaModel) {
+			this.vanillaSample = vanillaSample;
 			this.vanillaModel = vanillaModel;
 			this.jumpingModelKeys = jumping ? new EnumMap<>(BucketType.class) : Map.of();
 			for (BucketType bucketType : BucketType.values()) {
@@ -217,28 +261,17 @@ public class BucketModifier extends ItemModifier {
 			return this.vanillaModel;
 		}
 
+		public boolean hasLava() {
+			return UtilizerTags.LAVA_BUCKETS.isTagged(this.vanillaSample);
+		}
+
+		public boolean isHot() {
+			return UtilizerTags.HOT_BUCKETS.isTagged(this.vanillaSample);
+		}
+
 		public boolean isSlime() {
 			return this == SLIME
 				|| this == MAGMA_CUBE;
-		}
-
-		public boolean isAxolotl() {
-			return this == AXOLOTL_LEUCISTIC
-				|| this == AXOLOTL_LEUCISTIC_BABY
-				|| this == AXOLOTL_WILD
-				|| this == AXOLOTL_WILD_BABY
-				|| this == AXOLOTL_GOLD
-				|| this == AXOLOTL_GOLD_BABY
-				|| this == AXOLOTL_CYAN
-				|| this == AXOLOTL_CYAN_BABY
-				|| this == AXOLOTL_BLUE
-				|| this == AXOLOTL_BLUE_BABY;
-		}
-
-		public boolean isFrog() {
-			return this == FROG_COLD
-				|| this == FROG_TEMPERATE
-				|| this == FROG_WARM;
 		}
 
 		public static @Nullable BucketOverlay fromBucket(ItemStack item) {
@@ -257,6 +290,14 @@ public class BucketModifier extends ItemModifier {
 					if ("cold".equals(type)) return FROG_COLD;
 					if ("warm".equals(type)) return FROG_WARM;
 					return FROG_TEMPERATE;
+				});
+				case Material m when m == TrappedNewbieItems.BOILED_AXOLOTL_BUCKET -> NBT.getComponents(item, nbt -> {
+					ReadableNBT bucketEntityData = nbt.getCompound("minecraft:bucket_entity_data");
+					if (bucketEntityData == null) return AXOLOTL_BOILED;
+					if (!bucketEntityData.hasTag("Age")) return AXOLOTL_BOILED;
+
+					int age = bucketEntityData.getOrDefault("Age", 0);
+					return age >= 0 ? AXOLOTL_BOILED : AXOLOTL_BOILED_BABY;
 				});
 				case WATER_BUCKET -> WATER;
 				case LAVA_BUCKET -> LAVA;

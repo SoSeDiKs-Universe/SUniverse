@@ -6,11 +6,14 @@ import me.sosedik.miscme.listener.entity.ItemFrameSpillables;
 import me.sosedik.miscme.listener.item.ImmersiveDyes;
 import me.sosedik.trappednewbie.TrappedNewbie;
 import me.sosedik.trappednewbie.api.item.VisualArmor;
+import me.sosedik.trappednewbie.dataset.TrappedNewbieItems;
 import me.sosedik.trappednewbie.impl.item.modifier.BucketModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.ScrapModifier;
 import me.sosedik.trappednewbie.listener.block.FluidPickupRequiresGloves;
 import me.sosedik.trappednewbie.listener.player.VisualArmorLayer;
+import me.sosedik.utilizer.api.event.recipe.RemainingItemEvent;
 import me.sosedik.utilizer.dataset.UtilizerTags;
+import me.sosedik.utilizer.util.DurabilityUtil;
 import net.minecraft.world.item.MobBucketItem;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -31,6 +34,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockDispenseEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
+import org.bukkit.event.inventory.FurnaceBurnEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketEntityEvent;
@@ -87,7 +91,7 @@ public class MoreBucketTypes implements Listener {
 			BucketModifier.BucketType bucketType = BucketModifier.BucketType.fromBucket(item);
 			if (bucketType == null) return null;
 
-			ItemStack reminder = bucketType.save(ItemStack.of(Material.BUCKET));
+			ItemStack reminder = bucketType.save(item, ItemStack.of(Material.BUCKET));
 
 			if (block.getType() == Material.LAVA_CAULDRON) {
 				block.emitSound(Sound.BLOCK_LAVA_EXTINGUISH, 1F, 1F);
@@ -99,7 +103,7 @@ public class MoreBucketTypes implements Listener {
 			if (block.getType() == Material.CAULDRON)
 				block.setType(Material.WATER_CAULDRON);
 
-			if (block.getBlockData() instanceof Levelled levelled && (block.getType() == Material.WATER_CAULDRON || block.getType() == Material.WATER)) {
+			if (block.getBlockData() instanceof Levelled levelled && block.getType() == Material.WATER_CAULDRON) {
 				if (levelled.getLevel() < levelled.getMaximumLevel()) {
 					levelled.setLevel(levelled.getMaximumLevel());
 					block.setBlockData(levelled);
@@ -112,6 +116,11 @@ public class MoreBucketTypes implements Listener {
 					waterlogged.setWaterlogged(true);
 					block.setBlockData(waterlogged);
 				}
+				return reminder;
+			}
+
+			if (block.getType() == Material.WATER && block.getBlockData() instanceof Levelled levelled && levelled.getLevel() != 0) {
+				block.setType(Material.WATER);
 				return reminder;
 			}
 
@@ -131,7 +140,7 @@ public class MoreBucketTypes implements Listener {
 		};
 		ItemFrameSpillables.addSpillable(Material.WATER_BUCKET, waterSpillLogic);
 
-		ItemFrameSpillables.addSpillable(Material.LAVA_BUCKET, (spiller, item, block) -> {
+		ItemFrameSpillables.SpillableItem lavaSpillLogic = (spiller, item, block) -> {
 			block.emitSound(Sound.ITEM_BUCKET_EMPTY_LAVA, 1F, 1F);
 
 			if (spiller instanceof LivingEntity entity)
@@ -140,7 +149,7 @@ public class MoreBucketTypes implements Listener {
 			BucketModifier.BucketType bucketType = BucketModifier.BucketType.fromBucket(item);
 			if (bucketType == null) return null;
 
-			ItemStack reminder = bucketType.save(ItemStack.of(Material.BUCKET));
+			ItemStack reminder = bucketType.save(item, ItemStack.of(Material.BUCKET));
 
 			if (block.getType() == Material.CAULDRON) {
 				block.setType(Material.LAVA_CAULDRON);
@@ -171,6 +180,11 @@ public class MoreBucketTypes implements Listener {
 				return reminder;
 			}
 
+			if (block.getType() == Material.LAVA && block.getBlockData() instanceof Levelled levelled && levelled.getLevel() != 0) {
+				block.setType(Material.LAVA);
+				return reminder;
+			}
+
 			if (!block.getType().isBurnable() && !block.isReplaceable())
 				block = block.getRelative(BlockFace.UP);
 
@@ -178,7 +192,8 @@ public class MoreBucketTypes implements Listener {
 
 			block.setType(Material.LAVA);
 			return reminder;
-		});
+		};
+		ItemFrameSpillables.addSpillable(Material.LAVA_BUCKET, lavaSpillLogic);
 
 		ItemFrameSpillables.addSpillable(Material.MILK_BUCKET, (spiller, item, block) -> {
 			block.emitSound(Sound.ITEM_BUCKET_EMPTY, 1F, 1F);
@@ -186,7 +201,7 @@ public class MoreBucketTypes implements Listener {
 			BucketModifier.BucketType bucketType = BucketModifier.BucketType.fromBucket(item);
 			if (bucketType == null) return null;
 
-			ItemStack reminder = bucketType.save(ItemStack.of(Material.BUCKET));
+			ItemStack reminder = bucketType.save(item, ItemStack.of(Material.BUCKET));
 
 			// ToDo: custom milk cauldron
 
@@ -202,7 +217,7 @@ public class MoreBucketTypes implements Listener {
 			BucketModifier.BucketType bucketType = BucketModifier.BucketType.fromBucket(item);
 			if (bucketType == null) return null;
 
-			ItemStack reminder = bucketType.save(ItemStack.of(Material.BUCKET));
+			ItemStack reminder = bucketType.save(item, ItemStack.of(Material.BUCKET));
 
 			if (block.getType() == Material.LAVA_CAULDRON) {
 				block.emitSound(Sound.BLOCK_LAVA_EXTINGUISH, 1F, 1F);
@@ -231,18 +246,48 @@ public class MoreBucketTypes implements Listener {
 			return reminder;
 		});
 
-		UtilizerTags.SPILLABLE_MOB_BUCKETS.getValues().forEach(bucketType -> {
-			if (!(net.minecraft.world.item.ItemStack.fromBukkitCopy(ItemStack.of(bucketType)).getItem() instanceof MobBucketItem))
-				throw new IllegalArgumentException("Not a mob bucket: " + bucketType);
+		UtilizerTags.SPILLABLE_MOB_BUCKETS.getValues().forEach(bucketMaterial -> {
+			if (!(net.minecraft.world.item.ItemStack.fromBukkitCopy(ItemStack.of(bucketMaterial)).getItem() instanceof MobBucketItem))
+				throw new IllegalArgumentException("Not a mob bucket: " + bucketMaterial);
 
-			ItemFrameSpillables.addSpillable(bucketType, (spiller, item, block) -> {
+			ItemFrameSpillables.addSpillable(bucketMaterial, (spiller, item, block) -> {
 				net.minecraft.world.item.ItemStack itemStack = net.minecraft.world.item.ItemStack.fromBukkitCopy(item);
 				if (itemStack.getItem() instanceof MobBucketItem mobBucketItem)
 					mobBucketItem.checkExtraContent(spiller instanceof CraftLivingEntity living ? living.getHandle() : null, ((CraftWorld) block.getWorld()).getHandle(), itemStack, CraftLocation.toBlockPosition(block.getLocation()));
 
+				if (UtilizerTags.HOT_BUCKETS.isTagged(item.getType())) {
+					BucketModifier.BucketType bucketType = BucketModifier.BucketType.fromBucket(item);
+					if (bucketType == null) return ItemStack.empty();
+
+					if (bucketType == BucketModifier.BucketType.CLAY) {
+						block.emitSound(Sound.BLOCK_LAVA_EXTINGUISH, 1F, 1F);
+						return crackedCeramic(null);
+					}
+
+					if (UtilizerTags.LAVA_BUCKETS.isTagged(item.getType()))
+						return lavaSpillLogic.onSpill(spiller, item, block);
+
+					return bucketType.save(item, ItemStack.of(Material.BUCKET));
+				}
+
 				return waterSpillLogic.onSpill(spiller, item, block);
 			});
 		});
+	}
+
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onBurn(FurnaceBurnEvent event) {
+		ItemStack fuel = event.getFuel();
+		BucketModifier.BucketType bucketType = BucketModifier.BucketType.fromBucket(fuel);
+		if (bucketType == null) return;
+		if (!bucketType.isWooden()) return;
+
+		event.setRemainingItem(ItemStack.of(TrappedNewbieItems.ASH));
+	}
+
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	public void onRemain(RemainingItemEvent event) {
+		preserveBucketType(event);
 	}
 
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
@@ -272,7 +317,7 @@ public class MoreBucketTypes implements Listener {
 		if (!spillClayBucket(player, item)) return;
 
 		player.swingMainHand();
-		ItemStack result = item.getType() == Material.LAVA_BUCKET ? crackedCeramic(ItemStack.of(Material.BUCKET)) : null;
+		ItemStack result = UtilizerTags.HOT_BUCKETS.isTagged(item.getType()) ? crackedCeramic(null) : ItemStack.of(Material.CLAY_BALL);
 		player.getInventory().setItem(event.getPreviousSlot(), result);
 	}
 
@@ -282,12 +327,12 @@ public class MoreBucketTypes implements Listener {
 
 		if (spillClayBucket(player, event.getMainHandItem())) {
 			player.swingMainHand();
-			ItemStack result = event.getMainHandItem().getType() == Material.LAVA_BUCKET ? crackedCeramic(ItemStack.of(Material.BUCKET)) : null;
+			ItemStack result = UtilizerTags.HOT_BUCKETS.isTagged(event.getMainHandItem().getType()) ? crackedCeramic(null) : ItemStack.of(Material.CLAY_BALL);
 			event.setMainHandItem(result);
 		}
 		if (spillClayBucket(player, event.getOffHandItem())) {
 			player.swingOffHand();
-			ItemStack result = event.getOffHandItem().getType() == Material.LAVA_BUCKET ? crackedCeramic(ItemStack.of(Material.BUCKET)) : null;
+			ItemStack result = UtilizerTags.HOT_BUCKETS.isTagged(event.getOffHandItem().getType()) ? crackedCeramic(null) : ItemStack.of(Material.CLAY_BALL);
 			event.setOffHandItem(result);
 		}
 	}
@@ -300,7 +345,7 @@ public class MoreBucketTypes implements Listener {
 		if (!spillClayBucket(player, item)) return;
 
 		player.swingMainHand();
-		ItemStack result = item.getType() == Material.LAVA_BUCKET ? crackedCeramic(ItemStack.of(Material.BUCKET)) : null;
+		ItemStack result = UtilizerTags.HOT_BUCKETS.isTagged(item.getType()) ? crackedCeramic(null) : ItemStack.of(Material.CLAY_BALL);
 		event.setCurrentItem(result);
 	}
 
@@ -312,10 +357,10 @@ public class MoreBucketTypes implements Listener {
 		if (!spillClayBucket(player, item)) return;
 
 		player.swingMainHand();
-		if (item.getType() == Material.LAVA_BUCKET)
-			itemDrop.setItemStack(crackedCeramic(ItemStack.of(Material.BUCKET)));
+		if (UtilizerTags.HOT_BUCKETS.isTagged(item.getType()))
+			itemDrop.setItemStack(crackedCeramic(null));
 		else
-			itemDrop.remove();
+			itemDrop.setItemStack(ItemStack.of(Material.CLAY_BALL));
 	}
 
 	@EventHandler(ignoreCancelled = true)
@@ -327,7 +372,7 @@ public class MoreBucketTypes implements Listener {
 		if (!spillClayBucket(event.getEntity(), item)) return;
 
 		event.setCancelled(true);
-		itemDrop.remove();
+		itemDrop.setItemStack(ItemStack.of(Material.CLAY_BALL));
 	}
 
 	@Contract("_, null -> false")
@@ -336,7 +381,11 @@ public class MoreBucketTypes implements Listener {
 		if (item.getType() == Material.BUCKET) return false;
 		if (BucketModifier.BucketType.fromBucket(item) != BucketModifier.BucketType.CLAY) return false;
 
+		if (UtilizerTags.HOT_BUCKETS.isTagged(item.getType()))
+			entity.emitSound(Sound.BLOCK_LAVA_EXTINGUISH, 1F, 1F);
+
 		ItemFrameSpillables.spill(entity, item, entity.getLocation().getBlock());
+
 		return true;
 	}
 
@@ -355,6 +404,7 @@ public class MoreBucketTypes implements Listener {
 	private void preserveBucketType(Event event) {
 		ItemStack result;
 		switch (event) {
+			case RemainingItemEvent bucketEvent -> result = bucketEvent.getResult();
 			case PlayerBucketEvent bucketEvent -> result = bucketEvent.getItemStack();
 			case PlayerBucketEntityEvent bucketEvent -> result = bucketEvent.getEntityBucket();
 			case BlockDispenseEvent bucketEvent -> result = bucketEvent.getLeftoverItem();
@@ -366,6 +416,7 @@ public class MoreBucketTypes implements Listener {
 
 		ItemStack bucket;
 		switch (event) {
+			case RemainingItemEvent bucketEvent -> bucket = bucketEvent.getItem();
 			case PlayerBucketEvent bucketEvent -> bucket = bucketEvent.getBucketItem();
 			case PlayerBucketEntityEvent bucketEvent -> bucket = bucketEvent.getOriginalBucket();
 			case BlockDispenseEvent bucketEvent -> bucket = bucketEvent.getItem();
@@ -385,24 +436,33 @@ public class MoreBucketTypes implements Listener {
 		if (event instanceof PlayerBucketEmptyEvent bucketEvent && bucketType == BucketModifier.BucketType.CLAY) {
 			Player player = bucketEvent.getPlayer();
 			ItemFrameSpillables.spill(player, bucket, player.getLocation().getBlock());
-			if (overlay == BucketModifier.BucketOverlay.LAVA) {
-				result = crackedCeramic(result);
+			if (overlay != null && overlay.hasLava()) {
+				result = crackedCeramic(null);
+				bucketEvent.getPlayer().emitSound(Sound.BLOCK_LAVA_EXTINGUISH, 1F, 1F);
 			} else {
-				bucketEvent.setItemStack(null);
+				bucketEvent.setItemStack(ItemStack.of(Material.CLAY_BALL));
 				return;
 			}
-		// Filling burnable with lava
-		} else if (overlay == BucketModifier.BucketOverlay.LAVA && !bucketType.canHoldLava()) {
-			if (event instanceof PlayerBucketEvent bucketEvent)
-				bucketEvent.setItemStack(null);
-			else if (event instanceof PlayerBucketEntityEvent bucketEvent)
-				bucketEvent.setEntityBucket(null);
-			else if (event instanceof BlockDispenseEvent bucketEvent)
-				bucketEvent.setDispensedItem(ItemStack.empty());
+		// Filling burnable with hot
+		} else if (overlay != null && overlay.isHot() && !bucketType.canHoldHeat()) {
+			ItemStack leftOver = bucketType.isWooden() ? ItemStack.of(TrappedNewbieItems.ASH) : ItemStack.empty();
+			if (event instanceof RemainingItemEvent bucketEvent) {
+				if (bucketEvent.getPlayer() != null) bucketEvent.getPlayer().emitSound(Sound.BLOCK_LAVA_EXTINGUISH, 1F, 1F);
+				bucketEvent.setResult(leftOver);
+			} if (event instanceof PlayerBucketEvent bucketEvent) {
+				bucketEvent.getPlayer().emitSound(Sound.BLOCK_LAVA_EXTINGUISH, 1F, 1F);
+				bucketEvent.setItemStack(leftOver);
+			} else if (event instanceof PlayerBucketEntityEvent bucketEvent) {
+				bucketEvent.getPlayer().emitSound(Sound.BLOCK_LAVA_EXTINGUISH, 1F, 1F);
+				bucketEvent.setEntityBucket(leftOver);
+			} else if (event instanceof BlockDispenseEvent bucketEvent) {
+				bucketEvent.getBlock().emitSound(Sound.BLOCK_LAVA_EXTINGUISH, 1F, 1F);
+				bucketEvent.setDispensedItem(leftOver);
+			}
 			return;
 		// Preserve bucket type
 		} else {
-			result = bucketType.save(result);
+			result = bucketType.save(bucket, result);
 		}
 
 		// Preserve bucket color
@@ -413,27 +473,47 @@ public class MoreBucketTypes implements Listener {
 		if (event instanceof PlayerBucketFillEvent bucketEvent && bucketType == BucketModifier.BucketType.CLAY) {
 			boolean spill = bucket.getAmount() > 1;
 			Player player = bucketEvent.getPlayer();
-			if (overlay == BucketModifier.BucketOverlay.LAVA) {
+			if (overlay != null && overlay.hasLava()) {
 				VisualArmor visualArmor = VisualArmorLayer.getVisualArmor(player);
 				player.setFireTicks(Math.max(6 * 20, player.getFireTicks()));
 				spill = spill || visualArmor.canUseVisualArmor() && !visualArmor.hasNonBrokenGloves();
 			}
 			if (spill) {
 				ItemFrameSpillables.spill(player, result, player.getLocation().getBlock());
-				result = null;
+				result = ItemStack.of(Material.CLAY_BALL);
 			}
 		}
 
-		if (event instanceof PlayerBucketEvent bucketEvent)
+		int damage = (bucketType == BucketModifier.BucketType.CERAMIC && overlay != null && overlay.hasLava()) ? 32 : 1;
+		if (event instanceof RemainingItemEvent bucketEvent) {
+			if (bucketEvent.getPlayer() != null)
+				result = result.damage(damage, bucketEvent.getPlayer());
+			else
+				result = DurabilityUtil.damageItem(result, damage);
+			if ((bucketType == BucketModifier.BucketType.CLAY || bucketType == BucketModifier.BucketType.CERAMIC) && result.isEmpty())
+				result = crackedCeramic(bucket);
+			bucketEvent.setResult(result);
+		} else if (event instanceof PlayerBucketEvent bucketEvent) {
+			if (event instanceof PlayerBucketEmptyEvent)
+				result = result.damage(damage, bucketEvent.getPlayer());
+			if ((bucketType == BucketModifier.BucketType.CLAY || bucketType == BucketModifier.BucketType.CERAMIC) && result.isEmpty())
+				result = crackedCeramic(bucket);
 			bucketEvent.setItemStack(result);
-		else if (event instanceof PlayerBucketEntityEvent bucketEvent)
+		} else if (event instanceof PlayerBucketEntityEvent bucketEvent) {
 			bucketEvent.setEntityBucket(result);
-		else if (event instanceof BlockDispenseEvent bucketEvent)
+		} else if (event instanceof BlockDispenseEvent bucketEvent) {
+			result = DurabilityUtil.damageItem(result, damage);
+			if ((bucketType == BucketModifier.BucketType.CLAY || bucketType == BucketModifier.BucketType.CERAMIC) && result.isEmpty())
+				result = crackedCeramic(bucket);
 			bucketEvent.setDispensedItem(result);
+		}
 	}
 
-	private ItemStack crackedCeramic(ItemStack bucket) {
-		return ScrapModifier.makeScrap(BucketModifier.BucketType.CERAMIC.save(bucket));
+	private ItemStack crackedCeramic(@Nullable ItemStack bucket) {
+		ItemStack item = BucketModifier.BucketType.CERAMIC.save(ItemStack.of(Material.BUCKET));
+		if (bucket != null && bucket.hasData(DataComponentTypes.DYED_COLOR))
+			item.setData(DataComponentTypes.DYED_COLOR, bucket.getData(DataComponentTypes.DYED_COLOR));
+		return ScrapModifier.makeScrap(item);
 	}
 
 }

@@ -184,6 +184,7 @@ import me.sosedik.utilizer.CommandManager;
 import me.sosedik.utilizer.api.language.TranslationHolder;
 import me.sosedik.utilizer.listener.BlockStorage;
 import me.sosedik.utilizer.listener.item.PlaceableBlockItems;
+import me.sosedik.utilizer.util.DurabilityUtil;
 import me.sosedik.utilizer.util.EventUtil;
 import me.sosedik.utilizer.util.FileUtil;
 import me.sosedik.utilizer.util.InventoryUtil;
@@ -230,6 +231,8 @@ public final class TrappedNewbie extends JavaPlugin {
 
 		TranslationHolder.extractLocales(this);
 		ResourceLib.loadDefaultResources(this);
+
+		DurabilityUtil.leftOverItem = ScrapModifier::makeScrap;
 
 		TrappedNewbieTags.CHOPPING_BLOCKS.getValues().forEach(material -> BlockStorage.addMapping(material, ChoppingBlockStorage.class));
 		TrappedNewbieTags.DRUMS.getValues().forEach(material -> BlockStorage.addMapping(material, DrumBlockStorage.class));

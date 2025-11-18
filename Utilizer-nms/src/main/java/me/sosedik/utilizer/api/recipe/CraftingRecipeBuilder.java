@@ -283,7 +283,7 @@ public abstract class CraftingRecipeBuilder<T extends CraftingRecipeBuilder<T>> 
 
 		@Override
 		public boolean test(ItemStack item) {
-			return this.recipe.findMatch(key, item);
+			return this.recipe.findMatch(this.key, item);
 		}
 
 	}

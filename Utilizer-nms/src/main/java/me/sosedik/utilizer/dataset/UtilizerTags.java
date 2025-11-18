@@ -43,6 +43,8 @@ public class UtilizerTags {
 	public static final Tag<Material> POISON_CURES = itemTag("poison_cures");
 	public static final Tag<Material> SMITHING_TEMPLATES = itemTag("smithing_templates");
 	public static final Tag<Material> HIDES = itemTag("hides");
+	public static final Tag<Material> LAVA_BUCKETS = itemTag("lava_buckets");
+	public static final Tag<Material> HOT_BUCKETS = itemTag("hot_buckets");
 	public static final Tag<Material> SPILLABLE_MOB_BUCKETS = itemTag("spillable_mob_buckets");
 
 	public static final Tag<Material> STONE_ORES_BLOCKS = blockTag("stone_ores");

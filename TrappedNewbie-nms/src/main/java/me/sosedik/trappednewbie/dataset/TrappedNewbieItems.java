@@ -259,6 +259,7 @@ public class TrappedNewbieItems {
 	public static final Material SLIME_BUCKET = byKey("slime_bucket");
 	public static final Material MAGMA_CUBE_BUCKET = byKey("magma_cube_bucket");
 	public static final Material FROG_BUCKET = byKey("frog_bucket");
+	public static final Material BOILED_AXOLOTL_BUCKET = byKey("boiled_axolotl_bucket");
 
 	public static final Material LEATHER_GLOVES = byKey("leather_gloves");
 

@@ -4,10 +4,8 @@ import io.papermc.paper.event.entity.TameableDeathMessageEvent;
 import me.sosedik.utilizer.api.language.LangOptionsStorage;
 import me.sosedik.utilizer.api.language.TranslationHolder;
 import me.sosedik.utilizer.api.message.Messenger;
-import me.sosedik.utilizer.api.message.Mini;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TranslatableComponent;
-import net.kyori.adventure.text.TranslationArgument;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -16,10 +14,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.intellij.lang.annotations.Subst;
 import org.jspecify.annotations.NullMarked;
 
-import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
@@ -38,12 +34,12 @@ public class LocalizedDeathMessages implements Listener {
 		if (!TranslationHolder.translationHolder().hasMessage(localeKey)) return;
 
 		localeKey = getLocaleKey(component);
-		TagResolver[] tagResolvers = tagResolvers(component);
+		TagResolver[] tagResolvers = TranslationHolder.tagResolvers(component);
 		for (Player player : Bukkit.getOnlinePlayers())
 			Messenger.messenger(player).sendMessage(localeKey, tagResolvers);
 
+		event.originalDeathMessage(event.deathMessage());
 		event.deathMessage(null);
-		event.originalDeathMessage(Messenger.messenger(LangOptionsStorage.getDefaultLangOptions()).getMessage(localeKey, tagResolvers));
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -67,7 +63,7 @@ public class LocalizedDeathMessages implements Listener {
 		if (!TranslationHolder.translationHolder().hasMessage(localeKey)) return message;
 
 		localeKey = getLocaleKey(component);
-		return Messenger.messenger(LangOptionsStorage.getByLocale(locale)).getMessage(localeKey, tagResolvers(component));
+		return Messenger.messenger(LangOptionsStorage.getByLocale(locale)).getMessage(localeKey, TranslationHolder.tagResolvers(component));
 	}
 
 	private static String getLocaleKey(TranslatableComponent component) {
@@ -78,22 +74,6 @@ public class LocalizedDeathMessages implements Listener {
 				localeKey += ".killer";
 		}
 		return localeKey;
-	}
-
-	private static TagResolver[] tagResolvers(TranslatableComponent component) {
-		List<TranslationArgument> arguments = component.arguments();
-		TagResolver[] tagResolvers = new TagResolver[arguments.size()];
-		for (int i = 0; i < arguments.size(); i++) {
-			@Subst("key") String key = switch (i) {
-				case 0 -> "entity";
-				case 1 -> "attacker";
-				case 2 -> "item";
-				default -> String.valueOf(i);
-			};
-			Component placeholder = arguments.get(i).asComponent();
-			tagResolvers[i] = Mini.raw(key, placeholder);
-		}
-		return tagResolvers;
 	}
 
 }

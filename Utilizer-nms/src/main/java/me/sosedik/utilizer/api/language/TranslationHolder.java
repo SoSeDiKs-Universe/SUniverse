@@ -8,8 +8,19 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSyntaxException;
 import me.sosedik.utilizer.Utilizer;
+import me.sosedik.utilizer.api.message.Messenger;
+import me.sosedik.utilizer.api.message.Mini;
 import me.sosedik.utilizer.util.FileUtil;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TranslatableComponent;
+import net.kyori.adventure.text.TranslationArgument;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import net.kyori.adventure.translation.GlobalTranslator;
+import net.kyori.adventure.translation.Translator;
+import net.kyori.adventure.util.TriState;
 import org.bukkit.plugin.Plugin;
+import org.intellij.lang.annotations.Subst;
 import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -19,10 +30,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
@@ -33,10 +46,14 @@ import java.util.jar.JarFile;
  * Holds custom translations
  */
 @NullMarked
-public class TranslationHolder {
+public class TranslationHolder implements Translator {
 
 	private static final TranslationHolder TRANSLATION_HOLDER = new TranslationHolder();
 	private static final Random RANDOM = new Random();
+
+	static {
+		GlobalTranslator.translator().addSource(TRANSLATION_HOLDER);
+	}
 
 	private final Map<String, JsonObject> locales = new HashMap<>();
 
@@ -273,6 +290,52 @@ public class TranslationHolder {
 	 */
 	public static TranslationHolder translationHolder() {
 		return TRANSLATION_HOLDER;
+	}
+
+	@Override
+	public TriState hasAnyTranslations() {
+		return TriState.TRUE;
+	}
+
+	@Override
+	public Key name() {
+		return Key.key(Utilizer.NAMESPACE, "translation_holder");
+	}
+
+	@Override
+	public @Nullable MessageFormat translate(String key, Locale locale) {
+		return null;
+	}
+
+	@Override
+	public @Nullable Component translate(TranslatableComponent component, Locale locale) {
+		Component message = Messenger.messenger(LangOptionsStorage.getByLocale(locale)).getMessageIfExists(component.key(), tagResolvers(component));
+		if (message == null) return null;
+
+		return message.append(component.children()).applyFallbackStyle(component.style());
+	}
+
+	/**
+	 * Converts translatable arguments into tag resolvers
+	 *
+	 * @param component component
+	 * @return tag resolvers
+	 */
+	public static TagResolver[] tagResolvers(TranslatableComponent component) {
+		boolean deathMessage = component.key().startsWith("death.");
+		List<TranslationArgument> arguments = component.arguments();
+		TagResolver[] tagResolvers = new TagResolver[arguments.size()];
+		for (int i = 0; i < arguments.size(); i++) {
+			@Subst("key") String key = switch (i) {
+				case 0 -> deathMessage ? "entity" : "0";
+				case 1 -> deathMessage ? "attacker" : "1";
+				case 2 -> deathMessage ? "item" : "2";
+				default -> String.valueOf(i);
+			};
+			Component placeholder = arguments.get(i).asComponent();
+			tagResolvers[i] = Mini.raw(key, placeholder);
+		}
+		return tagResolvers;
 	}
 
 }

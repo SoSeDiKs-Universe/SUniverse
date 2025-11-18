@@ -1,4 +1,4 @@
-package me.sosedik.miscme.task;
+package me.sosedik.miscme.listener.world;
 
 import me.sosedik.miscme.MiscMe;
 import org.bukkit.Bukkit;
@@ -8,6 +8,11 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.world.WorldUnloadEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
@@ -17,18 +22,28 @@ import java.util.UUID;
 /**
  * Generates trails where players walk
  */
-public class TrailPaths extends BukkitRunnable {
+public class TrailPaths extends BukkitRunnable implements Listener {
 
 	private final Map<UUID, Location> storedLocations = new HashMap<>();
-	private final Map<Location, Integer> storedSteps = new HashMap<>();
+	private final Map<UUID, Map<Location, Integer>> storedSteps = new HashMap<>();
 
 	public TrailPaths() {
 		MiscMe.scheduler().async(this, 5L, 5L);
 	}
 
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onQuit(PlayerQuitEvent event) {
+		this.storedLocations.remove(event.getPlayer().getUniqueId());
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onUnload(WorldUnloadEvent event) {
+		this.storedSteps.remove(event.getWorld().getUID());
+	}
+
 	@Override
 	public void run() {
-		for (Player player : Bukkit.getServer().getOnlinePlayers())
+		for (Player player : Bukkit.getOnlinePlayers())
 			checkPaths(player);
 	}
 
@@ -41,11 +56,14 @@ public class TrailPaths extends BukkitRunnable {
 		Location oldLocation = this.storedLocations.computeIfAbsent(player.getUniqueId(), k -> playerLocation);
 		if (oldLocation.getWorld() == playerLocation.getWorld() && oldLocation.isBlockSame(playerLocation)) return;
 
-		makePath(oldLocation);
+		MiscMe.scheduler().sync(() -> makePath(oldLocation));
 		this.storedLocations.replace(player.getUniqueId(), playerLocation);
 	}
 
 	private void makePath(Location oldLoc) {
+		if (!oldLoc.isWorldLoaded()) return;
+		if (!oldLoc.isChunkLoaded()) return;
+
 		int relY = oldLoc.getBlockY() & 0xFF;
 		if (relY <= oldLoc.getWorld().getMinHeight()) return;
 		if (relY >= oldLoc.getWorld().getMaxHeight()) return;
@@ -56,17 +74,18 @@ public class TrailPaths extends BukkitRunnable {
 		Material blockType = chunkSnapshot.getBlockType(relX, relY, relZ);
 		if (blockType.isSolid()) return;
 
+		Map<Location, Integer> storedSteps = this.storedSteps.computeIfAbsent(oldLoc.getWorld().getUID(), k -> new HashMap<>());
 		blockType = chunkSnapshot.getBlockType(relX, relY - 1, relZ);
 		for (Trail trail : Trail.values()) {
 			if (trail.getFrom() != blockType) continue;
 			if (!trail.shouldConvert()) return;
 
-			for (Map.Entry<Location, Integer> entry : this.storedSteps.entrySet()) {
+			for (Map.Entry<Location, Integer> entry : storedSteps.entrySet()) {
 				Location loc = entry.getKey();
 				if (oldLoc.getWorld() == loc.getWorld() && oldLoc.isBlockSame(loc)) {
 					int walked = entry.getValue();
 					if (walked < trail.getSteps()) {
-						this.storedSteps.replace(loc, walked + 1);
+						storedSteps.replace(loc, walked + 1);
 						return;
 					}
 
@@ -75,11 +94,11 @@ public class TrailPaths extends BukkitRunnable {
 						if (block.getType() == trail.getFrom())
 							block.setType(trail.getTo());
 					});
-					this.storedSteps.remove(loc);
+					storedSteps.remove(loc);
 					return;
 				}
 			}
-			this.storedSteps.put(oldLoc, 1);
+			storedSteps.put(oldLoc, 1);
 			return;
 		}
 	}

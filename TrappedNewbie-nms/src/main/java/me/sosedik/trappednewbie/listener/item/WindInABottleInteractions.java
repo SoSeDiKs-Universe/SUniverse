@@ -116,7 +116,7 @@ public class WindInABottleInteractions implements Listener {
 		if (!player.getGameMode().isInvulnerable()) {
 			item.subtract();
 
-			var event = new RemainingItemEvent(null, player, null, BOTTLE_CONSUME_KEY, ItemStack.of(Material.GLASS_BOTTLE), 1);
+			var event = new RemainingItemEvent(null, player, null, BOTTLE_CONSUME_KEY, ItemStack.of(Material.GLASS_BOTTLE), 1, false);
 			event.callEvent();
 			ItemStack result = event.getResult();
 			if (!ItemStack.isEmpty(result))

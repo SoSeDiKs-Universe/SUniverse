@@ -8,6 +8,9 @@
     "minecraft:tropical_fish_bucket",
     "minecraft:cod_bucket",
     "minecraft:salmon_bucket",
-    "minecraft:pufferfish_bucket"
+    "minecraft:pufferfish_bucket",
+    "trapped_newbie:slime_bucket",
+    "trapped_newbie:magma_cube_bucket",
+    "trapped_newbie:frog_bucket"
   ]
 }

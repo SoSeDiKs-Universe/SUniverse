@@ -33,7 +33,7 @@ public class FlintAndSteelIgnitesEntities implements Listener {
 		if (!(player.isSneaking() || (player.hasFixedPose() && player.getPose() == Pose.SWIMMING))) return;
 
 		if (tryLitEntity(player, rightClicked, EquipmentSlot.HAND)
-				|| tryLitEntity(player, rightClicked, EquipmentSlot.OFF_HAND))
+			|| tryLitEntity(player, rightClicked, EquipmentSlot.OFF_HAND))
 			event.setCancelled(true);
 	}
 

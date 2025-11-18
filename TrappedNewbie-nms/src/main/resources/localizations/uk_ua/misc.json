@@ -59,5 +59,6 @@
 	"gui.soul_travel.travel": [
 		"Натисніть, щоб розпочати подорож",
 		"Вартість: <color><level> <plural:uk_ua:рівень|рівня|рівнів:'<level>'> (досвіду)"
-	]
+	],
+	"damage.run_with_scissors": "<red><i>Не бігайте з ножицями!"
 }

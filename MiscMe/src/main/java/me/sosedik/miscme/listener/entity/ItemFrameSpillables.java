@@ -1,12 +1,14 @@
 package me.sosedik.miscme.listener.entity;
 
 import io.papermc.paper.datacomponent.DataComponentTypes;
+import io.papermc.paper.datacomponent.item.UseRemainder;
 import io.papermc.paper.event.player.PlayerItemFrameChangeEvent;
 import me.sosedik.miscme.MiscMe;
 import org.bukkit.Material;
 import org.bukkit.Rotation;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -17,15 +19,14 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * Some items have extra behaviors when flipped in item frame
  */
 @NullMarked
-public class ItemFrameFallables implements Listener {
+public class ItemFrameSpillables implements Listener {
 
-	private static final Map<Material, ItemFrameFallable> FALLABLES = new HashMap<>();
+	private static final Map<Material, SpillableItem> SPILLABLES = new HashMap<>();
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onFrameItemChange(PlayerItemFrameChangeEvent event) {
@@ -46,21 +47,39 @@ public class ItemFrameFallables implements Listener {
 		if (attachedFace == BlockFace.DOWN) return;
 
 		ItemStack item = frame.getItem();
-		ItemFrameFallable fallable = FALLABLES.get(item.getType());
-		if (fallable == null) return;
+		ItemStack remainder = spill(frame, item, frame.getLocation().getBlock().getRelative(BlockFace.DOWN));
+		if (remainder == null) return;
 
-		ItemStack remainder = fallable.onSpillFromItemFrame(item, frame.getLocation().getBlock().getRelative(BlockFace.DOWN));
-		if (remainder == null && item.hasData(DataComponentTypes.USE_REMAINDER))
-			remainder = Objects.requireNonNull(item.getData(DataComponentTypes.USE_REMAINDER)).transformInto();
 		frame.setItem(remainder);
 	}
 
-	public static void addFallable(Material type, ItemFrameFallable fallable) {
-		FALLABLES.put(type, fallable);
+	public static void addSpillable(Material type, SpillableItem fallable) {
+		SPILLABLES.put(type, fallable);
+	}
+
+	/**
+	 * Tries to spill an item
+	 *
+	 * @param item item to spill
+	 * @param block block to spill onto
+	 * @return null if not spilled, remainder otherwise
+	 */
+	public static @Nullable ItemStack spill(@Nullable Entity spiller, ItemStack item, Block block) {
+		SpillableItem spillable = SPILLABLES.get(item.getType());
+		if (spillable == null) return null;
+
+		ItemStack remainder = spillable.onSpill(spiller, item, block);
+		if (remainder == null && item.hasData(DataComponentTypes.USE_REMAINDER)) {
+			UseRemainder data = item.getData(DataComponentTypes.USE_REMAINDER);
+			assert data != null;
+			remainder = data.transformInto();
+		}
+
+		return remainder == null ? ItemStack.empty() : remainder;
 	}
 
 	@FunctionalInterface
-	public interface ItemFrameFallable {
+	public interface SpillableItem {
 
 		/**
 		 * Spills an item onto a block.
@@ -70,7 +89,7 @@ public class ItemFrameFallables implements Listener {
 		 * @param block block to spill onto
 		 * @return item remainder
 		 */
-		@Nullable ItemStack onSpillFromItemFrame(ItemStack item, Block block);
+		@Nullable ItemStack onSpill(@Nullable Entity spiller, ItemStack item, Block block);
 
 	}
 

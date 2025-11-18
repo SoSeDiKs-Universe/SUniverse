@@ -40,7 +40,7 @@ public class DurabilityTooltipModifier extends ItemModifier {
 
 	@Override
 	public ModificationResult modify(ItemContextBox contextBox) {
-		if (!contextBox.getContextType().hasVisibleLore()) return ModificationResult.PASS;
+		if (!contextBox.getContext().getContextType().hasVisibleLore()) return ModificationResult.PASS;
 
 		Player player = contextBox.getViewer();
 		if (player == null) return ModificationResult.PASS;

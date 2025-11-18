@@ -53,7 +53,7 @@ public class LunarClockModifier extends ItemModifier {
 		if (contextBox.getInitialType() != MiscMeItems.LUNAR_CLOCK) return ModificationResult.PASS;
 
 		Player player = contextBox.getViewer();
-		if (player == null || ItemUtil.shouldFreeze(contextBox)) {
+		if (player == null || ItemUtil.shouldFreeze(contextBox.getContext())) {
 			contextBox.getItem().setData(DataComponentTypes.ITEM_MODEL, STILL_LUNAR_CLOCK);
 			return ModificationResult.OK;
 		}
@@ -64,8 +64,8 @@ public class LunarClockModifier extends ItemModifier {
 		} else {
 			contextBox.getItem().setData(DataComponentTypes.ITEM_MODEL, LUNAR_CLOCK);
 
-			if (!contextBox.getContextType().hasVisibleLore()) return ModificationResult.OK;
-			if (!(contextBox.getContext() instanceof SlottedItemModifierContext)) return ModificationResult.OK;
+			if (!contextBox.getContext().getContextType().hasVisibleLore()) return ModificationResult.OK;
+			if (!(contextBox.getContext().getRootContext() instanceof SlottedItemModifierContext)) return ModificationResult.OK;
 
 			var messenger = Messenger.messenger(LangOptionsStorage.getByLocale(contextBox.getLocale()));
 			MoonPhase moonPhase = world.getMoonPhase();

@@ -49,8 +49,8 @@ import me.sosedik.miscme.listener.entity.DynamicMovingSpeed;
 import me.sosedik.miscme.listener.entity.DynamicVisibilityRange;
 import me.sosedik.miscme.listener.entity.EndermanTeleportsPlayers;
 import me.sosedik.miscme.listener.entity.ExtraPigsOnBreeding;
-import me.sosedik.miscme.listener.entity.ItemFrameFallables;
 import me.sosedik.miscme.listener.entity.ItemFrameReverseRotate;
+import me.sosedik.miscme.listener.entity.ItemFrameSpillables;
 import me.sosedik.miscme.listener.entity.MinecartSlimeBoost;
 import me.sosedik.miscme.listener.entity.MoreBabyMobs;
 import me.sosedik.miscme.listener.entity.MovingMinecartsHurtEntities;
@@ -96,7 +96,7 @@ import me.sosedik.miscme.listener.projectile.SnowballFreezesEntities;
 import me.sosedik.miscme.listener.projectile.WaterPotionSplashesTorches;
 import me.sosedik.miscme.listener.vehicle.JumpyBoats;
 import me.sosedik.miscme.listener.world.CustomDayCycleCleanup;
-import me.sosedik.miscme.task.TrailPaths;
+import me.sosedik.miscme.listener.world.TrailPaths;
 import me.sosedik.resourcelib.ResourceLib;
 import me.sosedik.utilizer.api.language.TranslationHolder;
 import me.sosedik.utilizer.util.EventUtil;
@@ -183,7 +183,7 @@ public final class MiscMe extends JavaPlugin {
 			DynamicVisibilityRange.class,
 			EndermanTeleportsPlayers.class,
 			ExtraPigsOnBreeding.class,
-			ItemFrameFallables.class,
+			ItemFrameSpillables.class,
 			ItemFrameReverseRotate.class,
 			MinecartSlimeBoost.class,
 			MoreBabyMobs.class,
@@ -236,14 +236,13 @@ public final class MiscMe extends JavaPlugin {
 			// vehicle
 			JumpyBoats.class,
 			// world
-			CustomDayCycleCleanup.class
+			CustomDayCycleCleanup.class,
+			TrailPaths.class
 		);
 
 		new ShearableEntities.ShearableBehavior()
 			.withDrop(Material.FEATHER, 1, 2)
 			.registerFor(EntityType.CHICKEN);
-
-		new TrailPaths();
 	}
 
 	/**

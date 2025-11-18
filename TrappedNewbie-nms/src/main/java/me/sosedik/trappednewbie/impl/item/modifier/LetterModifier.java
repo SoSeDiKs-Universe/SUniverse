@@ -51,7 +51,7 @@ public class LetterModifier extends ItemModifier {
 
 		var messenger = Messenger.messenger(LangOptionsStorage.getByLocale(contextBox.getLocale()));
 
-		if (!hasContents && contextBox.getContextType().hasVisibleLore()) {
+		if (!hasContents && contextBox.getContext().getContextType().hasVisibleLore()) {
 			hasContents = NBT.get(item, nbt -> {
 				if (!nbt.hasTag(FRIENDSHIP_TAG)) return false;
 
@@ -79,7 +79,7 @@ public class LetterModifier extends ItemModifier {
 			});
 		}
 
-		if (contextBox.getContextType().hasVisibleName()) {
+		if (contextBox.getContext().getContextType().hasVisibleName()) {
 			Component itemName = messenger.getMessage(hasContents ? type.localeClosed : type.localeOpen);
 			item.setData(DataComponentTypes.ITEM_NAME, itemName);
 		}

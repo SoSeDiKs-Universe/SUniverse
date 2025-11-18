@@ -1,0 +1,7 @@
+{
+	"client_type": "minecraft:iron_nugget",
+	"skip_rp": true,
+	"parser": "none",
+	"stack_size": 1,
+	"remaining_item": "minecraft:bucket"
+}

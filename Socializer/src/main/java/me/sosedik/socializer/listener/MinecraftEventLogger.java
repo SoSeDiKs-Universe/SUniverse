@@ -82,6 +82,8 @@ public class MinecraftEventLogger implements Listener {
 	}
 
 	private void sendDiscordMessage(Player who, String emote, String message) {
+		if (message.isBlank()) return;
+
 		message = makeReplacements(message);
 		message = DiscordUtil.parseMentions(message);
 

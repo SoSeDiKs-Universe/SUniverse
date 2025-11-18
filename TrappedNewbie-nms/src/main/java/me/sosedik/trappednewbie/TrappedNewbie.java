@@ -1,5 +1,6 @@
 package me.sosedik.trappednewbie;
 
+import com.destroystokyo.paper.MaterialTags;
 import io.leangen.geantyref.TypeToken;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import me.sosedik.delightfulfarming.dataset.DelightfulFarmingRecipes;
@@ -32,6 +33,7 @@ import me.sosedik.trappednewbie.impl.blockstorage.TotemBaseBlockStorage;
 import me.sosedik.trappednewbie.impl.blockstorage.WorkStationBlockStorage;
 import me.sosedik.trappednewbie.impl.item.modifier.AdvancementTrophyModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.AdvancementTrophyNameLoreModifier;
+import me.sosedik.trappednewbie.impl.item.modifier.BucketModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.DirtyWaterModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.FoodTooltipModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.GoodieBagModifier;
@@ -83,6 +85,7 @@ import me.sosedik.trappednewbie.listener.block.BlockBreakHurts;
 import me.sosedik.trappednewbie.listener.block.BlockChoppingViaSwing;
 import me.sosedik.trappednewbie.listener.block.BreakableTombstones;
 import me.sosedik.trappednewbie.listener.block.CustomBlockBreaking;
+import me.sosedik.trappednewbie.listener.block.FluidPickupRequiresGloves;
 import me.sosedik.trappednewbie.listener.block.LogStrippingGivesBarks;
 import me.sosedik.trappednewbie.listener.block.SoftBlockHandBreaking;
 import me.sosedik.trappednewbie.listener.block.TreePhysics;
@@ -100,6 +103,7 @@ import me.sosedik.trappednewbie.listener.entity.AngryAnimals;
 import me.sosedik.trappednewbie.listener.entity.BabierBabyMobs;
 import me.sosedik.trappednewbie.listener.entity.BetterPillagers;
 import me.sosedik.trappednewbie.listener.entity.CreepersLoveCrawlers;
+import me.sosedik.trappednewbie.listener.entity.CustomEntityBuckets;
 import me.sosedik.trappednewbie.listener.entity.ExtraMobGoals;
 import me.sosedik.trappednewbie.listener.entity.FleeFromScaryEffect;
 import me.sosedik.trappednewbie.listener.entity.GliderInteraction;
@@ -121,8 +125,10 @@ import me.sosedik.trappednewbie.listener.item.FriendshipLetters;
 import me.sosedik.trappednewbie.listener.item.GlassShardCuts;
 import me.sosedik.trappednewbie.listener.item.GoodieBagsGiveCandies;
 import me.sosedik.trappednewbie.listener.item.HammerBlockRepair;
+import me.sosedik.trappednewbie.listener.item.HotItemsRequireGloves;
 import me.sosedik.trappednewbie.listener.item.KnifeCarvesTotemBases;
 import me.sosedik.trappednewbie.listener.item.MeshSifting;
+import me.sosedik.trappednewbie.listener.item.MoreBucketTypes;
 import me.sosedik.trappednewbie.listener.item.NecronomiconTravel;
 import me.sosedik.trappednewbie.listener.item.PaperPlanes;
 import me.sosedik.trappednewbie.listener.item.PearlPopCandyTeleportation;
@@ -143,6 +149,7 @@ import me.sosedik.trappednewbie.listener.misc.DisableJoinQuitMessages;
 import me.sosedik.trappednewbie.listener.misc.DynamicInventoryInfoGatherer;
 import me.sosedik.trappednewbie.listener.misc.DynamicReducedF3DebugInfo;
 import me.sosedik.trappednewbie.listener.misc.FakeHardcoreHearts;
+import me.sosedik.trappednewbie.listener.misc.RunWithScissors;
 import me.sosedik.trappednewbie.listener.misc.TabHeaderFooterBeautifier;
 import me.sosedik.trappednewbie.listener.misc.TemporaryScoreboardAdvancementMessages;
 import me.sosedik.trappednewbie.listener.player.DisableNaturalRespawn;
@@ -232,7 +239,7 @@ public final class TrappedNewbie extends JavaPlugin {
 		BlockStorage.addMapping(TrappedNewbieItems.CLAY_KILN, ClayKilnBlockStorage.class);
 		BlockStorage.addMapping(TrappedNewbieItems.SLEEPING_BAG, SleepingBagBlockStorage.class);
 
-		FillingBowlWithWater.BOWLS.forEach((bowl, filledBowl) -> {
+		FillingBowlWithWater.BOWLS_BOTTLES.forEach((bowl, filledBowl) -> {
 			ItemStack filled = TrappedNewbieRecipes.getFilled(ItemStack.of(bowl), ThirstData.DrinkType.MILK);
 			assert filled != null;
 			DelightfulFarmingRecipes.addMilkPredicate(filled, item -> ThirstData.DrinkType.fromItem(item) == ThirstData.DrinkType.MILK);
@@ -242,6 +249,8 @@ public final class TrappedNewbie extends JavaPlugin {
 			assert filled != null;
 			DelightfulFarmingRecipes.addMilkPredicate(filled, item -> ThirstData.DrinkType.fromItem(item) == ThirstData.DrinkType.MILK);
 		});
+
+		MaterialTags.BUCKETS.unlock().add(TrappedNewbieItems.SLIME_BUCKET, TrappedNewbieItems.MAGMA_CUBE_BUCKET, TrappedNewbieItems.FROG_BUCKET).lock();
 	}
 
 	private void cleanupTemporaryWorlds() {
@@ -264,6 +273,7 @@ public final class TrappedNewbie extends JavaPlugin {
 
 		new AdvancementTrophyModifier(trappedNewbieKey("advancement_trophy")).register();
 		new AdvancementTrophyNameLoreModifier(trappedNewbieKey("advancement_trophy_name_lore")).register();
+		new BucketModifier(trappedNewbieKey("buckets")).register();
 		new DirtyWaterModifier(trappedNewbieKey("dirty_water")).register();
 		new FoodTooltipModifier(trappedNewbieKey("food_tooltip")).register();
 		new GoodieBagModifier(trappedNewbieKey("goodie_bag")).register();
@@ -326,6 +336,7 @@ public final class TrappedNewbie extends JavaPlugin {
 			BlockChoppingViaSwing.class,
 			BreakableTombstones.class,
 			CustomBlockBreaking.class,
+			FluidPickupRequiresGloves.class,
 			LogStrippingGivesBarks.class,
 			SoftBlockHandBreaking.class,
 			TreePhysics.class,
@@ -345,6 +356,7 @@ public final class TrappedNewbie extends JavaPlugin {
 			BabierBabyMobs.class,
 			BetterPillagers.class,
 			CreepersLoveCrawlers.class,
+			CustomEntityBuckets.class,
 			ExtraMobGoals.class,
 			FleeFromScaryEffect.class,
 			GliderInteraction.class,
@@ -367,8 +379,10 @@ public final class TrappedNewbie extends JavaPlugin {
 			GlassShardCuts.class,
 			GoodieBagsGiveCandies.class,
 			HammerBlockRepair.class,
+			HotItemsRequireGloves.class,
 			KnifeCarvesTotemBases.class,
 			MeshSifting.class,
+			MoreBucketTypes.class,
 			NecronomiconTravel.class,
 			PaperPlanes.class,
 			PearlPopCandyTeleportation.class,
@@ -390,6 +404,7 @@ public final class TrappedNewbie extends JavaPlugin {
 			DynamicInventoryInfoGatherer.class,
 			DynamicReducedF3DebugInfo.class,
 			FakeHardcoreHearts.class,
+			RunWithScissors.class,
 			TabHeaderFooterBeautifier.class,
 			TemporaryScoreboardAdvancementMessages.class,
 			// player
@@ -451,6 +466,7 @@ public final class TrappedNewbie extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
+		VisualArmorLayer.saveData();
 		RainRefillsWaterAndMakesPuddles.removeAllPuddles();
 		TrappedNewbieAdvancements.MANAGER.saveProgresses();
 		ThirstOnJoinLeave.saveAll();
@@ -506,9 +522,9 @@ public final class TrappedNewbie extends JavaPlugin {
 	}
 
 	private void applyWorldRules() {
-		for (World world : Bukkit.getWorlds()) {
+		PerPlayerWorlds.startDayCycleTask(Bukkit.getWorlds().getFirst());
+		for (World world : Bukkit.getWorlds())
 			PerPlayerWorlds.applyWorldRules(world);
-		}
 	}
 
 	private void registerCommands() {

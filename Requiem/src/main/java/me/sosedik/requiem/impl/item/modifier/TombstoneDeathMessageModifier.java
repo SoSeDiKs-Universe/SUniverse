@@ -38,14 +38,17 @@ public class TombstoneDeathMessageModifier extends ItemModifier {
 
 	@Override
 	public ModificationResult modify(ItemContextBox contextBox) {
-		if (!contextBox.getContextType().hasVisibleLore()) return ModificationResult.PASS;
+		if (!contextBox.getContext().getContextType().hasVisibleLore()) return ModificationResult.PASS;
 		if (!RequiemTags.TOMBSTONES.isTagged(contextBox.getInitialType())) return ModificationResult.PASS;
 
 		ItemStack item = contextBox.getItem();
 		boolean changed = NBT.get(item, nbt -> {
-			if (!nbt.hasTag(TombstoneBlockStorage.DEATH_MESSAGE_KEY, NBTType.NBTTagCompound)) return false;
+			if (!nbt.hasTag(TombstoneBlockStorage.DEATH_MESSAGE_KEY)) return false;
 
-			Component message = JSONComponentSerializer.json().deserialize(Objects.requireNonNull(nbt.getCompound(TombstoneBlockStorage.DEATH_MESSAGE_KEY)).toString());
+			String serialized = nbt.hasTag(TombstoneBlockStorage.DEATH_MESSAGE_KEY, NBTType.NBTTagCompound)
+				? Objects.requireNonNull(nbt.getCompound(TombstoneBlockStorage.DEATH_MESSAGE_KEY)).toString()
+				: nbt.getString(TombstoneBlockStorage.DEATH_MESSAGE_KEY);
+			Component message = JSONComponentSerializer.json().deserialize(serialized);
 			message = LocalizedDeathMessages.formatDeathMessage(contextBox.getLocale(), message);
 			List<Component> lines = ChatUtil.wrapComponent(message, 35);
 			if (lines.isEmpty()) return false; // Huh?

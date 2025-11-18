@@ -12,6 +12,7 @@ import me.sosedik.requiem.dataset.RequiemItems;
 import me.sosedik.requiem.feature.PossessingPlayer;
 import me.sosedik.requiem.listener.item.SoulboundNecronomicon;
 import me.sosedik.trappednewbie.TrappedNewbie;
+import me.sosedik.trappednewbie.impl.item.modifier.BucketModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.ScrapModifier;
 import me.sosedik.trappednewbie.impl.thirst.ThirstData;
 import me.sosedik.trappednewbie.listener.block.LogStrippingGivesBarks;
@@ -19,9 +20,12 @@ import me.sosedik.trappednewbie.listener.item.FillingBowlWithWater;
 import me.sosedik.utilizer.api.event.recipe.ItemCraftPrepareEvent;
 import me.sosedik.utilizer.api.recipe.CraftingRecipeBuilder;
 import me.sosedik.utilizer.dataset.UtilizerTags;
+import me.sosedik.utilizer.impl.recipe.CampfireCraft;
 import me.sosedik.utilizer.impl.recipe.FireCraft;
+import me.sosedik.utilizer.impl.recipe.FurnaceCraft;
 import me.sosedik.utilizer.impl.recipe.ShapedCraft;
 import me.sosedik.utilizer.impl.recipe.ShapelessCraft;
+import me.sosedik.utilizer.impl.recipe.StonecuttingCraft;
 import me.sosedik.utilizer.impl.recipe.WaterCraft;
 import me.sosedik.utilizer.util.MiscUtil;
 import org.bukkit.Bukkit;
@@ -128,8 +132,10 @@ public class TrappedNewbieRecipes {
 		REPAIR_VALUES.put(TrappedNewbieItems.FLINT_KNIFE, (int) TrappedNewbieItems.FLINT_KNIFE.getMaxDurability());
 		REPAIR_VALUES.put(TrappedNewbieItems.FLINT_SHEARS, (int) TrappedNewbieItems.FLINT_SHEARS.getMaxDurability());
 		REPAIR_VALUES.put(TrappedNewbieItems.FLINT_PICKAXE, (int) TrappedNewbieItems.FLINT_PICKAXE.getMaxDurability());
+		REPAIR_VALUES.put(TrappedNewbieItems.IRON_KNIFE, (int) TrappedNewbieItems.IRON_KNIFE.getMaxDurability());
 		REPAIR_VALUES.put(TrappedNewbieItems.GRASS_MESH, (int) TrappedNewbieItems.GRASS_MESH.getMaxDurability());
 		REPAIR_VALUES.put(TrappedNewbieItems.FIRESTRIKER, (int) TrappedNewbieItems.FIRESTRIKER.getMaxDurability());
+		REPAIR_VALUES.put(TrappedNewbieItems.LEATHER_GLOVES, (int) TrappedNewbieItems.LEATHER_GLOVES.getMaxDurability());
 
 		new ShapedCraft(ItemStack.of(TrappedNewbieItems.PAPER_PLANE, 3), trappedNewbieKey("paper_plane"), "P P", " P ")
 			.withGroup("paper_plane")
@@ -165,6 +171,13 @@ public class TrappedNewbieRecipes {
 			.withCategory(CraftingBookCategory.EQUIPMENT)
 			.addIngredients('T', Material.STRING, TrappedNewbieItems.TWINE)
 			.addIngredients('F', TrappedNewbieItems.FLAKED_FLINT)
+			.register();
+
+		new ShapedCraft(ItemStack.of(TrappedNewbieItems.IRON_KNIFE), trappedNewbieKey("iron_knife"), "IT", "IS")
+			.withCategory(CraftingBookCategory.EQUIPMENT)
+			.addIngredients('T', Material.STRING, TrappedNewbieItems.TWINE)
+			.addIngredients('S', Material.STICK)
+			.addIngredients('I', Material.IRON_INGOT)
 			.register();
 
 		new ShapelessCraft(ItemStack.of(TrappedNewbieItems.ROUGH_STICK), trappedNewbieKey("rough_stick"))
@@ -332,7 +345,7 @@ public class TrappedNewbieRecipes {
 			.addIngredients(TrappedNewbieTags.GLASS_SHARDS.getValues(), 2)
 			.register();
 
-		FillingBowlWithWater.BOWLS.forEach((bowl, filledBowl) -> {
+		FillingBowlWithWater.BOWLS_BOTTLES.forEach((bowl, filledBowl) -> {
 			if (bowl == Material.GLASS_BOTTLE) return;
 			new ShapelessCraft(ItemStack.of(bowl), trappedNewbieKey(bowl.key().value() + "_emptying"))
 				.special()
@@ -369,7 +382,7 @@ public class TrappedNewbieRecipes {
 			.addIngredients('I', Material.INK_SAC, Material.GLOW_INK_SAC)
 			.register();
 
-		FillingBowlWithWater.BOWLS.forEach((bowl, filledBowl) -> {
+		FillingBowlWithWater.BOWLS_BOTTLES.forEach((bowl, filledBowl) -> {
 			new ShapelessCraft(Objects.requireNonNull(getFilled(ItemStack.of(bowl), ThirstData.DrinkType.CACTUS_JUICE)), trappedNewbieKey("cactus_" + filledBowl.key().value()))
 				.withGroup("cactus_juice")
 				.addIngredients(DelightfulFarmingItems.CACTUS_FLESH)
@@ -428,6 +441,36 @@ public class TrappedNewbieRecipes {
 				.addIngredients('S', Material.STICK)
 				.register();
 		}
+
+		new ShapedCraft(BucketModifier.BucketType.CLAY.save(ItemStack.of(Material.BUCKET)), trappedNewbieKey("clay_bucket"), "C C", " C ")
+			.addIngredients('C', Material.CLAY_BALL)
+			.register();
+		new CampfireCraft(BucketModifier.BucketType.CERAMIC.save(ItemStack.of(Material.BUCKET)), 20 * 20, trappedNewbieKey("ceramic_bucket"))
+			.withGroup("ceramic_bucket")
+			.addIngredientItems(BucketModifier.BucketType.CLAY.save(ItemStack.of(Material.BUCKET)), item -> BucketModifier.BucketType.fromBucket(item) == BucketModifier.BucketType.CLAY)
+			.register();
+		new FurnaceCraft(BucketModifier.BucketType.CERAMIC.save(ItemStack.of(Material.BUCKET)), 20 * 20, trappedNewbieKey("ceramic_bucket"))
+			.withGroup("ceramic_bucket")
+			.addIngredientItems(BucketModifier.BucketType.CLAY.save(ItemStack.of(Material.BUCKET)), item -> BucketModifier.BucketType.fromBucket(item) == BucketModifier.BucketType.CLAY)
+			.register();
+
+		Tag.PLANKS.getValues().forEach(planks -> {
+			BucketModifier.BucketType bucketType = BucketModifier.BucketType.valueOf(planks.name().replace("_PLANKS", ""));
+
+			new ShapedCraft(bucketType.save(ItemStack.of(Material.BUCKET)), bucketType.getKey(), "P P", " P ")
+				.withGroup("wooden_bucket")
+				.addIngredients('P', planks)
+				.register();
+			new StonecuttingCraft(bucketType.save(ItemStack.of(Material.BUCKET)), bucketType.getKey())
+				.withGroup("wooden_bucket")
+				.addIngredients('P', planks)
+				.register();
+		});
+
+		new ShapedCraft(ItemStack.of(TrappedNewbieItems.LEATHER_GLOVES), trappedNewbieKey("leather_gloves"), "L L")
+			.withCategory(CraftingBookCategory.EQUIPMENT)
+			.addIngredients('L', Material.LEATHER)
+			.register();
 
 		new ShapelessCraft(ItemStack.of(Material.GREEN_DYE), trappedNewbieKey("green_dye"))
 			.addIngredients(Material.BLUE_DYE, Material.YELLOW_DYE)
@@ -576,7 +619,7 @@ public class TrappedNewbieRecipes {
 	}
 
 	private static void addDrinkRecipes() {
-		FillingBowlWithWater.BOWLS.values().forEach(filledBowl -> registerDrinkRecipes(filledBowl == Material.POTION ? WaterAwareBottleReset.getWaterBottle(1) : ItemStack.of(filledBowl), filledBowl.key().value()));
+		FillingBowlWithWater.BOWLS_BOTTLES.values().forEach(filledBowl -> registerDrinkRecipes(filledBowl == Material.POTION ? WaterAwareBottleReset.getWaterBottle(1) : ItemStack.of(filledBowl), filledBowl.key().value()));
 		TrappedNewbieTags.CANTEENS.getValues().forEach(canteen -> registerDrinkRecipes(ItemStack.of(canteen), canteen.key().value()));
 	}
 
@@ -680,6 +723,8 @@ public class TrappedNewbieRecipes {
 		addReplacements(replacements, Material.SHEARS, UtilizerTags.SHEARS);
 		addReplacements(replacements, Material.STRING, List.of(Material.STRING, TrappedNewbieItems.HORSEHAIR), NamespacedKey.minecraft("white_wool_from_string"));
 		addReplacements(replacements, Material.RABBIT_HIDE, UtilizerTags.HIDES);
+		addReplacements(replacements, Material.SLIME_BALL, List.of(TrappedNewbieItems.SLIME_BUCKET));
+		addReplacements(replacements, Material.MAGMA_CREAM, List.of(TrappedNewbieItems.MAGMA_CUBE_BUCKET));
 
 		TrappedNewbie.scheduler().sync(() -> {
 			List<Recipe> toReAdd = new ArrayList<>();
@@ -820,7 +865,7 @@ public class TrappedNewbieRecipes {
 	}
 
 	public static @Nullable ItemStack getFilled(ItemStack item, ThirstData.DrinkType drinkType) {
-		Material filledType = FillingBowlWithWater.BOWLS.get(item.getType());
+		Material filledType = FillingBowlWithWater.BOWLS_BOTTLES.get(item.getType());
 		if (filledType == null) {
 			if (TrappedNewbieTags.CANTEENS.isTagged(item.getType()))
 				filledType = item.getType();

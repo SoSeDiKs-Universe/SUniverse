@@ -6,6 +6,7 @@ import me.sosedik.delightfulfarming.feature.sugar.SugarEater;
 import me.sosedik.kiterino.modifier.item.ItemContextBox;
 import me.sosedik.kiterino.modifier.item.ItemModifier;
 import me.sosedik.kiterino.modifier.item.ModificationResult;
+import me.sosedik.kiterino.modifier.item.context.ItemModifierContext;
 import me.sosedik.miscme.impl.item.modifier.ClockModifier;
 import me.sosedik.resourcelib.ResourceLib;
 import me.sosedik.resourcelib.api.font.FontData;
@@ -49,7 +50,6 @@ public class ClockMealModifier extends ItemModifier {
 	@Override
 	public ModificationResult modify(ItemContextBox contextBox) {
 		if (contextBox.getInitialType() != Material.CLOCK) return ModificationResult.PASS;
-		if (ItemUtil.shouldFreeze(contextBox)) return ModificationResult.PASS;
 
 		Player player = contextBox.getViewer();
 		if (player == null) return ModificationResult.PASS;
@@ -67,6 +67,11 @@ public class ClockMealModifier extends ItemModifier {
 		contextBox.addLore(combined(icon, Component.space(), message));
 
 		return ModificationResult.OK;
+	}
+
+	@Override
+	public boolean skipContext(ItemModifierContext context) {
+		return ItemUtil.shouldFreeze(context);
 	}
 
 }

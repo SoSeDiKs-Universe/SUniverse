@@ -51,7 +51,7 @@ public class AdvancementTrophyModifier extends ItemModifier {
 			updated = true;
 		}
 
-		if (!contextBox.getContextType().hasVisibleLore()) return updated ? ModificationResult.OK : ModificationResult.PASS;
+		if (!contextBox.getContext().getContextType().hasVisibleLore()) return updated ? ModificationResult.OK : ModificationResult.PASS;
 
 		UUID achieverUuid = AdvancementTrophies.getAchiever(item);
 		if (achieverUuid == null) return updated ? ModificationResult.OK : ModificationResult.PASS;

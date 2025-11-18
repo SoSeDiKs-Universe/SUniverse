@@ -11,5 +11,8 @@
 	"equipment.legs.cosmetic": "Косметический слот поножей",
 	"equipment.feet.armor": "Слот ботинок",
 	"equipment.feet.cosmetic": "Косметический слот ботинок",
-	"equipment.off_hand.armor": "Слот перчаток"
+	"equipment.off_hand.armor": "Слот перчаток",
+	"equipment.gloves.hot_item_hold": "Вы не можете держать раскалённые предметы без перчаток",
+	"equipment.gloves.lava_bucket_fill": "Вы не можете набрать ведро лавы без перчаток",
+	"equipment.gloves.water_bucket_fill": "Вам не следует набирать ведро воды в холодных биомах без перчаток"
 }

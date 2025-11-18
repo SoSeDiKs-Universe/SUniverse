@@ -71,6 +71,8 @@ import java.util.Objects;
 @NullMarked
 public final class Utilizer extends JavaPlugin {
 
+	public static final String NAMESPACE = "utilizer";
+
 	private static @UnknownNullability Utilizer instance;
 	private static @Nullable World limboWorld;
 
@@ -106,9 +108,9 @@ public final class Utilizer extends JavaPlugin {
 			LocaleResolver::new
 		);
 		URI discordUrl = URI.create(DiscordResolver.DISCORD_URL.startsWith("http") ? DiscordResolver.DISCORD_URL : "https://" + DiscordResolver.DISCORD_URL);
-		Bukkit.getServer().getServerLinks().addLink(ServerLinks.Type.REPORT_BUG, discordUrl);
-		Bukkit.getServer().getServerLinks().addLink(ServerLinks.Type.COMMUNITY, discordUrl);
-		Bukkit.getServer().getServerLinks().addLink(ServerLinks.Type.WEBSITE, URI.create("https://sosedik.com"));
+		Bukkit.getServerLinks().addLink(ServerLinks.Type.REPORT_BUG, discordUrl);
+		Bukkit.getServerLinks().addLink(ServerLinks.Type.COMMUNITY, discordUrl);
+		Bukkit.getServerLinks().addLink(ServerLinks.Type.WEBSITE, URI.create("https://sosedik.com"));
 
 		new CustomTotemOfUndyingModifier(utilizerKey("custom_totem_display")).register();
 		new DyedItemNamesModifier(utilizerKey("dyed_item_name")).register();
@@ -222,7 +224,7 @@ public final class Utilizer extends JavaPlugin {
 	 * @return namespaced key
 	 */
 	public static NamespacedKey utilizerKey(String value) {
-		return new NamespacedKey("utilizer", value);
+		return new NamespacedKey(NAMESPACE, value);
 	}
 
 	/**

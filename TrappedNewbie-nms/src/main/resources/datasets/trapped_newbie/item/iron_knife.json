@@ -1,0 +1,6 @@
+{
+	"parent_model": "handheld",
+	"client_type": "minecraft:iron_nugget",
+	"durability": 250,
+	"repairable": "minecraft:iron_ingot"
+}

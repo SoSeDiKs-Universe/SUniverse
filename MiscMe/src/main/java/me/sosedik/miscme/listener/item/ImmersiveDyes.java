@@ -1,9 +1,12 @@
 package me.sosedik.miscme.listener.item;
 
 import com.destroystokyo.paper.MaterialTags;
+import io.papermc.paper.datacomponent.DataComponentTypes;
+import io.papermc.paper.datacomponent.item.DyedItemColor;
 import me.sosedik.miscme.MiscMe;
 import me.sosedik.utilizer.util.MiscUtil;
 import net.kyori.adventure.text.Component;
+import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -37,6 +40,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Dyes can be applied onto blocks immersible.
@@ -310,7 +314,7 @@ public class ImmersiveDyes implements Listener {
 		player.clearActiveItem(); // In case dye is usable
 		player.emitSound(Sound.ITEM_LEAD_TIED, 1F, 2F);
 		if (hand != null) player.swingHand(hand);
-		if (effect != null) loc.getWorld().spawnParticle(Particle.BLOCK_CRUMBLE, loc.center(0.5), 10, 0.4, 0.4, 0.4, 0, effect);
+		if (effect != null) loc.getWorld().spawnParticle(Particle.BLOCK_CRUMBLE, loc.center(), 10, 0.4, 0.4, 0.4, 0, effect);
 	}
 
 	/**
@@ -321,6 +325,35 @@ public class ImmersiveDyes implements Listener {
 	 */
 	public static @Nullable DyeColor getDyeColor(ItemStack dye) {
 		return MiscUtil.parseOrNull(dye.getType().getKey().getKey().replace("_dye", ""), DyeColor.class);
+	}
+
+	/**
+	 * Tries to dye an item
+	 *
+	 * @param item item
+	 * @param dye dye item
+	 * @return whether the item was dyed
+	 */
+	public static boolean tryToDye(ItemStack item, ItemStack dye) {
+		DyeColor dyeColor = dye.getType() == ImmersiveDyes.CLEARING_MATERIAL ? null : ImmersiveDyes.getDyeColor(dye);
+		Color currentColor = extractColor(item);
+		if (currentColor == null && dyeColor == null) return false;
+
+		Color newColor = currentColor == null ? dyeColor.getColor() : (dyeColor == null ? null : currentColor.mixDyes(dyeColor));
+		if (currentColor != null && currentColor.equals(newColor)) return false;
+
+		if (newColor == null)
+			item.resetData(DataComponentTypes.DYED_COLOR);
+		else
+			item.setData(DataComponentTypes.DYED_COLOR, DyedItemColor.dyedItemColor(newColor));
+
+		return true;
+	}
+
+	private static @Nullable Color extractColor(ItemStack item) {
+		if (!item.hasData(DataComponentTypes.DYED_COLOR)) return null;
+		if (!item.isDataOverridden(DataComponentTypes.DYED_COLOR)) return null;
+		return Objects.requireNonNull(item.getData(DataComponentTypes.DYED_COLOR)).color();
 	}
 
 	/**

@@ -53,7 +53,7 @@ public class NMesSUtil {
 	}
 
 	public static @Nullable FurnaceRecipe getFurnaceRecipe(org.bukkit.inventory.ItemStack input) { // TODO This omits smelt events, but they require a furnace block, and I'm feeling lazy
-		Iterator<Recipe> recipeIterator = Bukkit.getServer().recipeIterator();
+		Iterator<Recipe> recipeIterator = Bukkit.recipeIterator();
 		while (recipeIterator.hasNext()) {
 			if (!(recipeIterator.next() instanceof FurnaceRecipe furnaceRecipe)) continue;
 			if (!furnaceRecipe.getInputChoice().test(input)) continue;

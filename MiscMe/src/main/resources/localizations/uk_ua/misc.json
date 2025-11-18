@@ -4,7 +4,7 @@
 	"attribute.durability.capacity": "<gray>Заповненість: <value>",
 	"attribute.repairable": "<gray>Ремонтується: <items>",
 	"overlay.toggle": [
-		"<yellow><!i><key:key.sneak> + <key:key.use> для перемикання ",
+		"<yellow><!i><key:key.sneak> + <key:key.use> в руці для перемикання",
 		"<yellow><!i>відображення на екрані"
 	],
 	"item.clock.time.nether": "<gray><!i>Година? Що таке «година»?",

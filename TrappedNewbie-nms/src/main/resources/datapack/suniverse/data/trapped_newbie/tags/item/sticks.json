@@ -1,6 +1,7 @@
 {
   "values": [
     "minecraft:stick",
+    "minecraft:debug_stick",
     "trapped_newbie:acacia_stick",
     "trapped_newbie:bamboo_stick",
     "trapped_newbie:bamboos_stick",

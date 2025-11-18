@@ -30,7 +30,7 @@ public class DyedItemNamesModifier extends ItemModifier {
 
 	@Override
 	public ModificationResult modify(ItemContextBox contextBox) {
-		if (!contextBox.getContextType().hasVisibleName()) return ModificationResult.PASS;
+		if (!contextBox.getContext().getContextType().hasVisibleName()) return ModificationResult.PASS;
 		if (!contextBox.getInitialType().isInjected()) return ModificationResult.PASS;
 
 		ItemStack item = contextBox.getItem();

@@ -41,12 +41,12 @@ public class DepthMeterModifier extends ItemModifier {
 
 		contextBox.getItem().setData(DataComponentTypes.ITEM_MODEL, DEPTH_SURFACE);
 
-		if (ItemUtil.shouldFreeze(contextBox)) return ModificationResult.OK;
+		if (ItemUtil.shouldFreeze(contextBox.getContext())) return ModificationResult.OK;
 
 		Entity target = null;
-		if (contextBox.getContext() instanceof EntityEquipmentPacketContext context) {
+		if (contextBox.getContext().getRootContext() instanceof EntityEquipmentPacketContext context) {
 			target = context.getEntity();
-		} else if (contextBox.getContext() instanceof EntityDataPacketContext context) {
+		} else if (contextBox.getContext().getRootContext() instanceof EntityDataPacketContext context) {
 			target = context.getEntity();
 		}
 		if (target == null) {
@@ -56,7 +56,7 @@ public class DepthMeterModifier extends ItemModifier {
 		}
 
 		var messenger = Messenger.messenger(LangOptionsStorage.getByLocale(contextBox.getLocale()));
-		boolean addLore = contextBox.getContextType().hasVisibleLore();
+		boolean addLore = contextBox.getContext().getContextType().hasVisibleLore();
 
 		int playerY = target.getLocation().getBlockY();
 

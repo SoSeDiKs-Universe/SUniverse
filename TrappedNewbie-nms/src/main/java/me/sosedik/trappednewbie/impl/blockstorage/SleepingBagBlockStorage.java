@@ -11,6 +11,7 @@ import me.sosedik.trappednewbie.TrappedNewbie;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieItems;
 import me.sosedik.trappednewbie.impl.item.modifier.ItemModelModifier;
 import me.sosedik.utilizer.api.storage.block.BlockDataStorageHolder;
+import me.sosedik.utilizer.api.storage.block.ExtraDroppableBlockStorage;
 import me.sosedik.utilizer.util.MiscUtil;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
@@ -20,7 +21,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;
-import org.bukkit.event.block.BlockDropItemEvent;
+import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -28,10 +29,11 @@ import org.bukkit.util.Transformation;
 import org.joml.Quaternionf;
 import org.jspecify.annotations.NullMarked;
 
+import java.util.List;
 import java.util.function.Consumer;
 
 @NullMarked
-public class SleepingBagBlockStorage extends BlockDataStorageHolder {
+public class SleepingBagBlockStorage extends BlockDataStorageHolder implements ExtraDroppableBlockStorage {
 
 	private static final String ITEM_KEY = "item";
 	private static final String FACING_KEY = "facing";
@@ -84,7 +86,7 @@ public class SleepingBagBlockStorage extends BlockDataStorageHolder {
 	}
 
 	private ItemDisplay createDisplay() {
-		Location loc = getBlock().getLocation().center(0.5);
+		Location loc = getBlock().getLocation().center();
 		return loc.getWorld().spawn(loc, ItemDisplay.class, display -> {
 			display.setPersistent(false);
 			double rotation = switch (this.facing) {
@@ -107,8 +109,8 @@ public class SleepingBagBlockStorage extends BlockDataStorageHolder {
 	}
 
 	@Override
-	public void onDrop(BlockDropItemEvent event) {
-		event.addDrop(this.storedItem);
+	public List<ItemStack> getExtraDrops(Event event) {
+		return List.of(this.storedItem);
 	}
 
 	@Override
@@ -119,7 +121,7 @@ public class SleepingBagBlockStorage extends BlockDataStorageHolder {
 	@Override
 	public void onMove(Location from, Location to) {
 		super.onMove(from, to);
-		this.display.teleport(getBlock().getRelative(this.facing).getLocation().center(0.5));
+		this.display.teleport(getBlock().getRelative(this.facing).getLocation().center());
 	}
 
 	@Override

@@ -7,6 +7,7 @@ import me.sosedik.trappednewbie.dataset.TrappedNewbieTags;
 import me.sosedik.trappednewbie.util.NMesSUtil;
 import me.sosedik.utilizer.api.event.player.PlayerPlaceItemEvent;
 import me.sosedik.utilizer.api.storage.block.BlockDataStorageHolder;
+import me.sosedik.utilizer.api.storage.block.ExtraDroppableBlockStorage;
 import me.sosedik.utilizer.util.DurabilityUtil;
 import me.sosedik.utilizer.util.ItemUtil;
 import me.sosedik.utilizer.util.MathUtil;
@@ -22,8 +23,8 @@ import org.bukkit.block.data.Directional;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -35,12 +36,14 @@ import org.joml.Quaternionf;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.function.Supplier;
 
 @NullMarked
-public class WorkStationBlockStorage extends BlockDataStorageHolder {
+public class WorkStationBlockStorage extends BlockDataStorageHolder implements ExtraDroppableBlockStorage {
 
 	private static final String STORED_ITEMS_KEY = "items";
 	private static final String STORED_TOOL_KEY = "stored_tool";
@@ -365,13 +368,15 @@ public class WorkStationBlockStorage extends BlockDataStorageHolder {
 	}
 
 	@Override
-	public void onDrop(BlockDropItemEvent event) {
+	public List<ItemStack> getExtraDrops(Event event) {
+		List<ItemStack> drops = new ArrayList<>();
 		for (ItemStack item : this.displayItems) {
 			if (!ItemStack.isEmpty(item))
-				event.addDrop(item);
+				drops.add(item);
 		}
 		if (!ItemStack.isEmpty(this.storedTool))
-			event.addDrop(this.storedTool);
+			drops.add(this.storedTool);
+		return drops;
 	}
 
 	@Override

@@ -44,7 +44,7 @@ public class CompassModifier extends ItemModifier {
 	public ModificationResult modify(ItemContextBox contextBox) {
 		if (!Tag.ITEMS_COMPASSES.isTagged(contextBox.getInitialType())) return ModificationResult.PASS;
 
-		if (ItemUtil.shouldFreeze(contextBox)) {
+		if (ItemUtil.shouldFreeze(contextBox.getContext())) {
 			if (contextBox.getItem().isDataOverridden(DataComponentTypes.ITEM_MODEL)) return ModificationResult.PASS;
 
 			NamespacedKey model = contextBox.getInitialType() == Material.RECOVERY_COMPASS ? STILL_RECOVERY_COMPASS : STILL_COMPASS;
@@ -66,8 +66,8 @@ public class CompassModifier extends ItemModifier {
 			contextBox.getItem().setData(DataComponentTypes.ITEM_MODEL, COMPASS_MIMIC);
 		}
 
-		if (!contextBox.getContextType().hasVisibleLore()) return updated ? ModificationResult.OK : ModificationResult.PASS;
-		if (!(contextBox.getContext() instanceof SlottedItemModifierContext)) return updated ? ModificationResult.OK : ModificationResult.PASS;
+		if (!contextBox.getContext().getContextType().hasVisibleLore()) return updated ? ModificationResult.OK : ModificationResult.PASS;
+		if (!(contextBox.getContext().getRootContext() instanceof SlottedItemModifierContext)) return updated ? ModificationResult.OK : ModificationResult.PASS;
 
 		Location loc = player.getLocation();
 		int x = loc.getBlockX();

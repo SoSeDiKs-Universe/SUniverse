@@ -7,6 +7,7 @@ import me.sosedik.trappednewbie.dataset.TrappedNewbieSoundKeys;
 import me.sosedik.trappednewbie.impl.recipe.ChoppingBlockCrafting;
 import me.sosedik.utilizer.api.event.player.PlayerPlaceItemEvent;
 import me.sosedik.utilizer.api.storage.block.BlockDataStorageHolder;
+import me.sosedik.utilizer.api.storage.block.ExtraDroppableBlockStorage;
 import me.sosedik.utilizer.util.DurabilityUtil;
 import me.sosedik.utilizer.util.LocationUtil;
 import me.sosedik.utilizer.util.RecipeManager;
@@ -18,8 +19,8 @@ import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -27,8 +28,10 @@ import org.bukkit.util.Transformation;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.util.List;
+
 @NullMarked
-public class ChoppingBlockStorage extends BlockDataStorageHolder {
+public class ChoppingBlockStorage extends BlockDataStorageHolder implements ExtraDroppableBlockStorage {
 
 	private static final String STORED_ITEM_KEY = "item";
 
@@ -177,9 +180,8 @@ public class ChoppingBlockStorage extends BlockDataStorageHolder {
 	}
 
 	@Override
-	public void onDrop(BlockDropItemEvent event) {
-		if (this.currentItem != null)
-			event.addDrop(this.currentItem);
+	public List<ItemStack> getExtraDrops(Event event) {
+		return ItemStack.isEmpty(this.currentItem) ? List.of() : List.of(this.currentItem);
 	}
 
 	@Override

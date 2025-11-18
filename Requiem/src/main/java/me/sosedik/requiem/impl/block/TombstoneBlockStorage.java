@@ -2,13 +2,14 @@ package me.sosedik.requiem.impl.block;
 
 import com.destroystokyo.paper.event.block.BlockDestroyEvent;
 import de.tr7zw.nbtapi.NBT;
-import de.tr7zw.nbtapi.iface.ReadWriteItemNBT;
+import de.tr7zw.nbtapi.NBTType;
 import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import io.papermc.paper.loot.LootContextKey;
 import me.sosedik.requiem.api.event.player.TombstoneDestroyEvent;
 import me.sosedik.requiem.dataset.RequiemItems;
 import me.sosedik.requiem.feature.PossessingPlayer;
 import me.sosedik.utilizer.api.storage.block.BlockDataStorageHolder;
+import me.sosedik.utilizer.api.storage.block.ExtraDroppableBlockStorage;
 import me.sosedik.utilizer.util.InventoryUtil;
 import me.sosedik.utilizer.util.LocationUtil;
 import me.sosedik.utilizer.util.MathUtil;
@@ -25,7 +26,6 @@ import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockBurnEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.loot.LootContext;
@@ -38,10 +38,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
-import java.util.function.Consumer;
 
 @NullMarked
-public class TombstoneBlockStorage extends BlockDataStorageHolder {
+public class TombstoneBlockStorage extends BlockDataStorageHolder implements ExtraDroppableBlockStorage {
 
 	private static final String FACING_KEY = "facing";
 	private static final String STORAGES_KEY = "storages";
@@ -68,10 +67,14 @@ public class TombstoneBlockStorage extends BlockDataStorageHolder {
 		NBT.get(item, itemNbt -> {
 			if (itemNbt.hasTag(DEATH_MESSAGE_KEY)) {
 				ReadWriteNBT data = NBT.createNBTObject();
-				data.getOrCreateCompound(STORAGES_KEY)
-					.getOrCreateCompound("0")
-					.getOrCreateCompound(DEATH_MESSAGE_KEY)
-					.mergeCompound(itemNbt.getCompound(DEATH_MESSAGE_KEY));
+				ReadWriteNBT tempNbt = data.getOrCreateCompound(STORAGES_KEY)
+					.getOrCreateCompound("0");
+				if (itemNbt.hasTag(DEATH_MESSAGE_KEY, NBTType.NBTTagCompound)) {
+					tempNbt.getOrCreateCompound(DEATH_MESSAGE_KEY)
+						.mergeCompound(itemNbt.getCompound(DEATH_MESSAGE_KEY));
+				} else {
+					tempNbt.setString(DEATH_MESSAGE_KEY, itemNbt.getString(DEATH_MESSAGE_KEY));
+				}
 				this.storedData.mergeCompound(data);
 			}
 		});
@@ -132,57 +135,63 @@ public class TombstoneBlockStorage extends BlockDataStorageHolder {
 	}
 
 	@Override
-	public void onBreak(BlockBreakEvent event) {
-		super.onBreak(event);
-
-		if (isPlayerTombstone() && event.getBlock().getType() != getMatchingMaterial()) // Drop loot, keep base block
-			event.setCancelled(true);
-
-		if (dropLoot(event.getPlayer()))
-			event.setDropItems(false);
+	public boolean dropsOnBreak() {
+		return true;
 	}
 
 	@Override
-	public boolean onExplode(Event event) {
-		super.onExplode(event);
-
-		if (dropLoot(null)) {
-			this.block.setType(Material.AIR);
-			return true;
-		}
-		return false;
+	public boolean dropOnBurn() {
+		return true;
 	}
 
 	@Override
-	public void onBurn(BlockBurnEvent event) {
-		super.onBurn(event);
-
-		dropLoot(null);
+	public boolean dropOnExplosion() {
+		return true;
 	}
 
 	@Override
-	public void onDestroy(BlockDestroyEvent event) {
-		super.onDestroy(event);
+	public boolean removeFromExplosion(Event event) {
+		if (!isPlayerTombstone() && this.block.getType() == getMatchingMaterial())
+			return false;
 
-		if (event.willDrop() && dropLoot(null))
-			event.setWillDrop(false);
+		this.block.setType(Material.AIR);
+		return true;
 	}
 
-	private boolean dropLoot(@Nullable Player player) {
+	@Override
+	public List<ItemStack> getExtraDrops(Event event) {
+		Player player = null;
+		if (event instanceof BlockBreakEvent breakEvent) player = breakEvent.getPlayer();
 		if (isPlayerTombstone()) {
-			dropIfSilkTouch(player);
-			dropStorage(player);
-			return true;
+			List<ItemStack> drops = new ArrayList<>();
+			dropIfSilkTouch(player, drops);
+			dropStorage(player, drops);
+
+			if (event instanceof BlockBreakEvent breakEvent) {
+				breakEvent.setDropItems(false);
+
+				// Drop loot, keep base block
+				if (this.block.getType() != getMatchingMaterial())
+					breakEvent.setCancelled(true);
+			}
+
+			return drops;
 		}
 
 		Material type = getMatchingMaterial();
-		if (type == null) return false;
-		if (this.block.getType() == type) return false;
+		if (type == null) return List.of();
+		if (this.block.getType() == type) return List.of();
 
 		LootTable lootTable = Bukkit.getLootTable(new NamespacedKey(getId().getNamespace(), "blocks/" + getId().getKey()));
-		if (lootTable == null) return false;
+		if (lootTable == null) return List.of();
 
-		if (dropIfSilkTouch(player)) return true;
+		List<ItemStack> drops = new ArrayList<>();
+		if (dropIfSilkTouch(player, drops)) return drops;
+
+		if (event instanceof BlockBreakEvent breakEvent)
+			breakEvent.setDropItems(false);
+		else if (event instanceof BlockDestroyEvent destroyEvent)
+			destroyEvent.setWillDrop(false);
 
 		LootContext lootContext = new LootContext.Builder(this.block.getWorld())
 			.luck(player == null ? 0F : (float) Objects.requireNonNull(player.getAttribute(Attribute.LUCK)).getValue())
@@ -190,13 +199,12 @@ public class TombstoneBlockStorage extends BlockDataStorageHolder {
 			.with(LootContextKey.ORIGIN, this.block.getLocation())
 			.with(LootContextKey.TOOL, player == null ? ItemStack.empty() : player.getInventory().getItemInMainHand())
 			.build();
-		Location loc = this.block.getLocation().center();
-		lootTable.populateLoot(RANDOM, lootContext).forEach(item -> this.block.getWorld().dropItemNaturally(loc, item));
+		drops.addAll(lootTable.populateLoot(RANDOM, lootContext));
 
-		return true;
+		return drops;
 	}
 
-	private boolean dropIfSilkTouch(@Nullable Player player) {
+	private boolean dropIfSilkTouch(@Nullable Player player, List<ItemStack> drops) {
 		if (player == null) return false;
 
 		ItemStack item = player.getInventory().getItemInMainHand();
@@ -205,20 +213,25 @@ public class TombstoneBlockStorage extends BlockDataStorageHolder {
 		Material type = getMatchingMaterial();
 		if (type == null) return false;
 
-		Location loc = this.block.getLocation().center();
 		item = ItemStack.of(type);
 
 		if (this.storedData.hasTag(STORAGES_KEY)) {
 			ReadWriteNBT storage = this.storedData.getOrCreateCompound(STORAGES_KEY).getCompound("0");
-			if (storage != null && storage.hasTag(DEATH_MESSAGE_KEY))
-				NBT.modify(item, (Consumer<ReadWriteItemNBT>) nbt -> nbt.getOrCreateCompound(DEATH_MESSAGE_KEY).mergeCompound(storage.getCompound(DEATH_MESSAGE_KEY)));
+			if (storage != null && storage.hasTag(DEATH_MESSAGE_KEY)) {
+				NBT.modify(item, nbt -> {
+					if (storage.hasTag(DEATH_MESSAGE_KEY, NBTType.NBTTagCompound))
+						nbt.getOrCreateCompound(DEATH_MESSAGE_KEY).mergeCompound(storage.getCompound(DEATH_MESSAGE_KEY));
+					else
+						nbt.setString(DEATH_MESSAGE_KEY, storage.getString(DEATH_MESSAGE_KEY));
+				});
+			}
 		}
 
-		this.block.getWorld().dropItemNaturally(loc, item);
+		drops.add(item);
 		return true;
 	}
 
-	private void dropStorage(@Nullable Player player) {
+	private void dropStorage(@Nullable Player player, List<ItemStack> drops) {
 		if (!this.storedData.hasTag(STORAGES_KEY)) return;
 
 		ReadWriteNBT storageData = this.storedData.getOrCreateCompound(STORAGES_KEY);
@@ -257,17 +270,17 @@ public class TombstoneBlockStorage extends BlockDataStorageHolder {
 			}
 		}
 		event.callEvent();
-		Location loc = this.block.getLocation().center();
 		int exp = event.getExp();
 		if (exp > 0) {
 			if (player == null || PossessingPlayer.isPossessing(player)) {
+				Location loc = this.block.getLocation().center();
 				this.block.getWorld().spawn(loc, ExperienceOrb.class, orb -> orb.setExperience(exp));
 			} else {
 				player.giveExp(exp);
 			}
 		}
 		if (player == null) {
-			event.getToDrop().forEach(item -> this.block.getWorld().dropItemNaturally(loc, item));
+			drops.addAll(event.getToDrop());
 		} else {
 			event.getToDrop().forEach(item -> InventoryUtil.addOrDrop(player, item, false));
 		}

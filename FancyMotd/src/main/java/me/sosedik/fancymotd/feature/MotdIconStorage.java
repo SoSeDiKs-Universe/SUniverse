@@ -71,7 +71,7 @@ public class MotdIconStorage {
 		for (File icon : Objects.requireNonNull(storage.listFiles())) {
 			if (!icon.getName().endsWith(".png")) continue;
 			try {
-				SERVER_ICONS.add(Bukkit.getServer().loadServerIcon(icon));
+				SERVER_ICONS.add(Bukkit.loadServerIcon(icon));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

@@ -6,6 +6,7 @@ import me.sosedik.trappednewbie.impl.block.nms.ClayKilnBlock;
 import me.sosedik.trappednewbie.util.NMesSUtil;
 import me.sosedik.utilizer.api.event.player.PlayerPlaceItemEvent;
 import me.sosedik.utilizer.api.storage.block.BlockDataStorageHolder;
+import me.sosedik.utilizer.api.storage.block.ExtraDroppableBlockStorage;
 import me.sosedik.utilizer.util.ItemUtil;
 import me.sosedik.utilizer.util.LocationUtil;
 import org.bukkit.Bukkit;
@@ -17,8 +18,8 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
@@ -29,8 +30,10 @@ import org.joml.Quaternionf;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.util.List;
+
 @NullMarked
-public class ClayKilnBlockStorage extends BlockDataStorageHolder {
+public class ClayKilnBlockStorage extends BlockDataStorageHolder implements ExtraDroppableBlockStorage {
 
 	private static final String STORED_ITEM_KEY = "item";
 	private static final NamespacedKey DUMMY_RECIPE_KEY = TrappedNewbie.trappedNewbieKey("dummy");
@@ -257,9 +260,8 @@ public class ClayKilnBlockStorage extends BlockDataStorageHolder {
 	}
 
 	@Override
-	public void onDrop(BlockDropItemEvent event) {
-		if (this.storedItem != null)
-			event.addDrop(this.storedItem);
+	public List<ItemStack> getExtraDrops(Event event) {
+		return ItemStack.isEmpty(this.storedItem) ? List.of() : List.of(this.storedItem);
 	}
 
 	@Override

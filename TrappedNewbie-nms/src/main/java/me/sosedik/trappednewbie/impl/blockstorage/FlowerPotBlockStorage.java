@@ -1,6 +1,7 @@
 package me.sosedik.trappednewbie.impl.blockstorage;
 
 import de.tr7zw.nbtapi.iface.ReadWriteNBT;
+import me.sosedik.utilizer.api.storage.block.ExtraDroppableBlockStorage;
 import me.sosedik.utilizer.api.storage.block.InventoryBlockDataStorageHolder;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -8,16 +9,18 @@ import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
-import org.bukkit.event.block.BlockDropItemEvent;
+import org.bukkit.event.Event;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NullMarked;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @NullMarked
-public class FlowerPotBlockStorage extends InventoryBlockDataStorageHolder {
+public class FlowerPotBlockStorage extends InventoryBlockDataStorageHolder implements ExtraDroppableBlockStorage {
 
 	private static final Component DEFAULT_TITLE = Component.translatable(Material.FLOWER_POT.translationKey());
 
@@ -39,11 +42,18 @@ public class FlowerPotBlockStorage extends InventoryBlockDataStorageHolder {
 	}
 
 	@Override
-	public void onDrop(BlockDropItemEvent event) {
+	public boolean dropOnExplosion() {
+		return true;
+	}
+
+	@Override
+	public List<ItemStack> getExtraDrops(Event event) {
+		List<ItemStack> drops = new ArrayList<>();
 		for (ItemStack item : getInventory().getStorageContents()) {
 			if (!ItemStack.isEmpty(item))
-				event.addDrop(item);
+				drops.add(item);
 		}
+		return drops;
 	}
 
 	@Override

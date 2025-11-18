@@ -35,22 +35,37 @@ import me.sosedik.trappednewbie.impl.item.nms.KnifeItem;
 import me.sosedik.trappednewbie.impl.item.nms.PaperPlaneItem;
 import me.sosedik.trappednewbie.impl.item.nms.ThrowableRockItem;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.animal.Bucketable;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.MobBucketItem;
 import net.minecraft.world.item.ShovelItem;
 import net.minecraft.world.item.ToolMaterial;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.component.Weapon;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DispenserBlock;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.craftbukkit.entity.CraftEntityTypes;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
+import java.util.function.BiConsumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 import static org.bukkit.craftbukkit.entity.CraftEntityTypes.createAndMoveEmptyRot;
 
@@ -108,9 +123,24 @@ public class TrappedNewbieBootstrap implements PluginBootstrap {
 			case "flint_pickaxe" -> new Item(((Item.Properties) properties).pickaxe(dummyMaterial, 1F, -3F));
 			case "flint_shovel" -> new ShovelItem(dummyMaterial, 1.5F, -3F, (Item.Properties) properties);
 			case "flint_shears" -> ItemCreator.shearsItem(properties);
-			case "flint_knife" -> new KnifeItem(((Item.Properties) properties)
+			case "flint_knife", "iron_knife" -> new KnifeItem(((Item.Properties) properties)
 				.component(DataComponents.TOOL, KnifeItem.createToolProperties())
 				.component(DataComponents.WEAPON, new Weapon(1)));
+			case "slime_bucket" -> mobBucket((Item.Properties) properties, EntityType.SLIME, Fluids.EMPTY, Items.BUCKET,
+				entity -> entity.getSize() == 1,
+				null,
+				(entity, tag) -> entity.setSize(1, false)
+			);
+			case "magma_cube_bucket" -> mobBucket((Item.Properties) properties, EntityType.MAGMA_CUBE, Fluids.EMPTY, Items.BUCKET,
+				entity -> entity.getSize() == 1,
+				null,
+				(entity, tag) -> entity.setSize(1, false)
+			);
+			case "frog_bucket" -> mobBucket((Item.Properties) properties, EntityType.FROG, Fluids.EMPTY, Items.BUCKET,
+				null,
+				(entity, stack) -> stack.copyFrom(DataComponents.FROG_VARIANT, entity),
+				null
+			);
 			default -> null;
 		});
 
@@ -128,6 +158,66 @@ public class TrappedNewbieBootstrap implements PluginBootstrap {
 				}
 			}
 		);
+	}
+
+	private <T extends Mob> Item mobBucket(Item.Properties properties, EntityType<T> entityType, Fluid fluid, Item pickupBucket, @Nullable Predicate<T> check, @Nullable BiConsumer<T, ItemStack> save, @Nullable BiConsumer<T, CompoundTag> load) {
+		SoundEvent pickupSound = fluid == Fluids.LAVA ? SoundEvents.BUCKET_FILL_LAVA : SoundEvents.BUCKET_FILL;
+		MobBucketItem mobBucketItem = new MobBucketItem(entityType, fluid, SoundEvents.BUCKET_EMPTY, properties.component(DataComponents.BUCKET_ENTITY_DATA, CustomData.EMPTY));
+		Bucketable bucketable = new Bucketable() {
+			@Override
+			public boolean fromBucket() {
+				return false;
+			}
+
+			@Override
+			public void setFromBucket(boolean fromBucket) {
+			}
+
+			@Override
+			public void saveToBucketTag(ItemStack stack) {
+			}
+
+			@Override
+			public void loadFromBucketTag(CompoundTag tag) {
+			}
+
+			@Override
+			public boolean canPickup(LivingEntity entity) {
+				return check == null || check.test((T) entity);
+			}
+
+			@Override
+			public void saveToBucketTag(LivingEntity entity, ItemStack stack) {
+				if (entity instanceof Mob mob)
+					Bucketable.saveDefaultDataToBucketTag(mob, stack);
+				if (save != null)
+					save.accept((T) entity, stack);
+			}
+
+			@Override
+			public void loadFromBucketTag(LivingEntity entity, CompoundTag tag) {
+				loadFromBucketTag(tag);
+				if (load != null)
+					load.accept((T) entity, tag);
+			}
+
+			@Override
+			public ItemStack getBucketItemStack() {
+				return new ItemStack(mobBucketItem);
+			}
+
+			@Override
+			public SoundEvent getPickupSound() {
+				return pickupSound;
+			}
+
+			@Override
+			public Item getPickBucket() {
+				return pickupBucket;
+			}
+		};
+		DispenserBlock.registerBehavior(mobBucketItem, MobBucketItem.BUCKET_DISPENSE_BEHAVIOR);
+		return mobBucketItem.bucketable(bucketable);
 	}
 
 }

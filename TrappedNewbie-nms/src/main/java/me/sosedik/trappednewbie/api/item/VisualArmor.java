@@ -2,8 +2,8 @@ package me.sosedik.trappednewbie.api.item;
 
 import me.sosedik.requiem.feature.GhostyPlayer;
 import me.sosedik.requiem.feature.PossessingPlayer;
+import me.sosedik.trappednewbie.dataset.TrappedNewbieItems;
 import me.sosedik.trappednewbie.listener.player.VisualArmorLayer;
-import me.sosedik.utilizer.util.DurabilityUtil;
 import me.sosedik.utilizer.util.InventoryUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -79,11 +79,11 @@ public class VisualArmor {
 	}
 
 	public boolean hasHelmet() {
-		return helmet != null;
+		return this.helmet != null;
 	}
 
 	public ItemStack getHelmet() {
-		return helmet == null ? ItemStack.empty() : helmet;
+		return this.helmet == null ? ItemStack.empty() : this.helmet;
 	}
 
 	public void setHelmet(@Nullable ItemStack helmet) {
@@ -92,11 +92,11 @@ public class VisualArmor {
 	}
 
 	public boolean hasChestplate() {
-		return chestplate != null;
+		return this.chestplate != null;
 	}
 
 	public ItemStack getChestplate() {
-		return chestplate == null ? ItemStack.empty() : chestplate;
+		return this.chestplate == null ? ItemStack.empty() : this.chestplate;
 	}
 
 	public void setChestplate(@Nullable ItemStack chestplate) {
@@ -105,11 +105,11 @@ public class VisualArmor {
 	}
 
 	public boolean hasLeggings() {
-		return leggings != null;
+		return this.leggings != null;
 	}
 
 	public ItemStack getLeggings() {
-		return leggings == null ? ItemStack.empty() : leggings;
+		return this.leggings == null ? ItemStack.empty() : this.leggings;
 	}
 
 	public void setLeggings(@Nullable ItemStack leggings) {
@@ -118,11 +118,11 @@ public class VisualArmor {
 	}
 
 	public boolean hasBoots() {
-		return boots != null;
+		return this.boots != null;
 	}
 
 	public ItemStack getBoots() {
-		return boots == null ? ItemStack.empty() : boots;
+		return this.boots == null ? ItemStack.empty() : this.boots;
 	}
 
 	public void setBoots(@Nullable ItemStack boots) {
@@ -131,15 +131,15 @@ public class VisualArmor {
 	}
 
 	public boolean hasGloves() {
-		return gloves != null;
+		return this.gloves != null;
 	}
 
 	public boolean hasNonBrokenGloves() {
-		return hasGloves() && !DurabilityUtil.isBroken(gloves);
+		return hasGloves() && this.gloves.getType() != TrappedNewbieItems.SCRAP;
 	}
 
 	public ItemStack getGloves() {
-		return gloves == null ? ItemStack.empty() : gloves;
+		return this.gloves == null ? ItemStack.empty() : this.gloves;
 	}
 
 	public void setGloves(@Nullable ItemStack gloves) {
@@ -160,13 +160,13 @@ public class VisualArmor {
 		int invSlot = InventoryUtil.getSlot(this.player, slot);
 		if (invSlot != -1) this.player.sendItem(invSlot, getItem(slot));
 		Bukkit.getOnlinePlayers().forEach(onlinePlayer -> {
-			if (onlinePlayer != player && onlinePlayer.getWorld() == player.getWorld())
+			if (onlinePlayer != this.player && onlinePlayer.getWorld() == this.player.getWorld())
 				onlinePlayer.sendEquipmentChange(this.player, slot, getItem(slot));
 		});
 	}
 
 	public boolean isArmorPreview() {
-		return armorPreview;
+		return this.armorPreview;
 	}
 
 	public void toggleArmorPreview() {

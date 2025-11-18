@@ -46,12 +46,12 @@ public class SpeedometerModifier extends ItemModifier {
 
 		contextBox.getItem().setData(DataComponentTypes.ITEM_MODEL, MODELS[0]);
 
-		if (ItemUtil.shouldFreeze(contextBox)) return ModificationResult.OK;
+		if (ItemUtil.shouldFreeze(contextBox.getContext())) return ModificationResult.OK;
 
 		Entity target = null;
-		if (contextBox.getContext() instanceof EntityEquipmentPacketContext context) {
+		if (contextBox.getContext().getRootContext() instanceof EntityEquipmentPacketContext context) {
 			target = context.getEntity();
-		} else if (contextBox.getContext() instanceof EntityDataPacketContext context) {
+		} else if (contextBox.getContext().getRootContext() instanceof EntityDataPacketContext context) {
 			target = context.getEntity();
 		}
 		if (target == null) {
@@ -67,7 +67,7 @@ public class SpeedometerModifier extends ItemModifier {
 
 		contextBox.getItem().setData(DataComponentTypes.ITEM_MODEL, MODELS[model]);
 
-		if (contextBox.getContextType().hasVisibleLore()) {
+		if (contextBox.getContext().getContextType().hasVisibleLore()) {
 			var messenger = Messenger.messenger(LangOptionsStorage.getByLocale(contextBox.getLocale()));
 			contextBox.addLore(messenger.getMessage("item.speedometer.speed",
 				raw("speed", speed)

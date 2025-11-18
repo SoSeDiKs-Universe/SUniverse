@@ -3,6 +3,7 @@ package me.sosedik.trappednewbie.impl.item.modifier;
 import me.sosedik.kiterino.modifier.item.ItemContextBox;
 import me.sosedik.kiterino.modifier.item.ItemModifier;
 import me.sosedik.kiterino.modifier.item.ModificationResult;
+import me.sosedik.kiterino.modifier.item.context.ItemModifierContext;
 import me.sosedik.miscme.MiscMe;
 import me.sosedik.miscme.dataset.MiscMeItems;
 import me.sosedik.resourcelib.ResourceLib;
@@ -10,6 +11,7 @@ import me.sosedik.resourcelib.util.SpacingUtil;
 import me.sosedik.trappednewbie.listener.misc.DynamicInventoryInfoGatherer;
 import me.sosedik.utilizer.api.language.LangOptionsStorage;
 import me.sosedik.utilizer.api.message.Messenger;
+import me.sosedik.utilizer.util.ItemUtil;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -45,7 +47,7 @@ public class ItemOverlayToggleModifier extends ItemModifier {
 
 	@Override
 	public ModificationResult modify(ItemContextBox contextBox) {
-		if (!contextBox.getContextType().hasVisibleLore()) return ModificationResult.PASS;
+		if (!contextBox.getContext().getContextType().hasVisibleLore()) return ModificationResult.PASS;
 
 		Player viewer = contextBox.getViewer();
 		if (viewer == null) return ModificationResult.PASS;
@@ -58,6 +60,11 @@ public class ItemOverlayToggleModifier extends ItemModifier {
 		contextBox.addLore(texts);
 
 		return ModificationResult.OK;
+	}
+
+	@Override
+	public boolean skipContext(ItemModifierContext context) {
+		return ItemUtil.shouldFreeze(context);
 	}
 
 	public static @Nullable ToggleableData getOverlayToggleable(Material item) {

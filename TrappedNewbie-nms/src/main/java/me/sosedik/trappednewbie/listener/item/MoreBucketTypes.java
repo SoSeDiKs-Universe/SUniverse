@@ -1,0 +1,439 @@
+package me.sosedik.trappednewbie.listener.item;
+
+import com.destroystokyo.paper.MaterialTags;
+import io.papermc.paper.datacomponent.DataComponentTypes;
+import me.sosedik.miscme.listener.entity.ItemFrameSpillables;
+import me.sosedik.miscme.listener.item.ImmersiveDyes;
+import me.sosedik.trappednewbie.TrappedNewbie;
+import me.sosedik.trappednewbie.api.item.VisualArmor;
+import me.sosedik.trappednewbie.impl.item.modifier.BucketModifier;
+import me.sosedik.trappednewbie.impl.item.modifier.ScrapModifier;
+import me.sosedik.trappednewbie.listener.block.FluidPickupRequiresGloves;
+import me.sosedik.trappednewbie.listener.player.VisualArmorLayer;
+import me.sosedik.utilizer.dataset.UtilizerTags;
+import net.minecraft.world.item.MobBucketItem;
+import org.bukkit.Material;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.Levelled;
+import org.bukkit.block.data.Waterlogged;
+import org.bukkit.craftbukkit.CraftWorld;
+import org.bukkit.craftbukkit.entity.CraftLivingEntity;
+import org.bukkit.craftbukkit.util.CraftLocation;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Item;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockDispenseEvent;
+import org.bukkit.event.entity.EntityPickupItemEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerBucketEmptyEvent;
+import org.bukkit.event.player.PlayerBucketEntityEvent;
+import org.bukkit.event.player.PlayerBucketEvent;
+import org.bukkit.event.player.PlayerBucketFillEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.event.player.PlayerItemHeldEvent;
+import org.bukkit.event.player.PlayerSwapHandItemsEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import org.jetbrains.annotations.Contract;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
+
+/**
+ * Custom buckets handler
+ */
+// MCCheck: 1.21.10, new buckets (spills)
+@NullMarked
+public class MoreBucketTypes implements Listener {
+
+	public MoreBucketTypes() {
+		MaterialTags.BUCKETS.getValues().forEach(bucketMaterial ->
+			ImmersiveDyes.addExtraDyeRule(bucketMaterial, (item, dye) -> {
+				BucketModifier.BucketType bucketType = BucketModifier.BucketType.fromBucket(item);
+				if (bucketType == null) return null;
+				if (!bucketType.isDyable()) return null;
+
+				item = item.clone();
+				if (!ImmersiveDyes.tryToDye(item, dye)) return null;
+
+				return item;
+			})
+		);
+
+		ItemFrameSpillables.SpillableItem waterSpillLogic = (spiller, item, block) -> {
+			block.emitSound(Sound.ITEM_BUCKET_EMPTY, 1F, 1F);
+
+			if (spiller instanceof Player player
+				&& FluidPickupRequiresGloves.REQUIRE_GLOVES.contains(player.getLocation().getBlock().getBiome())) {
+				VisualArmor visualArmor = VisualArmorLayer.getVisualArmor(player);
+				if (visualArmor.canUseVisualArmor()) {
+					if (visualArmor.hasNonBrokenGloves()) {
+						ItemStack damaged = visualArmor.getGloves().damage(1, player);
+						visualArmor.setGloves(damaged);
+					} else {
+						player.setFreezeTicks(player.getFreezeTicks() + 12 * 20);
+					}
+				}
+			}
+
+			BucketModifier.BucketType bucketType = BucketModifier.BucketType.fromBucket(item);
+			if (bucketType == null) return null;
+
+			ItemStack reminder = bucketType.save(ItemStack.of(Material.BUCKET));
+
+			if (block.getType() == Material.LAVA_CAULDRON) {
+				block.emitSound(Sound.BLOCK_LAVA_EXTINGUISH, 1F, 1F);
+				block.getWorld().spawnParticle(Particle.SMOKE, block.getLocation().center(), 50);
+				block.setType(Material.CAULDRON);
+				return reminder;
+			}
+
+			if (block.getType() == Material.CAULDRON)
+				block.setType(Material.WATER_CAULDRON);
+
+			if (block.getBlockData() instanceof Levelled levelled && (block.getType() == Material.WATER_CAULDRON || block.getType() == Material.WATER)) {
+				if (levelled.getLevel() < levelled.getMaximumLevel()) {
+					levelled.setLevel(levelled.getMaximumLevel());
+					block.setBlockData(levelled);
+				}
+				return reminder;
+			}
+
+			if (block.getBlockData() instanceof Waterlogged waterlogged) {
+				if (!waterlogged.isWaterlogged()) {
+					waterlogged.setWaterlogged(true);
+					block.setBlockData(waterlogged);
+				}
+				return reminder;
+			}
+
+			if (block.getType() == Material.LAVA) {
+				block.emitSound(Sound.BLOCK_LAVA_EXTINGUISH, 1F, 1F);
+				block.setType(Material.OBSIDIAN);
+				return reminder;
+			}
+
+			if (!block.isReplaceable()) {
+				block = block.getRelative(BlockFace.UP);
+				if (!block.isReplaceable()) return reminder;
+			}
+
+			block.setType(Material.WATER);
+			return reminder;
+		};
+		ItemFrameSpillables.addSpillable(Material.WATER_BUCKET, waterSpillLogic);
+
+		ItemFrameSpillables.addSpillable(Material.LAVA_BUCKET, (spiller, item, block) -> {
+			block.emitSound(Sound.ITEM_BUCKET_EMPTY_LAVA, 1F, 1F);
+
+			if (spiller instanceof LivingEntity entity)
+				entity.setFireTicks(Math.max(10 * 20, entity.getFireTicks()));
+
+			BucketModifier.BucketType bucketType = BucketModifier.BucketType.fromBucket(item);
+			if (bucketType == null) return null;
+
+			ItemStack reminder = bucketType.save(ItemStack.of(Material.BUCKET));
+
+			if (block.getType() == Material.CAULDRON) {
+				block.setType(Material.LAVA_CAULDRON);
+				return reminder;
+			}
+
+			if (block.getType() == Material.WATER_CAULDRON) {
+				block.emitSound(Sound.BLOCK_LAVA_EXTINGUISH, 1F, 1F);
+				block.getWorld().spawnParticle(Particle.SMOKE, block.getLocation().center(), 50);
+				block.setType(Material.CAULDRON);
+				return reminder;
+			}
+
+			// ToDo: custom levelled lava cauldron
+
+			if (block.getType() == Material.WATER) {
+				block.emitSound(Sound.BLOCK_LAVA_EXTINGUISH, 1F, 1F);
+				block.getWorld().spawnParticle(Particle.SMOKE, block.getLocation().center(), 50);
+				block.setType(Material.STONE);
+				return reminder;
+			}
+
+			if (block.getBlockData() instanceof Waterlogged waterlogged && waterlogged.isWaterlogged()) {
+				waterlogged.setWaterlogged(false);
+				block.setBlockData(waterlogged);
+				block.emitSound(Sound.BLOCK_LAVA_EXTINGUISH, 1F, 1F);
+				block.getWorld().spawnParticle(Particle.SMOKE, block.getLocation().center(), 50);
+				return reminder;
+			}
+
+			if (!block.getType().isBurnable() && !block.isReplaceable())
+				block = block.getRelative(BlockFace.UP);
+
+			if (!block.isReplaceable()) return reminder;
+
+			block.setType(Material.LAVA);
+			return reminder;
+		});
+
+		ItemFrameSpillables.addSpillable(Material.MILK_BUCKET, (spiller, item, block) -> {
+			block.emitSound(Sound.ITEM_BUCKET_EMPTY, 1F, 1F);
+
+			BucketModifier.BucketType bucketType = BucketModifier.BucketType.fromBucket(item);
+			if (bucketType == null) return null;
+
+			ItemStack reminder = bucketType.save(ItemStack.of(Material.BUCKET));
+
+			// ToDo: custom milk cauldron
+
+			return reminder;
+		});
+
+		ItemFrameSpillables.addSpillable(Material.POWDER_SNOW_BUCKET, (spiller, item, block) -> {
+			block.emitSound(Sound.ITEM_BUCKET_EMPTY, 1F, 1F);
+
+			if (spiller instanceof LivingEntity entity)
+				entity.setFreezeTicks(entity.getFreezeTicks() + 5 * 20);
+
+			BucketModifier.BucketType bucketType = BucketModifier.BucketType.fromBucket(item);
+			if (bucketType == null) return null;
+
+			ItemStack reminder = bucketType.save(ItemStack.of(Material.BUCKET));
+
+			if (block.getType() == Material.LAVA_CAULDRON) {
+				block.emitSound(Sound.BLOCK_LAVA_EXTINGUISH, 1F, 1F);
+				block.getWorld().spawnParticle(Particle.SMOKE, block.getLocation().center(), 50);
+				return reminder;
+			}
+
+			if (block.getType() == Material.CAULDRON)
+				block.setType(Material.POWDER_SNOW_CAULDRON);
+
+			if (block.getBlockData() instanceof Levelled levelled && block.getType() == Material.POWDER_SNOW_CAULDRON) {
+				if (levelled.getLevel() < levelled.getMaximumLevel()) {
+					levelled.setLevel(levelled.getMaximumLevel());
+					block.setBlockData(levelled);
+				}
+				return reminder;
+			}
+
+			if (!block.isReplaceable()) {
+				block = block.getRelative(BlockFace.UP);
+				if (!block.isReplaceable()) return reminder;
+			}
+
+			block.setType(Material.POWDER_SNOW);
+
+			return reminder;
+		});
+
+		UtilizerTags.SPILLABLE_MOB_BUCKETS.getValues().forEach(bucketType -> {
+			if (!(net.minecraft.world.item.ItemStack.fromBukkitCopy(ItemStack.of(bucketType)).getItem() instanceof MobBucketItem))
+				throw new IllegalArgumentException("Not a mob bucket: " + bucketType);
+
+			ItemFrameSpillables.addSpillable(bucketType, (spiller, item, block) -> {
+				net.minecraft.world.item.ItemStack itemStack = net.minecraft.world.item.ItemStack.fromBukkitCopy(item);
+				if (itemStack.getItem() instanceof MobBucketItem mobBucketItem)
+					mobBucketItem.checkExtraContent(spiller instanceof CraftLivingEntity living ? living.getHandle() : null, ((CraftWorld) block.getWorld()).getHandle(), itemStack, CraftLocation.toBlockPosition(block.getLocation()));
+
+				return waterSpillLogic.onSpill(spiller, item, block);
+			});
+		});
+	}
+
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+	public void onEmpty(PlayerBucketEmptyEvent event) {
+		preserveBucketType(event);
+	}
+
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+	public void onFill(PlayerBucketFillEvent event) {
+		preserveBucketType(event);
+	}
+
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+	public void onBucket(PlayerBucketEntityEvent event) {
+		preserveBucketType(event);
+	}
+
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+	public void onDispense(BlockDispenseEvent event) {
+		preserveBucketType(event);
+	}
+
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+	public void onItemHeld(PlayerItemHeldEvent event) {
+		Player player = event.getPlayer();
+		ItemStack item = player.getInventory().getItem(event.getPreviousSlot());
+		if (!spillClayBucket(player, item)) return;
+
+		player.swingMainHand();
+		ItemStack result = item.getType() == Material.LAVA_BUCKET ? crackedCeramic(ItemStack.of(Material.BUCKET)) : null;
+		player.getInventory().setItem(event.getPreviousSlot(), result);
+	}
+
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+	public void onSwap(PlayerSwapHandItemsEvent event) {
+		Player player = event.getPlayer();
+
+		if (spillClayBucket(player, event.getMainHandItem())) {
+			player.swingMainHand();
+			ItemStack result = event.getMainHandItem().getType() == Material.LAVA_BUCKET ? crackedCeramic(ItemStack.of(Material.BUCKET)) : null;
+			event.setMainHandItem(result);
+		}
+		if (spillClayBucket(player, event.getOffHandItem())) {
+			player.swingOffHand();
+			ItemStack result = event.getOffHandItem().getType() == Material.LAVA_BUCKET ? crackedCeramic(ItemStack.of(Material.BUCKET)) : null;
+			event.setOffHandItem(result);
+		}
+	}
+
+	@EventHandler(ignoreCancelled = true)
+	public void onItemClick(InventoryClickEvent event) {
+		if (!(event.getWhoClicked() instanceof Player player)) return;
+
+		ItemStack item = event.getCurrentItem();
+		if (!spillClayBucket(player, item)) return;
+
+		player.swingMainHand();
+		ItemStack result = item.getType() == Material.LAVA_BUCKET ? crackedCeramic(ItemStack.of(Material.BUCKET)) : null;
+		event.setCurrentItem(result);
+	}
+
+	@EventHandler(ignoreCancelled = true)
+	public void onDrop(PlayerDropItemEvent event) {
+		Player player = event.getPlayer();
+		Item itemDrop = event.getItemDrop();
+		ItemStack item = itemDrop.getItemStack();
+		if (!spillClayBucket(player, item)) return;
+
+		player.swingMainHand();
+		if (item.getType() == Material.LAVA_BUCKET)
+			itemDrop.setItemStack(crackedCeramic(ItemStack.of(Material.BUCKET)));
+		else
+			itemDrop.remove();
+	}
+
+	@EventHandler(ignoreCancelled = true)
+	public void onPickup(EntityPickupItemEvent event) {
+		Item itemDrop = event.getItem();
+		if (!itemDrop.isValid()) return;
+
+		ItemStack item = itemDrop.getItemStack();
+		if (!spillClayBucket(event.getEntity(), item)) return;
+
+		event.setCancelled(true);
+		itemDrop.remove();
+	}
+
+	@Contract("_, null -> false")
+	private boolean spillClayBucket(Entity entity, @Nullable ItemStack item) {
+		if (ItemStack.isEmpty(item)) return false;
+		if (item.getType() == Material.BUCKET) return false;
+		if (BucketModifier.BucketType.fromBucket(item) != BucketModifier.BucketType.CLAY) return false;
+
+		ItemFrameSpillables.spill(entity, item, entity.getLocation().getBlock());
+		return true;
+	}
+
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	public void onConsume(PlayerItemConsumeEvent event) {
+		ItemStack item = event.getItem();
+		if (BucketModifier.BucketType.fromBucket(item) != BucketModifier.BucketType.CLAY) return;
+
+		Player player = event.getPlayer();
+
+		event.setReplacement(ItemStack.empty());
+		// In case the item clears effects (e.g., milk bucket)
+		TrappedNewbie.scheduler().sync(() -> player.addPotionEffect(new PotionEffect(PotionEffectType.NAUSEA, 60 * 20, 0)), 1L);
+	}
+
+	private void preserveBucketType(Event event) {
+		ItemStack result;
+		switch (event) {
+			case PlayerBucketEvent bucketEvent -> result = bucketEvent.getItemStack();
+			case PlayerBucketEntityEvent bucketEvent -> result = bucketEvent.getEntityBucket();
+			case BlockDispenseEvent bucketEvent -> result = bucketEvent.getLeftoverItem();
+			default -> {
+				return;
+			}
+		}
+		if (ItemStack.isEmpty(result)) return;
+
+		ItemStack bucket;
+		switch (event) {
+			case PlayerBucketEvent bucketEvent -> bucket = bucketEvent.getBucketItem();
+			case PlayerBucketEntityEvent bucketEvent -> bucket = bucketEvent.getOriginalBucket();
+			case BlockDispenseEvent bucketEvent -> bucket = bucketEvent.getItem();
+			default -> {
+				return;
+			}
+		}
+		if (ItemStack.isEmpty(bucket)) return;
+
+		BucketModifier.BucketType bucketType = BucketModifier.BucketType.fromBucket(bucket);
+		if (bucketType == null) return;
+		if (bucketType == BucketModifier.BucketType.VANILLA) return;
+
+		BucketModifier.BucketOverlay overlay = BucketModifier.BucketOverlay.fromBucket(bucket);
+
+		// Emptying clay buckets
+		if (event instanceof PlayerBucketEmptyEvent bucketEvent && bucketType == BucketModifier.BucketType.CLAY) {
+			Player player = bucketEvent.getPlayer();
+			ItemFrameSpillables.spill(player, bucket, player.getLocation().getBlock());
+			if (overlay == BucketModifier.BucketOverlay.LAVA) {
+				result = crackedCeramic(result);
+			} else {
+				bucketEvent.setItemStack(null);
+				return;
+			}
+		// Filling burnable with lava
+		} else if (overlay == BucketModifier.BucketOverlay.LAVA && !bucketType.canHoldLava()) {
+			if (event instanceof PlayerBucketEvent bucketEvent)
+				bucketEvent.setItemStack(null);
+			else if (event instanceof PlayerBucketEntityEvent bucketEvent)
+				bucketEvent.setEntityBucket(null);
+			else if (event instanceof BlockDispenseEvent bucketEvent)
+				bucketEvent.setDispensedItem(ItemStack.empty());
+			return;
+		// Preserve bucket type
+		} else {
+			result = bucketType.save(result);
+		}
+
+		// Preserve bucket color
+		if (bucketType.isDyable() && bucket.hasData(DataComponentTypes.DYED_COLOR))
+			result.setData(DataComponentTypes.DYED_COLOR, bucket.getData(DataComponentTypes.DYED_COLOR));
+
+		// Filling more than 1 bucket or clay with lava without gloves
+		if (event instanceof PlayerBucketFillEvent bucketEvent && bucketType == BucketModifier.BucketType.CLAY) {
+			boolean spill = bucket.getAmount() > 1;
+			Player player = bucketEvent.getPlayer();
+			if (overlay == BucketModifier.BucketOverlay.LAVA) {
+				VisualArmor visualArmor = VisualArmorLayer.getVisualArmor(player);
+				player.setFireTicks(Math.max(6 * 20, player.getFireTicks()));
+				spill = spill || visualArmor.canUseVisualArmor() && !visualArmor.hasNonBrokenGloves();
+			}
+			if (spill) {
+				ItemFrameSpillables.spill(player, result, player.getLocation().getBlock());
+				result = null;
+			}
+		}
+
+		if (event instanceof PlayerBucketEvent bucketEvent)
+			bucketEvent.setItemStack(result);
+		else if (event instanceof PlayerBucketEntityEvent bucketEvent)
+			bucketEvent.setEntityBucket(result);
+		else if (event instanceof BlockDispenseEvent bucketEvent)
+			bucketEvent.setDispensedItem(result);
+	}
+
+	private ItemStack crackedCeramic(ItemStack bucket) {
+		return ScrapModifier.makeScrap(BucketModifier.BucketType.CERAMIC.save(bucket));
+	}
+
+}

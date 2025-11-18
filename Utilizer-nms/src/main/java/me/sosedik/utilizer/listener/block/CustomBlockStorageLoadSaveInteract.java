@@ -1,6 +1,7 @@
 package me.sosedik.utilizer.listener.block;
 
 import com.destroystokyo.paper.event.block.BlockDestroyEvent;
+import io.papermc.paper.event.block.BlockBreakBlockEvent;
 import me.sosedik.utilizer.Utilizer;
 import me.sosedik.utilizer.api.math.WorldChunkPosition;
 import me.sosedik.utilizer.api.storage.block.BlockDataStorage;
@@ -111,12 +112,23 @@ public class CustomBlockStorageLoadSaveInteract implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onBreak(BlockBreakBlockEvent event) {
+		BlockDataStorage storage = BlockStorage.removeInfo(event.getBlock().getLocation());
+		if (storage == null) return;
+
+		storage.onBreak(event);
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onBreak(BlockBreakEvent event) {
 		Location loc = event.getBlock().getLocation();
 		BlockDataStorage storage = BlockStorage.removeInfo(loc);
 		if (storage == null) return;
 
 		storage.onBreak(event);
+		if (event.isCancelled()) return;
+		if (!event.isDropItems()) return;
+
 		DROP_CACHE.put(loc, storage);
 		Utilizer.scheduler().sync(() -> DROP_CACHE.remove(loc), 1L);
 	}

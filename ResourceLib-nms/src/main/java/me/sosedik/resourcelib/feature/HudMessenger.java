@@ -22,13 +22,14 @@ import static me.sosedik.utilizer.api.message.Mini.combined;
 @NullMarked
 public class HudMessenger extends BukkitRunnable {
 
-	private static final long ACTION_BAR_MESSAGE_DURATION = 30L;
+	private static final int ACTION_BAR_MESSAGE_DURATION = 40;
 	private static final Map<UUID, HudMessenger> STORED_HUDS = new HashMap<>();
 
 	private final Map<NamespacedKey, HudProvider> hudProviders = new HashMap<>();
 	private final List<Component> huds = new ArrayList<>();
 	private final Player player;
 	private @Nullable Component actionBarMessage = null;
+	private int messageTicks = 0;
 
 	private HudMessenger(Player player) {
 		this.player = player;
@@ -42,14 +43,20 @@ public class HudMessenger extends BukkitRunnable {
 	 * @param message action bar message
 	 */
 	public void displayMessage(Component message) {
+		displayMessage(message, ACTION_BAR_MESSAGE_DURATION);
+	}
+
+	/**
+	 * Sets action bar message displayed to the player.
+	 * It might be overwritten at any time.
+	 *
+	 * @param message action bar message
+	 */
+	public void displayMessage(Component message, int messageTicks) {
 		int length = SpacingUtil.getWidth(message);
 		message = SpacingUtil.getOffset((int) Math.ceil(length / -2D), length, message);
 		this.actionBarMessage = message;
-		Component finalMessage = message;
-		ResourceLib.scheduler().async(() -> {
-			if (this.actionBarMessage == finalMessage)
-				this.actionBarMessage = null;
-		}, ACTION_BAR_MESSAGE_DURATION);
+		this.messageTicks = messageTicks;
 	}
 
 	/**
@@ -75,8 +82,11 @@ public class HudMessenger extends BukkitRunnable {
 			if (hudElement != null)
 				this.huds.add(hudElement);
 		}
-		if (this.actionBarMessage != null)
+		if (this.actionBarMessage != null) {
 			this.huds.add(this.actionBarMessage);
+			if (--this.messageTicks <= 0)
+				this.actionBarMessage = null;
+		}
 		return combined(this.huds);
 	}
 

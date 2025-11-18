@@ -40,7 +40,7 @@ public class BookAuthorOnlineModifier extends ItemModifier {
 
 	@Override
 	public ModificationResult modify(ItemContextBox contextBox) {
-		if (!contextBox.getContextType().hasVisibleName()) return ModificationResult.PASS;
+		if (!contextBox.getContext().getContextType().hasVisibleName()) return ModificationResult.PASS;
 
 		Player player = contextBox.getViewer();
 		if (player == null) return ModificationResult.PASS;
@@ -53,7 +53,7 @@ public class BookAuthorOnlineModifier extends ItemModifier {
 		String author = writtenBookContent.author();
 		if (!VALID_NICKNAME.matcher(author).matches()) return ModificationResult.PASS;
 
-		Component status = getStatus(author);
+		Component status = getStatus(author, false);
 		if (status == null) return ModificationResult.PASS;
 
 		// TODO replace with #toBuilder once available
@@ -73,16 +73,22 @@ public class BookAuthorOnlineModifier extends ItemModifier {
 	 * @param author player name
 	 * @return online status indicator, or null if unknown/invalid player
 	 */
-	public static @Nullable Component getStatus(String author) {
+	public static @Nullable Component getStatus(String author, boolean renderHead) {
 		Player playerExact = Bukkit.getPlayerExact(author);
-		if (playerExact != null)
-			return combined(Mini.asIcon(Component.object(ObjectContents.playerHead(playerExact.getUniqueId()))), Component.space(), playerExact.displayName(), Component.space(), ONLINE);
+		if (playerExact != null) {
+			if (renderHead)
+				return combined(Mini.asIcon(Component.object(ObjectContents.playerHead(playerExact.getUniqueId()))), Component.space(), playerExact.displayName(), Component.space(), ONLINE);
+			return combined(playerExact.displayName(), Component.space(), ONLINE);
+		}
 
 		OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayerIfCached(author);
 		if (offlinePlayer == null) offlinePlayer = Bukkit.getOfflinePlayer(author);
 
-		if (offlinePlayer.hasPlayedBefore())
-			return combined(Mini.asIcon(Component.object(ObjectContents.playerHead(offlinePlayer.getUniqueId()))), Component.space(), Component.text(author), Component.space(), OFFLINE);
+		if (offlinePlayer.hasPlayedBefore()) {
+			if (renderHead)
+				return combined(Mini.asIcon(Component.object(ObjectContents.playerHead(offlinePlayer.getUniqueId()))), Component.space(), Component.text(author), Component.space(), OFFLINE);
+			return combined(Component.text(author), Component.space(), OFFLINE);
+		}
 
 		return null;
 	}

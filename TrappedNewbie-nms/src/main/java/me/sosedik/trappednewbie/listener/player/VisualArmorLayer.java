@@ -17,6 +17,7 @@ import me.sosedik.trappednewbie.api.item.VisualArmor;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieTags;
 import me.sosedik.utilizer.api.event.player.PlayerDataLoadedEvent;
 import me.sosedik.utilizer.api.event.player.PlayerDataSaveEvent;
+import me.sosedik.utilizer.api.storage.player.PlayerDataStorage;
 import me.sosedik.utilizer.util.EntityUtil;
 import me.sosedik.utilizer.util.InventoryUtil;
 import me.sosedik.utilizer.util.ItemUtil;
@@ -240,8 +241,17 @@ public class VisualArmorLayer implements Listener {
 				player.getInventory().setItem(slot, visualArmor.getGloves());
 				visualArmor.setGloves(null);
 			} else if (clickType == ClickType.LEFT || clickType == ClickType.RIGHT) {
-				player.setItemOnCursor(visualArmor.getGloves());
-				visualArmor.setGloves(null);
+				ItemStack cursor = event.getCursor();
+				if (cursor.isEmpty()) {
+					if (!visualArmor.hasGloves()) return;
+
+					player.setItemOnCursor(visualArmor.getGloves());
+					visualArmor.setGloves(null);
+					return;
+				} else if (TrappedNewbieTags.GLOVES.isTagged(cursor.getType())) {
+					player.setItemOnCursor(visualArmor.getGloves());
+					visualArmor.setGloves(cursor);
+				}
 			}
 
 			player.updateInventory();
@@ -507,9 +517,6 @@ public class VisualArmorLayer implements Listener {
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onLoad(PlayerDataLoadedEvent event) {
 		ReadWriteNBT nbt = event.getData();
-		if (!nbt.hasTag(ARMOR_BUNDLE_TAG)) return;
-
-		nbt = nbt.getOrCreateCompound(ARMOR_BUNDLE_TAG);
 		Player player = event.getPlayer();
 		ARMOR_BUNDLES.put(player.getUniqueId(), load(player, nbt));
 		player.updateInventory();
@@ -521,11 +528,12 @@ public class VisualArmorLayer implements Listener {
 		VisualArmor visualArmor = event.isQuit() ? ARMOR_BUNDLES.remove(player.getUniqueId()) : getVisualArmor(player);
 		if (visualArmor == null) return;
 
-		ReadWriteNBT nbt = event.getData();
-		save(visualArmor, nbt.getOrCreateCompound(ARMOR_BUNDLE_TAG));
+		save(visualArmor, event.getData());
 	}
 
-	private void save(VisualArmor visualArmor, ReadWriteNBT nbt) {
+	private static void save(VisualArmor visualArmor, ReadWriteNBT nbt) {
+		nbt.removeKey(ARMOR_BUNDLE_TAG);
+		nbt = nbt.getOrCreateCompound(ARMOR_BUNDLE_TAG);
 		if (visualArmor.hasHelmet()) nbt.setItemStack(HELMET_TAG, visualArmor.getHelmet());
 		if (visualArmor.hasChestplate()) nbt.setItemStack(CHESTPLATE_TAG, visualArmor.getChestplate());
 		if (visualArmor.hasLeggings()) nbt.setItemStack(LEGGINGS_TAG, visualArmor.getLeggings());
@@ -533,11 +541,10 @@ public class VisualArmorLayer implements Listener {
 		if (visualArmor.hasGloves()) nbt.setItemStack(GLOVES_TAG, visualArmor.getGloves());
 	}
 
-	private static VisualArmor empty(Player player) {
-		return new VisualArmor(player, null, null, null, null, null);
-	}
-
 	private static VisualArmor load(Player player, ReadableNBT nbt) {
+		if (!nbt.hasTag(ARMOR_BUNDLE_TAG))
+			return new VisualArmor(player, null, null, null, null, null);
+		nbt = nbt.getCompound(ARMOR_BUNDLE_TAG);
 		return new VisualArmor(
 			player,
 			nbt.hasTag(HELMET_TAG) ? nbt.getItemStack(HELMET_TAG) : null,
@@ -555,7 +562,12 @@ public class VisualArmorLayer implements Listener {
 	 * @return visual armor
 	 */
 	public static VisualArmor getVisualArmor(Player player) {
-		return ARMOR_BUNDLES.computeIfAbsent(player.getUniqueId(), k -> empty(player));
+		return ARMOR_BUNDLES.computeIfAbsent(player.getUniqueId(), k -> load(player, PlayerDataStorage.getData(player)));
+	}
+
+	public static void saveData() {
+		ARMOR_BUNDLES.forEach((uuid, visualArmor) -> save(visualArmor, PlayerDataStorage.getData(uuid)));
+		ARMOR_BUNDLES.clear();
 	}
 
 }

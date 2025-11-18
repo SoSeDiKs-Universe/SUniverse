@@ -43,7 +43,7 @@ public class DirtyWaterModifier extends ItemModifier {
 
 		var thirstData = ThirstData.of(item, contextBox.getInitialType());
 		if (thirstData.thirst() == 0 && thirstData.thirstChance() == 0) {
-			if (!contextBox.getContextType().hasVisibleName()) return ModificationResult.PASS;
+			if (!contextBox.getContext().getContextType().hasVisibleName()) return ModificationResult.PASS;
 
 			applyName(messenger, item, contextBox.getInitialType(), "empty");
 			return ModificationResult.OK;
@@ -51,7 +51,7 @@ public class DirtyWaterModifier extends ItemModifier {
 
 		if (thirstData.drinkType() == ThirstData.DrinkType.MILK) {
 			applyColor(item, MILK_COLOR);
-			if (!contextBox.getContextType().hasVisibleName()) return ModificationResult.OK;
+			if (!contextBox.getContext().getContextType().hasVisibleName()) return ModificationResult.OK;
 
 			applyName(messenger, item, contextBox.getInitialType(), "milk");
 			return ModificationResult.OK;
@@ -59,7 +59,7 @@ public class DirtyWaterModifier extends ItemModifier {
 
 		if (thirstData.drinkType() == ThirstData.DrinkType.CACTUS_JUICE) {
 			applyColor(item, CACTUS_COLOR);
-			if (!contextBox.getContextType().hasVisibleName()) return ModificationResult.OK;
+			if (!contextBox.getContext().getContextType().hasVisibleName()) return ModificationResult.OK;
 
 			applyName(messenger, item, contextBox.getInitialType(), "cactus");
 			return ModificationResult.OK;
@@ -69,7 +69,7 @@ public class DirtyWaterModifier extends ItemModifier {
 
 		if (thirstData.thirstChance() == 0) {
 			applyColor(item, DrinkableWater.PURE_WATER_COLOR);
-			if (!contextBox.getContextType().hasVisibleName()) return ModificationResult.OK;
+			if (!contextBox.getContext().getContextType().hasVisibleName()) return ModificationResult.OK;
 
 			applyName(messenger, item, contextBox.getInitialType(), "purified");
 			return ModificationResult.OK;
@@ -77,13 +77,13 @@ public class DirtyWaterModifier extends ItemModifier {
 
 		if (thirstData.thirstChance() >= 0.7) {
 			applyColor(item, DrinkableWater.DIRTY_WATER_COLOR);
-			if (!contextBox.getContextType().hasVisibleName()) return ModificationResult.OK;
+			if (!contextBox.getContext().getContextType().hasVisibleName()) return ModificationResult.OK;
 
 			applyName(messenger, item, contextBox.getInitialType(), "dirty");
 			return ModificationResult.OK;
 		}
 
-		if (!contextBox.getContextType().hasVisibleName()) return ModificationResult.PASS;
+		if (!contextBox.getContext().getContextType().hasVisibleName()) return ModificationResult.PASS;
 
 		applyName(messenger, item, contextBox.getInitialType(), "water");
 		return ModificationResult.OK;

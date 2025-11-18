@@ -11,5 +11,8 @@
 	"equipment.legs.cosmetic": "Cosmetic Leggings Slot",
 	"equipment.feet.armor": "Armor Boots Slot",
 	"equipment.feet.cosmetic": "Cosmetic Boots Slot",
-	"equipment.off_hand.armor": "Gloves Slot"
+	"equipment.off_hand.armor": "Gloves Slot",
+	"equipment.gloves.hot_item_hold": "You can't hold hot items without gloves",
+	"equipment.gloves.lava_bucket_fill": "You can't fill a bucket with lava without gloves",
+	"equipment.gloves.water_bucket_fill": "You shouldn't fill a bucket with water in cold biomes without gloves"
 }

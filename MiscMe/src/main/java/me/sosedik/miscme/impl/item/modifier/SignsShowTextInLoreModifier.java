@@ -48,7 +48,7 @@ public class SignsShowTextInLoreModifier extends ItemModifier {
 
 	@Override
 	public ModificationResult modify(ItemContextBox contextBox) {
-		if (!contextBox.getContextType().hasVisibleLore()) return ModificationResult.PASS;
+		if (!contextBox.getContext().getContextType().hasVisibleLore()) return ModificationResult.PASS;
 
 		ItemStack item = contextBox.getItem();
 		if (!Tag.ALL_SIGNS.isTagged(contextBox.getInitialType())) return ModificationResult.PASS;

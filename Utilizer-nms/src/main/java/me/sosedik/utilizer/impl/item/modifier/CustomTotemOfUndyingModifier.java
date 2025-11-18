@@ -6,8 +6,6 @@ import me.sosedik.kiterino.inventory.InventorySlotHelper;
 import me.sosedik.kiterino.modifier.item.ItemContextBox;
 import me.sosedik.kiterino.modifier.item.ItemModifier;
 import me.sosedik.kiterino.modifier.item.ModificationResult;
-import me.sosedik.kiterino.modifier.item.context.ItemModifierContext;
-import me.sosedik.kiterino.modifier.item.context.ItemModifierContextType;
 import me.sosedik.kiterino.modifier.item.context.SlottedItemModifierContext;
 import me.sosedik.utilizer.Utilizer;
 import net.kyori.adventure.text.Component;
@@ -39,12 +37,12 @@ public class CustomTotemOfUndyingModifier extends ItemModifier {
 
 		Player player = contextBox.getViewer();
 		if (player == null) return ModificationResult.PASS;
-		if (ctx.slot() != InventorySlotHelper.FIRST_HOTBAR_SLOT + player.getInventory().getHeldItemSlot()) return ModificationResult.PASS;
+		if (ctx.getSlot() != InventorySlotHelper.FIRST_HOTBAR_SLOT + player.getInventory().getHeldItemSlot()) return ModificationResult.PASS;
 
 		ItemStack itemStack = TOTEM_CACHE.remove(player.getUniqueId());
 		if (itemStack == null) return ModificationResult.PASS;
 
-		itemStack = modifyItem(new ItemContextBox(player, contextBox.getLocale(), ItemModifierContextType.EMPTY_NO_LORE, ItemModifierContext.EMPTY, itemStack.clone()));
+		itemStack = modifyItem(ctx, player, contextBox.getLocale(), itemStack.clone());
 		if (itemStack == null) return ModificationResult.PASS;
 
 		itemStack.setData(DataComponentTypes.CUSTOM_NAME, Component.empty());

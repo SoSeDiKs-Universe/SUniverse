@@ -31,7 +31,7 @@ public class CustomLoreModifier extends ItemModifier {
 
 	@Override
 	public ModificationResult modify(ItemContextBox contextBox) {
-		if (!contextBox.getContextType().hasVisibleLore()) return ModificationResult.PASS;
+		if (!contextBox.getContext().getContextType().hasVisibleLore()) return ModificationResult.PASS;
 
 		boolean componentsLore = NBT.get(contextBox.getItem(), nbt -> {
 			if (!nbt.hasTag(LORE_COMPONENTS_TAG)) return false;

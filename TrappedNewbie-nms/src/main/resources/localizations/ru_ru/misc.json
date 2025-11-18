@@ -59,5 +59,6 @@
 	"gui.soul_travel.travel": [
 		"Нажмите, чтобы начать перемещение",
 		"Стоимость: <color><level> <plural:ru_ru:уровень|уровня|уровней:'<level>'> (опыта)"
-	]
+	],
+	"damage.run_with_scissors": "<red><i>Не бегайте с ножницами!"
 }

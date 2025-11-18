@@ -1,6 +1,8 @@
 package me.sosedik.requiem.listener.player;
 
 import de.tr7zw.nbtapi.NBT;
+import de.tr7zw.nbtapi.NbtApiException;
+import me.sosedik.requiem.Requiem;
 import me.sosedik.requiem.api.event.player.PlayerTombstoneCreateEvent;
 import me.sosedik.requiem.dataset.RequiemItems;
 import me.sosedik.requiem.dataset.RequiemTags;
@@ -13,6 +15,8 @@ import me.sosedik.utilizer.util.EntityUtil;
 import me.sosedik.utilizer.util.LocationUtil;
 import me.sosedik.utilizer.util.MathUtil;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TranslatableComponent;
+import net.kyori.adventure.text.TranslationArgument;
 import net.kyori.adventure.text.serializer.json.JSONComponentSerializer;
 import org.bukkit.HeightMap;
 import org.bukkit.Material;
@@ -262,8 +266,25 @@ public class PlayerTombstones implements Listener {
 
 		Component message = event.deathMessage();
 		if (message == null) message = event.originalDeathMessage();
-		if (message != null)
-			tombstoneCreateEvent.getData().getOrCreateCompound(TombstoneBlockStorage.DEATH_MESSAGE_KEY).mergeCompound(NBT.parseNBT(JSONComponentSerializer.json().serialize(message)));
+		if (message != null) {
+			if (message instanceof TranslatableComponent translatable) {
+				List<TranslationArgument> arguments = new ArrayList<>(translatable.arguments());
+				arguments.replaceAll(argument -> {
+					if (!(argument.value() instanceof Component component)) return argument;
+					return TranslationArgument.component(component.hoverEvent(null).clickEvent(null).insertion(null));
+				});
+				message = translatable.arguments(arguments);
+			}
+			String serialized = JSONComponentSerializer.json().serialize(message);
+			try {
+				if (serialized.charAt(0) == '{')
+					tombstoneCreateEvent.getData().getOrCreateCompound(TombstoneBlockStorage.DEATH_MESSAGE_KEY).mergeCompound(NBT.parseNBT(serialized));
+				else
+					tombstoneCreateEvent.getData().setString(TombstoneBlockStorage.DEATH_MESSAGE_KEY, serialized);
+			} catch (NbtApiException e) {
+				Requiem.logger().error("Couldn't save player's death message into a tombstone: {}", serialized);
+			}
+		}
 
 		int slot = -1;
 		for (ItemStack item : event.getDrops()) {

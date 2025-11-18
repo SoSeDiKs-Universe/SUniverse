@@ -28,7 +28,7 @@ public class CustomNameModifier extends ItemModifier {
 
 	@Override
 	public ModificationResult modify(ItemContextBox contextBox) {
-		if (!contextBox.getContextType().hasVisibleName()) return ModificationResult.PASS;
+		if (!contextBox.getContext().getContextType().hasVisibleName()) return ModificationResult.PASS;
 
 		ItemStack item = contextBox.getItem();
 
@@ -46,7 +46,7 @@ public class CustomNameModifier extends ItemModifier {
 		if (NamespacedKey.MINECRAFT.equals(key.namespace())) return ModificationResult.PASS;
 
 		Component name = Messenger.messenger(LangOptionsStorage.getByLocale(contextBox.getLocale()))
-				.getMessageIfExists("item." + key.getNamespace() + "." + key.getKey() + ".name");
+			.getMessageIfExists("item." + key.getNamespace() + "." + key.getKey() + ".name");
 		if (name == null) return ModificationResult.PASS;
 
 		item.setData(DataComponentTypes.ITEM_NAME, name);

@@ -256,7 +256,7 @@ public class SittingMechanics implements Listener {
 			loc.setDirection(add).setPitch(pitch);
 
 			Location tpLoc = loc.clone();
-			loc = block.getLocation().center(0.5).setDirection(add).add(add.multiply(adding));
+			loc = block.getLocation().center().setDirection(add).add(add.multiply(adding));
 
 			SittingData oldSittingData = SITTERS.get(player.getUniqueId());
 			if (oldSittingData != null && oldSittingData.sitCase() == SitCase.STATIC && oldSittingData.loc().isBlockSame(loc)) return;

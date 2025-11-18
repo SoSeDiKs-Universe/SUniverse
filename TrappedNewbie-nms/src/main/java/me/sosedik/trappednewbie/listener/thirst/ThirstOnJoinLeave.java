@@ -48,6 +48,7 @@ public class ThirstOnJoinLeave implements Listener {
 
 	public static void saveAll() {
 		THIRSTY_PLAYERS.forEach((uuid, thirstyPlayer) -> PlayerDataStorage.getData(uuid).getOrCreateCompound(THIRST_TAG).mergeCompound(thirstyPlayer.save()));
+		THIRSTY_PLAYERS.clear();
 	}
 
 }

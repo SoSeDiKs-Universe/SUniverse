@@ -82,7 +82,7 @@ public class QuenchedFromDrinkingCacti implements PacketListener, Listener {
 		TrappedNewbieAdvancements.DRINK_CACTUS_JUICE.awardAllCriteria(player);
 	}
 
-	@EventHandler(ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onEffectEnd(EntityPotionEffectEvent event) {
 		if (!(event.getEntity() instanceof Player player)) return;
 
@@ -97,7 +97,7 @@ public class QuenchedFromDrinkingCacti implements PacketListener, Listener {
 			if (newEffect.getType() != TrappedNewbieEffects.QUENCHED) return;
 		}
 
-		player.getSentChunks().forEach(chunk -> chunk.getWorld().refreshChunk(chunk.getX(), chunk.getZ()));
+		player.getSentChunks().forEach(chunk -> chunk.getWorld().refreshChunk(chunk.getX(), chunk.getZ(), List.of(player)));
 	}
 
 	@EventHandler

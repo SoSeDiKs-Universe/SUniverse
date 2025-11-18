@@ -7,16 +7,22 @@ import me.sosedik.resourcelib.ResourceLib;
 import me.sosedik.trappednewbie.impl.blockstorage.SleepingBagBlockStorage;
 import me.sosedik.utilizer.listener.BlockStorage;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.BedBlock;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -61,6 +67,39 @@ public class SleepingBagBlock extends BedBlock implements KiterinoBlock {
 	@Override
 	public void postInit() {
 		CraftBlockStates.register(SLEEPING_BAG, SleepingBagCraftEntityState.class, SleepingBagCraftEntityState::new);
+	}
+
+	@Override
+	public @Nullable BlockState getStateForPlacement(BlockPlaceContext context) {
+		Level level = context.getLevel();
+		Direction horizontalDirection = context.getHorizontalDirection();
+		BlockPos clickedPos = context.getClickedPos();
+		if (!canSurvive(level.getBlockState(clickedPos), level, clickedPos)) return null;
+
+		BlockPos blockPos = clickedPos.relative(horizontalDirection);
+		if (!canSurvive(level.getBlockState(blockPos), level, blockPos)) return null;
+
+		return super.getStateForPlacement(context);
+	}
+
+	@Override
+	protected BlockState updateShape(
+		BlockState state,
+		LevelReader level,
+		ScheduledTickAccess scheduledTickAccess,
+		BlockPos pos,
+		Direction direction,
+		BlockPos neighborPos,
+		BlockState neighborState,
+		RandomSource random
+	) {
+		if (!canSurvive(state, level, pos)) return Blocks.AIR.defaultBlockState();
+		return super.updateShape(state, level, scheduledTickAccess, pos, direction, neighborPos, neighborState, random);
+	}
+
+	@Override
+	protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
+		return level.getBlockState(pos.below()).isSolid();
 	}
 
 	@Override

@@ -26,7 +26,7 @@ public class AdvancementTrophyNameLoreModifier extends ItemModifier {
 
 	@Override
 	public ModificationResult modify(ItemContextBox contextBox) {
-		if (!contextBox.getContextType().hasVisibleLore()) return ModificationResult.PASS;
+		if (!contextBox.getContext().getContextType().hasVisibleLore()) return ModificationResult.PASS;
 
 		ItemStack item = contextBox.getItem();
 		String trophyId = NBT.get(item, nbt -> {

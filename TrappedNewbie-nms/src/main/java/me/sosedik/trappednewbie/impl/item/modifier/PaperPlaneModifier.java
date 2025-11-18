@@ -25,7 +25,7 @@ public class PaperPlaneModifier extends ItemModifier {
 
 	@Override
 	public ModificationResult modify(ItemContextBox contextBox) {
-		if (!contextBox.getContextType().hasVisibleLore()) return ModificationResult.PASS;
+		if (!contextBox.getContext().getContextType().hasVisibleLore()) return ModificationResult.PASS;
 		if (contextBox.getInitialType() != TrappedNewbieItems.PAPER_PLANE) return ModificationResult.PASS;
 
 		ItemStack item = contextBox.getItem();

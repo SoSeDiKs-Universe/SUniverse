@@ -11,5 +11,8 @@
 	"equipment.legs.cosmetic": "Косметичний слот наголінників",
 	"equipment.feet.armor": "Слот чобіт",
 	"equipment.feet.cosmetic": "Косметичний слот чобіт",
-	"equipment.off_hand.armor": "Слот рукавиць"
+	"equipment.off_hand.armor": "Слот рукавиць",
+	"equipment.gloves.hot_item_hold": "Ви не можете тримати розпечені речі без перчаток",
+	"equipment.gloves.lava_bucket_fill": "Ви не можете набрати відро лави без перчаток",
+	"equipment.gloves.water_bucket_fill": "Вам не слід набирати відро води в холодних біомах без перчаток"
 }

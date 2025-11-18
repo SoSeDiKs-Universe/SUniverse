@@ -1,6 +1,8 @@
 package me.sosedik.trappednewbie.listener.item;
 
-import me.sosedik.miscme.listener.entity.ItemFrameFallables;
+import io.papermc.paper.datacomponent.DataComponentTypes;
+import io.papermc.paper.datacomponent.item.PotionContents;
+import me.sosedik.miscme.listener.entity.ItemFrameSpillables;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieItems;
 import me.sosedik.trappednewbie.impl.thirst.ThirstData;
 import me.sosedik.trappednewbie.listener.thirst.DrinkableWater;
@@ -21,6 +23,7 @@ import org.bukkit.event.block.BlockDispenseEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionType;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -33,12 +36,12 @@ import java.util.stream.Collectors;
 @NullMarked
 public class FillingBowlWithWater implements Listener {
 	
-	public static final Map<Material, Material> BOWLS = Map.ofEntries(
+	public static final Map<Material, Material> BOWLS_BOTTLES = Map.ofEntries(
 		Map.entry(Material.GLASS_BOTTLE, Material.POTION),
 		Map.entry(Material.BOWL, TrappedNewbieItems.FILLED_BOWL),
 		Map.entry(TrappedNewbieItems.CACTUS_BOWL, TrappedNewbieItems.FILLED_CACTUS_BOWL)
 	);
-	public static final Map<Material, Material> REVERSED_BOWLS = BOWLS.entrySet()
+	public static final Map<Material, Material> REVERSED_BOWLS = BOWLS_BOTTLES.entrySet()
 		.stream()
 		.collect(Collectors.toMap(Map.Entry::getValue, Map.Entry::getKey));
 
@@ -47,7 +50,7 @@ public class FillingBowlWithWater implements Listener {
 	}
 
 	private void addItemFrameFallables() {
-		ItemFrameFallables.ItemFrameFallable fallableRule = (item, block) -> { // TODO custom cauldrons
+		ItemFrameSpillables.SpillableItem fallableRule = (spiller, item, block) -> { // TODO custom cauldrons
 			if (block.getType() == Material.CAULDRON) {
 				block.setType(Material.WATER_CAULDRON);
 				block.emitSound(Sound.BLOCK_POINTED_DRIPSTONE_DRIP_WATER_INTO_CAULDRON, 0.7F, 1.3F);
@@ -71,10 +74,10 @@ public class FillingBowlWithWater implements Listener {
 			block.emitSound(Sound.ENTITY_GENERIC_DRINK, 0.6F, 1.3F);
 			return null;
 		};
-		FillingBowlWithWater.BOWLS.forEach((bowl, filledBowl) -> {
+		FillingBowlWithWater.BOWLS_BOTTLES.forEach((bowl, filledBowl) -> {
 			if (bowl == Material.GLASS_BOTTLE) return;
 
-			ItemFrameFallables.addFallable(filledBowl, fallableRule);
+			ItemFrameSpillables.addSpillable(filledBowl, fallableRule);
 		});
 	}
 
@@ -89,22 +92,26 @@ public class FillingBowlWithWater implements Listener {
 	}
 
 	@EventHandler(ignoreCancelled = true)
-	public void onDispense(BlockDispenseEvent event) { // ToDo: vanilla puts water bottle into dispenser if there's place, but the event does not support such behaviour yet
-		Material resultType = BOWLS.get(event.getItem().getType());
+	public void onDispense(BlockDispenseEvent event) {
+		Material resultType = BOWLS_BOTTLES.get(event.getItem().getType());
 		if (resultType == null) return;
+		if (resultType == Material.POTION) return; // Handled by SavingThirstDataToWaterBottles, breaks vanilla behaviour
 
 		Block block = event.getBlock();
 		if (!(block.getBlockData() instanceof Dispenser dispenser)) return;
 
 		block = block.getRelative(dispenser.getFacing());
 
-		event.setItem(ThirstData.of(block).saveInto(ItemStack.of(resultType)));
+		ItemStack item = ThirstData.of(block).saveInto(getBowl(resultType));
+		event.setItem(item);
+		event.setDispensedItem(item);
+		event.setLeftoverItem(item);
 	}
 
 	private boolean tryToFillBowl(PlayerInteractEvent event, EquipmentSlot hand) {
 		Player player = event.getPlayer();
 		ItemStack item = player.getInventory().getItem(hand);
-		Material resultType = BOWLS.get(item.getType());
+		Material resultType = BOWLS_BOTTLES.get(item.getType());
 		if (resultType == null) return false;
 		if (player.hasCooldown(item.getType())) return false;
 
@@ -120,10 +127,17 @@ public class FillingBowlWithWater implements Listener {
 		player.swingHand(hand);
 		if (!player.getGameMode().isInvulnerable())
 			item.subtract();
-		InventoryUtil.replaceOrAdd(player, hand, drinkableData.saveInto(ItemStack.of(resultType)));
+		InventoryUtil.replaceOrAdd(player, hand, drinkableData.saveInto(getBowl(resultType)));
 //		TrappedNewbieAdvancements.PICK_UP_SOME_WATER.awardAllCriteria(player); // TODO adv
 
 		return true;
+	}
+
+	private ItemStack getBowl(Material type) {
+		var item = ItemStack.of(type);
+		if (type == Material.POTION)
+			item.setData(DataComponentTypes.POTION_CONTENTS, PotionContents.potionContents().potion(PotionType.WATER).build());
+		return item;
 	}
 
 	public static @Nullable Block getTargetBlock(PlayerInteractEvent event) {

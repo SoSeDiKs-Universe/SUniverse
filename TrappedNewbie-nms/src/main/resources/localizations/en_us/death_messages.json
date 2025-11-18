@@ -1,4 +1,6 @@
 {
+	"death.attack.run_with_scissors": "<entity> slipped and fell on their shears",
+	"death.attack.stonecutter": "<entity> has sawed themself in half",
 	"death.attack.glass_shard": "<entity> met their end at the hands of a glass shard",
 	"death.attack.pricky_block.r": [
 		"<entity>'s hands were no match for the thorns",

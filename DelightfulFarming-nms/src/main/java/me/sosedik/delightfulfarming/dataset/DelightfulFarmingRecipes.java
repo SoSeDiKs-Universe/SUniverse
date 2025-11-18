@@ -87,6 +87,7 @@ public class DelightfulFarmingRecipes {
 			.addIngredients(DelightfulFarmingItems.CHARCOAL_BLOCK)
 			.register();
 
+		// TODO cutting board recipe
 		new ShapelessCraft(ItemStack.of(DelightfulFarmingItems.CACTUS_FLESH, 2), delightfulFarmingKey("cactus_flesh_from_cutting"))
 			.addIngredients(Material.CACTUS)
 			.addIngredients(UtilizerTags.KNIFES.getValues())

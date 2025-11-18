@@ -3,6 +3,7 @@ package me.sosedik.utilizer.api.storage.block;
 import com.destroystokyo.paper.event.block.BlockDestroyEvent;
 import de.tr7zw.nbtapi.NBT;
 import de.tr7zw.nbtapi.iface.ReadWriteNBT;
+import io.papermc.paper.event.block.BlockBreakBlockEvent;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
@@ -57,6 +58,13 @@ public interface BlockDataStorage {
 	 * @param event event
 	 */
 	default void onBreak(BlockBreakEvent event) {}
+
+	/**
+	 * Called when the block is broken
+	 *
+	 * @param event event
+	 */
+	default void onBreak(BlockBreakBlockEvent event) {}
 
 	/**
 	 * Called when the block drops items

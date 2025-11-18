@@ -137,7 +137,7 @@ public class TotemBaseBlockStorage extends DisplayBlockStorage {
 				if (ItemStack.isEmpty(item)) continue;
 				if (!sacrifice.itemCheck().test(item)) continue;
 
-				var itemEvent = new RemainingItemEvent(null, player, null, TrappedNewbie.trappedNewbieKey("ritual_sacrifice"), item.asOne(), 1);
+				var itemEvent = new RemainingItemEvent(null, player, null, TrappedNewbie.trappedNewbieKey("ritual_sacrifice"), item.asOne(), 1, true);
 				Material craftingRemainingItem = item.getType().getCraftingRemainingItem();
 				if (craftingRemainingItem != null)
 					itemEvent.setResult(ItemStack.of(craftingRemainingItem));

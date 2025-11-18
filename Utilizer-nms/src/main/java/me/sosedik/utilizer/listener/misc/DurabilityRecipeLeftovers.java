@@ -19,6 +19,7 @@ public class DurabilityRecipeLeftovers implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onCraft(RemainingItemEvent event) {
 		if (event.getResult() != null) return;
+		if (event.isConsume()) return;
 		// Ignore vanilla recipes
 		if (NamespacedKey.MINECRAFT.equals(event.getKey().getNamespace())) return;
 
@@ -27,11 +28,13 @@ public class DurabilityRecipeLeftovers implements Listener {
 
 		Player player = event.getPlayer();
 		ItemStack replacement;
+		int damage = event.getAmount();
 		if (player != null) {
-			replacement = item.damage(event.getAmount(), player);
+			replacement = item.damage(damage, player);
 		} else {
 			replacement = item;
-			item.damage();
+			if (replacement.damage(damage))
+				replacement = null;
 		}
 		event.setResult(replacement);
 	}

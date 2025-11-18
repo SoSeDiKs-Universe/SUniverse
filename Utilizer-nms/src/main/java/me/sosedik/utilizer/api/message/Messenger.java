@@ -80,7 +80,7 @@ public class Messenger {
 	 * @param messagePath path for message
 	 * @return row message
 	 */
-	public String [] getRawMessage(String messagePath) {
+	public String[] getRawMessage(String messagePath) {
 		return TranslationHolder.translationHolder().getMessage(getLangOptions(), messagePath);
 	}
 
@@ -101,7 +101,7 @@ public class Messenger {
 	 * @param messagePath path for message
 	 * @return parsed message
 	 */
-	public Component [] getMessages(String messagePath) {
+	public Component[] getMessages(String messagePath) {
 		String[] minis = getRawMessage(messagePath);
 		if (minis.length == 1) return new Component[]{mini(this.miniMessage, minis[0])};
 

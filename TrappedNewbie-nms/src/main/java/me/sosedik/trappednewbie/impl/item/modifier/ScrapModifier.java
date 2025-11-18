@@ -6,6 +6,8 @@ import io.papermc.paper.datacomponent.DataComponentTypes;
 import me.sosedik.kiterino.modifier.item.ItemContextBox;
 import me.sosedik.kiterino.modifier.item.ItemModifier;
 import me.sosedik.kiterino.modifier.item.ModificationResult;
+import me.sosedik.resourcelib.ResourceLib;
+import me.sosedik.trappednewbie.TrappedNewbie;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieItems;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieTags;
 import me.sosedik.utilizer.api.language.LangOptionsStorage;
@@ -37,8 +39,6 @@ public class ScrapModifier extends ItemModifier {
 		ItemStack scrapItem = NBT.get(item, nbt -> nbt.hasTag(ITEM_TAG) ? nbt.getItemStack(ITEM_TAG) : null);
 		if (scrapItem == null) return ModificationResult.PASS;
 
-		Material scrapType = scrapItem.getType();
-
 		if (scrapItem.hasData(DataComponentTypes.MAX_DAMAGE)) {
 			int damage = scrapItem.getData(DataComponentTypes.MAX_DAMAGE);
 			scrapItem.setData(DataComponentTypes.DAMAGE, damage);
@@ -50,21 +50,34 @@ public class ScrapModifier extends ItemModifier {
 		ItemStack fakedScrap = scrapItem.withType(Material.IRON_NUGGET);
 		persistData(fakedScrap, scrapItem, item, DataComponentTypes.ITEM_MODEL);
 		persistData(fakedScrap, scrapItem, item, DataComponentTypes.ITEM_NAME);
+		persistData(fakedScrap, scrapItem, item, DataComponentTypes.DYED_COLOR);
 		fakedScrap.setData(DataComponentTypes.MAX_DAMAGE, 1000);
 		fakedScrap.setData(DataComponentTypes.DAMAGE, 997);
 
 		var messenger = Messenger.messenger(LangOptionsStorage.getByLocale(contextBox.getLocale()));
-		NamespacedKey key = scrapType.getKey();
+		NamespacedKey key = getScrapKey(scrapItem);
 		Component name = messenger.getMessageIfExists("item." + key.namespace() + ".broken_" + key.value() + ".name");
 		if (name != null)
 			fakedScrap.setData(DataComponentTypes.ITEM_NAME, name);
 
-		if (TrappedNewbieTags.SCRAPPABLE.isTagged(scrapType))
-			fakedScrap.setData(DataComponentTypes.ITEM_MODEL, new NamespacedKey(key.namespace(), "broken_" + key.value()));
+		if (isScrappable(scrapItem))
+			fakedScrap.setData(DataComponentTypes.ITEM_MODEL, ResourceLib.storage().getItemModelMapping(new NamespacedKey(key.namespace(), "broken_" + key.value())));
 
 		contextBox.setItem(fakedScrap);
 
 		return ModificationResult.RETURN;
+	}
+
+	private NamespacedKey getScrapKey(ItemStack scrapItem) {
+		if (BucketModifier.BucketType.fromBucket(scrapItem) == BucketModifier.BucketType.CERAMIC)
+			return TrappedNewbie.trappedNewbieKey("ceramic_bucket");
+		return scrapItem.getType().getKey();
+	}
+
+	private boolean isScrappable(ItemStack scrapItem) {
+		if (scrapItem.getType() == Material.BUCKET)
+			return BucketModifier.BucketType.fromBucket(scrapItem) == BucketModifier.BucketType.CERAMIC;
+		return TrappedNewbieTags.SCRAPPABLE.isTagged(scrapItem.getType());
 	}
 
 	@SuppressWarnings("unchecked")

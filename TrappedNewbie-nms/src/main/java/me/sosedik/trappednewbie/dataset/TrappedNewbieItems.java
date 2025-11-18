@@ -67,6 +67,7 @@ public class TrappedNewbieItems {
 	public static final Material FLINT_SHOVEL = byKey("flint_shovel");
 	public static final Material FLINT_PICKAXE = byKey("flint_pickaxe");
 	public static final Material FLINT_SHEARS = byKey("flint_shears");
+	public static final Material IRON_KNIFE = byKey("iron_knife");
 	public static final Material GRASS_MESH = byKey("grass_mesh");
 	public static final Material FIRESTRIKER = byKey("firestriker");
 	public static final Material STEEL_AND_FLINT = byKey("steel_and_flint");
@@ -254,6 +255,12 @@ public class TrappedNewbieItems {
 	public static final Material AZALEA_HANG_GLIDER = byKey("azalea_hang_glider");
 	public static final Material TATER_HANG_GLIDER = byKey("tater_hang_glider");
 	public static final Material PHANTOM_HANG_GLIDER = byKey("phantom_hang_glider");
+
+	public static final Material SLIME_BUCKET = byKey("slime_bucket");
+	public static final Material MAGMA_CUBE_BUCKET = byKey("magma_cube_bucket");
+	public static final Material FROG_BUCKET = byKey("frog_bucket");
+
+	public static final Material LEATHER_GLOVES = byKey("leather_gloves");
 
 	public static final Material DESTROY_STAGE_0 = byKey("destroy_stage_0");
 	public static final Material DESTROY_STAGE_1 = byKey("destroy_stage_1");

@@ -141,7 +141,7 @@ public class CustomRecipeLeftovers implements Listener {
 		for (int i = 0; i < matrix.length; i++) {
 			if (ItemStack.isEmpty(matrix[i])) continue;
 
-			var itemEvent = new RemainingItemEvent(event, player, event.getRecipe(), key, matrix[i], amount);
+			var itemEvent = new RemainingItemEvent(event, player, event.getRecipe(), key, matrix[i], amount, false);
 
 			if (exemptCheck != null && exemptCheck.test(itemEvent, matrix[i])) {
 				if (matrix[i].getAmount() == amount) {

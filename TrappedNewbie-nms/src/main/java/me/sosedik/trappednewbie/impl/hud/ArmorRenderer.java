@@ -7,12 +7,16 @@ import me.sosedik.resourcelib.ResourceLib;
 import me.sosedik.resourcelib.util.SpacingUtil;
 import me.sosedik.trappednewbie.TrappedNewbie;
 import me.sosedik.trappednewbie.api.hud.SimpleHudRenderer;
+import me.sosedik.trappednewbie.api.item.VisualArmor;
+import me.sosedik.trappednewbie.dataset.TrappedNewbieItems;
+import me.sosedik.trappednewbie.listener.player.VisualArmorLayer;
 import me.sosedik.utilizer.util.DurabilityUtil;
 import me.sosedik.utilizer.util.ItemUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.ShadowColor;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -41,6 +45,7 @@ public class ArmorRenderer extends SimpleHudRenderer {
 	private static final Component[] ELYTRA = new Component[] {mapping("armor/elytra"), mapping("armor/elytra_up")};
 	private static final Component[] TURTLE_HELMET = new Component[] {mapping("armor/turtle_helmet"), mapping("armor/turtle_helmet_up")};
 	private static final Component[] CARVED_PUMPKIN = new Component[] {mapping("armor/carved_pumpkin"), mapping("armor/carved_pumpkin_up")};
+	private static final Component[] LEATHER_GLOVES = new Component[] {mapping("armor/leather_gloves"), mapping("armor/leather_gloves_up")};
 	private static final Component[][] LEATHER_ARMOR = armor("leather");
 	private static final Component[][] CHAINMAIL_ARMOR = armor("chainmail");
 	private static final Component[][] COPPER_ARMOR = armor("copper");
@@ -121,6 +126,9 @@ public class ArmorRenderer extends SimpleHudRenderer {
 		ItemStack leggings = inv.getLeggings();
 		ItemStack boots = inv.getBoots();
 
+		VisualArmor visualArmor = VisualArmorLayer.getVisualArmor(this.player);
+		ItemStack gloves = visualArmor.canUseVisualArmor() && visualArmor.hasGloves() ? visualArmor.getGloves() : null;
+
 		int armorPoints = (int) (getArmor(helmet) + getArmor(chestplate) + getArmor(leggings) + getArmor(boots));
 		refreshDigits(DEFENCE_POINTS, this.defenceDisplay, armorPoints, moveUp);
 
@@ -145,6 +153,7 @@ public class ArmorRenderer extends SimpleHudRenderer {
 		renderArmor(chestplate, moveUp);
 		renderArmor(leggings, moveUp);
 		renderArmor(boots, moveUp);
+		renderArmor(gloves, moveUp);
 
 		if (!this.armorDisplay.isEmpty()) {
 			Component combined = combine(SpacingUtil.getSpacing(-2), this.armorDisplay);
@@ -193,6 +202,7 @@ public class ArmorRenderer extends SimpleHudRenderer {
 
 	private @Nullable Component getArmorIcon(ItemStack item, boolean up) {
 		return switch (item.getType()) {
+			case Material m when m == TrappedNewbieItems.LEATHER_GLOVES -> LEATHER_GLOVES[up ? 1 : 0].color(color(item));
 			case ELYTRA -> ELYTRA[up ? 1 : 0];
 			case TURTLE_HELMET -> TURTLE_HELMET[up ? 1 : 0];
 			case CARVED_PUMPKIN -> CARVED_PUMPKIN[up ? 1 : 0];

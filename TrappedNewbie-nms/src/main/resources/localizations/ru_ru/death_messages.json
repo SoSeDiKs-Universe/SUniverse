@@ -1,4 +1,6 @@
 {
+	"death.attack.run_with_scissors": "<entity> поскользнулся и упал на ножницы",
+	"death.attack.stonecutter": "<entity> распилил себя пополам",
 	"death.attack.glass_shard": "<entity> встретил свою смерть от осколка стекла",
 	"death.attack.pricky_block.r": [
 		"<entity> не справился с шипами",

@@ -7,7 +7,10 @@ import io.papermc.paper.datacomponent.item.TooltipDisplay;
 import me.sosedik.kiterino.modifier.item.ItemContextBox;
 import me.sosedik.kiterino.modifier.item.ItemModifier;
 import me.sosedik.kiterino.modifier.item.ModificationResult;
+import me.sosedik.kiterino.modifier.item.context.ItemModifierContextType;
+import me.sosedik.kiterino.modifier.item.context.PacketItemModifierContext;
 import me.sosedik.kiterino.modifier.item.context.SlottedItemModifierContext;
+import me.sosedik.kiterino.modifier.item.context.packet.RecipeBookPacketContext;
 import me.sosedik.miscme.listener.misc.WaterAwareBottleReset;
 import me.sosedik.resourcelib.ResourceLib;
 import me.sosedik.resourcelib.impl.item.modifier.CustomLoreModifier;
@@ -32,6 +35,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
@@ -257,13 +261,15 @@ public class AllRecipesInRecipeBook implements Listener {
 			items.put(24, inputs);
 			items.put(26, results);
 			items.put(18, List.of(ItemStack.of(Material.STONECUTTER)));
+			for (int gridSlot : GRID_SLOTS) items.remove(gridSlot - 2);
 			int inputsSize = inputs.size();
-			for (int i = 0; i < GRID_SLOTS.length; i++) {
-				if (i >= inputsSize) {
-					items.put(GRID_SLOTS[i] - 2, AIR);
-					continue;
-				}
-				items.put(GRID_SLOTS[i] - 2, List.of(inputs.get(i)));
+			int iterations = (int) Math.ceil((double) inputsSize / GRID_SLOTS.length) * GRID_SLOTS.length;
+			for (int i = 0; i < iterations; i++) {
+				int gridIndex = i % GRID_SLOTS.length;
+
+				items.computeIfAbsent(GRID_SLOTS[gridIndex] - 2, k -> new ArrayList<>()).add(
+					i < inputsSize ? inputs.get(i) : ItemStack.empty()
+				);
 			}
 		}
 		VIEWERS.put(player.getUniqueId(), new RecipeDisplay(player, items));
@@ -417,6 +423,13 @@ public class AllRecipesInRecipeBook implements Listener {
 			recipeDisplay.cancel();
 	}
 
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	public void onDeath(PlayerDeathEvent event) {
+		RecipeDisplay recipeDisplay = VIEWERS.remove(event.getPlayer().getUniqueId());
+		if (recipeDisplay != null)
+			recipeDisplay.cancel();
+	}
+
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onOpenForget(InventoryOpenEvent event) {
 		if (event.getInventory().getType() != InventoryType.WORKBENCH) return;
@@ -467,6 +480,11 @@ public class AllRecipesInRecipeBook implements Listener {
 
 		@Override
 		public void run() {
+			if (!VIEWERS.containsKey(this.player.getUniqueId())) {
+				cancel();
+				return;
+			}
+
 			this.currentDisplay++;
 			sendDisplay();
 		}
@@ -622,7 +640,7 @@ public class AllRecipesInRecipeBook implements Listener {
 			if (player == null) return ModificationResult.PASS;
 			if (!(contextBox.getContext() instanceof SlottedItemModifierContext context)) return ModificationResult.PASS;
 
-			int slot = context.slot();
+			int slot = context.getSlot();
 			if (slot < 0) return ModificationResult.PASS;
 			if (slot >= 5 && slot <= 8) return ModificationResult.PASS;
 			if (slot >= 36) return ModificationResult.PASS;
@@ -634,7 +652,8 @@ public class AllRecipesInRecipeBook implements Listener {
 			ItemStack recipeItem = recipeDisplay.getItem(slot);
 			if (recipeItem == null) return ModificationResult.PASS;
 
-			ItemStack item = modifyItem(player, contextBox.getLocale(), recipeItem);
+			RecipeBookPacketContext.DisplayType displayType = RecipeBookPacketContext.DisplayType.INGREDIENT;
+			ItemStack item = modifyItem(new ItemContextBox(player, contextBox.getLocale(), new RecipeBookPacketContext(ItemModifierContextType.RECIPE_GHOST, context, context instanceof PacketItemModifierContext p ? p : context, displayType), recipeItem));
 
 			contextBox.setItem(item == null ? recipeItem.clone() : item);
 

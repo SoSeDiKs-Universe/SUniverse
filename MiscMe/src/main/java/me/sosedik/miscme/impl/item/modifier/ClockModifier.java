@@ -42,7 +42,7 @@ public class ClockModifier extends ItemModifier {
 	public ModificationResult modify(ItemContextBox contextBox) {
 		if (contextBox.getInitialType() != Material.CLOCK) return ModificationResult.PASS;
 
-		if (ItemUtil.shouldFreeze(contextBox)) {
+		if (ItemUtil.shouldFreeze(contextBox.getContext())) {
 			contextBox.getItem().setData(DataComponentTypes.ITEM_MODEL, STILL_CLOCK);
 			return ModificationResult.OK;
 		}
@@ -58,8 +58,8 @@ public class ClockModifier extends ItemModifier {
 			contextBox.getItem().setData(DataComponentTypes.ITEM_MODEL, CLOCK_MIMIC);
 		}
 
-		if (!contextBox.getContextType().hasVisibleLore()) return updated ? ModificationResult.OK : ModificationResult.PASS;
-		if (!(contextBox.getContext() instanceof SlottedItemModifierContext)) return updated ? ModificationResult.OK : ModificationResult.PASS;
+		if (!contextBox.getContext().getContextType().hasVisibleLore()) return updated ? ModificationResult.OK : ModificationResult.PASS;
+		if (!(contextBox.getContext().getRootContext() instanceof SlottedItemModifierContext)) return updated ? ModificationResult.OK : ModificationResult.PASS;
 
 		contextBox.addLore(formatTime(player, contextBox.getLocale()));
 

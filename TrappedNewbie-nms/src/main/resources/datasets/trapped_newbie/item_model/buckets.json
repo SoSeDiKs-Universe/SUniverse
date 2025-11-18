@@ -1,0 +1,66 @@
+{
+	"parser": "bucket",
+	"no_mapping": true,
+	"buckets": [
+		"bucket",
+		"acacia_bucket",
+		"bamboo_bucket",
+		"birch_bucket",
+		"cherry_bucket",
+		"crimson_bucket",
+		"dark_oak_bucket",
+		"jungle_bucket",
+		"mangrove_bucket",
+		"oak_bucket",
+		"pale_oak_bucket",
+		"spruce_bucket",
+		"warped_bucket",
+		"clay_bucket",
+		"ceramic_bucket"
+	],
+	"overlays": [
+		"water_bucket",
+		"lava_bucket",
+		"milk_bucket",
+		"powder_snow_bucket",
+		"frog_cold_bucket",
+		"frog_temperate_bucket",
+		"frog_warm_bucket",
+		"tadpole_bucket"
+	],
+	"lowered_overlays": [
+		"cod_bucket",
+		"salmon_bucket",
+		"tropical_fish_bucket",
+		"pufferfish_bucket",
+		"axolotl_leucistic_bucket",
+		"axolotl_leucistic_baby_bucket",
+		"axolotl_wild_bucket",
+		"axolotl_wild_baby_bucket",
+		"axolotl_gold_bucket",
+		"axolotl_gold_baby_bucket",
+		"axolotl_cyan_bucket",
+		"axolotl_cyan_baby_bucket",
+		"axolotl_blue_bucket",
+		"axolotl_blue_baby_bucket"
+	],
+	"jumping_overlays": [
+		"slime_bucket",
+		"magma_cube_bucket"
+	],
+	"omit_vanilla_bucket_overlay": [
+		"water_bucket",
+		"lava_bucket",
+		"milk_bucket",
+		"powder_snow_bucket",
+		"cod_bucket",
+		"salmon_bucket",
+		"tropical_fish_bucket",
+		"pufferfish_bucket",
+		"tadpole_bucket",
+		"axolotl_leucistic_bucket"
+	],
+	"dyeables": {
+		"ceramic_bucket": 14975336
+	}
+}

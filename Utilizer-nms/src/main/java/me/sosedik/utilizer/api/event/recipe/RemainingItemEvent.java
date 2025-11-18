@@ -27,9 +27,10 @@ public class RemainingItemEvent extends Event {
 	private final ItemStack item;
 	private final int amount;
 	private @Nullable ItemStack result;
+	private final boolean consume;
 	private boolean finite = false;
 
-	public RemainingItemEvent(@Nullable Event parentEvent, @Nullable Player player, @Nullable Recipe recipe, NamespacedKey key, ItemStack item, int amount) {
+	public RemainingItemEvent(@Nullable Event parentEvent, @Nullable Player player, @Nullable Recipe recipe, NamespacedKey key, ItemStack item, int amount, boolean consume) {
 		super();
 		this.parentEvent = parentEvent;
 		this.recipe = recipe;
@@ -38,6 +39,7 @@ public class RemainingItemEvent extends Event {
 		this.item = item;
 		this.amount = amount;
 		this.result = null;
+		this.consume = consume;
 
 		if (recipe instanceof CraftingRecipe craftingRecipe) {
 			this.recipeGroup = craftingRecipe.getGroup();
@@ -118,6 +120,15 @@ public class RemainingItemEvent extends Event {
 	 */
 	public @Nullable ItemStack getResult() {
 		return this.result;
+	}
+
+	/**
+	 * Checks whether this is a consuming action
+	 *
+	 * @return whether this is a consuming action
+	 */
+	public boolean isConsume() {
+		return this.consume;
 	}
 
 	/**

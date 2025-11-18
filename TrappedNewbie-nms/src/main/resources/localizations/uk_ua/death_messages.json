@@ -1,9 +1,10 @@
 {
+	"death.attack.run_with_scissors": "<entity> послизнувся і впав на ножиці",
+	"death.attack.stonecutter": "<entity> розпиляв себе навпіл",
 	"death.attack.glass_shard": "<entity> зустрів свою смерть від уламку скла",
 	"death.attack.pricky_block.r": [
 		"<entity> не впорався з шипами",
 		"<entity> зіткнувся з гострими наслідками свого цікавості",
-		"<entity> заплатив за свою безрозсудну спробу зламати",
 		"<entity> був захоплений зненацька гострими краями свого оточення"
 	],
 	"death.attack.suicide": "<entity> вирішив покинути цей світ",

@@ -4,8 +4,8 @@
 	"attribute.durability.capacity": "<gray>Capacity: <value>",
 	"attribute.repairable": "<gray>Repairable: <items>",
 	"overlay.toggle": [
-		"<yellow><!i><key:key.sneak> + <key:key.use> to",
-		"<yellow><!i>toggle the on-screen overlay"
+		"<yellow><!i><key:key.sneak> + <key:key.use> while in hand",
+		"<yellow><!i>to toggle the on-screen overlay"
 	],
 	"item.clock.time.nether": "<gray><!i>Time? What is time?",
 	"item.clock.time.the_end": "<gray><!i>The End of Time",

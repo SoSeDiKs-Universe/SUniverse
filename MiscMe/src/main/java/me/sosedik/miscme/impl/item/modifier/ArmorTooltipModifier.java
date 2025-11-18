@@ -1,7 +1,6 @@
 package me.sosedik.miscme.impl.item.modifier;
 
 import io.papermc.paper.datacomponent.DataComponentTypes;
-import io.papermc.paper.datacomponent.item.TooltipDisplay;
 import me.sosedik.kiterino.modifier.item.ItemContextBox;
 import me.sosedik.kiterino.modifier.item.ItemModifier;
 import me.sosedik.kiterino.modifier.item.ModificationResult;
@@ -36,7 +35,7 @@ public class ArmorTooltipModifier extends ItemModifier {
 
 	@Override
 	public ModificationResult modify(ItemContextBox contextBox) {
-		if (!contextBox.getContextType().hasVisibleLore()) return ModificationResult.PASS;
+		if (!contextBox.getContext().getContextType().hasVisibleLore()) return ModificationResult.PASS;
 
 		Player player = contextBox.getViewer();
 		if (player == null) return ModificationResult.PASS;
@@ -63,12 +62,7 @@ public class ArmorTooltipModifier extends ItemModifier {
 
 		contextBox.addLore(text.colorIfAbsent(NamedTextColor.GRAY).decorationIfAbsent(TextDecoration.ITALIC, TextDecoration.State.FALSE));
 
-		TooltipDisplay tooltipDisplay = item.getData(DataComponentTypes.TOOLTIP_DISPLAY);
-		if (tooltipDisplay == null) {
-			item.setData(DataComponentTypes.TOOLTIP_DISPLAY, TooltipDisplay.tooltipDisplay().addHiddenComponents(DataComponentTypes.ATTRIBUTE_MODIFIERS).build());
-		} else if (!tooltipDisplay.hideTooltip() && !tooltipDisplay.hiddenComponents().contains(DataComponentTypes.ATTRIBUTE_MODIFIERS)) {
-			item.setData(DataComponentTypes.TOOLTIP_DISPLAY, TooltipDisplay.tooltipDisplay().hiddenComponents(tooltipDisplay.hiddenComponents()).addHiddenComponents(DataComponentTypes.ATTRIBUTE_MODIFIERS).build()); // TODO replace with toBuilder once available
-		}
+		contextBox.addHiddenComponents(DataComponentTypes.ATTRIBUTE_MODIFIERS);
 
 		return ModificationResult.OK;
 	}

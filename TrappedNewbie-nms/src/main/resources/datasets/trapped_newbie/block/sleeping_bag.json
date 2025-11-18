@@ -4,7 +4,7 @@
 	"sound_type": "wool",
 	"map_color": "snow",
 	"no_collision": true,
-	"client_type": "minecraft:barrier",
+	"client_type": "minecraft:white_bed",
 	"state_parser": "none",
 	"dyeable": -1,
 	"no_texture": true,

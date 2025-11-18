@@ -230,7 +230,12 @@ public class PerPlayerWorlds implements Listener {
 		return true;
 	}
 
-	private static void startDayCycleTask(World world) {
+	/**
+	 * Starts a day cycle task
+	 *
+	 * @param world world
+	 */
+	public static void startDayCycleTask(World world) {
 		new CustomDayCycleTask(world, () -> {
 			ServerTickManager serverTickManager = Bukkit.getServerTickManager();
 			if (serverTickManager.isFrozen()) return 0D;

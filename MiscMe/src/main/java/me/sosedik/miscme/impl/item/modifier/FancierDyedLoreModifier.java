@@ -2,7 +2,6 @@ package me.sosedik.miscme.impl.item.modifier;
 
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.DyedItemColor;
-import io.papermc.paper.datacomponent.item.TooltipDisplay;
 import me.sosedik.kiterino.modifier.item.ItemContextBox;
 import me.sosedik.kiterino.modifier.item.ItemModifier;
 import me.sosedik.kiterino.modifier.item.ModificationResult;
@@ -12,6 +11,8 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
+import org.bukkit.Bukkit;
+import org.bukkit.Color;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NullMarked;
@@ -30,22 +31,19 @@ public class FancierDyedLoreModifier extends ItemModifier {
 
 	@Override
 	public ModificationResult modify(ItemContextBox contextBox) {
-		if (!contextBox.getContextType().hasVisibleLore()) return ModificationResult.PASS;
+		if (!contextBox.getContext().getContextType().hasVisibleLore()) return ModificationResult.PASS;
 
 		ItemStack item = contextBox.getItem();
 		if (!item.hasData(DataComponentTypes.DYED_COLOR)) return ModificationResult.PASS;
 
-		TooltipDisplay tooltipDisplay = item.getData(DataComponentTypes.TOOLTIP_DISPLAY);
-		if (tooltipDisplay == null) {
-			item.setData(DataComponentTypes.TOOLTIP_DISPLAY, TooltipDisplay.tooltipDisplay().addHiddenComponents(DataComponentTypes.DYED_COLOR).build());
-		} else if (!tooltipDisplay.hideTooltip() && !tooltipDisplay.hiddenComponents().contains(DataComponentTypes.DYED_COLOR)) {
-			item.setData(DataComponentTypes.TOOLTIP_DISPLAY, TooltipDisplay.tooltipDisplay().hiddenComponents(tooltipDisplay.hiddenComponents()).addHiddenComponents(DataComponentTypes.DYED_COLOR).build()); // TODO replace with toBuilder once available
-		}
+		contextBox.addHiddenComponents(DataComponentTypes.DYED_COLOR);
 
 		if (!MiscMeTags.FAKE_DYEABLE.isTagged(contextBox.getInitialType())) {
 			DyedItemColor dyedItemColor = item.getData(DataComponentTypes.DYED_COLOR);
 			assert dyedItemColor != null;
-			contextBox.addLore(getDyedLore(dyedItemColor.color()));
+			Color color = dyedItemColor.color();
+			if (NamespacedKey.MINECRAFT.equals(contextBox.getInitialType().getKey().namespace()) || !color.equals(Bukkit.getItemFactory().getDefaultLeatherColor()))
+				contextBox.addLore(getDyedLore(color));
 		}
 
 		return ModificationResult.OK;

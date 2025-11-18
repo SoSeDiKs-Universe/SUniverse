@@ -22,16 +22,16 @@ public class FakeHorseSaddlesModifier extends ItemModifier {
 
 	@Override
 	public ModificationResult modify(ItemContextBox contextBox) {
-		if (!contextBox.getContextType().hasVisibleLore()) return ModificationResult.PASS;
+		if (!contextBox.getContext().getContextType().hasVisibleLore()) return ModificationResult.PASS;
 		if (!(contextBox.getContext() instanceof SlottedItemModifierContext ctx)) return ModificationResult.PASS;
-		if (ctx.slot() != 0) return ModificationResult.PASS;
+		if (ctx.getSlot() != 0) return ModificationResult.PASS;
 		if (contextBox.getItem().getType() != Material.AIR) return ModificationResult.PASS;
 
 		Player player = contextBox.getViewer();
 		if (player == null) return ModificationResult.PASS;
 		if (!(PossessingPlayer.getPossessed(player) instanceof AbstractHorse)) return ModificationResult.PASS;
 
-		ItemStack saddle = modifyItem(player, contextBox.getLocale(), ItemStack.of(RequiemItems.SADDLE_OUTLINE));
+		ItemStack saddle = modifyItem(ctx, player, contextBox.getLocale(), ItemStack.of(RequiemItems.SADDLE_OUTLINE));
 		if (saddle == null) saddle = ItemStack.of(Material.SADDLE);
 		contextBox.setItem(saddle);
 		return ModificationResult.RETURN;

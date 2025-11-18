@@ -39,7 +39,7 @@ public class GlowingItemModifier extends ItemModifier {
 		if (!NBT.get(item, nbt -> (boolean) nbt.getOrDefault(GLOW_MODIFIER_KEY, false))) return ModificationResult.PASS;
 
 		boolean modified = false;
-		if (contextBox.getContextType().hasVisibleName() && item.hasData(DataComponentTypes.DYED_COLOR)) {
+		if (contextBox.getContext().getContextType().hasVisibleName() && item.hasData(DataComponentTypes.DYED_COLOR)) {
 			Color color = Objects.requireNonNull(item.getData(DataComponentTypes.DYED_COLOR)).color();
 
 			Component name = item.effectiveName();
@@ -53,7 +53,7 @@ public class GlowingItemModifier extends ItemModifier {
 			modified = true;
 		}
 
-		if (contextBox.getContextType().hasVisibleLore()) {
+		if (contextBox.getContext().getContextType().hasVisibleLore()) {
 			var messenger = Messenger.messenger(LangOptionsStorage.getByLocale(contextBox.getLocale()));
 			contextBox.addLore(messenger.getMessage("item.modifier.glowy"));
 			modified = true;

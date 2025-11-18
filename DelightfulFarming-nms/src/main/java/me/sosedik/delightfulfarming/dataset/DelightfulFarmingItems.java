@@ -9,7 +9,7 @@ import org.jspecify.annotations.NullMarked;
 @SuppressWarnings("unused")
 public class DelightfulFarmingItems {
 
-	public static final Material PUMPKIN_SLICE = byKey("pumpkin_slice");
+	public static final Material PUMPKIN_SLICE = byKey("pumpkin_slice"); // TODO recipes
 	public static final Material SWEET_BERRY_MINCE = byKey("sweet_berry_mince");
 	public static final Material SWEET_BERRY_MEATBALLS = byKey("sweet_berry_meatballs");
 	public static final Material SWEET_BERRY_PIPS = byKey("sweet_berry_pips");

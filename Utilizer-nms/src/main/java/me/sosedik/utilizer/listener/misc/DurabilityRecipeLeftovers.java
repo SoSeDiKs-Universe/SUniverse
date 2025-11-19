@@ -18,7 +18,7 @@ public class DurabilityRecipeLeftovers implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onCraft(RemainingItemEvent event) {
-		if (event.getResult() != null) return;
+		if (!ItemStack.isEmpty(event.getResult())) return;
 		if (event.isConsume()) return;
 		// Ignore vanilla recipes
 		if (NamespacedKey.MINECRAFT.equals(event.getKey().getNamespace())) return;

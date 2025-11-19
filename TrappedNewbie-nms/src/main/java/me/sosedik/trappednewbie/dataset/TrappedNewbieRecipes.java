@@ -22,6 +22,7 @@ import me.sosedik.trappednewbie.impl.thirst.ThirstData;
 import me.sosedik.trappednewbie.listener.block.LogStrippingGivesBarks;
 import me.sosedik.trappednewbie.listener.item.FillingBowlWithWater;
 import me.sosedik.trappednewbie.listener.misc.AllRecipesInRecipeBook;
+import me.sosedik.utilizer.api.event.recipe.ItemCraftEvent;
 import me.sosedik.utilizer.api.event.recipe.ItemCraftPrepareEvent;
 import me.sosedik.utilizer.api.recipe.CraftingRecipeBuilder;
 import me.sosedik.utilizer.dataset.UtilizerTags;
@@ -34,6 +35,7 @@ import me.sosedik.utilizer.impl.recipe.ShapelessCraft;
 import me.sosedik.utilizer.impl.recipe.SmokingCraft;
 import me.sosedik.utilizer.impl.recipe.StonecuttingCraft;
 import me.sosedik.utilizer.impl.recipe.WaterCraft;
+import me.sosedik.utilizer.util.DurabilityUtil;
 import me.sosedik.utilizer.util.MiscUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
@@ -503,7 +505,7 @@ public class TrappedNewbieRecipes {
 			.addIngredients(Material.ORANGE_DYE, Material.BLACK_DYE)
 			.register();
 
-		Consumer<ItemCraftPrepareEvent> preCheck = event -> {
+		Consumer<ItemCraftEvent> craftCheck = event -> {
 			ItemStack result = event.getResult();
 			if (ItemStack.isEmpty(result)) return;
 
@@ -514,19 +516,22 @@ public class TrappedNewbieRecipes {
 					ReadableNBT bucketEntityData = nbt.getCompound("minecraft:bucket_entity_data");
 					if (bucketEntityData == null) return;
 
-					NBT.modifyComponents(item, (Consumer<ReadWriteNBT>) itemNbt -> itemNbt.getOrCreateCompound("minecraft:bucket_entity_data").mergeCompound(bucketEntityData));
+					NBT.modifyComponents(result, (Consumer<ReadWriteNBT>) itemNbt -> itemNbt.getOrCreateCompound("minecraft:bucket_entity_data").mergeCompound(bucketEntityData));
 				});
+				event.setResult(result);
 
 				return;
 			}
 		};
 		new CampfireCraft(ItemStack.of(TrappedNewbieItems.BOILED_AXOLOTL_BUCKET), 40 * 20, trappedNewbieKey("boiled_axolotl"))
+			.withExemptLeftovers()
 			.addIngredients(Material.AXOLOTL_BUCKET)
-			.withPreCheck(preCheck)
+			.withCraftCheck(craftCheck)
 			.register();
 		new SmokingCraft(ItemStack.of(TrappedNewbieItems.BOILED_AXOLOTL_BUCKET), 12 * 20, trappedNewbieKey("boiled_axolotl"))
+			.withExemptLeftovers()
 			.addIngredients(Material.AXOLOTL_BUCKET)
-			.withPreCheck(preCheck)
+			.withCraftCheck(craftCheck)
 			.register();
 
 		addDrinkRecipes();
@@ -756,7 +761,7 @@ public class TrappedNewbieRecipes {
 
 		Bukkit.addFuel(item -> {
 			BucketModifier.BucketType bucketType = BucketModifier.BucketType.fromBucket(item);
-			return bucketType != null && bucketType.isWooden() ? 10 * 20 : null;
+			return bucketType != null && bucketType.isWooden() && DurabilityUtil.isNew(item) ? 10 * 20 : null;
 		});
 	}
 

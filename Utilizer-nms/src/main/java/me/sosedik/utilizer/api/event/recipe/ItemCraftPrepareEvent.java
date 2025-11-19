@@ -1,5 +1,6 @@
 package me.sosedik.utilizer.api.event.recipe;
 
+import me.sosedik.kiterino.event.inventory.CrafterCraftPreviewEvent;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Crafter;
 import org.bukkit.entity.Player;
@@ -32,15 +33,21 @@ public class ItemCraftPrepareEvent extends Event {
 		this.parentEvent = parentEvent;
 		this.key = key;
 
-		if (parentEvent instanceof PrepareItemCraftEvent event) {
-			assert event.getRecipe() != null;
-			this.recipe = event.getRecipe();
-			this.player = event.getViewers().isEmpty() ? null : (Player) event.getViewers().getFirst();
-		} else if (parentEvent instanceof CrafterCraftEvent event) {
-			this.recipe = event.getRecipe();
-			this.player = null;
-		} else {
-			throw new IllegalArgumentException("Unsupported parent event: " + parentEvent.getEventName());
+		switch (parentEvent) {
+			case PrepareItemCraftEvent event -> {
+				assert event.getRecipe() != null;
+				this.recipe = event.getRecipe();
+				this.player = event.getViewers().isEmpty() ? null : (Player) event.getViewers().getFirst();
+			}
+			case CrafterCraftEvent event -> {
+				this.recipe = event.getRecipe();
+				this.player = null;
+			}
+			case CrafterCraftPreviewEvent event -> {
+				this.recipe = event.getRecipe();
+				this.player = null;
+			}
+			default -> throw new IllegalArgumentException("Unsupported parent event: " + parentEvent.getEventName());
 		}
 
 		if (recipe instanceof CraftingRecipe craftingRecipe) {
@@ -101,13 +108,12 @@ public class ItemCraftPrepareEvent extends Event {
 	 * @return the result item
 	 */
 	public @Nullable ItemStack getResult() {
-		if (this.parentEvent instanceof PrepareItemCraftEvent event) {
-			return event.getInventory().getResult();
-		} else if (this.parentEvent instanceof CrafterCraftEvent event) {
-			return event.getResult();
-		} else {
-			return null;
-		}
+		return switch (this.parentEvent) {
+			case PrepareItemCraftEvent event -> event.getInventory().getResult();
+			case CrafterCraftEvent event -> event.getResult();
+			case CrafterCraftPreviewEvent event -> event.getResult();
+			default -> null;
+		};
 	}
 
 	/**
@@ -116,10 +122,11 @@ public class ItemCraftPrepareEvent extends Event {
 	 * @param result the result item
 	 */
 	public void setResult(@Nullable ItemStack result) {
-		if (this.parentEvent instanceof PrepareItemCraftEvent event) {
-			event.getInventory().setResult(result);
-		} else if (this.parentEvent instanceof CrafterCraftEvent event) {
-			event.setResult(result == null ? ItemStack.empty() : result);
+		switch (this.parentEvent) {
+			case PrepareItemCraftEvent event -> event.getInventory().setResult(result);
+			case CrafterCraftEvent event -> event.setResult(result == null ? ItemStack.empty() : result);
+			case CrafterCraftPreviewEvent event -> event.setResult(result);
+			default -> {}
 		}
 	}
 
@@ -129,14 +136,15 @@ public class ItemCraftPrepareEvent extends Event {
 	 * @return the crafting matrix
 	 */
 	public @Nullable ItemStack[] getMatrix() {
-		if (this.parentEvent instanceof PrepareItemCraftEvent event) {
-			return event.getInventory().getMatrix();
-		} else if (this.parentEvent instanceof CrafterCraftEvent event) {
-			if (!(event.getBlock().getState(false) instanceof Crafter crafter)) return new ItemStack[] {};
-			return crafter.getInventory().getContents();
-		} else {
-			return new ItemStack[] {};
-		}
+		return switch (this.parentEvent) {
+			case PrepareItemCraftEvent event -> event.getInventory().getMatrix();
+			case CrafterCraftEvent event -> {
+				if (!(event.getBlock().getState(false) instanceof Crafter container)) yield new ItemStack[]{};
+				yield container.getInventory().getContents();
+			}
+			case CrafterCraftPreviewEvent event -> event.getView().getTopInventory().getStorageContents();
+			default -> new ItemStack[]{};
+		};
 	}
 
 	@Override

@@ -76,9 +76,8 @@ public class ThirstRenderer extends SimpleHudRenderer {
 	}
 
 	private ThirstIconSet getIconSet() {
-		if (this.player.hasPotionEffect(TrappedNewbieEffects.THIRST)) {
+		if (this.player.hasPotionEffect(TrappedNewbieEffects.THIRST))
 			return POISONED;
-		}
 		return NORMAL;
 	}
 

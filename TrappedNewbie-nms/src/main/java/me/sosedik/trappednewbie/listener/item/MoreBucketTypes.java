@@ -2,6 +2,8 @@ package me.sosedik.trappednewbie.listener.item;
 
 import com.destroystokyo.paper.MaterialTags;
 import io.papermc.paper.datacomponent.DataComponentTypes;
+import me.sosedik.kiterino.event.entity.EntityItemConsumeEvent;
+import me.sosedik.kiterino.event.entity.ItemConsumeEvent;
 import me.sosedik.miscme.listener.entity.ItemFrameSpillables;
 import me.sosedik.miscme.listener.item.ImmersiveDyes;
 import me.sosedik.trappednewbie.TrappedNewbie;
@@ -32,6 +34,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockCookEvent;
 import org.bukkit.event.block.BlockDispenseEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.FurnaceBurnEvent;
@@ -285,6 +288,11 @@ public class MoreBucketTypes implements Listener {
 		event.setRemainingItem(ItemStack.of(TrappedNewbieItems.ASH));
 	}
 
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onCook(BlockCookEvent event) {
+		preserveBucketType(event);
+	}
+
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onRemain(RemainingItemEvent event) {
 		preserveBucketType(event);
@@ -391,14 +399,12 @@ public class MoreBucketTypes implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onConsume(PlayerItemConsumeEvent event) {
-		ItemStack item = event.getItem();
-		if (BucketModifier.BucketType.fromBucket(item) != BucketModifier.BucketType.CLAY) return;
+		preserveBucketType(event);
+	}
 
-		Player player = event.getPlayer();
-
-		event.setReplacement(ItemStack.empty());
-		// In case the item clears effects (e.g., milk bucket)
-		TrappedNewbie.scheduler().sync(() -> player.addPotionEffect(new PotionEffect(PotionEffectType.NAUSEA, 60 * 20, 0)), 1L);
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	public void onConsume(EntityItemConsumeEvent event) {
+		preserveBucketType(event);
 	}
 
 	private void preserveBucketType(Event event) {
@@ -408,6 +414,16 @@ public class MoreBucketTypes implements Listener {
 			case PlayerBucketEvent bucketEvent -> result = bucketEvent.getItemStack();
 			case PlayerBucketEntityEvent bucketEvent -> result = bucketEvent.getEntityBucket();
 			case BlockDispenseEvent bucketEvent -> result = bucketEvent.getLeftoverItem();
+			case BlockCookEvent bucketEvent -> result = bucketEvent.getResult();
+			case ItemConsumeEvent bucketEvent -> {
+				result = bucketEvent.getReplacement();
+				if (!ItemStack.isEmpty(result)) break;
+
+				result = bucketEvent.getItem();
+				if (!result.hasData(DataComponentTypes.USE_REMAINDER)) return;
+				
+				result = result.getData(DataComponentTypes.USE_REMAINDER).transformInto();
+			}
 			default -> {
 				return;
 			}
@@ -420,6 +436,8 @@ public class MoreBucketTypes implements Listener {
 			case PlayerBucketEvent bucketEvent -> bucket = bucketEvent.getBucketItem();
 			case PlayerBucketEntityEvent bucketEvent -> bucket = bucketEvent.getOriginalBucket();
 			case BlockDispenseEvent bucketEvent -> bucket = bucketEvent.getItem();
+			case BlockCookEvent bucketEvent -> bucket = bucketEvent.getSource();
+			case ItemConsumeEvent bucketEvent -> bucket = bucketEvent.getItem();
 			default -> {
 				return;
 			}
@@ -443,21 +461,34 @@ public class MoreBucketTypes implements Listener {
 				bucketEvent.setItemStack(ItemStack.of(Material.CLAY_BALL));
 				return;
 			}
+		// Consuming clay buckets
+		} else if (event instanceof ItemConsumeEvent bucketEvent && bucketType == BucketModifier.BucketType.CLAY) {
+			bucketEvent.setReplacement(ItemStack.of(Material.CLAY_BALL));
+			// Delay in case the item clears effects (e.g., milk bucket)
+			TrappedNewbie.scheduler().sync(() -> bucketEvent.getEntity().addPotionEffect(new PotionEffect(PotionEffectType.NAUSEA, 60 * 20, 0)), 1L);
+			return;
 		// Filling burnable with hot
 		} else if (overlay != null && overlay.isHot() && !bucketType.canHoldHeat()) {
 			ItemStack leftOver = bucketType.isWooden() ? ItemStack.of(TrappedNewbieItems.ASH) : ItemStack.empty();
-			if (event instanceof RemainingItemEvent bucketEvent) {
-				if (bucketEvent.getPlayer() != null) bucketEvent.getPlayer().emitSound(Sound.BLOCK_LAVA_EXTINGUISH, 1F, 1F);
-				bucketEvent.setResult(leftOver);
-			} if (event instanceof PlayerBucketEvent bucketEvent) {
-				bucketEvent.getPlayer().emitSound(Sound.BLOCK_LAVA_EXTINGUISH, 1F, 1F);
-				bucketEvent.setItemStack(leftOver);
-			} else if (event instanceof PlayerBucketEntityEvent bucketEvent) {
-				bucketEvent.getPlayer().emitSound(Sound.BLOCK_LAVA_EXTINGUISH, 1F, 1F);
-				bucketEvent.setEntityBucket(leftOver);
-			} else if (event instanceof BlockDispenseEvent bucketEvent) {
-				bucketEvent.getBlock().emitSound(Sound.BLOCK_LAVA_EXTINGUISH, 1F, 1F);
-				bucketEvent.setDispensedItem(leftOver);
+			switch (event) {
+				case RemainingItemEvent bucketEvent -> {
+					if (bucketEvent.getPlayer() != null)
+						bucketEvent.getPlayer().emitSound(Sound.BLOCK_LAVA_EXTINGUISH, 1F, 1F);
+					bucketEvent.setResult(leftOver);
+				}
+				case PlayerBucketEvent bucketEvent -> {
+					bucketEvent.getPlayer().emitSound(Sound.BLOCK_LAVA_EXTINGUISH, 1F, 1F);
+					bucketEvent.setItemStack(leftOver);
+				}
+				case PlayerBucketEntityEvent bucketEvent -> {
+					bucketEvent.getPlayer().emitSound(Sound.BLOCK_LAVA_EXTINGUISH, 1F, 1F);
+					bucketEvent.setEntityBucket(leftOver);
+				}
+				case BlockDispenseEvent bucketEvent -> {
+					bucketEvent.getBlock().emitSound(Sound.BLOCK_LAVA_EXTINGUISH, 1F, 1F);
+					bucketEvent.setDispensedItem(leftOver);
+				}
+				default -> {}
 			}
 			return;
 		// Preserve bucket type
@@ -485,27 +516,40 @@ public class MoreBucketTypes implements Listener {
 		}
 
 		int damage = (bucketType == BucketModifier.BucketType.CERAMIC && overlay != null && overlay.hasLava()) ? 32 : 1;
-		if (event instanceof RemainingItemEvent bucketEvent) {
-			if (bucketEvent.getPlayer() != null)
-				result = result.damage(damage, bucketEvent.getPlayer());
-			else
+		switch (event) {
+			case RemainingItemEvent bucketEvent -> {
+				if (bucketEvent.isConsume()) {
+					if (bucketEvent.getPlayer() != null)
+						result = result.damage(damage, bucketEvent.getPlayer());
+					else
+						result = DurabilityUtil.damageItem(result, damage);
+				}
+				if (bucketType == BucketModifier.BucketType.CLAY || (overlay != null && overlay.hasLava() && (bucketType == BucketModifier.BucketType.CERAMIC)) && result.isEmpty())
+					result = crackedCeramic(bucket);
+				bucketEvent.setResult(result);
+			}
+			case PlayerBucketEvent bucketEvent -> {
+				if (event instanceof PlayerBucketEmptyEvent)
+					result = result.damage(damage, bucketEvent.getPlayer());
+				if ((bucketType == BucketModifier.BucketType.CLAY || bucketType == BucketModifier.BucketType.CERAMIC) && result.isEmpty())
+					result = crackedCeramic(bucket);
+				bucketEvent.setItemStack(result);
+			}
+			case PlayerBucketEntityEvent bucketEvent -> bucketEvent.setEntityBucket(result);
+			case BlockDispenseEvent bucketEvent -> {
 				result = DurabilityUtil.damageItem(result, damage);
-			if ((bucketType == BucketModifier.BucketType.CLAY || bucketType == BucketModifier.BucketType.CERAMIC) && result.isEmpty())
-				result = crackedCeramic(bucket);
-			bucketEvent.setResult(result);
-		} else if (event instanceof PlayerBucketEvent bucketEvent) {
-			if (event instanceof PlayerBucketEmptyEvent)
-				result = result.damage(damage, bucketEvent.getPlayer());
-			if ((bucketType == BucketModifier.BucketType.CLAY || bucketType == BucketModifier.BucketType.CERAMIC) && result.isEmpty())
-				result = crackedCeramic(bucket);
-			bucketEvent.setItemStack(result);
-		} else if (event instanceof PlayerBucketEntityEvent bucketEvent) {
-			bucketEvent.setEntityBucket(result);
-		} else if (event instanceof BlockDispenseEvent bucketEvent) {
-			result = DurabilityUtil.damageItem(result, damage);
-			if ((bucketType == BucketModifier.BucketType.CLAY || bucketType == BucketModifier.BucketType.CERAMIC) && result.isEmpty())
-				result = crackedCeramic(bucket);
-			bucketEvent.setDispensedItem(result);
+				if ((bucketType == BucketModifier.BucketType.CLAY || bucketType == BucketModifier.BucketType.CERAMIC) && result.isEmpty())
+					result = crackedCeramic(bucket);
+				bucketEvent.setDispensedItem(result);
+			}
+			case BlockCookEvent bucketEvent -> bucketEvent.setResult(result);
+			case ItemConsumeEvent bucketEvent -> {
+				result = result.damage(1, bucketEvent.getEntity());
+				if (bucketType == BucketModifier.BucketType.CERAMIC && result.isEmpty())
+					result = crackedCeramic(bucket);
+				bucketEvent.setReplacement(result);
+			}
+			default -> {}
 		}
 	}
 

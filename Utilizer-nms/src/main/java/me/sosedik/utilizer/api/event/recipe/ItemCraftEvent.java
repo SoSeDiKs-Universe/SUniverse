@@ -1,11 +1,16 @@
 package me.sosedik.utilizer.api.event.recipe;
 
 import org.bukkit.NamespacedKey;
+import org.bukkit.block.Campfire;
+import org.bukkit.block.Crafter;
+import org.bukkit.block.Furnace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.bukkit.event.block.BlockCookEvent;
 import org.bukkit.event.block.CrafterCraftEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
+import org.bukkit.inventory.CookingRecipe;
 import org.bukkit.inventory.CraftingRecipe;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
@@ -31,18 +36,27 @@ public class ItemCraftEvent extends Event {
 		this.parentEvent = parentEvent;
 		this.key = key;
 
-		if (parentEvent instanceof CraftItemEvent event) {
-			this.recipe = event.getRecipe();
-			this.player = (Player) event.getWhoClicked();
-		} else if (parentEvent instanceof CrafterCraftEvent event) {
-			this.recipe = event.getRecipe();
-			this.player = null;
-		} else {
-			throw new IllegalArgumentException("Unsupported parent event: " + parentEvent.getEventName());
+		switch (parentEvent) {
+			case CraftItemEvent event -> {
+				this.recipe = event.getRecipe();
+				this.player = (Player) event.getWhoClicked();
+			}
+			case CrafterCraftEvent event -> {
+				this.recipe = event.getRecipe();
+				this.player = null;
+			}
+			case BlockCookEvent event -> {
+				assert event.getRecipe() != null;
+				this.recipe = event.getRecipe();
+				this.player = null;
+			}
+			default -> throw new IllegalArgumentException("Unsupported parent event: " + parentEvent.getEventName());
 		}
 
 		if (recipe instanceof CraftingRecipe craftingRecipe) {
 			this.recipeGroup = craftingRecipe.getGroup();
+		} else if (recipe instanceof CookingRecipe<?> cookingRecipe) {
+			this.recipeGroup = cookingRecipe.getGroup();
 		} else {
 			this.recipeGroup = "";
 		}
@@ -99,13 +113,12 @@ public class ItemCraftEvent extends Event {
 	 * @return the result item
 	 */
 	public @Nullable ItemStack getResult() {
-		if (this.parentEvent instanceof CraftItemEvent event) {
-			return event.getInventory().getResult();
-		} else if (this.parentEvent instanceof CrafterCraftEvent event) {
-			return event.getResult();
-		} else {
-			return null;
-		}
+		return switch (this.parentEvent) {
+			case CraftItemEvent event -> event.getInventory().getResult();
+			case CrafterCraftEvent event -> event.getResult();
+			case BlockCookEvent event -> event.getResult();
+			default -> null;
+		};
 	}
 
 	/**
@@ -114,11 +127,39 @@ public class ItemCraftEvent extends Event {
 	 * @param result the result item
 	 */
 	public void setResult(@Nullable ItemStack result) {
-		if (this.parentEvent instanceof CraftItemEvent event) {
-			event.getInventory().setResult(result);
-		} else if (this.parentEvent instanceof CrafterCraftEvent event) {
-			event.setResult(result == null ? ItemStack.empty() : result);
+		switch (this.parentEvent) {
+			case CraftItemEvent event -> event.getInventory().setResult(result);
+			case CrafterCraftEvent event -> event.setResult(result == null ? ItemStack.empty() : result);
+			case BlockCookEvent event -> event.setResult(result == null ? ItemStack.empty() : result);
+			default -> {}
 		}
+	}
+
+	/**
+	 * Gets the crafting matrix
+	 *
+	 * @return the crafting matrix
+	 */
+	public @Nullable ItemStack[] getMatrix() {
+		return switch (this.parentEvent) {
+			case CraftItemEvent event -> event.getInventory().getMatrix();
+			case CrafterCraftEvent event -> {
+				if (!(event.getBlock().getState(false) instanceof Crafter container)) yield new ItemStack[]{};
+				yield container.getInventory().getContents();
+			}
+			case BlockCookEvent event -> {
+				if (event.getBlock().getState(false) instanceof Furnace container)
+					yield new @Nullable ItemStack[]{container.getInventory().getSmelting()};
+				if (event.getBlock().getState(false) instanceof Campfire container) {
+					@Nullable ItemStack[] matrix = new ItemStack[container.getSize()];
+					for (int i = 0; i < matrix.length; i++)
+						matrix[i] = container.getItem(i);
+					yield matrix;
+				}
+				yield new ItemStack[]{};
+			}
+			default -> new ItemStack[]{};
+		};
 	}
 
 	@Override

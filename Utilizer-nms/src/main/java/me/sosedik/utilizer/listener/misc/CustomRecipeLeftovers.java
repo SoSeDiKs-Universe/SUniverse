@@ -1,8 +1,10 @@
 package me.sosedik.utilizer.listener.misc;
 
 import io.papermc.paper.adventure.PaperAdventure;
+import me.sosedik.kiterino.event.item.SideItemRemainEvent;
 import me.sosedik.utilizer.Utilizer;
 import me.sosedik.utilizer.api.event.recipe.ItemCraftEvent;
+import me.sosedik.utilizer.api.event.recipe.ItemCraftPrepareEvent;
 import me.sosedik.utilizer.api.event.recipe.RemainingItemEvent;
 import me.sosedik.utilizer.util.DurabilityUtil;
 import me.sosedik.utilizer.util.InventoryUtil;
@@ -18,6 +20,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.CrafterCraftEvent;
 import org.bukkit.event.inventory.BrewEvent;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.CraftItemEvent;
@@ -42,6 +45,7 @@ import java.util.function.BiPredicate;
 @NullMarked
 public class CustomRecipeLeftovers implements Listener {
 
+	public static final NamespacedKey SIDE_LEFTOVER = Utilizer.utilizerKey("side_leftover");
 	public static final NamespacedKey BURNT_FUEL_LEFTOVER = Utilizer.utilizerKey("burnt_fuel_leftover");
 	public static final NamespacedKey BREW_LEFTOVER = Utilizer.utilizerKey("brew_leftover");
 
@@ -128,8 +132,39 @@ public class CustomRecipeLeftovers implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onPreCraft(CrafterCraftEvent event) {
+		var preCraftEvent = new ItemCraftPrepareEvent(event, event.getRecipe().getKey());
+		preCraftEvent.callEvent();
+
+		if (ItemStack.isEmpty(preCraftEvent.getResult()))
+			event.setCancelled(true);
+	}
+
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	public void onCraft(CrafterCraftEvent event) {
+		var craftEvent = new ItemCraftEvent(event, event.getRecipe().getKey());
+		craftEvent.callEvent();
+
+		ItemStack result = craftEvent.getResult();
+		if (ItemStack.isEmpty(result)) {
+			event.setCancelled(true);
+			return;
+		}
+
+		event.setResult(result);
+	}
+
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onRemain(SideItemRemainEvent event) {
+		RemainingItemEvent remainingItemEvent = new RemainingItemEvent(event, null, null, SIDE_LEFTOVER, event.getItem(), 1, false);
+		remainingItemEvent.setResult(event.getRemainder());
+		remainingItemEvent.callEvent();
+		event.setRemainder(remainingItemEvent.getResult());
+	}
+
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onBurn(FurnaceBurnEvent event) {
-		RemainingItemEvent remainingItemEvent = new RemainingItemEvent(event, null, null, BURNT_FUEL_LEFTOVER, event.getFuel(), 1, false);
+		RemainingItemEvent remainingItemEvent = new RemainingItemEvent(event, null, null, BURNT_FUEL_LEFTOVER, event.getFuel(), 1, true);
 		remainingItemEvent.setResult(event.getRemainingItem());
 		remainingItemEvent.callEvent();
 		event.setRemainingItem(remainingItemEvent.getResult());
@@ -140,7 +175,7 @@ public class CustomRecipeLeftovers implements Listener {
 		ItemStack item = event.getContents().getItem(3);
 		if (ItemStack.isEmpty(item)) return;
 
-		RemainingItemEvent remainingItemEvent = new RemainingItemEvent(event, null, null, BREW_LEFTOVER, item, 1, false);
+		RemainingItemEvent remainingItemEvent = new RemainingItemEvent(event, null, null, BREW_LEFTOVER, item, 1, true);
 		remainingItemEvent.setResult(event.getRemainingItem());
 		remainingItemEvent.callEvent();
 		event.setRemainingItem(remainingItemEvent.getResult());

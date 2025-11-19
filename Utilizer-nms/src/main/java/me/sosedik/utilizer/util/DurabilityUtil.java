@@ -30,6 +30,16 @@ public class DurabilityUtil {
 	}
 
 	/**
+	 * Checks whether item is new
+	 *
+	 * @param item item
+	 * @return true, if item has zero damage
+	 */
+	public static boolean isNew(@Nullable ItemStack item) {
+		return getDamage(item) == 0;
+	}
+
+	/**
 	 * Checks whether item is broken
 	 *
 	 * @param item item

@@ -1,5 +1,6 @@
 package me.sosedik.utilizer.listener.misc;
 
+import me.sosedik.kiterino.event.inventory.CrafterCraftPreviewEvent;
 import me.sosedik.utilizer.api.event.recipe.ItemCraftEvent;
 import me.sosedik.utilizer.api.event.recipe.ItemCraftPrepareEvent;
 import me.sosedik.utilizer.api.event.recipe.RemainingItemEvent;
@@ -8,7 +9,9 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockCookEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
+import org.bukkit.inventory.CookingRecipe;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.HashMap;
@@ -25,8 +28,23 @@ public class ExtraRecipeHandlers implements Listener {
 	private static final Map<NamespacedKey, Consumer<ItemCraftEvent>> EXTRA = new HashMap<>();
 	private static final Map<NamespacedKey, Consumer<RemainingItemEvent>> REMAINS = new HashMap<>();
 
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void onCook(BlockCookEvent event) {
+		CookingRecipe<?> recipe = event.getRecipe();
+		if (recipe == null) return;
+
+		new ItemCraftEvent(event, recipe.getKey()).callEvent();
+	}
+
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onPreCraft(PrepareItemCraftEvent event) {
+		if (!(event.getRecipe() instanceof Keyed keyed)) return;
+
+		new ItemCraftPrepareEvent(event, keyed.getKey()).callEvent();
+	}
+
+	@EventHandler(priority = EventPriority.HIGH)
+	public void onPreCraft(CrafterCraftPreviewEvent event) {
 		if (!(event.getRecipe() instanceof Keyed keyed)) return;
 
 		new ItemCraftPrepareEvent(event, keyed.getKey()).callEvent();

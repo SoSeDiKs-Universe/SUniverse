@@ -4,7 +4,9 @@ import com.destroystokyo.paper.MaterialTags;
 import de.tr7zw.nbtapi.NBT;
 import de.tr7zw.nbtapi.iface.ReadableNBT;
 import io.papermc.paper.datacomponent.DataComponentTypes;
+import io.papermc.paper.datacomponent.item.DamageResistant;
 import io.papermc.paper.datacomponent.item.DyedItemColor;
+import io.papermc.paper.registry.keys.tags.DamageTypeTagKeys;
 import me.sosedik.kiterino.modifier.item.ItemContextBox;
 import me.sosedik.kiterino.modifier.item.ItemModifier;
 import me.sosedik.kiterino.modifier.item.ModificationResult;
@@ -208,6 +210,9 @@ public class BucketModifier extends ItemModifier {
 				saveTo.setData(DataComponentTypes.MAX_DAMAGE, MAX_DIAMOND_USES);
 			else if (this == NETHERITE)
 				saveTo.setData(DataComponentTypes.MAX_DAMAGE, MAX_NETHERITE_USES);
+
+			if (this == NETHERITE && !saveTo.hasData(DataComponentTypes.DAMAGE_RESISTANT))
+				saveTo.setData(DataComponentTypes.DAMAGE_RESISTANT, DamageResistant.damageResistant(DamageTypeTagKeys.IS_FIRE));
 
 			if (saveTo.hasData(DataComponentTypes.MAX_DAMAGE)) {
 				if (saveFrom != null && saveFrom.hasData(DataComponentTypes.DAMAGE))

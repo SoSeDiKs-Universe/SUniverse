@@ -9,6 +9,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 
 /**
  * Represents a custom recipe
@@ -49,6 +50,12 @@ public interface CustomRecipe extends Recipe, Keyed {
 			case RecipeChoice.MaterialChoice choice -> choice.getChoices().stream().map(ItemStack::of).toList();
 			default -> List.of(recipeChoice.getItemStack());
 		};
+	}
+
+	static RecipeChoice.ExactChoice makeChoice(ItemStack sample, Predicate<ItemStack> check) {
+		RecipeChoice.ExactChoice choice = new RecipeChoice.ExactChoice(sample);
+		choice.setPredicate(check);
+		return choice;
 	}
 
 }

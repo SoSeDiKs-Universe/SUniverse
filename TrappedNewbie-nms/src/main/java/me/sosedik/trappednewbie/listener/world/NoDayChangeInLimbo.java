@@ -1,7 +1,6 @@
 package me.sosedik.trappednewbie.listener.world;
 
 import me.sosedik.miscme.api.event.world.DayChangeEvent;
-import me.sosedik.trappednewbie.TrappedNewbie;
 import me.sosedik.utilizer.Utilizer;
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;

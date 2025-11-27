@@ -2,6 +2,7 @@
   "values": [
     "minecraft:bucket",
     "minecraft:milk_bucket",
-    "#minecraft:placeable_buckets"
+    "#minecraft:placeable_buckets",
+		"trapped_newbie:boiled_axolotl_bucket"
   ]
 }

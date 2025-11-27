@@ -1,5 +1,6 @@
 {
   "values": [
-    "minecraft:lava_bucket"
+    "minecraft:lava_bucket",
+    "trapped_newbie:strider_bucket"
   ]
 }

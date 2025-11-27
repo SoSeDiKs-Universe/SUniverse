@@ -18,6 +18,7 @@ import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Axolotl;
+import org.bukkit.entity.Frog;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.AxolotlBucketMeta;
@@ -39,7 +40,13 @@ public class BucketModifier extends ItemModifier {
 
 	private static final int MAX_WOODEN_USES = 32;
 	private static final int MAX_CERAMIC_USES = 64;
+	private static final int MAX_IRON_USES = 126;
+	private static final int MAX_GOLDEN_USES = 16;
+	private static final int MAX_DIAMOND_USES = 780;
+	private static final int MAX_NETHERITE_USES = 1016;
 	private static final DyedItemColor DEFAULT_CERAMIC_COLOR = DyedItemColor.dyedItemColor(Color.fromRGB(14975336));
+	private static final NamespacedKey SLIME_BOTTLE_JUMPING_MODEL = ResourceLib.storage().getItemModelMapping(trappedNewbieKey("slime_bottle_excited"));
+	private static final NamespacedKey MAGMA_CUBE_BOTTLE_JUMPING_MODEL = ResourceLib.storage().getItemModelMapping(trappedNewbieKey("magma_cube_bottle_excited"));
 
 	public BucketModifier(NamespacedKey modifierId) {
 		super(modifierId);
@@ -50,48 +57,63 @@ public class BucketModifier extends ItemModifier {
 		ItemStack item = contextBox.getItem();
 
 		BucketType bucketType = BucketType.fromBucket(item, contextBox.getInitialType());
-		if (bucketType == null) return ModificationResult.PASS;
+		if (bucketType == null) {
+			if (contextBox.getInitialType() == TrappedNewbieItems.SLIME_BOTTLE || contextBox.getInitialType() == TrappedNewbieItems.MAGMA_CUBE_BOTTLE) {
+				if (ItemUtil.shouldFreeze(contextBox.getContext())) return ModificationResult.PASS;
+
+				Player viewer = contextBox.getViewer();
+				if (viewer == null) return ModificationResult.PASS;
+				if (!viewer.getChunk().isSlimeChunk()) return ModificationResult.PASS;
+
+				item.setData(DataComponentTypes.ITEM_MODEL, contextBox.getInitialType() == TrappedNewbieItems.SLIME_BOTTLE ? SLIME_BOTTLE_JUMPING_MODEL : MAGMA_CUBE_BOTTLE_JUMPING_MODEL);
+				return ModificationResult.OK;
+			}
+			if (contextBox.getInitialType() == TrappedNewbieItems.ALLAY_BOOK || contextBox.getInitialType() == TrappedNewbieItems.VEX_BOOK) {
+				item.setData(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+				return ModificationResult.OK;
+			}
+			return ModificationResult.PASS;
+		}
+
+		if (bucketType == BucketType.VANILLA && !item.hasData(DataComponentTypes.MAX_DAMAGE))
+			item.setData(DataComponentTypes.MAX_DAMAGE, MAX_IRON_USES);
 
 		Player viewer = contextBox.getViewer();
 		BucketOverlay bucketOverlay = BucketOverlay.fromBucket(item, contextBox.getInitialType());
-
-		if (bucketType == BucketType.VANILLA && (bucketOverlay == null || bucketOverlay.usesVanillaModel()))
-			return ModificationResult.PASS;
 
 		boolean jumping = bucketOverlay != null && bucketOverlay.isJumping() && !ItemUtil.shouldFreeze(contextBox.getContext());
 		if (jumping && bucketOverlay.isSlime())
 			jumping = viewer != null && viewer.getChunk().isSlimeChunk();
 
-		boolean modified = false;
 		if (bucketType.isDyable() && !item.hasData(DataComponentTypes.DYED_COLOR)) {
 			item.setData(DataComponentTypes.DYED_COLOR, DEFAULT_CERAMIC_COLOR);
-			modified = true;
 			contextBox.addHiddenComponents(DataComponentTypes.DYED_COLOR);
 		}
 
 		if (bucketOverlay == null) {
 			var messenger = Messenger.messenger(LangOptionsStorage.getByLocale(contextBox.getLocale()));
 			item.setData(DataComponentTypes.ITEM_NAME, messenger.getMessage("item." + bucketType.getKey().namespace() + "." + bucketType.getKey().value() + ".name"));
-			item.setData(DataComponentTypes.ITEM_MODEL, bucketType.getModelKey());
+			if (bucketType != BucketType.VANILLA)
+				item.setData(DataComponentTypes.ITEM_MODEL, bucketType.getModelKey());
 			return ModificationResult.OK;
 		}
 
-		NamespacedKey modelKey = jumping ? bucketOverlay.getJumpingModelKey(bucketType) : bucketOverlay.getModelKey(bucketType);
-		if (modelKey == null) return modified ? ModificationResult.OK : ModificationResult.PASS;
-
 		NamespacedKey key = bucketOverlay.getKey(bucketType);
-		if (key == null) return modified ? ModificationResult.OK : ModificationResult.PASS;
-
 		var messenger = Messenger.messenger(LangOptionsStorage.getByLocale(contextBox.getLocale()));
 		item.setData(DataComponentTypes.ITEM_NAME, messenger.getMessage("item." + key.namespace() + "." + key.value() + ".name"));
-		item.setData(DataComponentTypes.ITEM_MODEL, modelKey);
+
+		NamespacedKey modelKey = jumping ? bucketOverlay.getJumpingModelKey(bucketType) : bucketOverlay.getModelKey(bucketType);
+		if (modelKey == null) return ModificationResult.OK;
+
+		if (bucketType != BucketType.VANILLA || !bucketOverlay.usesVanillaModel())
+			item.setData(DataComponentTypes.ITEM_MODEL, modelKey);
 
 		return ModificationResult.OK;
 	}
 
 	public enum BucketType {
 
-		VANILLA, // IRON
+		VANILLA("bucket"), // IRON
 		CLAY,
 		CERAMIC,
 		ACACIA,
@@ -105,13 +127,21 @@ public class BucketModifier extends ItemModifier {
 		PALE_OAK,
 		SPRUCE,
 		CRIMSON,
-		WARPED;
+		WARPED,
+		GOLDEN,
+		DIAMOND,
+		NETHERITE;
 
 		private final NamespacedKey key;
 		private final NamespacedKey modelKey;
 
 		BucketType() {
 			this.key = trappedNewbieKey(name().toLowerCase(Locale.US) + "_bucket");
+			this.modelKey = ResourceLib.storage().getItemModelMapping(this.key);
+		}
+
+		BucketType(String key) {
+			this.key = trappedNewbieKey(key);
 			this.modelKey = ResourceLib.storage().getItemModelMapping(this.key);
 		}
 
@@ -170,6 +200,14 @@ public class BucketModifier extends ItemModifier {
 				saveTo.setData(DataComponentTypes.MAX_DAMAGE, MAX_WOODEN_USES);
 			else if (this == CERAMIC)
 				saveTo.setData(DataComponentTypes.MAX_DAMAGE, MAX_CERAMIC_USES);
+			else if (this == VANILLA)
+				saveTo.setData(DataComponentTypes.MAX_DAMAGE, MAX_IRON_USES);
+			else if (this == GOLDEN)
+				saveTo.setData(DataComponentTypes.MAX_DAMAGE, MAX_GOLDEN_USES);
+			else if (this == DIAMOND)
+				saveTo.setData(DataComponentTypes.MAX_DAMAGE, MAX_DIAMOND_USES);
+			else if (this == NETHERITE)
+				saveTo.setData(DataComponentTypes.MAX_DAMAGE, MAX_NETHERITE_USES);
 
 			if (saveTo.hasData(DataComponentTypes.MAX_DAMAGE)) {
 				if (saveFrom != null && saveFrom.hasData(DataComponentTypes.DAMAGE))
@@ -205,6 +243,9 @@ public class BucketModifier extends ItemModifier {
 		FROG_COLD(TrappedNewbieItems.FROG_BUCKET, false, false),
 		FROG_TEMPERATE(TrappedNewbieItems.FROG_BUCKET, false, false),
 		FROG_WARM(TrappedNewbieItems.FROG_BUCKET, false, false),
+		FROG_COLD_WATER(TrappedNewbieItems.FROG_WATER_BUCKET, false, false),
+		FROG_TEMPERATE_WATER(TrappedNewbieItems.FROG_WATER_BUCKET, false, false),
+		FROG_WARM_WATER(TrappedNewbieItems.FROG_WATER_BUCKET, false, false),
 		TADPOLE(Material.TADPOLE_BUCKET, false, true),
 		AXOLOTL_LEUCISTIC(Material.AXOLOTL_BUCKET, false, false),
 		AXOLOTL_LEUCISTIC_BABY(Material.AXOLOTL_BUCKET, false, false),
@@ -219,7 +260,12 @@ public class BucketModifier extends ItemModifier {
 		AXOLOTL_BOILED(TrappedNewbieItems.BOILED_AXOLOTL_BUCKET, false, false),
 		AXOLOTL_BOILED_BABY(TrappedNewbieItems.BOILED_AXOLOTL_BUCKET, false, false),
 		SLIME(TrappedNewbieItems.SLIME_BUCKET, true, false),
-		MAGMA_CUBE(TrappedNewbieItems.MAGMA_CUBE_BUCKET, true, false);
+		MAGMA_CUBE(TrappedNewbieItems.MAGMA_CUBE_BUCKET, true, false),
+		SQUID(TrappedNewbieItems.SQUID_BUCKET, false, false),
+		GLOW_SQUID(TrappedNewbieItems.GLOW_SQUID_BUCKET, false, false),
+		TURTLE(TrappedNewbieItems.TURTLE_BUCKET, false, false),
+		TURTLE_BABY(TrappedNewbieItems.TURTLE_BUCKET, false, false),
+		STRIDER(TrappedNewbieItems.STRIDER_BUCKET, false, false);
 
 		private final Material vanillaSample;
 		private final Map<BucketType, NamespacedKey> keys = new EnumMap<>(BucketType.class);
@@ -233,15 +279,15 @@ public class BucketModifier extends ItemModifier {
 			this.jumpingModelKeys = jumping ? new EnumMap<>(BucketType.class) : Map.of();
 			for (BucketType bucketType : BucketType.values()) {
 				String modelKey = (bucketType == BucketType.VANILLA ? "" : bucketType.name().toLowerCase(Locale.US) + "_") + name().toLowerCase(Locale.US) + "_bucket";
+				this.keys.put(bucketType, trappedNewbieKey(modelKey));
 				if (!vanillaModel || bucketType != BucketType.VANILLA) {
-					this.keys.put(bucketType, trappedNewbieKey(modelKey));
 					this.modelKeys.put(bucketType, ResourceLib.storage().getItemModelMapping(trappedNewbieKey(modelKey)));
 				}
 				if (jumping) this.jumpingModelKeys.put(bucketType, ResourceLib.storage().getItemModelMapping(trappedNewbieKey("jumping_" + modelKey)));
 			}
 		}
 
-		public @Nullable NamespacedKey getKey(BucketType bucketType) {
+		public NamespacedKey getKey(BucketType bucketType) {
 			return this.keys.get(bucketType);
 		}
 
@@ -266,7 +312,7 @@ public class BucketModifier extends ItemModifier {
 		}
 
 		public boolean isHot() {
-			return UtilizerTags.HOT_BUCKETS.isTagged(this.vanillaSample);
+			return UtilizerTags.HOT_BUCKETABLE.isTagged(this.vanillaSample);
 		}
 
 		public boolean isSlime() {
@@ -282,15 +328,18 @@ public class BucketModifier extends ItemModifier {
 			return switch (itemType) {
 				case Material m when m == TrappedNewbieItems.SLIME_BUCKET -> SLIME;
 				case Material m when m == TrappedNewbieItems.MAGMA_CUBE_BUCKET -> MAGMA_CUBE;
-				case Material m when m == TrappedNewbieItems.FROG_BUCKET -> NBT.getComponents(item, nbt -> {
-					ReadableNBT bucketEntityData = nbt.getCompound("minecraft:bucket_entity_data");
-					if (bucketEntityData == null) return FROG_TEMPERATE;
+				case Material m when (m == TrappedNewbieItems.FROG_BUCKET || m == TrappedNewbieItems.FROG_WATER_BUCKET) -> {
+					boolean water = m == TrappedNewbieItems.FROG_WATER_BUCKET;
+					if (!item.hasData(DataComponentTypes.FROG_VARIANT)) yield water ? FROG_TEMPERATE_WATER : FROG_TEMPERATE;
 
-					String type = bucketEntityData.getOrNull("Variant", String.class);
-					if ("cold".equals(type)) return FROG_COLD;
-					if ("warm".equals(type)) return FROG_WARM;
-					return FROG_TEMPERATE;
-				});
+					Frog.Variant data = item.getData(DataComponentTypes.FROG_VARIANT);
+					assert data != null;
+					yield switch (data) {
+						case Frog.Variant variant when variant == Frog.Variant.COLD -> water ? FROG_COLD_WATER : FROG_COLD;
+						case Frog.Variant variant when variant == Frog.Variant.WARM -> water ? FROG_WARM_WATER : FROG_WARM;
+						default -> water ? FROG_TEMPERATE_WATER : FROG_TEMPERATE;
+					};
+				}
 				case Material m when m == TrappedNewbieItems.BOILED_AXOLOTL_BUCKET -> NBT.getComponents(item, nbt -> {
 					ReadableNBT bucketEntityData = nbt.getCompound("minecraft:bucket_entity_data");
 					if (bucketEntityData == null) return AXOLOTL_BOILED;
@@ -299,6 +348,17 @@ public class BucketModifier extends ItemModifier {
 					int age = bucketEntityData.getOrDefault("Age", 0);
 					return age >= 0 ? AXOLOTL_BOILED : AXOLOTL_BOILED_BABY;
 				});
+				case Material m when m == TrappedNewbieItems.TURTLE_BUCKET -> NBT.getComponents(item, nbt -> {
+					ReadableNBT bucketEntityData = nbt.getCompound("minecraft:bucket_entity_data");
+					if (bucketEntityData == null) return TURTLE;
+					if (!bucketEntityData.hasTag("Age")) return TURTLE;
+
+					int age = bucketEntityData.getOrDefault("Age", 0);
+					return age >= 0 ? TURTLE : TURTLE_BABY;
+				});
+				case Material m when m == TrappedNewbieItems.SQUID_BUCKET -> SQUID;
+				case Material m when m == TrappedNewbieItems.GLOW_SQUID_BUCKET -> GLOW_SQUID;
+				case Material m when m == TrappedNewbieItems.STRIDER_BUCKET -> STRIDER;
 				case WATER_BUCKET -> WATER;
 				case LAVA_BUCKET -> LAVA;
 				case MILK_BUCKET -> MILK;

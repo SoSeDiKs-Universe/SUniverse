@@ -72,7 +72,9 @@ import me.sosedik.trappednewbie.impl.advancement.PyrotechnicAdvancement;
 import me.sosedik.trappednewbie.impl.advancement.RockPaperShearsAdvancement;
 import me.sosedik.trappednewbie.impl.advancement.Walk10KKMAdvancement;
 import me.sosedik.trappednewbie.impl.advancement.YouMonsterAdvancement;
+import me.sosedik.trappednewbie.impl.item.modifier.BucketModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.LetterModifier;
+import me.sosedik.trappednewbie.impl.item.modifier.ScrapModifier;
 import me.sosedik.trappednewbie.impl.thirst.ThirstData;
 import me.sosedik.utilizer.api.message.Messenger;
 import me.sosedik.utilizer.dataset.UtilizerTags;
@@ -197,6 +199,11 @@ public class TrappedNewbieAdvancements {
 		.display(display().x(1.25F).withAdvancementFrame(AdvancementFrame.SHARP).icon(RequiemItems.HOST_REVOCATOR))
 		.visibilityRule(parentGranted())
 		.buildAndRegister();
+	public static final IAdvancement EAT_A_ROASTED_SPIDER_EYE = buildBase(FIRST_POSSESSION, "eat_a_roasted_spider_eye")
+		.display(display().xy(0.5F, -1F).withAdvancementFrame(AdvancementFrame.CIRCLE).icon(DelightfulFarmingItems.ROASTED_SPIDER_EYE))
+		.visibilityRule(parentGranted())
+		.requiredProgress(vanilla(consumeItem().withItem(ItemTriggerCondition.of(DelightfulFarmingItems.ROASTED_SPIDER_EYE))))
+		.buildAndRegister();
 	public static final IAdvancement GOOD_AS_NEW = buildBase(FIRST_POSSESSION, "good_as_new")
 		.display(display().x(1.2F).withAdvancementFrame(AdvancementFrame.SHARP).icon(ItemUtil.texturedHead(MoreMobHeads.ZOMBIE_VILLAGER_PLAINS_ARMORER)))
 		.buildAndRegister();
@@ -213,9 +220,8 @@ public class TrappedNewbieAdvancements {
 	public static final IAdvancement I_HATE_SAND = buildBase(GOOD_AS_NEW, "i_hate_sand")
 		.display(display().xy(1F, 1F).withAdvancementFrame(AdvancementFrame.CIRCLE).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.SAND))
 		.buildAndRegister();
-	public static final IAdvancement KUNG_FU_PANDA = buildBase(FIRST_POSSESSION, "kung_fu_panda")
-		.display(display().xy(0.5F, -1F).withAdvancementFrame(AdvancementFrame.CIRCLE).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.BAMBOO))
-		.visibilityRule(parentGranted())
+	public static final IAdvancement KUNG_FU_PANDA = buildBase(I_HATE_SAND, "kung_fu_panda")
+		.display(display().x(1F).withAdvancementFrame(AdvancementFrame.CIRCLE).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.BAMBOO))
 		.buildAndRegister();
 	public static final IAdvancement FIRST_DRINK = buildBase(GOOD_AS_NEW, "first_drink")
 		.display(display().xy(1F, -1.6F).fancyDescriptionParent(NamedTextColor.GRAY).icon(Material.DRAGON_BREATH))
@@ -322,10 +328,6 @@ public class TrappedNewbieAdvancements {
 	public static final IAdvancement MAKE_A_FIRE_FILLER = buildFake(MAKE_A_FIRE).display(display().x(0.5F).isHidden(true))
 			.requiredProgress(neverDone())
 			.buildAndRegister();
-	public static final IAdvancement EAT_A_ROASTED_SPIDER_EYE = buildBase(MAKE_A_FIRE, "eat_a_roasted_spider_eye")
-		.display(display().xy(0.5F, -1.25F).withAdvancementFrame(AdvancementFrame.SHARP).icon(DelightfulFarmingItems.ROASTED_SPIDER_EYE))
-		.requiredProgress(vanilla(consumeItem().withItem(ItemTriggerCondition.of(DelightfulFarmingItems.ROASTED_SPIDER_EYE))))
-		.buildAndRegister();
 	public static final IAdvancement GET_A_CHARCOAL = buildBase(MAKE_A_FIRE_FILLER, "get_a_charcoal").display(display().xy(1F, -0.55F).icon(Material.CHARCOAL))
 			.requiredProgress(vanilla(inventoryChanged().withItems(ItemTriggerCondition.of(Material.CHARCOAL))))
 			.buildAndRegister();
@@ -389,6 +391,28 @@ public class TrappedNewbieAdvancements {
 			.visibilityRule(parentGranted())
 			.requiredProgress(vanilla(inventoryChanged().withItems(ItemTriggerCondition.of(Material.STONE))))
 			.buildAndRegister();
+	public static final IAdvancement GET_A_CLAY_BUCKET = buildBase(GET_A_CLAY_BALL, "get_a_clay_bucket")
+		.display(display().xy(0.5F, 1F).withAdvancementFrame(AdvancementFrame.CIRCLE).icon(BucketModifier.BucketType.CLAY.save(ItemStack.of(Material.BUCKET))))
+		.requiredProgress(vanilla(
+			inventoryChanged()
+				.withItems(ItemTriggerCondition.of(Material.BUCKET)
+					.withRawComponents(
+						"""
+							{
+								"components": {
+									"custom_data": {
+										"bucket_type": "CLAY"
+									}
+								}
+							}
+						"""
+					)
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement BURN_A_CLAY_BUCKET = buildBase(GET_A_CLAY_BUCKET, "burn_a_clay_bucket")
+		.display(display().x(1F).withAdvancementFrame(AdvancementFrame.CIRCLE).icon(ScrapModifier.makeScrap(BucketModifier.BucketType.CERAMIC.save(ItemStack.of(Material.BUCKET)))))
+		.buildAndRegister();
 //	public static final IAdvancement MAKE_A_STONE_TOOL = buildBase(MAKE_A_STONE, "make_a_stone_tool").display(display().xy(1F, 0F).goalFrame().icon(Material.STONE_PICKAXE))
 //			.requiredProgress(vanilla(inventoryChanged().withItems(ItemTriggerCondition.of(Material.STONE_AXE, Material.STONE_PICKAXE, Material.STONE_HOE, Material.STONE_SHOVEL, Material.STONE_SWORD))))
 //			.buildAndRegister();
@@ -1310,14 +1334,14 @@ public class TrappedNewbieAdvancements {
 			})
 		)
 		.buildAndRegister(BlowUpAllMonstersWithTNTAdvancement::new);
-	public static final IAdvancement GET_A_CROWSSBOW = buildBase(WEAPONRY_ROOT, "get_a_crowssbow").display(display().xy(1F, -6F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.TRIPWIRE_HOOK))
+	public static final IAdvancement GET_A_CROSSBOW = buildBase(WEAPONRY_ROOT, "get_a_crossbow").display(display().xy(1F, -6F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.TRIPWIRE_HOOK))
 		.requiredProgress(vanilla(inventoryChanged().withItems(ItemTriggerCondition.of(Material.CROSSBOW))))
 		.buildAndRegister();
-	public static final IAdvancement SHOOT_A_CROWSSBOW = buildBase(GET_A_CROWSSBOW, "shoot_a_crowssbow").display(display().x(1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.CROSSBOW))
+	public static final IAdvancement SHOOT_A_CROSSBOW = buildBase(GET_A_CROSSBOW, "shoot_a_crossbow").display(display().x(1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.CROSSBOW))
 		.withReward(rewards().addItems(ItemStack.of(Material.ARROW, 8)))
 		.requiredProgress(vanilla(shotCrossbow().withItem(ItemTriggerCondition.of(Material.CROSSBOW))))
 		.buildAndRegister();
-	public static final IAdvancement HOLD_A_CROWSSBOW_AND_A_SPYGLASS = buildBase(SHOOT_A_CROWSSBOW, "hold_a_crowssbow_and_a_spyglass").display(display().x(1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.SPYGLASS))
+	public static final IAdvancement HOLD_A_CROSSBOW_AND_A_SPYGLASS = buildBase(SHOOT_A_CROSSBOW, "hold_a_crossbow_and_a_spyglass").display(display().x(1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.SPYGLASS))
 		.withReward(rewards().withExp(20))
 		.requiredProgress(vanilla(
 			usingItem()
@@ -1329,7 +1353,7 @@ public class TrappedNewbieAdvancements {
 				.withItem(ItemTriggerCondition.of(Material.SPYGLASS))
 		))
 		.buildAndRegister();
-	public static final IAdvancement KILL_A_PILLAGER_WITH_A_CROSSBOW = buildBase(HOLD_A_CROWSSBOW_AND_A_SPYGLASS, "kill_a_pillager_with_a_crossbow").display(display().x(1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(ItemUtil.texturedHead(MoreMobHeads.PILLAGER)))
+	public static final IAdvancement KILL_A_PILLAGER_WITH_A_CROSSBOW = buildBase(HOLD_A_CROSSBOW_AND_A_SPYGLASS, "kill_a_pillager_with_a_crossbow").display(display().x(1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(ItemUtil.texturedHead(MoreMobHeads.PILLAGER)))
 		.withReward(rewards().addItems(ItemStack.of(Material.EMERALD, 2)))
 		.requiredProgress(vanilla(
 			killedByArrow()
@@ -1392,6 +1416,31 @@ public class TrappedNewbieAdvancements {
 				)
 		))
 		.buildAndRegister();
+	public static final IAdvancement GET_A_MOB_BOTTLE = buildBase(WEAPONRY_ROOT, "get_a_mob_bottle")
+		.display(display().xy(1F, -7F).fancyDescriptionParent(NamedTextColor.GREEN).icon(TrappedNewbieItems.BEE_BOTTLE))
+		.requiredProgress(vanilla(inventoryChanged().withItems(ItemTriggerCondition.of(UtilizerTags.BOTTLEABLE_MOBS))))
+		.buildAndRegister();
+	public static final IAdvancement CAPTURE_SLIMES = buildBase(GET_A_MOB_BOTTLE, "capture_slimes")
+		.display(display().x(1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(TrappedNewbieItems.SLIME_BOTTLE))
+		.requiredProgress(vanilla(
+			inventoryChanged()
+				.withItems(ItemTriggerCondition.of(TrappedNewbieItems.SLIME_BOTTLE, TrappedNewbieItems.SLIME_BUCKET)),
+			inventoryChanged()
+				.withItems(ItemTriggerCondition.of(TrappedNewbieItems.MAGMA_CUBE_BOTTLE, TrappedNewbieItems.MAGMA_CUBE_BUCKET))
+		))
+		.buildAndRegister();
+	public static final IAdvancement CAPTURE_ALL_BOTTLEABLE = buildBase(CAPTURE_SLIMES, "capture_all_bottleable")
+		.display(display().x(1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(TrappedNewbieItems.ENDERMITE_BOTTLE))
+		.requiredProgress(vanilla(
+			UtilizerTags.BOTTLEABLE_MOBS.getValues().stream()
+				.map(bottle -> inventoryChanged(bottle.key().value()).withItems(ItemTriggerCondition.of(bottle)))
+				.toList()
+		))
+		.buildAndRegister();
+	public static final IAdvancement GET_A_MOB_BOOK = buildBase(CAPTURE_ALL_BOTTLEABLE, "get_a_mob_book")
+		.display(display().x(1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(TrappedNewbieItems.ALLAY_BOOK))
+		.requiredProgress(vanilla(inventoryChanged().withItems(ItemTriggerCondition.of(UtilizerTags.BOOKABLE_MOBS))))
+		.buildAndRegister();
 
 	public static final AdvancementTab MAGIC_TAB = buildTab("magic", MANAGER)
 		.display(simpleTabDisplay().inverseY().display(display().backgroundPathTexture("block/obsidian").icon(Material.ENCHANTING_TABLE)))
@@ -1409,6 +1458,10 @@ public class TrappedNewbieAdvancements {
 		.display(display().withAdvancementFrame(AdvancementFrame.SQUIRCLE).fancyDescriptionParent(GRAY).icon(Material.RED_NETHER_BRICKS))
 		.visibilityRule(ifDone(false, FIRST_POSSESSION))
 		.requiredProgress(alwaysDone())
+		.buildAndRegister();
+	public static final IAdvancement GET_A_STRIDER_BUCKET = buildBase(NETHER_ROOT, "get_a_strider_bucket")
+		.display(display().x(1F).withAdvancementFrame(AdvancementFrame.GOAL).fancyDescriptionParent(NamedTextColor.AQUA).icon(TrappedNewbieItems.STRIDER_BUCKET))
+		.requiredProgress(vanilla(inventoryChanged().withItems(ItemTriggerCondition.of(TrappedNewbieItems.STRIDER_BUCKET))))
 		.buildAndRegister();
 
 	public static final AdvancementTab THE_END_TAB = buildTab("the_end", MANAGER)

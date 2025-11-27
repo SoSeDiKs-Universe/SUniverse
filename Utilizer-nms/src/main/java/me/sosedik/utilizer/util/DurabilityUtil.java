@@ -60,10 +60,9 @@ public class DurabilityUtil {
 	public static int getDurability(@Nullable ItemStack item) {
 		if (item == null) return -1;
 		if (item.isUnbreakable()) return -1;
-		if (!item.hasData(DataComponentTypes.DAMAGE)) return -1;
 		if (!item.hasData(DataComponentTypes.MAX_DAMAGE)) return -1;
 
-		int damage = Objects.requireNonNull(item.getData(DataComponentTypes.DAMAGE));
+		int damage = item.hasData(DataComponentTypes.DAMAGE) ? Objects.requireNonNull(item.getData(DataComponentTypes.DAMAGE)) : 0;
 		int maxDamage = Objects.requireNonNull(item.getData(DataComponentTypes.MAX_DAMAGE));
 		int durability = Math.max(0, maxDamage - damage);
 

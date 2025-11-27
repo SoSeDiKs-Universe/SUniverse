@@ -1,5 +1,6 @@
 package me.sosedik.utilizer;
 
+import com.destroystokyo.paper.MaterialTags;
 import io.leangen.geantyref.TypeToken;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import me.sosedik.limboworldgenerator.VoidChunkGenerator;
@@ -9,6 +10,7 @@ import me.sosedik.utilizer.api.language.TranslationHolder;
 import me.sosedik.utilizer.api.message.Mini;
 import me.sosedik.utilizer.command.LangCommand;
 import me.sosedik.utilizer.command.TranslatorCommand;
+import me.sosedik.utilizer.dataset.UtilizerTags;
 import me.sosedik.utilizer.impl.item.modifier.CustomTotemOfUndyingModifier;
 import me.sosedik.utilizer.impl.item.modifier.DyedItemNamesModifier;
 import me.sosedik.utilizer.impl.item.modifier.GlowingItemModifier;
@@ -88,6 +90,8 @@ public final class Utilizer extends JavaPlugin {
 		TranslationHolder.extractLocales(this);
 
 		scheduler = new Scheduler(this);
+
+		MaterialTags.BUCKETS.unlock().add(UtilizerTags.BUCKETS).lock();
 	}
 
 	@Override

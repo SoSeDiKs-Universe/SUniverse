@@ -84,7 +84,7 @@ public class FoodTooltipModifier extends ItemModifier {
 	}
 
 	public static Component combineToOne(int value, Component spacing, Component half, Component full) {
-		if (value < 0) return combined(Component.text('-', NamedTextColor.RED), combineToOne(-value, spacing, half, full));
+		if (value < 0) return combined(Component.text('-', NamedTextColor.RED), combineToOne(-value, spacing, half, full)).shadowColor(ShadowColor.shadowColor(NamedTextColor.RED, 0));
 		if (value == 1) return half;
 		if (value == 2) return full;
 

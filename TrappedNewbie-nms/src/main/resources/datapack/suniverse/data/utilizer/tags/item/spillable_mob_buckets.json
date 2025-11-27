@@ -8,6 +8,11 @@
     "minecraft:tadpole_bucket",
     "trapped_newbie:slime_bucket",
     "trapped_newbie:magma_cube_bucket",
-    "trapped_newbie:frog_bucket"
+    "trapped_newbie:frog_bucket",
+    "trapped_newbie:frog_water_bucket",
+    "trapped_newbie:turtle_bucket",
+    "trapped_newbie:squid_bucket",
+    "trapped_newbie:glow_squid_bucket",
+    "trapped_newbie:strider_bucket"
   ]
 }

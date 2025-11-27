@@ -1,0 +1,6 @@
+{
+	"client_type": "minecraft:iron_nugget",
+	"stack_size": 1,
+	"remaining_item": "minecraft:glass_bottle",
+	"using_converts_to": "minecraft:glass_bottle"
+}

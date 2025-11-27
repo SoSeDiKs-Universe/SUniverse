@@ -25,6 +25,7 @@ import me.sosedik.trappednewbie.listener.misc.AllRecipesInRecipeBook;
 import me.sosedik.utilizer.api.event.recipe.ItemCraftEvent;
 import me.sosedik.utilizer.api.event.recipe.ItemCraftPrepareEvent;
 import me.sosedik.utilizer.api.recipe.CraftingRecipeBuilder;
+import me.sosedik.utilizer.api.recipe.CustomRecipe;
 import me.sosedik.utilizer.dataset.UtilizerTags;
 import me.sosedik.utilizer.impl.recipe.BrewingCraft;
 import me.sosedik.utilizer.impl.recipe.CampfireCraft;
@@ -55,6 +56,7 @@ import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
+import org.bukkit.inventory.SmithingTransformRecipe;
 import org.bukkit.inventory.recipe.CraftingBookCategory;
 import org.bukkit.potion.PotionType;
 import org.jspecify.annotations.NullMarked;
@@ -492,6 +494,19 @@ public class TrappedNewbieRecipes {
 				.register();
 		});
 
+		new ShapedCraft(BucketModifier.BucketType.GOLDEN.save(ItemStack.of(Material.BUCKET)), trappedNewbieKey("golden_bucket"), "C C", " C ")
+			.addIngredients('C', Material.GOLD_INGOT)
+			.register();
+		new ShapedCraft(BucketModifier.BucketType.DIAMOND.save(ItemStack.of(Material.BUCKET)), trappedNewbieKey("diamond_bucket"), "C C", " C ")
+			.addIngredients('C', Material.DIAMOND)
+			.register();
+		Bukkit.addRecipe(new SmithingTransformRecipe(trappedNewbieKey("netherite_bucket"), BucketModifier.BucketType.NETHERITE.save(ItemStack.of(Material.BUCKET)),
+			new RecipeChoice.MaterialChoice(Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
+			CustomRecipe.makeChoice(BucketModifier.BucketType.DIAMOND.save(ItemStack.of(Material.BUCKET)), item -> BucketModifier.BucketType.fromBucket(item) == BucketModifier.BucketType.DIAMOND),
+			new RecipeChoice.MaterialChoice(Material.NETHERITE_INGOT),
+			true
+		));
+
 		new ShapedCraft(ItemStack.of(TrappedNewbieItems.LEATHER_GLOVES), trappedNewbieKey("leather_gloves"), "L L")
 			.withCategory(CraftingBookCategory.EQUIPMENT)
 			.addIngredients('L', Material.LEATHER)
@@ -752,6 +767,7 @@ public class TrappedNewbieRecipes {
 	private static void addFuels() {
 		Bukkit.addFuel(TrappedNewbieItems.ROUGH_STICK, 100);
 		Bukkit.addFuel(TrappedNewbieItems.MAGMA_CUBE_BUCKET, 1000 * 20);
+		Bukkit.addFuel(TrappedNewbieItems.MAGMA_CUBE_BOTTLE, 1000 * 20);
 		TrappedNewbieTags.BRANCHES.getValues().forEach(material -> Bukkit.addFuel(material, 100));
 		TrappedNewbieTags.STICKS.getValues().forEach(material -> Bukkit.addFuel(material, 100));
 		UtilizerTags.LAVA_BUCKETS.getValues().forEach(material -> {
@@ -770,8 +786,13 @@ public class TrappedNewbieRecipes {
 			.asBrewIngredient(PotionType.WATER, PotionType.MUNDANE)
 			.asBrewIngredient(PotionType.AWKWARD, PotionType.FIRE_RESISTANCE, "fire_resistance_from_magma_cream")
 			.register();
+		new BrewingCraft(ItemStack.of(TrappedNewbieItems.MAGMA_CUBE_BOTTLE), true, trappedNewbieKey("magma_cube_bottle"))
+			.asBrewIngredient(PotionType.WATER, PotionType.MUNDANE)
+			.asBrewIngredient(PotionType.AWKWARD, PotionType.FIRE_RESISTANCE, "fire_resistance_from_magma_cream")
+			.register();
 
 		AllRecipesInRecipeBook.addVanillaPotionMix("fire_resistance_from_magma_cream", PotionType.FIRE_RESISTANCE, TrappedNewbieItems.MAGMA_CUBE_BUCKET, null, PotionType.LONG_FIRE_RESISTANCE);
+		AllRecipesInRecipeBook.addVanillaPotionMix("fire_resistance_from_magma_cream", PotionType.FIRE_RESISTANCE, TrappedNewbieItems.MAGMA_CUBE_BOTTLE, null, PotionType.LONG_FIRE_RESISTANCE);
 	}
 
 	private static void removeRecipes() {
@@ -797,9 +818,9 @@ public class TrappedNewbieRecipes {
 		addReplacements(replacements, Material.SHEARS, UtilizerTags.SHEARS, null);
 		addReplacements(replacements, Material.STRING, List.of(Material.STRING, TrappedNewbieItems.HORSEHAIR), null, NamespacedKey.minecraft("white_wool_from_string"));
 		addReplacements(replacements, Material.RABBIT_HIDE, UtilizerTags.HIDES, null);
-		List<Material> slimes = List.of(Material.SLIME_BALL, TrappedNewbieItems.SLIME_BUCKET);
-		addReplacements(replacements, Material.SLIME_BALL, slimes, item -> slimes.contains(item.getType()));
-		List<Material> magmaCreams = List.of(Material.MAGMA_CREAM, TrappedNewbieItems.MAGMA_CUBE_BUCKET);
+		List<Material> slimeBalls = List.of(Material.SLIME_BALL, TrappedNewbieItems.SLIME_BUCKET, TrappedNewbieItems.SLIME_BOTTLE);
+		addReplacements(replacements, Material.SLIME_BALL, slimeBalls, item -> slimeBalls.contains(item.getType()));
+		List<Material> magmaCreams = List.of(Material.MAGMA_CREAM, TrappedNewbieItems.MAGMA_CUBE_BUCKET, TrappedNewbieItems.MAGMA_CUBE_BOTTLE);
 		addReplacements(replacements, Material.MAGMA_CREAM, magmaCreams, item -> magmaCreams.contains(item.getType()));
 
 		TrappedNewbie.scheduler().sync(() -> {

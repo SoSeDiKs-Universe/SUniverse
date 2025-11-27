@@ -1,6 +1,5 @@
 package me.sosedik.trappednewbie;
 
-import com.destroystokyo.paper.MaterialTags;
 import io.leangen.geantyref.TypeToken;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import me.sosedik.delightfulfarming.dataset.DelightfulFarmingRecipes;
@@ -252,8 +251,6 @@ public final class TrappedNewbie extends JavaPlugin {
 			assert filled != null;
 			DelightfulFarmingRecipes.addMilkPredicate(filled, item -> ThirstData.DrinkType.fromItem(item) == ThirstData.DrinkType.MILK);
 		});
-
-		MaterialTags.BUCKETS.unlock().add(TrappedNewbieItems.SLIME_BUCKET, TrappedNewbieItems.MAGMA_CUBE_BUCKET, TrappedNewbieItems.FROG_BUCKET).lock();
 	}
 
 	private void cleanupTemporaryWorlds() {

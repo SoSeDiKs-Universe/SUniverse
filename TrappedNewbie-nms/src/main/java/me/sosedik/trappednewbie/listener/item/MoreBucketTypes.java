@@ -2,12 +2,14 @@ package me.sosedik.trappednewbie.listener.item;
 
 import com.destroystokyo.paper.MaterialTags;
 import io.papermc.paper.datacomponent.DataComponentTypes;
+import io.papermc.paper.datacomponent.item.UseRemainder;
 import me.sosedik.kiterino.event.entity.EntityItemConsumeEvent;
 import me.sosedik.kiterino.event.entity.ItemConsumeEvent;
 import me.sosedik.miscme.listener.entity.ItemFrameSpillables;
 import me.sosedik.miscme.listener.item.ImmersiveDyes;
 import me.sosedik.trappednewbie.TrappedNewbie;
 import me.sosedik.trappednewbie.api.item.VisualArmor;
+import me.sosedik.trappednewbie.dataset.TrappedNewbieAdvancements;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieItems;
 import me.sosedik.trappednewbie.impl.item.modifier.BucketModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.ScrapModifier;
@@ -62,7 +64,9 @@ import org.jspecify.annotations.Nullable;
 public class MoreBucketTypes implements Listener {
 
 	public MoreBucketTypes() {
-		MaterialTags.BUCKETS.getValues().forEach(bucketMaterial ->
+		MaterialTags.BUCKETS.getValues().forEach(bucketMaterial -> {
+			if (BucketModifier.BucketType.fromBucket(ItemStack.of(bucketMaterial)) == null) return;
+
 			ImmersiveDyes.addExtraDyeRule(bucketMaterial, (item, dye) -> {
 				BucketModifier.BucketType bucketType = BucketModifier.BucketType.fromBucket(item);
 				if (bucketType == null) return null;
@@ -72,8 +76,8 @@ public class MoreBucketTypes implements Listener {
 				if (!ImmersiveDyes.tryToDye(item, dye)) return null;
 
 				return item;
-			})
-		);
+			});
+		});
 
 		ItemFrameSpillables.SpillableItem waterSpillLogic = (spiller, item, block) -> {
 			block.emitSound(Sound.ITEM_BUCKET_EMPTY, 1F, 1F);
@@ -258,7 +262,7 @@ public class MoreBucketTypes implements Listener {
 				if (itemStack.getItem() instanceof MobBucketItem mobBucketItem)
 					mobBucketItem.checkExtraContent(spiller instanceof CraftLivingEntity living ? living.getHandle() : null, ((CraftWorld) block.getWorld()).getHandle(), itemStack, CraftLocation.toBlockPosition(block.getLocation()));
 
-				if (UtilizerTags.HOT_BUCKETS.isTagged(item.getType())) {
+				if (UtilizerTags.HOT_BUCKETABLE.isTagged(item.getType())) {
 					BucketModifier.BucketType bucketType = BucketModifier.BucketType.fromBucket(item);
 					if (bucketType == null) return ItemStack.empty();
 
@@ -325,8 +329,11 @@ public class MoreBucketTypes implements Listener {
 		if (!spillClayBucket(player, item)) return;
 
 		player.swingMainHand();
-		ItemStack result = UtilizerTags.HOT_BUCKETS.isTagged(item.getType()) ? crackedCeramic(null) : ItemStack.of(Material.CLAY_BALL);
+		boolean fired = UtilizerTags.HOT_BUCKETABLE.isTagged(item.getType());
+		ItemStack result = fired ? crackedCeramic(null) : ItemStack.of(Material.CLAY_BALL);
 		player.getInventory().setItem(event.getPreviousSlot(), result);
+		if (fired)
+			TrappedNewbieAdvancements.BURN_A_CLAY_BUCKET.awardAllCriteria(player);
 	}
 
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
@@ -335,13 +342,19 @@ public class MoreBucketTypes implements Listener {
 
 		if (spillClayBucket(player, event.getMainHandItem())) {
 			player.swingMainHand();
-			ItemStack result = UtilizerTags.HOT_BUCKETS.isTagged(event.getMainHandItem().getType()) ? crackedCeramic(null) : ItemStack.of(Material.CLAY_BALL);
+			boolean fired = UtilizerTags.HOT_BUCKETABLE.isTagged(event.getMainHandItem().getType());
+			ItemStack result = fired ? crackedCeramic(null) : ItemStack.of(Material.CLAY_BALL);
 			event.setMainHandItem(result);
+			if (fired)
+				TrappedNewbieAdvancements.BURN_A_CLAY_BUCKET.awardAllCriteria(player);
 		}
 		if (spillClayBucket(player, event.getOffHandItem())) {
 			player.swingOffHand();
-			ItemStack result = UtilizerTags.HOT_BUCKETS.isTagged(event.getOffHandItem().getType()) ? crackedCeramic(null) : ItemStack.of(Material.CLAY_BALL);
+			boolean fired = UtilizerTags.HOT_BUCKETABLE.isTagged(event.getOffHandItem().getType());
+			ItemStack result = fired ? crackedCeramic(null) : ItemStack.of(Material.CLAY_BALL);
 			event.setOffHandItem(result);
+			if (fired)
+				TrappedNewbieAdvancements.BURN_A_CLAY_BUCKET.awardAllCriteria(player);
 		}
 	}
 
@@ -353,8 +366,11 @@ public class MoreBucketTypes implements Listener {
 		if (!spillClayBucket(player, item)) return;
 
 		player.swingMainHand();
-		ItemStack result = UtilizerTags.HOT_BUCKETS.isTagged(item.getType()) ? crackedCeramic(null) : ItemStack.of(Material.CLAY_BALL);
+		boolean fired = UtilizerTags.HOT_BUCKETABLE.isTagged(item.getType());
+		ItemStack result = fired ? crackedCeramic(null) : ItemStack.of(Material.CLAY_BALL);
 		event.setCurrentItem(result);
+		if (fired)
+			TrappedNewbieAdvancements.BURN_A_CLAY_BUCKET.awardAllCriteria(player);
 	}
 
 	@EventHandler(ignoreCancelled = true)
@@ -365,10 +381,12 @@ public class MoreBucketTypes implements Listener {
 		if (!spillClayBucket(player, item)) return;
 
 		player.swingMainHand();
-		if (UtilizerTags.HOT_BUCKETS.isTagged(item.getType()))
+		if (UtilizerTags.HOT_BUCKETABLE.isTagged(item.getType())) {
 			itemDrop.setItemStack(crackedCeramic(null));
-		else
+			TrappedNewbieAdvancements.BURN_A_CLAY_BUCKET.awardAllCriteria(player);
+		} else {
 			itemDrop.setItemStack(ItemStack.of(Material.CLAY_BALL));
+		}
 	}
 
 	@EventHandler(ignoreCancelled = true)
@@ -389,7 +407,7 @@ public class MoreBucketTypes implements Listener {
 		if (item.getType() == Material.BUCKET) return false;
 		if (BucketModifier.BucketType.fromBucket(item) != BucketModifier.BucketType.CLAY) return false;
 
-		if (UtilizerTags.HOT_BUCKETS.isTagged(item.getType()))
+		if (UtilizerTags.HOT_BUCKETABLE.isTagged(item.getType()))
 			entity.emitSound(Sound.BLOCK_LAVA_EXTINGUISH, 1F, 1F);
 
 		ItemFrameSpillables.spill(entity, item, entity.getLocation().getBlock());
@@ -445,8 +463,20 @@ public class MoreBucketTypes implements Listener {
 		if (ItemStack.isEmpty(bucket)) return;
 
 		BucketModifier.BucketType bucketType = BucketModifier.BucketType.fromBucket(bucket);
-		if (bucketType == null) return;
-		if (bucketType == BucketModifier.BucketType.VANILLA) return;
+		if (bucketType == null) {
+			if (event instanceof PlayerBucketEmptyEvent bucketEvent && bucket.hasData(DataComponentTypes.USE_REMAINDER)) {
+				UseRemainder data = bucket.getData(DataComponentTypes.USE_REMAINDER);
+				assert data != null;
+				ItemStack remainder = data.transformInto();
+				RemainingItemEvent remainingItemEvent = new RemainingItemEvent(event, bucketEvent.getPlayer(), null, TrappedNewbie.trappedNewbieKey("bucket_emptying_remainder"), bucket, 1, false);
+				remainingItemEvent.setResult(remainder);
+				remainingItemEvent.callEvent();
+				remainder = remainingItemEvent.getResult();
+				if (remainder == null) remainder = ItemStack.empty();
+				bucketEvent.setItemStack(remainder);
+			}
+			return;
+		}
 
 		BucketModifier.BucketOverlay overlay = BucketModifier.BucketOverlay.fromBucket(bucket);
 
@@ -457,6 +487,7 @@ public class MoreBucketTypes implements Listener {
 			if (overlay != null && overlay.hasLava()) {
 				result = crackedCeramic(null);
 				bucketEvent.getPlayer().emitSound(Sound.BLOCK_LAVA_EXTINGUISH, 1F, 1F);
+				TrappedNewbieAdvancements.BURN_A_CLAY_BUCKET.awardAllCriteria(player);
 			} else {
 				bucketEvent.setItemStack(ItemStack.of(Material.CLAY_BALL));
 				return;
@@ -524,15 +555,20 @@ public class MoreBucketTypes implements Listener {
 					else
 						result = DurabilityUtil.damageItem(result, damage);
 				}
-				if (bucketType == BucketModifier.BucketType.CLAY || (overlay != null && overlay.hasLava() && (bucketType == BucketModifier.BucketType.CERAMIC)) && result.isEmpty())
+				if (bucketType == BucketModifier.BucketType.CLAY || (overlay != null && overlay.hasLava() && (bucketType == BucketModifier.BucketType.CERAMIC)) && result.isEmpty()) {
 					result = crackedCeramic(bucket);
+					if (bucketEvent.getPlayer() != null)
+						TrappedNewbieAdvancements.BURN_A_CLAY_BUCKET.awardAllCriteria(bucketEvent.getPlayer());
+				}
 				bucketEvent.setResult(result);
 			}
 			case PlayerBucketEvent bucketEvent -> {
 				if (event instanceof PlayerBucketEmptyEvent)
 					result = result.damage(damage, bucketEvent.getPlayer());
-				if ((bucketType == BucketModifier.BucketType.CLAY || bucketType == BucketModifier.BucketType.CERAMIC) && result.isEmpty())
+				if ((bucketType == BucketModifier.BucketType.CLAY || bucketType == BucketModifier.BucketType.CERAMIC) && result.isEmpty()) {
 					result = crackedCeramic(bucket);
+					TrappedNewbieAdvancements.BURN_A_CLAY_BUCKET.awardAllCriteria(bucketEvent.getPlayer());
+				}
 				bucketEvent.setItemStack(result);
 			}
 			case PlayerBucketEntityEvent bucketEvent -> bucketEvent.setEntityBucket(result);
@@ -545,8 +581,11 @@ public class MoreBucketTypes implements Listener {
 			case BlockCookEvent bucketEvent -> bucketEvent.setResult(result);
 			case ItemConsumeEvent bucketEvent -> {
 				result = result.damage(1, bucketEvent.getEntity());
-				if (bucketType == BucketModifier.BucketType.CERAMIC && result.isEmpty())
+				if (bucketType == BucketModifier.BucketType.CERAMIC && result.isEmpty()) {
 					result = crackedCeramic(bucket);
+					if (bucketEvent instanceof PlayerItemConsumeEvent consumeEvent)
+						TrappedNewbieAdvancements.BURN_A_CLAY_BUCKET.awardAllCriteria(consumeEvent.getPlayer());
+				}
 				bucketEvent.setReplacement(result);
 			}
 			default -> {}

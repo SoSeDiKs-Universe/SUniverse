@@ -16,7 +16,11 @@
 		"spruce_bucket",
 		"warped_bucket",
 		"clay_bucket",
-		"ceramic_bucket"
+		"ceramic_bucket",
+		"copper_bucket",
+		"golden_bucket",
+		"diamond_bucket",
+		"netherite_bucket"
 	],
 	"overlays": [
 		"water_bucket",
@@ -44,7 +48,15 @@
 		"axolotl_blue_bucket",
 		"axolotl_blue_baby_bucket",
 		"axolotl_boiled_bucket",
-		"axolotl_boiled_baby_bucket"
+		"axolotl_boiled_baby_bucket",
+		"frog_cold_water_bucket",
+		"frog_temperate_water_bucket",
+		"frog_warm_water_bucket",
+		"turtle_bucket",
+		"turtle_baby_bucket",
+		"squid_bucket",
+		"glow_squid_bucket",
+		"strider_bucket"
 	],
 	"jumping_overlays": [
 		"slime_bucket",

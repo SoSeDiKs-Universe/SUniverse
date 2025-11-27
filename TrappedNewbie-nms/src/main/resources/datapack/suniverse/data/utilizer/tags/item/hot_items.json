@@ -5,7 +5,6 @@
     "minecraft:fire_charge",
     "minecraft:magma_block",
     "minecraft:magma_cream",
-    "#utilizer:hot_buckets",
-    "trapped_newbie:magma_cube_bucket"
+    "#utilizer:hot_bucketable"
   ]
 }

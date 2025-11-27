@@ -6,6 +6,7 @@ import me.sosedik.utilizer.Utilizer;
 import me.sosedik.utilizer.util.EntityUtil;
 import me.sosedik.utilizer.util.ItemUtil;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Tag;
 import org.bukkit.damage.DamageType;
 import org.bukkit.entity.EntityType;
@@ -43,9 +44,13 @@ public class UtilizerTags {
 	public static final Tag<Material> POISON_CURES = itemTag("poison_cures");
 	public static final Tag<Material> SMITHING_TEMPLATES = itemTag("smithing_templates");
 	public static final Tag<Material> HIDES = itemTag("hides");
+	public static final Tag<Material> BUCKETS = ItemUtil.itemTag(NamespacedKey.minecraft("buckets"));
 	public static final Tag<Material> LAVA_BUCKETS = itemTag("lava_buckets");
-	public static final Tag<Material> HOT_BUCKETS = itemTag("hot_buckets");
+	public static final Tag<Material> HOT_BUCKETABLE = itemTag("hot_bucketable");
 	public static final Tag<Material> SPILLABLE_MOB_BUCKETS = itemTag("spillable_mob_buckets");
+	public static final Tag<Material> SPAWN_EGGS = itemTag("spawn_eggs");
+	public static final Tag<Material> BOOKABLE_MOBS = itemTag("bookable_mobs");
+	public static final Tag<Material> BOTTLEABLE_MOBS = itemTag("bottleable_mobs");
 
 	public static final Tag<Material> STONE_ORES_BLOCKS = blockTag("stone_ores");
 	public static final Tag<Material> ORES_BLOCKS = blockTag("ores");

@@ -14,10 +14,12 @@ import me.sosedik.requiem.api.event.player.PlayerTombstoneCreateEvent;
 import me.sosedik.requiem.api.event.player.TombstoneDestroyEvent;
 import me.sosedik.trappednewbie.TrappedNewbie;
 import me.sosedik.trappednewbie.api.item.VisualArmor;
+import me.sosedik.trappednewbie.dataset.TrappedNewbieItems;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieTags;
 import me.sosedik.utilizer.api.event.player.PlayerDataLoadedEvent;
 import me.sosedik.utilizer.api.event.player.PlayerDataSaveEvent;
 import me.sosedik.utilizer.api.storage.player.PlayerDataStorage;
+import me.sosedik.utilizer.util.DurabilityUtil;
 import me.sosedik.utilizer.util.EntityUtil;
 import me.sosedik.utilizer.util.InventoryUtil;
 import me.sosedik.utilizer.util.ItemUtil;
@@ -41,6 +43,7 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jspecify.annotations.NullMarked;
 
@@ -219,9 +222,10 @@ public class VisualArmorLayer implements Listener {
 				return;
 			}
 
-			if (!player.hasPotionEffect(PotionEffectType.WEAKNESS)
-				|| Objects.requireNonNull(player.getPotionEffect(PotionEffectType.WEAKNESS)).getAmplifier() < 1) {
-				if (visualArmor.hasGloves() && visualArmor.getGloves().containsEnchantment(Enchantment.BINDING_CURSE)) return;
+			if (visualArmor.hasGloves()) {
+				ItemStack gloves = visualArmor.getGloves();
+				if (gloves.containsEnchantment(Enchantment.BINDING_CURSE) && !canTakeOutBindingCurse(player, gloves))
+					return;
 			}
 
 			if (clickType.isShiftClick()) {
@@ -259,19 +263,18 @@ public class VisualArmorLayer implements Listener {
 		}
 
 		EquipmentSlot equipmentSlot = InventoryUtil.getBySlot(rawSlot);
-		if (!player.hasPotionEffect(PotionEffectType.WEAKNESS) || Objects.requireNonNull(player.getPotionEffect(PotionEffectType.WEAKNESS)).getAmplifier() < 1) {
-			if (visualArmor.isArmorPreview()) {
-				ItemStack item = event.getCurrentItem();
-				if (item != null && item.containsEnchantment(Enchantment.BINDING_CURSE)) return;
-			} else {
-				if (visualArmor.hasItem(equipmentSlot)) {
-					ItemStack item = visualArmor.getItem(equipmentSlot);
-					if (item.containsEnchantment(Enchantment.BINDING_CURSE)) return;
-					if (item.getType() == Material.ENCHANTED_BOOK && item.hasData(DataComponentTypes.STORED_ENCHANTMENTS)) {
-						ItemEnchantments data = item.getData(DataComponentTypes.STORED_ENCHANTMENTS);
-						assert data != null;
-						if (data.enchantments().containsKey(Enchantment.BINDING_CURSE)) return; // Well, you did this to yourself
-					}
+		if (visualArmor.isArmorPreview()) {
+			ItemStack item = event.getCurrentItem();
+			if (item != null && item.containsEnchantment(Enchantment.BINDING_CURSE) && !canTakeOutBindingCurse(player, item))
+				return;
+		} else if (visualArmor.hasItem(equipmentSlot)) {
+			ItemStack item = visualArmor.getItem(equipmentSlot);
+			if (!canTakeOutBindingCurse(player, item)) {
+				if (item.containsEnchantment(Enchantment.BINDING_CURSE)) return;
+				if (item.getType() == Material.ENCHANTED_BOOK && item.hasData(DataComponentTypes.STORED_ENCHANTMENTS)) {
+					ItemEnchantments data = item.getData(DataComponentTypes.STORED_ENCHANTMENTS);
+					assert data != null;
+					if (data.enchantments().containsKey(Enchantment.BINDING_CURSE)) return; // Well, you did this to yourself
 				}
 			}
 		}
@@ -344,6 +347,14 @@ public class VisualArmorLayer implements Listener {
 		}
 
 		player.updateInventory();
+	}
+
+	private boolean canTakeOutBindingCurse(Player player, ItemStack item) {
+		if (!player.hasPotionEffect(PotionEffectType.WEAKNESS)) return false;
+
+		PotionEffect potionEffect = player.getPotionEffect(PotionEffectType.WEAKNESS);
+		assert potionEffect != null;
+		return potionEffect.getAmplifier() > 0 || item.getType() == TrappedNewbieItems.SCRAP || DurabilityUtil.isBroken(item);
 	}
 
 	private boolean isMissingArmor(Player player, int slot) {

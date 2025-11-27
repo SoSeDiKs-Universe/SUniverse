@@ -9,12 +9,6 @@
     "minecraft:glowstone",
     "minecraft:glowstone_dust",
     "minecraft:jack_o_lantern",
-    "minecraft:magma_block",
-    "minecraft:magma_cream",
-    "minecraft:lava_bucket",
-    "minecraft:blaze_rod",
-    "minecraft:blaze_powder",
-    "minecraft:fire_charge",
     "minecraft:torchflower",
     "minecraft:glow_berries",
     "minecraft:glow_item_frame",
@@ -25,6 +19,7 @@
     "minecraft:glistering_melon_slice",
     "minecraft:dragon_breath",
     "minecraft:experience_bottle",
-    "minecraft:enchanted_book"
+    "minecraft:enchanted_book",
+		"#utilizer:hot_items"
   ]
 }

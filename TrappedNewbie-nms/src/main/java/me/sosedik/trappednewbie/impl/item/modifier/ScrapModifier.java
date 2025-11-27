@@ -7,7 +7,6 @@ import me.sosedik.kiterino.modifier.item.ItemContextBox;
 import me.sosedik.kiterino.modifier.item.ItemModifier;
 import me.sosedik.kiterino.modifier.item.ModificationResult;
 import me.sosedik.resourcelib.ResourceLib;
-import me.sosedik.trappednewbie.TrappedNewbie;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieItems;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieTags;
 import me.sosedik.utilizer.api.language.LangOptionsStorage;
@@ -69,15 +68,15 @@ public class ScrapModifier extends ItemModifier {
 	}
 
 	private NamespacedKey getScrapKey(ItemStack scrapItem) {
-		if (BucketModifier.BucketType.fromBucket(scrapItem) == BucketModifier.BucketType.CERAMIC)
-			return TrappedNewbie.trappedNewbieKey("ceramic_bucket");
+		BucketModifier.BucketType bucketType = BucketModifier.BucketType.fromBucket(scrapItem);
+		if (bucketType != null)
+			return bucketType.getKey();
 		return scrapItem.getType().getKey();
 	}
 
 	private boolean isScrappable(ItemStack scrapItem) {
-		if (scrapItem.getType() == Material.BUCKET)
-			return BucketModifier.BucketType.fromBucket(scrapItem) == BucketModifier.BucketType.CERAMIC;
-		return TrappedNewbieTags.SCRAPPABLE.isTagged(scrapItem.getType());
+		return scrapItem.getType() == Material.BUCKET
+			|| TrappedNewbieTags.SCRAPPABLE.isTagged(scrapItem.getType());
 	}
 
 	@SuppressWarnings("unchecked")

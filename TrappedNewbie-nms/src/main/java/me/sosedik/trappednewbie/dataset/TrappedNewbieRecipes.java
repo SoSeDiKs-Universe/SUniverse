@@ -108,7 +108,7 @@ public class TrappedNewbieRecipes {
 						if (repairable.isEmpty())
 							return false;
 					}
-					return repairable.getType() == type && i.hasData(DataComponentTypes.REPAIRABLE);
+					return repairable.getType() == type && repairable.hasData(DataComponentTypes.REPAIRABLE);
 				})
 				.addIngredients(TrappedNewbieItems.SCRAP, i -> repairableTypes.contains(TypedKey.create(RegistryKey.ITEM, i.getType().asItemType().key())))
 				.withPreCheck(event -> {

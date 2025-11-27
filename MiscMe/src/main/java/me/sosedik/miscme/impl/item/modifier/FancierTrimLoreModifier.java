@@ -16,7 +16,6 @@ import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.trim.ArmorTrim;
 import org.bukkit.inventory.meta.trim.TrimMaterial;
@@ -83,7 +82,7 @@ public class FancierTrimLoreModifier extends ItemModifier {
 		TextColor trimColor = trimData == null ? NamedTextColor.GRAY : trimData.getValue();
 		Component trimText = Component.translatable("trim_pattern.%s.%s".formatted(trimKey.namespace(), trimKey.value()), trimColor);
 		if (trimIcon != null) trimText = Mini.combine(Component.space(), trimIcon, trimText);
-		item.editMeta(meta -> meta.addItemFlags(ItemFlag.HIDE_ARMOR_TRIM)); // TODO replace with data component once available
+		contextBox.addHiddenComponents(DataComponentTypes.TRIM);
 
 		contextBox.addLore(trimText);
 

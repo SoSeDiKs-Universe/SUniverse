@@ -699,6 +699,16 @@ public class TrappedNewbieAdvancements {
 				.withPlayer(player -> player.inverted().withGameModes(GameMode.SPECTATOR))
 		))
 		.buildAndRegister();
+	public static final IAdvancement FIND_A_SWAMP_HUT = buildBase(FIND_A_JUNGLE_PYRAMID, "find_a_swamp_hut")
+		.display(display().x(1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.CAULDRON))
+		.requiredProgress(vanilla(
+			location()
+				.withLocation(loc -> loc
+					.withStructure(Structure.SWAMP_HUT)
+				)
+				.withPlayer(player -> player.inverted().withGameModes(GameMode.SPECTATOR))
+		))
+		.buildAndRegister();
 
 	public static final AdvancementTab NATURE_TAB = buildTab("nature", MANAGER)
 		.display(simpleTabDisplay().inverseY().display(display().backgroundPathTexture("block/green_concrete_powder").icon(Material.PUMPKIN_PIE)))

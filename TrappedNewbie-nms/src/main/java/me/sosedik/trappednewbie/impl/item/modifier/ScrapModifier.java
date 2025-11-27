@@ -75,8 +75,7 @@ public class ScrapModifier extends ItemModifier {
 	}
 
 	private boolean isScrappable(ItemStack scrapItem) {
-		return scrapItem.getType() == Material.BUCKET
-			|| TrappedNewbieTags.SCRAPPABLE.isTagged(scrapItem.getType());
+		return TrappedNewbieTags.SCRAPPABLE.isTagged(scrapItem.getType());
 	}
 
 	@SuppressWarnings("unchecked")

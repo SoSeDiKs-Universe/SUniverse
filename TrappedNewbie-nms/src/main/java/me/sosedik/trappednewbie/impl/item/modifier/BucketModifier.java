@@ -225,6 +225,7 @@ public class BucketModifier extends ItemModifier {
 
 		public static @Nullable BucketType fromBucket(ItemStack item, Material itemType) {
 			if (!MaterialTags.BUCKETS.isTagged(itemType)) return null;
+			if (itemType == TrappedNewbieItems.CHAINMAIL_BUCKET) return null;
 			return NBT.get(item, nbt -> (BucketType) nbt.getOrDefault("bucket_type", VANILLA));
 		}
 

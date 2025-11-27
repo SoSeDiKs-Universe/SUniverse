@@ -232,6 +232,7 @@ public class ResourceLibBootstrap implements PluginBootstrap {
 	private static Item.Properties applyItemProperties(BootstrapContext context, Key itemKey, JsonObject json, Object props) {
 		Item.Properties properties = (Item.Properties) props;
 		if (json.has("durability")) properties.durability(json.get("durability").getAsInt());
+		if (json.has("enchantability")) properties.enchantable(json.get("enchantability").getAsInt());
 		if (json.has("repairable")) {
 			String tag = json.get("repairable").getAsString();
 			if (tag.charAt(0) == '#') {

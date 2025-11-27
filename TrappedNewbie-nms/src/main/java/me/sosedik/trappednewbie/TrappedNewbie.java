@@ -112,6 +112,7 @@ import me.sosedik.trappednewbie.listener.entity.NerfedBabies;
 import me.sosedik.trappednewbie.listener.entity.ShearableCreepers;
 import me.sosedik.trappednewbie.listener.item.BlackBeltSpeed;
 import me.sosedik.trappednewbie.listener.item.CanteenInteractions;
+import me.sosedik.trappednewbie.listener.item.ChainmailBucketInteractions;
 import me.sosedik.trappednewbie.listener.item.EyeceCreamCandyVisual;
 import me.sosedik.trappednewbie.listener.item.FillingBowlWithMilk;
 import me.sosedik.trappednewbie.listener.item.FillingBowlWithWater;
@@ -367,6 +368,7 @@ public final class TrappedNewbie extends JavaPlugin {
 			// item
 			BlackBeltSpeed.class,
 			CanteenInteractions.class,
+			ChainmailBucketInteractions.class,
 			EyeceCreamCandyVisual.class,
 			FillingBowlWithMilk.class,
 			FillingBowlWithWater.class,

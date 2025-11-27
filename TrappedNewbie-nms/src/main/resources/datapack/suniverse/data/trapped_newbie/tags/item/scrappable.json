@@ -1,7 +1,9 @@
 {
   "values": [
+    "minecraft:bucket",
     "trapped_newbie:canteen",
     "trapped_newbie:reinforced_canteen",
-    "trapped_newbie:dragon_flask"
+    "trapped_newbie:dragon_flask",
+		"trapped_newbie:chainmail_bucket"
   ]
 }

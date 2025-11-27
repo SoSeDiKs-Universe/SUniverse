@@ -1,5 +1,6 @@
 package me.sosedik.trappednewbie;
 
+import com.google.common.collect.Maps;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
 import me.sosedik.kiterino.registry.wrapper.KiterinoMobEffectBehaviourWrapper;
@@ -38,6 +39,8 @@ import net.minecraft.core.UUIDUtil;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -60,6 +63,10 @@ import net.minecraft.world.item.ShovelItem;
 import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.component.Weapon;
+import net.minecraft.world.item.equipment.ArmorMaterial;
+import net.minecraft.world.item.equipment.ArmorType;
+import net.minecraft.world.item.equipment.EquipmentAsset;
+import net.minecraft.world.item.equipment.EquipmentAssets;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.level.material.Fluid;
@@ -70,6 +77,7 @@ import org.bukkit.craftbukkit.entity.CraftEntityTypes;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -313,6 +321,7 @@ public class TrappedNewbieBootstrap implements PluginBootstrap {
 					entity.setItemInHand(InteractionHand.MAIN_HAND, tag.getCompoundOrEmpty("equipment").read("mainhand", ItemStack.CODEC).orElse(ItemStack.EMPTY));
 				}
 			);
+			case "chainmail_bucket" -> new Item(((Item.Properties) properties).humanoidArmor(new ArmorMaterial(15, makeDefense(1, 4, 5, 2, 4), 12, SoundEvents.ARMOR_EQUIP_CHAIN, 0.0F, 0.0F, ItemTags.REPAIRS_CHAIN_ARMOR, equipmentAssets("chainmail_bucket")), ArmorType.HELMET));
 			default -> null;
 		});
 
@@ -332,8 +341,15 @@ public class TrappedNewbieBootstrap implements PluginBootstrap {
 		);
 	}
 
+	private static Map<ArmorType, Integer> makeDefense(int boots, int leggings, int chestplate, int helmet, int body) {
+		return Maps.newEnumMap(Map.of(ArmorType.BOOTS, boots, ArmorType.LEGGINGS, leggings, ArmorType.CHESTPLATE, chestplate, ArmorType.HELMET, helmet, ArmorType.BODY, body));
+	}
 
-	private <T extends Mob> Item mobBucket(Item.Properties properties, EntityType<T> entityType, Fluid fluid, Item pickupBucket, @Nullable Predicate<T> check, @Nullable BiConsumer<T, ItemStack> save, @Nullable BiConsumer<T, CompoundTag> load) {
+	private static ResourceKey<EquipmentAsset> equipmentAssets(String key) {
+		return ResourceKey.create(EquipmentAssets.ROOT_ID, ResourceLocation.fromNamespaceAndPath("trapped_newbie", key));
+	}
+
+	private static <T extends Mob> Item mobBucket(Item.Properties properties, EntityType<T> entityType, Fluid fluid, Item pickupBucket, @Nullable Predicate<T> check, @Nullable BiConsumer<T, ItemStack> save, @Nullable BiConsumer<T, CompoundTag> load) {
 		SoundEvent pickupSound = switch (pickupBucket) {
 			case Item item when item == Items.GLASS_BOTTLE -> SoundEvents.BOTTLE_FILL;
 			case Item item when item == Items.BOOK -> SoundEvents.BOOK_PUT;

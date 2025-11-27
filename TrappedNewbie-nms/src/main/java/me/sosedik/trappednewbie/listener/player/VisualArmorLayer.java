@@ -151,15 +151,26 @@ public class VisualArmorLayer implements Listener {
 
 		ItemStack item = event.getCursor();
 		if (ItemStack.isEmpty(item)) return;
+		if (item.hasData(DataComponentTypes.EQUIPPABLE)) {
+			Equippable data = item.getData(DataComponentTypes.EQUIPPABLE);
+			assert data != null;
+			if (data.slot() == EquipmentSlot.HEAD) return;
+		}
 
 		VisualArmor visualArmor = getVisualArmor(player);
 		if (!visualArmor.canUseVisualArmor()) return;
 		if (visualArmor.isArmorPreview()) return;
-		if (visualArmor.hasHelmet()) return;
+		if (visualArmor.hasHelmet() && item.getAmount() > 1) return;
 
 		event.setCancelled(true);
-		visualArmor.setHelmet(item.asOne());
-		item.subtract();
+		if (visualArmor.hasHelmet()) {
+			ItemStack helmet = visualArmor.getHelmet();
+			visualArmor.setHelmet(item);
+			player.setItemOnCursor(helmet);
+		} else {
+			visualArmor.setHelmet(item.asOne());
+			item.subtract();
+		}
 		player.updateInventory();
 	}
 
@@ -185,8 +196,8 @@ public class VisualArmorLayer implements Listener {
 		// Oof, empty equipment slot click, calculate action manually
 		if (action == InventoryAction.NOTHING && isMissingArmor(player, rawSlot)) {
 			action = switch (clickType) {
-				case LEFT -> InventoryAction.PICKUP_ALL;
-				case RIGHT -> InventoryAction.PICKUP_HALF;
+				case LEFT -> ItemStack.isEmpty(event.getCursor()) ? InventoryAction.PICKUP_ALL : InventoryAction.PLACE_ALL;
+				case RIGHT -> ItemStack.isEmpty(event.getCursor()) ? InventoryAction.PICKUP_HALF : InventoryAction.PLACE_ALL;
 				case SHIFT_LEFT, SHIFT_RIGHT -> InventoryAction.MOVE_TO_OTHER_INVENTORY;
 				case DROP -> InventoryAction.DROP_ONE_SLOT;
 				case CONTROL_DROP -> InventoryAction.DROP_ALL_SLOT;
@@ -201,11 +212,15 @@ public class VisualArmorLayer implements Listener {
 			return;
 		}
 
+		EquipmentSlot equipmentSlot = InventoryUtil.getBySlot(rawSlot);
+		boolean armorPreview = visualArmor.isArmorPreview();
+		if (!armorPreview && !visualArmor.hasItem(equipmentSlot) && (action == InventoryAction.PLACE_ALL || (clickType == ClickType.LEFT && action == InventoryAction.SWAP_WITH_CURSOR)))
+			armorPreview = true;
+		
 		if (action == InventoryAction.DROP_ALL_SLOT) {
-			if (visualArmor.isArmorPreview()) {
+			if (armorPreview) {
 				event.setCancelled(false);
 			} else {
-				EquipmentSlot equipmentSlot = InventoryUtil.getBySlot(rawSlot);
 				if (visualArmor.hasItem(equipmentSlot)) {
 					ItemStack item = visualArmor.getItem(equipmentSlot);
 					visualArmor.setItem(equipmentSlot, null);
@@ -217,7 +232,7 @@ public class VisualArmorLayer implements Listener {
 		}
 
 		if (rawSlot == InventorySlotHelper.OFF_HAND) {
-			if (!visualArmor.isArmorPreview()) {
+			if (!armorPreview) {
 				event.setCancelled(false);
 				return;
 			}
@@ -262,8 +277,7 @@ public class VisualArmorLayer implements Listener {
 			return;
 		}
 
-		EquipmentSlot equipmentSlot = InventoryUtil.getBySlot(rawSlot);
-		if (visualArmor.isArmorPreview()) {
+		if (armorPreview) {
 			ItemStack item = event.getCurrentItem();
 			if (item != null && item.containsEnchantment(Enchantment.BINDING_CURSE) && !canTakeOutBindingCurse(player, item))
 				return;
@@ -277,6 +291,10 @@ public class VisualArmorLayer implements Listener {
 					if (data.enchantments().containsKey(Enchantment.BINDING_CURSE)) return; // Well, you did this to yourself
 				}
 			}
+		} else {
+			ItemStack item = event.getCurrentItem();
+			if (item != null && item.containsEnchantment(Enchantment.BINDING_CURSE) && !canTakeOutBindingCurse(player, item))
+				return;
 		}
 
 		if (player.getItemOnCursor().getType() != Material.AIR) {
@@ -291,7 +309,7 @@ public class VisualArmorLayer implements Listener {
 			};
 			if (!canEquip) return;
 
-			if (visualArmor.isArmorPreview()) {
+			if (armorPreview) {
 				player.setItemOnCursor(event.getCurrentItem());
 				player.getInventory().setItem(equipmentSlot, cursor);
 			} else {
@@ -302,13 +320,18 @@ public class VisualArmorLayer implements Listener {
 			return;
 		}
 
-		if (visualArmor.isArmorPreview() ? ItemStack.isEmpty(event.getCurrentItem()) : !visualArmor.hasItem(equipmentSlot)) {
+		// If no second layer, fallback to underwear
+		if (!armorPreview && !visualArmor.hasItem(equipmentSlot)) {
+			armorPreview = true;
+		}
+
+		if (armorPreview ? ItemStack.isEmpty(event.getCurrentItem()) : !visualArmor.hasItem(equipmentSlot)) {
 			player.updateInventory();
 			return;
 		}
 
 		if (clickType.isShiftClick()) {
-			if (visualArmor.isArmorPreview()) {
+			if (armorPreview) {
 				if (!InventoryUtil.tryToAdd(player, Objects.requireNonNull(event.getCurrentItem()))) return;
 				player.getInventory().setItem(equipmentSlot, ItemStack.empty());
 			} else {
@@ -318,7 +341,7 @@ public class VisualArmorLayer implements Listener {
 		} else if (clickType == ClickType.SWAP_OFFHAND) {
 			ItemStack current = player.getInventory().getItemInOffHand();
 			if (current.getType() != Material.AIR) return;
-			if (visualArmor.isArmorPreview()) {
+			if (armorPreview) {
 				// Since it'll just disappear…
 				return;
 			} else {
@@ -329,7 +352,7 @@ public class VisualArmorLayer implements Listener {
 			int slot = event.getHotbarButton();
 			ItemStack current = player.getInventory().getItem(slot);
 			if (!ItemStack.isEmpty(current)) return;
-			if (visualArmor.isArmorPreview()) {
+			if (armorPreview) {
 				player.getInventory().setItem(slot, event.getCurrentItem());
 				player.getInventory().setItem(equipmentSlot, ItemStack.empty());
 			} else {
@@ -337,7 +360,7 @@ public class VisualArmorLayer implements Listener {
 				visualArmor.setItem(equipmentSlot, null);
 			}
 		} else if (clickType == ClickType.LEFT || clickType == ClickType.RIGHT) {
-			if (visualArmor.isArmorPreview()) {
+			if (armorPreview) {
 				player.setItemOnCursor(event.getCurrentItem());
 				player.getInventory().setItem(equipmentSlot, ItemStack.empty());
 			} else {

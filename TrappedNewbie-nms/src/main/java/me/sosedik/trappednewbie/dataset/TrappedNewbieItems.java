@@ -256,6 +256,7 @@ public class TrappedNewbieItems {
 	public static final Material TATER_HANG_GLIDER = byKey("tater_hang_glider");
 	public static final Material PHANTOM_HANG_GLIDER = byKey("phantom_hang_glider");
 
+	public static final Material CHAINMAIL_BUCKET = byKey("chainmail_bucket");
 	public static final Material SLIME_BUCKET = byKey("slime_bucket");
 	public static final Material MAGMA_CUBE_BUCKET = byKey("magma_cube_bucket");
 	public static final Material FROG_BUCKET = byKey("frog_bucket");

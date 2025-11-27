@@ -45,6 +45,8 @@ public class ArmorRenderer extends SimpleHudRenderer {
 	private static final Component[] ELYTRA = new Component[] {mapping("armor/elytra"), mapping("armor/elytra_up")};
 	private static final Component[] TURTLE_HELMET = new Component[] {mapping("armor/turtle_helmet"), mapping("armor/turtle_helmet_up")};
 	private static final Component[] CARVED_PUMPKIN = new Component[] {mapping("armor/carved_pumpkin"), mapping("armor/carved_pumpkin_up")};
+	private static final Component[] SADDLE = new Component[] {mapping("armor/saddle"), mapping("armor/saddle_up")};
+	private static final Component[] CHAINMAIL_BUCKET = new Component[] {mapping("armor/chainmail_bucket"), mapping("armor/chainmail_bucket_up")};
 	private static final Component[] LEATHER_GLOVES = new Component[] {mapping("armor/leather_gloves"), mapping("armor/leather_gloves_up")};
 	private static final Component[][] LEATHER_ARMOR = armor("leather");
 	private static final Component[][] CHAINMAIL_ARMOR = armor("chainmail");
@@ -154,6 +156,8 @@ public class ArmorRenderer extends SimpleHudRenderer {
 		renderArmor(leggings, moveUp);
 		renderArmor(boots, moveUp);
 		renderArmor(gloves, moveUp);
+		if (visualArmor.hasHelmet() && visualArmor.getHelmet().getType() == Material.SADDLE)
+			renderArmor(visualArmor.getHelmet(), moveUp);
 
 		if (!this.armorDisplay.isEmpty()) {
 			Component combined = combine(SpacingUtil.getSpacing(-2), this.armorDisplay);
@@ -203,9 +207,11 @@ public class ArmorRenderer extends SimpleHudRenderer {
 	private @Nullable Component getArmorIcon(ItemStack item, boolean up) {
 		return switch (item.getType()) {
 			case Material m when m == TrappedNewbieItems.LEATHER_GLOVES -> LEATHER_GLOVES[up ? 1 : 0].color(color(item));
+			case Material m when m == TrappedNewbieItems.CHAINMAIL_BUCKET -> CHAINMAIL_BUCKET[up ? 1 : 0];
 			case ELYTRA -> ELYTRA[up ? 1 : 0];
 			case TURTLE_HELMET -> TURTLE_HELMET[up ? 1 : 0];
 			case CARVED_PUMPKIN -> CARVED_PUMPKIN[up ? 1 : 0];
+			case SADDLE -> SADDLE[up ? 1 : 0];
 			case LEATHER_HELMET -> getArmorIcon(LEATHER_ARMOR, up, 0).color(color(item));
 			case LEATHER_CHESTPLATE -> getArmorIcon(LEATHER_ARMOR, up, 1).color(color(item));
 			case LEATHER_LEGGINGS -> getArmorIcon(LEATHER_ARMOR, up, 2).color(color(item));

@@ -11,6 +11,7 @@ import me.sosedik.kiterino.modifier.item.context.ItemModifierContextType;
 import me.sosedik.kiterino.modifier.item.context.SlottedItemModifierContext;
 import me.sosedik.kiterino.modifier.item.context.packet.BaseItemContext;
 import me.sosedik.kiterino.modifier.item.context.packet.EntityEquipmentPacketContext;
+import me.sosedik.resourcelib.ResourceLib;
 import me.sosedik.trappednewbie.TrappedNewbie;
 import me.sosedik.trappednewbie.api.item.VisualArmor;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieItems;
@@ -34,7 +35,8 @@ import java.util.Locale;
 public class VisualArmorModifier extends ItemModifier {
 
 	public static final ItemModifierContextType VISUAL_ARMOR = ItemModifierContextType.context(BaseItemContext.class).withName().withLore().build();
-	private static final NamespacedKey SADDLE_HEAD_MODEL = TrappedNewbie.trappedNewbieKey("saddle_head");
+	private static final NamespacedKey SADDLE_HEAD_MODEL = ResourceLib.storage().getItemModelMapping(TrappedNewbie.trappedNewbieKey("saddle_head"));
+	private static final NamespacedKey CHAINMAIL_BUCKET_HEAD_MODEL = ResourceLib.storage().getItemModelMapping(TrappedNewbie.trappedNewbieKey("chainmail_bucket_helmet"));
 
 	public VisualArmorModifier(NamespacedKey key) {
 		super(key);
@@ -62,6 +64,8 @@ public class VisualArmorModifier extends ItemModifier {
 		var visualArmor = VisualArmor.of(target);
 		if (!visualArmor.canUseVisualArmor()) return ModificationResult.PASS;
 
+		Material initialType = contextBox.getInitialType();
+
 		if (visualArmor.isArmorPreview()) {
 			if (equipmentSlot == EquipmentSlot.OFF_HAND) {
 				contextBox.setItem(
@@ -75,12 +79,12 @@ public class VisualArmorModifier extends ItemModifier {
 			ItemStack item = target.getInventory().getItem(equipmentSlot); // This item might've been sent by a plugin's packet, so we get the real item just in case
 			if (ItemStack.isEmpty(item) || item.getType() == TrappedNewbieItems.MATERIAL_AIR) {
 				ItemStack fakedEmptyItem = getEmpty(contextBox.getContext(), messenger, contextBox.getLocale(), player, target, equipmentSlot, true);
-				contextBox.setItem(applyLore(messenger, fakedEmptyItem, equipmentSlot, true, false));
+				contextBox.setItem(applyLore(messenger, fakedEmptyItem, initialType, equipmentSlot, true, false));
 				return ModificationResult.RETURN;
 			}
 
 			ItemStack parsedArmorItem = parseItem(contextBox.getContext(), player, contextBox.getLocale(), item.clone());
-			contextBox.setItem(applyLore(messenger, parsedArmorItem, equipmentSlot, true, true));
+			contextBox.setItem(applyLore(messenger, parsedArmorItem, initialType, equipmentSlot, true, true));
 			return ModificationResult.RETURN;
 		}
 
@@ -93,30 +97,31 @@ public class VisualArmorModifier extends ItemModifier {
 			// Show elytras when gliding
 			if (equipmentSlot == EquipmentSlot.CHEST && player.isGliding() && visualItem.getType() != Material.ELYTRA) {
 				ItemStack underwear = player.getInventory().getItem(slot);
-				if (underwear.getType() == Material.ELYTRA) {
-					ItemStack parseUnderwear = parseUnderwear(contextBox.getContext(), messenger, player, contextBox.getLocale(), underwear.clone());
-					contextBox.setItem(applyLore(messenger, parseUnderwear, equipmentSlot, false, false));
+				if (ItemStack.isType(underwear, Material.ELYTRA)) {
+					ItemStack parseUnderwear = parseUnderwear(contextBox.getContext(), messenger, player, contextBox.getLocale(), underwear.clone(), equipmentSlot);
+					contextBox.setItem(applyLore(messenger, parseUnderwear, initialType, equipmentSlot, false, false));
 					return ModificationResult.RETURN;
 				}
 			}
 
+			initialType = visualItem.getType();
 			visualItem = visualItem.clone();
 			visualItem.unsetData(DataComponentTypes.ATTRIBUTE_MODIFIERS);
 			ItemStack parsedVisualItem = parseItem(contextBox.getContext(), player, contextBox.getLocale(), visualItem);
-			contextBox.setItem(applyLore(messenger, parsedVisualItem, equipmentSlot, false, true));
+			contextBox.setItem(applyLore(messenger, parsedVisualItem, initialType, equipmentSlot, false, true));
 			return ModificationResult.RETURN;
 		}
 
 		// Not wearing visual, show underwear
 		ItemStack underwear = target.getInventory().getItem(equipmentSlot);
 		if (!ItemStack.isEmpty(underwear)) {
-			ItemStack parsedUnderwear = parseUnderwear(contextBox.getContext(), messenger, player, contextBox.getLocale(), underwear.clone());
+			ItemStack parsedUnderwear = parseUnderwear(contextBox.getContext(), messenger, player, contextBox.getLocale(), underwear.clone(), equipmentSlot);
 			contextBox.setItem(parsedUnderwear);
 			return ModificationResult.RETURN;
 		}
 
 		ItemStack empty = getEmpty(contextBox.getContext(), messenger, contextBox.getLocale(), player, target, equipmentSlot, false);
-		contextBox.setItem(applyLore(messenger, empty, equipmentSlot, false, false));
+		contextBox.setItem(applyLore(messenger, empty, initialType, equipmentSlot, false, false));
 
 		return ModificationResult.RETURN;
 	}
@@ -161,7 +166,7 @@ public class VisualArmorModifier extends ItemModifier {
 		return item;
 	}
 
-	private ItemStack applyLore(Messenger messenger, ItemStack item, EquipmentSlot slot, boolean armorPreview, boolean cosmetic) {
+	private ItemStack applyLore(Messenger messenger, ItemStack item, Material initialType, EquipmentSlot slot, boolean armorPreview, boolean cosmetic) {
 		// Visual armor
 		ItemLore.Builder itemLore = ItemLore.lore();
 		if (item.hasData(DataComponentTypes.LORE))
@@ -173,15 +178,13 @@ public class VisualArmorModifier extends ItemModifier {
 		}
 		item.setData(DataComponentTypes.LORE, itemLore);
 
-		// Using custom model for saddles on head
-		if (!armorPreview && slot == EquipmentSlot.HEAD && item.getType() == Material.SADDLE && !item.isDataOverridden(DataComponentTypes.ITEM_MODEL)) {
-			item.setData(DataComponentTypes.ITEM_MODEL, SADDLE_HEAD_MODEL);
-		}
+		applyCustomModels(item, initialType, slot);
 
 		return item;
 	}
 
-	private static ItemStack parseUnderwear(ItemModifierContext context, Messenger messenger, Player player, Locale locale, ItemStack underwear) {
+	private static ItemStack parseUnderwear(ItemModifierContext context, Messenger messenger, Player player, Locale locale, ItemStack underwear, EquipmentSlot slot) {
+		Material initialType = underwear.getType();
 		ItemStack newUnderwear = modifyItem(new ItemContextBox(player, locale, new BaseItemContext(VISUAL_ARMOR, context), underwear));
 		if (newUnderwear != null) underwear = newUnderwear;
 		else underwear = underwear.clone();
@@ -194,7 +197,19 @@ public class VisualArmorModifier extends ItemModifier {
 		itemLore.addLine(messenger.getMessage("equipment.layer_switch.cosmetic").applyFallbackStyle(Style.style(NamedTextColor.GRAY, TextDecoration.ITALIC.withState(false))));
 		underwear.setData(DataComponentTypes.LORE, itemLore);
 
+		applyCustomModels(underwear, initialType, slot);
+
 		return underwear;
+	}
+
+	private static void applyCustomModels(ItemStack item, Material initialType, EquipmentSlot slot) {
+		if (slot == EquipmentSlot.HEAD) {
+			if (initialType == TrappedNewbieItems.CHAINMAIL_BUCKET) {
+				item.setData(DataComponentTypes.ITEM_MODEL, CHAINMAIL_BUCKET_HEAD_MODEL);
+			} else if (initialType == Material.SADDLE && !item.isDataOverridden(DataComponentTypes.ITEM_MODEL)) {
+				item.setData(DataComponentTypes.ITEM_MODEL, SADDLE_HEAD_MODEL);
+			}
+		}
 	}
 
 	public static boolean isArmorSlot(Player player, int slot) {

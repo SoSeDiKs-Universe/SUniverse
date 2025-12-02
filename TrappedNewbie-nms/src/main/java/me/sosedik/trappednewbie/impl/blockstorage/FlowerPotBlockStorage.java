@@ -6,12 +6,13 @@ import me.sosedik.utilizer.api.storage.block.InventoryBlockDataStorageHolder;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NullMarked;
 
@@ -32,13 +33,24 @@ public class FlowerPotBlockStorage extends InventoryBlockDataStorageHolder imple
 
 	@Override
 	public void onInteract(PlayerInteractEvent event) {
-		if (getBlock().getType() != Material.FLOWER_POT) {
-			Player player = event.getPlayer();
-			ItemStack item = player.getInventory().getItemInMainHand();
-			if (Tag.ITEMS_SMALL_FLOWERS.isTagged(item.getType())) return;
+		if (event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
+		if (event.getHand() == EquipmentSlot.OFF_HAND) {
+			event.setCancelled(true); // We don't want to place a block, if any
+			return;
 		}
 
+		Player player = event.getPlayer();
+		if (player.isSneaking() && !player.getInventory().getItemInMainHand().isEmpty()) return;
+
+		Block block = getBlock();
+		// Placing flower
+		if (block.getType() == Material.FLOWER_POT && canConvertToPot(player.getInventory().getItemInMainHand().getType())) return;
+
 		super.onInteract(event);
+	}
+
+	private boolean canConvertToPot(Material type) {
+		return type != Material.AIR && Material.matchMaterial(type.getKey().namespace() + ":potted_" + type.getKey().value()) != null;
 	}
 
 	@Override
@@ -54,6 +66,11 @@ public class FlowerPotBlockStorage extends InventoryBlockDataStorageHolder imple
 				drops.add(item);
 		}
 		return drops;
+	}
+
+	@Override
+	public Component getDefaultName(Player player) {
+		return DEFAULT_TITLE;
 	}
 
 	@Override

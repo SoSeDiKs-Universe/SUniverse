@@ -7,8 +7,10 @@ import me.sosedik.kiterino.inventory.InventorySlotHelper;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.jspecify.annotations.NullMarked;
@@ -94,6 +96,18 @@ public class InventoryUtil {
 				return item;
 		}
 
+		InventoryView view = player.getOpenInventory();
+		if (view.getType() == InventoryType.CRAFTING) {
+			for (int i = 1; i < 5; i++) {
+				ItemStack item = view.getItem(i);
+				if (ItemStack.isEmpty(item)) continue;
+
+				item = checkFolding(item, predicate);
+				if (item != null)
+					return item;
+			}
+		}
+
 		for (ItemStack item : inventory.getArmorContents()) {
 			if (ItemStack.isEmpty(item)) continue;
 
@@ -102,7 +116,7 @@ public class InventoryUtil {
 				return item;
 		}
 
-		ItemStack cursor = checkFolding(player.getOpenInventory().getCursor(), predicate);
+		ItemStack cursor = checkFolding(view.getCursor(), predicate);
 		if (cursor != null)
 			return cursor;
 

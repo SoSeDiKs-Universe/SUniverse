@@ -955,5 +955,9 @@
 	"item.trapped_newbie.magma_cube_bottle.name": "Magma Cube in a Bottle",
 	"item.trapped_newbie.vex_book.name": "Vex Possessed Book",
 	"item.trapped_newbie.allay_book.name": "Allay Possessed Book",
-	"item.trapped_newbie.leather_gloves.name": "Leather Gloves"
+	"item.trapped_newbie.leather_gloves.name": "Leather Gloves",
+	"item.trapped_newbie.gui_arrow_head_outline.name": "Arrow Head",
+	"item.trapped_newbie.gui_arrow_stick_outline.name": "Arrow Stick",
+	"item.trapped_newbie.gui_arrow_fletching_outline.name": "Arrow Fletching",
+	"item.trapped_newbie.gui_arrow_modifiers_outline.name": "Arrow Modifier"
 }

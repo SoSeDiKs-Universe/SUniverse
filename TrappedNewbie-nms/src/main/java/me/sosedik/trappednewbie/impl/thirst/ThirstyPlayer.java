@@ -53,7 +53,17 @@ public final class ThirstyPlayer {
 	}
 
 	public void addThirst(int thirst) {
-		setThirst(getThirst() + thirst);
+		if (thirst > 0) {
+			setThirst(getThirst() + thirst);
+			return;
+		}
+		float leftover = thirst + this.saturation;
+		if (leftover < 0) {
+			this.saturation = 0F;
+			setThirst(getThirst() + (int) leftover);
+			return;
+		}
+		this.saturation = leftover;
 	}
 
 	public float getSaturation() {
@@ -80,8 +90,8 @@ public final class ThirstyPlayer {
 //		if (thirstData.cooled()) // TODO temperature
 //			TemperaturedPlayer.of(player).addFlag(TempFlag.COLD_DRINK);
 
-		setThirst(getThirst() + thirstData.thirst());
 		setSaturation(getSaturation() + thirstData.saturation());
+		addThirst(thirstData.thirst());
 	}
 
 	private void startThirstDamageTask() {

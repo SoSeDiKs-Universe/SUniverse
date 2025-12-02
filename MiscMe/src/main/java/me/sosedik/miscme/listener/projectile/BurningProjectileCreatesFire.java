@@ -11,6 +11,7 @@ import org.bukkit.block.data.Lightable;
 import org.bukkit.block.data.type.Campfire;
 import org.bukkit.block.data.type.Candle;
 import org.bukkit.block.data.type.Fire;
+import org.bukkit.block.data.type.Snow;
 import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Entity;
@@ -35,7 +36,7 @@ import java.util.List;
 // MCCheck: 1.21.10, new replaceable by fire blocks
 public class BurningProjectileCreatesFire implements Listener {
 
-	private static final List<Material> replaceableByFire = List.of(
+	private static final List<Material> REPLACEABLE_BY_FIRE = List.of(
 		Material.SHORT_GRASS, Material.TALL_GRASS, Material.FERN, Material.LARGE_FERN,
 		Material.DEAD_BUSH, Material.BUSH, Material.FIREFLY_BUSH, Material.LEAF_LITTER,
 		Material.SHORT_DRY_GRASS, Material.TALL_DRY_GRASS
@@ -69,6 +70,10 @@ public class BurningProjectileCreatesFire implements Listener {
 		if (!createFireOrIgnite(hitBlock, hitBlockFace, projectile, BlockIgniteEvent.IgniteCause.ARROW)) return;
 
 		if (projectile instanceof AbstractArrow arrow) {
+			if (arrow.getPickupStatus() != AbstractArrow.PickupStatus.ALLOWED) {
+				arrow.remove();
+				return;
+			}
 			MiscMe.scheduler().sync(() -> {
 				if (arrow.isValid())
 					arrow.startFalling();
@@ -112,11 +117,7 @@ public class BurningProjectileCreatesFire implements Listener {
 		hitBlock = hitBlock.getRelative(hitBlockFace);
 		if (tryToLit(hitBlock)) return true;
 
-		if (!(
-			hitBlock.isEmpty()
-			|| Tag.CORAL_PLANTS.isTagged(hitBlock.getType())
-			|| replaceableByFire.contains(hitBlock.getType())
-		)) return false;
+		if (!isReplaceableByFire(hitBlock)) return false;
 
 		var igniteEvent = new BlockIgniteEvent(hitBlock, cause, ignitingEntity);
 		if (!igniteEvent.callEvent()) return false;
@@ -133,6 +134,14 @@ public class BurningProjectileCreatesFire implements Listener {
 		}
 		hitBlock.setBlockData(fire);
 		return true;
+	}
+
+	private static boolean isReplaceableByFire(Block block) {
+		if (block.getType() == Material.SNOW)
+			return block.getBlockData() instanceof Snow snow && snow.getLayers() == snow.getMinimumLayers();
+		return block.isEmpty()
+			|| Tag.CORAL_PLANTS.isTagged(block.getType())
+			|| REPLACEABLE_BY_FIRE.contains(block.getType());
 	}
 
 	/**

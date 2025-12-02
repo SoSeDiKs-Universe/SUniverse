@@ -266,10 +266,11 @@ public class StatisticAdvancements implements Listener {
 		trackMovementStat(player, Statistic.PIG_ONE_CM, 50 * 1000 * 100, TrappedNewbieAdvancements.PIG_50KM);
 		trackMovementStat(player, Statistic.PIG_ONE_CM, 100 * 1000 * 100, TrappedNewbieAdvancements.PIG_100KM);
 		trackMovementStat(player, Statistic.PIG_ONE_CM, 250 * 1000 * 100, TrappedNewbieAdvancements.PIG_250KM);
-		trackMovementStat(player, Statistic.PLAY_ONE_MINUTE, 24 * 60 * 60 * 20, TrappedNewbieAdvancements.PLAY_1D);
-		trackMovementStat(player, Statistic.PLAY_ONE_MINUTE, 100 * 24 * 60 * 60 * 20, TrappedNewbieAdvancements.PLAY_100D);
-		trackMovementStat(player, Statistic.PLAY_ONE_MINUTE, 365 * 24 * 60 * 60 * 20, TrappedNewbieAdvancements.PLAY_365D);
-		trackMovementStat(player, Statistic.PLAY_ONE_MINUTE, 1000 * 24 * 60 * 60 * 20, TrappedNewbieAdvancements.PLAY_1000D);
+		int dayTime = 20 * 60 * 60;
+		trackMovementStat(player, Statistic.PLAY_ONE_MINUTE, dayTime, TrappedNewbieAdvancements.PLAY_1D);
+		trackMovementStat(player, Statistic.PLAY_ONE_MINUTE, 100 * dayTime, TrappedNewbieAdvancements.PLAY_100D);
+		trackMovementStat(player, Statistic.PLAY_ONE_MINUTE, 365 * dayTime, TrappedNewbieAdvancements.PLAY_365D);
+		trackMovementStat(player, Statistic.PLAY_ONE_MINUTE, 1000 * dayTime, TrappedNewbieAdvancements.PLAY_1000D);
 		trackMovementStat(player, Statistic.TIME_SINCE_DEATH, 60 * 60 * 20, TrappedNewbieAdvancements.SURVIVE_1H);
 		trackMovementStat(player, Statistic.TIME_SINCE_DEATH, 10 * 60 * 60 * 20, TrappedNewbieAdvancements.SURVIVE_10H);
 		trackMovementStat(player, Statistic.TIME_SINCE_DEATH, 50 * 60 * 60 * 20, TrappedNewbieAdvancements.SURVIVE_50H);

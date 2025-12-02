@@ -188,6 +188,7 @@ public class VisualArmorLayer implements Listener {
 
 		VisualArmor visualArmor = getVisualArmor(player);
 		if (!visualArmor.canUseVisualArmor()) return;
+		if (!visualArmor.isArmorPreview() && rawSlot == InventorySlotHelper.OFF_HAND) return;
 
 		event.setCancelled(true);
 		ClickType clickType = event.getClick();

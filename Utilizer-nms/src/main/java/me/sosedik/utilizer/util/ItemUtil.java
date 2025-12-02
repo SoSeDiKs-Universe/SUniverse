@@ -105,9 +105,7 @@ public class ItemUtil {
 	 * @return whether item is a burning item
 	 */
 	public static boolean isBurningItem(ItemStack item) {
-		return item.getType() == Material.TORCH
-			|| item.getType() == Material.SOUL_TORCH
-			|| item.getType() == Material.COPPER_TORCH
+		return UtilizerTags.REGULAR_TORCHES.isTagged(item.getType())
 			|| isLitCampfire(item);
 	}
 

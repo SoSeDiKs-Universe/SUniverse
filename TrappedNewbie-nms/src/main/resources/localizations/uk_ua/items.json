@@ -955,5 +955,9 @@
 	"item.trapped_newbie.magma_cube_bottle.name": "Магмокуб у пляшечці",
 	"item.trapped_newbie.allay_book.name": "Одержима книга зі збириком",
 	"item.trapped_newbie.vex_book.name": "Одержима книга з бісиком",
-	"item.trapped_newbie.leather_gloves.name": "Шкіряні рукавиці"
+	"item.trapped_newbie.leather_gloves.name": "Шкіряні рукавиці",
+	"item.trapped_newbie.gui_arrow_head_outline.name": "Наконечник стріли",
+	"item.trapped_newbie.gui_arrow_stick_outline.name": "Палиця",
+	"item.trapped_newbie.gui_arrow_fletching_outline.name": "Оперення стріли",
+	"item.trapped_newbie.gui_arrow_modifiers_outline.name": "Модифікатор стріли"
 }

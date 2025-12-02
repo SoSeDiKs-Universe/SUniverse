@@ -64,5 +64,6 @@
 	"item.requiem.waterdrop_skeleton_tombstone.name": "Скелет, що приземлився",
 	"item.requiem.webbed_skeleton_tombstone.name": "Опутаний скелет",
 	"item.requiem.winter_skeleton_tombstone.name": "Зимовий скелет",
-	"item.requiem.necronomicon.name": "<red>Некрономікон"
+	"item.requiem.necronomicon.name": "<red>Некрономікон",
+	"item.requiem.fire_arrow.name": "Палаюча стріла"
 }

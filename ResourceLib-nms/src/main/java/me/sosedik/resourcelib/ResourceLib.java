@@ -7,6 +7,7 @@ import me.sosedik.resourcelib.command.CEffectCommand;
 import me.sosedik.resourcelib.dataset.ResourcePackStorage;
 import me.sosedik.resourcelib.feature.ScoreboardRenderer;
 import me.sosedik.resourcelib.feature.TabRenderer;
+import me.sosedik.resourcelib.impl.item.modifier.CustomCrossbowArrowModifier;
 import me.sosedik.resourcelib.impl.item.modifier.CustomLoreModifier;
 import me.sosedik.resourcelib.impl.item.modifier.CustomNameModifier;
 import me.sosedik.resourcelib.impl.message.tag.IconTag;
@@ -75,6 +76,7 @@ public class ResourceLib extends JavaPlugin {
 			IconTag.ICON
 		);
 
+		new CustomCrossbowArrowModifier(resourceLibKey("custom_crossbow_arrow")).register();
 		new CustomNameModifier(resourceLibKey("custom_name")).register();
 		new CustomLoreModifier(resourceLibKey("custom_lore")).register();
 

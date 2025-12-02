@@ -1,6 +1,7 @@
 package me.sosedik.miscme.listener.world;
 
 import me.sosedik.miscme.MiscMe;
+import me.sosedik.utilizer.api.math.WorldChunkPosition;
 import org.bukkit.Bukkit;
 import org.bukkit.ChunkSnapshot;
 import org.bukkit.Location;
@@ -12,6 +13,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.event.world.WorldUnloadEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -25,7 +27,7 @@ import java.util.UUID;
 public class TrailPaths extends BukkitRunnable implements Listener {
 
 	private final Map<UUID, Location> storedLocations = new HashMap<>();
-	private final Map<UUID, Map<Location, Integer>> storedSteps = new HashMap<>();
+	private final Map<UUID, Map<WorldChunkPosition, Map<Location, Integer>>> storedSteps = new HashMap<>();
 
 	public TrailPaths() {
 		MiscMe.scheduler().async(this, 5L, 5L);
@@ -39,6 +41,14 @@ public class TrailPaths extends BukkitRunnable implements Listener {
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onUnload(WorldUnloadEvent event) {
 		this.storedSteps.remove(event.getWorld().getUID());
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onUnload(ChunkUnloadEvent event) {
+		Map<WorldChunkPosition, Map<Location, Integer>> chunkLocs = this.storedSteps.get(event.getWorld().getUID());
+		if (chunkLocs == null) return;
+
+		chunkLocs.remove(WorldChunkPosition.of(event.getChunk()));
 	}
 
 	@Override
@@ -74,7 +84,8 @@ public class TrailPaths extends BukkitRunnable implements Listener {
 		Material blockType = chunkSnapshot.getBlockType(relX, relY, relZ);
 		if (blockType.isSolid()) return;
 
-		Map<Location, Integer> storedSteps = this.storedSteps.computeIfAbsent(oldLoc.getWorld().getUID(), k -> new HashMap<>());
+		Map<WorldChunkPosition, Map<Location, Integer>> chunkLocs = this.storedSteps.computeIfAbsent(oldLoc.getWorld().getUID(), k -> new HashMap<>());
+		Map<Location, Integer> storedSteps = chunkLocs.computeIfAbsent(WorldChunkPosition.of(oldLoc), k -> new HashMap<>());
 		blockType = chunkSnapshot.getBlockType(relX, relY - 1, relZ);
 		for (Trail trail : Trail.values()) {
 			if (trail.getFrom() != blockType) continue;

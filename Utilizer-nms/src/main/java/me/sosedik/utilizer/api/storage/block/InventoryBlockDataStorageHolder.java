@@ -5,7 +5,6 @@ import me.sosedik.utilizer.api.AInventory;
 import me.sosedik.utilizer.api.message.Messenger;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
-import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -18,8 +17,11 @@ import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.UnknownNullability;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
+import xyz.xenondevs.invui.window.Window;
 
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 @NullMarked
 public abstract class InventoryBlockDataStorageHolder extends BlockDataStorageHolder implements AInventory {
@@ -28,6 +30,7 @@ public abstract class InventoryBlockDataStorageHolder extends BlockDataStorageHo
 	public static final String INVENTORY_STORAGE_TAG = "inventory";
 
 	protected @UnknownNullability Inventory inventory;
+	protected @Nullable Map<UUID, Window> windows;
 	protected @Nullable Component name;
 
 	protected InventoryBlockDataStorageHolder(Block block, ReadWriteNBT nbt) {
@@ -48,41 +51,45 @@ public abstract class InventoryBlockDataStorageHolder extends BlockDataStorageHo
 		}
 
 		Player player = event.getPlayer();
-		Block block = getBlock();
-		if (player.isSneaking()) {
-			// Vanilla allows interacting with an empty hand while sneaking
-			if (!player.getInventory().getItemInMainHand().isEmpty()) return;
-			// Allow picking up flower with an empty hand
-			else if (block.getType() != Material.FLOWER_POT) return;
-		}
+		// Vanilla allows interacting with an empty hand while sneaking
+		if (player.isSneaking() && !player.getInventory().getItemInMainHand().isEmpty()) return;
 
-		// Placing flower
-		if (block.getType() == Material.FLOWER_POT && canConvertToPot(player.getInventory().getItemInMainHand().getType())) return;
-
-		event.setCancelled(true); // Also helps not to take the flower from the pot
+		event.setCancelled(true);
 		player.swingMainHand();
-		player.openInventory(getInventory());
+		openInventory(player);
 	}
 
-	private boolean canConvertToPot(Material type) {
-		return type != Material.AIR && Material.matchMaterial(type.getKey().namespace() + ":potted_" + type.getKey().value()) != null;
+	public void openInventory(Player player) {
+		player.openInventory(this.inventory);
+	}
+
+	public boolean isViewing(Player player) {
+		if (this.windows != null)
+			return this.windows.containsKey(player.getUniqueId());
+		return player.getOpenInventory().getTopInventory().equals(this.inventory);
 	}
 
 	@Override
 	public void onOpen(InventoryOpenEvent event) {
-		Component name = name();
-		if (name != null)
-			event.titleOverride(name);
+		if (event.getPlayer() instanceof Player player)
+			event.titleOverride(name(player));
 	}
 
 	@Override
 	public void cleanUp() {
 		super.cleanUp();
-		List.copyOf(this.inventory.getViewers()).forEach(player -> player.closeInventory(InventoryCloseEvent.Reason.CANT_USE));
+		if (this.inventory != null)
+			List.copyOf(this.inventory.getViewers()).forEach(player -> player.closeInventory(InventoryCloseEvent.Reason.CANT_USE));
+		if (this.windows != null)
+			Map.copyOf(this.windows).values().forEach(Window::close);
 	}
 
-	public @UnknownNullability Inventory getInventory() {
+	public Inventory getInventory() {
 		return this.inventory;
+	}
+
+	public @Nullable Window getWindow(Player player) {
+		return this.windows == null ? null : this.windows.get(player.getUniqueId());
 	}
 
 	public @Nullable Component name() {
@@ -91,11 +98,15 @@ public abstract class InventoryBlockDataStorageHolder extends BlockDataStorageHo
 
 	public Component name(Player player) {
 		Component name = name();
-		return name == null ? Messenger.messenger(player).getMessage("inv." + getId().asString().replace(":", ".") + ".title") : name;
+		return name == null ? getDefaultName(player) : name;
 	}
 
 	public void setName(@Nullable Component name) {
 		this.name = name;
+	}
+
+	public Component getDefaultName(Player player) {
+		return Messenger.messenger(player).getMessage("inv." + getId().asString().replace(":", ".") + ".title");
 	}
 
 	@Override

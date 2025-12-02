@@ -7,6 +7,7 @@ import me.sosedik.moves.api.event.PlayerStopSittingEvent;
 import me.sosedik.utilizer.api.event.player.PlayerDataLoadedEvent;
 import me.sosedik.utilizer.api.event.player.PlayerDataSaveEvent;
 import me.sosedik.utilizer.api.storage.player.PlayerDataStorage;
+import me.sosedik.utilizer.util.LocationUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Tag;
@@ -156,31 +157,36 @@ public class SittingMechanics implements Listener {
 		if (!isSitting(player)) return;
 		if (!player.isOnline()) return;
 
+		Location loc = mount == null ? player.getLocation() : mount.getLocation().setDirection(player.getLocation().getDirection());
+
 		if (mount != null)
 			mount.remove();
 
 		new PlayerStopSittingEvent(player).callEvent();
 
-		if (velocity) {
-			player.setNoDamageTicks(3);
-			boolean roomAbove = player.getEyeLocation().getBlock().getRelative(BlockFace.UP).isEmpty();
-			if (roomAbove) {
-				float pitch = player.getLocation().getPitch();
-				boolean lookingForward = pitch < 45F && pitch > -50F;
-				if (lookingForward) {
-					player.setVelocity(new Vector(0, 1, 0));
-					Moves.scheduler().sync(() -> {
-						Vector vector = player.getEyeLocation().getDirection().setY(0).normalize().multiply(0.15).setY(0.4);
-						player.setVelocity(vector);
-					}, 2L);
-				} else {
-					Block block = player.getLocation().getBlock();
-					boolean extraHeight = Tag.FENCES.isTagged(block.getType()) || Tag.WALLS.isTagged(block.getType());
-					player.setVelocity(new Vector(0, extraHeight ? 1 : 0.6, 0));
-					Moves.scheduler().sync(() -> player.setVelocity(new Vector(0, 0.2, 0)), 2L);
+		LocationUtil.smartTeleport(player, loc, false)
+			.thenRun(() -> {
+				if (velocity) {
+					player.setNoDamageTicks(3);
+					boolean roomAbove = player.getEyeLocation().getBlock().getRelative(BlockFace.UP).isEmpty();
+					if (roomAbove) {
+						float pitch = player.getLocation().getPitch();
+						boolean lookingForward = pitch < 45F && pitch > -50F;
+						if (lookingForward) {
+							player.setVelocity(new Vector(0, 0.2, 0));
+							Moves.scheduler().sync(() -> {
+								Vector vector = player.getEyeLocation().getDirection().setY(0).normalize().multiply(0.15).setY(0.2);
+								player.setVelocity(vector);
+							}, 2L);
+						} else {
+							Block block = player.getLocation().getBlock();
+							boolean extraHeight = LocationUtil.getMaxYPoint(block) > 1;
+							player.setVelocity(new Vector(0, extraHeight ? 0.4 : 0.2, 0));
+							Moves.scheduler().sync(() -> player.setVelocity(new Vector(0, 0.2, 0)), 2L);
+						}
+					}
 				}
-			}
-		}
+			});
 
 		SITTERS.remove(player.getUniqueId());
 	}
@@ -211,7 +217,9 @@ public class SittingMechanics implements Listener {
 		Block block = event.getClickedBlock();
 		if (block == null) return;
 		if (player.getLocation().distance(block.getLocation().center()) > 2) return;
-		if (!block.getRelative(BlockFace.UP).isEmpty()) return;
+
+		Block upper = block.getRelative(BlockFace.UP);
+		if (!upper.isEmpty() && LocationUtil.getMinYPoint(upper) < 0.5) return;
 
 		if (player.isSneaking()) {
 			if (block.getBlockData() instanceof Bed bed) {

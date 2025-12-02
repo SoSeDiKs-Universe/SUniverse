@@ -7,6 +7,7 @@ import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.DyedItemColor;
 import me.sosedik.miscme.listener.item.ImmersiveDyes;
+import me.sosedik.resourcelib.ResourceLib;
 import me.sosedik.trappednewbie.TrappedNewbie;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieItems;
 import me.sosedik.trappednewbie.impl.item.modifier.ItemModelModifier;
@@ -17,6 +18,7 @@ import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.ItemDisplay;
@@ -35,6 +37,7 @@ import java.util.function.Consumer;
 @NullMarked
 public class SleepingBagBlockStorage extends BlockDataStorageHolder implements ExtraDroppableBlockStorage {
 
+	private static final NamespacedKey SLEEPING_BAG_MODEL_KEY = ResourceLib.storage().getItemModelMapping(TrappedNewbie.trappedNewbieKey("sleeping_bag"));
 	private static final String ITEM_KEY = "item";
 	private static final String FACING_KEY = "facing";
 
@@ -104,7 +107,7 @@ public class SleepingBagBlockStorage extends BlockDataStorageHolder implements E
 	private void updateDisplayItem() {
 		ItemStack displayItem = this.storedItem.asOne();
 		NBT.modify(displayItem, (Consumer<ReadWriteItemNBT>) nbt -> nbt.setBoolean(ItemModelModifier.SKIP_TAG, true));
-		displayItem.setData(DataComponentTypes.ITEM_MODEL, TrappedNewbie.trappedNewbieKey("sleeping_bag"));
+		displayItem.setData(DataComponentTypes.ITEM_MODEL, SLEEPING_BAG_MODEL_KEY);
 		this.display.setItemStack(displayItem);
 	}
 

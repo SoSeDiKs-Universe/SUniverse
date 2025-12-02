@@ -42,7 +42,9 @@ public class SwordsSwingThroughGrass implements Listener {
 	public static @Nullable LivingEntity getEntityThoughGrass(Player player) {
 		Block block = player.getTargetBlockExact(EntityUtil.PLAYER_REACH);
 		if (block == null) return null;
-		if (block.getType().getHardness() > 0 && !block.getType().isCollidable()) {
+		if (block.getType().isCollidable()) return null;
+
+		if (block.getType().getHardness() > 0) {
 			if (LocationUtil.isCube(block) && !Tag.ITEMS_ENCHANTABLE_WEAPON.isTagged(player.getInventory().getItemInMainHand().getType())) return null;
 		}
 

@@ -20,6 +20,7 @@ import org.bukkit.entity.Chicken;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Dolphin;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Fox;
 import org.bukkit.entity.Goat;
 import org.bukkit.entity.LivingEntity;
@@ -127,9 +128,25 @@ public class AngryAnimals implements Listener {
 		if (entity instanceof Tameable tameable && tameable.isTamed() && damager.getUniqueId().equals(tameable.getOwnerUniqueId())) return;
 
 		entity.getWorld().getNearbyEntitiesByType(Mob.class, entity.getLocation(), 20, mob -> shouldAggro(entity, mob)).forEach(mob -> {
-			if (mob.getTarget() == null)
+			if (mob.getTarget() != null) return;
+
+			if (isSameType(entity, mob))
 				EntityUtil.setTarget(mob, damager);
+			else if (mob instanceof Animals)
+				mob.setPanicTicks(40);
 		});
+	}
+
+	private boolean isSameType(Mob damaged, Mob targeting) {
+		final EntityType targetingType = targeting.getType();
+		return switch (damaged.getType()) {
+			case CAT, OCELOT -> targetingType == EntityType.CAT || targetingType == EntityType.OCELOT;
+			case SQUID, GLOW_SQUID -> targetingType == EntityType.SQUID || targetingType == EntityType.GLOW_SQUID;
+			case HORSE, DONKEY, MULE -> targetingType == EntityType.HORSE || targetingType == EntityType.DONKEY || targetingType == EntityType.MULE;
+			case LLAMA, TRADER_LLAMA -> targetingType == EntityType.LLAMA || targetingType == EntityType.TRADER_LLAMA;
+			case COW, MOOSHROOM -> targetingType == EntityType.COW || targetingType == EntityType.MOOSHROOM;
+			default -> damaged.getType() == targetingType;
+		};
 	}
 
 	private boolean shouldAggro(Mob attackedMob, Mob friendlyMob) {

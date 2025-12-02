@@ -160,9 +160,9 @@ public class MiscUtil {
 	 * @param <T> object type
 	 */
 	@SafeVarargs
-	public static <T> List<@UnknownNullability T> combineToList(Collection<@Nullable T>... collections) {
+	public static <T> List<@UnknownNullability T> combineToList(Collection<? extends @Nullable T>... collections) {
 		List<T> newList = new ArrayList<>();
-		for (Collection<T> collection : collections)
+		for (Collection<? extends T> collection : collections)
 			newList.addAll(collection);
 		return newList;
 	}

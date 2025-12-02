@@ -955,5 +955,9 @@
 	"item.trapped_newbie.magma_cube_bottle.name": "Магмовый куб в бутылочке",
 	"item.trapped_newbie.allay_book.name": "Одержиманя книга с тихоней",
 	"item.trapped_newbie.vex_book.name": "Одержиманя книга с врединой",
-	"item.trapped_newbie.leather_gloves.name": "Кожаные перчатки"
+	"item.trapped_newbie.leather_gloves.name": "Кожаные перчатки",
+	"item.trapped_newbie.gui_arrow_head_outline.name": "Наконечник стрелы",
+	"item.trapped_newbie.gui_arrow_stick_outline.name": "Палка",
+	"item.trapped_newbie.gui_arrow_fletching_outline.name": "Оперение стрелы",
+	"item.trapped_newbie.gui_arrow_modifiers_outline.name": "Модификатор стрелы"
 }

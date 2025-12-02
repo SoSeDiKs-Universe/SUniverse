@@ -133,16 +133,15 @@ public class ClickThroughHanging implements Listener {
 
 		if (BlockStorage.getByLoc(container) instanceof InventoryBlockDataStorageHolder storage) {
 			Inventory inventory = storage.getInventory();
-			if (inventory == null) return TriState.FALSE;
 			if (!canInteractWithContainer(player, container, blockFace)) {
-				if (player.getOpenInventory().getTopInventory().equals(inventory)) // In case interact triggered opening
+				if (storage.isViewing(player)) // In case interact triggered opening
 					return TriState.TRUE;
 				return TriState.FALSE;
 			}
 
 			player.swingMainHand();
-			player.openInventory(inventory);
-			if (!player.getOpenInventory().getTopInventory().equals(inventory))
+			storage.openInventory(player);
+			if (!storage.isViewing(player))
 				return TriState.FALSE;
 
 			return TriState.TRUE;

@@ -18,6 +18,7 @@ import me.sosedik.requiem.listener.entity.OverwriteControlledPandasGenes;
 import me.sosedik.requiem.listener.entity.PrepareGhostMobs;
 import me.sosedik.requiem.listener.entity.UndeadConsecration;
 import me.sosedik.requiem.listener.item.ExplodingCreeperHeart;
+import me.sosedik.requiem.listener.item.FireArrowBurning;
 import me.sosedik.requiem.listener.item.HostRevocatorBodyLeaving;
 import me.sosedik.requiem.listener.item.HostRevocatorItemDestroying;
 import me.sosedik.requiem.listener.item.SoulboundNecronomicon;
@@ -96,6 +97,7 @@ public final class Requiem extends JavaPlugin {
 			UndeadConsecration.class,
 			// item
 			ExplodingCreeperHeart.class,
+			FireArrowBurning.class,
 			HostRevocatorBodyLeaving.class,
 			HostRevocatorItemDestroying.class,
 			SoulboundNecronomicon.class,

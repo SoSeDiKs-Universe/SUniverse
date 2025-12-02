@@ -2,7 +2,6 @@ package me.sosedik.miscme.listener.entity;
 
 import de.tr7zw.nbtapi.NBT;
 import de.tr7zw.nbtapi.iface.ReadWriteNBT;
-import me.sosedik.miscme.MiscMe;
 import me.sosedik.miscme.api.event.entity.EntityTurnBabyEvent;
 import me.sosedik.utilizer.util.EntityUtil;
 import org.bukkit.attribute.Attribute;
@@ -10,10 +9,12 @@ import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.Ageable;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Slime;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntitySpawnEvent;
+import org.bukkit.event.entity.EntityTransformEvent;
 import org.bukkit.event.world.EntitiesLoadEvent;
 
 import java.util.function.Consumer;
@@ -31,14 +32,27 @@ public class MoreBabyMobs implements Listener {
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onSpawn(EntitySpawnEvent event) {
 		if (!(event.getEntity() instanceof LivingEntity entity)) return;
-		if (entity instanceof Ageable) return;
-		if (!EntityUtil.isNaturallySpawned(entity)) return;
-		if (Math.random() > SPAWN_CHANCE) return;
+		if (!shouldBecomeBaby(entity)) return;
 
-		MiscMe.scheduler().sync(() -> {
-			if (entity.isValid())
-				makeBaby(entity);
-		}, 1L);
+		makeBaby(entity);
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onSplit(EntityTransformEvent event) {
+		if (!(event.getEntity() instanceof Slime slime)) return;
+		if (!isNonVanillaBaby(slime)) return;
+
+		event.getTransformedEntities().forEach(entity -> {
+			if (entity instanceof Slime living)
+				makeBaby(living);
+		});
+	}
+
+	private boolean shouldBecomeBaby(LivingEntity entity) {
+		if (NBT.get(entity, nbt -> (boolean) nbt.hasTag(BABY_TAG))) return true;
+		return !(entity instanceof Ageable)
+			&& EntityUtil.isNaturallySpawned(entity)
+			&& Math.random() > SPAWN_CHANCE;
 	}
 
 	// Re-apply attributes to custom babies on load
@@ -87,8 +101,9 @@ public class MoreBabyMobs implements Listener {
 
 	private static void modifyAttribute(LivingEntity entity, Attribute attribute, double modifier) {
 		AttributeInstance attributeInstance = entity.getAttribute(attribute);
-		if (attributeInstance != null)
-			attributeInstance.setBaseValue(attributeInstance.getBaseValue() * modifier);
+		if (attributeInstance == null) return;
+
+		attributeInstance.setBaseValue(attributeInstance.getBaseValue() * modifier);
 	}
 
 }

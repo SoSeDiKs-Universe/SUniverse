@@ -5,6 +5,7 @@ import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
 import me.sosedik.kiterino.registry.wrapper.KiterinoMobEffectBehaviourWrapper;
 import me.sosedik.kiterino.util.KiterinoBootstrapEntityTypeInjectorImpl;
+import me.sosedik.miscme.listener.entity.MoreBabyMobs;
 import me.sosedik.resourcelib.ResourceLibBootstrap;
 import me.sosedik.resourcelib.util.BlockCreator;
 import me.sosedik.resourcelib.util.ItemCreator;
@@ -142,24 +143,64 @@ public class TrappedNewbieBootstrap implements PluginBootstrap {
 				.component(DataComponents.TOOL, KnifeItem.createToolProperties())
 				.component(DataComponents.WEAPON, new Weapon(1)));
 			case "slime_bucket" -> mobBucket((Item.Properties) properties, EntityType.SLIME, Fluids.EMPTY, Items.BUCKET,
-				entity -> entity.getSize() == 1,
-				null,
-				(entity, tag) -> entity.setSize(1, false)
+				entity -> entity.getSize() == 1 || (entity.getSize() == 2 && MoreBabyMobs.isNonVanillaBaby(entity.getBukkitLivingEntity())),
+				(entity, stack) -> {
+					CustomData.update(DataComponents.BUCKET_ENTITY_DATA, stack, tag -> {
+						tag.putInt("Size", entity.getSize() - 1);
+						if (MoreBabyMobs.isNonVanillaBaby(entity.getBukkitLivingEntity()))
+							tag.putInt("Age", -24_000);
+					});
+				},
+				(entity, tag) -> {
+					entity.setSize(tag.getIntOr("Size", 0) + 1, false);
+					if (tag.getIntOr("Age", 0) == -24_000)
+						MoreBabyMobs.makeBaby(entity.getBukkitLivingEntity());
+				}
 			);
 			case "slime_bottle" -> mobBucket((Item.Properties) properties, EntityType.SLIME, Fluids.EMPTY, Items.GLASS_BOTTLE,
-				entity -> entity.getSize() == 1,
-				null,
-				(entity, tag) -> entity.setSize(1, false)
+				entity -> entity.getSize() == 1 || (entity.getSize() == 2 && MoreBabyMobs.isNonVanillaBaby(entity.getBukkitLivingEntity())),
+				(entity, stack) -> {
+					CustomData.update(DataComponents.BUCKET_ENTITY_DATA, stack, tag -> {
+						tag.putInt("Size", entity.getSize() - 1);
+						if (MoreBabyMobs.isNonVanillaBaby(entity.getBukkitLivingEntity()))
+							tag.putInt("Age", -24_000);
+					});
+				},
+				(entity, tag) -> {
+					entity.setSize(tag.getIntOr("Size", 0) + 1, false);
+					if (tag.getIntOr("Age", 0) == -24_000)
+						MoreBabyMobs.makeBaby(entity.getBukkitLivingEntity());
+				}
 			);
 			case "magma_cube_bucket" -> mobBucket((Item.Properties) properties, EntityType.MAGMA_CUBE, Fluids.EMPTY, Items.BUCKET,
-				entity -> entity.getSize() == 1,
-				null,
-				(entity, tag) -> entity.setSize(1, false)
+				entity -> entity.getSize() == 1 || (entity.getSize() == 2 && MoreBabyMobs.isNonVanillaBaby(entity.getBukkitLivingEntity())),
+				(entity, stack) -> {
+					CustomData.update(DataComponents.BUCKET_ENTITY_DATA, stack, tag -> {
+						tag.putInt("Size", entity.getSize() - 1);
+						if (MoreBabyMobs.isNonVanillaBaby(entity.getBukkitLivingEntity()))
+							tag.putInt("Age", -24_000);
+					});
+				},
+				(entity, tag) -> {
+					entity.setSize(tag.getIntOr("Size", 0) + 1, false);
+					if (tag.getIntOr("Age", 0) == -24_000)
+						MoreBabyMobs.makeBaby(entity.getBukkitLivingEntity());
+				}
 			);
 			case "magma_cube_bottle" -> mobBucket((Item.Properties) properties, EntityType.MAGMA_CUBE, Fluids.EMPTY, Items.GLASS_BOTTLE,
-				entity -> entity.getSize() == 1,
-				null,
-				(entity, tag) -> entity.setSize(1, false)
+				entity -> entity.getSize() == 1 || (entity.getSize() == 2 && MoreBabyMobs.isNonVanillaBaby(entity.getBukkitLivingEntity())),
+				(entity, stack) -> {
+					CustomData.update(DataComponents.BUCKET_ENTITY_DATA, stack, tag -> {
+						tag.putInt("Size", entity.getSize() - 1);
+						if (MoreBabyMobs.isNonVanillaBaby(entity.getBukkitLivingEntity()))
+							tag.putInt("Age", -24_000);
+					});
+				},
+				(entity, tag) -> {
+					entity.setSize(tag.getIntOr("Size", 0) + 1, false);
+					if (tag.getIntOr("Age", 0) == -24_000)
+						MoreBabyMobs.makeBaby(entity.getBukkitLivingEntity());
+				}
 			);
 			case "frog_bucket" -> mobBucket((Item.Properties) properties, EntityType.FROG, Fluids.EMPTY, Items.BUCKET,
 				null,
@@ -253,17 +294,29 @@ public class TrappedNewbieBootstrap implements PluginBootstrap {
 					CustomData.update(DataComponents.BUCKET_ENTITY_DATA, stack, tag -> {
 						tag.putInt("Lifetime", entity.life);
 						tag.putBoolean("PlayerSpawned", entity.isPlayerSpawned());
+						if (MoreBabyMobs.isNonVanillaBaby(entity.getBukkitLivingEntity()))
+							tag.putInt("Age", -24_000);
 					});
 				},
 				(entity, tag) -> {
 					entity.life = tag.getIntOr("Lifetime", 0);
 					entity.setPlayerSpawned(tag.getBooleanOr("PlayerSpawned", false));
+					if (tag.getIntOr("Age", 0) == -24_000)
+						MoreBabyMobs.makeBaby(entity.getBukkitLivingEntity());
 				}
 			);
 			case "silverfish_bottle" -> mobBucket((Item.Properties) properties, EntityType.SILVERFISH, Fluids.EMPTY, Items.GLASS_BOTTLE,
 				null,
-				null,
-				null
+				(entity, stack) -> {
+					CustomData.update(DataComponents.BUCKET_ENTITY_DATA, stack, tag -> {
+						if (MoreBabyMobs.isNonVanillaBaby(entity.getBukkitLivingEntity()))
+							tag.putInt("Age", -24_000);
+					});
+				},
+				(entity, tag) -> {
+					if (tag.getIntOr("Age", 0) == -24_000)
+						MoreBabyMobs.makeBaby(entity.getBukkitLivingEntity());
+				}
 			);
 			case "allay_book" -> mobBucket((Item.Properties) properties, EntityType.ALLAY, Fluids.EMPTY, Items.BOOK,
 				null,
@@ -289,6 +342,9 @@ public class TrappedNewbieBootstrap implements PluginBootstrap {
 						});
 						if (!inventoryTag.isEmpty())
 							tag.put("Inventory", inventoryTag);
+
+						if (MoreBabyMobs.isNonVanillaBaby(entity.getBukkitLivingEntity()))
+							tag.putInt("Age", -24_000);
 					});
 				},
 				(entity, tag) -> {
@@ -303,6 +359,9 @@ public class TrappedNewbieBootstrap implements PluginBootstrap {
 						if (!item.isEmpty())
 							entity.getInventory().addItem(item);
 					});
+
+					if (tag.getIntOr("Age", 0) == -24_000)
+						MoreBabyMobs.makeBaby(entity.getBukkitLivingEntity());
 				}
 			);
 			case "vex_book" -> mobBucket((Item.Properties) properties, EntityType.VEX, Fluids.EMPTY, Items.BOOK,
@@ -315,10 +374,16 @@ public class TrappedNewbieBootstrap implements PluginBootstrap {
 							equipmentTag.store("mainhand", ItemStack.CODEC, handItem);
 							tag.put("equipment", equipmentTag);
 						}
+
+						if (MoreBabyMobs.isNonVanillaBaby(entity.getBukkitLivingEntity()))
+							tag.putInt("Age", -24_000);
 					});
 				},
 				(entity, tag) -> {
 					entity.setItemInHand(InteractionHand.MAIN_HAND, tag.getCompoundOrEmpty("equipment").read("mainhand", ItemStack.CODEC).orElse(ItemStack.EMPTY));
+
+					if (tag.getIntOr("Age", 0) == -24_000)
+						MoreBabyMobs.makeBaby(entity.getBukkitLivingEntity());
 				}
 			);
 			case "chainmail_bucket" -> new Item(((Item.Properties) properties).humanoidArmor(new ArmorMaterial(15, makeDefense(1, 4, 5, 2, 4), 12, SoundEvents.ARMOR_EQUIP_CHAIN, 0.0F, 0.0F, ItemTags.REPAIRS_CHAIN_ARMOR, equipmentAssets("chainmail_bucket")), ArmorType.HELMET));

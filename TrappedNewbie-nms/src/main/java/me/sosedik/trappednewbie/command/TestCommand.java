@@ -1,9 +1,10 @@
 package me.sosedik.trappednewbie.command;
 
 import io.papermc.paper.command.brigadier.CommandSourceStack;
-import me.sosedik.requiem.listener.item.SoulboundNecronomicon;
+import me.sosedik.miscme.listener.entity.MoreBabyMobs;
 import me.sosedik.trappednewbie.TrappedNewbie;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Slime;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.Permission;
 import org.jspecify.annotations.NullMarked;
@@ -25,7 +26,11 @@ public class TestCommand {
 		}
 
 		TrappedNewbie.scheduler().sync(() -> {
-			player.getInventory().addItem(SoulboundNecronomicon.getNecronomicon(player));
+			// Stuff!
+			player.getWorld().spawn(player.getLocation(), Slime.class, e -> {
+				MoreBabyMobs.makeBaby(e);
+			});
+//			player.getInventory().addItem(SoulboundNecronomicon.getNecronomicon(player));
 //			Block block = player.getLocation().getBlock();
 //			block.setType(Material.CHERRY_SIGN);
 //			if (block.getState() instanceof Sign sign) {
@@ -33,7 +38,6 @@ public class TestCommand {
 //				sign.getSide(Side.FRONT).line(1, Component.text("text, but red", NamedTextColor.RED).hoverEvent(Component.text("smh")));
 //				sign.update();
 //			}
-			// Stuff!
 //			player.getWorld().spawn(player.getLocation(), Husk.class, e1 -> {
 //				e1.setCanPickupItems(true);
 //				e1.getEquipment().setHelmet(ItemStack.of(Material.JACK_O_LANTERN));

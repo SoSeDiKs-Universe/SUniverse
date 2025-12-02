@@ -159,7 +159,7 @@ public abstract class FancierAdvancementDisplay<T extends FancierAdvancementDisp
 		if (fontData == null) return super.renderAdvancementTitle(viewer);
 
 		return Component.textOfChildren(
-			fontData.offsetMapping(-29).shadowColor(ShadowColor.none()),
+			fontData.offsetMapping(-32).shadowColor(ShadowColor.none()),
 			super.renderAdvancementTitle(viewer)
 		);
 	}

@@ -26,6 +26,7 @@ import me.sosedik.trappednewbie.impl.block.nms.ClayKilnBlock;
 import me.sosedik.trappednewbie.impl.blockstorage.ChoppingBlockStorage;
 import me.sosedik.trappednewbie.impl.blockstorage.ClayKilnBlockStorage;
 import me.sosedik.trappednewbie.impl.blockstorage.DrumBlockStorage;
+import me.sosedik.trappednewbie.impl.blockstorage.FletchingTableBlockStorage;
 import me.sosedik.trappednewbie.impl.blockstorage.FlowerPotBlockStorage;
 import me.sosedik.trappednewbie.impl.blockstorage.SleepingBagBlockStorage;
 import me.sosedik.trappednewbie.impl.blockstorage.TotemBaseBlockStorage;
@@ -33,6 +34,9 @@ import me.sosedik.trappednewbie.impl.blockstorage.WorkStationBlockStorage;
 import me.sosedik.trappednewbie.impl.item.modifier.AdvancementTrophyModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.AdvancementTrophyNameLoreModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.BucketModifier;
+import me.sosedik.trappednewbie.impl.item.modifier.CustomArrowModifier;
+import me.sosedik.trappednewbie.impl.item.modifier.CustomBowArrowModifier;
+import me.sosedik.trappednewbie.impl.item.modifier.CustomCrossbowArrowModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.DirtyWaterModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.FoodTooltipModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.GoodieBagModifier;
@@ -43,6 +47,7 @@ import me.sosedik.trappednewbie.impl.item.modifier.LetterModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.PaperPlaneModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.ScrapModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.ThirstTooltipModifier;
+import me.sosedik.trappednewbie.impl.item.modifier.TippedArrowPotionTypeModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.UnlitCampfireModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.VisualArmorModifier;
 import me.sosedik.trappednewbie.impl.recipe.ChoppingBlockCrafting;
@@ -111,6 +116,7 @@ import me.sosedik.trappednewbie.listener.entity.LimboWandererTrades;
 import me.sosedik.trappednewbie.listener.entity.NerfedBabies;
 import me.sosedik.trappednewbie.listener.entity.ShearableCreepers;
 import me.sosedik.trappednewbie.listener.item.BlackBeltSpeed;
+import me.sosedik.trappednewbie.listener.item.BowArrowCache;
 import me.sosedik.trappednewbie.listener.item.CanteenInteractions;
 import me.sosedik.trappednewbie.listener.item.ChainmailBucketInteractions;
 import me.sosedik.trappednewbie.listener.item.EyeceCreamCandyVisual;
@@ -165,6 +171,7 @@ import me.sosedik.trappednewbie.listener.player.TeamableLeatherEquipment;
 import me.sosedik.trappednewbie.listener.player.TotemRituals;
 import me.sosedik.trappednewbie.listener.player.TrappedNewbiePlayerOptions;
 import me.sosedik.trappednewbie.listener.player.VisualArmorLayer;
+import me.sosedik.trappednewbie.listener.projectile.VariedTippedArrows;
 import me.sosedik.trappednewbie.listener.thirst.DrinkableWater;
 import me.sosedik.trappednewbie.listener.thirst.HealRestoresThirst;
 import me.sosedik.trappednewbie.listener.thirst.NoSprintingWhileThirsty;
@@ -239,6 +246,7 @@ public final class TrappedNewbie extends JavaPlugin {
 		TrappedNewbieTags.TOTEM_BASES.getValues().forEach(material -> BlockStorage.addMapping(material, TotemBaseBlockStorage.class));
 		TrappedNewbieTags.WORK_STATIONS.getValues().forEach(material -> BlockStorage.addMapping(material, WorkStationBlockStorage.class));
 		Tag.FLOWER_POTS.getValues().forEach(material -> BlockStorage.addMapping(material, FlowerPotBlockStorage.class));
+		BlockStorage.addMapping(Material.FLETCHING_TABLE, FletchingTableBlockStorage.class);
 		BlockStorage.addMapping(TrappedNewbieItems.CLAY_KILN, ClayKilnBlockStorage.class);
 		BlockStorage.addMapping(TrappedNewbieItems.SLEEPING_BAG, SleepingBagBlockStorage.class);
 
@@ -275,6 +283,9 @@ public final class TrappedNewbie extends JavaPlugin {
 		new AdvancementTrophyModifier(trappedNewbieKey("advancement_trophy")).register();
 		new AdvancementTrophyNameLoreModifier(trappedNewbieKey("advancement_trophy_name_lore")).register();
 		new BucketModifier(trappedNewbieKey("buckets")).register();
+		new CustomArrowModifier(trappedNewbieKey("custom_arrow")).register();
+		new CustomBowArrowModifier(trappedNewbieKey("custom_bow")).register();
+		new CustomCrossbowArrowModifier(trappedNewbieKey("custom_crossbow")).register();
 		new DirtyWaterModifier(trappedNewbieKey("dirty_water")).register();
 		new FoodTooltipModifier(trappedNewbieKey("food_tooltip")).register();
 		new GoodieBagModifier(trappedNewbieKey("goodie_bag")).register();
@@ -292,6 +303,7 @@ public final class TrappedNewbie extends JavaPlugin {
 		new PaperPlaneModifier(trappedNewbieKey("paper_plane")).register();
 		new ScrapModifier(trappedNewbieKey("scrap")).register();
 		new ThirstTooltipModifier(trappedNewbieKey("thirst_tooltip")).register();
+		new TippedArrowPotionTypeModifier(trappedNewbieKey("tipped_arrow_potion_type")).register();
 		new UnlitCampfireModifier(trappedNewbieKey("unlit_campfire")).register();
 		new VisualArmorModifier(trappedNewbieKey("visual_armor")).register();
 		new AllRecipesInRecipeBook.RecipeItemParser(trappedNewbieKey("recipe_parser")).register();
@@ -367,6 +379,7 @@ public final class TrappedNewbie extends JavaPlugin {
 			ShearableCreepers.class,
 			// item
 			BlackBeltSpeed.class,
+			BowArrowCache.class,
 			CanteenInteractions.class,
 			ChainmailBucketInteractions.class,
 			EyeceCreamCandyVisual.class,
@@ -423,6 +436,8 @@ public final class TrappedNewbie extends JavaPlugin {
 			TotemRituals.class,
 			TrappedNewbiePlayerOptions.class,
 			VisualArmorLayer.class,
+			// projectile
+			VariedTippedArrows.class,
 			// thirst
 			DrinkableWater.class,
 			HealRestoresThirst.class,

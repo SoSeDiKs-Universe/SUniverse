@@ -1,6 +1,8 @@
 {
 	"item.modifier.blazified": "<gray><i>Blazified",
 	"item.modifier.fragile": "<gray><i>Fragile",
+	"item.modifier.splash_arrow": "<gray><i>Splashable",
+	"item.modifier.lingering_arrow": "<gray><i>Lingering",
 	"item.modifier.letter.friendship": [
 		"<red><i>Friendship-powered",
 		"<!i><yellow><key:key.use><gray> on an empty-handed player",

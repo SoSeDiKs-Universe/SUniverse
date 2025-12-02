@@ -1,5 +1,6 @@
 package me.sosedik.trappednewbie.dataset;
 
+import com.google.common.base.Preconditions;
 import de.tr7zw.nbtapi.NBT;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.BannerPatternLayers;
@@ -15,6 +16,8 @@ import io.papermc.paper.datacomponent.item.ItemEnchantments;
 import io.papermc.paper.datacomponent.item.PotDecorations;
 import io.papermc.paper.datacomponent.item.PotionContents;
 import io.papermc.paper.datacomponent.item.UseCooldown;
+import io.papermc.paper.registry.RegistryAccess;
+import io.papermc.paper.registry.RegistryKey;
 import io.papermc.paper.registry.keys.tags.DamageTypeTagKeys;
 import me.sosedik.delightfulfarming.dataset.DelightfulFarmingItems;
 import me.sosedik.miscme.dataset.MoreMobHeads;
@@ -104,6 +107,7 @@ import org.bukkit.inventory.ItemType;
 import org.bukkit.inventory.meta.trim.ArmorTrim;
 import org.bukkit.inventory.meta.trim.TrimMaterial;
 import org.bukkit.inventory.meta.trim.TrimPattern;
+import org.bukkit.loot.LootTables;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 import org.jspecify.annotations.NullMarked;
@@ -136,9 +140,11 @@ import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaT
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.fallFromHeight;
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.fishingRodHooked;
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.inventoryChanged;
+import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.itemUsedOnBlock;
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.killedByArrow;
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.location;
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.placedBlock;
+import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.playerGeneratesContainerLoot;
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.playerHurtEntity;
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.playerInteractedWithEntity;
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.playerKilledEntity;
@@ -454,14 +460,20 @@ public class TrappedNewbieAdvancements {
 		.visibilityRule(ifDone(false, FIRST_POSSESSION))
 		.requiredProgress(alwaysDone())
 		.buildAndRegister();
-	// MCCheck: 1.21.10, new ruined portals
 	public static final IAdvancement FIND_A_BROKEN_NETHER_PORTAL = buildBase(ADVENTURE_ROOT, "find_a_broken_nether_portal")
 		.display(display().x(1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.CRYING_OBSIDIAN))
 		.requiredProgress(vanilla(
 			location()
 				.withLocation(loc -> loc
 					.withDimension(World.Environment.NORMAL)
-					.withStructure(List.of(Structure.RUINED_PORTAL, Structure.RUINED_PORTAL_NETHER, Structure.RUINED_PORTAL_DESERT, Structure.RUINED_PORTAL_JUNGLE, Structure.RUINED_PORTAL_MOUNTAIN, Structure.RUINED_PORTAL_OCEAN, Structure.RUINED_PORTAL_SWAMP))
+					.withStructure(
+						RegistryAccess.registryAccess().getRegistry(RegistryKey.STRUCTURE).stream()
+							.filter(structure -> {
+								NamespacedKey key = RegistryAccess.registryAccess().getRegistry(RegistryKey.STRUCTURE).getKeyOrThrow(structure);
+								return NamespacedKey.MINECRAFT.equals(key.namespace()) && key.value().startsWith("ruined_portal");
+							})
+							.toList()
+					)
 				)
 				.withPlayer(player -> player.inverted().withGameModes(GameMode.SPECTATOR))
 		))
@@ -689,8 +701,22 @@ public class TrappedNewbieAdvancements {
 		.display(display().x(1F).withAdvancementFrame(AdvancementFrame.STAR).fancyDescriptionParent(NamedTextColor.LIGHT_PURPLE).icon(Material.RIB_ARMOR_TRIM_SMITHING_TEMPLATE))
 		.withReward(rewards().withExp(833).addItems(ItemStack.of(Material.DIAMOND_BLOCK, 16)))
 		.buildAndRegister(GetAStackOfAllSmithingTemplatesAdvancement::new);
+	public static final IAdvancement TRIM_WITH_ANY_ARMOR_PATTERN = buildBase(FIND_A_DESERT_PYRAMID, "trim_with_any_armor_pattern")
+		.display(display().xy(0.5F, -1.5F).fancyDescriptionParent(NamedTextColor.GREEN).icon(() -> {
+			var item = ItemStack.of(Material.IRON_HELMET);
+			item.setData(DataComponentTypes.TRIM, ItemArmorTrim.itemArmorTrim(
+				new ArmorTrim(TrimMaterial.LAPIS, TrimPattern.SENTRY)
+			).build());
+			return item;
+		}))
+		.requiredProgress(vanillaAny(
+			UtilizerTags.SMITHING_TEMPLATES.getValues().stream()
+				.map(type -> recipeCrafted(type.getKey().value(), new NamespacedKey(type.key().namespace(), type.key().value() + "_smithing_trim")))
+				.toList()
+		))
+		.buildAndRegister();
 	public static final IAdvancement FIND_A_JUNGLE_PYRAMID = buildBase(FIND_A_DESERT_PYRAMID, "find_a_jungle_pyramid")
-		.display(display().xy(0.5F, -1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.MOSSY_COBBLESTONE))
+		.display(display().xy(0.5F, -3F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.MOSSY_COBBLESTONE))
 		.requiredProgress(vanilla(
 			location()
 				.withLocation(loc -> loc
@@ -708,6 +734,144 @@ public class TrappedNewbieAdvancements {
 				)
 				.withPlayer(player -> player.inverted().withGameModes(GameMode.SPECTATOR))
 		))
+		.buildAndRegister();
+	public static final IAdvancement FIND_AN_IGLOO = buildBase(FIND_A_SWAMP_HUT, "find_an_igloo")
+		.display(display().x(1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.SNOW_BLOCK))
+		.withReward(rewards().withExp(100))
+		.requiredProgress(vanilla(
+			location()
+				.withLocation(loc -> loc
+					.withStructure(Structure.IGLOO)
+				)
+				.withPlayer(player -> player.inverted().withGameModes(GameMode.SPECTATOR))
+		))
+		.buildAndRegister();
+	public static final IAdvancement FIND_ALL_STRUCTURES = buildBase(FIND_AN_IGLOO, "find_all_structures")
+		.display(display().x(1F).challengeFrame().fancyDescriptionParent(NamedTextColor.DARK_PURPLE).icon(Material.STRUCTURE_BLOCK))
+		.withReward(rewards().withExp(100))
+		.requiredProgress(vanilla(
+			MiscUtil.combineToList(
+				RegistryAccess.registryAccess().getRegistry(RegistryKey.STRUCTURE).stream()
+					.filter(structure -> {
+						NamespacedKey key = RegistryAccess.registryAccess().getRegistry(RegistryKey.STRUCTURE).getKeyOrThrow(structure);
+						return NamespacedKey.MINECRAFT.equals(key.namespace())
+							&& !key.value().equals("nether_fossil")
+							&& !key.value().equals("buried_treasure")
+							&& !key.value().startsWith("ruined_portal")
+							&& !key.value().startsWith("shipwreck");
+					})
+					.map(structure ->
+						location(RegistryAccess.registryAccess().getRegistry(RegistryKey.STRUCTURE).getKeyOrThrow(structure).value())
+							.withLocation(loc -> loc
+								.withStructure(structure)
+							)
+							.withPlayer(player -> player.inverted().withGameModes(GameMode.SPECTATOR)))
+					.toList(),
+				List.of(
+					location("shipwreck")
+						.withLocation(loc -> loc
+							.withStructure(
+								RegistryAccess.registryAccess().getRegistry(RegistryKey.STRUCTURE).stream()
+									.filter(structure -> {
+										NamespacedKey key = RegistryAccess.registryAccess().getRegistry(RegistryKey.STRUCTURE).getKeyOrThrow(structure);
+										return NamespacedKey.MINECRAFT.equals(key.namespace()) && key.value().startsWith("shipwreck");
+									})
+									.toList()
+							)
+						)
+						.withPlayer(player -> player.inverted().withGameModes(GameMode.SPECTATOR))
+				),
+				List.of(
+					location("ruined_portal")
+						.withLocation(loc -> loc
+							.withStructure(
+								RegistryAccess.registryAccess().getRegistry(RegistryKey.STRUCTURE).stream()
+									.filter(structure -> {
+										NamespacedKey key = RegistryAccess.registryAccess().getRegistry(RegistryKey.STRUCTURE).getKeyOrThrow(structure);
+										return NamespacedKey.MINECRAFT.equals(key.namespace()) && key.value().startsWith("ruined_portal");
+									})
+									.toList()
+							)
+						)
+						.withPlayer(player -> player.inverted().withGameModes(GameMode.SPECTATOR))
+				),
+				List.of(
+					playerGeneratesContainerLoot("dungeon_loot_chest")
+						.withLootTable(LootTables.SIMPLE_DUNGEON),
+					playerGeneratesContainerLoot("buried_treasure")
+						.withLootTable(LootTables.BURIED_TREASURE)
+				)
+			)
+		))
+		.buildAndRegister();
+	public static final IAdvancement USE_A_BRUSH_IN_ALL_STRUCTURES = buildBase(FIND_ALL_STRUCTURES, "use_a_brush_in_all_structures")
+		.display(display().x(1F).challengeFrame().fancyDescriptionParent(NamedTextColor.DARK_PURPLE).icon(ItemUtil.glint(Material.BRUSH)))
+		.withReward(rewards()
+			.withExp(250)
+			.withTrophy(ItemStack.of(Material.BRUSH))
+		)
+		.requiredProgress(vanilla(
+			MiscUtil.combineToList(
+				RegistryAccess.registryAccess().getRegistry(RegistryKey.STRUCTURE).stream()
+					.filter(structure -> {
+						NamespacedKey key = RegistryAccess.registryAccess().getRegistry(RegistryKey.STRUCTURE).getKeyOrThrow(structure);
+						return NamespacedKey.MINECRAFT.equals(key.namespace())
+							&& !key.value().equals("nether_fossil")
+							&& !key.value().startsWith("ruined_portal")
+							&& !key.value().startsWith("shipwreck");
+					})
+					.map(structure ->
+						itemUsedOnBlock(RegistryAccess.registryAccess().getRegistry(RegistryKey.STRUCTURE).getKeyOrThrow(structure).value())
+							.withItem(ItemTriggerCondition.of(Material.BRUSH))
+							.withLocation(loc -> loc
+								.withStructure(structure)
+							)
+							.withPlayer(player -> player.inverted().withGameModes(GameMode.SPECTATOR)))
+					.toList(),
+				List.of(
+					itemUsedOnBlock("shipwreck")
+						.withItem(ItemTriggerCondition.of(Material.BRUSH))
+						.withLocation(loc -> loc
+							.withStructure(
+								RegistryAccess.registryAccess().getRegistry(RegistryKey.STRUCTURE).stream()
+									.filter(structure -> {
+										NamespacedKey key = RegistryAccess.registryAccess().getRegistry(RegistryKey.STRUCTURE).getKeyOrThrow(structure);
+										return NamespacedKey.MINECRAFT.equals(key.namespace()) && key.value().startsWith("shipwreck");
+									})
+									.toList()
+							)
+						)
+						.withPlayer(player -> player.inverted().withGameModes(GameMode.SPECTATOR))
+				),
+				List.of(
+					itemUsedOnBlock("ruined_portal")
+						.withItem(ItemTriggerCondition.of(Material.BRUSH))
+						.withLocation(loc -> loc
+							.withStructure(
+								RegistryAccess.registryAccess().getRegistry(RegistryKey.STRUCTURE).stream()
+									.filter(structure -> {
+										NamespacedKey key = RegistryAccess.registryAccess().getRegistry(RegistryKey.STRUCTURE).getKeyOrThrow(structure);
+										return NamespacedKey.MINECRAFT.equals(key.namespace()) && key.value().startsWith("ruined_portal");
+									})
+									.toList()
+							)
+						)
+						.withPlayer(player -> player.inverted().withGameModes(GameMode.SPECTATOR))
+				),
+				List.of(
+					itemUsedOnBlock("dungeon_spawner")
+						.withItem(ItemTriggerCondition.of(Material.BRUSH))
+						.withLocation(loc -> loc
+							.withBlock(block -> block.withBlocks(Material.SPAWNER))
+						)
+						.withPlayer(player -> player.inverted().withGameModes(GameMode.SPECTATOR))
+				)
+			)
+		))
+		.buildAndRegister();
+	public static final IAdvancement BE_IN_TWO_STRUCTURES = buildBase(USE_A_BRUSH_IN_ALL_STRUCTURES, "be_in_two_structures")
+		.display(display().x(1F).withAdvancementFrame(AdvancementFrame.STAR).fancyDescriptionParent(NamedTextColor.LIGHT_PURPLE).icon(Material.JIGSAW))
+		.withReward(rewards().withExp(150))
 		.buildAndRegister();
 
 	public static final AdvancementTab NATURE_TAB = buildTab("nature", MANAGER)
@@ -956,7 +1120,7 @@ public class TrappedNewbieAdvancements {
 				.withEntity(entity -> entity.withDistanceToPlayer(distance -> distance.maxAbsolute(2D)))
 		))
 		.buildAndRegister();
-	public static final IAdvancement BOW_SPAMMER = buildBase(SHOOT_A_MOB_WITH_A_BOW, "bow_spammer").display(display().xy(1F, 0.5F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.STRING))
+	public static final IAdvancement BOW_SPAMMER = buildBase(POINT_BLANK_SHOT, "bow_spammer").display(display().x(1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.STRING))
 		.withReward(rewards().addItems(ItemStack.of(Material.ARROW, 8)))
 		.requiredProgress(vanilla(
 			playerHurtEntity()
@@ -3602,7 +3766,8 @@ public class TrappedNewbieAdvancements {
 	}
 
 	public static void setupAdvancements() {
-		// Filler
+		Preconditions.checkArgument(KILL_ALL_ALL_JOCKEYS.getRequiredProgress().requirements().size() == 757, "KILL_ALL_ALL_JOCKEYS: Jockeys count changed to %s".formatted(KILL_ALL_ALL_JOCKEYS.getRequiredProgress().requirements().size()));
+		Preconditions.checkArgument(FIND_ALL_STRUCTURES.getRequiredProgress().requirements().size() == 27, "FIND_ALL_STRUCTURES & USE_A_BRUSH_IN_ALL_STRUCTURES: Structure count changed to %s".formatted(FIND_ALL_STRUCTURES.getRequiredProgress().requirements().size()));
 	}
 
 }

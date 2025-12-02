@@ -51,6 +51,7 @@ public class UtilizerTags {
 	public static final Tag<Material> SPAWN_EGGS = itemTag("spawn_eggs");
 	public static final Tag<Material> BOOKABLE_MOBS = itemTag("bookable_mobs");
 	public static final Tag<Material> BOTTLEABLE_MOBS = itemTag("bottleable_mobs");
+	public static final Tag<Material> REGULAR_TORCHES = itemTag("regular_torches");
 
 	public static final Tag<Material> STONE_ORES_BLOCKS = blockTag("stone_ores");
 	public static final Tag<Material> ORES_BLOCKS = blockTag("ores");

@@ -1,5 +1,6 @@
 package me.sosedik.miscme.listener.item;
 
+import me.sosedik.utilizer.dataset.UtilizerTags;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.block.Block;
@@ -39,18 +40,12 @@ public class TorchesBurnCobwebs implements Listener {
 
 	private boolean tryToBurn(Player player, Block block, EquipmentSlot hand) {
 		ItemStack item = player.getInventory().getItem(hand);
-		if (!isTorch(item.getType())) return false;
+		if (!UtilizerTags.REGULAR_TORCHES.isTagged(item.getType())) return false;
 
 		player.swingHand(hand);
 		block.getWorld().spawnParticle(Particle.FLAME, block.getLocation().toCenterLocation(), 7 + RANDOM.nextInt(40), RANDOM.nextDouble() * 0.5D, RANDOM.nextDouble() * 0.5D, RANDOM.nextDouble() * 0.5D, 0.005);
 		block.setType(Material.AIR);
 		return true;
-	}
-
-	private boolean isTorch(Material type) {
-		return type == Material.TORCH
-			|| type == Material.SOUL_TORCH
-			|| type == Material.COPPER_TORCH;
 	}
 
 }

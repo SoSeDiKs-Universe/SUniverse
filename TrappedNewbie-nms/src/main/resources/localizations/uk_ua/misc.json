@@ -1,6 +1,8 @@
 {
 	"item.modifier.blazified": "<gray><i>Блазифікований",
 	"item.modifier.fragile": "<gray><i>Крихкий",
+	"item.modifier.splash_arrow": "<gray><i>Вибухова",
+	"item.modifier.lingering_arrow": "<gray><i>Осідальна",
 	"item.modifier.letter.friendship": [
 		"<red><i>Містить силу дружби",
 		"<!i><yellow><key:key.use><gray> по гравцю з пустою рукою,",

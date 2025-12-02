@@ -99,7 +99,8 @@ public class GameModeSwitcherTask extends BukkitRunnable {
 
 	private boolean isInteractable(Material blockType) {
 		if (blockType.isInteractable()) return true;
-		return Tag.FIRE.isTagged(blockType);
+		return Tag.FIRE.isTagged(blockType)
+			|| blockType == Material.FLETCHING_TABLE;
 	}
 
 	private boolean isPlaceable(ItemStack item) {

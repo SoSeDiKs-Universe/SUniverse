@@ -18,6 +18,7 @@ public final class RequiemItems {
 	public static final Material CREEPER_HEART = byKey("creeper_heart");
 
 	public static final Material NECRONOMICON = byKey("necronomicon");
+	public static final Material FIRE_ARROW = byKey("fire_arrow");
 
 	public static final Material HEART = byKey("heart");
 	public static final Material SPINE = byKey("spine");

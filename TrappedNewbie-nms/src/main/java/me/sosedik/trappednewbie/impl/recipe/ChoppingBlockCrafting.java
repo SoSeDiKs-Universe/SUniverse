@@ -109,7 +109,8 @@ public class ChoppingBlockCrafting implements CustomRecipe {
 		new ChoppingBlockCrafting(Material.SPRUCE_PLANKS, TrappedNewbieItems.SPRUCE_STICK, 3, 5).register();
 		new ChoppingBlockCrafting(Material.CRIMSON_PLANKS, TrappedNewbieItems.CRIMSON_STICK, 3, 5).register();
 		new ChoppingBlockCrafting(Material.WARPED_PLANKS, TrappedNewbieItems.WARPED_STICK, 3, 5).register();
-		new ChoppingBlockCrafting(Material.BAMBOO_PLANKS, TrappedNewbieItems.BAMBOOS_STICK, 3, 5).register();
+		new ChoppingBlockCrafting(Material.BAMBOO_PLANKS, TrappedNewbieItems.BAMBOO_STICK, 3, 5).register();
+		new ChoppingBlockCrafting(Material.BAMBOO_BLOCK, TrappedNewbieItems.BAMBOOS_STICK, 3, 5).register();
 		// Stripped Planks > Sticks
 		new ChoppingBlockCrafting(Material.STRIPPED_ACACIA_WOOD, TrappedNewbieItems.ACACIA_STICK, 3, 5).register();
 		new ChoppingBlockCrafting(Material.STRIPPED_BIRCH_WOOD, TrappedNewbieItems.BIRCH_STICK, 3, 5).register();

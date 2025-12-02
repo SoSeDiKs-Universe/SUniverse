@@ -20,6 +20,7 @@ import java.util.function.Consumer;
 @NullMarked
 public class CustomNameModifier extends ItemModifier {
 
+	private static final String NAME_LOCALE_TAG = "custom_name_locale";
 	private static final String NAME_COMPONENT_TAG = "custom_name_component";
 
 	public CustomNameModifier(NamespacedKey modifierId) {
@@ -42,16 +43,26 @@ public class CustomNameModifier extends ItemModifier {
 		});
 		if (componentName) return ModificationResult.OK;
 
-		NamespacedKey key = contextBox.getInitialType().getKey();
-		if (NamespacedKey.MINECRAFT.equals(key.namespace())) return ModificationResult.PASS;
+		String nameKey = NBT.get(contextBox.getItem(), nbt -> (String) nbt.getOrNull(NAME_LOCALE_TAG, String.class));
+		if (nameKey == null) {
+			NamespacedKey key = contextBox.getInitialType().getKey();
+			if (NamespacedKey.MINECRAFT.equals(key.namespace())) return ModificationResult.PASS;
+
+			nameKey = "item." + key.getNamespace() + "." + key.getKey() + ".name";
+		}
 
 		Component name = Messenger.messenger(LangOptionsStorage.getByLocale(contextBox.getLocale()))
-			.getMessageIfExists("item." + key.getNamespace() + "." + key.getKey() + ".name");
+			.getMessageIfExists(nameKey);
 		if (name == null) return ModificationResult.PASS;
 
 		item.setData(DataComponentTypes.ITEM_NAME, name);
 
 		return ModificationResult.OK;
+	}
+
+	public static ItemStack named(ItemStack item, String key) {
+		NBT.modify(item, (Consumer<ReadWriteItemNBT>) nbt -> nbt.setString(NAME_LOCALE_TAG, key));
+		return item;
 	}
 
 	public static ItemStack named(ItemStack item, Component name) {

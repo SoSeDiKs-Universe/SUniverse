@@ -17,7 +17,9 @@ import me.sosedik.requiem.feature.PossessingPlayer;
 import me.sosedik.requiem.listener.item.SoulboundNecronomicon;
 import me.sosedik.trappednewbie.TrappedNewbie;
 import me.sosedik.trappednewbie.impl.item.modifier.BucketModifier;
+import me.sosedik.trappednewbie.impl.item.modifier.LetterModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.ScrapModifier;
+import me.sosedik.trappednewbie.impl.recipe.FletchingCrafting;
 import me.sosedik.trappednewbie.impl.thirst.ThirstData;
 import me.sosedik.trappednewbie.listener.block.LogStrippingGivesBarks;
 import me.sosedik.trappednewbie.listener.item.FillingBowlWithWater;
@@ -216,6 +218,10 @@ public class TrappedNewbieRecipes {
 			.addIngredients(TrappedNewbieItems.ROUGH_STICK)
 			.addIngredients(UtilizerTags.KNIFES.getValues())
 			.register();
+		new ShapelessCraft(ItemStack.of(TrappedNewbieItems.BAMBOOS_STICK), trappedNewbieKey("bamboos_stick"))
+			.addIngredients(Material.BAMBOO)
+			.addIngredients(UtilizerTags.KNIFES.getValues())
+			.register();
 
 		new ShapedCraft(ItemStack.of(TrappedNewbieItems.GRASS_MESH), trappedNewbieKey("grass_mesh"), "TS", "ST")
 			.addIngredients('S', Material.STICK, TrappedNewbieItems.ROUGH_STICK)
@@ -323,18 +329,18 @@ public class TrappedNewbieRecipes {
 		new ShapedCraft(ItemStack.of(TrappedNewbieItems.TOTEMIC_STAFF), trappedNewbieKey("totemic_staff"), " LS", " S ", "S L")
 			.withCategory(CraftingBookCategory.EQUIPMENT)
 			.addIngredients('L', Tag.LEAVES.getValues())
-			.addIngredients('S', Material.STICK, TrappedNewbieItems.ROUGH_STICK)
+			.addIngredients('S', Material.STICK)
 			.register();
 		new ShapedCraft(ItemStack.of(TrappedNewbieItems.FLUTE), trappedNewbieKey("flute"), " LS", " S ", "S  ")
 			.withCategory(CraftingBookCategory.EQUIPMENT)
 			.addIngredients('L', Tag.LEAVES.getValues())
-			.addIngredients('S', Material.STICK, TrappedNewbieItems.ROUGH_STICK)
+			.addIngredients('S', Material.STICK)
 			.register();
 		new ShapedCraft(ItemStack.of(TrappedNewbieItems.RATTLE), trappedNewbieKey("rattle"), " WW", " BW", "S  ")
 			.withCategory(CraftingBookCategory.EQUIPMENT)
 			.addIngredients('W', Tag.LOGS_THAT_BURN.getValues())
 			.addIngredients('B', Material.STRING, TrappedNewbieItems.TWINE)
-			.addIngredients('S', Material.STICK, TrappedNewbieItems.ROUGH_STICK)
+			.addIngredients('S', Material.STICK)
 			.register();
 		TrappedNewbieTags.DRUMS.getValues().forEach(type -> {
 			new ShapedCraft(ItemStack.of(type), type.getKey(), "EEE", "LWL", "WLW")
@@ -402,7 +408,7 @@ public class TrappedNewbieRecipes {
 				.register();
 		});
 
-		new ShapedCraft(ItemStack.of(TrappedNewbieItems.CANTEEN), trappedNewbieKey("canteen"), "TLT", "LIL", "LLL")
+		new ShapedCraft(ScrapModifier.makeScrap(ItemStack.of(TrappedNewbieItems.CANTEEN)), trappedNewbieKey("canteen"), "TLT", "LIL", "LLL")
 			.withCategory(CraftingBookCategory.EQUIPMENT)
 			.addIngredients('T', Material.STRING, TrappedNewbieItems.TWINE)
 			.addIngredients('L', Material.LEATHER)
@@ -520,6 +526,15 @@ public class TrappedNewbieRecipes {
 			.addIngredients(Material.ORANGE_DYE, Material.BLACK_DYE)
 			.register();
 
+		new ShapedCraft(ItemStack.of(TrappedNewbieItems.LETTER), trappedNewbieKey("letter"), " L ", "LLL")
+			.addIngredients('L', Material.PAPER)
+			.register();
+		
+		new ShapelessCraft(LetterModifier.getFriendshipLetter(), trappedNewbieKey("friendship_letter"))
+			.addIngredients(TrappedNewbieItems.LETTER, i -> !LetterModifier.isFriendshipLetter(i))
+			.addIngredients(TrappedNewbieItems.FLOWER_BOUQUET, DurabilityUtil::isNew)
+			.register();
+
 		Consumer<ItemCraftEvent> craftCheck = event -> {
 			ItemStack result = event.getResult();
 			if (ItemStack.isEmpty(result)) return;
@@ -547,6 +562,16 @@ public class TrappedNewbieRecipes {
 			.withExemptLeftovers()
 			.addIngredients(Material.AXOLOTL_BUCKET)
 			.withCraftCheck(craftCheck)
+			.register();
+
+		new FletchingCrafting(ItemStack.of(Material.SPECTRAL_ARROW), trappedNewbieKey("spectral_arrow"))
+			.addIngredients(Material.GLOWSTONE_DUST)
+			.register();
+		new FletchingCrafting(ItemStack.of(Material.TIPPED_ARROW), trappedNewbieKey("tipped_arrow"))
+			.addIngredients('B', Material.GLASS_BOTTLE, Material.POTION, Material.SPLASH_POTION, Material.LINGERING_POTION)
+			.register();
+		new FletchingCrafting(ItemStack.of(RequiemItems.FIRE_ARROW), trappedNewbieKey("fire_arrow"))
+			.addIngredients(UtilizerTags.REGULAR_TORCHES.getValues())
 			.register();
 
 		addDrinkRecipes();
@@ -800,7 +825,7 @@ public class TrappedNewbieRecipes {
 			"repair_item",
 			// Tweaked
 			"stick", "stick_from_bamboo_item", "campfire",// "soul_campfire",
-			"leather"
+			"leather", "arrow", "spectral_arrow", "tipped_arrow"
 		}) {
 			removeRecipe(recipe);
 		}

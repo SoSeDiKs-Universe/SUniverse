@@ -1,6 +1,8 @@
 package me.sosedik.trappednewbie.listener.advancement.dedicated;
 
 import io.papermc.paper.event.player.PlayerClientLoadedWorldEvent;
+import io.papermc.paper.registry.RegistryAccess;
+import io.papermc.paper.registry.RegistryKey;
 import me.sosedik.resourcelib.feature.ScoreboardRenderer;
 import me.sosedik.trappednewbie.TrappedNewbie;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieAdvancements;
@@ -9,8 +11,11 @@ import me.sosedik.utilizer.api.message.Messenger;
 import me.sosedik.utilizer.dataset.UtilizerTags;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Registry;
 import org.bukkit.Tag;
+import org.bukkit.World;
 import org.bukkit.entity.Ageable;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -20,6 +25,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.generator.structure.Structure;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.Collection;
@@ -27,6 +33,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 @NullMarked
 public class TickerAdvancements implements Listener {
@@ -35,18 +42,24 @@ public class TickerAdvancements implements Listener {
 	private static final Map<UUID, Integer> WARDEN_HUGGERS = new HashMap<>();
 
 	public TickerAdvancements() {
+		long delay = 0L;
+		runCheck(delay++, this::checkWardenAtWorldHeightAdvancement);
+		runCheck(delay++, this::checkWardensAdvancement);
+		runCheck(delay++, this::checkWardenHuggersAdvancement);
+		runCheck(delay++, this::checkRavagersAdvancement);
+		runCheck(delay++, this::checkFamilyReunionAdvancement);
+		runCheck(delay++, this::checkBoneToPartyAdvancement);
+		runCheck(delay++, this::checkTwoStructuresAdvancement);
+	}
+
+	private void runCheck(long delay, Consumer<Player> check) {
 		TrappedNewbie.scheduler().sync(() -> {
 			for (Player player : Bukkit.getOnlinePlayers()) {
 				if (player.isDead()) continue;
 
-				checkWardenAtWorldHeightAdvancement(player);
-				checkWardensAdvancement(player);
-				checkWardenHuggersAdvancement(player);
-				checkRavagersAdvancement(player);
-				checkFamilyReunionAdvancement(player);
-				checkBoneToPartyAdvancement(player);
+				check.accept(player);
 			}
-		}, 20L, 20L);
+		}, 20L + delay, 20L);
 	}
 
 	@EventHandler
@@ -145,6 +158,21 @@ public class TickerAdvancements implements Listener {
 		}
 
 		TrappedNewbieAdvancements.BONE_TO_PARTY.awardAllCriteria(player);
+	}
+
+	private void checkTwoStructuresAdvancement(Player player) {
+		if (TrappedNewbieAdvancements.BE_IN_TWO_STRUCTURES.isDone(player)) return;
+
+		Location loc = player.getLocation();
+		World world = loc.getWorld();
+		Registry<Structure> registry = RegistryAccess.registryAccess().getRegistry(RegistryKey.STRUCTURE);
+		long count = registry.stream()
+			.filter(structure -> world.hasStructureAt(loc, structure))
+			.limit(2L)
+			.count();
+		if (count < 2L) return;
+
+		TrappedNewbieAdvancements.BE_IN_TWO_STRUCTURES.awardAllCriteria(player);
 	}
 
 }

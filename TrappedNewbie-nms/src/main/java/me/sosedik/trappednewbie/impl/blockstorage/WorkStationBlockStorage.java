@@ -114,7 +114,7 @@ public class WorkStationBlockStorage extends BlockDataStorageHolder implements E
 		ItemStack currentItem = this.displayItems[slot];
 		EquipmentSlot heldSlot = EquipmentSlot.HAND;
 		ItemStack heldItem = player.getInventory().getItem(heldSlot);
-		if (currentItem == null) {
+		if (ItemStack.isEmpty(currentItem)) {
 			if (heldItem.isEmpty() || TrappedNewbieTags.HAMMERS.isTagged(heldItem.getType())) {
 				heldSlot = EquipmentSlot.OFF_HAND;
 				heldItem = player.getInventory().getItem(heldSlot);
@@ -177,7 +177,7 @@ public class WorkStationBlockStorage extends BlockDataStorageHolder implements E
 		if (event.getBlockFace() != getFacing() && !player.isSneaking()) return;
 
 		ItemStack hand = player.getInventory().getItemInMainHand();
-		if (this.storedTool == null) {
+		if (ItemStack.isEmpty(this.storedTool)) {
 			if (!TrappedNewbieTags.HAMMERS.isTagged(hand.getType())) return;
 			if (!new PlayerPlaceItemEvent(player, hand).callEvent()) return;
 
@@ -265,7 +265,7 @@ public class WorkStationBlockStorage extends BlockDataStorageHolder implements E
 			if (!ItemStack.isEmpty(matrixItem))
 				matrixLeftovers += matrixItem.getAmount();
 		}
-		if (result.getAmount() + matrixLeftovers > 9) {
+		if (result.getAmount() + matrixLeftovers > 9 || ItemStack.isEmpty(result)) {
 			getBlock().emitSound(Sound.ENTITY_ZOMBIE_ATTACK_WOODEN_DOOR, 0.2F, 2F);
 			applyRandomRotations();
 			return;
@@ -288,7 +288,7 @@ public class WorkStationBlockStorage extends BlockDataStorageHolder implements E
 		slot = 0;
 		while (result.getAmount() > 0) {
 			int displaySlot = RESULTS_ORDER[slot];
-			if (this.displayItems[displaySlot] == null) {
+			if (ItemStack.isEmpty(this.displayItems[displaySlot])) {
 				this.displayItems[displaySlot] = result.asOne();
 				result = result.subtract();
 			}
@@ -336,7 +336,7 @@ public class WorkStationBlockStorage extends BlockDataStorageHolder implements E
 
 		ItemDisplay display = this.displayStands[slot];
 		ItemStack item = this.displayItems[slot];
-		if (item == null) {
+		if (ItemStack.isEmpty(item)) {
 			display.setItemStack(null);
 			return;
 		}

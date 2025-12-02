@@ -8,7 +8,7 @@ import org.bukkit.inventory.recipe.CraftingBookCategory;
 
 import static me.sosedik.miscme.MiscMe.miscMeKey;
 
-public class MiscMeRecipes {
+public final class MiscMeRecipes {
 
 	private MiscMeRecipes() {
 		throw new IllegalStateException("Utility class");

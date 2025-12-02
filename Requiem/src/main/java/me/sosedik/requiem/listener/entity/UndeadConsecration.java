@@ -9,6 +9,7 @@ import org.bukkit.Particle;
 import org.bukkit.Tag;
 import org.bukkit.damage.DamageType;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Golem;
 import org.bukkit.entity.LivingEntity;
@@ -111,6 +112,13 @@ public class UndeadConsecration implements Listener {
 					return;
 				}
 				case Projectile projectile -> {
+					if (projectile instanceof AbstractArrow abstractArrow && abstractArrow.getItemStack().hasEnchant(Enchantment.FLAME)) {
+						if (entity.isImmuneToFire())
+							healTask.updateNoHealTime(7);
+						else
+							healTask.updateVulnerabilityTime(20);
+						return;
+					}
 					if (projectile.getFireTicks() > 0 || projectile.getVisualFire().toBooleanOrElse(false)) {
 						if (entity.isImmuneToFire()) {
 							event.setCancelled(true);

@@ -11,6 +11,10 @@ import org.jspecify.annotations.NullMarked;
 public class TrappedNewbieTags {
 
 	// items
+	public static final Tag<Material> ARROW_HEAD_MATERIALS = itemTag("arrow_head_materials");
+	public static final Tag<Material> ARROW_STICK_MATERIALS = itemTag("arrow_stick_materials");
+	public static final Tag<Material> ARROW_FLETCHING_MATERIALS = itemTag("arrow_fletching_materials");
+	public static final Tag<Material> ARROW_INFUSION_MATERIALS = itemTag("arrow_infusion_materials");
 	public static final Tag<Material> STICKS = itemTag("sticks");
 	public static final Tag<Material> BRANCHES = itemTag("branches");
 	public static final Tag<Material> ROCKS = itemTag("rocks");

@@ -207,12 +207,13 @@ public class DiscordUtil {
 	}
 
 	private static String getEmote(Player sender) {
-		if (sender.isUnderWater()) return UNDER_WATER_EMOTE;
-		if (!EntityUtil.canSee(sender)) return NIGHT_EMOTE;
-
 		World.Environment environment = sender.getWorld().getEnvironment();
 		if (environment == World.Environment.NETHER) return NETHER_EMOTE;
 		if (environment == World.Environment.THE_END) return THE_END_EMOTE;
+
+		if (sender.isUnderWater()) return UNDER_WATER_EMOTE;
+		if (!EntityUtil.canSee(sender)) return NIGHT_EMOTE;
+
 		if (environment == World.Environment.CUSTOM) return CUSTOM_WORLD_EMOTE;
 
 		return OVERWORLD_EMOTE;

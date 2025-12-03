@@ -18,5 +18,6 @@
 	"item.miscme.depth_meter.name": "Depth Meter",
 	"item.miscme.lunar_clock.name": "Lunar Clock",
 	"item.miscme.speedometer.name": "Speedometer",
-	"item.miscme.barometer.name": "Barometer"
+	"item.miscme.barometer.name": "Barometer",
+	"item.miscme.luxmeter.name": "Luxmeter"
 }

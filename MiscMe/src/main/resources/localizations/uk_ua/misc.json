@@ -46,5 +46,7 @@
 	"compass.north_east": "<white>↗</white> ПнСх",
 	"compass.north_west": "<white>↖</white> ПнЗх",
 	"compass.south_east": "<white>↘</white> ПдСх",
-	"compass.south_west": "<white>↙</white> ПдЗх"
+	"compass.south_west": "<white>↙</white> ПдЗх",
+	"item.luxmeter.light_level": "<gray><!i>Рівень світла: <level> (<sky> небо, <block> блок)",
+	"item.luxmeter.light_level.click": "Рівень світла: <level> (<sky> небо, <block> блок)"
 }

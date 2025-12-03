@@ -272,7 +272,7 @@ public class TombstoneBlockStorage extends BlockDataStorageHolder implements Ext
 		event.callEvent();
 		int exp = event.getExp();
 		if (exp > 0) {
-			if (player == null || PossessingPlayer.isPossessing(player)) {
+			if (player == null || PossessingPlayer.isPossessingSoft(player)) {
 				Location loc = this.block.getLocation().center();
 				this.block.getWorld().spawn(loc, ExperienceOrb.class, orb -> orb.setExperience(exp));
 			} else {

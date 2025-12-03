@@ -40,7 +40,7 @@ public class HungerRenderer extends SimpleHudRenderer {
 	public @Nullable Component render() {
 		if (this.player.getGameMode().isInvulnerable()) return null;
 		if (GhostyPlayer.isGhost(this.player)) return null;
-		if (PossessingPlayer.isPossessing(this.player)) return null;
+		if (PossessingPlayer.isPossessingSoft(this.player)) return null;
 
 		this.foodDisplay.clear();
 

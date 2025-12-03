@@ -323,6 +323,7 @@ public class DynamicInventoryInfoGatherer implements Listener {
 		private final boolean depthMeter;
 		private final boolean barometer;
 		private final boolean speedometer;
+		private final boolean luxmeter;
 
 		public InventoryData(Player player) {
 			this.clock = InventoryUtil.findItem(player, item -> item.getType() == Material.CLOCK) != null;
@@ -331,6 +332,7 @@ public class DynamicInventoryInfoGatherer implements Listener {
 			this.depthMeter = InventoryUtil.findItem(player, item -> item.getType() == MiscMeItems.DEPTH_METER) != null;
 			this.barometer = InventoryUtil.findItem(player, item -> item.getType() == MiscMeItems.BAROMETER) != null;
 			this.speedometer = InventoryUtil.findItem(player, item -> item.getType() == MiscMeItems.SPEEDOMETER) != null;
+			this.luxmeter = InventoryUtil.findItem(player, item -> item.getType() == MiscMeItems.LUXMETER) != null;
 		}
 
 		public boolean hasClock() {
@@ -357,12 +359,22 @@ public class DynamicInventoryInfoGatherer implements Listener {
 			return this.speedometer;
 		}
 
+		public boolean hasLuxmeter() {
+			return this.luxmeter;
+		}
+
 		public boolean shouldDisableReducedDebugInfo() {
 			return hasAllItems(); // No cheesing!
 		}
 
 		public boolean hasAllItems() {
-			return hasClock() && hasLunarClock() && hasCompass() && hasDepthMeter() && hasBarometer() && hasSpeedometer();
+			return hasClock()
+				&& hasLunarClock()
+				&& hasCompass()
+				&& hasDepthMeter()
+				&& hasBarometer()
+				&& hasSpeedometer()
+				&& hasLuxmeter();
 		}
 
 	}

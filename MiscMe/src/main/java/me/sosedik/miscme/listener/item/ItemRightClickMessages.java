@@ -10,6 +10,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -83,6 +84,15 @@ public class ItemRightClickMessages implements Listener {
 			case Material m when m == MiscMeItems.BAROMETER -> {
 				String message = getWeatherMessageId(player);
 				messenger.sendActionBar(message);
+				player.swingMainHand();
+			}
+			case Material m when m == MiscMeItems.LUXMETER -> {
+				Block block = player.getLocation().getBlock();
+				messenger.sendActionBar("item.luxmeter.light_level.click",
+					raw("level", block.getLightLevel()),
+					raw("sky", block.getLightFromSky()),
+					raw("block", block.getLightFromBlocks())
+				);
 				player.swingMainHand();
 			}
 			default -> {}

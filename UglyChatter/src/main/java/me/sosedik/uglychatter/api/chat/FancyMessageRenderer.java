@@ -117,8 +117,8 @@ public class FancyMessageRenderer implements ChatRenderer {
 		// Try to preserve initial input decorations
 		// And unescape escaped placeholders to allow parsing them with minimessage
 		String plain = Mini.buildMini()
-				.serialize(message)
-				.replace("\\<", "<");
+			.serialize(message)
+			.replace("\\<", "<");
 		// Replace unsupported emoji sequences with mappings
 		if (!rendererTags.contains(FancyRendererTag.SKIP_EMOJI_MAPPINGS)) plain = EmojiPlaceholder.applyMappings(plain);
 		// Strip placeholders

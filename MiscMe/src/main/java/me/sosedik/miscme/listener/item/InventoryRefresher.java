@@ -38,7 +38,8 @@ public class InventoryRefresher implements Listener {
 			MiscMeItems.BAROMETER,
 			MiscMeItems.LUNAR_CLOCK,
 			MiscMeItems.DEPTH_METER,
-			MiscMeItems.SPEEDOMETER
+			MiscMeItems.SPEEDOMETER,
+			MiscMeItems.LUXMETER
 		);
 	}
 

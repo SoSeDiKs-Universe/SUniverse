@@ -112,7 +112,7 @@ public class HealthRenderer extends SimpleHudRenderer {
 	private int[] getHealth() {
 		double health;
 		double maxHealth;
-		if (this.player.getVehicle() instanceof LivingEntity vehicle && vehicle.getRider() == this.player && PossessingPlayer.isPossessing(this.player)) {
+		if (this.player.getVehicle() instanceof LivingEntity vehicle && vehicle.getRider() == this.player && PossessingPlayer.isPossessingSoft(this.player)) {
 			health = vehicle.getHealth();
 			maxHealth = vehicle.getMaxHealth();
 		} else {

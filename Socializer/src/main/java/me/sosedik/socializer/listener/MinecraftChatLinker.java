@@ -28,8 +28,8 @@ public class MinecraftChatLinker implements Listener {
 
 		String nickname = who.getName();
 		var builder = new WebhookMessageBuilder()
-				.setUsername(nickname)
-				.setContent(DiscordUtil.formatGameMessage(who, message));
+			.setUsername(nickname)
+			.setContent(DiscordUtil.formatGameMessage(who, message));
 
 		DiscordBot.sendMessage(who.getName(), who.getUniqueId().toString(), builder, false);
 	}

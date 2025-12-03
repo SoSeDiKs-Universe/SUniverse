@@ -36,24 +36,19 @@ public class PossessedDismount implements Listener {
 				this.cooldowns.add(player.getUniqueId());
 				Requiem.scheduler().sync(() -> this.cooldowns.remove(player.getUniqueId()), 20L);
 			}
-
-			if (event.isCancelled()) {
-				// Play safe, check if still mounted tick later
-				Requiem.scheduler().sync(() -> {
-					if (!PossessingPlayer.isPossessingSoft(player)) return;
-
-					LivingEntity possessed = PossessingPlayer.getPossessed(player);
-					if (possessed == vehicle && possessed.isValid()) return;
-
-					PossessingPlayer.stopPossessing(player, possessed, false);
-					GhostyPlayer.markGhost(player);
-				}, 1L);
-				return;
-			}
 		}
 
-		PossessingPlayer.stopPossessing(player, vehicle, false);
-		GhostyPlayer.markGhost(player);
+		// Play safe, check if still mounted a tick later
+		// Even in non-cancellable cases (e.g., teleports between worlds) the player may still end up riding the entity
+		Requiem.scheduler().sync(() -> {
+			if (!PossessingPlayer.isPossessingSoft(player)) return;
+
+			LivingEntity possessed = PossessingPlayer.getPossessed(player);
+			if (possessed != null) return;
+
+			PossessingPlayer.stopPossessing(player, vehicle, false);
+			GhostyPlayer.markGhost(player);
+		}, 1L);
 	}
 
 }

@@ -39,6 +39,11 @@ public final class MiscMeRecipes {
 			.addIngredients('C', Material.COPPER_INGOT)
 			.addIngredients('R', Material.REDSTONE_TORCH)
 			.register();
+		new ShapedCraft(ItemStack.of(MiscMeItems.LUXMETER), miscMeKey("luxmeter"), " G ", "GDG", " G ")
+			.withCategory(CraftingBookCategory.EQUIPMENT)
+			.addIngredients('G', Material.GOLD_INGOT)
+			.addIngredients('D', Material.DAYLIGHT_DETECTOR)
+			.register();
 	}
 
 }

@@ -90,6 +90,9 @@ public class DeathMakesPossessed implements Listener {
 	}
 
 	private <T extends LivingEntity> void migrateAndPosses(Player player, Class<T> entityClass) {
+		player.setExp(0);
+		player.setLevel(3); // Decrease attrition
+
 		player.setStatistic(Statistic.TIME_SINCE_DEATH, 0);
 		LivingEntity possessed = player.getWorld().spawn(player.getLocation(), entityClass, entity -> {
 			PossessingPlayer.migrateStatsToEntity(player, entity);

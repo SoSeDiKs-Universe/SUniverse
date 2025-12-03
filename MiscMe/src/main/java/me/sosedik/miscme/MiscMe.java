@@ -12,6 +12,7 @@ import me.sosedik.miscme.impl.item.modifier.DurabilityTooltipModifier;
 import me.sosedik.miscme.impl.item.modifier.FancierDyedLoreModifier;
 import me.sosedik.miscme.impl.item.modifier.FancierTrimLoreModifier;
 import me.sosedik.miscme.impl.item.modifier.LunarClockModifier;
+import me.sosedik.miscme.impl.item.modifier.LuxmeterModifier;
 import me.sosedik.miscme.impl.item.modifier.RepairableTooltipModifier;
 import me.sosedik.miscme.impl.item.modifier.SignsShowTextInLoreModifier;
 import me.sosedik.miscme.impl.item.modifier.SpeedometerModifier;
@@ -140,6 +141,7 @@ public final class MiscMe extends JavaPlugin {
 		new FancierDyedLoreModifier(miscMeKey("fancier_dyed_lore")).register();
 		new FancierTrimLoreModifier(miscMeKey("fancier_trim_lore")).register();
 		new LunarClockModifier(miscMeKey("lunar_clock")).register();
+		new LuxmeterModifier(miscMeKey("luxmeter")).register();
 		new RepairableTooltipModifier(miscMeKey("repairable_tooltip")).register();
 		new SignsShowTextInLoreModifier(miscMeKey("signs_show_text_in_lore")).register();
 		new SpeedometerModifier(miscMeKey("speedometer")).register();

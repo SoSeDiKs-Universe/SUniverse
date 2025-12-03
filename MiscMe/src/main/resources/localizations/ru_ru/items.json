@@ -18,5 +18,6 @@
 	"item.miscme.depth_meter.name": "Глубиномер",
 	"item.miscme.lunar_clock.name": "Лунные часы",
 	"item.miscme.speedometer.name": "Спидометр",
-	"item.miscme.barometer.name": "Барометр"
+	"item.miscme.barometer.name": "Барометр",
+	"item.miscme.luxmeter.name": "Люксметр"
 }

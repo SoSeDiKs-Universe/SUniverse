@@ -21,6 +21,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
+import org.bukkit.event.world.WorldUnloadEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jspecify.annotations.NullMarked;
 
@@ -40,7 +41,7 @@ import java.util.UUID;
 public class RainRefillsWaterAndMakesPuddles implements Listener {
 
 	private static final Random RANDOM = new Random();
-	private static final Set<UUID> REFILLING_WORLDS = new HashSet<>();
+	private static final Map<UUID, RainRefillTask> REFILLING_WORLDS = new HashMap<>();
 	private static final Map<UUID, Map<WorldChunkPosition, Set<BlockPosition>>> PUDDLES = new HashMap<>();
 	private static final int PUDDLE_LEVEL = 7;
 
@@ -70,10 +71,18 @@ public class RainRefillsWaterAndMakesPuddles implements Listener {
 
 	private void goThroughWorld(World world) {
 		if (world.getEnvironment() != World.Environment.NORMAL) return;
-		if (!REFILLING_WORLDS.add(world.getUID())) return;
+		if (REFILLING_WORLDS.containsKey(world.getUID())) return;
 
 		var refillTask = new RainRefillTask(world);
+		REFILLING_WORLDS.put(world.getUID(), refillTask);
 		TrappedNewbie.scheduler().sync(refillTask, 5 * 20L, 2L);
+	}
+
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onWorldUnload(WorldUnloadEvent event) {
+		RainRefillTask task = REFILLING_WORLDS.remove(event.getWorld().getUID());
+		if (task != null)
+			task.cancel();
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
@@ -233,9 +242,9 @@ public class RainRefillsWaterAndMakesPuddles implements Listener {
 		 */
 		public void goThroughChunk(Chunk chunk) {
 			Block highestBlock = this.world.getHighestBlockAt(
-					(chunk.getX() << 4) + RANDOM.nextInt(16),
-					(chunk.getZ() << 4) + RANDOM.nextInt(16),
-					HeightMap.MOTION_BLOCKING_NO_LEAVES);
+				(chunk.getX() << 4) + RANDOM.nextInt(16),
+				(chunk.getZ() << 4) + RANDOM.nextInt(16),
+				HeightMap.MOTION_BLOCKING_NO_LEAVES);
 			if (highestBlock.getTemperature() > 0.95) return; // Too hot
 			if (highestBlock.getTemperature() < 0.15) return; // Snowy
 
@@ -248,7 +257,6 @@ public class RainRefillsWaterAndMakesPuddles implements Listener {
 			if (!tryToRefillWaterLevel(highestBlock)) {
 				for (BlockFace blockFace : LocationUtil.SURROUNDING_BLOCKS) {
 					Block relativeBlock = highestBlock.getRelative(blockFace);
-					if (!relativeBlock.getLocation().isChunkLoaded()) continue;
 					if (tryToRefillWaterLevel(relativeBlock))
 						return;
 				}
@@ -263,8 +271,6 @@ public class RainRefillsWaterAndMakesPuddles implements Listener {
 			if (!block.isEmpty()) return false;
 
 			for (Block nearbyBlock : LocationUtil.getBlocksAround(block, 1, 1)) {
-				if (!nearbyBlock.getLocation().isChunkLoaded())
-					return false;
 				if (nearbyBlock.isLiquid())
 					return false;
 			}

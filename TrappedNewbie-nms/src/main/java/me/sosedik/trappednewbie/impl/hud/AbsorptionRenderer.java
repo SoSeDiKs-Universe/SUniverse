@@ -61,7 +61,7 @@ public class AbsorptionRenderer extends SimpleHudRenderer {
 	 */
 	public static int getAbsorption(Player player) {
 		double absorption;
-		if (player.getVehicle() instanceof LivingEntity vehicle && vehicle.getRider() == player && PossessingPlayer.isPossessing(player)) {
+		if (player.getVehicle() instanceof LivingEntity vehicle && vehicle.getRider() == player && PossessingPlayer.isPossessingSoft(player)) {
 			absorption = vehicle.getAbsorptionAmount();
 		} else {
 			absorption = player.getAbsorptionAmount();

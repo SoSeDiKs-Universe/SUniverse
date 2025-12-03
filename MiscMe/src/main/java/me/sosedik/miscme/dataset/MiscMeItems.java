@@ -10,6 +10,7 @@ public class MiscMeItems {
 	public static final Material LUNAR_CLOCK = byKey("lunar_clock");
 	public static final Material SPEEDOMETER = byKey("speedometer");
 	public static final Material BAROMETER = byKey("barometer");
+	public static final Material LUXMETER = byKey("luxmeter");
 
 	private static Material byKey(String value) {
 		return KiterinoBootstrapMaterialInjector.injectMaterial(MiscMe.miscMeKey(value));

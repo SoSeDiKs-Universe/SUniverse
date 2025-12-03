@@ -76,10 +76,12 @@ public record ThirstData(
 		int thirst;
 		var drinkType = DrinkType.fromItem(item, type);
 		boolean dehydrating = TrappedNewbieTags.DEHYDRATING_FOOD.isTagged(type);
-		double thirstChanceBackup = dehydrating ? 1D : 0D;
+		double thirstChanceBackup = dehydrating ? 1 : 0;
 		float saturation = SATURATION_VALUES.getOrDefault(type, 0F);
 		if (THIRST_VALUES.containsKey(type)) {
 			thirst = THIRST_VALUES.get(type);
+			if (type == Material.WATER_BUCKET)
+				thirstChanceBackup = 1;
 		} else {
 			if (type == Material.POTION || drinkType == DrinkType.WATER) {
 				if (isWateryItem(item, type)) {
@@ -192,6 +194,8 @@ public record ThirstData(
 
 	static {
 		addThirst(Material.MILK_BUCKET, 5, 1F);
+		addThirst(Material.WATER_BUCKET, 20, 0F);
+		addThirst(Material.LAVA_BUCKET, -20, 0F);
 		addThirst(Material.SUSPICIOUS_STEW, 3, 0.5F);
 		addThirst(Material.BEETROOT_SOUP, 2, 0.5F);
 		addThirst(Material.MUSHROOM_STEW, 2, 0.5F);
@@ -224,6 +228,8 @@ public record ThirstData(
 
 		public static @Nullable DrinkType fromItem(ItemStack item, Material type) {
 			if (type == Material.MILK_BUCKET) return MILK;
+			if (type == Material.WATER_BUCKET) return WATER;
+			if (type == Material.LAVA_BUCKET) return LAVA;
 
 			DrinkType drinkType = NBT.get(item, nbt -> {
 				return nbt.getOrNull(DRINK_TYPE_TAG, DrinkType.class);

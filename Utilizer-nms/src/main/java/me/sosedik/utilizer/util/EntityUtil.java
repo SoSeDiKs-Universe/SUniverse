@@ -22,7 +22,6 @@ import org.bukkit.entity.WaterMob;
 import org.bukkit.entity.Zombie;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.inventory.EntityEquipment;
@@ -235,20 +234,6 @@ public class EntityUtil {
 		if (entity.isSwimming()) return false;
 		if (entity.isInsideVehicle()) return false;
 		return entity.getMovementAffectingBlock().isEmpty();
-	}
-
-	/**
-	 * Checks whether the damage is a fire damage
-	 *
-	 * @param cause cause
-	 * @return whether the damage is a fire damage
-	 */
-	public static boolean isFireDamageCause(EntityDamageEvent.DamageCause cause) {
-		return cause == EntityDamageEvent.DamageCause.FIRE
-			|| cause == EntityDamageEvent.DamageCause.FIRE_TICK
-			|| cause == EntityDamageEvent.DamageCause.LAVA
-			|| cause == EntityDamageEvent.DamageCause.HOT_FLOOR
-			|| cause == EntityDamageEvent.DamageCause.CAMPFIRE;
 	}
 
 	/**

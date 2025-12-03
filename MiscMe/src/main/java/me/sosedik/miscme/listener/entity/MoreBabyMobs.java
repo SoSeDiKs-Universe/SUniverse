@@ -52,7 +52,7 @@ public class MoreBabyMobs implements Listener {
 		if (NBT.get(entity, nbt -> (boolean) nbt.hasTag(BABY_TAG))) return true;
 		return !(entity instanceof Ageable)
 			&& EntityUtil.isNaturallySpawned(entity)
-			&& Math.random() > SPAWN_CHANCE;
+			&& Math.random() < SPAWN_CHANCE;
 	}
 
 	// Re-apply attributes to custom babies on load

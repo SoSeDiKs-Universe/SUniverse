@@ -13,5 +13,6 @@
 		"<entity> died of dehydration",
 		"<entity> forgot to drink water"
 	],
-	"death.attack.hot_potato": "<entity> couldn't get rid of that hot potato"
+	"death.attack.hot_potato": "<entity> couldn't get rid of that hot potato",
+	"death.attack.lava_drink": "<entity>'s insides were filled with lava"
 }

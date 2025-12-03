@@ -7,9 +7,9 @@ import me.sosedik.kiterino.modifier.item.ItemContextBox;
 import me.sosedik.kiterino.modifier.item.ItemModifier;
 import me.sosedik.kiterino.modifier.item.ModificationResult;
 import me.sosedik.trappednewbie.TrappedNewbie;
-import me.sosedik.trappednewbie.dataset.TrappedNewbieItems;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieTags;
 import me.sosedik.trappednewbie.impl.thirst.ThirstData;
+import me.sosedik.trappednewbie.listener.item.FillingBowlWithWater;
 import me.sosedik.trappednewbie.listener.thirst.DrinkableWater;
 import me.sosedik.utilizer.api.language.LangOptionsStorage;
 import me.sosedik.utilizer.api.message.Messenger;
@@ -107,7 +107,7 @@ public class DirtyWaterModifier extends ItemModifier {
 	}
 
 	private void applyName(Messenger messenger, ItemStack item, Material type, String prefix) {
-		String key = "item." + TrappedNewbie.NAMESPACE + "." + prefix +"_" + type.getKey().value() + ".name";
+		String key = "item." + TrappedNewbie.NAMESPACE + "." + prefix + "_" + type.getKey().value() + ".name";
 		Component name = messenger.getMessageIfExists(key);
 		if (name == null) return;
 
@@ -118,10 +118,9 @@ public class DirtyWaterModifier extends ItemModifier {
 	}
 
 	private boolean isFluidContainer(Material type) {
-		if (TrappedNewbieTags.CANTEENS.isTagged(type)) return true;
-		return type == Material.POTION
-			|| type == TrappedNewbieItems.FILLED_BOWL
-			|| type == TrappedNewbieItems.FILLED_CACTUS_BOWL;
+		return type == Material.WATER_BUCKET
+			|| TrappedNewbieTags.CANTEENS.isTagged(type)
+			|| FillingBowlWithWater.REVERSED_BOWLS.containsKey(type);
 	}
 
 }

@@ -221,7 +221,7 @@ public class ResourceLibBootstrap implements PluginBootstrap {
 		});
 	}
 
-	private static Reference2ObjectMap<DataComponentType<?>, Object> getComponentsMap(Item item) {
+	public static Reference2ObjectMap<DataComponentType<?>, Object> getComponentsMap(Item item) {
 		if (!(item.components() instanceof DataComponentMap.Builder.SimpleMap(
 			Reference2ObjectMap<DataComponentType<?>, Object> map
 		)))

@@ -9,7 +9,6 @@ import me.sosedik.delightfulfarming.listener.sugar.AlwaysAllowEating;
 import me.sosedik.delightfulfarming.listener.sugar.CaloriesExhaustion;
 import me.sosedik.delightfulfarming.listener.sugar.CaloriesOnFoodConsume;
 import me.sosedik.delightfulfarming.listener.sugar.CaloriesOnJoinLeave;
-import me.sosedik.delightfulfarming.listener.sugar.HiddenSaturation;
 import me.sosedik.resourcelib.ResourceLib;
 import me.sosedik.utilizer.api.language.TranslationHolder;
 import me.sosedik.utilizer.impl.storage.SimpleRotatableBlockStorage;
@@ -53,8 +52,7 @@ public final class DelightfulFarming extends JavaPlugin {
 			AlwaysAllowEating.class,
 			CaloriesExhaustion.class,
 			CaloriesOnFoodConsume.class,
-			CaloriesOnJoinLeave.class,
-			HiddenSaturation.class
+			CaloriesOnJoinLeave.class
 		);
 
 		PlaceableBlockItems.addMapping(DelightfulFarmingItems.SWEET_BERRY_PIPS, DelightfulFarmingItems.SWEET_BERRY_PIPS_BUSH);

@@ -1,12 +1,15 @@
 package me.sosedik.trappednewbie;
 
 import com.google.common.collect.Maps;
+import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
+import io.papermc.paper.registry.event.RegistryEvents;
 import me.sosedik.kiterino.registry.wrapper.KiterinoMobEffectBehaviourWrapper;
 import me.sosedik.kiterino.util.KiterinoBootstrapEntityTypeInjectorImpl;
 import me.sosedik.miscme.listener.entity.MoreBabyMobs;
 import me.sosedik.resourcelib.ResourceLibBootstrap;
+import me.sosedik.resourcelib.impl.item.modifier.ExtraItemComponentsModifier;
 import me.sosedik.resourcelib.util.BlockCreator;
 import me.sosedik.resourcelib.util.ItemCreator;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieEntities;
@@ -62,7 +65,9 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.MobBucketItem;
 import net.minecraft.world.item.ShovelItem;
 import net.minecraft.world.item.ToolMaterial;
+import net.minecraft.world.item.component.Consumables;
 import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.item.component.UseRemainder;
 import net.minecraft.world.item.component.Weapon;
 import net.minecraft.world.item.equipment.ArmorMaterial;
 import net.minecraft.world.item.equipment.ArmorType;
@@ -404,6 +409,15 @@ public class TrappedNewbieBootstrap implements PluginBootstrap {
 				}
 			}
 		);
+
+		context.getLifecycleManager().registerEventHandler(RegistryEvents.ITEM.compose(), event -> {
+			ResourceLibBootstrap.getComponentsMap(Items.WATER_BUCKET).put(DataComponents.USE_REMAINDER, new UseRemainder(new ItemStack(Items.BUCKET)));
+			ResourceLibBootstrap.getComponentsMap(Items.WATER_BUCKET).put(DataComponents.CONSUMABLE, Consumables.defaultDrink().consumeSeconds(8F).build());
+			ExtraItemComponentsModifier.addExtra(Material.WATER_BUCKET, DataComponentTypes.USE_REMAINDER, DataComponentTypes.CONSUMABLE);
+			ResourceLibBootstrap.getComponentsMap(Items.LAVA_BUCKET).put(DataComponents.USE_REMAINDER, new UseRemainder(new ItemStack(Items.BUCKET)));
+			ResourceLibBootstrap.getComponentsMap(Items.LAVA_BUCKET).put(DataComponents.CONSUMABLE, Consumables.defaultDrink().consumeSeconds(8F).build());
+			ExtraItemComponentsModifier.addExtra(Material.LAVA_BUCKET, DataComponentTypes.USE_REMAINDER, DataComponentTypes.CONSUMABLE);
+		});
 	}
 
 	private static Map<ArmorType, Integer> makeDefense(int boots, int leggings, int chestplate, int helmet, int body) {

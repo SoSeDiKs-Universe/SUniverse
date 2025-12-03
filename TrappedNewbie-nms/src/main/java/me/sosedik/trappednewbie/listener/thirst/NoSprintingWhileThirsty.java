@@ -22,9 +22,10 @@ public class NoSprintingWhileThirsty implements Listener {
 
 		Player player = event.getPlayer();
 		if (player.getGameMode().isInvulnerable()) return;
-		if (ThirstyPlayer.of(player).getThirst() >= 7) return;
+		if (ThirstyPlayer.of(player).canRun()) return;
 
 		event.setCancelled(true);
+		player.sendHealthUpdate(); // Trigger fake hunger level
 		player.setSprinting(false);
 		player.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 15, 2, false, false, false));
 	}

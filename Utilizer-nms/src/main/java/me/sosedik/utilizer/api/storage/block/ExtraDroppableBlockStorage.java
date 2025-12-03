@@ -19,7 +19,6 @@ public interface ExtraDroppableBlockStorage extends BlockDataStorage {
 	default void onBreak(BlockBreakEvent event) {
 		if (!dropsOnBreak()) return;
 
-		event.setDropItems(false);
 		dropItems(getExtraDrops(event));
 	}
 

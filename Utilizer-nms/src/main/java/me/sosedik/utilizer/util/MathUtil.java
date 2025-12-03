@@ -36,7 +36,7 @@ public class MathUtil {
 	 * @return decimal part of the value
 	 */
 	public static double getDecimalPart(double value) {
-		var bigDecimal = new BigDecimal(String.valueOf(value));
+		var bigDecimal = BigDecimal.valueOf(value);
 		return bigDecimal.subtract(new BigDecimal(bigDecimal.intValue())).doubleValue();
 	}
 

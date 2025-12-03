@@ -80,7 +80,7 @@ public class TombstoneBlockStorage extends BlockDataStorageHolder implements Ext
 		});
 
 		BlockFace facing = event.getPlayer().getFacing().getOppositeFace();
-		this.display = createDisplay(block, facing, getBlock().getType());
+		this.display = createDisplay(this.block, facing, getBlock().getType());
 
 		updateBlockType();
 	}
@@ -182,11 +182,11 @@ public class TombstoneBlockStorage extends BlockDataStorageHolder implements Ext
 		if (type == null) return List.of();
 		if (this.block.getType() == type) return List.of();
 
-		LootTable lootTable = Bukkit.getLootTable(new NamespacedKey(getId().getNamespace(), "blocks/" + getId().getKey()));
-		if (lootTable == null) return List.of();
-
 		List<ItemStack> drops = new ArrayList<>();
 		if (dropIfSilkTouch(player, drops)) return drops;
+
+		LootTable lootTable = Bukkit.getLootTable(new NamespacedKey(getId().getNamespace(), "blocks/" + getId().getKey()));
+		if (lootTable == null) return drops;
 
 		if (event instanceof BlockBreakEvent breakEvent)
 			breakEvent.setDropItems(false);

@@ -25,6 +25,7 @@ import org.bukkit.World;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.damage.DamageType;
 import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.Blaze;
 import org.bukkit.entity.EnderDragon;
@@ -58,6 +59,7 @@ import java.util.Set;
 public class PlayerTombstones implements Listener {
 
 	private static final Map<PlayerDeathEvent, PlayerTombstoneCreateEvent> EVENT_CACHE = new HashMap<>();
+	private static final Map<DamageType, Material> DAMAGE_TOMBSTONES = new HashMap<>();
 
 	@EventHandler(ignoreCancelled = true)
 	public void onDeathCache(PlayerDeathEvent event) {
@@ -303,6 +305,9 @@ public class PlayerTombstones implements Listener {
 	}
 
 	private @Nullable Material getByDamageCause(Player player, EntityDamageEvent event) {
+		Material type = DAMAGE_TOMBSTONES.get(event.getDamageSource().getDamageType());
+		if (type != null) return type;
+
 		EntityDamageEvent.DamageCause cause = event.getCause();
 		if (cause == EntityDamageEvent.DamageCause.BLOCK_EXPLOSION || cause == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION)
 			return RequiemItems.DEVASTATED_SKELETON_TOMBSTONE;
@@ -336,10 +341,13 @@ public class PlayerTombstones implements Listener {
 				}
 				default -> {}
 			}
+
 			if (damage.getDamageSource().getCausingEntity() instanceof Blaze)
 				return RequiemItems.PIERCED_SKELETON_TOMBSTONE;
+
 			if (damage.getDamager() instanceof LivingEntity livingEntity) {
 				if (livingEntity.getEquipment() == null) return null;
+
 				Material stackType = livingEntity.getEquipment().getItemInMainHand().getType();
 				if (stackType == Material.WOODEN_SWORD)
 					return RequiemItems.ROOKIE_SKELETON_TOMBSTONE;
@@ -351,6 +359,7 @@ public class PlayerTombstones implements Listener {
 					return RequiemItems.THIEF_SKELETON_TOMBSTONE;
 			}
 		}
+
 		return null;
 	}
 
@@ -375,6 +384,10 @@ public class PlayerTombstones implements Listener {
 			}
 		}
 		return locBlock;
+	}
+
+	public static void addTombstone(DamageType damageType, Material tombstone) {
+		DAMAGE_TOMBSTONES.put(damageType, tombstone);
 	}
 
 }

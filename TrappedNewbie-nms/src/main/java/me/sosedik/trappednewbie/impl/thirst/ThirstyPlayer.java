@@ -38,6 +38,10 @@ public final class ThirstyPlayer {
 		return this.player;
 	}
 
+	public boolean canRun() {
+		return getThirst() > 6;
+	}
+
 	public int getThirst() {
 		return this.thirst;
 	}
@@ -48,6 +52,7 @@ public final class ThirstyPlayer {
 
 	public void setThirst(int thirst) {
 		this.thirst = Math.clamp(thirst, MIN_THIRST, MAX_THIRST);
+		this.player.sendHealthUpdate();
 		if (getThirst() <= 0)
 			startThirstDamageTask();
 	}

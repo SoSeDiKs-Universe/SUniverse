@@ -8,8 +8,10 @@ import me.sosedik.utilizer.listener.BlockStorage;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Endermite;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.entity.Silverfish;
 import org.bukkit.entity.Skeleton;
 import org.bukkit.entity.Stray;
@@ -37,6 +39,9 @@ public class TombstoneCreatures implements Listener {
 		Material blockType = block.getType();
 		if (!RequiemTags.TOMBSTONES.isTagged(blockType)) return;
 		if (BlockStorage.getByLoc(block) instanceof TombstoneBlockStorage storage && storage.isPlayerTombstone()) return;
+
+		Player player = event.getPlayer();
+		if (player.getInventory().getItemInMainHand().hasEnchant(Enchantment.SILK_TOUCH)) return;
 
 		Class<? extends Entity> silverfishType;
 		World.Environment environment = block.getWorld().getEnvironment();

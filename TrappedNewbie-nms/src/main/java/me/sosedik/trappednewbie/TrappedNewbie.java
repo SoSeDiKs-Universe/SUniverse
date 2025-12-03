@@ -161,6 +161,7 @@ import me.sosedik.trappednewbie.listener.misc.TemporaryScoreboardAdvancementMess
 import me.sosedik.trappednewbie.listener.player.DisableNaturalRespawn;
 import me.sosedik.trappednewbie.listener.player.DynamicGameMode;
 import me.sosedik.trappednewbie.listener.player.ExtraPossessedDrops;
+import me.sosedik.trappednewbie.listener.player.FakeHungerLevel;
 import me.sosedik.trappednewbie.listener.player.MilkHelpsSkeletons;
 import me.sosedik.trappednewbie.listener.player.NewbieWelcome;
 import me.sosedik.trappednewbie.listener.player.PossessingRegeneration;
@@ -172,6 +173,8 @@ import me.sosedik.trappednewbie.listener.player.TotemRituals;
 import me.sosedik.trappednewbie.listener.player.TrappedNewbiePlayerOptions;
 import me.sosedik.trappednewbie.listener.player.VisualArmorLayer;
 import me.sosedik.trappednewbie.listener.projectile.VariedTippedArrows;
+import me.sosedik.trappednewbie.listener.thirst.DrinkableBuckets;
+import me.sosedik.trappednewbie.listener.thirst.DrinkableCows;
 import me.sosedik.trappednewbie.listener.thirst.DrinkableWater;
 import me.sosedik.trappednewbie.listener.thirst.HealRestoresThirst;
 import me.sosedik.trappednewbie.listener.thirst.NoSprintingWhileThirsty;
@@ -426,6 +429,7 @@ public final class TrappedNewbie extends JavaPlugin {
 			DisableNaturalRespawn.class,
 			DynamicGameMode.class,
 			ExtraPossessedDrops.class,
+			FakeHungerLevel.class,
 			MilkHelpsSkeletons.class,
 			NewbieWelcome.class,
 			PossessingRegeneration.class,
@@ -439,6 +443,8 @@ public final class TrappedNewbie extends JavaPlugin {
 			// projectile
 			VariedTippedArrows.class,
 			// thirst
+			DrinkableBuckets.class,
+			DrinkableCows.class,
 			DrinkableWater.class,
 			HealRestoresThirst.class,
 			NoSprintingWhileThirsty.class,

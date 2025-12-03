@@ -2,7 +2,6 @@ package me.sosedik.trappednewbie.listener.entity;
 
 import me.sosedik.moves.listener.movement.CrawlingMechanics;
 import me.sosedik.trappednewbie.TrappedNewbie;
-import me.sosedik.utilizer.util.EntityUtil;
 import me.sosedik.utilizer.util.MetadataUtil;
 import org.bukkit.Particle;
 import org.bukkit.entity.Creeper;
@@ -12,6 +11,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.tag.DamageTypeTags;
 import org.jspecify.annotations.NullMarked;
 
 /**
@@ -48,7 +48,7 @@ public class CreepersLoveCrawlers implements Listener {
 	public void onHurt(EntityDamageEvent event) {
 		if (!(event.getEntity() instanceof Creeper entity)) return;
 
-		if (EntityUtil.isFireDamageCause(event.getCause())) {
+		if (DamageTypeTags.IS_FIRE.isTagged(event.getDamageSource().getDamageType())) {
 			event.setDamage(0);
 			if (entity.hasPotionEffect(PotionEffectType.FIRE_RESISTANCE)) return;
 			if (!entity.isIgnited())

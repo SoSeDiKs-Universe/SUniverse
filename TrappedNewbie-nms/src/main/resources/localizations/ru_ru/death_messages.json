@@ -12,5 +12,6 @@
 		"<entity> умер от обезвоживания",
 		"<entity> забыл пить воду"
 	],
-	"death.attack.hot_potato": "<entity> не смог избавиться от горячей картошки"
+	"death.attack.hot_potato": "<entity> не смог избавиться от горячей картошки",
+	"death.attack.lava_drink": "Внутренности <entity> были заполнены лавой"
 }

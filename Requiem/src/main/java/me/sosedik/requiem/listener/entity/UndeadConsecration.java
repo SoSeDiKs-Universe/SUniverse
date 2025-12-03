@@ -3,7 +3,6 @@ package me.sosedik.requiem.listener.entity;
 import de.tr7zw.nbtapi.NBT;
 import me.sosedik.requiem.Requiem;
 import me.sosedik.requiem.feature.PossessingPlayer;
-import me.sosedik.utilizer.util.EntityUtil;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.Tag;
@@ -28,6 +27,7 @@ import org.bukkit.event.world.EntitiesUnloadEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.tag.DamageTypeTags;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -77,7 +77,8 @@ public class UndeadConsecration implements Listener {
 		HealTask healTask = UNDEAD_MOBS.get(entity.getUniqueId());
 		if (healTask == null) return;
 
-		if (EntityUtil.isFireDamageCause(event.getCause())) {
+
+		if (DamageTypeTags.IS_FIRE.isTagged(event.getDamageSource().getDamageType())) {
 			if (entity.isImmuneToFire()) {
 				event.setCancelled(true);
 			} else {

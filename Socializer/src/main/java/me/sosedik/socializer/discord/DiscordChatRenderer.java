@@ -27,8 +27,6 @@ import static me.sosedik.utilizer.api.message.Mini.combined;
 public class DiscordChatRenderer implements MinecraftChatRenderer {
 
 	private static final Component DISCORD_ICON = ResourceLib.requireFontData(socializerKey("discord")).icon();
-	private static final Component DISCORD_HOVER = combined(Component.space(), ResourceLib.requireFontData(socializerKey("discord")).icon(), Component.space())
-			.hoverEvent(Component.text("Discord"));
 	private static final Component SPACED_NEW_LINE = combined(Component.newline(), SpacingUtil.getSpacing(8));
 	private static final Style BASE_STYLE = Style.style(TextColor.fromHexString("#9fb2f4"));
 
@@ -42,9 +40,6 @@ public class DiscordChatRenderer implements MinecraftChatRenderer {
 		var offlinePlayer = Bukkit.getOfflinePlayerIfCached(nickname);
 		if (offlinePlayer == null) offlinePlayer = Bukkit.getOfflinePlayer(nickname);
 		Player onlinePlayer = offlinePlayer.getPlayer();
-
-		Component prefix = DISCORD_HOVER.clickEvent(ClickEvent.suggestCommand("@" + nickname));
-		Component suffix = Component.text(": ", TextColor.fromHexString("#dceefa"));
 
 		List<Component> unparsedLines = new ArrayList<>();
 		var chatRenderer = new FancyMessageRenderer();
@@ -69,8 +64,11 @@ public class DiscordChatRenderer implements MinecraftChatRenderer {
 
 			Component parsedMessage = combine(SPACED_NEW_LINE, unparsedLines);
 
-			prefix = onlinePlayer == null ? prefix : PlayerDisplayFormatter.getPMComponent("", NamedTextColor.WHITE, onlinePlayer, player).append(DISCORD_ICON);
-			player.sendMessage(combined(prefix, displayName, suffix, parsedMessage));
+			Component prefix = onlinePlayer == null
+				? DISCORD_ICON.hoverEvent(Component.text("Discord")).clickEvent(ClickEvent.suggestCommand("@" + nickname))
+				: PlayerDisplayFormatter.getPMComponent("", NamedTextColor.WHITE, onlinePlayer, player).append(DISCORD_ICON);
+			Component suffix = Component.text(": ", TextColor.fromHexString("#dceefa"));
+			player.sendMessage(combined(prefix, Component.space(), displayName, suffix, parsedMessage));
 		}
 	}
 

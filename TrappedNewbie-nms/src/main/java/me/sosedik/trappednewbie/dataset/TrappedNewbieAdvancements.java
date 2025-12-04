@@ -49,6 +49,9 @@ import me.sosedik.trappednewbie.impl.advancement.CollectAllPotterySherdsAdvancem
 import me.sosedik.trappednewbie.impl.advancement.CommunismAdvancement;
 import me.sosedik.trappednewbie.impl.advancement.FrozenHeartAdvancement;
 import me.sosedik.trappednewbie.impl.advancement.GetABannerShieldAdvancement;
+import me.sosedik.trappednewbie.impl.advancement.GetALeatherCopperArmorAdvancement;
+import me.sosedik.trappednewbie.impl.advancement.GetALeatherEmeraldArmorAdvancement;
+import me.sosedik.trappednewbie.impl.advancement.GetALeatherNetheriteArmorAdvancement;
 import me.sosedik.trappednewbie.impl.advancement.GetAStackOfAllSmithingTemplatesAdvancement;
 import me.sosedik.trappednewbie.impl.advancement.GiveWindMaceToAFoxAdvancement;
 import me.sosedik.trappednewbie.impl.advancement.HuntLandAnimalsAdvancement;
@@ -71,14 +74,19 @@ import me.sosedik.trappednewbie.impl.advancement.KillHostileNetherMobsAdvancemen
 import me.sosedik.trappednewbie.impl.advancement.KillHostileOverworldNightMobsAdvancement;
 import me.sosedik.trappednewbie.impl.advancement.MasterShieldsmanAdvancement;
 import me.sosedik.trappednewbie.impl.advancement.MereMortalAdvancement;
+import me.sosedik.trappednewbie.impl.advancement.ObtainEveryArmorTrimAdvancement;
 import me.sosedik.trappednewbie.impl.advancement.PyrotechnicAdvancement;
 import me.sosedik.trappednewbie.impl.advancement.RockPaperShearsAdvancement;
 import me.sosedik.trappednewbie.impl.advancement.Walk10KKMAdvancement;
+import me.sosedik.trappednewbie.impl.advancement.WearARealNetheriteArmorAdvancement;
+import me.sosedik.trappednewbie.impl.advancement.WearArmorWithSameTrimsAdvancement;
+import me.sosedik.trappednewbie.impl.advancement.WearSilentArmorAdvancement;
 import me.sosedik.trappednewbie.impl.advancement.YouMonsterAdvancement;
 import me.sosedik.trappednewbie.impl.item.modifier.BucketModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.LetterModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.ScrapModifier;
 import me.sosedik.trappednewbie.impl.thirst.ThirstData;
+import me.sosedik.trappednewbie.listener.advancement.AdvancementsAdvancement;
 import me.sosedik.utilizer.api.message.Messenger;
 import me.sosedik.utilizer.dataset.UtilizerTags;
 import me.sosedik.utilizer.util.ItemUtil;
@@ -114,6 +122,7 @@ import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static java.util.Objects.requireNonNull;
 import static me.sosedik.packetadvancements.api.progression.RequiredAdvancementProgress.alwaysDone;
@@ -406,7 +415,7 @@ public class TrappedNewbieAdvancements {
 						"""
 							{
 								"components": {
-									"custom_data": {
+									"minecraft:custom_data": {
 										"bucket_type": "CLAY"
 									}
 								}
@@ -682,7 +691,14 @@ public class TrappedNewbieAdvancements {
 			inventoryChanged().withItems(ItemTriggerCondition.of(Material.SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE))
 		))
 		.buildAndRegister();
-	public static final IAdvancement APPLY_ALL_SMITHING_TEMPLATES = buildBase(GET_A_SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE, "apply_all_smithing_templates")
+	public static final IAdvancement WEAR_A_SILENT_ARMOR = buildBase(GET_A_SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE, "wear_a_silent_armor")
+		.display(display().x(1F).challengeFrame().fancyDescriptionParent(NamedTextColor.DARK_PURPLE).icon(ItemUtil.glint(ItemStack.of(Material.SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE))))
+		.withReward(rewards()
+			.withExp(90)
+			.withTrophy(ItemStack.of(Material.SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE))
+		)
+		.buildAndRegister(WearSilentArmorAdvancement::new);
+	public static final IAdvancement APPLY_ALL_SMITHING_TEMPLATES = buildBase(WEAR_A_SILENT_ARMOR, "apply_all_smithing_templates")
 		.display(display().x(1F).challengeFrame().fancyDescriptionParent(NamedTextColor.DARK_PURPLE).icon(Material.SPIRE_ARMOR_TRIM_SMITHING_TEMPLATE))
 		.withReward(rewards()
 			.withExp(150)
@@ -715,6 +731,150 @@ public class TrappedNewbieAdvancements {
 				.toList()
 		))
 		.buildAndRegister();
+	public static final IAdvancement GET_A_LEATHER_DIAMOND_CHESTPLATE = buildBase(TRIM_WITH_ANY_ARMOR_PATTERN, "get_a_leather_diamond_chestplate")
+		.display(display().xy(1F, 0.5F).fancyDescriptionParent(NamedTextColor.GREEN).icon(ItemStack.of(Material.LEATHER_CHESTPLATE).withColor(DyeColor.LIGHT_BLUE)))
+		.withReward(rewards().withExp(20))
+		.requiredProgress(vanilla(inventoryChanged()
+			.withPlayer(player -> player
+				.withEquipment(equipment -> equipment
+					.withChestplate(
+						ItemTriggerCondition.of(Material.LEATHER_CHESTPLATE)
+							.withRawComponents(
+								"""
+								{
+									"components": {
+										"minecraft:dyed_color": %s,
+										"minecraft:custom_name": "%s"
+									}
+								}
+								""".formatted(DyeColor.LIGHT_BLUE.getColor().asRGB(), "<lang:item.minecraft.diamond_chestplate>")
+							)
+					)
+				)
+			)
+		))
+		.buildAndRegister();
+	public static final IAdvancement GET_A_LEATHER_COPPER_ARMOR = buildBase(GET_A_LEATHER_DIAMOND_CHESTPLATE, "get_a_leather_copper_armor")
+		.display(display().x(1F).goalFrame().fancyDescriptionParent(NamedTextColor.AQUA).icon(() -> {
+			var item = ItemStack.of(Material.LEATHER_CHESTPLATE);
+			item.setData(DataComponentTypes.DYED_COLOR, DyedItemColor.dyedItemColor(DyeColor.ORANGE.getColor()));
+			item.setData(DataComponentTypes.TRIM, ItemArmorTrim.itemArmorTrim(new ArmorTrim(TrimMaterial.COPPER, TrimPattern.BOLT)).build());
+			return item;
+		}))
+		.withReward(rewards().withExp(60).addItems(ItemStack.of(Material.BOLT_ARMOR_TRIM_SMITHING_TEMPLATE)))
+		.buildAndRegister(GetALeatherCopperArmorAdvancement::new);
+	public static final IAdvancement GET_A_LEATHER_NETHERITE_ARMOR = buildBase(GET_A_LEATHER_COPPER_ARMOR, "get_a_leather_netherite_armor")
+		.display(display().x(1F).goalFrame().fancyDescriptionParent(NamedTextColor.AQUA).icon(() -> {
+			var item = ItemStack.of(Material.LEATHER_CHESTPLATE);
+			item.setData(DataComponentTypes.DYED_COLOR, DyedItemColor.dyedItemColor(DyeColor.BLACK.getColor()));
+			item.setData(DataComponentTypes.TRIM, ItemArmorTrim.itemArmorTrim(new ArmorTrim(TrimMaterial.NETHERITE, TrimPattern.SILENCE)).build());
+			return item;
+		}))
+		.withReward(rewards().withExp(80).addItems(ItemStack.of(Material.BLACK_DYE, 8)))
+		.buildAndRegister(GetALeatherNetheriteArmorAdvancement::new);
+	public static final IAdvancement GET_A_LEATHER_EMERALD_ARMOR = buildBase(GET_A_LEATHER_NETHERITE_ARMOR, "get_a_leather_emerald_armor")
+		.display(display().x(1F).goalFrame().fancyDescriptionParent(NamedTextColor.AQUA).icon(() -> {
+			var item = ItemStack.of(Material.LEATHER_CHESTPLATE);
+			item.setData(DataComponentTypes.DYED_COLOR, DyedItemColor.dyedItemColor(DyeColor.LIME.getColor()));
+			item.setData(DataComponentTypes.TRIM, ItemArmorTrim.itemArmorTrim(new ArmorTrim(TrimMaterial.EMERALD, TrimPattern.SILENCE)).build());
+			return item;
+		}))
+		.withReward(rewards().withExp(60).addItems(ItemStack.of(Material.EMERALD, 8)))
+		.buildAndRegister(GetALeatherEmeraldArmorAdvancement::new);
+	public static final IAdvancement DUPLICATE_A_SMITHING_TEMPLATE = buildBase(TRIM_WITH_ANY_ARMOR_PATTERN, "duplicate_a_smithing_template")
+		.display(display().xy(1F, -0.5F).fancyDescriptionParent(NamedTextColor.GREEN).icon(ItemStack.of(Material.DIAMOND)))
+		.withReward(rewards().addItems(ItemStack.of(Material.DIAMOND, 8)))
+		.requiredProgress(vanillaAny(
+			UtilizerTags.SMITHING_TEMPLATES.getValues().stream()
+				.map(type -> recipeCrafted(type.getKey().value(), type.getKey()))
+				.toList()
+		))
+		.buildAndRegister();
+	public static final IAdvancement WEAR_ARMOR_WITH_SAME_TRIMS = buildBase(DUPLICATE_A_SMITHING_TEMPLATE, "wear_armor_with_same_trims")
+		.display(display().x(1F).goalFrame().fancyDescriptionParent(NamedTextColor.AQUA).icon(() -> {
+			var item = ItemStack.of(Material.DIAMOND_BOOTS);
+			item.setData(DataComponentTypes.TRIM, ItemArmorTrim.itemArmorTrim(new ArmorTrim(TrimMaterial.REDSTONE, TrimPattern.SENTRY)).build());
+			return item;
+		}))
+		.withReward(rewards().withExp(50).addItems(ItemStack.of(Material.DIAMOND, 8)))
+		.buildAndRegister(WearArmorWithSameTrimsAdvancement::new);
+	public static final IAdvancement WEAR_A_REAL_NETHERITE_ARMOR = buildBase(WEAR_ARMOR_WITH_SAME_TRIMS, "wear_a_real_netherite_armor")
+		.display(display().x(1F).challengeFrame().fancyDescriptionParent(NamedTextColor.DARK_PURPLE).icon(() -> {
+			var item = ItemStack.of(Material.NETHERITE_CHESTPLATE);
+			item.setData(DataComponentTypes.TRIM, ItemArmorTrim.itemArmorTrim(new ArmorTrim(TrimMaterial.NETHERITE, TrimPattern.SILENCE)).build());
+			return item;
+		}))
+		.withReward(rewards()
+			.withExp(125)
+			.addItems(ItemStack.of(Material.NETHERITE_SCRAP, 2))
+			.withTrophy(ItemStack.of(Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE))
+		)
+		.buildAndRegister(WearARealNetheriteArmorAdvancement::new);
+	public static final IAdvancement TRIM_WITH_ALL_MATERIALS = buildBase(WEAR_A_REAL_NETHERITE_ARMOR, "trim_with_all_materials")
+		.display(display().x(1F).goalFrame().fancyDescriptionParent(NamedTextColor.AQUA).icon(() -> {
+			var item = ItemStack.of(Material.NETHERITE_CHESTPLATE);
+			item.setData(DataComponentTypes.TRIM, ItemArmorTrim.itemArmorTrim(new ArmorTrim(TrimMaterial.GOLD, TrimPattern.SENTRY)).build());
+			return item;
+		}))
+		.withReward(rewards()
+			.withExp(100)
+			.addItems(ItemStack.of(Material.DIAMOND, 18))
+			.withTrophy(ItemStack.of(Material.LEATHER_CHESTPLATE))
+		)
+		.requiredProgress(vanilla(
+			RegistryAccess.registryAccess().getRegistry(RegistryKey.TRIM_MATERIAL).stream()
+				.filter(trimMaterial -> NamespacedKey.MINECRAFT.equals(RegistryAccess.registryAccess().getRegistry(RegistryKey.TRIM_MATERIAL).getKeyOrThrow(trimMaterial).namespace()))
+				.map(trimMaterial ->
+					inventoryChanged(RegistryAccess.registryAccess().getRegistry(RegistryKey.TRIM_MATERIAL).getKeyOrThrow(trimMaterial).value())
+						.withItems(ItemTriggerCondition.builder()
+							.withRawComponents(
+								"""
+								{
+									"predicates": {
+										"minecraft:trim": {
+											"material": "%s"
+										}
+									}
+								}
+								""".formatted(RegistryAccess.registryAccess().getRegistry(RegistryKey.TRIM_MATERIAL).getKeyOrThrow(trimMaterial))
+							)
+						)
+				)
+				.toList()
+		))
+		.buildAndRegister();
+	public static final IAdvancement OBTAIN_EVERY_ARMOR_TRIM_WITH_EVERY_MATERIAL = buildMulti(GET_A_LEATHER_EMERALD_ARMOR, "obtain_every_armor_trim_with_every_material", TRIM_WITH_ALL_MATERIALS)
+		.display(display().xy(1F, -0.5F).withAdvancementFrame(AdvancementFrame.BUTTERFLY).fancyDescriptionParent(NamedTextColor.BLACK).superTorture().icon(() -> {
+			var item = ItemStack.of(Material.TURTLE_HELMET);
+			item.setData(DataComponentTypes.TRIM, ItemArmorTrim.itemArmorTrim(new ArmorTrim(TrimMaterial.NETHERITE, TrimPattern.SILENCE)));
+			return item;
+		}))
+		.requiredProgress(requirements("turtle", "leather", "chainmail", "copper", "iron", "golden", "diamond", "netherite"))
+		.buildAndRegister();
+	public static final IAdvancement OBTAIN_EVERY_TURTLE_ARMOR_TRIM = buildBase(OBTAIN_EVERY_ARMOR_TRIM_WITH_EVERY_MATERIAL, "obtain_every_turtle_armor_trim")
+		.display(display().xy(1F, 0.5F).withAdvancementFrame(AdvancementFrame.STAR).fancyDescriptionParent(NamedTextColor.DARK_RED).torture().icon(Material.TURTLE_SCUTE))
+		.buildAndRegister(b -> new ObtainEveryArmorTrimAdvancement(b, List.of(Material.TURTLE_SCUTE)));
+	public static final IAdvancement OBTAIN_EVERY_LEATHER_ARMOR_TRIM = buildBase(OBTAIN_EVERY_TURTLE_ARMOR_TRIM, "obtain_every_leather_armor_trim")
+		.display(display().x(1F).withAdvancementFrame(AdvancementFrame.STAR).fancyDescriptionParent(NamedTextColor.DARK_RED).torture().icon(Material.LEATHER))
+		.buildAndRegister(b -> new ObtainEveryArmorTrimAdvancement(b, List.of(Material.LEATHER_HELMET, Material.LEATHER_CHESTPLATE, Material.LEATHER_LEGGINGS, Material.LEATHER_BOOTS)));
+	public static final IAdvancement OBTAIN_EVERY_CHAINMAIL_ARMOR_TRIM = buildBase(OBTAIN_EVERY_LEATHER_ARMOR_TRIM, "obtain_every_chainmail_armor_trim")
+		.display(display().x(1F).withAdvancementFrame(AdvancementFrame.STAR).fancyDescriptionParent(NamedTextColor.DARK_RED).torture().icon(Material.IRON_CHAIN))
+		.buildAndRegister(b -> new ObtainEveryArmorTrimAdvancement(b, List.of(Material.CHAINMAIL_HELMET, Material.CHAINMAIL_CHESTPLATE, Material.CHAINMAIL_LEGGINGS, Material.CHAINMAIL_BOOTS)));
+	public static final IAdvancement OBTAIN_EVERY_COPPER_ARMOR_TRIM = buildBase(OBTAIN_EVERY_CHAINMAIL_ARMOR_TRIM, "obtain_every_copper_armor_trim")
+		.display(display().x(1F).withAdvancementFrame(AdvancementFrame.STAR).fancyDescriptionParent(NamedTextColor.DARK_RED).torture().icon(Material.COPPER_INGOT))
+		.buildAndRegister(b -> new ObtainEveryArmorTrimAdvancement(b, List.of(Material.COPPER_HELMET, Material.COPPER_CHESTPLATE, Material.COPPER_LEGGINGS, Material.COPPER_BOOTS)));
+	public static final IAdvancement OBTAIN_EVERY_IRON_ARMOR_TRIM = buildBase(OBTAIN_EVERY_ARMOR_TRIM_WITH_EVERY_MATERIAL, "obtain_every_iron_armor_trim")
+		.display(display().xy(1F, -0.5F).withAdvancementFrame(AdvancementFrame.STAR).fancyDescriptionParent(NamedTextColor.DARK_RED).torture().icon(Material.IRON_INGOT))
+		.buildAndRegister(b -> new ObtainEveryArmorTrimAdvancement(b, List.of(Material.IRON_HELMET, Material.IRON_CHESTPLATE, Material.IRON_LEGGINGS, Material.IRON_BOOTS)));
+	public static final IAdvancement OBTAIN_EVERY_GOLDEN_ARMOR_TRIM = buildBase(OBTAIN_EVERY_IRON_ARMOR_TRIM, "obtain_every_golden_armor_trim")
+		.display(display().x(1F).withAdvancementFrame(AdvancementFrame.STAR).fancyDescriptionParent(NamedTextColor.DARK_RED).torture().icon(Material.GOLD_INGOT))
+		.buildAndRegister(b -> new ObtainEveryArmorTrimAdvancement(b, List.of(Material.GOLDEN_HELMET, Material.GOLDEN_CHESTPLATE, Material.GOLDEN_LEGGINGS, Material.GOLDEN_BOOTS)));
+	public static final IAdvancement OBTAIN_EVERY_DIAMOND_ARMOR_TRIM = buildBase(OBTAIN_EVERY_GOLDEN_ARMOR_TRIM, "obtain_every_diamond_armor_trim")
+		.display(display().x(1F).withAdvancementFrame(AdvancementFrame.STAR).fancyDescriptionParent(NamedTextColor.DARK_RED).torture().icon(Material.DIAMOND))
+		.buildAndRegister(b -> new ObtainEveryArmorTrimAdvancement(b, List.of(Material.DIAMOND_HELMET, Material.DIAMOND_CHESTPLATE, Material.DIAMOND_LEGGINGS, Material.DIAMOND_BOOTS)));
+	public static final IAdvancement OBTAIN_EVERY_NETHERITE_ARMOR_TRIM = buildBase(OBTAIN_EVERY_DIAMOND_ARMOR_TRIM, "obtain_every_netherite_armor_trim")
+		.display(display().x(1F).withAdvancementFrame(AdvancementFrame.STAR).fancyDescriptionParent(NamedTextColor.DARK_RED).torture().icon(Material.NETHERITE_INGOT))
+		.buildAndRegister(b -> new ObtainEveryArmorTrimAdvancement(b, List.of(Material.NETHERITE_HELMET, Material.NETHERITE_CHESTPLATE, Material.NETHERITE_LEGGINGS, Material.NETHERITE_BOOTS)));
 	public static final IAdvancement FIND_A_JUNGLE_PYRAMID = buildBase(FIND_A_DESERT_PYRAMID, "find_a_jungle_pyramid")
 		.display(display().xy(0.5F, -3F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.MOSSY_COBBLESTONE))
 		.requiredProgress(vanilla(
@@ -1655,7 +1815,7 @@ public class TrappedNewbieAdvancements {
 		.visibilityRule(ifDone(false, FIRST_POSSESSION))
 		.requiredProgress(alwaysDone())
 		.buildAndRegister();
-	public static final IAdvancement DEFLECT_200 = buildBase(CHALLENGES_ROOT, "deflect_200").display(display().x(1F).fancyDescriptionParent(NamedTextColor.RED).challengeFrame().superChallenge().icon(ItemUtil.glint(Material.SKULL_BANNER_PATTERN)))
+	public static final IAdvancement DEFLECT_200 = buildBase(CHALLENGES_ROOT, "deflect_200").display(display().x(1F).fancyDescriptionParent(NamedTextColor.DARK_RED).challengeFrame().superChallenge().icon(ItemUtil.glint(Material.SKULL_BANNER_PATTERN)))
 		.requiredProgress(vanilla(entityHurtPlayer().withDamage(damage -> damage.blocked().withMinDealtDamage(200D))))
 		.withReward(rewards()
 			.withExp(250)
@@ -1666,7 +1826,7 @@ public class TrappedNewbieAdvancements {
 			})
 		)
 		.buildAndRegister();
-	public static final IAdvancement DEFLECT_SHIELD = buildBase(DEFLECT_200, "deflect_shield").display(display().x(1F).fancyDescriptionParent(NamedTextColor.RED).challengeFrame().superChallenge().icon(() -> {
+	public static final IAdvancement DEFLECT_SHIELD = buildBase(DEFLECT_200, "deflect_shield").display(display().x(1F).fancyDescriptionParent(NamedTextColor.DARK_RED).challengeFrame().superChallenge().icon(() -> {
 			var item = ItemStack.of(Material.SHIELD);
 			item.setData(DataComponentTypes.BASE_COLOR, DyeColor.RED);
 			item.setData(DataComponentTypes.BANNER_PATTERNS, BannerPatternLayers.bannerPatternLayers(List.of(
@@ -2961,7 +3121,7 @@ public class TrappedNewbieAdvancements {
 			.withTrophy(ItemStack.of(Material.MAGMA_CREAM))
 		)
 		.buildAndRegister();
-	public static final IAdvancement LEVEL_2500 = buildBase(LEVEL_1000, "level_2500").display(display().x(1F).fancyDescriptionParent(NamedTextColor.RED).challengeFrame().superTorture().icon(ItemUtil.glint(Material.ENCHANTING_TABLE))).buildAndRegister();
+	public static final IAdvancement LEVEL_2500 = buildBase(LEVEL_1000, "level_2500").display(display().x(1F).fancyDescriptionParent(NamedTextColor.DARK_RED).challengeFrame().superTorture().icon(ItemUtil.glint(Material.ENCHANTING_TABLE))).buildAndRegister();
 	public static final IAdvancement LEVEL_5000 = buildBase(LEVEL_2500, "level_5000").display(display().x(1F).fancyDescriptionParent(NamedTextColor.BLACK).withAdvancementFrame(AdvancementFrame.BUTTERFLY).cheat().icon(ItemUtil.glint(Material.DAMAGED_ANVIL))).buildAndRegister();
 	public static final IAdvancement ENCHANT_10 = buildBase(STATISTICS_RIGHT_LINKER, "enchant_10").display(display().xy(1F, 2F).fancyDescriptionParent(NamedTextColor.GREEN).icon(ItemUtil.glint(Material.IRON_SWORD)))
 		.withReward(rewards().withExp(50).addItems(ItemStack.of(Material.LAPIS_LAZULI, 12)))
@@ -2977,7 +3137,7 @@ public class TrappedNewbieAdvancements {
 		)
 		.buildAndRegister();
 	public static final IAdvancement ENCHANT_1000 = buildBase(ENCHANT_250, "enchant_1000").display(display().x(1F).fancyDescriptionParent(NamedTextColor.LIGHT_PURPLE).challengeFrame().superChallenge().icon(ItemUtil.glint(Material.NETHERITE_PICKAXE))).buildAndRegister();
-	public static final IAdvancement ENCHANT_2500 = buildBase(ENCHANT_1000, "enchant_2500").display(display().x(1F).fancyDescriptionParent(NamedTextColor.RED).challengeFrame().torture().icon(ItemUtil.glint(Material.BOW))).buildAndRegister();
+	public static final IAdvancement ENCHANT_2500 = buildBase(ENCHANT_1000, "enchant_2500").display(display().x(1F).fancyDescriptionParent(NamedTextColor.DARK_RED).challengeFrame().torture().icon(ItemUtil.glint(Material.BOW))).buildAndRegister();
 	public static final IAdvancement ENCHANT_5K = buildBase(ENCHANT_2500, "enchant_5k").display(display().x(1F).fancyDescriptionParent(PURPLE).challengeFrame().superTorture().icon(ItemUtil.glint(Material.BRUSH)))
 		.withReward(rewards()
 			.withExp(500)
@@ -2996,7 +3156,7 @@ public class TrappedNewbieAdvancements {
 			})
 		)
 		.buildAndRegister();
-	public static final IAdvancement WASH_1K = buildBase(WASH_250, "wash_1k").display(display().x(1F).fancyDescriptionParent(NamedTextColor.RED).challengeFrame().torture().icon(ItemUtil.glint(Material.CAULDRON))).requiredProgress(simple(1000, 1)).buildAndRegister();
+	public static final IAdvancement WASH_1K = buildBase(WASH_250, "wash_1k").display(display().x(1F).fancyDescriptionParent(NamedTextColor.DARK_RED).challengeFrame().torture().icon(ItemUtil.glint(Material.CAULDRON))).requiredProgress(simple(1000, 1)).buildAndRegister();
 	public static final IAdvancement WASH_5K = buildBase(WASH_1K, "wash_5k").display(display().x(1F).fancyDescriptionParent(PURPLE).challengeFrame().superTorture().icon(Material.SHULKER_BOX)).requiredProgress(simple(5000, 1)).buildAndRegister();
 	public static final IAdvancement WASH_10K = buildBase(WASH_5K, "wash_10k").display(display().x(1F).fancyDescriptionParent(NamedTextColor.BLACK).withAdvancementFrame(AdvancementFrame.BUTTERFLY).cheat().icon(Material.WATER_BUCKET)).requiredProgress(simple(10000, 1)).buildAndRegister();
 	public static final IAdvancement FISH_5 = buildBase(STATISTICS_RIGHT_LINKER, "fish_5").display(display().xy(1F, 4F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.FISHING_ROD))
@@ -3035,7 +3195,7 @@ public class TrappedNewbieAdvancements {
 			})
 		)
 		.buildAndRegister();
-	public static final IAdvancement FISH_5K = buildBase(FISH_2500, "fish_5k").display(display().x(1F).fancyDescriptionParent(NamedTextColor.RED).challengeFrame().torture().icon(Material.PUFFERFISH)).buildAndRegister();
+	public static final IAdvancement FISH_5K = buildBase(FISH_2500, "fish_5k").display(display().x(1F).fancyDescriptionParent(NamedTextColor.DARK_RED).challengeFrame().torture().icon(Material.PUFFERFISH)).buildAndRegister();
 	public static final IAdvancement FISH_10K = buildBase(FISH_5K, "fish_10k").display(display().x(1F).fancyDescriptionParent(PURPLE).challengeFrame().superTorture().icon(Material.NAUTILUS_SHELL)).buildAndRegister();
 	public static final IAdvancement FISH_50K = buildBase(FISH_10K, "fish_50k").display(display().x(1F).fancyDescriptionParent(NamedTextColor.BLACK).withAdvancementFrame(AdvancementFrame.BUTTERFLY).cheat().icon(ItemUtil.glint(Material.FISHING_ROD))).buildAndRegister();
 	public static final IAdvancement EAT_200 = buildBase(STATISTICS_RIGHT_LINKER, "eat_200").display(display().xy(1F, 5F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.BREAD)).requiredProgress(simple(200, 1))
@@ -3051,7 +3211,7 @@ public class TrappedNewbieAdvancements {
 		)
 		.buildAndRegister();
 	public static final IAdvancement EAT_5K = buildBase(EAT_2500, "eat_5k").display(display().x(1F).fancyDescriptionParent(NamedTextColor.LIGHT_PURPLE).challengeFrame().superChallenge().icon(Material.GOLDEN_CARROT)).requiredProgress(simple(5000, 1)).buildAndRegister();
-	public static final IAdvancement EAT_10K = buildBase(EAT_5K, "eat_10k").display(display().x(1F).fancyDescriptionParent(NamedTextColor.RED).challengeFrame().torture().icon(Material.GOLDEN_APPLE)).requiredProgress(simple(10000, 1))
+	public static final IAdvancement EAT_10K = buildBase(EAT_5K, "eat_10k").display(display().x(1F).fancyDescriptionParent(NamedTextColor.DARK_RED).challengeFrame().torture().icon(Material.GOLDEN_APPLE)).requiredProgress(simple(10000, 1))
 		.withReward(rewards()
 			.withExp(550)
 			.withTrophy(ItemStack.of(Material.DRIED_KELP))
@@ -3147,7 +3307,7 @@ public class TrappedNewbieAdvancements {
 		)
 		.buildAndRegister();
 	public static final IAdvancement BREED_5K = buildBase(BREED_2500, "breed_5k").display(display().x(1F).fancyDescriptionParent(NamedTextColor.LIGHT_PURPLE).challengeFrame().superChallenge().icon(Material.MUTTON)).buildAndRegister();
-	public static final IAdvancement BREED_10K = buildBase(BREED_5K, "breed_10k").display(display().x(1F).fancyDescriptionParent(NamedTextColor.RED).challengeFrame().torture().icon(Material.RABBIT))
+	public static final IAdvancement BREED_10K = buildBase(BREED_5K, "breed_10k").display(display().x(1F).fancyDescriptionParent(NamedTextColor.DARK_RED).challengeFrame().torture().icon(Material.RABBIT))
 		.withReward(rewards()
 			.withExp(550)
 			.withTrophy(MR_SHEEP_HEAD) // todo textured heads
@@ -3191,7 +3351,7 @@ public class TrappedNewbieAdvancements {
 		)
 		.buildAndRegister();
 	public static final IAdvancement KILL_50K = buildBase(KILL_25K, "kill_50k").display(display().x(1F).fancyDescriptionParent(NamedTextColor.LIGHT_PURPLE).challengeFrame().superChallenge().icon(Material.GOLDEN_SWORD)).buildAndRegister();
-	public static final IAdvancement KILL_100K = buildBase(KILL_50K, "kill_100k").display(display().x(1F).fancyDescriptionParent(NamedTextColor.RED).challengeFrame().torture().icon(Material.NETHERITE_SWORD)).buildAndRegister();
+	public static final IAdvancement KILL_100K = buildBase(KILL_50K, "kill_100k").display(display().x(1F).fancyDescriptionParent(NamedTextColor.DARK_RED).challengeFrame().torture().icon(Material.NETHERITE_SWORD)).buildAndRegister();
 	public static final IAdvancement KILL_250K = buildBase(KILL_100K, "kill_250k").display(display().x(1F).fancyDescriptionParent(PURPLE).challengeFrame().superTorture().icon(Material.WOODEN_SWORD)).buildAndRegister();
 	public static final IAdvancement KILL_500K = buildBase(KILL_250K, "kill_500k").display(display().x(1F).fancyDescriptionParent(NamedTextColor.BLACK).withAdvancementFrame(AdvancementFrame.BUTTERFLY).cheat().icon(ItemUtil.glint(Material.NETHERITE_SWORD)))
 		.withReward(rewards()
@@ -3218,7 +3378,7 @@ public class TrappedNewbieAdvancements {
 			.withTrophy(STONKS_HEAD)
 		)
 		.buildAndRegister();
-	public static final IAdvancement TRADE_25K = buildBase(TRADE_10K, "trade_25k").display(display().x(1F).fancyDescriptionParent(NamedTextColor.RED).challengeFrame().torture().icon(Material.MELON)).buildAndRegister();
+	public static final IAdvancement TRADE_25K = buildBase(TRADE_10K, "trade_25k").display(display().x(1F).fancyDescriptionParent(NamedTextColor.DARK_RED).challengeFrame().torture().icon(Material.MELON)).buildAndRegister();
 	public static final IAdvancement TRADE_50K = buildBase(TRADE_25K, "trade_50k").display(display().x(1F).fancyDescriptionParent(PURPLE).challengeFrame().superTorture().icon(Material.GLASS)).buildAndRegister();
 	public static final IAdvancement TRADE_250K = buildBase(TRADE_50K, "trade_250k").display(display().x(1F).fancyDescriptionParent(NamedTextColor.BLACK).withAdvancementFrame(AdvancementFrame.BUTTERFLY).cheat().icon(TRADER_HEAD)).buildAndRegister();
 	public static final IAdvancement LOOT_10 = buildBase(STATISTICS_RIGHT_LINKER, "loot_10").display(display().xy(1F, -4F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.CHEST)).requiredProgress(simple(10, 1))
@@ -3768,6 +3928,17 @@ public class TrappedNewbieAdvancements {
 	public static void setupAdvancements() {
 		Preconditions.checkArgument(KILL_ALL_ALL_JOCKEYS.getRequiredProgress().requirements().size() == 757, "KILL_ALL_ALL_JOCKEYS: Jockeys count changed to %s".formatted(KILL_ALL_ALL_JOCKEYS.getRequiredProgress().requirements().size()));
 		Preconditions.checkArgument(FIND_ALL_STRUCTURES.getRequiredProgress().requirements().size() == 27, "FIND_ALL_STRUCTURES & USE_A_BRUSH_IN_ALL_STRUCTURES: Structure count changed to %s".formatted(FIND_ALL_STRUCTURES.getRequiredProgress().requirements().size()));
+
+		AdvancementsAdvancement.addAdvancement(OBTAIN_EVERY_ARMOR_TRIM_WITH_EVERY_MATERIAL, Map.of(
+			OBTAIN_EVERY_TURTLE_ARMOR_TRIM, "turtle",
+			OBTAIN_EVERY_LEATHER_ARMOR_TRIM, "leather",
+			OBTAIN_EVERY_CHAINMAIL_ARMOR_TRIM, "chainmail",
+			OBTAIN_EVERY_COPPER_ARMOR_TRIM, "copper",
+			OBTAIN_EVERY_IRON_ARMOR_TRIM, "iron",
+			OBTAIN_EVERY_GOLDEN_ARMOR_TRIM, "golden",
+			OBTAIN_EVERY_DIAMOND_ARMOR_TRIM, "diamond",
+			OBTAIN_EVERY_NETHERITE_ARMOR_TRIM, "netherite"
+		));
 	}
 
 }

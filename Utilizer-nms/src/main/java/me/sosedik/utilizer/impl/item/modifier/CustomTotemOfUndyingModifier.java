@@ -45,7 +45,7 @@ public class CustomTotemOfUndyingModifier extends ItemModifier {
 		itemStack = modifyItem(ctx, player, contextBox.getLocale(), itemStack.clone());
 		if (itemStack == null) return ModificationResult.PASS;
 
-		itemStack.setData(DataComponentTypes.CUSTOM_NAME, Component.empty());
+		itemStack.setData(DataComponentTypes.ITEM_NAME, Component.empty());
 
 		contextBox.setItem(itemStack);
 		player.playEffect(EntityEffect.PROTECTED_FROM_DEATH);

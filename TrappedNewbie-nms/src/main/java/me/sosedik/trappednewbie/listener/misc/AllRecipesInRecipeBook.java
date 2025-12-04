@@ -189,7 +189,7 @@ public class AllRecipesInRecipeBook implements Listener {
 	private static ItemStack dummyStack(ItemStack item) {
 		item = item.asOne();
 		item.setData(DataComponentTypes.TOOLTIP_DISPLAY, TooltipDisplay.tooltipDisplay().hideTooltip(true).build());
-		item.setData(DataComponentTypes.CUSTOM_NAME, Component.empty());
+		item.setData(DataComponentTypes.ITEM_NAME, Component.empty());
 		return item;
 	}
 

@@ -6,6 +6,7 @@ import me.sosedik.uglychatter.api.mini.tag.ExecuteTag;
 import me.sosedik.uglychatter.api.mini.tag.LinkTag;
 import me.sosedik.uglychatter.api.mini.tag.SpoilerTag;
 import me.sosedik.uglychatter.impl.item.modifier.BookContentModifier;
+import me.sosedik.uglychatter.impl.item.modifier.ParsedDisplayNameModifier;
 import me.sosedik.uglychatter.listener.item.PreviewBookFormatting;
 import me.sosedik.uglychatter.listener.misc.BookBeautifier;
 import me.sosedik.uglychatter.listener.misc.ChatBeautifier;
@@ -48,6 +49,7 @@ public class UglyChatter extends JavaPlugin {
 		);
 
 		new BookContentModifier(uglyChatterKey("book_content")).register();
+		new ParsedDisplayNameModifier(uglyChatterKey("parsed_display_name")).register();
 
 		EventUtil.registerListeners(this,
 			// item

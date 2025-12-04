@@ -1,4 +1,18 @@
 {
+	"trophy.wear_a_silent_armor.name": "<#A5F1F4>Тиша",
+	"trophy.wear_a_silent_armor.lore": "<#A5F1F4>Тиха вода греблю рве",
+	"trophy.trim_with_all_materials.name": "<#F6FEFF>Костюм Трона",
+	"trophy.trim_with_all_materials.lore": [
+		"<#F6FEFF>Система. Цифровий Всесвіт.",
+		"<#F6FEFF>Я намагався уявити пакети даних,",
+		"<#F6FEFF>що проносяться в комп'ютері.",
+		"<#F6FEFF>На що вони схожі? Катери? Мотоцикли?",
+		"<#F6FEFF>Якими дорогами вони мчать?",
+		"<#F6FEFF>Я думав, що ніколи не побачу цей світ моєї мрії.",
+		"<#F6FEFF>І потім, одного дня… Я потрапив туди."
+	],
+	"trophy.wear_a_real_netherite_armor.name": "<#441500>Справжній незеритовий шаблон",
+	"trophy.wear_a_real_netherite_armor.lore": "<#441500>Такий дійсно справжній",
 	"trophy.use_a_brush_in_all_structures.name": "<#D8AD8B>Мітла",
 	"trophy.use_a_brush_in_all_structures.lore": "<#D8AD8B>Прибирає безлад і нудьгу!",
 	"trophy.apply_all_smithing_templates.name": "<#BA2920>Костюм залізної людини",

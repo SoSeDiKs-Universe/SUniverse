@@ -42,10 +42,7 @@ public class AdvancementTrophyNameLoreModifier extends ItemModifier {
 
 		if (name != null) {
 			name = name.decorationIfAbsent(TextDecoration.BOLD, TextDecoration.State.TRUE);
-			if (item.hasData(DataComponentTypes.CUSTOM_NAME))
-				item.setData(DataComponentTypes.ITEM_NAME, name);
-			else
-				item.setData(DataComponentTypes.CUSTOM_NAME, name.decorationIfAbsent(TextDecoration.ITALIC, TextDecoration.State.FALSE));
+			item.setData(DataComponentTypes.ITEM_NAME, name);
 		}
 
 		if (lore != null)

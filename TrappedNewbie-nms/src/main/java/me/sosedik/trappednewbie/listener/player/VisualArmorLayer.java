@@ -298,13 +298,13 @@ public class VisualArmorLayer implements Listener {
 				return;
 		}
 
-		if (player.getItemOnCursor().getType() != Material.AIR) {
+		if (!player.getItemOnCursor().isEmpty()) {
 			ItemStack cursor = event.getCursor();
 			boolean canEquip = switch (equipmentSlot) {
 				case HEAD -> isEquipable(cursor, EquipmentSlot.HEAD, false);
 				case CHEST -> isEquipable(cursor, EquipmentSlot.CHEST, false);
 				case LEGS -> isEquipable(cursor, EquipmentSlot.LEGS, false);
-				case FEET -> isEquipable(cursor, EquipmentSlot.BODY, false);
+				case FEET -> isEquipable(cursor, EquipmentSlot.FEET, false);
 				case OFF_HAND -> TrappedNewbieTags.GLOVES.isTagged(cursor.getType());
 				default -> false;
 			};

@@ -13,6 +13,7 @@ dependencies {
     compileOnly(project(":FancyMotd"))
     compileOnly(project(":Requiem"))
     compileOnly(project(":Socializer"))
+    compileOnly(project(":UglyChatter"))
     compileOnly(project(":DelightfulFarming-nms"))
 
     compileOnly("me.sosedik:PacketAdvancements-api:1.0-SNAPSHOT")
@@ -103,6 +104,11 @@ paper {
             joinClasspath = true
         }
         register("Socializer") {
+            load = PaperPluginDescription.RelativeLoadOrder.BEFORE
+            required = true
+            joinClasspath = true
+        }
+        register("UglyChatter") {
             load = PaperPluginDescription.RelativeLoadOrder.BEFORE
             required = true
             joinClasspath = true

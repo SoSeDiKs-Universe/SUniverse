@@ -38,7 +38,7 @@ public class CustomNameModifier extends ItemModifier {
 
 			Component name = GsonComponentSerializer.gson().deserialize(nbt.getString(NAME_COMPONENT_TAG))
 				.decorationIfAbsent(TextDecoration.ITALIC, TextDecoration.State.FALSE);
-			item.setData(DataComponentTypes.CUSTOM_NAME, name);
+			item.setData(DataComponentTypes.ITEM_NAME, name);
 			return true;
 		});
 		if (componentName) return ModificationResult.OK;

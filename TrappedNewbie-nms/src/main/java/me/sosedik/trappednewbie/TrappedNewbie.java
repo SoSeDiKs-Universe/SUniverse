@@ -54,6 +54,7 @@ import me.sosedik.trappednewbie.impl.recipe.ChoppingBlockCrafting;
 import me.sosedik.trappednewbie.impl.thirst.ThirstData;
 import me.sosedik.trappednewbie.listener.advancement.AdvancementRecipes;
 import me.sosedik.trappednewbie.listener.advancement.AdvancementTrophies;
+import me.sosedik.trappednewbie.listener.advancement.AdvancementsAdvancement;
 import me.sosedik.trappednewbie.listener.advancement.AdvancementsLocalizer;
 import me.sosedik.trappednewbie.listener.advancement.LoadSaveAdvancementsOnJoinQuit;
 import me.sosedik.trappednewbie.listener.advancement.dedicated.BlockMoveAdvancements;
@@ -314,6 +315,7 @@ public final class TrappedNewbie extends JavaPlugin {
 		EventUtil.registerListeners(this,
 			// advancement
 			AdvancementRecipes.class,
+			AdvancementsAdvancement.class,
 			AdvancementsLocalizer.class,
 			AdvancementTrophies.class,
 			LoadSaveAdvancementsOnJoinQuit.class,

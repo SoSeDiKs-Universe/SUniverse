@@ -14,7 +14,6 @@ import me.sosedik.trappednewbie.listener.thirst.DrinkableWater;
 import me.sosedik.utilizer.api.language.LangOptionsStorage;
 import me.sosedik.utilizer.api.message.Messenger;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -111,10 +110,7 @@ public class DirtyWaterModifier extends ItemModifier {
 		Component name = messenger.getMessageIfExists(key);
 		if (name == null) return;
 
-		if (type == Material.POTION && !item.hasData(DataComponentTypes.CUSTOM_NAME))
-			item.setData(DataComponentTypes.CUSTOM_NAME, name.decorationIfAbsent(TextDecoration.ITALIC, TextDecoration.State.FALSE));
-		else
-			item.setData(DataComponentTypes.ITEM_NAME, name);
+		item.setData(DataComponentTypes.ITEM_NAME, name);
 	}
 
 	private boolean isFluidContainer(Material type) {

@@ -63,7 +63,7 @@ public class MiniNodeRenderer extends CoreMarkdownNodeRenderer {
 	@Override
 	public void visit(Link link) {
 		String destination = link.getDestination();
-		if (destination.startsWith("click:open_url")) {
+		if (destination.startsWith("click:open_url") || destination.startsWith("lang:")) {
 			writer.raw("<" + destination + ">");
 			return;
 		}

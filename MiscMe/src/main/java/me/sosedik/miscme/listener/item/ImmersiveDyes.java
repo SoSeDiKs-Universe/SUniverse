@@ -6,6 +6,7 @@ import io.papermc.paper.datacomponent.item.DyedItemColor;
 import me.sosedik.miscme.MiscMe;
 import me.sosedik.utilizer.util.MiscUtil;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.util.TriState;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
@@ -64,23 +65,29 @@ public class ImmersiveDyes implements Listener {
 		if (block == null) return;
 
 		Player player = event.getPlayer();
-		if (tryToDye(player, block, EquipmentSlot.HAND)
-			|| tryToDye(player, block, EquipmentSlot.OFF_HAND))
-			event.setCancelled(true);
+		TriState result = tryToDye(player, block, EquipmentSlot.HAND);
+		if (result == TriState.NOT_SET) return;
+
+		if (result != TriState.TRUE) {
+			result = tryToDye(player, block, EquipmentSlot.OFF_HAND);
+			if (result != TriState.TRUE) return;
+		}
+
+		event.setCancelled(true);
 	}
 
-	private boolean tryToDye(Player player, Block block, EquipmentSlot hand) {
+	private TriState tryToDye(Player player, Block block, EquipmentSlot hand) {
 		ItemStack item = player.getInventory().getItem(hand);
-		if (!isDyingItem(item) && item.getType() != Material.SLIME_BALL) return false;
+		if (!isDyingItem(item) && item.getType() != Material.SLIME_BALL) return TriState.FALSE;
 
 		Material apply = getApplied(item.getType(), block);
-		if (apply == null) return false;
-		if (block.getType() == apply) return true; // No need to try second hand
+		if (apply == null) return TriState.FALSE;
+		if (block.getType() == apply) return TriState.NOT_SET;
 
 		if (Tag.SHULKER_BOXES.isTagged(apply)) {
-			if (!(block.getBlockData() instanceof Directional oldData)) return true;
-			if (!(apply.createBlockData() instanceof Directional newData)) return true;
-			if (!(block.getState() instanceof ShulkerBox oldState)) return true;
+			if (!(block.getBlockData() instanceof Directional oldData)) return TriState.NOT_SET;
+			if (!(apply.createBlockData() instanceof Directional newData)) return TriState.NOT_SET;
+			if (!(block.getState() instanceof ShulkerBox oldState)) return TriState.NOT_SET;
 
 			newData.setFacing(oldData.getFacing());
 			ItemStack[] contents = oldState.getInventory().getStorageContents();
@@ -91,12 +98,13 @@ public class ImmersiveDyes implements Listener {
 				newState.getSnapshotInventory().setStorageContents(contents);
 				newState.update();
 			}
-			return postEffect(player, hand, item, block);
+			postEffect(player, hand, item, block);
+			return TriState.TRUE;
 		}
 
 		if (Tag.BEDS.isTagged(apply)) {
-			if (!(block.getBlockData() instanceof Bed oldData)) return true;
-			if (!(apply.createBlockData() instanceof Bed newData)) return true;
+			if (!(block.getBlockData() instanceof Bed oldData)) return TriState.NOT_SET;
+			if (!(apply.createBlockData() instanceof Bed newData)) return TriState.NOT_SET;
 
 			newData.setPart(oldData.getPart());
 			newData.setFacing(oldData.getFacing());
@@ -111,11 +119,12 @@ public class ImmersiveDyes implements Listener {
 				newData.setOccupied(secondOldData.isOccupied());
 				secondBlock.setBlockData(newData, false);
 			}
-			return postEffect(player, hand, item, block);
+			postEffect(player, hand, item, block);
+			return TriState.TRUE;
 		}
 
 		if (Tag.ITEMS_BANNERS.isTagged(apply) || Tag.BANNERS.isTagged(apply)) {
-			if (!(block.getState() instanceof Banner banner)) return true;
+			if (!(block.getState() instanceof Banner banner)) return TriState.NOT_SET;
 			DyeColor color = banner.getBaseColor();
 			List<Pattern> patterns = banner.getPatterns();
 			if (block.getBlockData() instanceof Rotatable oldData && apply.createBlockData() instanceof Rotatable newData) {
@@ -125,19 +134,20 @@ public class ImmersiveDyes implements Listener {
 				newData.setFacing(oldData.getFacing());
 				block.setBlockData(newData);
 			} else {
-				return true;
+				return TriState.NOT_SET;
 			}
 			if (block.getState() instanceof Banner newState) {
 				newState.setBaseColor(color);
 				newState.setPatterns(patterns);
 				newState.update();
 			}
-			return postEffect(player, hand, item, block);
+			postEffect(player, hand, item, block);
+			return TriState.TRUE;
 		}
 
 		if (Tag.CANDLES.isTagged(apply)) {
-			if (!(block.getBlockData() instanceof Candle oldData)) return false;
-			if (!(apply.createBlockData() instanceof Candle newData)) return false;
+			if (!(block.getBlockData() instanceof Candle oldData)) return TriState.NOT_SET;
+			if (!(apply.createBlockData() instanceof Candle newData)) return TriState.NOT_SET;
 
 			newData.setCandles(oldData.getCandles());
 			newData.setLit(oldData.isLit());
@@ -149,11 +159,12 @@ public class ImmersiveDyes implements Listener {
 				if (finalBlock.getType() == apply)
 					finalBlock.setBlockData(newData);
 			}, 1L);
-			return postEffect(player, hand, item, block);
+			postEffect(player, hand, item, block);
+			return TriState.TRUE;
 		}
 		if (Tag.CANDLE_CAKES.isTagged(block.getType())) {
-			if (!(block.getBlockData() instanceof Lightable oldData)) return false;
-			if (!(apply.createBlockData() instanceof Lightable newData)) return false;
+			if (!(block.getBlockData() instanceof Lightable oldData)) return TriState.NOT_SET;
+			if (!(apply.createBlockData() instanceof Lightable newData)) return TriState.NOT_SET;
 
 			newData.setLit(oldData.isLit());
 			block.setBlockData(newData, false);
@@ -163,7 +174,8 @@ public class ImmersiveDyes implements Listener {
 				if (finalBlock.getType() == apply)
 					finalBlock.setBlockData(newData);
 			}, 1L);
-			return postEffect(player, hand, item, block);
+			postEffect(player, hand, item, block);
+			return TriState.TRUE;
 		}
 
 		if (apply == Material.STICKY_PISTON || apply == Material.PISTON || apply == Material.PISTON_HEAD) {
@@ -182,25 +194,25 @@ public class ImmersiveDyes implements Listener {
 						block.setBlockData(head);
 					}
 				}
-				return postEffect(player, hand, item, block);
+				postEffect(player, hand, item, block);
+				return TriState.TRUE;
 			} else {
-				return false;
+				return TriState.FALSE;
 			}
 		} else {
 			block.setType(apply);
-			return postEffect(player, hand, item, block);
+			postEffect(player, hand, item, block);
+			return TriState.TRUE;
 		}
 	}
 
-	private boolean postEffect(Player player, EquipmentSlot hand, ItemStack item, Block block) {
+	private void postEffect(Player player, EquipmentSlot hand, ItemStack item, Block block) {
 		playEffect(player, hand, block.getLocation(), block.getBlockData());
 
 		if (!player.getGameMode().isInvulnerable()) {
 			if (item.getType() == Material.SLIME_BALL || Math.random() < DYE_REDUCE_CHANCE)
 				item.subtract();
 		}
-
-		return true;
 	}
 
 	private @Nullable Material getApplied(Material dyeItem, Block block) {

@@ -1,14 +1,8 @@
 package me.sosedik.trappednewbie.command;
 
 import io.papermc.paper.command.brigadier.CommandSourceStack;
-import io.papermc.paper.datacomponent.DataComponentTypes;
-import io.papermc.paper.datacomponent.item.ItemEnchantments;
-import io.papermc.paper.registry.RegistryAccess;
-import io.papermc.paper.registry.RegistryKey;
 import me.sosedik.trappednewbie.TrappedNewbie;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.Permission;
 import org.jspecify.annotations.NullMarked;
@@ -31,11 +25,11 @@ public class TestCommand {
 
 		TrappedNewbie.scheduler().sync(() -> {
 			// Stuff!
-			var item = ItemStack.of(Material.ENCHANTED_BOOK);
-			ItemEnchantments.Builder builder = ItemEnchantments.itemEnchantments();
-			RegistryAccess.registryAccess().getRegistry(RegistryKey.ENCHANTMENT).iterator().forEachRemaining(enchantment -> builder.add(enchantment, enchantment.getMaxLevel()));
-			item.setData(DataComponentTypes.STORED_ENCHANTMENTS, builder.build());
-			player.getInventory().addItem(item);
+//			var item = ItemStack.of(Material.ENCHANTED_BOOK);
+//			ItemEnchantments.Builder builder = ItemEnchantments.itemEnchantments();
+//			RegistryAccess.registryAccess().getRegistry(RegistryKey.ENCHANTMENT).iterator().forEachRemaining(enchantment -> builder.add(enchantment, enchantment.getMaxLevel()));
+//			item.setData(DataComponentTypes.STORED_ENCHANTMENTS, builder.build());
+//			player.getInventory().addItem(item);
 //			player.getInventory().addItem(SoulboundNecronomicon.getNecronomicon(player));
 //			Block block = player.getLocation().getBlock();
 //			block.setType(Material.CHERRY_SIGN);

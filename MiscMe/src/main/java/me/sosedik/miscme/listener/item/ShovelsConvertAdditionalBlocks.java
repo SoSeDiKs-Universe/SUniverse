@@ -44,6 +44,7 @@ public class ShovelsConvertAdditionalBlocks implements Listener {
 
 		Material converted = getConverted(block.getType());
 		if (converted == null) return;
+
 		if (tryToConvert(player, EquipmentSlot.HAND)
 				|| tryToConvert(player, EquipmentSlot.OFF_HAND)) {
 			event.setCancelled(true);

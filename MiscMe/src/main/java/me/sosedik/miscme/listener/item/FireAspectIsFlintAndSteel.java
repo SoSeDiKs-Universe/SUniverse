@@ -46,7 +46,7 @@ public class FireAspectIsFlintAndSteel implements Listener {
 
 		Entity entity = event.getRightClicked();
 		if (interactEntity(player, entity, EquipmentSlot.HAND)
-				|| interactEntity(player, entity, EquipmentSlot.OFF_HAND)) {
+			|| interactEntity(player, entity, EquipmentSlot.OFF_HAND)) {
 			event.setCancelled(true);
 		}
 	}

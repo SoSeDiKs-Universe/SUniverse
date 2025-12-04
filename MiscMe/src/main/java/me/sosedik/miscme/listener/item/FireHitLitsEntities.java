@@ -15,7 +15,7 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public class FireHitLitsEntities implements Listener {
 
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	public void onAttackWithTorch(EntityDamageByEntityEvent event) {
 		if (event.getCause() != EntityDamageEvent.DamageCause.ENTITY_ATTACK) return;
 		if (!(event.getDamager() instanceof LivingEntity damager)) return;

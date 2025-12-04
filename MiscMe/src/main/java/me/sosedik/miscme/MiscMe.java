@@ -50,9 +50,11 @@ import me.sosedik.miscme.listener.entity.DynamicMovingSpeed;
 import me.sosedik.miscme.listener.entity.DynamicVisibilityRange;
 import me.sosedik.miscme.listener.entity.EndermanTeleportsPlayers;
 import me.sosedik.miscme.listener.entity.ExtraPigsOnBreeding;
+import me.sosedik.miscme.listener.entity.FriendlyFireTameable;
 import me.sosedik.miscme.listener.entity.ItemFrameReverseRotate;
 import me.sosedik.miscme.listener.entity.ItemFrameSpillables;
 import me.sosedik.miscme.listener.entity.MinecartSlimeBoost;
+import me.sosedik.miscme.listener.entity.MobPatting;
 import me.sosedik.miscme.listener.entity.MoreBabyMobs;
 import me.sosedik.miscme.listener.entity.MovingMinecartsHurtEntities;
 import me.sosedik.miscme.listener.entity.PrimingExplosiveMinecart;
@@ -68,7 +70,7 @@ import me.sosedik.miscme.listener.fixup.IgnitableCobweb;
 import me.sosedik.miscme.listener.item.BottledAir;
 import me.sosedik.miscme.listener.item.ColoredShulkerShells;
 import me.sosedik.miscme.listener.item.DyeableItemsInItemFrames;
-import me.sosedik.miscme.listener.item.EasierShovelPathCreation;
+import me.sosedik.miscme.listener.item.EasierBlockFlattening;
 import me.sosedik.miscme.listener.item.FireAspectIsFlintAndSteel;
 import me.sosedik.miscme.listener.item.FireHitLitsEntities;
 import me.sosedik.miscme.listener.item.FlintAndSteelIgnitesEntities;
@@ -185,9 +187,11 @@ public final class MiscMe extends JavaPlugin {
 			DynamicVisibilityRange.class,
 			EndermanTeleportsPlayers.class,
 			ExtraPigsOnBreeding.class,
+			FriendlyFireTameable.class,
 			ItemFrameSpillables.class,
 			ItemFrameReverseRotate.class,
 			MinecartSlimeBoost.class,
+			MobPatting.class,
 			MoreBabyMobs.class,
 			MovingMinecartsHurtEntities.class,
 			PrimingExplosiveMinecart.class,
@@ -205,7 +209,7 @@ public final class MiscMe extends JavaPlugin {
 			BottledAir.class,
 			ColoredShulkerShells.class,
 			DyeableItemsInItemFrames.class,
-			EasierShovelPathCreation.class,
+			EasierBlockFlattening.class,
 			FireAspectIsFlintAndSteel.class,
 			FireHitLitsEntities.class,
 			FlintAndSteelIgnitesEntities.class,

@@ -18,7 +18,6 @@ import java.util.Random;
 /**
  * RMB click with a torch removes cobwebs
  */
-// MCCheck: 1.21.10, new torches
 @NullMarked
 public class TorchesBurnCobwebs implements Listener {
 

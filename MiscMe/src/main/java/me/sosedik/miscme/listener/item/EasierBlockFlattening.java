@@ -6,6 +6,7 @@ import org.bukkit.Sound;
 import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.type.Snow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -18,10 +19,10 @@ import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NullMarked;
 
 /**
- * Create paths below replaceable blocks
+ * Create paths/farmland below replaceable blocks
  */
 @NullMarked
-public class EasierShovelPathCreation implements Listener {
+public class EasierBlockFlattening implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onPathing(PlayerInteractEvent event) {
@@ -38,28 +39,42 @@ public class EasierShovelPathCreation implements Listener {
 		if (!shouldBeBroken(block.getRelative(BlockFace.UP))) return;
 
 		Player player = event.getPlayer();
-		if (createPath(player, block, EquipmentSlot.HAND) || createPath(player, block, EquipmentSlot.OFF_HAND))
+		if (tryToFlatten(player, block, EquipmentSlot.HAND) || tryToFlatten(player, block, EquipmentSlot.OFF_HAND))
 			event.setCancelled(true);
 	}
 
 	private boolean shouldBeBroken(Block block) {
-		if (block.getType() == Material.SNOW) return false;
-		if (block.isReplaceable()) return true;
+		if (block.getType() == Material.SNOW)
+			return block.getBlockData() instanceof Snow snow && snow.getLayers() == snow.getMinimumLayers();
+		if (block.isReplaceable())
+			return true;
 		return Tag.FLOWERS.isTagged(block.getType());
 	}
 
-	private boolean createPath(Player player, Block block, EquipmentSlot hand) {
+	private boolean tryToFlatten(Player player, Block block, EquipmentSlot hand) {
 		ItemStack item = player.getInventory().getItem(hand);
-		if (!Tag.ITEMS_SHOVELS.isTagged(item.getType())) return false;
 		if (player.hasCooldown(item)) return false;
 
+		if (Tag.ITEMS_SHOVELS.isTagged(item.getType()))
+			return tryToFlatten(player, block, hand, Material.DIRT_PATH, Sound.ITEM_SHOVEL_FLATTEN);
+
+		if (Tag.ITEMS_HOES.isTagged(item.getType()))
+			return tryToFlatten(player, block, hand, Material.FARMLAND, Sound.ITEM_HOE_TILL);
+
+		return false;
+	}
+
+	private boolean tryToFlatten(Player player, Block block, EquipmentSlot hand, Material blockType, Sound sound) {
 		Material materialPre = block.getType();
-		if (!new EntityChangeBlockEvent(player, block, Material.DIRT_PATH.createBlockData()).callEvent()) return false;
+		if (!new EntityChangeBlockEvent(player, block, blockType.createBlockData()).callEvent()) return false;
 
 		player.swingHand(hand);
-		if (materialPre == block.getType()) block.setType(Material.DIRT_PATH);
-		block.emitSound(Sound.ITEM_SHOVEL_FLATTEN, 1F, 1F);
-		item.damage(1, player);
+		Block upperBlock = block.getRelative(BlockFace.UP);
+		if (!upperBlock.isEmpty())
+			player.breakBlock(upperBlock);
+		if (materialPre == block.getType()) block.setType(blockType);
+		block.emitSound(sound, 1F, 1F);
+		player.getInventory().getItem(hand).damage(1, player);
 
 		return true;
 	}

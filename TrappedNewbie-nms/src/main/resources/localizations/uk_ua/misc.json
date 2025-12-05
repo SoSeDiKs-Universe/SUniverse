@@ -62,5 +62,8 @@
 		"Натисніть, щоб розпочати подорож",
 		"Вартість: <color><level> <plural:uk_ua:рівень|рівня|рівнів:'<level>'> (досвіду)"
 	],
-	"damage.run_with_scissors": "<red><i>Не бігайте з ножицями!"
+	"damage.run_with_scissors": "<red><i>Не бігайте з ножицями!",
+	"mob.name.slenderman": "Слендермен",
+	"mob.name.placeholder": "Затичка",
+	"mob.name.komaru": "Комару"
 }

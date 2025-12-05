@@ -68,9 +68,9 @@ public class StatisticAdvancements implements Listener {
 						TrappedNewbieAdvancements.BREAK_10K_NETHERITE.modifySimpleProgress(player, p -> p.setGained(statValue));
 						TrappedNewbieAdvancements.BREAK_100K_NETHERITE.modifySimpleProgress(player, p -> p.setGained(statValue));
 					}
-					case ENDER_PEARL -> {
-						TrappedNewbieAdvancements.USE_100_STACKS_OF_ENDER_PEARLS.modifySimpleProgress(player, p -> p.setGained(statValue));
-					}
+					case ENDER_PEARL -> TrappedNewbieAdvancements.USE_100_STACKS_OF_ENDER_PEARLS.modifySimpleProgress(player, p -> p.setGained(statValue));
+					case SPIDER_EYE -> TrappedNewbieAdvancements.EAT_1K_SPIDER_EYES.modifySimpleProgress(player, p -> p.setGained(statValue));
+					case ENCHANTED_GOLDEN_APPLE -> TrappedNewbieAdvancements.EAT_A_STACK_OF_ENCHANTED_GOLDEN_APPLES.modifySimpleProgress(player, p -> p.setGained(statValue));
 					case null, default -> {}
 				}
 			}

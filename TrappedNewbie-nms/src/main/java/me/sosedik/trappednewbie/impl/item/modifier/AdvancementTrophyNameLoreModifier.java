@@ -10,6 +10,7 @@ import me.sosedik.utilizer.api.language.LangOptionsStorage;
 import me.sosedik.utilizer.api.message.Messenger;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NullMarked;
@@ -42,7 +43,10 @@ public class AdvancementTrophyNameLoreModifier extends ItemModifier {
 
 		if (name != null) {
 			name = name.decorationIfAbsent(TextDecoration.BOLD, TextDecoration.State.TRUE);
-			item.setData(DataComponentTypes.ITEM_NAME, name);
+			if (item.getType() == Material.PLAYER_HEAD)
+				item.setData(DataComponentTypes.CUSTOM_NAME, name);
+			else
+				item.setData(DataComponentTypes.ITEM_NAME, name);
 		}
 
 		if (lore != null)

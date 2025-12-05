@@ -149,11 +149,11 @@ public class FancyAdvancementReward extends SimpleAdvancementRewardBuilder<Fancy
 
 	public static void sendExpMessage(Player player, int exp) {
 		if (exp != 0)
-			player.sendMessage(Component.space().append(getExpMessage(player, exp)));
+			player.sendMessage(getExpMessage(player, exp));
 	}
 
 	public static Component getExpMessage(Player player, int exp) {
-		String expMessage = (exp > 0 ? "+" : "") + String.format("%,d", exp).replace(",", ".");
+		String expMessage = (exp > 0 ? " +" : " ") + String.format("%,d", exp).replace(",", ".");
 		return Messenger.messenger(player).getMessage("advancement.reward.exp", raw("exp", expMessage), raw("exp_raw", exp));
 	}
 
@@ -177,7 +177,7 @@ public class FancyAdvancementReward extends SimpleAdvancementRewardBuilder<Fancy
 	public static Component getItemMessage(ItemStack item, TextColor color) {
 		int amount = item.getAmount();
 		if (amount > item.getMaxStackSize()) item = item.asOne();
-		return Component.text("+" + amount + " ", color).append(item.effectiveName().hoverEvent(item));
+		return Component.text(" +" + amount + " ", color).append(item.effectiveName().hoverEvent(item));
 	}
 
 }

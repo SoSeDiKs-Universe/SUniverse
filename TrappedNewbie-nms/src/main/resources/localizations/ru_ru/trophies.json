@@ -1,4 +1,31 @@
 {
+	"trophy.eat_a_stack_of_enchanted_golden_apples.name": "<gold>Ещё одно",
+	"trophy.eat_a_stack_of_enchanted_golden_apples.lore": "<gold>«Ещё одно» — DJ Khaled",
+	"trophy.name_a_piglin_brute_technoblade.name": "<#FDF55F>Корона Картофельного короля",
+	"trophy.name_a_piglin_brute_technoblade.lore": [
+		"<#FDF55F>Корона, выкованная из чистейшего золота,",
+		"<#FDF55F>изготовленная богатейшим из пиглинов.",
+		"<#FDF55F>Носима только Алексом (он же Technoblade),",
+		"<#FDF55F>единственный и неповторимым Картофельным королём."
+	],
+	"trophy.name_a_cat_komaru.name": "<#FFD5FD>Мордочка Комару",
+	"trophy.name_a_cat_komaru.lore": [
+		"<#FFD5FD>Мою любимую кошку зовут Комару. Это",
+		"<#FFD5FD>игривый и озорной маленький комочек шерсти",
+		"<#FFD5FD>с сердцем, полным любви. У Комару",
+		"<#FFD5FD>красивая серая шерсть с белыми пятнами",
+		"<#FFD5FD>на лапах и груди. Её ярко-зелёные",
+		"<#FFD5FD>глаза искрятся любопытством и интеллектом.",
+		"<#FFD5FD>Комару любит гоняться за игрушками",
+		"<#FFD5FD>и забираться на высокие места. Она",
+		"<#FFD5FD>всегда готова к объятиям и мурлыканью",
+		"<#FFD5FD>на коленях. Комару приносит столько",
+		"<#FFD5FD>радости и счастья в мою жизнь."
+	],
+	"trophy.name_a_sheep_jeb.name": "<#FF662D>Голова jeb_",
+	"trophy.name_a_sheep_jeb.lore": "<#FF662D>Бе-е-е, бе-е-е, бе-е-е, бе-е-е, бе-е-е, бе-е-е, бе-е-е!",
+	"trophy.turn_a_mob_upside_down.name": "<#F6F5F5>Голова Dinnerbone",
+	"trophy.turn_a_mob_upside_down.lore": "<#F6F5F5>Все позабыли о Grumm",
 	"trophy.wear_a_silent_armor.name": "<#A5F1F4>Тишина",
 	"trophy.wear_a_silent_armor.lore": "<#A5F1F4>В тихом омуте черти водятся",
 	"trophy.trim_with_all_materials.name": "<#F6FEFF>Костюм Трона",

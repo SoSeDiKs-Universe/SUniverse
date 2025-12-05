@@ -1,4 +1,31 @@
 {
+	"trophy.eat_a_stack_of_enchanted_golden_apples.name": "<gold>Another one",
+	"trophy.eat_a_stack_of_enchanted_golden_apples.lore": "<gold>\"Another one\" — DJ Khaled",
+	"trophy.name_a_piglin_brute_technoblade.name": "<#FDF55F>Crown of the Potato King",
+	"trophy.name_a_piglin_brute_technoblade.lore": [
+		"<#FDF55F>A crown forged in the purest gold,",
+		"<#FDF55F>made by the richest of Piglins.",
+		"<#FDF55F>Worn only by Alex (aka Technoblade),",
+		"<#FDF55F>the one and only Potato King."
+	],
+	"trophy.name_a_cat_komaru.name": "<#FFD5FD>Komaru's Head",
+	"trophy.name_a_cat_komaru.lore": [
+		"<#FFD5FD>My favorite cat's name is Komaru. She is a",
+		"<#FFD5FD>playful and mischievous little furball",
+		"<#FFD5FD>with a heart full of love. Komaru has a",
+		"<#FFD5FD>beautiful gray fur with white patches",
+		"<#FFD5FD>on her paws and chest. Her bright green",
+		"<#FFD5FD>eyes sparkle with curiosity and",
+		"<#FFD5FD>intelligence. Komaru loves to chase",
+		"<#FFD5FD>after toys and climb up high places. She",
+		"<#FFD5FD>is always ready for cuddles and will",
+		"<#FFD5FD>purr contently in your lap. Komaru",
+		"<#FFD5FD>brings so much joy and happiness to my life."
+	],
+	"trophy.name_a_sheep_jeb.name": "<#FF662D>jeb_'s Head",
+	"trophy.name_a_sheep_jeb.lore": "<#FF662D>Baah, Baah, Baah, Baah, Baah, Baah, Baah!",
+	"trophy.turn_a_mob_upside_down.name": "<#F6F5F5>Dinnerbone's Head",
+	"trophy.turn_a_mob_upside_down.lore": "<#F6F5F5>No love for Grumm",
 	"trophy.wear_a_silent_armor.name": "<#A5F1F4>The Silence",
 	"trophy.wear_a_silent_armor.lore": "<#A5F1F4>Still waters run deep",
 	"trophy.trim_with_all_materials.name": "<#F6FEFF>Tron Suit",

@@ -3,7 +3,6 @@ package me.sosedik.trappednewbie.listener.advancement.dedicated;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieAdvancements;
 import me.sosedik.utilizer.dataset.UtilizerTags;
-import org.bukkit.Material;
 import org.bukkit.Statistic;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -26,11 +25,7 @@ public class FoodConsumingAdvancements implements Listener {
 		ItemStack item = event.getItem();
 		if (!isFood(item)) return;
 
-		Player player = event.getPlayer();
-		increaseStats(player);
-
-		if (item.getType() == Material.SPIDER_EYE)
-			TrappedNewbieAdvancements.EAT_1K_SPIDER_EYES.awardNextCriterion(player);
+		increaseEatStats(event.getPlayer());
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -52,10 +47,10 @@ public class FoodConsumingAdvancements implements Listener {
 		Player player = event.getPlayer();
 		int diff = event.getNewValue() - event.getPreviousValue();
 		for (int i = 0; i < diff; i++)
-			increaseStats(player);
+			increaseEatStats(player);
 	}
 
-	private void increaseStats(Player player) {
+	private void increaseEatStats(Player player) {
 		TrappedNewbieAdvancements.EAT_200.awardNextCriterion(player);
 		TrappedNewbieAdvancements.EAT_1K.awardNextCriterion(player);
 		TrappedNewbieAdvancements.EAT_2500.awardNextCriterion(player);

@@ -62,5 +62,8 @@
 		"Нажмите, чтобы начать перемещение",
 		"Стоимость: <color><level> <plural:ru_ru:уровень|уровня|уровней:'<level>'> (опыта)"
 	],
-	"damage.run_with_scissors": "<red><i>Не бегайте с ножницами!"
+	"damage.run_with_scissors": "<red><i>Не бегайте с ножницами!",
+	"mob.name.slenderman": "Слендермен",
+	"mob.name.placeholder": "Затычка",
+	"mob.name.komaru": "Комару"
 }

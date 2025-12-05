@@ -1,5 +1,7 @@
 package me.sosedik.trappednewbie.dataset;
 
+import com.destroystokyo.paper.MaterialTags;
+import com.destroystokyo.paper.profile.ProfileProperty;
 import com.google.common.base.Preconditions;
 import de.tr7zw.nbtapi.NBT;
 import io.papermc.paper.datacomponent.DataComponentTypes;
@@ -15,6 +17,7 @@ import io.papermc.paper.datacomponent.item.ItemContainerContents;
 import io.papermc.paper.datacomponent.item.ItemEnchantments;
 import io.papermc.paper.datacomponent.item.PotDecorations;
 import io.papermc.paper.datacomponent.item.PotionContents;
+import io.papermc.paper.datacomponent.item.ResolvableProfile;
 import io.papermc.paper.datacomponent.item.UseCooldown;
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
@@ -87,6 +90,7 @@ import me.sosedik.trappednewbie.impl.item.modifier.LetterModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.ScrapModifier;
 import me.sosedik.trappednewbie.impl.thirst.ThirstData;
 import me.sosedik.trappednewbie.listener.advancement.AdvancementsAdvancement;
+import me.sosedik.utilizer.api.language.LangOptionsStorage;
 import me.sosedik.utilizer.api.message.Messenger;
 import me.sosedik.utilizer.dataset.UtilizerTags;
 import me.sosedik.utilizer.util.ItemUtil;
@@ -123,6 +127,7 @@ import org.jspecify.annotations.NullMarked;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import static java.util.Objects.requireNonNull;
 import static me.sosedik.packetadvancements.api.progression.RequiredAdvancementProgress.alwaysDone;
@@ -192,8 +197,30 @@ public class TrappedNewbieAdvancements {
 	private static final ItemStack THE_WALKING_HEAD = ItemUtil.texturedHead("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZDI4ZDlmZjU0MTg4YTFhZmVlNjViOTRmM2JmY2NlMzIxYzY0M2EzNDU5MGMxNGIxOTJiMmUzZWMyZjUyNWQzIn19fQ==");
 	private static final ItemStack ARACHNOPHOBIA_HEAD = ItemUtil.texturedHead("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTAxMjhlOWRiNGI1NDRlMTQ3ZWM2OGY5NGQ4NWY5ZGI4MTA5OTRhZWI5NDNiMDM4ZGQ0OTFlYTJlYTlhNDY5NiJ9fX0=");
 	private static final ItemStack SANS_HEAD = ItemUtil.texturedHead("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYmQ5MDcwODM4ZjZkNzU0M2U3NGQ0MjE3ZjI4YzcxNDdkODAxNDI3MWJlNDhhMzkzMGE5YjY2OWI0YTY1NWZmNSJ9fX0=");
+	private static final ItemStack KOMARU_HEAD = ItemUtil.texturedHead("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZWUwMDNjMzVhZGEzMGM2MGFhNzgyNjQzNzE0YjU0N2U0NzRhNjcwYmE0MjcwNzEyMjFlNzE0NTA3NWQwODQ3MCJ9fX0=");
+	private static final ItemStack DINNERBONE_HEAD = ItemStack.of(Material.PLAYER_HEAD);
+	private static final ItemStack JEB_HEAD = ItemStack.of(Material.PLAYER_HEAD);
+	private static final ItemStack TECHNOBLADE_HEAD = ItemStack.of(Material.PLAYER_HEAD);
 	private static final TextColor PURPLE = AnnouncementMessage.SUPER_TORTURE.getColor();
 	private static final TextColor GRAY = requireNonNull(TextColor.fromHexString("#cccccc"));
+
+	static {
+		DINNERBONE_HEAD.setData(DataComponentTypes.PROFILE, ResolvableProfile.resolvableProfile()
+			.uuid(UUID.fromString("61699b2e-d327-4a01-9f1e-0ea8c3f06bc6"))
+			.name("Dinnerbone")
+			.addProperty(new ProfileProperty("textures", "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTBjNDEwZmFkOGQ5ZDg4MjVhZDU2YjBlNDQzZTI3NzdhNmI0NmJmYTIwZGFjZDFkMmY1NWVkYzcxZmJlYjA2ZCJ9fX0="))
+			.build());
+		JEB_HEAD.setData(DataComponentTypes.PROFILE, ResolvableProfile.resolvableProfile()
+			.uuid(UUID.fromString("853c80ef-3c37-49fd-aa49-938b674adae6"))
+			.name("jeb_")
+			.addProperty(new ProfileProperty("textures", "e3RleHR1cmVzOntTS0lOOnt1cmw6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZDJlN2Y3OTdlOTJhOTk1NmU5MTUxYjM1YmJhZWMwMTIzNjVhOTAyY2U4OTc5MGRhYjVhNDc3ODliZWQ5NzE5MCJ9fX0="))
+			.build());
+		TECHNOBLADE_HEAD.setData(DataComponentTypes.PROFILE, ResolvableProfile.resolvableProfile()
+			.uuid(UUID.fromString("b876ec32-e396-476b-a115-8438d83c67d4"))
+			.name("Technoblade")
+			.addProperty(new ProfileProperty("textures", "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOGM5MDdhN2Y0ZjBjM2E2YzljOWI3OTM0OGY3YmYxOTkzNjk1YjZkMmVhZTJmYWI3MDRhMWE0ZDliODI4OGNiZSJ9fX0="))
+			.build());
+	}
 
 	public static final AdvancementManager MANAGER = new AdvancementManager(new JsonStorage(TrappedNewbie.instance()));
 
@@ -413,13 +440,13 @@ public class TrappedNewbieAdvancements {
 				.withItems(ItemTriggerCondition.of(Material.BUCKET)
 					.withRawComponents(
 						"""
-							{
-								"components": {
-									"minecraft:custom_data": {
-										"bucket_type": "CLAY"
-									}
+						{
+							"components": {
+								"minecraft:custom_data": {
+									"bucket_type": "CLAY"
 								}
 							}
+						}
 						"""
 					)
 				)
@@ -1032,6 +1059,273 @@ public class TrappedNewbieAdvancements {
 	public static final IAdvancement BE_IN_TWO_STRUCTURES = buildBase(USE_A_BRUSH_IN_ALL_STRUCTURES, "be_in_two_structures")
 		.display(display().x(1F).withAdvancementFrame(AdvancementFrame.STAR).fancyDescriptionParent(NamedTextColor.LIGHT_PURPLE).icon(Material.JIGSAW))
 		.withReward(rewards().withExp(150))
+		.buildAndRegister();
+	public static final IAdvancement GET_A_NAME_TAG = buildBase(ADVENTURE_ROOT, "get_a_name_tag")
+		.display(display().xy(1F, -4.5F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.NAME_TAG))
+		.requiredProgress(vanilla(inventoryChanged().withItems(ItemTriggerCondition.of(Material.NAME_TAG))))
+		.buildAndRegister();
+	public static final IAdvancement NAME_A_RABBIT_TOAST = buildBase(GET_A_NAME_TAG, "name_a_rabbit_toast")
+		.display(display().xy(1F, 0.5F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.RABBIT_SPAWN_EGG))
+		.withReward(rewards().addItems(ItemStack.of(Material.NAME_TAG), ItemStack.of(Material.RABBIT_FOOT)))
+		.requiredProgress(vanilla(
+			playerInteractedWithEntity()
+				.withItem(ItemTriggerCondition.of(Material.NAME_TAG)
+					.withRawComponents(
+						"""
+						{
+							"components": {
+								"minecraft:custom_name": "Toast"
+							}
+						}
+						"""
+					)
+				)
+				.withEntity(entity -> entity.withEntityType(EntityType.RABBIT))
+		))
+		.buildAndRegister();
+	public static final IAdvancement TURN_A_MOB_UPSIDE_DOWN = buildBase(NAME_A_RABBIT_TOAST, "turn_a_mob_upside_down")
+		.display(display().x(1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(DINNERBONE_HEAD))
+		.withReward(rewards()
+			.addItems(ItemStack.of(Material.NAME_TAG))
+			.withTrophy(DINNERBONE_HEAD)
+		)
+		.requiredProgress(vanillaAny(
+			playerInteractedWithEntity("dinnerbone")
+				.withItem(ItemTriggerCondition.of(Material.NAME_TAG)
+					.withRawComponents(
+						"""
+						{
+							"components": {
+								"minecraft:custom_name": "Dinnerbone"
+							}
+						}
+						"""
+					)
+				)
+				.withEntity(entity -> entity.inverted().withEntityType(UtilizerTags.NON_MOB_ENTITIES)),
+			playerInteractedWithEntity("grumm")
+				.withItem(ItemTriggerCondition.of(Material.NAME_TAG)
+					.withRawComponents(
+						"""
+						{
+							"components": {
+								"minecraft:custom_name": "Grumm"
+							}
+						}
+						"""
+					)
+				)
+				.withEntity(entity -> entity.inverted().withEntityType(UtilizerTags.NON_MOB_ENTITIES))
+		))
+		.buildAndRegister();
+	public static final IAdvancement NAME_A_SHEEP_JEB = buildBase(TURN_A_MOB_UPSIDE_DOWN, "name_a_sheep_jeb")
+		.display(display().x(1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.MAGENTA_WOOL))
+		.withReward(rewards()
+			.addItems(ItemStack.of(Material.NAME_TAG))
+			.withTrophy(JEB_HEAD)
+		)
+		.requiredProgress(vanilla(
+			playerInteractedWithEntity()
+				.withItem(ItemTriggerCondition.of(Material.NAME_TAG)
+					.withRawComponents(
+						"""
+						{
+							"components": {
+								"minecraft:custom_name": "jeb_"
+							}
+						}
+						"""
+					)
+				)
+				.withEntity(entity -> entity.withEntityType(EntityType.SHEEP))
+		))
+		.buildAndRegister();
+	public static final IAdvancement KILL_A_SLENDERMAN = buildBase(NAME_A_SHEEP_JEB, "kill_a_slenderman")
+		.display(display().x(1F).goalFrame().fancyDescriptionParent(NamedTextColor.AQUA).icon(Material.ENDERMAN_SPAWN_EGG))
+		.withReward(rewards().addItems(ItemStack.of(Material.NAME_TAG), ItemStack.of(Material.ENDER_PEARL, 3)))
+		.requiredProgress(vanillaAny(
+			LangOptionsStorage.getSupportedLanguages().stream()
+				.map(langOptions -> Messenger.messenger(langOptions).getRawMessage("mob.name.slenderman")[0])
+				.distinct()
+				.map(name -> playerKilledEntity()
+					.withEntity(entity -> entity
+						.withEntityType(EntityType.ENDERMAN)
+						.withNbt("{CustomName:\"%s\"}".formatted(name))
+					)
+				)
+				.toList()
+		))
+		.buildAndRegister();
+	public static final IAdvancement KILL_JOHNNY = buildBase(KILL_A_SLENDERMAN, "kill_johnny")
+		.display(display().x(1F).goalFrame().fancyDescriptionParent(NamedTextColor.AQUA).icon(Material.VINDICATOR_SPAWN_EGG))
+		.withReward(rewards().addItems(ItemStack.of(Material.NAME_TAG), ItemStack.of(Material.EMERALD, 3)))
+		.requiredProgress(vanilla(
+			playerKilledEntity()
+				.withEntity(entity -> entity
+					.withEntityType(EntityType.VINDICATOR)
+					.withNbt("{CustomName:\"Johnny\"}")
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement NAME_A_PIGLIN_BRUTE_TECHNOBLADE = buildBase(KILL_JOHNNY, "name_a_piglin_brute_technoblade")
+		.display(display().x(1F).goalFrame().fancyDescriptionParent(NamedTextColor.AQUA).icon(TECHNOBLADE_HEAD))
+		.withReward(rewards()
+			.addItems(ItemStack.of(Material.NAME_TAG), ItemStack.of(Material.GOLDEN_SWORD))
+			.withTrophy(TECHNOBLADE_HEAD)
+		)
+		.requiredProgress(vanilla(
+			playerInteractedWithEntity()
+				.withItem(ItemTriggerCondition.of(Material.NAME_TAG)
+					.withRawComponents(
+						"""
+						{
+							"components": {
+								"minecraft:custom_name": "Technoblade"
+							}
+						}
+						"""
+					)
+				)
+				.withEntity(entity -> entity.withEntityType(EntityType.PIGLIN_BRUTE))
+		))
+		.buildAndRegister();
+	public static final IAdvancement NAME_A_WARDEN_PLACEHOLDER = buildBase(NAME_A_PIGLIN_BRUTE_TECHNOBLADE, "name_a_warden_placeholder")
+		.display(display().x(1F).goalFrame().fancyDescriptionParent(NamedTextColor.AQUA).icon(Material.SCULK_VEIN))
+		.withReward(rewards().withExp(25))
+		.requiredProgress(vanillaAny(
+			LangOptionsStorage.getSupportedLanguages().stream()
+				.map(langOptions -> Messenger.messenger(langOptions).getRawMessage("mob.name.placeholder")[0])
+				.distinct()
+				.map(name ->
+					playerInteractedWithEntity()
+						.withItem(ItemTriggerCondition.of(Material.NAME_TAG)
+							.withRawComponents(
+								"""
+								{
+									"components": {
+										"minecraft:custom_name": "%s"
+									}
+								}
+								""".formatted(name)
+							)
+						)
+						.withEntity(entity -> entity.withEntityType(EntityType.WARDEN))
+				)
+				.toList()
+		))
+		.buildAndRegister();
+	public static final IAdvancement NAME_A_CAT_KOMARU = buildBase(NAME_A_WARDEN_PLACEHOLDER, "name_a_cat_komaru")
+		.display(display().x(1F).goalFrame().fancyDescriptionParent(NamedTextColor.AQUA).icon(KOMARU_HEAD))
+		.withReward(rewards()
+			.withExp(8)
+			.withTrophy(KOMARU_HEAD)
+		)
+		.requiredProgress(vanillaAny(
+			LangOptionsStorage.getSupportedLanguages().stream()
+				.map(langOptions -> Messenger.messenger(langOptions).getRawMessage("mob.name.komaru")[0])
+				.distinct()
+				.map(name ->
+					playerInteractedWithEntity()
+						.withItem(ItemTriggerCondition.of(Material.NAME_TAG)
+							.withRawComponents(
+								"""
+								{
+									"components": {
+										"minecraft:custom_name": "%s"
+									}
+								}
+								""".formatted(name)
+							)
+						)
+						.withEntity(entity -> entity.withEntityType(EntityType.CAT))
+				)
+				.toList()
+		))
+		.buildAndRegister();
+	public static final IAdvancement GET_A_JUKEBOX = buildBase(GET_A_NAME_TAG, "get_a_jukebox")
+		.display(display().xy(1F, -0.5F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.JUKEBOX))
+		.withReward(rewards().addItems(ItemStack.of(Material.DIAMOND)))
+		.requiredProgress(vanilla(inventoryChanged().withItems(ItemTriggerCondition.of(Material.JUKEBOX))))
+		.buildAndRegister();
+	public static final IAdvancement PLAY_A_MUSIC_DISC = buildBase(GET_A_JUKEBOX, "play_a_music_disc")
+		.display(display().x(1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.MUSIC_DISC_CAT))
+		.requiredProgress(vanilla(
+			itemUsedOnBlock()
+				.withItem(ItemTriggerCondition.builder()
+					.withRawComponents(
+						"""
+						{
+							"predicates": {
+								"minecraft:jukebox_playable": {}
+							}
+						}
+						"""
+					)
+				)
+				.withLocation(loc -> loc
+					.withBlock(block -> block
+						.withBlocks(Material.JUKEBOX)
+						.withProperties(properties -> properties
+							.withProperty("has_record", true)
+						)
+					)
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement PLAY_A_JUKEBOX_IN_MEADOWS = buildBase(PLAY_A_MUSIC_DISC, "play_a_jukebox_in_meadows")
+		.display(display().x(1F).goalFrame().fancyDescriptionParent(NamedTextColor.AQUA).icon(Material.AZURE_BLUET))
+		.requiredProgress(vanilla(
+			itemUsedOnBlock()
+				.withItem(ItemTriggerCondition.builder()
+					.withRawComponents(
+						"""
+						{
+							"predicates": {
+								"minecraft:jukebox_playable": {}
+							}
+						}
+						"""
+					)
+				)
+				.withLocation(loc -> loc
+					.withBiome(Biome.MEADOW)
+					.withBlock(block -> block
+						.withBlocks(Material.JUKEBOX)
+						.withProperties(properties -> properties
+							.withProperty("has_record", true)
+						)
+					)
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement PLAY_ALL_MUSIC_DISCS = buildBase(PLAY_A_JUKEBOX_IN_MEADOWS, "play_all_music_discs")
+		.display(display().x(1F).challengeFrame().fancyDescriptionParent(NamedTextColor.DARK_PURPLE).icon(Material.MUSIC_DISC_CHIRP))
+		.withReward(rewards().withExp(250))
+		.requiredProgress(vanilla(
+			MaterialTags.MUSIC_DISCS.getValues().stream()
+				.map(type -> itemUsedOnBlock(type.key().value())
+					.withItem(ItemTriggerCondition.of(type))
+					.withLocation(loc -> loc
+						.withBlock(block -> block
+							.withBlocks(Material.JUKEBOX)
+							.withProperties(properties -> properties
+								.withProperty("has_record", true)
+							)
+						)
+					))
+				.toList()
+		))
+		.buildAndRegister();
+	public static final IAdvancement GET_AN_ENCHANTED_GOLDEN_APPLE = buildBase(PLAY_ALL_MUSIC_DISCS, "get_an_enchanted_golden_apple")
+		.display(display().x(1F).challengeFrame().fancyDescriptionParent(NamedTextColor.DARK_PURPLE).icon(Material.ENCHANTED_GOLDEN_APPLE))
+		.withReward(rewards().withExp(50).addItems(ItemStack.of(Material.GOLD_INGOT, 4)))
+		.requiredProgress(vanilla(inventoryChanged().withItems(ItemTriggerCondition.of(Material.ENCHANTED_GOLDEN_APPLE))))
+		.buildAndRegister();
+	public static final IAdvancement EAT_A_STACK_OF_ENCHANTED_GOLDEN_APPLES = buildBase(GET_AN_ENCHANTED_GOLDEN_APPLE, "eat_a_stack_of_enchanted_golden_apples")
+		.display(display().x(1F).withAdvancementFrame(AdvancementFrame.STAR).fancyDescriptionParent(NamedTextColor.DARK_RED).icon(Material.ENCHANTED_GOLDEN_APPLE))
+		.withReward(rewards()
+			.withTrophy(ItemStack.of(Material.ENCHANTED_GOLDEN_APPLE))
+		)
 		.buildAndRegister();
 
 	public static final AdvancementTab NATURE_TAB = buildTab("nature", MANAGER)
@@ -2904,7 +3198,20 @@ public class TrappedNewbieAdvancements {
 				.withEntity(entity -> entity.withEntityType(EntityType.WARDEN))
 		))
 		.buildAndRegister();
-	public static final IAdvancement GET_A_WARDEN_TO_THE_HEIGHT_LIMIT = buildBase(KILL_A_WARDEN, "get_a_warden_to_the_height_limit").display(display().xy(-1F, 0.5F).challengeFrame().fancyDescriptionParent(NamedTextColor.DARK_PURPLE).icon(Material.BLACK_CONCRETE_POWDER))
+	public static final IAdvancement WARDENS_THRUST = buildBase(KILL_A_WARDEN, "wardens_thrust")
+		.display(display().x(-1F).challengeFrame().fancyDescriptionParent(NamedTextColor.DARK_PURPLE).icon(ItemUtil.texturedHead("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTAzODE3MzdkNGRhNTI4ODIzNTQ3MjUxYjE0NTU2OGQxNTI1M2E4N2IxMTE5M2MzZGFmZjZhZTM1NTc3NSJ9fX0=")))
+		.withReward(rewards().withExp(80))
+		.requiredProgress(vanilla(
+			entityHurtPlayer()
+				.withPlayer(player -> player.withState(state -> state.flying()))
+				.withDamage(damage -> damage
+					.withDamageSource(source -> source
+						.withTag(UtilizerTags.IS_SONIC_BOOM, true)
+					)
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement GET_A_WARDEN_TO_THE_HEIGHT_LIMIT = buildBase(WARDENS_THRUST, "get_a_warden_to_the_height_limit").display(display().xy(-1F, 0.5F).challengeFrame().fancyDescriptionParent(NamedTextColor.DARK_PURPLE).icon(Material.BLACK_CONCRETE_POWDER))
 		.withReward(rewards()
 			.withExp(100)
 			.addItems(ItemStack.of(Material.SCULK_CATALYST, 4))
@@ -2924,7 +3231,7 @@ public class TrappedNewbieAdvancements {
 			})
 		)
 		.buildAndRegister();
-	public static final IAdvancement KILL_A_WARDEN_IN_A_SNOW_BIOME = buildBase(KILL_A_WARDEN, "kill_a_warden_in_a_snow_biome").display(display().xy(-1F, -0.5F).challengeFrame().fancyDescriptionParent(NamedTextColor.DARK_PURPLE).icon(Material.CYAN_STAINED_GLASS))
+	public static final IAdvancement KILL_A_WARDEN_IN_A_SNOW_BIOME = buildBase(WARDENS_THRUST, "kill_a_warden_in_a_snow_biome").display(display().xy(-1F, -0.5F).challengeFrame().fancyDescriptionParent(NamedTextColor.DARK_PURPLE).icon(Material.CYAN_STAINED_GLASS))
 		.withReward(rewards().withExp(100))
 		.requiredProgress(vanilla(
 			playerKilledEntity()

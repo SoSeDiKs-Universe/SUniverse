@@ -1,7 +1,11 @@
 package me.sosedik.utilizer.util;
 
+import io.papermc.paper.registry.RegistryAccess;
+import io.papermc.paper.registry.RegistryKey;
+import io.papermc.paper.registry.tag.TagKey;
 import net.kyori.adventure.util.RGBLike;
 import org.bukkit.DyeColor;
+import org.bukkit.Keyed;
 import org.bukkit.Material;
 import org.jetbrains.annotations.UnknownNullability;
 import org.jspecify.annotations.NullMarked;
@@ -165,6 +169,18 @@ public class MiscUtil {
 		for (Collection<? extends T> collection : collections)
 			newList.addAll(collection);
 		return newList;
+	}
+
+	/**
+	 * Gets tag values
+	 *
+	 * @param tagKey tag key
+	 * @return tag values
+	 * @param <T> tag type
+	 */
+	public static <T extends Keyed> Collection<T> getTagValues(TagKey<T> tagKey) {
+		RegistryKey<T> registryKey = tagKey.registryKey();
+		return RegistryAccess.registryAccess().getRegistry(registryKey).getTagValues(tagKey);
 	}
 
 }

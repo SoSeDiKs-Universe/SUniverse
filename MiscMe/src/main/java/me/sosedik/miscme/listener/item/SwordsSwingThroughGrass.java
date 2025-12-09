@@ -28,6 +28,10 @@ public class SwordsSwingThroughGrass implements Listener {
 		if (event.getAction() != Action.LEFT_CLICK_BLOCK) return;
 
 		Player player = event.getPlayer();
+		Block clickedBlock = event.getClickedBlock();
+		if (clickedBlock == null) return;
+		if (!NoSwordInstaBreak.shouldPreventBlockBreak(player.getInventory().getItemInMainHand(), clickedBlock)) return;
+
 		LivingEntity entity = getEntityThoughGrass(player);
 		if (entity != null)
 			player.attack(entity);

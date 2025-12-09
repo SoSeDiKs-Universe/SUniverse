@@ -1,6 +1,7 @@
 package me.sosedik.trappednewbie.misc;
 
 import com.destroystokyo.paper.MaterialTags;
+import me.sosedik.miscme.listener.item.NoSwordInstaBreak;
 import me.sosedik.requiem.feature.GhostyPlayer;
 import me.sosedik.trappednewbie.TrappedNewbie;
 import me.sosedik.trappednewbie.api.event.player.PlayerTargetBlockEvent;
@@ -112,7 +113,7 @@ public class GameModeSwitcherTask extends BukkitRunnable {
 
 	public static boolean isApplicableTool(Player player, Block block, ItemStack tool) {
 		Material type = block.getType();
-		if (TrappedNewbieTags.MINEABLE_BY_HAND.isTagged(type)) return true;
+		if (TrappedNewbieTags.MINEABLE_BY_HAND.isTagged(type)) return !NoSwordInstaBreak.shouldPreventBlockBreak(tool, block);
 
 		if (tool.isEmpty()) {
 			if (Tag.WOODEN_BUTTONS.isTagged(type)) return true;
@@ -128,7 +129,7 @@ public class GameModeSwitcherTask extends BukkitRunnable {
 		if (Tag.MINEABLE_PICKAXE.isTagged(type)) return Tag.ITEMS_PICKAXES.isTagged(toolType);
 		if (Tag.MINEABLE_SHOVEL.isTagged(type)) return Tag.ITEMS_SHOVELS.isTagged(toolType);
 		if (Tag.MINEABLE_HOE.isTagged(type)) return Tag.ITEMS_HOES.isTagged(toolType);
-		return true;
+		return !NoSwordInstaBreak.shouldPreventBlockBreak(tool, block);
 	}
 
 }

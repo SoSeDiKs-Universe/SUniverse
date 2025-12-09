@@ -2,6 +2,7 @@ package me.sosedik.miscme.listener.item;
 
 import me.sosedik.utilizer.util.ItemUtil;
 import org.bukkit.Tag;
+import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -20,10 +21,15 @@ public class NoSwordInstaBreak implements Listener {
 		if (!event.getInstaBreak()) return;
 
 		ItemStack itemInHand = event.getItemInHand();
-		if (!ItemUtil.isMeleeWeapon(itemInHand)) return;
-		if (Tag.ITEMS_AXES.isTagged(event.getItemInHand().getType())) return;
+		if (!shouldPreventBlockBreak(itemInHand, event.getBlock())) return;
 
 		event.setCancelled(true);
+	}
+
+	public static boolean shouldPreventBlockBreak(ItemStack item, Block block) {
+		if (Tag.FIRE.isTagged(block.getType())) return false;
+		return ItemUtil.isMeleeWeapon(item)
+			&& !Tag.ITEMS_AXES.isTagged(item.getType());
 	}
 
 }

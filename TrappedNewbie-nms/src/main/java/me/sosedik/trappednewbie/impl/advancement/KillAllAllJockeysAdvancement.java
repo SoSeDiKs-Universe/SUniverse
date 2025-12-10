@@ -7,6 +7,7 @@ import me.sosedik.packetadvancements.api.progression.RequiredAdvancementProgress
 import me.sosedik.packetadvancements.imlp.advancement.base.BaseAdvancement;
 import me.sosedik.packetadvancements.imlp.progress.vanilla.types.PlayerKilledEntityTriggerData;
 import me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
 import org.bukkit.entity.Chicken;
 import org.bukkit.entity.EntityType;
@@ -32,12 +33,16 @@ public class KillAllAllJockeysAdvancement extends BaseAdvancement {
 		List<VanillaTriggerData<?>> triggerDatas = new ArrayList<>();
 
 		RegistryAccess.registryAccess().getRegistry(RegistryKey.CHICKEN_VARIANT).forEach(chickenVariant -> {
-			Registry.VILLAGER_TYPE.iterator().forEachRemaining(villagerType -> {
-				villagerRider(requirements, triggerDatas, villagerType, null, chickenVariant);
-				Registry.VILLAGER_PROFESSION.iterator().forEachRemaining(profession -> {
-					villagerRider(requirements, triggerDatas, villagerType, profession, chickenVariant);
+			Registry.VILLAGER_TYPE.stream()
+				.filter(type -> NamespacedKey.MINECRAFT.equals(type.key().namespace()))
+				.forEach(villagerType -> {
+					villagerRider(requirements, triggerDatas, villagerType, null, chickenVariant);
+					Registry.VILLAGER_PROFESSION.stream()
+						.filter(profession -> NamespacedKey.MINECRAFT.equals(profession.key().namespace()))
+						.forEach(profession -> {
+							villagerRider(requirements, triggerDatas, villagerType, profession, chickenVariant);
+						});
 				});
-			});
 		});
 
 		RegistryAccess.registryAccess().getRegistry(RegistryKey.CHICKEN_VARIANT).forEach(chickenVariant -> {

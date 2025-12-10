@@ -21,16 +21,21 @@ import io.papermc.paper.datacomponent.item.ResolvableProfile;
 import io.papermc.paper.datacomponent.item.UseCooldown;
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
+import io.papermc.paper.registry.keys.VillagerTypeKeys;
 import io.papermc.paper.registry.keys.tags.DamageTypeTagKeys;
+import io.papermc.paper.registry.keys.tags.StructureTagKeys;
 import me.sosedik.delightfulfarming.dataset.DelightfulFarmingItems;
 import me.sosedik.miscme.dataset.MoreMobHeads;
 import me.sosedik.packetadvancements.api.advancement.IAdvancement;
 import me.sosedik.packetadvancements.api.tab.AdvancementManager;
 import me.sosedik.packetadvancements.api.tab.AdvancementTab;
+import me.sosedik.packetadvancements.imlp.progress.vanilla.conditions.BlockTriggerCondition;
 import me.sosedik.packetadvancements.imlp.progress.vanilla.conditions.DamageTriggerCondition;
 import me.sosedik.packetadvancements.imlp.progress.vanilla.conditions.EntityStateTriggerCondition;
 import me.sosedik.packetadvancements.imlp.progress.vanilla.conditions.EntityTriggerCondition;
 import me.sosedik.packetadvancements.imlp.progress.vanilla.conditions.ItemTriggerCondition;
+import me.sosedik.packetadvancements.imlp.progress.vanilla.conditions.MinMaxBoundsTriggerCondition;
+import me.sosedik.packetadvancements.imlp.progress.vanilla.conditions.context.TimeTriggerCondition;
 import me.sosedik.packetadvancements.util.storage.JsonStorage;
 import me.sosedik.requiem.dataset.RequiemItems;
 import me.sosedik.trappednewbie.TrappedNewbie;
@@ -93,6 +98,7 @@ import me.sosedik.trappednewbie.listener.advancement.AdvancementsAdvancement;
 import me.sosedik.utilizer.api.language.LangOptionsStorage;
 import me.sosedik.utilizer.api.message.Messenger;
 import me.sosedik.utilizer.dataset.UtilizerTags;
+import me.sosedik.utilizer.util.BiomeTags;
 import me.sosedik.utilizer.util.ItemUtil;
 import me.sosedik.utilizer.util.MiscUtil;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -104,6 +110,7 @@ import org.bukkit.FireworkEffect;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Registry;
 import org.bukkit.Tag;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
@@ -112,6 +119,7 @@ import org.bukkit.block.banner.PatternType;
 import org.bukkit.block.data.type.Campfire;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Villager;
 import org.bukkit.generator.structure.Structure;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -128,6 +136,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 import static me.sosedik.packetadvancements.api.progression.RequiredAdvancementProgress.alwaysDone;
@@ -147,6 +156,7 @@ import static me.sosedik.packetadvancements.imlp.display.AdvancementVisibilities
 import static me.sosedik.packetadvancements.imlp.display.AdvancementVisibilities.ifVisible;
 import static me.sosedik.packetadvancements.imlp.display.AdvancementVisibilities.parentGranted;
 import static me.sosedik.packetadvancements.imlp.display.SimpleAdvancementTabDisplay.simpleTabDisplay;
+import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.anyBlockUse;
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.bredAnimals;
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.consumeItem;
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.entityHurtPlayer;
@@ -167,6 +177,7 @@ import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaT
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.startedRiding;
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.thrownItemPickedUpByEntity;
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.usingItem;
+import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.villagerTrade;
 import static me.sosedik.trappednewbie.TrappedNewbie.trappedNewbieKey;
 
 @NullMarked
@@ -198,6 +209,7 @@ public class TrappedNewbieAdvancements {
 	private static final ItemStack ARACHNOPHOBIA_HEAD = ItemUtil.texturedHead("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTAxMjhlOWRiNGI1NDRlMTQ3ZWM2OGY5NGQ4NWY5ZGI4MTA5OTRhZWI5NDNiMDM4ZGQ0OTFlYTJlYTlhNDY5NiJ9fX0=");
 	private static final ItemStack SANS_HEAD = ItemUtil.texturedHead("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYmQ5MDcwODM4ZjZkNzU0M2U3NGQ0MjE3ZjI4YzcxNDdkODAxNDI3MWJlNDhhMzkzMGE5YjY2OWI0YTY1NWZmNSJ9fX0=");
 	private static final ItemStack KOMARU_HEAD = ItemUtil.texturedHead("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZWUwMDNjMzVhZGEzMGM2MGFhNzgyNjQzNzE0YjU0N2U0NzRhNjcwYmE0MjcwNzEyMjFlNzE0NTA3NWQwODQ3MCJ9fX0=");
+	private static final ItemStack MR_WORLDWIDE_HEAD = ItemUtil.texturedHead("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDRjNTY0OTYwNzc0ZDRhNzc1ZmMzZjFhNzY5NmU3NGY4Y2FmMWEyMDRkNDk1ZDNmYjFhYmIwNGZhOTFkMmJmIn19fQ==");
 	private static final ItemStack DINNERBONE_HEAD = ItemStack.of(Material.PLAYER_HEAD);
 	private static final ItemStack JEB_HEAD = ItemStack.of(Material.PLAYER_HEAD);
 	private static final ItemStack TECHNOBLADE_HEAD = ItemStack.of(Material.PLAYER_HEAD);
@@ -1061,7 +1073,7 @@ public class TrappedNewbieAdvancements {
 		.withReward(rewards().withExp(150))
 		.buildAndRegister();
 	public static final IAdvancement GET_A_NAME_TAG = buildBase(ADVENTURE_ROOT, "get_a_name_tag")
-		.display(display().xy(1F, -4.5F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.NAME_TAG))
+		.display(display().xy(1F, -6F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.NAME_TAG))
 		.requiredProgress(vanilla(inventoryChanged().withItems(ItemTriggerCondition.of(Material.NAME_TAG))))
 		.buildAndRegister();
 	public static final IAdvancement NAME_A_RABBIT_TOAST = buildBase(GET_A_NAME_TAG, "name_a_rabbit_toast")
@@ -1326,6 +1338,329 @@ public class TrappedNewbieAdvancements {
 		.withReward(rewards()
 			.withTrophy(ItemStack.of(Material.ENCHANTED_GOLDEN_APPLE))
 		)
+		.buildAndRegister();
+	public static final IAdvancement FIND_A_VILLAGE = buildBase(ADVENTURE_ROOT, "find_a_village")
+		.display(display().xy(1F, 5.25F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.OAK_DOOR))
+		.requiredProgress(vanilla(
+			location()
+				.withLocation(loc -> loc
+					.withStructure(MiscUtil.getTagValues(StructureTagKeys.VILLAGE))
+				)
+				.withPlayer(player -> player.inverted().withGameModes(GameMode.SPECTATOR))
+		))
+		.buildAndRegister();
+	public static final IAdvancement TRADE_WITH_A_VILLAGER = buildBase(FIND_A_VILLAGE, "trade_with_a_villager")
+		.display(display().x(1.5F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.EMERALD))
+		.withReward(rewards().addItems(ItemStack.of(Material.EMERALD, 2)))
+		.requiredProgress(vanilla(
+			villagerTrade()
+				.withEntity(entity -> entity.withEntityType(EntityType.VILLAGER))
+		))
+		.buildAndRegister();
+	public static final IAdvancement GET_A_STACK_OF_EMERALDS = buildBase(TRADE_WITH_A_VILLAGER, "get_a_stack_of_emeralds")
+		.display(display().y(-1F).goalFrame().fancyDescriptionParent(NamedTextColor.AQUA).icon(Material.EMERALD))
+		.withReward(rewards().withExp(100).addItems(ItemStack.of(Material.EMERALD, 8)))
+		.requiredProgress(vanilla(inventoryChanged().withItems(ItemTriggerCondition.of(Material.EMERALD).withMinAmount(Material.EMERALD.getMaxStackSize()))))
+		.buildAndRegister();
+	public static final IAdvancement GET_A_STACK_OF_EMERALD_BLOCKS = buildBase(GET_A_STACK_OF_EMERALDS, "get_a_stack_of_emerald_blocks")
+		.display(display().x(-1F).challengeFrame().fancyDescriptionParent(NamedTextColor.DARK_PURPLE).icon(Material.EMERALD_BLOCK))
+		.withReward(rewards()
+			.withExp(250)
+			.addItems(ItemStack.of(Material.EMERALD_BLOCK, 4))
+			.withTrophy(ItemStack.of(Material.EGG))
+		)
+		.requiredProgress(vanilla(inventoryChanged().withItems(ItemTriggerCondition.of(Material.EMERALD_BLOCK).withMinAmount(Material.EMERALD_BLOCK.getMaxStackSize()))))
+		.buildAndRegister();
+	public static final IAdvancement TRADE_AN_ENCHANTED_BOOK = buildBase(TRADE_WITH_A_VILLAGER, "trade_an_enchanted_book")
+		.display(display().x(1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.ENCHANTED_BOOK))
+		.requiredProgress(vanilla(
+			villagerTrade()
+				.withItem(ItemTriggerCondition.of(Material.ENCHANTED_BOOK))
+		))
+		.buildAndRegister();
+	public static final IAdvancement TRADE_AN_EXPERIENCE_BOTTLE = buildBase(TRADE_AN_ENCHANTED_BOOK, "trade_an_experience_bottle")
+		.display(display().x(1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.EXPERIENCE_BOTTLE))
+		.withReward(rewards().addItems(ItemStack.of(Material.EMERALD, 8)))
+		.requiredProgress(vanilla(
+			villagerTrade()
+				.withItem(ItemTriggerCondition.of(Material.EXPERIENCE_BOTTLE))
+		))
+		.buildAndRegister();
+	public static final IAdvancement TRADE_A_COOKIE_AT_MIDNIGHT = buildBase(TRADE_AN_EXPERIENCE_BOTTLE, "trade_a_cookie_at_midnight")
+		.display(display().x(1F).goalFrame().fancyDescriptionParent(NamedTextColor.AQUA).icon(Material.COOKIE))
+		.withReward(rewards()
+			.withExp(70)
+			.addItems(ItemStack.of(Material.COOKIE, 8))
+			.withTrophy(ItemStack.of(Material.CLOCK))
+		)
+		.requiredProgress(vanilla(
+			villagerTrade()
+				.withItem(ItemTriggerCondition.of(Material.COOKIE))
+				.withEntity(entity -> entity.withEntityType(EntityType.VILLAGER))
+				.withPlayer(
+					new TimeTriggerCondition(24_000L, MinMaxBoundsTriggerCondition.Ints.ofIntegers(21_000, 22_000))
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement TRADE_BRICKS_IN_RIVER = buildBase(TRADE_A_COOKIE_AT_MIDNIGHT, "trade_bricks_in_river")
+		.display(display().x(1F).goalFrame().fancyDescriptionParent(NamedTextColor.AQUA).icon(Material.BRICK))
+		.withReward(rewards().withExp(70).addItems(ItemStack.of(Material.BRICK, 32)))
+		.requiredProgress(vanilla(
+			villagerTrade()
+				.withItem(ItemTriggerCondition.of(Material.BRICK))
+				.withEntity(entity -> entity
+					.withEntityType(EntityType.VILLAGER)
+					.withLocation(loc -> loc
+						.withBiome(BiomeTags.RIVER)
+					)
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement TRADE_TERRACOTTA_IN_BADLANDS = buildBase(TRADE_BRICKS_IN_RIVER, "trade_terracotta_in_badlands")
+		.display(display().x(1F).goalFrame().fancyDescriptionParent(NamedTextColor.AQUA).icon(Material.WHITE_TERRACOTTA))
+		.withReward(rewards().withExp(85).addItems(ItemStack.of(Material.TERRACOTTA, 32)))
+		.requiredProgress(vanilla(
+			villagerTrade()
+				.withItem(ItemTriggerCondition.of(Tag.ITEMS_TERRACOTTA))
+				.withEntity(entity -> entity
+					.withEntityType(EntityType.VILLAGER)
+					.withLocation(loc -> loc
+						.withBiome(BiomeTags.BADLANDS)
+					)
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement TRADE_DRIPSTONE_BLOCK_IN_DRIPSTONE_CAVES = buildBase(TRADE_TERRACOTTA_IN_BADLANDS, "trade_dripstone_block_in_dripstone_caves")
+		.display(display().x(1F).challengeFrame().fancyDescriptionParent(NamedTextColor.DARK_PURPLE).icon(Material.DRIPSTONE_BLOCK))
+		.withReward(rewards().withExp(85).addItems(ItemStack.of(Material.DRIPSTONE_BLOCK, 32)))
+		.requiredProgress(vanilla(
+			villagerTrade()
+				.withItem(ItemTriggerCondition.of(Material.DRIPSTONE_BLOCK))
+				.withEntity(entity -> entity
+					.withEntityType(EntityType.VILLAGER)
+					.withLocation(loc -> loc
+						.withBiome(Biome.DRIPSTONE_CAVES)
+					)
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement TRADE_WITH_ALL_VILLAGER_TYPES = buildBase(TRADE_WITH_A_VILLAGER, "trade_with_all_villager_types")
+		.display(display().xy(1F, -1F).goalFrame().fancyDescriptionParent(NamedTextColor.AQUA).icon(Material.ACACIA_LOG))
+		.withReward(rewards().addItems(ItemStack.of(Material.EMERALD, 5)))
+		.requiredProgress(vanilla(
+			// MCCheck: 1.21.10, new natural villager types
+			Stream.of(VillagerTypeKeys.PLAINS, VillagerTypeKeys.DESERT, VillagerTypeKeys.SAVANNA, VillagerTypeKeys.TAIGA, VillagerTypeKeys.SNOW)
+				.map(type -> villagerTrade(type.key().value())
+					.withEntity(entity -> entity
+						.withNbt("{VillagerData:{type:\"%s\"}}".formatted(type.key().asString()))
+					)
+				)
+				.toList()
+		))
+		.buildAndRegister();
+	public static final IAdvancement TRADE_WITH_A_MASTER_VILLAGER = buildBase(TRADE_WITH_ALL_VILLAGER_TYPES, "trade_with_a_master_villager")
+		.display(display().x(1F).goalFrame().fancyDescriptionParent(NamedTextColor.AQUA).icon(Material.LOOM))
+		.withReward(rewards().addItems(ItemStack.of(Material.EMERALD, 5)))
+		.requiredProgress(vanilla(
+			villagerTrade()
+				.withEntity(entity -> entity
+					.withNbt("{VillagerData:{level:5}}")
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement TRADE_WITH_EVERY_VILLAGER_PROFESSION = buildBase(TRADE_WITH_A_MASTER_VILLAGER, "trade_with_every_villager_profession")
+		.display(display().x(1F).goalFrame().fancyDescriptionParent(NamedTextColor.AQUA).icon(Material.FLETCHING_TABLE))
+		.withReward(rewards().addItems(ItemStack.of(Material.EMERALD, 10)))
+		.requiredProgress(vanilla(
+			Registry.VILLAGER_PROFESSION.stream()
+				.filter(type -> type != Villager.Profession.NONE && type != Villager.Profession.NITWIT && NamespacedKey.MINECRAFT.equals(type.key().namespace()))
+				.map(type -> villagerTrade(type.key().value())
+					.withEntity(entity -> entity
+						.withNbt("{VillagerData:{profession:\"%s\"}}".formatted(type.key().asString()))
+					)
+				)
+				.toList()
+		))
+		.buildAndRegister();
+	public static final IAdvancement TRADE_WITH_A_JUNGLE_VILLAGER = buildBase(TRADE_WITH_EVERY_VILLAGER_PROFESSION, "trade_with_a_jungle_villager")
+		.display(display().x(1F).goalFrame().fancyDescriptionParent(NamedTextColor.AQUA).icon(Material.JUNGLE_LOG))
+		.withReward(rewards().withExp(100).addItems(ItemStack.of(Material.EMERALD, 8)))
+		.requiredProgress(vanilla(
+			villagerTrade()
+				.withEntity(entity -> entity
+					.withNbt("{VillagerData:{type:\"%s\"}}".formatted(Villager.Type.JUNGLE.key().asString()))
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement TRADE_WITH_A_SWAMP_VILLAGER = buildBase(TRADE_WITH_A_JUNGLE_VILLAGER, "trade_with_a_swamp_villager")
+		.display(display().x(1F).goalFrame().fancyDescriptionParent(NamedTextColor.AQUA).icon(Material.LILY_PAD))
+		.withReward(rewards().withExp(100).addItems(ItemStack.of(Material.EMERALD, 8)))
+		.requiredProgress(vanilla(
+			villagerTrade()
+				.withEntity(entity -> entity
+					.withNbt("{VillagerData:{type:\"%s\"}}".formatted(Villager.Type.SWAMP.key().asString()))
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement TRADE_AT_BUILD_HEIGHT = buildBase(TRADE_WITH_A_SWAMP_VILLAGER, "trade_at_build_height")
+		.display(display().x(1F).goalFrame().fancyDescriptionParent(NamedTextColor.AQUA).icon(Material.NETHER_STAR))
+		.withReward(rewards().withExp(100).addItems(ItemStack.of(Material.EMERALD, 16)))
+		.requiredProgress(vanilla(
+			villagerTrade()
+				.withEntity(entity -> entity
+					.withLocation(loc -> loc
+						.withDimension(World.Environment.NORMAL)
+						.minY(Bukkit.getWorlds().getFirst().getMaxHeight() - 1D)
+					)
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement TRADE_WITH_ALL_MASTER_VILLAGERS = buildBase(TRADE_AT_BUILD_HEIGHT, "trade_with_all_master_villagers")
+		.display(display().x(1F).challengeFrame().fancyDescriptionParent(NamedTextColor.DARK_PURPLE).icon(Material.GRINDSTONE))
+		.withReward(rewards().withExp(100).addItems(ItemStack.of(Material.EMERALD, 32)))
+		.requiredProgress(vanilla(
+			Registry.VILLAGER_PROFESSION.stream()
+				.filter(type -> type != Villager.Profession.NONE && type != Villager.Profession.NITWIT && NamespacedKey.MINECRAFT.equals(type.key().namespace()))
+				.map(type -> villagerTrade(type.key().value())
+					.withEntity(entity -> entity
+						.withNbt("{VillagerData:{profession:\"%s\",level:5}}".formatted(type.key().asString()))
+					)
+				)
+				.toList()
+		))
+		.buildAndRegister();
+	public static final IAdvancement TRADE_WITH_EVERY_VILLAGER_IN_ALL_BIOMES = buildBase(TRADE_WITH_ALL_MASTER_VILLAGERS, "trade_with_every_villager_in_all_biomes")
+		.display(display().x(1F).withAdvancementFrame(AdvancementFrame.BUTTERFLY).torture().fancyDescriptionParent(NamedTextColor.DARK_RED).icon(ItemUtil.texturedHead("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYjFkZDRmZTRhNDI5YWJkNjY1ZGZkYjNlMjEzMjFkNmVmYTZhNmI1ZTdiOTU2ZGI5YzVkNTljOWVmYWIyNSJ9fX0=")))
+		.withReward(rewards()
+			.withTrophy(MR_WORLDWIDE_HEAD)
+		)
+		.requiredProgress(vanilla(
+			Registry.VILLAGER_PROFESSION.stream()
+				.filter(type -> type != Villager.Profession.NONE && type != Villager.Profession.NITWIT && NamespacedKey.MINECRAFT.equals(type.key().namespace()))
+				.flatMap(profession ->
+					RegistryAccess.registryAccess().getRegistry(RegistryKey.BIOME).stream()
+						.filter(biome -> biome != Biome.THE_VOID && NamespacedKey.MINECRAFT.equals(biome.key().namespace()))
+						.map(biome -> villagerTrade(profession.key().value() + "_" + biome.key().value())
+							.withEntity(entity -> entity
+								.withLocation(loc -> loc.withBiome(biome))
+								.withNbt("{VillagerData:{profession:\"%s\"}}".formatted(profession.key().asString()))
+							)
+						)
+				)
+				.toList()
+		))
+		.buildAndRegister();
+	public static final IAdvancement RING_A_BELL = buildBase(FIND_A_VILLAGE, "ring_a_bell")
+		.display(display().xy(1F, 2F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.BELL))
+		.requiredProgress(vanilla(
+			anyBlockUse()
+				.withLocation(loc -> loc
+					.withBlock(BlockTriggerCondition.of(Material.BELL))
+					.withStructure(MiscUtil.getTagValues(StructureTagKeys.VILLAGE))
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement RING_AN_ALARM_BELL = buildBase(RING_A_BELL, "ring_an_alarm_bell")
+		.display(display().x(1F).goalFrame().fancyDescriptionParent(NamedTextColor.AQUA).icon(ItemUtil.texturedHead("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYzFkNDlhNjBmNWQyOTNhMGViNzRmODA4MjU3MzQ2NDU2MjY0MGU3NDdlY2Y0Y2U4ZDc5YzQwMTg3OTljOTAyYyJ9fX0=")))
+		.withReward(rewards().withExp(35))
+		.requiredProgress(vanilla(
+			anyBlockUse()
+				.withPlayer(
+					new TimeTriggerCondition(24_000L, MinMaxBoundsTriggerCondition.Ints.ofIntegers(0, 500))
+				)
+				.withLocation(loc -> loc
+					.withBlock(BlockTriggerCondition.of(Material.BELL))
+					.withDimension(World.Environment.NORMAL)
+					.minY(Bukkit.getWorlds().getFirst().getMaxHeight() - 1D)
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement VILLAGER_SPY = buildBase(RING_AN_ALARM_BELL, "villager_spy")
+		.display(display().x(1F).goalFrame().fancyDescriptionParent(NamedTextColor.AQUA).icon(Material.RED_TULIP))
+		.withReward(rewards()
+			.withExp(50)
+			.withTrophy(ItemStack.of(Material.TUFF))
+		)
+		.requiredProgress(vanilla(
+			usingItem()
+				.withItem(ItemTriggerCondition.of(Material.SPYGLASS))
+				.withPlayer(player -> player
+					.withLookingAt(entity -> entity
+						.withEntityType(Tag.ENTITY_TYPES_BOAT)
+						.withNbt("{Passengers:[{id:\"%s\"},{id:\"%s\"}]}".replace("%s", EntityType.VILLAGER.key().asString()))
+						.withDistanceToPlayer(d -> d.minAbsolute(50D))
+					)
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement GOT_YOUR_NOSE = buildBase(VILLAGER_SPY, "got_your_nose")
+		.display(display().x(1F).goalFrame().fancyDescriptionParent(NamedTextColor.AQUA).icon(Material.SPYGLASS))
+		.withReward(rewards()
+			.withTrophy(ItemStack.of(Material.BROWN_WOOL))
+		)
+		.requiredProgress(vanilla(
+			usingItem()
+				.withItem(ItemTriggerCondition.of(Material.SPYGLASS))
+				.withPlayer(player -> player
+					.withLookingAt(entity -> entity
+						.withEntityType(EntityType.VILLAGER)
+						.withDistanceToPlayer(d -> d.maxAbsolute(1D))
+					)
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement TRADE_A_BELL = buildBase(TRADE_WITH_A_VILLAGER, "trade_a_bell")
+		.display(display().xy(1F, 1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.BELL))
+		.withReward(rewards().addItems(ItemStack.of(Material.EMERALD, 5)))
+		.requiredProgress(vanilla(
+			villagerTrade()
+				.withItem(ItemTriggerCondition.of(Material.BELL))
+		))
+		.buildAndRegister();
+	public static final IAdvancement PLACE_ALL_VILLAGER_WORKSTATIONS = buildBase(TRADE_A_BELL, "place_all_villager_workstations")
+		.display(display().x(1F).goalFrame().fancyDescriptionParent(NamedTextColor.AQUA).icon(Material.STONECUTTER))
+		.withReward(rewards().addItems(ItemStack.of(Material.EMERALD, 5)))
+		.requiredProgress(vanilla(
+			UtilizerTags.VILLAGER_WORKSTATIONS.getValues().stream()
+				.map(type -> placedBlock(type.key().value()).withBlock(type))
+				.toList()
+		))
+		.buildAndRegister();
+	public static final IAdvancement GET_A_STACK_OF_ALL_VILLAGER_WORKSTATIONS = buildBase(PLACE_ALL_VILLAGER_WORKSTATIONS, "get_a_stack_of_all_villager_workstations")
+		.display(display().x(1F).challengeFrame().fancyDescriptionParent(NamedTextColor.DARK_PURPLE).icon(Material.BREWING_STAND))
+		.withReward(rewards().withExp(100).addItems(ItemStack.of(Material.EMERALD, 16)))
+		.requiredProgress(vanilla(
+			UtilizerTags.VILLAGER_WORKSTATIONS.getValues().stream()
+				.map(type -> inventoryChanged(type.key().value()).withItems(ItemTriggerCondition.of(type).withMinAmount(type.getMaxStackSize())))
+				.toList()
+		))
+		.buildAndRegister();
+	public static final IAdvancement GEAR_UP_A_VILLAGER_IN_NETHERITE = buildBase(GET_A_STACK_OF_ALL_VILLAGER_WORKSTATIONS, "gear_up_a_villager_in_netherite")
+		.display(display().x(1F).challengeFrame().fancyDescriptionParent(NamedTextColor.DARK_PURPLE).icon(Material.NETHERITE_CHESTPLATE))
+		.withReward(rewards()
+			.withExp(60)
+			.addItems(ItemStack.of(Material.EMERALD, 16))
+			.withTrophy(ItemStack.of(Material.EMERALD))
+		)
+		.buildAndRegister();
+	public static final IAdvancement GET_A_TALL_GRASS = buildBase(ADVENTURE_ROOT, "get_a_tall_grass")
+		.display(display().xy(1F, -4.25F).goalFrame().fancyDescriptionParent(NamedTextColor.AQUA).icon(Material.LARGE_FERN))
+		.requiredProgress(vanillaAny(
+			inventoryChanged(Material.TALL_GRASS.key().value()).withItems(ItemTriggerCondition.of(Material.TALL_GRASS)),
+			inventoryChanged(Material.LARGE_FERN.key().value()).withItems(ItemTriggerCondition.of(Material.LARGE_FERN))
+		))
+		.buildAndRegister();
+	public static final IAdvancement GET_A_STACK_OF_TALL_GRASS = buildBase(GET_A_TALL_GRASS, "get_a_stack_of_tall_grass")
+		.display(display().x(1F).challengeFrame().fancyDescriptionParent(NamedTextColor.LIGHT_PURPLE).icon(Material.LARGE_FERN))
+		.withReward(rewards()
+			.withExp(800)
+			.addItems(ItemStack.of(Material.LARGE_FERN))
+			.withTrophy(ItemStack.of(Material.GOLD_NUGGET))
+		)
+		.requiredProgress(vanillaAny(
+			inventoryChanged(Material.TALL_GRASS.key().value()).withItems(ItemTriggerCondition.of(Material.TALL_GRASS).withMinAmount(Material.TALL_GRASS.getMaxStackSize())),
+			inventoryChanged(Material.LARGE_FERN.key().value()).withItems(ItemTriggerCondition.of(Material.LARGE_FERN).withMinAmount(Material.LARGE_FERN.getMaxStackSize()))
+		))
 		.buildAndRegister();
 
 	public static final AdvancementTab NATURE_TAB = buildTab("nature", MANAGER)
@@ -1641,10 +1976,16 @@ public class TrappedNewbieAdvancements {
 					.withTag(DamageTypeTagKeys.IS_PROJECTILE, true)
 				)
 				.withEntity(entity -> entity
-					.withLocation(loc -> loc.maxY(Bukkit.getWorlds().getFirst().getMinHeight() + 5D))
+					.withLocation(loc -> loc
+						.withDimension(World.Environment.NORMAL)
+						.maxY(Bukkit.getWorlds().getFirst().getMinHeight() + 5D)
+					)
 				)
 				.withPlayer(player -> player
-					.withLocation(loc -> loc.minY(Bukkit.getWorlds().getFirst().getMaxHeight() - 1D))
+					.withLocation(loc -> loc
+						.withDimension(World.Environment.NORMAL)
+						.minY(Bukkit.getWorlds().getFirst().getMaxHeight() - 1D)
+					)
 				)
 		))
 		.buildAndRegister();
@@ -2277,7 +2618,10 @@ public class TrappedNewbieAdvancements {
 			playerKilledEntity()
 				.withEntity(entity -> entity
 					.withEntityType(EntityType.PHANTOM)
-					.withLocation(loc -> loc.maxY(Bukkit.getWorlds().getFirst().getMinHeight() + 5D))
+					.withLocation(loc -> loc
+						.withDimension(World.Environment.NORMAL)
+						.maxY(Bukkit.getWorlds().getFirst().getMinHeight() + 5D)
+					)
 				)
 				.withPlayer(player -> player
 					.withEquipment(equipment -> equipment
@@ -4235,6 +4579,7 @@ public class TrappedNewbieAdvancements {
 	public static void setupAdvancements() {
 		Preconditions.checkArgument(KILL_ALL_ALL_JOCKEYS.getRequiredProgress().requirements().size() == 757, "KILL_ALL_ALL_JOCKEYS: Jockeys count changed to %s".formatted(KILL_ALL_ALL_JOCKEYS.getRequiredProgress().requirements().size()));
 		Preconditions.checkArgument(FIND_ALL_STRUCTURES.getRequiredProgress().requirements().size() == 27, "FIND_ALL_STRUCTURES & USE_A_BRUSH_IN_ALL_STRUCTURES: Structure count changed to %s".formatted(FIND_ALL_STRUCTURES.getRequiredProgress().requirements().size()));
+		Preconditions.checkArgument(TRADE_WITH_EVERY_VILLAGER_IN_ALL_BIOMES.getRequiredProgress().requirements().size() == 832, "TRADE_WITH_EVERY_VILLAGER: Villager types count changed to %s".formatted(TRADE_WITH_EVERY_VILLAGER_IN_ALL_BIOMES.getRequiredProgress().requirements().size()));
 
 		AdvancementsAdvancement.addAdvancement(OBTAIN_EVERY_ARMOR_TRIM_WITH_EVERY_MATERIAL, Map.of(
 			OBTAIN_EVERY_TURTLE_ARMOR_TRIM, "turtle",

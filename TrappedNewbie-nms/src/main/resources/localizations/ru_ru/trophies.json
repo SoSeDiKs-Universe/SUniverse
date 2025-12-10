@@ -1,4 +1,24 @@
 {
+	"trophy.trade_with_every_villager_in_all_biomes.name": "<blue>Международная любовь",
+	"trophy.trade_with_every_villager_in_all_biomes.lore": [
+		"<blue>От районного тусовщика",
+		"<blue>до звезды планеты"
+	],
+	"trophy.get_a_stack_of_emerald_blocks.name": "<#E5C0AE>Голова Стонкса",
+	"trophy.get_a_stack_of_emerald_blocks.lore": "<#E5C0AE>СТОНКС",
+	"trophy.get_a_stack_of_tall_grass.name": "<#6ADA62>Медаль коллекционера папоротников",
+	"trophy.get_a_stack_of_tall_grass.lore": [
+		"<#6ADA62>Вы собрали достаточно травы,",
+		"<#6ADA62>чтобы создать собственные джунгли"
+	],
+	"trophy.trade_a_cookie_at_midnight.name": "<#F9FFAB>Наручные часы",
+	"trophy.trade_a_cookie_at_midnight.lore": "<#F9FFAB>В следующий раз смотрите на время",
+	"trophy.gear_up_a_villager_in_netherite.name": "<#FD1401>Рубин",
+	"trophy.gear_up_a_villager_in_netherite.lore": "<#FD1401>Бесценен…",
+	"trophy.got_your_nose.name": "<#8d4705>Нос крестьянина",
+	"trophy.got_your_nose.lore": "<#8d4705>Поймал твой нос! ХА-ХА-ХА!",
+	"trophy.villager_spy.name": "<#B7B3B2>Луна",
+	"trophy.villager_spy.lore": "<#B7B3B2>Да, здесь только ты, я и Луна",
 	"trophy.eat_a_stack_of_enchanted_golden_apples.name": "<gold>Ещё одно",
 	"trophy.eat_a_stack_of_enchanted_golden_apples.lore": "<gold>«Ещё одно» — DJ Khaled",
 	"trophy.name_a_piglin_brute_technoblade.name": "<#FDF55F>Корона Картофельного короля",

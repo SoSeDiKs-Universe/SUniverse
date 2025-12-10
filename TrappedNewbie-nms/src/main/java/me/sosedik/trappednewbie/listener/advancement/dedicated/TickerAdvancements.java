@@ -9,23 +9,28 @@ import me.sosedik.trappednewbie.dataset.TrappedNewbieAdvancements;
 import me.sosedik.trappednewbie.listener.player.TrappedNewbiePlayerOptions;
 import me.sosedik.utilizer.api.message.Messenger;
 import me.sosedik.utilizer.dataset.UtilizerTags;
+import me.sosedik.utilizer.util.EntityUtil;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
 import org.bukkit.Tag;
 import org.bukkit.World;
 import org.bukkit.entity.Ageable;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Villager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.generator.structure.Structure;
+import org.bukkit.inventory.EntityEquipment;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.Collection;
@@ -50,6 +55,7 @@ public class TickerAdvancements implements Listener {
 		runCheck(delay++, this::checkFamilyReunionAdvancement);
 		runCheck(delay++, this::checkBoneToPartyAdvancement);
 		runCheck(delay++, this::checkTwoStructuresAdvancement);
+		runCheck(delay++, this::checkLookAtAdvancements);
 	}
 
 	private void runCheck(long delay, Consumer<Player> check) {
@@ -173,6 +179,21 @@ public class TickerAdvancements implements Listener {
 		if (count < 2L) return;
 
 		TrappedNewbieAdvancements.BE_IN_TWO_STRUCTURES.awardAllCriteria(player);
+	}
+
+	private void checkLookAtAdvancements(Player player) {
+		if (TrappedNewbieAdvancements.GEAR_UP_A_VILLAGER_IN_NETHERITE.isDone(player)) return;
+
+		Entity targetEntity = player.getTargetEntity(EntityUtil.PLAYER_REACH);
+		if (targetEntity instanceof Villager villager) {
+			EntityEquipment equipment = villager.getEquipment();
+			if (equipment.getHelmet().getType() != Material.NETHERITE_HELMET) return;
+			if (equipment.getChestplate().getType() != Material.NETHERITE_CHESTPLATE) return;
+			if (equipment.getLeggings().getType() != Material.NETHERITE_LEGGINGS) return;
+			if (equipment.getBoots().getType() != Material.NETHERITE_BOOTS) return;
+
+			TrappedNewbieAdvancements.GEAR_UP_A_VILLAGER_IN_NETHERITE.awardAllCriteria(player);
+		}
 	}
 
 }

@@ -15,6 +15,8 @@ import java.util.Set;
 public class BiomeTags {
 
 	public static final Collection<Biome> OCEAN = MiscUtil.getTagValues(BiomeTagKeys.IS_OCEAN);
+	public static final Collection<Biome> RIVER = MiscUtil.getTagValues(BiomeTagKeys.IS_RIVER);
+	public static final Collection<Biome> BADLANDS = MiscUtil.getTagValues(BiomeTagKeys.IS_BADLANDS);
 
 	public static final Collection<Biome> EXTRA_WARM = builder()
 		.add(Biome.DESERT)

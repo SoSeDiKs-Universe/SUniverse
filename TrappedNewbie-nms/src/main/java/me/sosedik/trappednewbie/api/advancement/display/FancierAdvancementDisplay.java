@@ -138,7 +138,7 @@ public abstract class FancierAdvancementDisplay<T extends FancierAdvancementDisp
 				extraMessages.forEach(m -> {
 					Component message = m.apply(viewer);
 					if (message != null)
-						awards.add(message);
+						awards.add(Component.space().append(message));
 				});
 			}
 		}

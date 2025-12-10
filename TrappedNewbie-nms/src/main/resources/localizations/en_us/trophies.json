@@ -1,4 +1,24 @@
 {
+	"trophy.trade_with_every_villager_in_all_biomes.name": "<blue>International Love",
+	"trophy.trade_with_every_villager_in_all_biomes.lore": [
+		"<blue>Went from Mr. 305 (Dade County)",
+		"<blue>to Mr. Worldwide (all around the World)"
+	],
+	"trophy.get_a_stack_of_emerald_blocks.name": "<#E5C0AE>Stonk Man's Head",
+	"trophy.get_a_stack_of_emerald_blocks.lore": "<#E5C0AE>STONKS",
+	"trophy.get_a_stack_of_tall_grass.name": "<#6ADA62>Fern Collector's Medal",
+	"trophy.get_a_stack_of_tall_grass.lore": [
+		"<#6ADA62>You’ve gathered enough grass",
+		"<#6ADA62>to start your own jungle"
+	],
+	"trophy.trade_a_cookie_at_midnight.name": "<#F9FFAB>Watch",
+	"trophy.trade_a_cookie_at_midnight.lore": "<#F9FFAB>Next time, watch the time",
+	"trophy.gear_up_a_villager_in_netherite.name": "<#FD1401>Ruby",
+	"trophy.gear_up_a_villager_in_netherite.lore": "<#FD1401>Priceless…",
+	"trophy.got_your_nose.name": "<#8d4705>Villager's Nose",
+	"trophy.got_your_nose.lore": "<#8d4705>Got your Nose! HA-HA-HA!",
+	"trophy.villager_spy.name": "<#B7B3B2>The Moon",
+	"trophy.villager_spy.lore": "<#B7B3B2>Yeah, it's just me, you, and the Moon",
 	"trophy.eat_a_stack_of_enchanted_golden_apples.name": "<gold>Another one",
 	"trophy.eat_a_stack_of_enchanted_golden_apples.lore": "<gold>\"Another one\" — DJ Khaled",
 	"trophy.name_a_piglin_brute_technoblade.name": "<#FDF55F>Crown of the Potato King",

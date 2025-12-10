@@ -5,6 +5,7 @@ import me.sosedik.packetadvancements.api.progression.RequiredAdvancementProgress
 import me.sosedik.packetadvancements.imlp.advancement.base.BaseAdvancement;
 import me.sosedik.packetadvancements.imlp.progress.vanilla.types.PlayerKilledEntityTriggerData;
 import me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
 import org.bukkit.World;
 import org.bukkit.entity.EntityType;
@@ -31,16 +32,20 @@ public class KillAllZombieVillagersAdvancement extends BaseAdvancement {
 		for (World.Environment environment : World.Environment.values()) {
 			if (environment == World.Environment.CUSTOM) continue;
 
-			Registry.VILLAGER_TYPE.iterator().forEachRemaining(type -> {
-				Registry.VILLAGER_PROFESSION.iterator().forEachRemaining(profession -> {
-					String key = environment.name().toLowerCase(Locale.US) + "_" + type.key().value() + "_" + profession.key().value();
+			Registry.VILLAGER_TYPE.stream()
+				.filter(type -> NamespacedKey.MINECRAFT.equals(type.key().namespace()))
+				.forEach(type -> {
+					Registry.VILLAGER_PROFESSION.stream()
+						.filter(profession -> NamespacedKey.MINECRAFT.equals(profession.key().namespace()))
+						.forEach(profession -> {
+							String key = environment.name().toLowerCase(Locale.US) + "_" + type.key().value() + "_" + profession.key().value();
+							requirements.add(List.of(key));
+							triggerDatas.add(triggerData(key, environment, type, profession, false));
+						});
+					String key = environment.name().toLowerCase(Locale.US) + "_" + type.key().value() + "_baby";
 					requirements.add(List.of(key));
-					triggerDatas.add(triggerData(key, environment, type, profession, false));
+					triggerDatas.add(triggerData(key, environment, type, null, true));
 				});
-				String key = environment.name().toLowerCase(Locale.US) + "_" + type.key().value() + "_baby";
-				requirements.add(List.of(key));
-				triggerDatas.add(triggerData(key, environment, type, null, true));
-			});
 		}
 		return RequiredAdvancementProgress.vanilla(requirements, triggerDatas);
 	}

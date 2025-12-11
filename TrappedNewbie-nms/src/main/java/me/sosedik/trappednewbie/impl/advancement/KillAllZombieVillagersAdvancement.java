@@ -5,6 +5,7 @@ import me.sosedik.packetadvancements.api.progression.RequiredAdvancementProgress
 import me.sosedik.packetadvancements.imlp.advancement.base.BaseAdvancement;
 import me.sosedik.packetadvancements.imlp.progress.vanilla.types.PlayerKilledEntityTriggerData;
 import me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData;
+import me.sosedik.utilizer.util.MiscUtil;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
 import org.bukkit.World;
@@ -15,7 +16,6 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.playerKilledEntity;
 
@@ -38,11 +38,11 @@ public class KillAllZombieVillagersAdvancement extends BaseAdvancement {
 					Registry.VILLAGER_PROFESSION.stream()
 						.filter(profession -> NamespacedKey.MINECRAFT.equals(profession.key().namespace()))
 						.forEach(profession -> {
-							String key = environment.name().toLowerCase(Locale.US) + "_" + type.key().value() + "_" + profession.key().value();
+							String key = MiscUtil.getDimensionKey(environment) + "_" + type.key().value() + "_" + profession.key().value();
 							requirements.add(List.of(key));
 							triggerDatas.add(triggerData(key, environment, type, profession, false));
 						});
-					String key = environment.name().toLowerCase(Locale.US) + "_" + type.key().value() + "_baby";
+					String key = MiscUtil.getDimensionKey(environment) + "_" + type.key().value() + "_baby";
 					requirements.add(List.of(key));
 					triggerDatas.add(triggerData(key, environment, type, null, true));
 				});

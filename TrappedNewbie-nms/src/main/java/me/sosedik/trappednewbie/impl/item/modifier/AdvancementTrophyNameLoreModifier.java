@@ -43,7 +43,7 @@ public class AdvancementTrophyNameLoreModifier extends ItemModifier {
 
 		if (name != null) {
 			name = name.decorationIfAbsent(TextDecoration.BOLD, TextDecoration.State.TRUE);
-			if (item.getType() == Material.PLAYER_HEAD)
+			if (requiresCustomName(item.getType()))
 				item.setData(DataComponentTypes.CUSTOM_NAME, name.decorationIfAbsent(TextDecoration.ITALIC, TextDecoration.State.FALSE));
 			else
 				item.setData(DataComponentTypes.ITEM_NAME, name);
@@ -53,6 +53,10 @@ public class AdvancementTrophyNameLoreModifier extends ItemModifier {
 			contextBox.addLore(lore);
 
 		return ModificationResult.OK;
+	}
+
+	private boolean requiresCustomName(Material type) {
+		return type == Material.PLAYER_HEAD || type == Material.SHIELD;
 	}
 
 }

@@ -1,4 +1,56 @@
 {
+	"trophy.kill_all_villager_professions_with_a_crossbow.name": "<gold>Ominous Shield",
+	"trophy.kill_all_villager_professions_with_a_crossbow.lore": [
+		"<gold>This Shield certifies your rank as a",
+		"<gold>Pillager of the Arch-Illager's forces"
+	],
+	"trophy.kill_a_villager_wearing_a_piglin_head.name": "<red>Clown Nose",
+	"trophy.kill_a_villager_wearing_a_piglin_head.lore": "<red>Wear a second nose yourself",
+	"trophy.kill_a_villager_wearing_a_dragon_head.name": "<#bd6b00>Training Dummy",
+	"trophy.kill_a_villager_wearing_a_dragon_head.lore": "<#bd6b00>This one is reusable",
+	"trophy.die_from_a_villager_thorns.name": "<dark_green>New Clothes",
+	"trophy.die_from_a_villager_thorns.lore": "<dark_green>Apparently they protect you",
+	"trophy.kill_all_villagers_in_all_dimensions.name": "<dark_blue>Big Asteroid",
+	"trophy.kill_all_villagers_in_all_dimensions.lore": [
+		"<dark_blue>It crashed on the Earth.",
+		"<dark_blue>That's why all the Villagers are Dead.",
+		"<dark_blue>You had Nothing to do with it. Nope.",
+		"<dark_blue>Nothing at all."
+	],
+	"trophy.kill_100_of_every_nitwit.name": "<dark_green>Villager Shield",
+	"trophy.kill_100_of_every_nitwit.lore": [
+		"<dark_green>This Shield shows your Rank as a Villager.",
+		"<dark_green>You have no Rank."
+	],
+	"trophy.compost_a_stack_of_large_ferns.name": "<dark_green>The Mistake",
+	"trophy.compost_a_stack_of_large_ferns.lore": [
+		"<dark_green>You have chosen to waste a lot of very Rare Items,",
+		"<dark_green>that is why this Trophy lives with you forever,",
+		"<dark_green>to remind you of your Great Mistake"
+	],
+	"trophy.compost_a_stack_of_tall_grass.name": "<dark_green>The Forever Regret",
+	"trophy.compost_a_stack_of_tall_grass.lore": [
+		"<dark_green>You have wasted so much so fast,",
+		"<dark_green>Days of Work gone in a Moment"
+	],
+	"trophy.get_a_firefly_bush.name": "<#fffec8>Serenity",
+	"trophy.get_a_firefly_bush.lore": [
+		"<#fffec8>A Firefly-class mid-bulk transport ship,",
+		"<#fffec8>called home by her motley crew"
+	],
+	"trophy.get_a_stack_of_tall_grass.name": "<dark_green>Weedwhacker",
+	"trophy.get_a_stack_of_tall_grass.lore": [
+		"<dark_green>You already whacked the Weeds,",
+		"<dark_green>what do you need this for?"
+	],
+	"trophy.kill_all_baby_villagers.name": "<blue>Youngling Slayer 9000",
+	"trophy.kill_all_baby_villagers.lore": [
+		"<blue>You are fulfilling your Destiny, Anakin.",
+		"<blue>Become my Apprentice.",
+		"<blue>Learn to use the Dark Side of the Force."
+	],
+	"trophy.kill_100_villagers.name": "<#FFC27F>Bread",
+	"trophy.kill_100_villagers.lore": "<#FFC27F>So tasty…",
 	"trophy.trade_with_every_villager_in_all_biomes.name": "<blue>International Love",
 	"trophy.trade_with_every_villager_in_all_biomes.lore": [
 		"<blue>Went from Mr. 305 (Dade County)",
@@ -6,8 +58,8 @@
 	],
 	"trophy.get_a_stack_of_emerald_blocks.name": "<#E5C0AE>Stonk Man's Head",
 	"trophy.get_a_stack_of_emerald_blocks.lore": "<#E5C0AE>STONKS",
-	"trophy.get_a_stack_of_tall_grass.name": "<#6ADA62>Fern Collector's Medal",
-	"trophy.get_a_stack_of_tall_grass.lore": [
+	"trophy.get_a_stack_of_large_ferns.name": "<#6ADA62>Fern Collector's Medal",
+	"trophy.get_a_stack_of_large_ferns.lore": [
 		"<#6ADA62>You’ve gathered enough grass",
 		"<#6ADA62>to start your own jungle"
 	],

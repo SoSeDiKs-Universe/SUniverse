@@ -83,6 +83,7 @@ public class UtilizerTags {
 
 	public static final TagKey<DamageType> IS_CAMPFIRE = damageTypeTag("is_campfire");
 	public static final TagKey<DamageType> IS_SONIC_BOOM = damageTypeTag("is_sonic_boom");
+	public static final TagKey<DamageType> IS_THORNS = damageTypeTag("is_thorns");
 
 	private static Tag<Material> itemTag(String key) {
 		return ItemUtil.itemTag(Utilizer.utilizerKey(key));

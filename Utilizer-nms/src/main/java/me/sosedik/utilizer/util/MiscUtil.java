@@ -7,6 +7,7 @@ import net.kyori.adventure.util.RGBLike;
 import org.bukkit.DyeColor;
 import org.bukkit.Keyed;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.jetbrains.annotations.UnknownNullability;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -181,6 +182,36 @@ public class MiscUtil {
 	public static <T extends Keyed> Collection<T> getTagValues(TagKey<T> tagKey) {
 		RegistryKey<T> registryKey = tagKey.registryKey();
 		return RegistryAccess.registryAccess().getRegistry(registryKey).getTagValues(tagKey);
+	}
+
+	/**
+	 * Gets the dimension key from the environment
+	 *
+	 * @param environment environment
+	 * @return the dimension key
+	 */
+	public static String getDimensionKey(World.Environment environment) {
+		return switch (environment) {
+			case NORMAL -> "overworld";
+			case NETHER -> "the_nether";
+			case THE_END -> "the_end";
+			default -> throw new IllegalArgumentException("Not a valid vanilla dimension: " + environment);
+		};
+	}
+
+	/**
+	 * Gets the dimension key from the environment
+	 *
+	 * @param key dimension key
+	 * @return the environment
+	 */
+	public static World.Environment getByDimensionKey(String key) {
+		return switch (key) {
+			case "overworld" -> World.Environment.NORMAL;
+			case "the_nether" -> World.Environment.NETHER;
+			case "the_end" -> World.Environment.THE_END;
+			default -> throw new IllegalArgumentException("Not a valid vanilla dimension key: " + key);
+		};
 	}
 
 }

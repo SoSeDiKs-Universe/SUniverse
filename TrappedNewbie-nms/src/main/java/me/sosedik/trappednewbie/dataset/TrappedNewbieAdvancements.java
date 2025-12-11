@@ -133,13 +133,16 @@ import org.bukkit.potion.PotionType;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 import static me.sosedik.packetadvancements.api.progression.RequiredAdvancementProgress.alwaysDone;
+import static me.sosedik.packetadvancements.api.progression.RequiredAdvancementProgress.multi;
 import static me.sosedik.packetadvancements.api.progression.RequiredAdvancementProgress.neverDone;
 import static me.sosedik.packetadvancements.api.progression.RequiredAdvancementProgress.requirements;
 import static me.sosedik.packetadvancements.api.progression.RequiredAdvancementProgress.simple;
@@ -175,6 +178,7 @@ import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaT
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.recipeCrafted;
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.shotCrossbow;
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.startedRiding;
+import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.summonedEntity;
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.thrownItemPickedUpByEntity;
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.usingItem;
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.villagerTrade;
@@ -210,6 +214,7 @@ public class TrappedNewbieAdvancements {
 	private static final ItemStack SANS_HEAD = ItemUtil.texturedHead("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYmQ5MDcwODM4ZjZkNzU0M2U3NGQ0MjE3ZjI4YzcxNDdkODAxNDI3MWJlNDhhMzkzMGE5YjY2OWI0YTY1NWZmNSJ9fX0=");
 	private static final ItemStack KOMARU_HEAD = ItemUtil.texturedHead("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZWUwMDNjMzVhZGEzMGM2MGFhNzgyNjQzNzE0YjU0N2U0NzRhNjcwYmE0MjcwNzEyMjFlNzE0NTA3NWQwODQ3MCJ9fX0=");
 	private static final ItemStack MR_WORLDWIDE_HEAD = ItemUtil.texturedHead("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDRjNTY0OTYwNzc0ZDRhNzc1ZmMzZjFhNzY5NmU3NGY4Y2FmMWEyMDRkNDk1ZDNmYjFhYmIwNGZhOTFkMmJmIn19fQ==");
+	private static final ItemStack BREAD_HEAD = ItemUtil.texturedHead("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNWQ4MDA4ZTA2YzlmZWNkMDIwMTA4MzBmM2JlNDE0OGFjMDhiNmNhMmQzZTBhNWNiNThlMGZlMTg1ZmQzZjQyMCJ9fX0=");
 	private static final ItemStack DINNERBONE_HEAD = ItemStack.of(Material.PLAYER_HEAD);
 	private static final ItemStack JEB_HEAD = ItemStack.of(Material.PLAYER_HEAD);
 	private static final ItemStack TECHNOBLADE_HEAD = ItemStack.of(Material.PLAYER_HEAD);
@@ -1073,7 +1078,7 @@ public class TrappedNewbieAdvancements {
 		.withReward(rewards().withExp(150))
 		.buildAndRegister();
 	public static final IAdvancement GET_A_NAME_TAG = buildBase(ADVENTURE_ROOT, "get_a_name_tag")
-		.display(display().xy(1F, -6F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.NAME_TAG))
+		.display(display().xy(1F, -5F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.NAME_TAG))
 		.requiredProgress(vanilla(inventoryChanged().withItems(ItemTriggerCondition.of(Material.NAME_TAG))))
 		.buildAndRegister();
 	public static final IAdvancement NAME_A_RABBIT_TOAST = buildBase(GET_A_NAME_TAG, "name_a_rabbit_toast")
@@ -1551,7 +1556,7 @@ public class TrappedNewbieAdvancements {
 		))
 		.buildAndRegister();
 	public static final IAdvancement RING_A_BELL = buildBase(FIND_A_VILLAGE, "ring_a_bell")
-		.display(display().xy(1F, 2F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.BELL))
+		.display(display().xy(1F, 2.25F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.BELL))
 		.requiredProgress(vanilla(
 			anyBlockUse()
 				.withLocation(loc -> loc
@@ -1643,23 +1648,194 @@ public class TrappedNewbieAdvancements {
 			.withTrophy(ItemStack.of(Material.EMERALD))
 		)
 		.buildAndRegister();
-	public static final IAdvancement GET_A_TALL_GRASS = buildBase(ADVENTURE_ROOT, "get_a_tall_grass")
-		.display(display().xy(1F, -4.25F).goalFrame().fancyDescriptionParent(NamedTextColor.AQUA).icon(Material.LARGE_FERN))
-		.requiredProgress(vanillaAny(
-			inventoryChanged(Material.TALL_GRASS.key().value()).withItems(ItemTriggerCondition.of(Material.TALL_GRASS)),
-			inventoryChanged(Material.LARGE_FERN.key().value()).withItems(ItemTriggerCondition.of(Material.LARGE_FERN))
+	public static final IAdvancement SUMMON_AN_IRON_GOLEM = buildBase(FIND_A_VILLAGE, "summon_an_iron_golem")
+		.display(display().xy(1F, 3.5F).goalFrame().fancyDescriptionParent(NamedTextColor.AQUA).icon(Material.IRON_BLOCK))
+		.withReward(rewards().addItems(ItemStack.of(Material.IRON_BLOCK, 2)))
+		.requiredProgress(vanilla(
+			summonedEntity()
+				.withEntity(entity -> entity.withEntityType(EntityType.IRON_GOLEM))
 		))
 		.buildAndRegister();
-	public static final IAdvancement GET_A_STACK_OF_TALL_GRASS = buildBase(GET_A_TALL_GRASS, "get_a_stack_of_tall_grass")
-		.display(display().x(1F).challengeFrame().fancyDescriptionParent(NamedTextColor.LIGHT_PURPLE).icon(Material.LARGE_FERN))
+	public static final IAdvancement GET_KILLED_BY_AN_IRON_GOLEM = buildBase(SUMMON_AN_IRON_GOLEM, "get_killed_by_an_iron_golem")
+		.display(display().x(1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.IRON_BARS))
+		.requiredProgress(vanilla(
+			entityKilledPlayer()
+				.withEntity(entity -> entity.withEntityType(EntityType.IRON_GOLEM))
+		))
+		.buildAndRegister();
+	public static final IAdvancement REPAIR_AN_IRON_GOLEM = buildBase(GET_KILLED_BY_AN_IRON_GOLEM, "repair_an_iron_golem")
+		.display(display().x(1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.IRON_INGOT))
+		.withReward(rewards().addItems(ItemStack.of(Material.IRON_INGOT, 4)))
+		.requiredProgress(vanilla(
+			playerInteractedWithEntity()
+				.withItem(ItemTriggerCondition.of(Material.IRON_INGOT))
+				.withEntity(entity -> entity.withEntityType(EntityType.IRON_GOLEM))
+		))
+		.buildAndRegister();
+	public static final IAdvancement REPAIR_AN_IRON_GOLEM_DURING_A_BATTLE_WITH_A_WARDEN = buildBase(REPAIR_AN_IRON_GOLEM, "repair_an_iron_golem_during_a_battle_with_a_warden")
+		.display(display().x(1F).challengeFrame().fancyDescriptionParent(NamedTextColor.DARK_PURPLE).icon(ItemUtil.texturedHead("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZjdjODg2ZWU5YjA0ZTg1YjJmYjBmMjY3NDBjMTAwY2FiYTlhODE3YmYxZDA5YWE0ZWQ1NDQ5NTM2MTM1Y2M5MCJ9fX0=")))
+		.withReward(rewards().withExp(70).addItems(ItemStack.of(Material.IRON_BLOCK, 2)))
+		.requiredProgress(vanilla(
+			playerInteractedWithEntity()
+				.withItem(ItemTriggerCondition.of(Material.IRON_INGOT))
+				.withEntity(entity -> entity
+					.withEntityType(EntityType.IRON_GOLEM)
+					.withTargetedEntity(targetEntity -> targetEntity
+						.withEntityType(EntityType.WARDEN)
+					)
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement KILL_A_VILLAGER = buildBase(REPAIR_AN_IRON_GOLEM_DURING_A_BATTLE_WITH_A_WARDEN, "kill_a_villager")
+		.display(display().x(1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.IRON_SWORD))
+		.requiredProgress(vanilla(
+			playerKilledEntity()
+				.withEntity(entity -> entity
+					.withEntityType(EntityType.VILLAGER)
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement KILL_100_VILLAGERS = buildBase(KILL_A_VILLAGER, "kill_100_villagers")
+		.display(display().xy(1F, 0.5F).challengeFrame().fancyDescriptionParent(NamedTextColor.DARK_PURPLE).icon(ItemUtil.texturedHead("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNWQ4MDA4ZTA2YzlmZWNkMDIwMTA4MzBmM2JlNDE0OGFjMDhiNmNhMmQzZTBhNWNiNThlMGZlMTg1ZmQzZjQyMCJ9fX0=")))
 		.withReward(rewards()
-			.withExp(800)
-			.addItems(ItemStack.of(Material.LARGE_FERN))
-			.withTrophy(ItemStack.of(Material.GOLD_NUGGET))
+			.withExp(95)
+			.addItems(ItemStack.of(Material.BREAD, 16))
+			.withTrophy(BREAD_HEAD)
 		)
-		.requiredProgress(vanillaAny(
-			inventoryChanged(Material.TALL_GRASS.key().value()).withItems(ItemTriggerCondition.of(Material.TALL_GRASS).withMinAmount(Material.TALL_GRASS.getMaxStackSize())),
-			inventoryChanged(Material.LARGE_FERN.key().value()).withItems(ItemTriggerCondition.of(Material.LARGE_FERN).withMinAmount(Material.LARGE_FERN.getMaxStackSize()))
+		.requiredProgress(simple(100))
+		.buildAndRegister();
+	public static final IAdvancement KILL_ALL_BABY_VILLAGERS = buildBase(KILL_100_VILLAGERS, "kill_all_baby_villagers")
+		.display(display().x(1F).challengeFrame().fancyDescriptionParent(NamedTextColor.DARK_PURPLE).icon(Material.WOODEN_SWORD))
+		.withReward(rewards()
+			.withTrophy(ItemStack.of(Material.DIAMOND_SWORD))
+		)
+		.requiredProgress(vanilla(
+			Registry.VILLAGER_TYPE.stream()
+				.filter(type -> NamespacedKey.MINECRAFT.equals(type.key().namespace()))
+				.map(type -> villagerTrade(type.key().value())
+					.withEntity(entity -> entity
+						.withState(EntityStateTriggerCondition::baby)
+						.withNbt("{VillagerData:{type:\"%s\"}}".formatted(type.key().asString()))
+					)
+				)
+				.toList()
+		))
+		.buildAndRegister();
+	public static final IAdvancement KILL_100_OF_EVERY_NITWIT = buildBase(KILL_ALL_BABY_VILLAGERS, "kill_100_of_every_nitwit")
+		.display(display().x(1F).withAdvancementFrame(AdvancementFrame.STAR).torture().fancyDescriptionParent(NamedTextColor.DARK_RED).icon(Material.DIRT))
+		.withReward(rewards()
+			.withTrophy(
+				shield(DyeColor.WHITE,
+					new Pattern(DyeColor.GREEN, PatternType.RHOMBUS),
+					new Pattern(DyeColor.BROWN, PatternType.STRIPE_BOTTOM),
+					new Pattern(DyeColor.ORANGE, PatternType.STRIPE_CENTER),
+					new Pattern(DyeColor.BROWN, PatternType.BORDER),
+					new Pattern(DyeColor.BLACK, PatternType.STRIPE_MIDDLE),
+					new Pattern(DyeColor.BROWN, PatternType.HALF_HORIZONTAL)
+				)
+			)
+		)
+		.requiredProgress(multi(
+			Registry.VILLAGER_TYPE.stream()
+				.filter(type -> NamespacedKey.MINECRAFT.equals(type.key().namespace()))
+				.collect(Collectors.toMap(
+					type -> type.key().value(),
+					type -> simple(100, 1)
+				))
+		))
+		.buildAndRegister();
+	public static final IAdvancement KILL_ALL_VILLAGERS_IN_ALL_DIMENSIONS = buildBase(KILL_100_OF_EVERY_NITWIT, "kill_all_villagers_in_all_dimensions")
+		.display(display().x(1F).withAdvancementFrame(AdvancementFrame.BUTTERFLY).torture().fancyDescriptionParent(NamedTextColor.DARK_RED).icon(ItemUtil.glint(Material.BELL)))
+		.withReward(rewards()
+			.withTrophy(ItemStack.of(Material.TUFF))
+		)
+		.requiredProgress(vanilla(
+			Arrays.stream(World.Environment.values())
+				.filter(environment -> environment != World.Environment.CUSTOM)
+				.flatMap(environment -> Registry.VILLAGER_TYPE.stream()
+					.filter(villagerType -> NamespacedKey.MINECRAFT.equals(villagerType.key().namespace()))
+					.flatMap(villagerType -> Registry.VILLAGER_PROFESSION.stream()
+						.filter(profession -> NamespacedKey.MINECRAFT.equals(profession.key().namespace()))
+						.map(profession -> playerKilledEntity(MiscUtil.getDimensionKey(environment) + "_" + villagerType.key().value() + "_" + profession.key().value())
+							.withEntity(entity -> entity
+								.withEntityType(EntityType.VILLAGER)
+								.withNbt("{VillagerData:{profession:\"%s\",type:\"%s\"}}".formatted(profession.key().asString(), villagerType.key().asString()))
+								.withLocation(loc -> loc.withDimension(environment))
+							)
+						)
+					)
+				)
+				.toList()
+		))
+		.buildAndRegister();
+	public static final IAdvancement DIE_FROM_A_VILLAGER_THORNS = buildBase(KILL_A_VILLAGER, "die_from_a_villager_thorns")
+		.display(display().xy(1F, -0.5F).challengeFrame().fancyDescriptionParent(NamedTextColor.DARK_PURPLE).icon(Material.CACTUS))
+		.withReward(rewards()
+			.withDeathExp(40)
+			.withTrophy(ItemStack.of(Material.CACTUS))
+		)
+		.requiredProgress(vanilla(
+			entityKilledPlayer()
+				.withEntity(entity -> entity.withEntityType(EntityType.VILLAGER))
+				.withDamage(damage -> damage.withTag(UtilizerTags.IS_THORNS, true))
+		))
+		.buildAndRegister();
+	public static final IAdvancement KILL_A_VILLAGER_WEARING_A_DRAGON_HEAD = buildBase(DIE_FROM_A_VILLAGER_THORNS, "kill_a_villager_wearing_a_dragon_head")
+		.display(display().x(1F).challengeFrame().fancyDescriptionParent(NamedTextColor.DARK_PURPLE).icon(Material.DRAGON_HEAD))
+		.withReward(rewards()
+			.withTrophy(ItemStack.of(Material.ARMOR_STAND))
+		)
+		.requiredProgress(vanilla(
+			playerKilledEntity()
+				.withEntity(entity -> entity
+					.withEntityType(EntityType.VILLAGER)
+					.withEquipment(equipment -> equipment
+						.withHelmet(Material.DRAGON_HEAD)
+					)
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement KILL_A_VILLAGER_WEARING_A_PIGLIN_HEAD = buildBase(KILL_A_VILLAGER_WEARING_A_DRAGON_HEAD, "kill_a_villager_wearing_a_piglin_head")
+		.display(display().x(1F).challengeFrame().fancyDescriptionParent(NamedTextColor.DARK_PURPLE).icon(Material.PIGLIN_HEAD))
+		.withReward(rewards()
+			.withTrophy(ItemStack.of(Material.BEETROOT))
+		)
+		.requiredProgress(vanilla(
+			playerKilledEntity()
+				.withEntity(entity -> entity
+					.withEntityType(EntityType.VILLAGER)
+					.withEquipment(equipment -> equipment
+						.withHelmet(Material.PIGLIN_HEAD)
+					)
+				)
+		))
+		.buildAndRegister();
+	public static final IAdvancement KILL_ALL_VILLAGER_PROFESSIONS_WITH_A_CROSSBOW = buildBase(KILL_A_VILLAGER_WEARING_A_PIGLIN_HEAD, "kill_all_villager_professions_with_a_crossbow")
+		.display(display().x(1F).challengeFrame().fancyDescriptionParent(NamedTextColor.DARK_PURPLE).icon(ItemUtil.texturedHead(MoreMobHeads.PILLAGER)))
+		.withReward(rewards()
+			.withExp(100)
+			.addItems(ItemStack.of(Material.EMERALD, 16))
+			.withTrophy(banner(Material.SHIELD,
+				new Pattern(DyeColor.CYAN, PatternType.RHOMBUS),
+				new Pattern(DyeColor.LIGHT_GRAY, PatternType.STRIPE_BOTTOM),
+				new Pattern(DyeColor.GRAY, PatternType.STRIPE_CENTER),
+				new Pattern(DyeColor.LIGHT_GRAY, PatternType.BORDER),
+				new Pattern(DyeColor.BLACK, PatternType.STRIPE_MIDDLE),
+				new Pattern(DyeColor.LIGHT_GRAY, PatternType.HALF_HORIZONTAL),
+				new Pattern(DyeColor.LIGHT_GRAY, PatternType.CIRCLE),
+				new Pattern(DyeColor.BLACK, PatternType.BORDER)
+			))
+		)
+		.requiredProgress(vanilla(
+			Registry.VILLAGER_PROFESSION.stream()
+				.filter(type -> NamespacedKey.MINECRAFT.equals(type.key().namespace()))
+				.map(type -> killedByArrow(type.key().value())
+					.withWeapon(ItemTriggerCondition.of(Material.CROSSBOW))
+					.withEntity(entity -> entity
+						.withNbt("{VillagerData:{profession:\"%s\"}}".formatted(type.key().asString()))
+					)
+				)
+				.toList()
 		))
 		.buildAndRegister();
 
@@ -1694,6 +1870,73 @@ public class TrappedNewbieAdvancements {
 		.buildAndRegister();
 	public static final IAdvancement DRINK_CACTUS_JUICE = buildBase(NATURE_ROOT, "drink_cactus_juice")
 		.display(display().x(-1F).goalFrame().fancyDescriptionParent(NamedTextColor.AQUA).icon(TrappedNewbieRecipes.getFilled(ItemStack.of(TrappedNewbieItems.CACTUS_BOWL), ThirstData.DrinkType.CACTUS_JUICE)))
+		.buildAndRegister();
+	public static final IAdvancement GET_A_SHORT_GRASS = buildBase(NATURE_ROOT, "get_a_short_grass")
+		.display(display().xy(1F, -2F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.SHORT_GRASS))
+		.requiredProgress(vanillaAny(
+			inventoryChanged(Material.SHORT_GRASS.key().value()).withItems(ItemTriggerCondition.of(Material.SHORT_GRASS)),
+			inventoryChanged(Material.SHORT_DRY_GRASS.key().value()).withItems(ItemTriggerCondition.of(Material.SHORT_DRY_GRASS)),
+			inventoryChanged(Material.FERN.key().value()).withItems(ItemTriggerCondition.of(Material.FERN))
+		))
+		.buildAndRegister();
+	public static final IAdvancement GET_A_TALL_GRASS = buildBase(GET_A_SHORT_GRASS, "get_a_tall_grass")
+		.display(display().x(1F).goalFrame().fancyDescriptionParent(NamedTextColor.AQUA).icon(Material.TALL_GRASS))
+		.requiredProgress(vanillaAny(
+			inventoryChanged(Material.TALL_GRASS.key().value()).withItems(ItemTriggerCondition.of(Material.TALL_GRASS)),
+			inventoryChanged(Material.TALL_DRY_GRASS.key().value()).withItems(ItemTriggerCondition.of(Material.TALL_DRY_GRASS)),
+			inventoryChanged(Material.LARGE_FERN.key().value()).withItems(ItemTriggerCondition.of(Material.LARGE_FERN))
+		))
+		.buildAndRegister();
+	public static final IAdvancement GET_SOME_BUSHES = buildBase(GET_A_TALL_GRASS, "get_some_bushes")
+		.display(display().x(1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.BUSH))
+		.requiredProgress(vanilla(
+			inventoryChanged().withItems(ItemTriggerCondition.of(Material.BUSH).withMinAmount(2))
+		))
+		.buildAndRegister();
+	public static final IAdvancement GET_A_FIREFLY_BUSH = buildBase(GET_SOME_BUSHES, "get_a_firefly_bush")
+		.display(display().x(1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.FIREFLY_BUSH))
+		.withReward(rewards()
+			.withTrophy(ItemStack.of(Material.YELLOW_HARNESS))
+		)
+		.requiredProgress(vanilla(
+			inventoryChanged().withItems(ItemTriggerCondition.of(Material.FIREFLY_BUSH))
+		))
+		.buildAndRegister();
+	public static final IAdvancement GET_A_STACK_OF_TALL_GRASS = buildBase(GET_A_TALL_GRASS, "get_a_stack_of_tall_grass")
+		.display(display().xy(1F, -1F).challengeFrame().fancyDescriptionParent(NamedTextColor.DARK_PURPLE).icon(Material.SHORT_GRASS))
+		.withReward(rewards()
+			.withExp(800)
+			.addItems(ItemStack.of(Material.TALL_GRASS))
+			.withTrophy(ItemStack.of(Material.SHEARS))
+		)
+		.requiredProgress(vanilla(
+			inventoryChanged().withItems(ItemTriggerCondition.of(Material.TALL_GRASS).withMinAmount(Material.TALL_GRASS.getMaxStackSize()))
+		))
+		.buildAndRegister();
+	public static final IAdvancement COMPOST_A_STACK_OF_TALL_GRASS = buildBase(GET_A_STACK_OF_TALL_GRASS, "compost_a_stack_of_tall_grass")
+		.display(display().x(1F).challengeFrame().fancyDescriptionParent(NamedTextColor.DARK_PURPLE).icon(Material.TALL_GRASS))
+		.withReward(rewards()
+			.withTrophy(ItemStack.of(Material.TALL_GRASS))
+		)
+		.requiredProgress(simple(Material.TALL_GRASS.getMaxStackSize()))
+		.buildAndRegister();
+	public static final IAdvancement GET_A_STACK_OF_LARGE_FERNS = buildBase(GET_A_TALL_GRASS, "get_a_stack_of_large_ferns")
+		.display(display().xy(1F, 1F).challengeFrame().fancyDescriptionParent(NamedTextColor.DARK_PURPLE).icon(Material.FERN))
+		.withReward(rewards()
+			.withExp(800)
+			.addItems(ItemStack.of(Material.LARGE_FERN))
+			.withTrophy(ItemStack.of(Material.GOLD_NUGGET))
+		)
+		.requiredProgress(vanilla(
+			inventoryChanged().withItems(ItemTriggerCondition.of(Material.LARGE_FERN).withMinAmount(Material.LARGE_FERN.getMaxStackSize()))
+		))
+		.buildAndRegister();
+	public static final IAdvancement COMPOST_A_STACK_OF_LARGE_FERNS = buildBase(GET_A_STACK_OF_LARGE_FERNS, "compost_a_stack_of_large_ferns")
+		.display(display().x(1F).challengeFrame().fancyDescriptionParent(NamedTextColor.DARK_PURPLE).icon(Material.LARGE_FERN))
+		.withReward(rewards()
+			.withTrophy(ItemStack.of(Material.LARGE_FERN))
+		)
+		.requiredProgress(simple(Material.LARGE_FERN.getMaxStackSize()))
 		.buildAndRegister();
 
 	public static final AdvancementTab BUILDING_TAB = buildTab("building", MANAGER)
@@ -1738,14 +1981,10 @@ public class TrappedNewbieAdvancements {
 	public static final IAdvancement DIE_TWICE_WITHIN_5S = buildBase(DIE_TWICE_WITHIN_10S, "die_twice_within_5s").display(display().x(1F).challengeFrame().fancyDescriptionParent(NamedTextColor.DARK_PURPLE).icon(banner(Material.WHITE_BANNER, new Pattern(DyeColor.BLACK, PatternType.STRIPE_BOTTOM), new Pattern(DyeColor.BLACK, PatternType.STRIPE_LEFT), new Pattern(DyeColor.WHITE, PatternType.BORDER))))
 		.withReward(rewards()
 			.withDeathExp(35)
-			.withDeathTrophy(() -> {
-				ItemStack item = shield(DyeColor.WHITE);
-				item.setData(DataComponentTypes.BANNER_PATTERNS, BannerPatternLayers.bannerPatternLayers(List.of(
-					new Pattern(DyeColor.BLACK, PatternType.HALF_VERTICAL),
-					new Pattern(DyeColor.BLACK, PatternType.STRIPE_BOTTOM)
-				)));
-				return item;
-			})
+			.withDeathTrophy(() -> shield(DyeColor.WHITE,
+				new Pattern(DyeColor.BLACK, PatternType.HALF_VERTICAL),
+				new Pattern(DyeColor.BLACK, PatternType.STRIPE_BOTTOM)
+			))
 		)
 		.buildAndRegister();
 	public static final IAdvancement HALF_A_HEART_1M = buildBase(ROCK_PAPER_SHEARS, "half_a_heart_1m").display(display().x(1F).goalFrame().fancyDescriptionParent(NamedTextColor.AQUA).icon(Material.NETHER_WART))
@@ -1770,40 +2009,31 @@ public class TrappedNewbieAdvancements {
 	public static final IAdvancement GET_A_BANNER_SHIELD = buildBase(BLOCK_WITH_SHIELD, "get_a_banner_shield").display(display().x(1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(shield(DyeColor.RED)))
 		.withReward(rewards().addItems(ItemStack.of(Material.WHITE_WOOL, 6)))
 		.buildAndRegister(GetABannerShieldAdvancement::new);
-	public static final IAdvancement MORE_SHIELDS = buildBase(GET_A_BANNER_SHIELD, "more_shields").display(display().x(1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().icon(() -> {
-			ItemStack item = shield(DyeColor.WHITE);
-			item.setData(DataComponentTypes.BANNER_PATTERNS, BannerPatternLayers.bannerPatternLayers(List.of(
-				new Pattern(DyeColor.LIGHT_GRAY, PatternType.MOJANG),
-				new Pattern(DyeColor.LIGHT_BLUE, PatternType.GRADIENT_UP),
-				new Pattern(DyeColor.BLACK, PatternType.GRADIENT),
-				new Pattern(DyeColor.BLACK, PatternType.TRIANGLE_BOTTOM),
-				new Pattern(DyeColor.WHITE, PatternType.CIRCLE),
-				new Pattern(DyeColor.BLACK, PatternType.SQUARE_BOTTOM_LEFT)
-			)));
-			return item;
-		}))
+	public static final IAdvancement MORE_SHIELDS = buildBase(GET_A_BANNER_SHIELD, "more_shields").display(display().x(1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().icon(() -> shield(DyeColor.WHITE,
+			new Pattern(DyeColor.LIGHT_GRAY, PatternType.MOJANG),
+			new Pattern(DyeColor.LIGHT_BLUE, PatternType.GRADIENT_UP),
+			new Pattern(DyeColor.BLACK, PatternType.GRADIENT),
+			new Pattern(DyeColor.BLACK, PatternType.TRIANGLE_BOTTOM),
+			new Pattern(DyeColor.WHITE, PatternType.CIRCLE),
+			new Pattern(DyeColor.BLACK, PatternType.SQUARE_BOTTOM_LEFT)
+		)))
 		.withReward(rewards()
 			.withExp(25)
-			.withTrophy(() -> {
-				ItemStack item = shield(DyeColor.LIME);
-				item.setData(DataComponentTypes.BANNER_PATTERNS, BannerPatternLayers.bannerPatternLayers(List.of(
-					new Pattern(DyeColor.BROWN, PatternType.PIGLIN),
-					new Pattern(DyeColor.BROWN, PatternType.TRIANGLES_BOTTOM),
-					new Pattern(DyeColor.BROWN, PatternType.STRIPE_CENTER),
-					new Pattern(DyeColor.GREEN, PatternType.TRIANGLES_TOP),
-					new Pattern(DyeColor.GREEN, PatternType.GRADIENT),
-					new Pattern(DyeColor.GREEN, PatternType.BRICKS)
-				)));
-				return item;
-			})
+			.withTrophy(() -> shield(DyeColor.LIME,
+				new Pattern(DyeColor.BROWN, PatternType.PIGLIN),
+				new Pattern(DyeColor.BROWN, PatternType.TRIANGLES_BOTTOM),
+				new Pattern(DyeColor.BROWN, PatternType.STRIPE_CENTER),
+				new Pattern(DyeColor.GREEN, PatternType.TRIANGLES_TOP),
+				new Pattern(DyeColor.GREEN, PatternType.GRADIENT),
+				new Pattern(DyeColor.GREEN, PatternType.BRICKS)
+			))
 		)
 		.buildAndRegister();
 	public static final IAdvancement MASTER_SHIELDSMAN = buildBase(MORE_SHIELDS, "master_shieldsman").display(display().x(1F).fancyDescriptionParent(NamedTextColor.DARK_PURPLE).challengeFrame().icon(shield(DyeColor.BLACK)))
 		.withReward(rewards()
 			.withExp(100)
 			.withTrophy(() -> {
-				ItemStack item = shield(DyeColor.BLUE);
-				item.setData(DataComponentTypes.BANNER_PATTERNS, BannerPatternLayers.bannerPatternLayers(List.of(
+				ItemStack item = shield(DyeColor.BLUE,
 					new Pattern(DyeColor.RED, PatternType.FLOWER),
 					new Pattern(DyeColor.BLUE, PatternType.HALF_HORIZONTAL),
 					new Pattern(DyeColor.YELLOW, PatternType.TRIANGLE_TOP),
@@ -1811,23 +2041,19 @@ public class TrappedNewbieAdvancements {
 					new Pattern(DyeColor.YELLOW, PatternType.TRIANGLES_BOTTOM),
 					new Pattern(DyeColor.BLACK, PatternType.BORDER),
 					new Pattern(DyeColor.LIGHT_GRAY, PatternType.CURLY_BORDER)
-				)));
+				);
 				item.addUnsafeEnchantment(Enchantment.UNBREAKING, 10);
 				item.addUnsafeEnchantment(Enchantment.THORNS, 1);
 				return item;
 			})
 		)
 		.buildAndRegister(MasterShieldsmanAdvancement::new);
-	public static final IAdvancement DEFLECT_40 = buildBase(MASTER_SHIELDSMAN, "deflect_40").display(display().x(1F).fancyDescriptionParent(NamedTextColor.DARK_PURPLE).challengeFrame().icon(() -> {
-			ItemStack item = shield(DyeColor.BLACK);
-			item.setData(DataComponentTypes.BANNER_PATTERNS, BannerPatternLayers.bannerPatternLayers(List.of(
-				new Pattern(DyeColor.GRAY, PatternType.CURLY_BORDER),
-				new Pattern(DyeColor.GRAY, PatternType.TRIANGLE_BOTTOM),
-				new Pattern(DyeColor.GRAY, PatternType.TRIANGLE_TOP),
-				new Pattern(DyeColor.GRAY, PatternType.BRICKS)
-			)));
-			return item;
-		}))
+	public static final IAdvancement DEFLECT_40 = buildBase(MASTER_SHIELDSMAN, "deflect_40").display(display().x(1F).fancyDescriptionParent(NamedTextColor.DARK_PURPLE).challengeFrame().icon(() -> shield(DyeColor.BLACK,
+		new Pattern(DyeColor.GRAY, PatternType.CURLY_BORDER),
+		new Pattern(DyeColor.GRAY, PatternType.TRIANGLE_BOTTOM),
+		new Pattern(DyeColor.GRAY, PatternType.TRIANGLE_TOP),
+		new Pattern(DyeColor.GRAY, PatternType.BRICKS)
+	)))
 		.requiredProgress(vanilla(entityHurtPlayer().withDamage(damage -> damage.blocked().withMinDealtDamage(40D))))
 		.buildAndRegister();
 	public static final IAdvancement ATTACK_WITH_AN_AXE = buildBase(WEAPONRY_ROOT, "attack_with_an_axe").display(display().xy(1F, 2.5F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.STONE_AXE))
@@ -2514,16 +2740,12 @@ public class TrappedNewbieAdvancements {
 				)
 		))
 		.buildAndRegister();
-	public static final IAdvancement BLOCK_A_PHANTOM_WITH_A_SHIELD = buildBase(GET_ATTACKED_BY_A_PHANTOM, "block_a_phantom_with_a_shield").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(() -> {
-			ItemStack item = shield(DyeColor.BLUE);
-			item.setData(DataComponentTypes.BANNER_PATTERNS, BannerPatternLayers.bannerPatternLayers(List.of(
-				new Pattern(DyeColor.LIME, PatternType.STRIPE_MIDDLE),
-				new Pattern(DyeColor.BLUE, PatternType.STRIPE_CENTER),
-				new Pattern(DyeColor.BLACK, PatternType.STRIPE_TOP),
-				new Pattern(DyeColor.BLACK, PatternType.STRIPE_BOTTOM)
-			)));
-			return item;
-		}))
+	public static final IAdvancement BLOCK_A_PHANTOM_WITH_A_SHIELD = buildBase(GET_ATTACKED_BY_A_PHANTOM, "block_a_phantom_with_a_shield").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(() -> shield(DyeColor.BLUE,
+			new Pattern(DyeColor.LIME, PatternType.STRIPE_MIDDLE),
+			new Pattern(DyeColor.BLUE, PatternType.STRIPE_CENTER),
+			new Pattern(DyeColor.BLACK, PatternType.STRIPE_TOP),
+			new Pattern(DyeColor.BLACK, PatternType.STRIPE_BOTTOM)
+		)))
 		.withReward(rewards().addItems(ItemStack.of(Material.PHANTOM_MEMBRANE)))
 		.requiredProgress(vanilla(
 			entityHurtPlayer()
@@ -2825,17 +3047,13 @@ public class TrappedNewbieAdvancements {
 				.withEntity(entity -> entity.withEntityType(EntityType.DROWNED))
 		))
 		.buildAndRegister();
-	public static final IAdvancement BLOCK_A_DROWNED_TRIDENT = buildBase(GET_A_STACK_OF_ROTTEN_FLESH, "block_a_drowned_trident").display(display().xy(0F, -1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(() -> {
-			ItemStack item = shield(DyeColor.CYAN);
-			item.setData(DataComponentTypes.BANNER_PATTERNS, BannerPatternLayers.bannerPatternLayers(List.of(
-				new Pattern(DyeColor.LIGHT_BLUE, PatternType.STRIPE_MIDDLE),
-				new Pattern(DyeColor.CYAN, PatternType.STRIPE_CENTER),
-				new Pattern(DyeColor.GREEN, PatternType.TRIANGLES_TOP),
-				new Pattern(DyeColor.LIGHT_BLUE, PatternType.STRIPE_BOTTOM),
-				new Pattern(DyeColor.BROWN, PatternType.TRIANGLES_BOTTOM)
-			)));
-			return item;
-		}))
+	public static final IAdvancement BLOCK_A_DROWNED_TRIDENT = buildBase(GET_A_STACK_OF_ROTTEN_FLESH, "block_a_drowned_trident").display(display().xy(0F, -1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(() -> shield(DyeColor.CYAN,
+			new Pattern(DyeColor.LIGHT_BLUE, PatternType.STRIPE_MIDDLE),
+			new Pattern(DyeColor.CYAN, PatternType.STRIPE_CENTER),
+			new Pattern(DyeColor.GREEN, PatternType.TRIANGLES_TOP),
+			new Pattern(DyeColor.LIGHT_BLUE, PatternType.STRIPE_BOTTOM),
+			new Pattern(DyeColor.BROWN, PatternType.TRIANGLES_BOTTOM)
+		)))
 		.requiredProgress(vanilla(
 			entityHurtPlayer()
 				.withDamage(damage -> damage
@@ -3224,17 +3442,13 @@ public class TrappedNewbieAdvancements {
 				)
 		))
 		.buildAndRegister();
-	public static final IAdvancement BLOCK_A_CREEPER = buildBase(SHOOT_A_CREEPER, "block_a_creeper").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(() -> {
-			ItemStack item = shield(DyeColor.LIME);
-			item.setData(DataComponentTypes.BANNER_PATTERNS, BannerPatternLayers.bannerPatternLayers(List.of(
-				new Pattern(DyeColor.LIME, PatternType.HALF_HORIZONTAL),
-				new Pattern(DyeColor.LIME, PatternType.HALF_HORIZONTAL_BOTTOM),
-				new Pattern(DyeColor.BLACK, PatternType.CREEPER),
-				new Pattern(DyeColor.BLACK, PatternType.CREEPER),
-				new Pattern(DyeColor.BLACK, PatternType.CREEPER)
-			)));
-			return item;
-		}))
+	public static final IAdvancement BLOCK_A_CREEPER = buildBase(SHOOT_A_CREEPER, "block_a_creeper").display(display().x(-1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(() -> shield(DyeColor.LIME,
+			new Pattern(DyeColor.LIME, PatternType.HALF_HORIZONTAL),
+			new Pattern(DyeColor.LIME, PatternType.HALF_HORIZONTAL_BOTTOM),
+			new Pattern(DyeColor.BLACK, PatternType.CREEPER),
+			new Pattern(DyeColor.BLACK, PatternType.CREEPER),
+			new Pattern(DyeColor.BLACK, PatternType.CREEPER)
+		)))
 		.withReward(rewards().addItems(ItemStack.of(Material.GUNPOWDER, 8)))
 		.requiredProgress(vanilla(
 			entityHurtPlayer()
@@ -4562,9 +4776,10 @@ public class TrappedNewbieAdvancements {
 		return item;
 	}
 
-	private static ItemStack shield(DyeColor dyeColor) {
+	private static ItemStack shield(DyeColor dyeColor, Pattern... patterns) {
 		var item = ItemStack.of(Material.SHIELD);
 		item.setData(DataComponentTypes.BASE_COLOR, dyeColor);
+		if (patterns.length > 0) item.setData(DataComponentTypes.BANNER_PATTERNS, BannerPatternLayers.bannerPatternLayers(List.of(patterns)));
 		return item;
 	}
 

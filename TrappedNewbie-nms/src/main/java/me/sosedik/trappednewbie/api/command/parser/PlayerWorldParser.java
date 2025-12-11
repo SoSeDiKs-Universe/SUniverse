@@ -22,7 +22,6 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 
 @NullMarked
@@ -59,9 +58,11 @@ public final class PlayerWorldParser<C> implements ArgumentParser.FutureArgument
 			World.Environment environment = null;
 			if (input.contains(ENV_SEPARATOR)) {
 				String[] split = input.split(ENV_SEPARATOR);
-				environment = MiscUtil.parseOrNull(split[1], World.Environment.class);
-				if (environment == null)
+				try {
+					environment = MiscUtil.getByDimensionKey(split[1]);
+				} catch (IllegalArgumentException e) {
 					return ArgumentParseResult.failureFuture(new WorldParser.WorldParseException(input, commandContext));
+				}
 
 				if (input.startsWith("@s" + ENV_SEPARATOR)) {
 					Player target = resolveTarget(commandContext);
@@ -145,7 +146,7 @@ public final class PlayerWorldParser<C> implements ArgumentParser.FutureArgument
 				completions.add(Suggestion.suggestion(playerPrefix));
 				for (World.Environment environment : World.Environment.values()) {
 					if (environment == World.Environment.CUSTOM) continue;
-					completions.add(Suggestion.suggestion(playerPrefix + ENV_SEPARATOR + environment.name().toLowerCase(Locale.US)));
+					completions.add(Suggestion.suggestion(playerPrefix + ENV_SEPARATOR + MiscUtil.getDimensionKey(environment)));
 				}
 			}
 		}

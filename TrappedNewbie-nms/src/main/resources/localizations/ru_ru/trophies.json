@@ -1,4 +1,56 @@
 {
+	"trophy.kill_all_villager_professions_with_a_crossbow.name": "<gold>Зловещий щит",
+	"trophy.kill_all_villager_professions_with_a_crossbow.lore": [
+		"<gold>Этот щит подтверждает Вашу принадлежность",
+		"<gold>к разбойникам сил Архи-грабителя"
+	],
+	"trophy.kill_a_villager_wearing_a_piglin_head.name": "<red>Клоунский нос",
+	"trophy.kill_a_villager_wearing_a_piglin_head.lore": "<red>Носите второй нос сами",
+	"trophy.kill_a_villager_wearing_a_dragon_head.name": "<#bd6b00>Тренировочный манекен",
+	"trophy.kill_a_villager_wearing_a_dragon_head.lore": "<#bd6b00>Этот можно использовать повторно",
+	"trophy.die_from_a_villager_thorns.name": "<dark_green>Новая одежда",
+	"trophy.die_from_a_villager_thorns.lore": "<dark_green>Похоже, она защищает",
+	"trophy.kill_all_villagers_in_all_dimensions.name": "<dark_blue>Большой астероид",
+	"trophy.kill_all_villagers_in_all_dimensions.lore": [
+		"<dark_blue>Он упал на Землю.",
+		"<dark_blue>Поэтому все крестьяне мертвы.",
+		"<dark_blue>Вы не имеете к этому никакого отношения.",
+		"<dark_blue>Да, совершенно точно никакого."
+	],
+	"trophy.kill_100_of_every_nitwit.name": "<dark_green>Щит крестьянина",
+	"trophy.kill_100_of_every_nitwit.lore": [
+		"<dark_green>Этот щит показывает Ваш крестьянский ранг.",
+		"<dark_green>У Вас нет ранга."
+	],
+	"trophy.compost_a_stack_of_large_ferns.name": "<dark_green>Ошибка",
+	"trophy.compost_a_stack_of_large_ferns.lore": [
+		"<dark_green>Вы решили потратить впустую много очень редких предметов,",
+		"<dark_green>поэтому этот трофей останется с Вами навсегда,",
+		"<dark_green>чтобы напоминать Вам о Вашей большой ошибке"
+	],
+	"trophy.compost_a_stack_of_tall_grass.name": "<dark_green>Вечное сожаление",
+	"trophy.compost_a_stack_of_tall_grass.lore": [
+		"<dark_green>Вы так быстро всё растратили,",
+		"<dark_green>дни работы улетучились в мгновение ока"
+	],
+	"trophy.get_a_firefly_bush.name": "<#fffec8>Безмятежность",
+	"trophy.get_a_firefly_bush.lore": [
+		"<#fffec8>Среднетоннажный транспортный корабль класса «светлячок»,",
+		"<#fffec8>ставший домом для его разношёрстного экипажа"
+	],
+	"trophy.get_a_stack_of_tall_grass.name": "<dark_green>Косилка для сорняков",
+	"trophy.get_a_stack_of_tall_grass.lore": [
+		"<dark_green>Вы уже избавились от всех сорняков,",
+		"<dark_green>зачем Вам нужно это?"
+	],
+	"trophy.kill_all_baby_villagers.name": "<blue>Детоубийца 9000",
+	"trophy.kill_all_baby_villagers.lore": [
+		"<blue>Ты исполняешь своё предназначение, Энакин.",
+		"<blue>Теперь ты — мой ученик.",
+		"<blue>Научись использовать тёмную сторону Силы."
+	],
+	"trophy.kill_100_villagers.name": "<#FFC27F>Хлеб",
+	"trophy.kill_100_villagers.lore": "<#FFC27F>Такой вкусный…",
 	"trophy.trade_with_every_villager_in_all_biomes.name": "<blue>Международная любовь",
 	"trophy.trade_with_every_villager_in_all_biomes.lore": [
 		"<blue>От районного тусовщика",
@@ -6,8 +58,8 @@
 	],
 	"trophy.get_a_stack_of_emerald_blocks.name": "<#E5C0AE>Голова Стонкса",
 	"trophy.get_a_stack_of_emerald_blocks.lore": "<#E5C0AE>СТОНКС",
-	"trophy.get_a_stack_of_tall_grass.name": "<#6ADA62>Медаль коллекционера папоротников",
-	"trophy.get_a_stack_of_tall_grass.lore": [
+	"trophy.get_a_stack_of_large_ferns.name": "<#6ADA62>Медаль коллекционера папоротников",
+	"trophy.get_a_stack_of_large_ferns.lore": [
 		"<#6ADA62>Вы собрали достаточно травы,",
 		"<#6ADA62>чтобы создать собственные джунгли"
 	],

@@ -2,13 +2,16 @@ package me.sosedik.trappednewbie.listener.advancement.dedicated;
 
 import me.sosedik.trappednewbie.dataset.TrappedNewbieAdvancements;
 import me.sosedik.utilizer.dataset.UtilizerTags;
+import net.kyori.adventure.key.Key;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.damage.DamageSource;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Villager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -23,6 +26,20 @@ import java.util.List;
  */
 @NullMarked
 public class KillMobsAdvancements implements Listener {
+
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onNitwitKill(EntityDeathEvent event) {
+		if (!(event.getEntity() instanceof Villager villager)) return;
+		if (villager.getProfession() != Villager.Profession.NITWIT) return;
+
+		Player killer = villager.getKiller();
+		if (killer == null) return;
+
+		Key key = villager.getVillagerType().key();
+		if (!NamespacedKey.MINECRAFT.equals(key.namespace())) return;
+
+		TrappedNewbieAdvancements.KILL_100_OF_EVERY_NITWIT.awardMultiCriterion(killer, key.value(), null);
+	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onHalloweenKill(EntityDeathEvent event) {

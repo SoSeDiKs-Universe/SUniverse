@@ -12,6 +12,7 @@ import me.sosedik.utilizer.dataset.UtilizerTags;
 import me.sosedik.utilizer.util.EntityUtil;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -62,6 +63,7 @@ public class TickerAdvancements implements Listener {
 		TrappedNewbie.scheduler().sync(() -> {
 			for (Player player : Bukkit.getOnlinePlayers()) {
 				if (player.isDead()) continue;
+				if (player.getGameMode() == GameMode.SPECTATOR) continue;
 
 				check.accept(player);
 			}

@@ -122,7 +122,7 @@ public abstract class FancierAdvancementDisplay<T extends FancierAdvancementDisp
 		List<Component> awards = new ArrayList<>();
 		int exp = simpleReward.getExp();
 		if (exp != 0)
-			awards.add(FancyAdvancementReward.getExpMessage(viewer, exp));
+			awards.add(Component.space().append(FancyAdvancementReward.getExpMessage(viewer, exp)));
 
 		List<ItemStack> items = simpleReward.getItems();
 		if (!items.isEmpty())
@@ -154,8 +154,11 @@ public abstract class FancierAdvancementDisplay<T extends FancierAdvancementDisp
 		if (viewer == null) return super.renderAdvancementTitle(null);
 		if (this.advancement == null) return super.renderAdvancementTitle(null);
 
+		AdvancementFrame frame = getAdvancementFrame();
+		if (!frame.requiresBackground()) return super.renderAdvancementTitle(null);
+
 		boolean obtained = this.advancement.isDone(viewer);
-		FontData fontData = getAdvancementFrame().getFontData(obtained);
+		FontData fontData = frame.getFontData(obtained);
 		if (fontData == null) return super.renderAdvancementTitle(viewer);
 
 		return Component.textOfChildren(
@@ -163,7 +166,7 @@ public abstract class FancierAdvancementDisplay<T extends FancierAdvancementDisp
 			super.renderAdvancementTitle(viewer)
 		);
 	}
-	
+
 	@Override
 	public TextColor chatAnnouncementTitleColor(@Nullable Player viewer) {
 		if (this.announcementMessage == null) {

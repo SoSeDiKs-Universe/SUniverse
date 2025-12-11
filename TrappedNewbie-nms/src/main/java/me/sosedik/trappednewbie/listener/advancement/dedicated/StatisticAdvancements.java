@@ -139,6 +139,7 @@ public class StatisticAdvancements implements Listener {
 				if (entityType == EntityType.SKELETON_HORSE) TrappedNewbieAdvancements.KILL_400_SKELETON_HORSES.modifySimpleProgress(player, p -> p.setGained(statValue));
 				else if (entityType == EntityType.ENDERMITE) TrappedNewbieAdvancements.KILL_10K_ENDERMITES.modifySimpleProgress(player, p -> p.setGained(statValue));
 				else if (entityType == EntityType.SILVERFISH) TrappedNewbieAdvancements.KILL_10K_SILVERFISHES.modifySimpleProgress(player, p -> p.setGained(statValue));
+				else if (entityType == EntityType.VILLAGER) TrappedNewbieAdvancements.KILL_100_VILLAGERS.modifySimpleProgress(player, p -> p.setGained(statValue));
 			}
 			case TRADED_WITH_VILLAGER -> {
 				if (statValue >= 100) TrappedNewbieAdvancements.TRADE_100.awardAllCriteria(player);

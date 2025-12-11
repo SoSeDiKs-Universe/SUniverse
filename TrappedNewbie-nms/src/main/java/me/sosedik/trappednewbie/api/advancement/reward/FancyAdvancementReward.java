@@ -149,11 +149,11 @@ public class FancyAdvancementReward extends SimpleAdvancementRewardBuilder<Fancy
 
 	public static void sendExpMessage(Player player, int exp) {
 		if (exp != 0)
-			player.sendMessage(getExpMessage(player, exp));
+			player.sendMessage(Component.space().append(getExpMessage(player, exp)));
 	}
 
 	public static Component getExpMessage(Player player, int exp) {
-		String expMessage = (exp > 0 ? " +" : " ") + String.format("%,d", exp).replace(",", ".");
+		String expMessage = (exp > 0 ? "+" : "") + String.format("%,d", exp).replace(",", ".");
 		return Messenger.messenger(player).getMessage("advancement.reward.exp", raw("exp", expMessage), raw("exp_raw", exp));
 	}
 

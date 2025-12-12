@@ -204,7 +204,7 @@ import me.sosedik.utilizer.util.Scheduler;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.bukkit.Bukkit;
 import org.bukkit.Difficulty;
-import org.bukkit.GameRule;
+import org.bukkit.GameRules;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Tag;
@@ -468,7 +468,6 @@ public final class TrappedNewbie extends JavaPlugin {
 			// command
 			MigrateCommand.class
 		);
-		SuicideCommand.init(this);
 
 		TrappedNewbieTags.ROCKS.getValues().forEach(rock -> {
 			Material pebble = Material.getMaterial(rock.name().replace("ROCK", "PEBBLE"));
@@ -515,16 +514,17 @@ public final class TrappedNewbie extends JavaPlugin {
 		world.setAutoSave(false);
 		world.setFullTime(0);
 		world.setDifficulty(Difficulty.PEACEFUL);
-		world.setGameRule(GameRule.SPAWN_RADIUS, 0);
-		world.setGameRule(GameRule.DO_WEATHER_CYCLE, false);
-		world.setGameRule(GameRule.DO_INSOMNIA, false);
-		world.setGameRule(GameRule.DO_MOB_SPAWNING, false);
-		world.setGameRule(GameRule.DO_PATROL_SPAWNING, false);
-		world.setGameRule(GameRule.DO_TRADER_SPAWNING, false);
-		world.setGameRule(GameRule.DO_WARDEN_SPAWNING, false);
-		world.setGameRule(GameRule.DO_VINES_SPREAD, false);
-		world.setGameRule(GameRule.RANDOM_TICK_SPEED, 0);
-		world.setGameRule(GameRule.MOB_GRIEFING, false);
+		world.setGameRule(GameRules.RESPAWN_RADIUS, 0);
+		world.setGameRule(GameRules.ADVANCE_WEATHER, false);
+		world.setGameRule(GameRules.SPAWN_PHANTOMS, false);
+		world.setGameRule(GameRules.SPAWN_MOBS, false);
+		world.setGameRule(GameRules.SPAWN_MONSTERS, false);
+		world.setGameRule(GameRules.SPAWN_PATROLS, false);
+		world.setGameRule(GameRules.SPAWN_WANDERING_TRADERS, false);
+		world.setGameRule(GameRules.SPAWN_WARDENS, false);
+		world.setGameRule(GameRules.SPREAD_VINES, false);
+		world.setGameRule(GameRules.RANDOM_TICK_SPEED, 0);
+		world.setGameRule(GameRules.MOB_GRIEFING, false);
 		new CustomDayCycleTask(world, () -> {
 			if (Bukkit.getServerTickManager().isFrozen()) return 0D;
 			if (limboWorld().getPlayers().isEmpty()) return 0D;
@@ -567,6 +567,7 @@ public final class TrappedNewbie extends JavaPlugin {
 		commandManager.registerCommands(this,
 			MigrateCommand.class,
 			SpitCommand.class,
+			SuicideCommand.class,
 			TestCommand.class,
 			ThirstCommand.class
 		);

@@ -8,6 +8,7 @@ import org.incendo.cloud.annotations.AnnotationParser;
 import org.incendo.cloud.execution.ExecutionCoordinator;
 import org.incendo.cloud.meta.CommandMeta;
 import org.incendo.cloud.paper.PaperCommandManager;
+import org.jetbrains.annotations.UnknownNullability;
 import org.jspecify.annotations.NullMarked;
 
 import java.lang.reflect.Constructor;
@@ -17,7 +18,7 @@ import java.util.Collection;
 @NullMarked
 public class CommandManager {
 
-	private static CommandManager commandManager;
+	private static @UnknownNullability CommandManager commandManager;
 
 	private final PaperCommandManager<CommandSourceStack> paperCommandManager;
 	private final AnnotationParser<CommandSourceStack> annotationParser;
@@ -41,6 +42,7 @@ public class CommandManager {
 	public void registerCommands(Plugin plugin, Class<?> ... commandClasses) {
 		CommandManager commandManager = commandManager();
 		try {
+			commands:
 			for (Class<?> commandClass : commandClasses) {
 				if (commandClass.getDeclaredConstructors().length != 1) {
 					Utilizer.logger().warn("Couldn't register commands in {} for {} (must be exactly 1 constructor)", commandClass, plugin.getName());
@@ -51,20 +53,22 @@ public class CommandManager {
 				if (paramCount == 0) {
 					Object commandInstance = constructor.newInstance();
 					commandManager.registerCommand(commandInstance);
-					continue;
-				} else if (paramCount == 1) {
-					if (constructor.getParameterTypes()[0] == CommandManager.class) {
-						constructor.newInstance(commandManager);
-						continue;
+				} else {
+					Object[] initArgs = new Object[paramCount];
+					for (int i = 0; i < paramCount; i++) {
+						Class<?> parameterType = constructor.getParameterTypes()[i];
+						if (Plugin.class.isAssignableFrom(parameterType)) {
+							initArgs[i] = plugin;
+						} else if (parameterType == CommandManager.class) {
+							initArgs[i] = CommandManager.commandManager();
+						} else {
+							Utilizer.logger().warn("Couldn't register commands in {} for {} (unsupported constructor parameter: {})", commandClass, plugin.getName(), parameterType);
+							continue commands;
+						}
 					}
-				} else if (paramCount == 2) {
-					Class<?>[] paramTypes = constructor.getParameterTypes();
-					if (paramTypes[0] == Plugin.class && paramTypes[1] == CommandManager.class) {
-						constructor.newInstance(plugin, commandManager);
-						continue;
-					}
+					Object commandInstance = constructor.newInstance(initArgs);
+					commandManager.registerCommand(commandInstance);
 				}
-				Utilizer.logger().warn("Couldn't register commands in {} for {} (unsupported constructor)", commandClass, plugin.getName());
 			}
 		} catch (SecurityException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
 			Utilizer.logger().error("Couldn't register commands for {}", plugin.getName(), e);

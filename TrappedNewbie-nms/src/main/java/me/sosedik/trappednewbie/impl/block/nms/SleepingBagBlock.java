@@ -133,16 +133,15 @@ public class SleepingBagBlock extends BedBlock implements KiterinoBlock {
 			player.startSleepInBed(pos).ifLeft(bedSleepingProblem -> {
 				// Paper start - PlayerBedFailEnterEvent
 				if (bedSleepingProblem != null) {
-					io.papermc.paper.event.player.PlayerBedFailEnterEvent event = new io.papermc.paper.event.player.PlayerBedFailEnterEvent((org.bukkit.entity.Player) player.getBukkitEntity(), io.papermc.paper.event.player.PlayerBedFailEnterEvent.FailReason.values()[bedSleepingProblem.ordinal()], org.bukkit.craftbukkit.block.CraftBlock.at(level, finalBlockPos), !level.dimensionType().bedWorks(), io.papermc.paper.adventure.PaperAdventure.asAdventure(bedSleepingProblem.getMessage()));
+					io.papermc.paper.event.player.PlayerBedFailEnterEvent event = org.bukkit.craftbukkit.event.CraftEventFactory.callPlayerBedFailEnterEvent(player, finalBlockPos, bedSleepingProblem);
 					if (!event.callEvent()) {
 						return;
 					}
-					// Paper end - PlayerBedFailEnterEvent
-					if (bedSleepingProblem.getMessage() != null) {
-						final net.kyori.adventure.text.Component message = event.getMessage(); // Paper - PlayerBedFailEnterEvent
-						if (message != null) player.displayClientMessage(io.papermc.paper.adventure.PaperAdventure.asVanilla(message), true); // Paper - PlayerBedFailEnterEvent
-					}
-				} // Paper - PlayerBedFailEnterEvent
+					final net.kyori.adventure.text.Component message = event.getMessage();
+					if (message != null)
+						player.displayClientMessage(io.papermc.paper.adventure.PaperAdventure.asVanilla(message), true);
+				}
+				// Paper end - PlayerBedFailEnterEvent
 			}).ifRight(u -> {
 				player.setPos(finalBlockPos.getX() + 0.5, finalBlockPos.getY() + 0.1, finalBlockPos.getZ() + 0.5);
 				if (player instanceof ServerPlayer serverPlayer)

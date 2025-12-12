@@ -1,6 +1,7 @@
 package me.sosedik.trappednewbie.listener.item;
 
 import me.sosedik.trappednewbie.TrappedNewbie;
+import me.sosedik.trappednewbie.dataset.TrappedNewbieDamageTypes;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieItems;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieTags;
 import me.sosedik.utilizer.dataset.UtilizerTags;
@@ -9,7 +10,6 @@ import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.damage.DamageSource;
-import org.bukkit.damage.DamageType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Snowball;
 import org.bukkit.event.EventHandler;
@@ -62,7 +62,9 @@ public class ThrowableRockBehavior implements Listener {
 			target.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 5 * 20, 2));
 		} else if (TrappedNewbieTags.ROCKS.isTagged(projectile.getType())) {
 			LivingEntity shooter = snowball.getShooter() instanceof LivingEntity livingEntity ? livingEntity : null;
-			DamageSource.Builder builder = DamageSource.builder(DamageType.THROWN).withDirectEntity(snowball).withDamageLocation(snowball.getLocation());
+			DamageSource.Builder builder = DamageSource.builder(TrappedNewbieDamageTypes.THROWN_ROCK)
+				.withDirectEntity(snowball)
+				.withDamageLocation(snowball.getLocation());
 			if (shooter != null) builder = builder.withCausingEntity(shooter);
 			target.damage(1, builder.build());
 		}

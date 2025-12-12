@@ -46,7 +46,7 @@ import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-// MCCheck: 1.21.10, new mobs visually carrying items outside entity equipment
+// MCCheck: 1.21.11, new mobs visually carrying items outside entity equipment
 @NullMarked
 public class PossessingPlayer {
 

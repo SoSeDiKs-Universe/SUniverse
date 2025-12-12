@@ -30,7 +30,7 @@ import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -236,12 +236,12 @@ public class ResourceLibBootstrap implements PluginBootstrap {
 		if (json.has("repairable")) {
 			String tag = json.get("repairable").getAsString();
 			if (tag.charAt(0) == '#') {
-				properties.repairable(TagKey.create(Registries.ITEM, ResourceLocation.parse(tag.substring(1))));
+				properties.repairable(TagKey.create(Registries.ITEM, Identifier.parse(tag.substring(1))));
 			} else {
-				Item item = BuiltInRegistries.ITEM.getValue(ResourceLocation.parse(tag));
+				Item item = BuiltInRegistries.ITEM.getValue(Identifier.parse(tag));
 				if (item == Items.AIR) {
 					postActions.add(() -> {
-						Item repairItem = BuiltInRegistries.ITEM.getValue(ResourceLocation.parse(tag));
+						Item repairItem = BuiltInRegistries.ITEM.getValue(Identifier.parse(tag));
 						if (repairItem == Items.AIR) {
 							ResourceLib.logger().error("Couldn't set repairable ({} -> {}): missing item", itemKey, tag);
 							return;
@@ -256,10 +256,10 @@ public class ResourceLibBootstrap implements PluginBootstrap {
 		}
 		if (json.has("remaining_item")) {
 			String itemId = json.get("remaining_item").getAsString();
-			Item item = BuiltInRegistries.ITEM.getValue(ResourceLocation.parse(itemId));
+			Item item = BuiltInRegistries.ITEM.getValue(Identifier.parse(itemId));
 			if (item == Items.AIR) {
 				postActions.add(() -> {
-					Item remainingItem = BuiltInRegistries.ITEM.getValue(ResourceLocation.parse(itemId));
+					Item remainingItem = BuiltInRegistries.ITEM.getValue(Identifier.parse(itemId));
 					if (remainingItem == Items.AIR) {
 						ResourceLib.logger().error("Couldn't set remaining_item ({} -> {}): missing item", itemKey, itemId);
 						return;
@@ -277,10 +277,10 @@ public class ResourceLibBootstrap implements PluginBootstrap {
 		}
 		if (json.has("using_converts_to")) {
 			String itemId = json.get("using_converts_to").getAsString();
-			Item item = BuiltInRegistries.ITEM.getValue(ResourceLocation.parse(itemId));
+			Item item = BuiltInRegistries.ITEM.getValue(Identifier.parse(itemId));
 			if (item == Items.AIR) {
 				postActions.add(() -> {
-					Item usingConvertsTo = BuiltInRegistries.ITEM.getValue(ResourceLocation.parse(itemId));
+					Item usingConvertsTo = BuiltInRegistries.ITEM.getValue(Identifier.parse(itemId));
 					if (usingConvertsTo == Items.AIR) {
 						ResourceLib.logger().error("Couldn't set using_converts_to ({} -> {}): missing item", itemKey, itemId);
 						return;

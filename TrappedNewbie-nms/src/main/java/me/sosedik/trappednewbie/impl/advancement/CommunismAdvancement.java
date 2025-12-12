@@ -30,7 +30,7 @@ import java.util.Locale;
 
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.thrownItemPickedUpByEntity;
 
-// MCCheck: 1.21.10, new unobtainable items, new suspicious stew effects, new special items
+// MCCheck: 1.21.11, new unobtainable items, new suspicious stew effects, new special items
 @NullMarked
 public class CommunismAdvancement extends BaseAdvancement {
 
@@ -257,7 +257,7 @@ public class CommunismAdvancement extends BaseAdvancement {
 	}
 
 	private static boolean isUnobtainable(Material type) {
-		if (type.name().endsWith("_SPAWN_EGG")) return true;
+		if (UtilizerTags.SPAWN_EGGS.isTagged(type)) return true;
 		return type == Material.AIR
 			|| type == Material.GLOW_INK_SAC // Zombies are prohibited from picking them up specifically ¯\_(ツ)_/¯
 			|| type == Material.PLAYER_HEAD

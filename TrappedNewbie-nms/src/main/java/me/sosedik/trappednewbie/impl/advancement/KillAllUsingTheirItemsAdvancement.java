@@ -19,7 +19,7 @@ import java.util.List;
 
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.playerKilledEntity;
 
-// MCCheck: 1.21.10, new mobs with items
+// MCCheck: 1.21.11, new mobs with items
 @NullMarked
 public class KillAllUsingTheirItemsAdvancement extends BaseAdvancement {
 
@@ -31,21 +31,22 @@ public class KillAllUsingTheirItemsAdvancement extends BaseAdvancement {
 		List<List<String>> requirements = new ArrayList<>();
 		List<VanillaTriggerData<?>> triggerDatas = new ArrayList<>();
 
-		addTriggerData(requirements, triggerDatas, EntityType.ZOMBIE, Material.IRON_SHOVEL, Material.IRON_SWORD);
-		addTriggerData(requirements, triggerDatas, EntityType.ZOMBIE_VILLAGER, Material.IRON_SHOVEL, Material.IRON_SWORD);
-		addTriggerData(requirements, triggerDatas, EntityType.HUSK, Material.IRON_SHOVEL, Material.IRON_SWORD);
+		addTriggerData(requirements, triggerDatas, EntityType.ZOMBIE, Material.IRON_SHOVEL, Material.IRON_SWORD, Material.IRON_SPEAR);
+		addTriggerData(requirements, triggerDatas, EntityType.ZOMBIE_VILLAGER, Material.IRON_SHOVEL, Material.IRON_SWORD, Material.IRON_SPEAR);
+		addTriggerData(requirements, triggerDatas, EntityType.HUSK, Material.IRON_SHOVEL, Material.IRON_SWORD, Material.IRON_SPEAR);
 		addTriggerData(requirements, triggerDatas, EntityType.SKELETON, Material.BOW);
 		addTriggerData(requirements, triggerDatas, EntityType.STRAY, Material.BOW);
 		addTriggerData(requirements, triggerDatas, EntityType.BOGGED, Material.BOW);
+		addTriggerData(requirements, triggerDatas, EntityType.PARCHED, Material.BOW);
 		addTriggerData(requirements, triggerDatas, EntityType.DROWNED, Material.FISHING_ROD, Material.NAUTILUS_SHELL, Material.TRIDENT);
 		addTriggerData(requirements, triggerDatas, EntityType.ENDERMAN, Tag.ENDERMAN_HOLDABLE.getValues().toArray(Material[]::new));
 		addPotionTriggerData(requirements, triggerDatas, EntityType.WITCH, PotionType.FIRE_RESISTANCE, PotionType.HEALING, PotionType.SWIFTNESS, PotionType.WATER_BREATHING);
 		addTriggerData(requirements, triggerDatas, EntityType.PILLAGER, Material.CROSSBOW);
 		addTriggerData(requirements, triggerDatas, EntityType.VEX, Material.IRON_SWORD);
 		addTriggerData(requirements, triggerDatas, EntityType.VINDICATOR, Material.IRON_AXE);
-		addTriggerData(requirements, triggerDatas, EntityType.PIGLIN, Material.CROSSBOW, Material.GOLDEN_SWORD);
+		addTriggerData(requirements, triggerDatas, EntityType.PIGLIN, Material.CROSSBOW, Material.GOLDEN_SWORD, Material.GOLDEN_SPEAR);
 		addTriggerData(requirements, triggerDatas, EntityType.PIGLIN_BRUTE, Material.GOLDEN_AXE);
-		addTriggerData(requirements, triggerDatas, EntityType.ZOMBIFIED_PIGLIN, Material.CROSSBOW, Material.WARPED_FUNGUS_ON_A_STICK, Material.GOLDEN_SWORD, Material.GOLDEN_AXE);
+		addTriggerData(requirements, triggerDatas, EntityType.ZOMBIFIED_PIGLIN, Material.CROSSBOW, Material.WARPED_FUNGUS_ON_A_STICK, Material.GOLDEN_SWORD, Material.GOLDEN_AXE, Material.GOLDEN_SPEAR);
 		addTriggerData(requirements, triggerDatas, EntityType.WITHER_SKELETON, Material.STONE_SWORD);
 		addTriggerData(requirements, triggerDatas, EntityType.FOX, Material.EMERALD, Material.RABBIT_FOOT, Material.RABBIT_HIDE, Material.EGG, Material.WHEAT, Material.LEATHER, Material.FEATHER);
 		addTriggerData(requirements, triggerDatas, EntityType.PANDA, Material.BAMBOO, Material.CAKE);

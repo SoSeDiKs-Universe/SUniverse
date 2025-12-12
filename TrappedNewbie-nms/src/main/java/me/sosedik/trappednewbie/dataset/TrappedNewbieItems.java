@@ -266,6 +266,8 @@ public class TrappedNewbieItems {
 	public static final Material GLOW_SQUID_BUCKET = byKey("glow_squid_bucket");
 	public static final Material TURTLE_BUCKET = byKey("turtle_bucket");
 	public static final Material STRIDER_BUCKET = byKey("strider_bucket");
+	public static final Material NAUTILUS_BUCKET = byKey("nautilus_bucket");
+	public static final Material ZOMBIE_NAUTILUS_BUCKET = byKey("zombie_nautilus_bucket");
 	public static final Material BEE_BOTTLE = byKey("bee_bottle");
 	public static final Material ENDERMITE_BOTTLE = byKey("endermite_bottle");
 	public static final Material SILVERFISH_BOTTLE = byKey("silverfish_bottle");

@@ -26,7 +26,7 @@ import java.util.Map;
 /**
  * Change player's speed depending on blocks below
  */
-// MCCheck: 1.21.10, new blocks
+// MCCheck: 1.21.11, new blocks
 @NullMarked
 public class DynamicMovingSpeed implements Listener {
 

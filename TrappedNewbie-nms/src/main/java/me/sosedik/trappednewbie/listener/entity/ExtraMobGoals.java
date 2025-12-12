@@ -6,9 +6,9 @@ import me.sosedik.trappednewbie.impl.entity.ai.JumpToTargetGoal;
 import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
-import net.minecraft.world.entity.animal.AbstractFish;
-import net.minecraft.world.entity.animal.Ocelot;
-import net.minecraft.world.entity.animal.Parrot;
+import net.minecraft.world.entity.animal.feline.Ocelot;
+import net.minecraft.world.entity.animal.fish.AbstractFish;
+import net.minecraft.world.entity.animal.parrot.Parrot;
 import net.minecraft.world.entity.animal.wolf.Wolf;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.Phantom;
@@ -23,6 +23,7 @@ import org.bukkit.craftbukkit.entity.CraftGoat;
 import org.bukkit.craftbukkit.entity.CraftHusk;
 import org.bukkit.craftbukkit.entity.CraftIllusioner;
 import org.bukkit.craftbukkit.entity.CraftOcelot;
+import org.bukkit.craftbukkit.entity.CraftParched;
 import org.bukkit.craftbukkit.entity.CraftParrot;
 import org.bukkit.craftbukkit.entity.CraftPigZombie;
 import org.bukkit.craftbukkit.entity.CraftPiglin;
@@ -50,7 +51,7 @@ import org.jspecify.annotations.NullMarked;
 /**
  * Some extra entity AI goals
  */
-// MCCheck: 1.21.10, new mobs
+// MCCheck: 1.21.11, new mobs
 @NullMarked
 public class ExtraMobGoals implements Listener {
 
@@ -78,6 +79,8 @@ public class ExtraMobGoals implements Listener {
 			case CraftStray entity ->
 				Bukkit.getMobGoals().addGoal(entity, 1, new JumpToTargetGoal(entity));
 			case CraftBogged entity ->
+				Bukkit.getMobGoals().addGoal(entity, 1, new JumpToTargetGoal(entity));
+			case CraftParched entity ->
 				Bukkit.getMobGoals().addGoal(entity, 1, new JumpToTargetGoal(entity));
 			case CraftHusk entity ->
 				Bukkit.getMobGoals().addGoal(entity, 1, new JumpToTargetGoal(entity));

@@ -15,6 +15,9 @@ public class TrappedNewbieDamageTypes {
 	public static final DamageType THIRST_DAMAGE = RegistryAccess.registryAccess().getRegistry(RegistryKey.DAMAGE_TYPE).getOrThrow(TrappedNewbie.trappedNewbieKey("thirst"));
 	public static final DamageType HOT_POTATO = RegistryAccess.registryAccess().getRegistry(RegistryKey.DAMAGE_TYPE).getOrThrow(TrappedNewbie.trappedNewbieKey("hot_potato"));
 	public static final DamageType LAVA_DRINK = RegistryAccess.registryAccess().getRegistry(RegistryKey.DAMAGE_TYPE).getOrThrow(TrappedNewbie.trappedNewbieKey("lava_drink"));
+	public static final DamageType THROWN_ROCK = RegistryAccess.registryAccess().getRegistry(RegistryKey.DAMAGE_TYPE).getOrThrow(TrappedNewbie.trappedNewbieKey("thrown_rock"));
+	public static final DamageType THROWN_MUSHROOM = RegistryAccess.registryAccess().getRegistry(RegistryKey.DAMAGE_TYPE).getOrThrow(TrappedNewbie.trappedNewbieKey("thrown_mushroom"));
+	public static final DamageType THROWN_SNOWBALL = RegistryAccess.registryAccess().getRegistry(RegistryKey.DAMAGE_TYPE).getOrThrow(TrappedNewbie.trappedNewbieKey("thrown_snowball"));
 
 	static {
 		PlayerTombstones.addTombstone(LAVA_DRINK, RequiemItems.MELTED_SKELETON_TOMBSTONE);

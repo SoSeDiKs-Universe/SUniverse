@@ -596,6 +596,8 @@
 	"adv.trappednewbie.weaponry.give_wind_mace_to_a_fox.description": "Give a «Wind Burst III» Mace to a Fox",
 	"adv.trappednewbie.weaponry.mace_500_damage.title": "Warden Extinction",
 	"adv.trappednewbie.weaponry.mace_500_damage.description": "Deal 250 hearts of damage in a single hit using a Mace… to one-shot a Warden",
+	"adv.trappednewbie.weaponry.spear_many_mobs.title": "<lang:advancements.adventure.spear_many_mobs.title>",
+	"adv.trappednewbie.weaponry.spear_many_mobs.description": "<lang:advancements.adventure.spear_many_mobs.description>",
 	"adv.trappednewbie.weaponry.kill_a_hostile_mob.title": "Monster Hunter",
 	"adv.trappednewbie.weaponry.kill_a_hostile_mob.description": "Kill any hostile monster",
 	"adv.trappednewbie.weaponry.kill_hostile_overworld_night_mobs.title": "Night Runner",

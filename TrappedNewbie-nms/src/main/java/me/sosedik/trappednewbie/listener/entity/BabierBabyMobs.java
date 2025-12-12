@@ -7,6 +7,7 @@ import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import me.sosedik.kiterino.event.entity.EntityStartUsingItemEvent;
 import me.sosedik.miscme.api.event.entity.EntityTurnBabyEvent;
 import me.sosedik.miscme.listener.entity.MoreBabyMobs;
+import me.sosedik.trappednewbie.dataset.TrappedNewbieDamageTypes;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieItems;
 import me.sosedik.trappednewbie.impl.entity.ai.NonBowRangedAttackGoal;
 import me.sosedik.trappednewbie.impl.entity.ai.TrumpetAttackGoal;
@@ -22,6 +23,7 @@ import org.bukkit.damage.DamageType;
 import org.bukkit.entity.AbstractSkeleton;
 import org.bukkit.entity.Bogged;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Parched;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Skeleton;
 import org.bukkit.entity.Snowball;
@@ -35,8 +37,11 @@ import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.jspecify.annotations.Nullable;
 
+import java.util.Map;
 import java.util.function.Consumer;
 
 /**
@@ -46,6 +51,7 @@ public class BabierBabyMobs implements Listener {
 
 	private static final String STRAY_PROJECTILE_MARKER = "stray_projectile";
 	private static final String BOGGED_PROJECTILE_MARKER = "bogged_projectile";
+	private static final String PARCHED_PROJECTILE_MARKER = "parched_projectile";
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onTurn(EntityTurnBabyEvent event) {
@@ -55,7 +61,7 @@ public class BabierBabyMobs implements Listener {
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onStart(EntityStartUsingItemEvent event) {
 		if (!(event.getEntity() instanceof AbstractSkeleton skeleton)) return;
-		if (!(skeleton instanceof Bogged || skeleton instanceof Stray)) return;
+		if (!(skeleton instanceof Bogged || skeleton instanceof Stray || skeleton instanceof Parched)) return;
 		if (!MoreBabyMobs.isNonVanillaBaby(skeleton)) return;
 		if (event.getItem().getType() == Material.BOW) return;
 
@@ -77,9 +83,14 @@ public class BabierBabyMobs implements Listener {
 				snowball.setItem(ItemStack.of(Math.random() > 0.5 ? Material.RED_MUSHROOM : Material.BROWN_MUSHROOM));
 				NBT.modifyPersistentData(snowball, (Consumer<ReadWriteNBT>) nbt -> nbt.setBoolean(BOGGED_PROJECTILE_MARKER, true));
 			});
-		} else {
+		} else if (skeleton instanceof Stray) {
 			skeleton.launchProjectile(Snowball.class, null,
 				snowball -> NBT.modifyPersistentData(snowball, (Consumer<ReadWriteNBT>) nbt -> nbt.setBoolean(STRAY_PROJECTILE_MARKER, true)));
+		} else {
+			skeleton.launchProjectile(Snowball.class, null, snowball -> {
+				snowball.setItem(ItemStack.of(TrappedNewbieItems.SANDSTONE_ROCK));
+				NBT.modifyPersistentData(snowball, (Consumer<ReadWriteNBT>) nbt -> nbt.setBoolean(PARCHED_PROJECTILE_MARKER, true));
+			});
 		}
 	}
 
@@ -88,17 +99,29 @@ public class BabierBabyMobs implements Listener {
 		if (!(event.getHitEntity() instanceof LivingEntity target)) return;
 		if (!(event.getEntity() instanceof Snowball snowball)) return;
 
-		Double damage = NBT.getPersistentData(snowball, nbt -> {
-			if (nbt.getOrDefault(STRAY_PROJECTILE_MARKER, false)) return 0.5;
-			if (nbt.getOrDefault(BOGGED_PROJECTILE_MARKER, false)) return 2D;
+		Map.Entry<DamageType, Double> damage = NBT.getPersistentData(snowball, nbt -> {
+			if (nbt.getOrDefault(STRAY_PROJECTILE_MARKER, false)) {
+				target.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 15 * 20, 0));
+				return Map.entry(TrappedNewbieDamageTypes.THROWN_SNOWBALL, 0.5);
+			}
+			if (nbt.getOrDefault(BOGGED_PROJECTILE_MARKER, false)) {
+				target.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 2 * 20, 0));
+				return Map.entry(TrappedNewbieDamageTypes.THROWN_MUSHROOM, 2D);
+			}
+			if (nbt.getOrDefault(PARCHED_PROJECTILE_MARKER, false)) {
+				target.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 15 * 20, 0));
+				return null;
+			}
 			return null;
 		});
 		if (damage == null) return;
 
 		LivingEntity shooter = snowball.getShooter() instanceof LivingEntity livingEntity ? livingEntity : null;
-		DamageSource.Builder builder = DamageSource.builder(DamageType.THROWN).withDirectEntity(snowball).withDamageLocation(snowball.getLocation());
+		DamageSource.Builder builder = DamageSource.builder(damage.getKey())
+			.withDirectEntity(snowball)
+			.withDamageLocation(snowball.getLocation());
 		if (shooter != null) builder = builder.withCausingEntity(shooter);
-		target.damage(damage, builder.build());
+		target.damage(damage.getValue(), builder.build());
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -157,6 +180,12 @@ public class BabierBabyMobs implements Listener {
 			skeleton.getEquipment().setItemInMainHandDropChance(0.2F);
 			Bukkit.getMobGoals().removeGoal(skeleton, VanillaGoal.RANGED_BOW_ATTACK);
 			Bukkit.getMobGoals().addGoal(skeleton, 1, new PaperGoal<>(new NonBowRangedAttackGoal<>(nms, 1, 30, 15F)));
+		} else if (entity instanceof Parched skeleton) {
+			var nms = ((CraftAbstractSkeleton) skeleton).getHandle();
+			skeleton.getEquipment().setItemInMainHand(ItemStack.of(TrappedNewbieItems.SANDSTONE_ROCK));
+			skeleton.getEquipment().setItemInMainHandDropChance(0.2F);
+			Bukkit.getMobGoals().removeGoal(skeleton, VanillaGoal.RANGED_BOW_ATTACK);
+			Bukkit.getMobGoals().addGoal(skeleton, 1, new PaperGoal<>(new NonBowRangedAttackGoal<>(nms, 1, 30, 15F)));
 		} else if (entity instanceof WitherSkeleton skeleton) {
 			if (getItemHand(skeleton, Material.WITHER_ROSE) == null) {
 				var nms = ((CraftAbstractSkeleton) skeleton).getHandle();
@@ -183,7 +212,7 @@ public class BabierBabyMobs implements Listener {
 		Bukkit.getMobGoals().removeGoal(skeleton, VanillaGoal.AVOID_ENTITY);
 		Bukkit.getMobGoals().addGoal(skeleton, 1, new PaperGoal<>(new HurtByTargetGoal(nms)));
 		Bukkit.getMobGoals().addGoal(skeleton, 3, new PaperGoal<>(new AvoidEntityGoal<>(nms, net.minecraft.world.entity.animal.wolf.Wolf.class, 6F, 1, 1.2)));
-		Bukkit.getMobGoals().addGoal(skeleton, 3, new PaperGoal<>(new NearestAttackableTargetGoal<>(nms, net.minecraft.world.entity.animal.Turtle.class, 10, true, false, net.minecraft.world.entity.animal.Turtle.BABY_ON_LAND_SELECTOR)));
+		Bukkit.getMobGoals().addGoal(skeleton, 3, new PaperGoal<>(new NearestAttackableTargetGoal<>(nms, net.minecraft.world.entity.animal.turtle.Turtle.class, 10, true, false, net.minecraft.world.entity.animal.turtle.Turtle.BABY_ON_LAND_SELECTOR)));
 	}
 
 }

@@ -14,7 +14,7 @@ import me.sosedik.utilizer.util.FileUtil;
 import me.sosedik.utilizer.util.MiscUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Difficulty;
-import org.bukkit.GameRule;
+import org.bukkit.GameRules;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -389,21 +389,22 @@ public class PerPlayerWorlds implements Listener {
 	 */
 	public static void applyWorldRules(World world) {
 		world.setDifficulty(Difficulty.HARD);
-		world.setGameRule(GameRule.NATURAL_REGENERATION, false);
-		world.setGameRule(GameRule.DO_IMMEDIATE_RESPAWN, false);
-		world.setGameRule(GameRule.DO_LIMITED_CRAFTING, false);
-		world.setGameRule(GameRule.REDUCED_DEBUG_INFO, true);
+		world.setGameRule(GameRules.NATURAL_HEALTH_REGENERATION, false);
+		world.setGameRule(GameRules.IMMEDIATE_RESPAWN, false);
+		world.setGameRule(GameRules.LIMITED_CRAFTING, false);
+		world.setGameRule(GameRules.REDUCED_DEBUG_INFO, true);
 	}
 
 	private static void applyVoidWorldRules(World world) {
 		world.setFullTime(0);
-		world.setGameRule(GameRule.DO_INSOMNIA, false);
-		world.setGameRule(GameRule.DO_MOB_SPAWNING, false);
-		world.setGameRule(GameRule.DO_PATROL_SPAWNING, false);
-		world.setGameRule(GameRule.DO_TRADER_SPAWNING, false);
-		world.setGameRule(GameRule.DO_WARDEN_SPAWNING, false);
-		world.setGameRule(GameRule.DO_VINES_SPREAD, false);
-		world.setGameRule(GameRule.MOB_GRIEFING, false);
+		world.setGameRule(GameRules.SPAWN_PHANTOMS, false);
+		world.setGameRule(GameRules.SPAWN_MOBS, false);
+		world.setGameRule(GameRules.SPAWN_MONSTERS, false);
+		world.setGameRule(GameRules.SPAWN_PATROLS, false);
+		world.setGameRule(GameRules.SPAWN_WANDERING_TRADERS, false);
+		world.setGameRule(GameRules.SPAWN_WARDENS, false);
+		world.setGameRule(GameRules.SPREAD_VINES, false);
+		world.setGameRule(GameRules.MOB_GRIEFING, false);
 
 		Block block = world.getBlockAt(0, 120, 0);
 		if (block.isEmpty()) {

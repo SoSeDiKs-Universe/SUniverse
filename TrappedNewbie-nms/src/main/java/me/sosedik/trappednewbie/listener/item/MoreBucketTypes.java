@@ -59,7 +59,7 @@ import org.jspecify.annotations.Nullable;
 /**
  * Custom buckets handler
  */
-// MCCheck: 1.21.10, new buckets (spills)
+// MCCheck: 1.21.11, new buckets (spills)
 @NullMarked
 public class MoreBucketTypes implements Listener {
 

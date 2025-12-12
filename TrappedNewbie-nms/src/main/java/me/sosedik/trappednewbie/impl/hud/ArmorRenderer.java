@@ -33,7 +33,7 @@ import java.util.Objects;
 import static me.sosedik.utilizer.api.message.Mini.combine;
 import static me.sosedik.utilizer.api.message.Mini.combined;
 
-// MCCheck: 1.21.10, new armor
+// MCCheck: 1.21.11, new armor
 @NullMarked
 public class ArmorRenderer extends SimpleHudRenderer {
 

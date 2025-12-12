@@ -30,7 +30,7 @@ import org.jspecify.annotations.NullMarked;
 /**
  * Allow opening containers behind hanging entities
  */
-// MCCheck: 1.21.10: new containers
+// MCCheck: 1.21.11: new containers
 @NullMarked
 public class ClickThroughHanging implements Listener {
 

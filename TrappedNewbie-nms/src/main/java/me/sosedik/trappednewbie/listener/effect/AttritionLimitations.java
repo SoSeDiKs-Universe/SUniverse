@@ -6,6 +6,7 @@ import me.sosedik.resourcelib.feature.HudMessenger;
 import me.sosedik.trappednewbie.impl.blockstorage.FlowerPotBlockStorage;
 import me.sosedik.utilizer.api.message.Messenger;
 import me.sosedik.utilizer.listener.item.NotDroppableItems;
+import org.bukkit.entity.AbstractHorse;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -74,7 +75,8 @@ public class AttritionLimitations implements Listener {
 	}
 
 	private static boolean isAllowedInventory(InventoryHolder holder) {
-		return holder instanceof FlowerPotBlockStorage;
+		return holder instanceof FlowerPotBlockStorage // It has GUI, but it's meant to be of primitive kind and there's no better way yet
+			|| holder instanceof AbstractHorse; // Can't open player's own inventory otherwise
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

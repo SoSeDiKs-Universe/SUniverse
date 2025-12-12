@@ -13,7 +13,7 @@ import java.util.List;
 
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.playerKilledEntity;
 
-// MCCheck: 1.21.10, new jockeys
+// MCCheck: 1.21.11, new jockeys
 @NullMarked
 public class KillAllJockeysAdvancement extends BaseAdvancement {
 
@@ -33,12 +33,20 @@ public class KillAllJockeysAdvancement extends BaseAdvancement {
 		simpleRider(requirements, triggerDatas, EntityType.VILLAGER, EntityType.CHICKEN);
 		simpleRider(requirements, triggerDatas, EntityType.WITCH, EntityType.CHICKEN);
 
+		simpleRider(requirements, triggerDatas, EntityType.DROWNED, EntityType.ZOMBIE_NAUTILUS);
+
+		simpleRider(requirements, triggerDatas, EntityType.ZOMBIE, EntityType.ZOMBIE_HORSE);
+
+		simpleRider(requirements, triggerDatas, EntityType.HUSK, EntityType.CAMEL_HUSK);
+		simpleRider(requirements, triggerDatas, EntityType.PARCHED, EntityType.CAMEL_HUSK);
+
 		simpleRider(requirements, triggerDatas, EntityType.ZOMBIFIED_PIGLIN, EntityType.STRIDER);
 		simpleRider(requirements, triggerDatas, EntityType.STRIDER, EntityType.STRIDER);
 
 		simpleRider(requirements, triggerDatas, EntityType.PIGLIN, EntityType.HOGLIN);
 		simpleRider(requirements, triggerDatas, EntityType.PIGLIN, EntityType.PIGLIN);
 
+		// Skeleton can be converted into Stray via powder snow
 		simpleRider(requirements, triggerDatas, EntityType.SKELETON, EntityType.SPIDER);
 		simpleRider(requirements, triggerDatas, EntityType.STRAY, EntityType.SPIDER);
 

@@ -13,6 +13,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.block.Block;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -217,7 +218,7 @@ public class PossessedUndeadZombieCuring implements Listener {
 	}
 
 	public static boolean canBeCured(LivingEntity entity) {
-		return UtilizerTags.HUMAN_LIKE_ZOMBIES.isTagged(entity.getType());
+		return UtilizerTags.HUMAN_LIKE_ZOMBIES.isTagged(entity.getType()) || entity.getType() == EntityType.WITCH;
 	}
 
 	public static void startCureTask(LivingEntity entity) {

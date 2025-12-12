@@ -56,7 +56,13 @@
 		"turtle_baby_bucket",
 		"squid_bucket",
 		"glow_squid_bucket",
-		"strider_bucket"
+		"strider_bucket",
+		"nautilus_bucket",
+		"nautilus_baby_bucket",
+		"zombie_nautilus_bucket",
+		"zombie_nautilus_baby_bucket",
+		"zombie_nautilus_coral_bucket",
+		"zombie_nautilus_coral_baby_bucket"
 	],
 	"jumping_overlays": [
 		"slime_bucket",

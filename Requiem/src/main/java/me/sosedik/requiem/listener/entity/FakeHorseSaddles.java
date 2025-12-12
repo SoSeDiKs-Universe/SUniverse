@@ -28,7 +28,7 @@ import java.util.UUID;
  * Fakes saddles for clients to allow controlling horses without actual saddles.
  * <br>This only allows access to the inventory, the riding itself requires {@link FakeHorseSaddlesModifier}.
  */
-// MCCheck: 1.21.10, abstract horse metadata index for saddles
+// MCCheck: 1.21.11, abstract horse metadata index for saddles // TODO No longer needed
 @NullMarked
 public class FakeHorseSaddles implements PacketListener, Listener {
 
@@ -51,7 +51,7 @@ public class FakeHorseSaddles implements PacketListener, Listener {
 
 			EntityData<Byte> entityData = (EntityData<Byte>) entityDataRaw;
 			byte mask = (byte) entityDataRaw.getValue();
-			mask |= 0x04; // Is saddled, required to control entity client-side
+			mask |= 0x04; // Is saddled, required to control entity client-side // TODO No longer needed
 			entityData.setValue(mask);
 			break;
 		}
@@ -96,9 +96,8 @@ public class FakeHorseSaddles implements PacketListener, Listener {
 		if (playerUuids == null) return;
 		if (!playerUuids.remove(player.getUniqueId())) return;
 
-		if (playerUuids.isEmpty()) {
+		if (playerUuids.isEmpty())
 			ENTITY_TO_PLAYER_SADDLES.remove(entity.getEntityId());
-		}
 
 		entity.resendMetadata(HORSE_META_INDEX);
 	}

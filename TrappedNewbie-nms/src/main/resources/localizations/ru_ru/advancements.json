@@ -581,6 +581,8 @@
 	"adv.trappednewbie.weaponry.give_wind_mace_to_a_fox.description": "Дайте лисице булаву с зачарованием «Порыв ветра III»",
 	"adv.trappednewbie.weaponry.mace_500_damage.title": "Метеорит",
 	"adv.trappednewbie.weaponry.mace_500_damage.description": "Нанесите 250 сердец урона хранителю булавой… чтобы убить его одним ударом",
+	"adv.trappednewbie.weaponry.spear_many_mobs.title": "<lang:advancements.adventure.spear_many_mobs.title>",
+	"adv.trappednewbie.weaponry.spear_many_mobs.description": "<lang:advancements.adventure.spear_many_mobs.description>",
 	"adv.trappednewbie.weaponry.kill_a_hostile_mob.title": "Охотник на монстров",
 	"adv.trappednewbie.weaponry.kill_a_hostile_mob.description": "Убейте злобного монстра",
 	"adv.trappednewbie.weaponry.kill_hostile_overworld_night_mobs.title": "Ночной бегун",

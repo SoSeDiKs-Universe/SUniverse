@@ -39,12 +39,15 @@ import me.sosedik.trappednewbie.impl.item.nms.HangGliderItem;
 import me.sosedik.trappednewbie.impl.item.nms.KnifeItem;
 import me.sosedik.trappednewbie.impl.item.nms.PaperPlaneItem;
 import me.sosedik.trappednewbie.impl.item.nms.ThrowableRockItem;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.data.registries.VanillaRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -75,6 +78,7 @@ import net.minecraft.world.item.equipment.EquipmentAsset;
 import net.minecraft.world.item.equipment.EquipmentAssets;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DispenserBlock;
+import net.minecraft.world.level.entity.UniquelyIdentifyable;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import org.bukkit.Material;
@@ -92,6 +96,8 @@ import static org.bukkit.craftbukkit.entity.CraftEntityTypes.createAndMoveEmptyR
 
 @NullMarked
 public class TrappedNewbieBootstrap implements PluginBootstrap {
+
+	private static HolderLookup.@Nullable Provider registryLookup = null;
 
 	@Override
 	public void bootstrap(BootstrapContext context) {
@@ -262,6 +268,48 @@ public class TrappedNewbieBootstrap implements PluginBootstrap {
 					entity.setItemSlot(EquipmentSlot.SADDLE, tag.getCompoundOrEmpty("equipment").read("saddle", ItemStack.CODEC).orElse(ItemStack.EMPTY));
 				}
 			);
+			case "nautilus_bucket" -> mobBucket((Item.Properties) properties, EntityType.NAUTILUS, Fluids.WATER, Items.WATER_BUCKET,
+				entity -> !entity.isVehicle() && !entity.isAggravated(),
+				(entity, stack) -> {
+					CustomData.update(DataComponents.BUCKET_ENTITY_DATA, stack, tag -> {
+						tag.putInt("Age", entity.getAge());
+						tag.putBoolean("AgeLocked", entity.ageLocked);
+						ItemStack saddleItem = entity.getItemBySlot(EquipmentSlot.SADDLE);
+						if (!saddleItem.isEmpty()) {
+							CompoundTag equipmentTag = new CompoundTag();
+							equipmentTag.store("saddle", ItemStack.CODEC, saddleItem);
+							tag.put("equipment", equipmentTag);
+						}
+					});
+				},
+				(entity, tag) -> {
+					entity.setAge(tag.getIntOr("Age", 0));
+					entity.ageLocked = tag.getBooleanOr("AgeLocked", false);
+					entity.setItemSlot(EquipmentSlot.SADDLE, tag.getCompoundOrEmpty("equipment").read("saddle", ItemStack.CODEC).orElse(ItemStack.EMPTY));
+				}
+			);
+			case "zombie_nautilus_bucket" -> mobBucket((Item.Properties) properties, EntityType.ZOMBIE_NAUTILUS, Fluids.WATER, Items.WATER_BUCKET,
+				entity -> !entity.isVehicle() && !entity.isAggravated(),
+				(entity, stack) -> {
+					CustomData.update(DataComponents.BUCKET_ENTITY_DATA, stack, tag -> {
+						tag.putInt("Age", entity.getAge());
+						tag.putBoolean("AgeLocked", entity.ageLocked);
+						ItemStack saddleItem = entity.getItemBySlot(EquipmentSlot.SADDLE);
+						if (!saddleItem.isEmpty()) {
+							CompoundTag equipmentTag = new CompoundTag();
+							equipmentTag.store("saddle", ItemStack.CODEC, saddleItem);
+							tag.put("equipment", equipmentTag);
+						}
+						entity.getVariant().unwrapKey().ifPresent(resourceKey -> tag.store("variant", Identifier.CODEC, resourceKey.identifier()));
+					});
+				},
+				(entity, tag) -> {
+					entity.setAge(tag.getIntOr("Age", 0));
+					entity.ageLocked = tag.getBooleanOr("AgeLocked", false);
+					entity.setItemSlot(EquipmentSlot.SADDLE, tag.getCompoundOrEmpty("equipment").read("saddle", ItemStack.CODEC).orElse(ItemStack.EMPTY));
+					tag.read("variant", Identifier.CODEC).map(identifier -> ResourceKey.create(Registries.ZOMBIE_NAUTILUS_VARIANT, identifier)).flatMap(getRegistryLookup()::get);
+				}
+			);
 			case "bee_bottle" -> mobBucket((Item.Properties) properties, EntityType.BEE, Fluids.EMPTY, Items.GLASS_BOTTLE,
 				null,
 				(entity, stack) -> {
@@ -273,8 +321,8 @@ public class TrappedNewbieBootstrap implements PluginBootstrap {
 						tag.putInt("TicksSincePollination", entity.ticksWithoutNectarSinceExitingHive);
 						tag.putInt("CannotEnterHiveTicks", entity.stayOutOfHiveCountdown);
 						tag.putInt("CropsGrownSincePollination", entity.numCropsGrownSincePollination);
-						tag.putInt("AngerTime", entity.getRemainingPersistentAngerTime());
-						tag.storeNullable("AngryAt", UUIDUtil.CODEC, entity.getPersistentAngerTarget());
+						tag.putLong("anger_end_time", entity.getPersistentAngerEndTime());
+						tag.storeNullable("angry_at", EntityReference.codec(), entity.getPersistentAngerTarget());
 						tag.putInt("InLove", entity.inLove);
 						if (entity.loveCause != null) tag.store("LoveCause", UUIDUtil.CODEC, entity.loveCause.getUUID());
 					});
@@ -287,8 +335,14 @@ public class TrappedNewbieBootstrap implements PluginBootstrap {
 					entity.ticksWithoutNectarSinceExitingHive = tag.getIntOr("TicksSincePollination", 0);
 					entity.stayOutOfHiveCountdown = tag.getIntOr("CannotEnterHiveTicks", 0);
 					entity.numCropsGrownSincePollination = tag.getIntOr("CropsGrownSincePollination", 0);
-					entity.setRemainingPersistentAngerTime(tag.getIntOr("AngerTime", 0));
-					entity.setPersistentAngerTarget(tag.read("AngryAt", UUIDUtil.CODEC).orElse(null));
+					entity.setPersistentAngerEndTime(tag.getLongOr("anger_end_time", -1L));
+					if (tag.contains("anger_end_time"))
+						entity.setPersistentAngerEndTime(tag.getLongOr("anger_end_time", -1L));
+					else if (tag.contains("AngerTime"))
+						entity.setTimeToRemainAngry(tag.getIntOr("AngerTime", 0));
+					else
+						entity.setPersistentAngerEndTime(-1L);
+					entity.setPersistentAngerTarget(readAngerTarget(tag, "angry_at"));
 					entity.inLove = tag.getIntOr("InLove", 0);
 					entity.loveCause = tag.read("LoveCause", EntityReference.<ServerPlayer>codec()).orElse(null);
 				}
@@ -420,12 +474,16 @@ public class TrappedNewbieBootstrap implements PluginBootstrap {
 		});
 	}
 
+	private static <StoredEntityType extends UniquelyIdentifyable> @Nullable EntityReference<StoredEntityType> readAngerTarget(CompoundTag input, String key) {
+		return input.read(key, EntityReference.<StoredEntityType>codec()).orElse(null);
+	}
+
 	private static Map<ArmorType, Integer> makeDefense(int boots, int leggings, int chestplate, int helmet, int body) {
 		return Maps.newEnumMap(Map.of(ArmorType.BOOTS, boots, ArmorType.LEGGINGS, leggings, ArmorType.CHESTPLATE, chestplate, ArmorType.HELMET, helmet, ArmorType.BODY, body));
 	}
 
 	private static ResourceKey<EquipmentAsset> equipmentAssets(String key) {
-		return ResourceKey.create(EquipmentAssets.ROOT_ID, ResourceLocation.fromNamespaceAndPath("trapped_newbie", key));
+		return ResourceKey.create(EquipmentAssets.ROOT_ID, Identifier.fromNamespaceAndPath("trapped_newbie", key));
 	}
 
 	private static <T extends Mob> Item mobBucket(Item.Properties properties, EntityType<T> entityType, Fluid fluid, Item pickupBucket, @Nullable Predicate<T> check, @Nullable BiConsumer<T, ItemStack> save, @Nullable BiConsumer<T, CompoundTag> load) {
@@ -495,6 +553,11 @@ public class TrappedNewbieBootstrap implements PluginBootstrap {
 		};
 		DispenserBlock.registerBehavior(mobBucketItem, MobBucketItem.BUCKET_DISPENSE_BEHAVIOR);
 		return mobBucketItem.bucketable(bucketable);
+	}
+
+	private static HolderLookup.Provider getRegistryLookup() {
+		if (registryLookup == null) registryLookup = VanillaRegistries.createLookup();
+		return registryLookup;
 	}
 
 }

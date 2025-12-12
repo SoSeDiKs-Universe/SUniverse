@@ -11,7 +11,7 @@ import org.jspecify.annotations.NullMarked;
 /**
  * Advancements for washing items
  */
-// MCCheck: 1.21.10, new washable items
+// MCCheck: 1.21.11, new washable items
 @NullMarked
 public class WashAdvancements implements Listener {
 
@@ -30,8 +30,8 @@ public class WashAdvancements implements Listener {
 
 	private boolean isWashing(CauldronLevelChangeEvent.ChangeReason changeReason) {
 		return changeReason == CauldronLevelChangeEvent.ChangeReason.ARMOR_WASH
-				|| changeReason == CauldronLevelChangeEvent.ChangeReason.BANNER_WASH
-				|| changeReason == CauldronLevelChangeEvent.ChangeReason.SHULKER_WASH;
+			|| changeReason == CauldronLevelChangeEvent.ChangeReason.BANNER_WASH
+			|| changeReason == CauldronLevelChangeEvent.ChangeReason.SHULKER_WASH;
 	}
 
 }

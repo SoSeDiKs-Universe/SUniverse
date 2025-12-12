@@ -14,5 +14,11 @@
 		"<entity> forgot to drink water"
 	],
 	"death.attack.hot_potato": "<entity> couldn't get rid of that hot potato",
-	"death.attack.lava_drink": "<entity>'s insides were filled with lava"
+	"death.attack.lava_drink": "<entity>'s insides were filled with lava",
+	"death.attack.thrown_rock": "<entity> was stoned to death",
+	"death.attack.thrown_rock.killer": "<entity> was stoned to death by <attacker>",
+	"death.attack.thrown_mushroom": "<entity> was mushroomed to death",
+	"death.attack.thrown_mushroom.killer": "<entity> was mushroomed to death by <attacker>",
+	"death.attack.thrown_snowball": "<entity> was snowballed to death",
+	"death.attack.thrown_snowball.killer": "<entity> was snowballed to death by <attacker>"
 }

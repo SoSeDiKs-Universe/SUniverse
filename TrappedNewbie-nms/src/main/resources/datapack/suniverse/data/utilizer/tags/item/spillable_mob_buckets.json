@@ -13,6 +13,8 @@
     "trapped_newbie:turtle_bucket",
     "trapped_newbie:squid_bucket",
     "trapped_newbie:glow_squid_bucket",
-    "trapped_newbie:strider_bucket"
+    "trapped_newbie:strider_bucket",
+    "trapped_newbie:nautilus_bucket",
+    "trapped_newbie:zombie_nautilus_bucket"
   ]
 }

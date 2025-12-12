@@ -2,7 +2,7 @@ package me.sosedik.miscme.task;
 
 import me.sosedik.miscme.MiscMe;
 import me.sosedik.miscme.api.event.world.DayChangeEvent;
-import org.bukkit.GameRule;
+import org.bukkit.GameRules;
 import org.bukkit.World;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jspecify.annotations.NullMarked;
@@ -28,7 +28,7 @@ public class CustomDayCycleTask extends BukkitRunnable {
 		this.world = world;
 		this.timeIncrementRule = timeIncrementRule;
 
-		world.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
+		world.setGameRule(GameRules.ADVANCE_TIME, false);
 
 		TASKS.put(world.getUID(), this);
 		MiscMe.scheduler().sync(this, 0L, 1L);

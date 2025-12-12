@@ -581,6 +581,8 @@
 	"adv.trappednewbie.weaponry.give_wind_mace_to_a_fox.description": "Дайте лисиці булаву з зачаруванням «Порив вітру III»",
 	"adv.trappednewbie.weaponry.mace_500_damage.title": "Розборонення",
 	"adv.trappednewbie.weaponry.mace_500_damage.description": "Завдайте 250 сердець шкоди боронителю булавою… щоб вбити його одним ударом",
+	"adv.trappednewbie.weaponry.spear_many_mobs.title": "<lang:advancements.adventure.spear_many_mobs.title>",
+	"adv.trappednewbie.weaponry.spear_many_mobs.description": "<lang:advancements.adventure.spear_many_mobs.description>",
 	"adv.trappednewbie.weaponry.kill_a_hostile_mob.title": "Мисливець на монстрів",
 	"adv.trappednewbie.weaponry.kill_a_hostile_mob.description": "Вбийте ворожого монстра",
 	"adv.trappednewbie.weaponry.kill_hostile_overworld_night_mobs.title": "Нічний захисник",

@@ -27,7 +27,7 @@ import java.util.Locale;
 
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.playerKilledEntity;
 
-// MCCheck: 1.21.10, new baby animals, entity nbt tags
+// MCCheck: 1.21.11, new baby animals, entity nbt tags
 @NullMarked
 public class YouMonsterAdvancement extends BaseAdvancement {
 
@@ -43,7 +43,9 @@ public class YouMonsterAdvancement extends BaseAdvancement {
 			EntityType.DONKEY, EntityType.MULE, EntityType.OCELOT, EntityType.HOGLIN,
 			EntityType.TURTLE, EntityType.TADPOLE, EntityType.CAMEL, EntityType.SNIFFER,
 			EntityType.POLAR_BEAR, EntityType.ARMADILLO, EntityType.SQUID, EntityType.GLOW_SQUID,
-			EntityType.DOLPHIN, EntityType.HAPPY_GHAST
+			EntityType.DOLPHIN, EntityType.HAPPY_GHAST, EntityType.NAUTILUS
+			// Non-naturally spawned, though technically ageable; Possibly spawnable by MoreBabyMobs (skeleton horse is not)
+			// EntityType.CAMEL_HUSK, EntityType.ZOMBIE_NAUTILUS, EntityType.ZOMBIE_HORSE
 		)) {
 			String criterion = type.key().value();
 			requirements.add(List.of(criterion));

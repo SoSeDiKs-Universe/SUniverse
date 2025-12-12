@@ -177,6 +177,7 @@ import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaT
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.playerKilledEntity;
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.recipeCrafted;
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.shotCrossbow;
+import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.spearMobs;
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.startedRiding;
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.summonedEntity;
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.thrownItemPickedUpByEntity;
@@ -1453,7 +1454,7 @@ public class TrappedNewbieAdvancements {
 		.display(display().xy(1F, -1F).goalFrame().fancyDescriptionParent(NamedTextColor.AQUA).icon(Material.ACACIA_LOG))
 		.withReward(rewards().addItems(ItemStack.of(Material.EMERALD, 5)))
 		.requiredProgress(vanilla(
-			// MCCheck: 1.21.10, new natural villager types
+			// MCCheck: 1.21.11, new natural villager types
 			Stream.of(VillagerTypeKeys.PLAINS, VillagerTypeKeys.DESERT, VillagerTypeKeys.SAVANNA, VillagerTypeKeys.TAIGA, VillagerTypeKeys.SNOW)
 				.map(type -> villagerTrade(type.key().value())
 					.withEntity(entity -> entity
@@ -2377,6 +2378,14 @@ public class TrappedNewbieAdvancements {
 				)
 		))
 		.buildAndRegister();
+	public static final IAdvancement SPEAR_MANY_MOBS = buildBase(WEAPONRY_ROOT, "spear_many_mobs")
+		.display(display().xy(1F, 7.5F).goalFrame().fancyDescriptionParent(NamedTextColor.AQUA).icon(Material.IRON_SPEAR))
+		.withReward(rewards().withExp(50))
+		.requiredProgress(vanilla(
+			spearMobs()
+				.withCount(5)
+		))
+		.buildAndRegister();
 	public static final IAdvancement ATTACK_WITH_AN_EGG = buildBase(WEAPONRY_ROOT, "attack_with_an_egg").display(display().xy(1F, -3F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.EGG))
 		.buildAndRegister(AttackWithAnEggAdvancement::new);
 	public static final IAdvancement ATTACK_ZOMBIE_WITH_AN_EGG = buildBase(ATTACK_WITH_AN_EGG, "attack_zombie_with_an_egg").display(display().x(1F).fancyDescriptionParent(NamedTextColor.AQUA).goalFrame().icon(Material.ZOMBIE_HEAD))
@@ -3131,7 +3140,6 @@ public class TrappedNewbieAdvancements {
 				)
 		))
 		.buildAndRegister();
-	// MCCheck: 1.21.10, nbt
 	public static final IAdvancement KILL_ALL_DIAMOND_ZOMBIE_BUT_HARD = buildBase(KILL_ALL_DIAMOND_ZOMBIE, "kill_all_diamond_zombie_but_hard").display(display().x(-1F).withAdvancementFrame(AdvancementFrame.BUTTERFLY).fancyDescriptionParent(NamedTextColor.BLACK).cheat().icon(ASSASSIN_HEAD))
 		.withReward(rewards()
 			.withTrophy(ItemStack.of(Material.PLAYER_HEAD))
@@ -4792,7 +4800,7 @@ public class TrappedNewbieAdvancements {
 	}
 
 	public static void setupAdvancements() {
-		Preconditions.checkArgument(KILL_ALL_ALL_JOCKEYS.getRequiredProgress().requirements().size() == 757, "KILL_ALL_ALL_JOCKEYS: Jockeys count changed to %s".formatted(KILL_ALL_ALL_JOCKEYS.getRequiredProgress().requirements().size()));
+		Preconditions.checkArgument(KILL_ALL_ALL_JOCKEYS.getRequiredProgress().requirements().size() == 762, "KILL_ALL_ALL_JOCKEYS: Jockeys count changed to %s".formatted(KILL_ALL_ALL_JOCKEYS.getRequiredProgress().requirements().size()));
 		Preconditions.checkArgument(FIND_ALL_STRUCTURES.getRequiredProgress().requirements().size() == 27, "FIND_ALL_STRUCTURES & USE_A_BRUSH_IN_ALL_STRUCTURES: Structure count changed to %s".formatted(FIND_ALL_STRUCTURES.getRequiredProgress().requirements().size()));
 		Preconditions.checkArgument(TRADE_WITH_EVERY_VILLAGER_IN_ALL_BIOMES.getRequiredProgress().requirements().size() == 832, "TRADE_WITH_EVERY_VILLAGER: Villager types count changed to %s".formatted(TRADE_WITH_EVERY_VILLAGER_IN_ALL_BIOMES.getRequiredProgress().requirements().size()));
 

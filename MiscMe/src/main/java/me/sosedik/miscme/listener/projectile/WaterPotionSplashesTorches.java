@@ -16,7 +16,7 @@ import org.jspecify.annotations.NullMarked;
 /**
  * Throwable water potions splash torches
  */
-// MCCheck: 1.21.10, new torches
+// MCCheck: 1.21.11, new torches
 @NullMarked
 public class WaterPotionSplashesTorches implements Listener {
 

@@ -24,8 +24,8 @@ import java.util.UUID;
 
 /**
  * Pat allowed mobs
- * MCCheck: 1.21.10, new baby mobs
  */
+// MCCheck: 1.21.11, new baby mobs
 @NullMarked
 public class MobPatting implements Listener {
 

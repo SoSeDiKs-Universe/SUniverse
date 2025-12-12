@@ -10,7 +10,7 @@ import org.jspecify.annotations.NullMarked;
 import java.util.ArrayList;
 import java.util.List;
 
-// MCCheck: 1.21.10, new firework shapes/effects
+// MCCheck: 1.21.11, new firework shapes/effects
 @NullMarked
 public class PyrotechnicAdvancement extends BaseAdvancement {
 

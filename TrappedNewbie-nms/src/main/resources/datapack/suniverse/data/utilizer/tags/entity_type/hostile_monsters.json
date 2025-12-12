@@ -38,6 +38,11 @@
 		"minecraft:warden",
 		"minecraft:breeze",
 		"minecraft:bogged",
-		"minecraft:creaking"
+		"minecraft:creaking",
+		"minecraft:parched",
+		"minecraft:zombie_nautilus",
+		"minecraft:zombie_horse",
+		"minecraft:camel_husk",
+		"minecraft:skeleton_horse"
 	]
 }

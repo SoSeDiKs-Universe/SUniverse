@@ -13,5 +13,11 @@
 		"<entity> забув пити воду"
 	],
 	"death.attack.hot_potato": "<entity> не зміг позбутися гарячої картоплі",
-	"death.attack.lava_drink": "Внутрішності <entity> були заповнені лавою"
+	"death.attack.lava_drink": "Внутрішності <entity> були заповнені лавою",
+	"death.attack.thrown_rock": "<entity> був забитий камінням до смерті",
+	"death.attack.thrown_rock.killer": "<entity> був забитий камінням до смерті від <attacker>",
+	"death.attack.thrown_mushroom": "<entity> був завалений грибами до смерті",
+	"death.attack.thrown_mushroom.killer": "<entity> був завалений грибами до смерті від <attacker>",
+	"death.attack.thrown_snowball": "<entity> був закиданий сніжками до смерті",
+	"death.attack.thrown_snowball.killer": "<entity> був закиданий сніжками до смерті від <attacker>"
 }

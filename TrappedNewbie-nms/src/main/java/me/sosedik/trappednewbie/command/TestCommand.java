@@ -3,7 +3,7 @@ package me.sosedik.trappednewbie.command;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import me.sosedik.trappednewbie.TrappedNewbie;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Villager;
+import org.bukkit.entity.ZombieNautilus;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.Permission;
 import org.jspecify.annotations.NullMarked;
@@ -26,9 +26,9 @@ public class TestCommand {
 
 		TrappedNewbie.scheduler().sync(() -> {
 			// Stuff!
-			player.getWorld().spawn(player.getLocation(), Villager.class, villager -> {
-				villager.setVillagerType(Villager.Type.DESERT);
-				villager.setProfession(Villager.Profession.NITWIT);
+			player.getWorld().spawn(player.getLocation(), ZombieNautilus.class, e1 -> {
+				e1.setVariant(ZombieNautilus.Variant.WARM);
+				player.sendMessage("T: " + e1.getAsString());
 			});
 //			var item = ItemStack.of(Material.ENCHANTED_BOOK);
 //			ItemEnchantments.Builder builder = ItemEnchantments.itemEnchantments();

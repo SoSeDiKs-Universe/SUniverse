@@ -23,8 +23,6 @@ dependencies {
     compileOnly("org.incendo:cloud-paper:${project.property("cloudImplVersion")}")
     compileOnly("org.incendo:cloud-annotations:${project.property("cloudVersion")}")
 
-    compileOnly("dev.jorel:commandapi-paper-annotations:${project.property("commandApiVersion")}")
-
     compileOnly("xyz.xenondevs.invui:invui:${project.property("invApiVersion")}")
 }
 
@@ -54,11 +52,6 @@ paper {
             joinClasspath = true
         }
         register("packetevents") {
-            load = PaperPluginDescription.RelativeLoadOrder.BEFORE
-            required = true
-            joinClasspath = true
-        }
-        register("CommandAPI") {
             load = PaperPluginDescription.RelativeLoadOrder.BEFORE
             required = true
             joinClasspath = true

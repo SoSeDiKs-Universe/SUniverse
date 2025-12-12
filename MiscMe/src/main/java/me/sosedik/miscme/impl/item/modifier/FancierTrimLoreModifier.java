@@ -31,7 +31,7 @@ import static java.util.Map.entry;
 /**
  * Makes trim lore fancier with icons and shorter displays
  */
-// MCCheck: 1.21.10, armor trim materials
+// MCCheck: 1.21.11, armor trim materials
 // https://minecraft.wiki/w/Smithing#List_of_tooltip_text_colors_for_all_materials
 @NullMarked
 public class FancierTrimLoreModifier extends ItemModifier {

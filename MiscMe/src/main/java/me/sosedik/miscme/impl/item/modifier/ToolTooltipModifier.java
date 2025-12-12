@@ -46,13 +46,8 @@ public class ToolTooltipModifier extends ItemModifier {
 		double damage = ItemUtil.getAttributeValue(item, Attribute.ATTACK_DAMAGE, player);
 		double speed = ItemUtil.getAttributeValue(item, Attribute.ATTACK_SPEED, player);
 
-		if (damage == 1 && speed == 4 && !item.isDataOverridden(DataComponentTypes.ATTRIBUTE_MODIFIERS)) {
-			if (contextBox.getInitialType() != contextBox.getItem().getType()) {
-				contextBox.addHiddenComponents(DataComponentTypes.ATTRIBUTE_MODIFIERS);
-				return ModificationResult.OK;
-			}
+		if (!item.hasData(DataComponentTypes.TOOL) && !item.hasData(DataComponentTypes.WEAPON) && !contextBox.getItem().isDataOverridden(DataComponentTypes.ATTRIBUTE_MODIFIERS))
 			return ModificationResult.PASS;
-		}
 
 		Component text = combined(
 			combined(SPEED_ICON, Component.space(), Component.text(ChatUtil.formatDouble(speed))),

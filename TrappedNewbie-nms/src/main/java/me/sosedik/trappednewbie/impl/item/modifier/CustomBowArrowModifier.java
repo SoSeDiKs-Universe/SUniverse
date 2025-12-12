@@ -26,12 +26,15 @@ public class CustomBowArrowModifier extends ItemModifier {
 
 	private static final ItemStack BOGGED_BOW = ItemStack.of(Material.BOW);
 	private static final ItemStack STRAY_BOW = ItemStack.of(Material.BOW);
+	private static final ItemStack PARCHED_BOW = ItemStack.of(Material.BOW);
 
 	static {
 		BowData.defaultData(ArrowData.defaultData(Material.TIPPED_ARROW)).saveToCustomModelData(BOGGED_BOW, false);
 		BowData.defaultData(ArrowData.defaultData(Material.TIPPED_ARROW)).saveToCustomModelData(STRAY_BOW, false);
+		BowData.defaultData(ArrowData.defaultData(Material.TIPPED_ARROW)).saveToCustomModelData(PARCHED_BOW, false);
 		BOGGED_BOW.setData(DataComponentTypes.POTION_CONTENTS, PotionContents.potionContents().potion(PotionType.POISON).build());
 		STRAY_BOW.setData(DataComponentTypes.POTION_CONTENTS, PotionContents.potionContents().potion(PotionType.SLOWNESS).build());
+		PARCHED_BOW.setData(DataComponentTypes.POTION_CONTENTS, PotionContents.potionContents().potion(PotionType.WEAKNESS).build());
 	}
 
 	public CustomBowArrowModifier(NamespacedKey modifierId) {
@@ -72,6 +75,11 @@ public class CustomBowArrowModifier extends ItemModifier {
 
 			if (target.getType() == EntityType.STRAY) {
 				contextBox.setItem(STRAY_BOW);
+				return ModificationResult.RETURN;
+			}
+
+			if (target.getType() == EntityType.PARCHED) {
+				contextBox.setItem(PARCHED_BOW);
 				return ModificationResult.RETURN;
 			}
 		}

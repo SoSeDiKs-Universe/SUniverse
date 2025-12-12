@@ -192,14 +192,14 @@ public class TotemBaseBlockStorage extends DisplayBlockStorage {
 				}
 
 				if (player.hasPotionEffect(PotionEffectType.WEAKNESS)) {
-					if (possessed == null) {
+					if (possessed != null && PossessedUndeadZombieCuring.canBeCured(possessed)) {
+						player.removePotionEffect(PotionEffectType.WEAKNESS);
+						PossessedUndeadZombieCuring.startCureTask(possessed);
+					} else {
 						PotionEffect potionEffect = player.getPotionEffect(PotionEffectType.WEAKNESS);
 						player.removePotionEffect(PotionEffectType.WEAKNESS);
 						if (potionEffect != null)
 							player.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH, potionEffect.getDuration(), potionEffect.getAmplifier(), potionEffect.isAmbient(), potionEffect.hasParticles(), potionEffect.hasIcon()));
-					} else if (PossessedUndeadZombieCuring.canBeCured(possessed)) {
-						player.removePotionEffect(PotionEffectType.WEAKNESS);
-						PossessedUndeadZombieCuring.startCureTask(possessed);
 					}
 				}
 			});

@@ -1,6 +1,5 @@
 package me.sosedik.utilizer.util;
 
-import com.destroystokyo.paper.MaterialTags;
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
 import io.papermc.paper.datacomponent.DataComponentTypes;
@@ -34,7 +33,7 @@ import java.util.UUID;
 /**
  * General utilities around items
  */
-// MCCheck: 1.21.10, item types
+// MCCheck: 1.21.11, item types
 @NullMarked
 public class ItemUtil {
 
@@ -134,6 +133,7 @@ public class ItemUtil {
 		Material type = item.getType();
 		if (Tag.ITEMS_SWORDS.isTagged(type)) return true;
 		if (Tag.ITEMS_AXES.isTagged(type)) return true;
+		if (Tag.ITEMS_SPEARS.isTagged(type)) return true;
 
 		return switch (type) {
 			case TRIDENT, MACE -> true;
@@ -182,10 +182,10 @@ public class ItemUtil {
 		if (ItemStack.isEmpty(item)) return 0D;
 
 		Material type = item.getType();
-		if (MaterialTags.HELMETS.isTagged(type)) return getAttributeValue(item, EquipmentSlot.HEAD, attribute, entity);
-		if (MaterialTags.CHESTPLATES.isTagged(type)) return getAttributeValue(item, EquipmentSlot.CHEST, attribute, entity);
-		if (MaterialTags.LEGGINGS.isTagged(type)) return getAttributeValue(item, EquipmentSlot.LEGS, attribute, entity);
-		if (MaterialTags.BOOTS.isTagged(type)) return getAttributeValue(item, EquipmentSlot.FEET, attribute, entity);
+		if (Tag.ITEMS_HEAD_ARMOR.isTagged(type)) return getAttributeValue(item, EquipmentSlot.HEAD, attribute, entity);
+		if (Tag.ITEMS_CHEST_ARMOR.isTagged(type)) return getAttributeValue(item, EquipmentSlot.CHEST, attribute, entity);
+		if (Tag.ITEMS_LEG_ARMOR.isTagged(type)) return getAttributeValue(item, EquipmentSlot.LEGS, attribute, entity);
+		if (Tag.ITEMS_FOOT_ARMOR.isTagged(type)) return getAttributeValue(item, EquipmentSlot.FEET, attribute, entity);
 		return getAttributeValue(item, EquipmentSlot.HAND, attribute, entity);
 	}
 

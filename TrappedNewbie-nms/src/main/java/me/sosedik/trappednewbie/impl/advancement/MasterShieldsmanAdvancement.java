@@ -12,7 +12,7 @@ import org.jspecify.annotations.NullMarked;
 import java.util.ArrayList;
 import java.util.List;
 
-// MCCheck: 1.21.10, new hostile mobs that can't have attack damage deflected
+// MCCheck: 1.21.11, new hostile mobs that can't have attack damage deflected
 @NullMarked
 public class MasterShieldsmanAdvancement extends BaseAdvancement {
 
@@ -38,7 +38,10 @@ public class MasterShieldsmanAdvancement extends BaseAdvancement {
 			|| entityType == EntityType.ENDERMITE
 			|| entityType == EntityType.EVOKER
 			|| entityType == EntityType.GUARDIAN
-			|| entityType == EntityType.ELDER_GUARDIAN;
+			|| entityType == EntityType.ELDER_GUARDIAN
+			|| entityType == EntityType.ZOMBIE_HORSE
+			|| entityType == EntityType.SKELETON_HORSE
+			|| entityType == EntityType.CAMEL_HUSK;
 	}
 
 	private static EntityHurtPlayerTriggerData hurt(EntityType entityType) {

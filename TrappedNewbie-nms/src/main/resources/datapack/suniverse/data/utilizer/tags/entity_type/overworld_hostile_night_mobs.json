@@ -12,8 +12,13 @@
 		"minecraft:skeleton",
 		"minecraft:stray",
 		"minecraft:bogged",
+		"minecraft:parched",
 		"minecraft:witch",
 		"minecraft:phantom",
-		"minecraft:creaking"
+		"minecraft:creaking",
+		"minecraft:zombie_nautilus",
+		"minecraft:zombie_horse",
+		"minecraft:camel_husk",
+		"minecraft:skeleton_horse"
 	]
 }

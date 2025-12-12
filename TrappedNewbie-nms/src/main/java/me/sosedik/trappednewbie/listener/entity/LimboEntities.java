@@ -98,7 +98,7 @@ public class LimboEntities implements Listener {
 			wanderingTrader.setCollidable(false);
 			wanderingTrader.setRecipes(List.of());
 
-			net.minecraft.world.entity.npc.WanderingTrader nms = ((CraftWanderingTrader) wanderingTrader).getHandle();
+			net.minecraft.world.entity.npc.wanderingtrader.WanderingTrader nms = ((CraftWanderingTrader) wanderingTrader).getHandle();
 
 			Bukkit.getMobGoals().removeAllGoals(wanderingTrader);
 			Bukkit.getMobGoals().addGoal(wanderingTrader, 0, new PaperGoal<>(new FloatGoal(nms)));
@@ -107,7 +107,7 @@ public class LimboEntities implements Listener {
 		} else if (entity instanceof TraderLlama traderLlama) {
 			traderLlama.setCollidable(false);
 
-			net.minecraft.world.entity.animal.horse.TraderLlama nms = ((CraftTraderLlama) traderLlama).getHandle();
+			net.minecraft.world.entity.animal.equine.TraderLlama nms = ((CraftTraderLlama) traderLlama).getHandle();
 
 			Bukkit.getMobGoals().removeAllGoals(traderLlama);
 			Bukkit.getMobGoals().addGoal(traderLlama, 0, new PaperGoal<>(new FloatGoal(nms)));

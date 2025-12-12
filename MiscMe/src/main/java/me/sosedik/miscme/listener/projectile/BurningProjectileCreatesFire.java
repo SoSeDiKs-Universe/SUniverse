@@ -33,7 +33,7 @@ import java.util.List;
  * Burning projectiles create fire upon landing
  */
 @NullMarked
-// MCCheck: 1.21.10, new replaceable by fire blocks
+// MCCheck: 1.21.11, new replaceable by fire blocks
 public class BurningProjectileCreatesFire implements Listener {
 
 	private static final List<Material> REPLACEABLE_BY_FIRE = List.of(

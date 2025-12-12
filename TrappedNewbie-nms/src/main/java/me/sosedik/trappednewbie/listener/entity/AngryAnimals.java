@@ -43,7 +43,7 @@ import org.bukkit.event.world.EntitiesLoadEvent;
 /**
  * Well, you are the only one to blame, really
  */
-// MCCheck: 1.21.10, new animals
+// MCCheck: 1.21.11, new animals
 public class AngryAnimals implements Listener {
 
 	@EventHandler
@@ -145,6 +145,8 @@ public class AngryAnimals implements Listener {
 			case HORSE, DONKEY, MULE -> targetingType == EntityType.HORSE || targetingType == EntityType.DONKEY || targetingType == EntityType.MULE;
 			case LLAMA, TRADER_LLAMA -> targetingType == EntityType.LLAMA || targetingType == EntityType.TRADER_LLAMA;
 			case COW, MOOSHROOM -> targetingType == EntityType.COW || targetingType == EntityType.MOOSHROOM;
+			case NAUTILUS, ZOMBIE_NAUTILUS -> targetingType == EntityType.NAUTILUS || targetingType == EntityType.ZOMBIE_NAUTILUS;
+			case CAMEL, CAMEL_HUSK -> targetingType == EntityType.CAMEL || targetingType == EntityType.CAMEL_HUSK;
 			default -> damaged.getType() == targetingType;
 		};
 	}

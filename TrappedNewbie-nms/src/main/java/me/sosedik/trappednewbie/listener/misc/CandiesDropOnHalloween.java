@@ -22,7 +22,7 @@ import java.util.function.Consumer;
 /**
  * Some mobs drop candies on Halloween
  */
-// MCCheck: 1.21.10, new mods
+// MCCheck: 1.21.11, new mods
 @NullMarked
 public class CandiesDropOnHalloween implements Listener {
 
@@ -41,7 +41,7 @@ public class CandiesDropOnHalloween implements Listener {
 		addDrop(ItemStack.of(TrappedNewbieItems.SKELETON_GOODIE_BAG), Tag.ENTITY_TYPES_SKELETONS.getValues());
 		addDrop(ItemStack.of(TrappedNewbieItems.SLIME_GOODIE_BAG), EntityType.SLIME, EntityType.MAGMA_CUBE);
 		addDrop(ItemStack.of(TrappedNewbieItems.SPIDER_GOODIE_BAG), EntityType.SPIDER, EntityType.CAVE_SPIDER);
-		addDrop(ItemStack.of(TrappedNewbieItems.ZOMBIE_GOODIE_BAG), Tag.ENTITY_TYPES_ZOMBIES.getValues().stream().filter(type -> type != EntityType.DROWNED).toList());
+		addDrop(ItemStack.of(TrappedNewbieItems.ZOMBIE_GOODIE_BAG), Tag.ENTITY_TYPES_ZOMBIES.getValues().stream().filter(type -> drops.get(type) == null).toList());
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)

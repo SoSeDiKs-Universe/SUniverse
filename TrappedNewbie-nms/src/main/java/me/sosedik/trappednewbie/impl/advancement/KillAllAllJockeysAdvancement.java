@@ -12,6 +12,7 @@ import org.bukkit.Registry;
 import org.bukkit.entity.Chicken;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Villager;
+import org.bukkit.entity.ZombieNautilus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -20,7 +21,7 @@ import java.util.List;
 
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.playerKilledEntity;
 
-// MCCheck: 1.21.10, new jockeys, entity nbt tags
+// MCCheck: 1.21.11, new jockeys, entity nbt tags
 @NullMarked
 public class KillAllAllJockeysAdvancement extends BaseAdvancement {
 
@@ -57,6 +58,15 @@ public class KillAllAllJockeysAdvancement extends BaseAdvancement {
 			chickenRider(requirements, triggerDatas, EntityType.WITCH, chickenVariant, null, true);
 			chickenRider(requirements, triggerDatas, EntityType.WITCH, chickenVariant, null, false);
 		});
+
+		RegistryAccess.registryAccess().getRegistry(RegistryKey.ZOMBIE_NAUTILUS_VARIANT).forEach(variant -> {
+			zombieNautilusRider(requirements, triggerDatas, EntityType.DROWNED, variant);
+		});
+
+		simpleRider(requirements, triggerDatas, EntityType.ZOMBIE, EntityType.ZOMBIE_HORSE);
+
+		simpleRider(requirements, triggerDatas, EntityType.HUSK, EntityType.CAMEL_HUSK);
+		simpleRider(requirements, triggerDatas, EntityType.PARCHED, EntityType.CAMEL_HUSK);
 
 		simpleRider(requirements, triggerDatas, EntityType.ZOMBIFIED_PIGLIN, EntityType.STRIDER, true, null);
 		simpleRider(requirements, triggerDatas, EntityType.ZOMBIFIED_PIGLIN, EntityType.STRIDER, false, null);
@@ -108,6 +118,15 @@ public class KillAllAllJockeysAdvancement extends BaseAdvancement {
 		requirements.add(List.of(ridingKey, bearingKey));
 		triggerDatas.add(vehicleTriggerData(ridingKey, riderType, EntityType.CHICKEN, babyRider, babyVehicle, null, vehicleNbt));
 		triggerDatas.add(riderTriggerData(bearingKey, riderType, EntityType.CHICKEN, babyRider, babyVehicle, null, vehicleNbt));
+	}
+
+	private static void zombieNautilusRider(List<List<String>> requirements, List<VanillaTriggerData<?>> triggerDatas, EntityType riderType, ZombieNautilus.Variant variant) {
+		String ridingKey = riderType.key().value() + "_riding_" + variant.key().value() + "_zombie_nautilus";
+		String bearingKey = variant.key().value() + "_zombie_nautilus" + "_bearing_" + riderType.key().value();
+		String vehicleNbt = "{variant:\"%s\"}".formatted(variant.key());
+		requirements.add(List.of(ridingKey, bearingKey));
+		triggerDatas.add(vehicleTriggerData(ridingKey, riderType, EntityType.ZOMBIE_NAUTILUS, null, null, null, vehicleNbt));
+		triggerDatas.add(riderTriggerData(bearingKey, riderType, EntityType.ZOMBIE_NAUTILUS, null, null, null, vehicleNbt));
 	}
 
 	private static void simpleRider(List<List<String>> requirements, List<VanillaTriggerData<?>> triggerDatas, EntityType riderType, EntityType vehicleType) {

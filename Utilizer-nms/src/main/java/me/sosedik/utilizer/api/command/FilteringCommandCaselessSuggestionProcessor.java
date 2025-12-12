@@ -27,8 +27,8 @@ public class FilteringCommandCaselessSuggestionProcessor<C> implements Suggestio
 		}
 
 		return suggestions
-				.filter(suggestion -> suggestion.suggestion().startsWith(input))
-				.filter(suggestion -> !suggestion.suggestion().startsWith("--I_"));  // ignore internal flags
+			.filter(suggestion -> suggestion.suggestion().contains(input))
+			.filter(suggestion -> !suggestion.suggestion().startsWith("--I_"));  // ignore internal flags
 	}
 
 }

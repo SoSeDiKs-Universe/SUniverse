@@ -56,7 +56,7 @@ import java.util.UUID;
 /**
  * Players have a visual second armor layer
  */
-// MCCheck: 1.21.10, new equipable items (& equip sounds)
+// MCCheck: 1.21.11, new equipable items (& equip sounds)
 @NullMarked
 public class VisualArmorLayer implements Listener {
 
@@ -479,7 +479,7 @@ public class VisualArmorLayer implements Listener {
 		return true;
 	}
 
-	// MCCheck: 1.21.10, new armor
+	// MCCheck: 1.21.11, new armor
 	private Sound getEquipSound(ItemStack item) {
 		return switch (item.getType()) {
 			case ELYTRA -> Sound.ITEM_ARMOR_EQUIP_ELYTRA;

@@ -9,6 +9,8 @@
 		"minecraft:mooshroom",
 		"minecraft:polar_bear",
 		"minecraft:horse",
+		"minecraft:skeleton_horse",
+		"minecraft:zombie_horse",
 		"minecraft:donkey",
 		"minecraft:mule",
 		"minecraft:llama",
@@ -27,7 +29,9 @@
 		"minecraft:goat",
 		"minecraft:frog",
 		"minecraft:camel",
+		"minecraft:camel_husk",
 		"minecraft:sniffer",
-		"minecraft:armadillo"
+		"minecraft:armadillo",
+		"minecraft:zoglin"
 	]
 }

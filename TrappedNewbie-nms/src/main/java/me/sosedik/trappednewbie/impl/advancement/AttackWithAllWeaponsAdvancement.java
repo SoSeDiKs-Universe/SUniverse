@@ -15,7 +15,7 @@ import org.jspecify.annotations.NullMarked;
 import java.util.ArrayList;
 import java.util.List;
 
-// MCCheck: 1.21.10, new weapons / attack opportunities
+// MCCheck: 1.21.11, new weapons / attack opportunities
 @NullMarked
 public class AttackWithAllWeaponsAdvancement extends BaseAdvancement {
 
@@ -41,7 +41,8 @@ public class AttackWithAllWeaponsAdvancement extends BaseAdvancement {
 			List.of("splash_potion"),
 			List.of("lingering_potion"),
 			List.of("mace", "mace_smash"),
-			List.of("wind_charge")
+			List.of("wind_charge"),
+			List.of("spear")
 		);
 		List<VanillaTriggerData<?>> triggerDatas = new ArrayList<>(List.of(
 			VanillaTriggerData.playerHurtEntity("axe")
@@ -223,6 +224,17 @@ public class AttackWithAllWeaponsAdvancement extends BaseAdvancement {
 						.withTag(DamageTypeTagKeys.IS_PROJECTILE, true)
 						.withDirectEntity(entity -> entity
 							.withEntityType(EntityType.WIND_CHARGE)
+						)
+					)
+				),
+			VanillaTriggerData.playerHurtEntity("spear")
+				.withDamage(damage -> damage
+					.withDamageSource(source -> source
+						.withTag(DamageTypeTagKeys.IS_PLAYER_ATTACK, true)
+						.withSourceEntity(entity -> entity
+							.withEquipment(equipment -> equipment
+								.withMainHand(ItemTriggerCondition.of(Tag.ITEMS_SPEARS))
+							)
 						)
 					)
 				)

@@ -46,7 +46,7 @@ public class EntityUtil {
 	/**
 	 * How far the player's hand can reach
 	 */
-	public static final int PLAYER_REACH = 5;
+	public static final int PLAYER_REACH = 5; // TODO Unhardcode, depens on other variables like the held item (attack_range)
 	public static final int DARKNESS_LIGHT_LEVEL = 3;
 
 	/**
@@ -194,6 +194,7 @@ public class EntityUtil {
 	public static boolean isNaturallySpawned(Entity entity) {
 		CreatureSpawnEvent.SpawnReason spawnReason = entity.getEntitySpawnReason();
 		return spawnReason == CreatureSpawnEvent.SpawnReason.NATURAL
+			|| spawnReason == CreatureSpawnEvent.SpawnReason.JOCKEY
 			|| spawnReason == CreatureSpawnEvent.SpawnReason.DEFAULT
 			|| spawnReason == CreatureSpawnEvent.SpawnReason.SPAWNER
 			|| spawnReason == CreatureSpawnEvent.SpawnReason.SPAWNER_EGG;

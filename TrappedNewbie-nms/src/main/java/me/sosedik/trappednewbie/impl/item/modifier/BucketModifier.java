@@ -22,6 +22,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Axolotl;
 import org.bukkit.entity.Frog;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.ZombieNautilus;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.AxolotlBucketMeta;
 import org.jspecify.annotations.NullMarked;
@@ -36,7 +37,7 @@ import static me.sosedik.trappednewbie.TrappedNewbie.trappedNewbieKey;
 /**
  * Bucket visuals
  */
-// MCCheck: 1.21.10, new wood types / new buckets
+// MCCheck: 1.21.11, new wood types / new buckets
 @NullMarked
 public class BucketModifier extends ItemModifier {
 
@@ -271,7 +272,13 @@ public class BucketModifier extends ItemModifier {
 		GLOW_SQUID(TrappedNewbieItems.GLOW_SQUID_BUCKET, false, false),
 		TURTLE(TrappedNewbieItems.TURTLE_BUCKET, false, false),
 		TURTLE_BABY(TrappedNewbieItems.TURTLE_BUCKET, false, false),
-		STRIDER(TrappedNewbieItems.STRIDER_BUCKET, false, false);
+		STRIDER(TrappedNewbieItems.STRIDER_BUCKET, false, false),
+		NAUTILUS(TrappedNewbieItems.NAUTILUS_BUCKET, false, false),
+		NAUTILUS_BABY(TrappedNewbieItems.NAUTILUS_BUCKET, false, false),
+		ZOMBIE_NAUTILUS(TrappedNewbieItems.ZOMBIE_NAUTILUS_BUCKET, false, false),
+		ZOMBIE_NAUTILUS_BABY(TrappedNewbieItems.ZOMBIE_NAUTILUS_BUCKET, false, false),
+		ZOMBIE_NAUTILUS_CORAL(TrappedNewbieItems.ZOMBIE_NAUTILUS_BUCKET, false, false),
+		ZOMBIE_NAUTILUS_CORAL_BABY(TrappedNewbieItems.ZOMBIE_NAUTILUS_BUCKET, false, false);
 
 		private final Material vanillaSample;
 		private final Map<BucketType, NamespacedKey> keys = new EnumMap<>(BucketType.class);
@@ -365,6 +372,26 @@ public class BucketModifier extends ItemModifier {
 				case Material m when m == TrappedNewbieItems.SQUID_BUCKET -> SQUID;
 				case Material m when m == TrappedNewbieItems.GLOW_SQUID_BUCKET -> GLOW_SQUID;
 				case Material m when m == TrappedNewbieItems.STRIDER_BUCKET -> STRIDER;
+				case Material m when m == TrappedNewbieItems.NAUTILUS_BUCKET -> NBT.getComponents(item, nbt -> {
+					ReadableNBT bucketEntityData = nbt.getCompound("minecraft:bucket_entity_data");
+					if (bucketEntityData == null) return NAUTILUS;
+					if (!bucketEntityData.hasTag("Age")) return NAUTILUS;
+
+					int age = bucketEntityData.getOrDefault("Age", 0);
+					return age >= 0 ? NAUTILUS : NAUTILUS_BABY;
+				});
+				case Material m when m == TrappedNewbieItems.ZOMBIE_NAUTILUS_BUCKET -> NBT.getComponents(item, nbt -> {
+					ReadableNBT bucketEntityData = nbt.getCompound("minecraft:bucket_entity_data");
+					boolean baby = bucketEntityData != null && bucketEntityData.hasTag("Age") && bucketEntityData.getOrDefault("Age", 0) < 0;
+
+					if (!item.hasData(DataComponentTypes.ZOMBIE_NAUTILUS_VARIANT)) return baby ? ZOMBIE_NAUTILUS_BABY : ZOMBIE_NAUTILUS;
+
+					ZombieNautilus.Variant data = item.getData(DataComponentTypes.ZOMBIE_NAUTILUS_VARIANT);
+					assert data != null;
+					if (baby)
+						return data == ZombieNautilus.Variant.WARM ? ZOMBIE_NAUTILUS_CORAL_BABY : ZOMBIE_NAUTILUS_BABY;
+					return data == ZombieNautilus.Variant.WARM ? ZOMBIE_NAUTILUS_CORAL : ZOMBIE_NAUTILUS;
+				});
 				case WATER_BUCKET -> WATER;
 				case LAVA_BUCKET -> LAVA;
 				case MILK_BUCKET -> MILK;

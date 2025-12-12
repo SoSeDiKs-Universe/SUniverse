@@ -52,7 +52,7 @@ public class SwordsSwingThroughGrass implements Listener {
 			if (LocationUtil.isCube(block) && !Tag.ITEMS_ENCHANTABLE_WEAPON.isTagged(player.getInventory().getItemInMainHand().getType())) return null;
 		}
 
-		RayTraceResult rayTraceResult = player.getWorld().rayTraceEntities(player.getEyeLocation(),
+		RayTraceResult rayTraceResult = player.getWorld().rayTraceEntities(player.getEyeLocation(), // TODO Items (e.g., spears) can also have the minimum reach distance
 				player.getEyeLocation().getDirection(), EntityUtil.PLAYER_REACH, entity -> entity != player);
 		if (rayTraceResult == null) return null;
 

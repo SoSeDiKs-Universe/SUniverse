@@ -13,12 +13,13 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NullMarked;
 
+// MCCheck: 1.21.11, new tag thingies
 @NullMarked
 public class UtilizerTags {
 
-	// MCCheck: 1.21.10, new flattenables (hardcoded in ShovelItem)
+	// MCCheck: 1.21.11, new flattenables (hardcoded in ShovelItem)
 	public static final Tag<Material> FLATTENABLES = itemTag("flattenables");
-	// MCCheck: 1.21.10, new tillables (hardcoded in HoeItem)
+	// MCCheck: 1.21.11, new tillables (hardcoded in HoeItem)
 	public static final Tag<Material> TILLABLES = itemTag("tillables");
 	/**
 	 * @see ItemUtil#isHot(ItemStack)
@@ -59,7 +60,7 @@ public class UtilizerTags {
 	public static final Tag<Material> FRAGILE_BLOCKS = blockTag("fragile_blocks");
 	public static final Tag<Material> VILLAGER_WORKSTATIONS = blockTag("villager_workstations");
 
-	// MCCheck: 1.21.10, new mobs
+	// MCCheck: 1.21.11, new mobs
 	public static final Tag<EntityType> HOSTILE_MONSTERS = entityTag("hostile_monsters");
 	public static final Tag<EntityType> CHEST_BOATS = entityTag("chest_boats");
 	public static final Tag<EntityType> NON_MOB_ENTITIES = entityTag("non_mob_entities");

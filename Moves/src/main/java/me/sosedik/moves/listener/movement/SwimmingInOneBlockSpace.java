@@ -18,7 +18,7 @@ import org.jspecify.annotations.NullMarked;
 /**
  * Start swimming in one block space
  */
-// MCCheck: 1.21.10, workaround to swimming state metadata
+// MCCheck: 1.21.11, workaround to swimming state metadata
 @NullMarked
 public class SwimmingInOneBlockSpace implements Listener {
 

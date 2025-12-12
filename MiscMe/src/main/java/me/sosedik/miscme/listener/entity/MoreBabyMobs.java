@@ -8,6 +8,7 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.Ageable;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Slime;
 import org.bukkit.event.EventHandler;
@@ -50,9 +51,16 @@ public class MoreBabyMobs implements Listener {
 
 	private boolean shouldBecomeBaby(LivingEntity entity) {
 		if (NBT.get(entity, nbt -> (boolean) nbt.hasTag(BABY_TAG))) return true;
-		return !(entity instanceof Ageable)
+		return (!(entity instanceof Ageable) || forceBabySpawn(entity))
 			&& EntityUtil.isNaturallySpawned(entity)
 			&& Math.random() < SPAWN_CHANCE;
+	}
+
+	private boolean forceBabySpawn(LivingEntity entity) {
+		return entity.getType() == EntityType.ZOMBIE_HORSE
+			|| entity.getType() == EntityType.SKELETON_HORSE
+			|| entity.getType() == EntityType.CAMEL_HUSK
+			|| entity.getType() == EntityType.ZOMBIE_NAUTILUS;
 	}
 
 	// Re-apply attributes to custom babies on load

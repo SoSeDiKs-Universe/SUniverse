@@ -50,6 +50,8 @@ import static java.util.Objects.requireNonNull;
 public class ResourceLib extends JavaPlugin {
 
 	private static @UnknownNullability ResourceLib instance;
+	private static final Key BLOCKS_ATLAS = Key.key("blocks");
+	private static final Key ITEMS_ATLAS = Key.key("items");
 
 	private @UnknownNullability Scheduler scheduler;
 	private @UnknownNullability ResourcePackStorage storage;
@@ -264,15 +266,17 @@ public class ResourceLib extends JavaPlugin {
 			key = Key.key(fakeItemData.model().namespace(), fakeItemData.model().value());
 
 		boolean blocksAtlas = itemType.hasBlockType() && !useItemTexture(itemType.asMaterial());
-		Key texture = Key.key(key.namespace(), (blocksAtlas ? "block/" : "item/") + getReplacement(key.value()));
-		return Mini.asIcon(Component.object(ObjectContents.sprite(texture)));
+		String value = (blocksAtlas ? "block/" : "item/") + getTextureMapping(key.value());
+		Key atlas = blocksAtlas ? BLOCKS_ATLAS : ITEMS_ATLAS;
+		Key texture = Key.key(key.namespace(), value);
+		return Mini.asIcon(Component.object(ObjectContents.sprite(atlas, texture)));
 	}
 
 	private static boolean useItemTexture(Material type) {
 		return type == Material.PITCHER_PLANT;
 	}
 
-	private static String getReplacement(String key) {
+	private static String getTextureMapping(String key) {
 		return switch (key) {
 			case "lilac" -> "lilac_top";
 			case "peony" -> "peony_top";

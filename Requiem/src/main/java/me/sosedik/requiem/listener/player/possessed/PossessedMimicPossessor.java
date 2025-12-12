@@ -1,12 +1,15 @@
 package me.sosedik.requiem.listener.player.possessed;
 
-import com.google.common.base.Function;
 import io.papermc.paper.event.entity.EntityEquipmentChangedEvent;
 import io.papermc.paper.event.player.PlayerArmSwingEvent;
 import io.papermc.paper.event.player.PlayerInventorySlotChangeEvent;
+import io.papermc.paper.world.damagesource.CombatEntry;
+import io.papermc.paper.world.damagesource.CombatTracker;
+import me.sosedik.kiterino.event.entity.EntityStartUsingItemEvent;
 import me.sosedik.requiem.feature.PossessingPlayer;
 import me.sosedik.utilizer.util.LocationUtil;
 import org.bukkit.entity.Enderman;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -14,18 +17,17 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityCombustEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.EntityEquipment;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 /**
  * Possessed mimic actions of their possessor
@@ -148,31 +150,49 @@ public class PossessedMimicPossessor implements Listener {
 		entity.setFireTicks(ticks);
 	}
 
-	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onDamageAnotherEntity(EntityDamageByEntityEvent event) {
 		if (!(event.getDamager() instanceof Player player)) return;
-		if (!PossessingPlayer.isPossessing(player)) return;
-		if (!(event.getEntity() instanceof LivingEntity damaged)) return;
 
 		LivingEntity entity = PossessingPlayer.getPossessed(player);
 		if (entity == null) return;
 
+		Entity damaged = event.getEntity();
 		if (entity == damaged) {
 			event.setDamage(0);
 			event.setCancelled(true);
 			return;
 		}
 
-		Map<EntityDamageEvent.DamageModifier, Double> modifiers = new HashMap<>();
-		modifiers.put(EntityDamageEvent.DamageModifier.BASE, event.getFinalDamage());
-		Map<EntityDamageEvent.DamageModifier, Function<Double, Double>> modifierFunctions = new HashMap<>();
-		modifierFunctions.put(EntityDamageEvent.DamageModifier.BASE, d -> d);
-		var fakedEvent = new EntityDamageByEntityEvent(entity, damaged, event.getCause(), event.getDamageSource(), modifiers, modifierFunctions, event.isCritical());
-		fakedEvent.callEvent();
+		if (damaged instanceof LivingEntity living) {
+			CombatTracker combatTracker = living.getCombatTracker();
+			if (skipDamage(player, combatTracker)) return;
 
-		event.setDamage(fakedEvent.getFinalDamage());
-		event.setCancelled(fakedEvent.isCancelled());
+			combatTracker.addCombatEntry(CombatEntry.combatEntry(event.getDamageSource(), 0F, null, 0F));
+		}
+
+		event.setCancelled(true);
+		entity.attack(damaged);
+	}
+
+	private boolean skipDamage(Player player, CombatTracker combatTracker) {
+		List<CombatEntry> combatEntries = combatTracker.getCombatEntries();
+		if (combatEntries.isEmpty()) return false;
+
+		CombatEntry last = combatEntries.getLast();
+		return last.getDamage() == 0F && last.getDamageSource().getCausingEntity() == player;
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onUse(EntityStartUsingItemEvent event) {
+		if (!(event.getEntity() instanceof Player player)) return;
+
+		LivingEntity possessed = PossessingPlayer.getPossessed(player);
+		if (possessed == null) return;
+
+		EquipmentSlot hand = player.getActiveItemHand();
+
+		possessed.startUsingItem(hand);
 	}
 
 }

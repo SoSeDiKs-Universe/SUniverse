@@ -185,11 +185,9 @@ public class TotemBaseBlockStorage extends DisplayBlockStorage {
 			case SOUL_MELANCHOLY -> this.ritualData.getPerformers().forEach(uuid -> {
 				Player player = Bukkit.getPlayer(uuid);
 				if (player == null) return;
+
+				PossessingPlayer.applyAttrition(player, 4);
 				LivingEntity possessed = PossessingPlayer.getPossessed(player);
-				if (possessed != null && player.getLevel() < 1) {
-					player.setLevel(1);
-					player.setExp(0F);
-				}
 
 				if (player.hasPotionEffect(PotionEffectType.WEAKNESS)) {
 					if (possessed != null && PossessedUndeadZombieCuring.canBeCured(possessed)) {

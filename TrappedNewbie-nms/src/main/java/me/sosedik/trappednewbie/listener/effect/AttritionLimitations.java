@@ -1,6 +1,5 @@
 package me.sosedik.trappednewbie.listener.effect;
 
-import me.sosedik.requiem.dataset.RequiemEffects;
 import me.sosedik.requiem.feature.PossessingPlayer;
 import me.sosedik.resourcelib.feature.HudMessenger;
 import me.sosedik.trappednewbie.impl.blockstorage.FlowerPotBlockStorage;
@@ -14,10 +13,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
-import org.bukkit.event.player.PlayerLevelChangeEvent;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffect;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
@@ -33,11 +30,7 @@ public class AttritionLimitations implements Listener {
 		NotDroppableItems.addRule(new NotDroppableItems.NotDroppableRule(
 			(entity, item) -> {
 				if (!(entity instanceof Player player)) return false;
-				if (!player.hasPotionEffect(RequiemEffects.ATTRITION)) return false;
-
-				PotionEffect potionEffect = player.getPotionEffect(RequiemEffects.ATTRITION);
-				if (potionEffect == null) return false;
-				if (potionEffect.getAmplifier() < 4) return false;
+				if (PossessingPlayer.canDropItems(player)) return false;
 
 				HudMessenger.of(player).displayMessage(Messenger.messenger(player).getMessage("attrition.too_high"));
 				return true;
@@ -48,24 +41,10 @@ public class AttritionLimitations implements Listener {
 		);
 	}
 
-	@EventHandler
-	public void onLevel(PlayerLevelChangeEvent event) {
-		Player player = event.getPlayer();
-		if (!PossessingPlayer.isPossessing(player)) return;
-
-		int level = Math.min(event.getNewLevel(), 5);
-		player.removePotionEffect(RequiemEffects.ATTRITION);
-		player.addPotionEffect(new PotionEffect(RequiemEffects.ATTRITION, PotionEffect.INFINITE_DURATION, 5 - level));
-	}
-
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onOpen(InventoryOpenEvent event) {
 		if (!(event.getPlayer() instanceof Player player)) return;
-		if (!player.hasPotionEffect(RequiemEffects.ATTRITION)) return;
-
-		PotionEffect potionEffect = player.getPotionEffect(RequiemEffects.ATTRITION);
-		if (potionEffect == null) return;
-		if (potionEffect.getAmplifier() < 3) return;
+		if (PossessingPlayer.canOpenInventories(player)) return;
 
 		InventoryHolder holder = event.getInventory().getHolder();
 		if (holder != null && isAllowedInventory(holder)) return;
@@ -85,11 +64,7 @@ public class AttritionLimitations implements Listener {
 		Player rider = entity.getRider();
 		if (rider == null) return;
 		if (PossessingPlayer.getPossessed(rider) != entity) return;
-		if (!rider.hasPotionEffect(RequiemEffects.ATTRITION)) return;
-
-		PotionEffect potionEffect = rider.getPotionEffect(RequiemEffects.ATTRITION);
-		if (potionEffect == null) return;
-		if (potionEffect.getAmplifier() < 3) return;
+		if (PossessingPlayer.canKeepItemsOnDeath(rider)) return;
 
 		List<ItemStack> drops = event.getDrops();
 		if (drops.isEmpty()) return;

@@ -65,7 +65,7 @@ public class WorldAwareRequiemAbilities implements Listener {
 			GhostyPlayer.checkCanGhostFly(player);
 			GhostyPlayer.checkCanHoldGhostItems(player);
 		} else if (PossessingPlayer.isPossessing(player)) {
-			PossessingPlayer.checkPossessedExtraItems(player);
+			PossessingPlayer.checkPossessedExtraItems(player, false);
 		}
 	}
 

@@ -45,7 +45,6 @@ public class TombstoneBlockStorage extends BlockDataStorageHolder implements Ext
 	private static final String FACING_KEY = "facing";
 	private static final String STORAGES_KEY = "storages";
 	public static final String EXP_KEY = "exp";
-	public static final String ITEMS_KEY = "items";
 	public static final String DEATH_MESSAGE_KEY = "message";
 
 	private static final Random RANDOM = new Random();
@@ -246,28 +245,8 @@ public class TombstoneBlockStorage extends BlockDataStorageHolder implements Ext
 
 		for (ReadWriteNBT storage : event.getStorages()) {
 			if (storage.hasTag(EXP_KEY)) event.addExp(storage.getInteger(EXP_KEY));
-			if (storage.hasTag(ITEMS_KEY)) {
-				ReadWriteNBT itemsTag = storage.getCompound(ITEMS_KEY);
-				if (itemsTag == null) continue;
 
-				for (String key : itemsTag.getKeys()) {
-					int slot;
-					try {
-						slot = Integer.parseInt(key);
-					} catch (NumberFormatException ignored) {
-						continue;
-					}
-
-					ItemStack item = itemsTag.getItemStack(key);
-					if (ItemStack.isEmpty(item)) continue;
-
-					if (player == null || slot < 0 || !ItemStack.isEmpty(player.getInventory().getItem(slot))) {
-						event.getToDrop().add(item);
-					} else {
-						player.getInventory().setItem(slot, item);
-					}
-				}
-			}
+			InventoryUtil.restoreFromSlotted(player == null ? null : player.getInventory(), storage, items -> event.getToDrop().addAll(items));
 		}
 		event.callEvent();
 		int exp = event.getExp();

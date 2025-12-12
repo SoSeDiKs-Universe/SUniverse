@@ -6,9 +6,7 @@ import me.sosedik.requiem.impl.block.TombstoneBlockStorage;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerEvent;
-import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NullMarked;
-import org.jspecify.annotations.Nullable;
 
 @NullMarked
 public class PlayerTombstoneCreateEvent extends PlayerEvent {
@@ -38,12 +36,6 @@ public class PlayerTombstoneCreateEvent extends PlayerEvent {
 
 	public int getExp() {
 		return this.data.getOrDefault(TombstoneBlockStorage.EXP_KEY, 0);
-	}
-
-	public void setItem(int slot, @Nullable ItemStack item) {
-		if (ItemStack.isEmpty(item)) return;
-
-		this.data.getOrCreateCompound(TombstoneBlockStorage.ITEMS_KEY).setItemStack(String.valueOf(slot), item);
 	}
 
 	@Override

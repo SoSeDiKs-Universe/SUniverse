@@ -1,17 +1,26 @@
 package me.sosedik.requiem.listener.player.possessed;
 
 import com.destroystokyo.paper.event.server.ServerTickEndEvent;
+import com.google.common.base.Function;
 import me.sosedik.requiem.Requiem;
 import me.sosedik.requiem.feature.PossessingPlayer;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.damage.DamageSource;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityPotionEffectEvent;
 import org.bukkit.potion.PotionEffect;
 import org.jspecify.annotations.NullMarked;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Possessor mimics actions of possessed mob
@@ -44,8 +53,47 @@ public class PossessorMimicsPossessed implements Listener {
 			LivingEntity possessed = PossessingPlayer.getPossessed(player);
 			if (possessed == null) return;
 
-			PossessingPlayer.migrateInvFromEntity(player, possessed);
+			PossessingPlayer.migrateInvFromEntity(player, possessed, false);
 		});
+	}
+
+	@SuppressWarnings("deprecation")
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onDamageAnotherEntity(EntityDamageByEntityEvent event) {
+		if (!(event.getDamager() instanceof LivingEntity damager)) return;
+		if (!(event.getEntity() instanceof LivingEntity damaged)) return;
+		if (event.getDamage() == 0D) return;
+
+		Player rider = damager.getRider();
+		if (rider == null) return;
+		if (PossessingPlayer.getPossessed(rider) != damager) return;
+
+		event.setCancelled(true);
+
+		DamageSource damageSource = event.getDamageSource();
+		var source = DamageSource.builder(damageSource.getDamageType());
+
+		Entity directEntity = damageSource.getDirectEntity();
+		if (directEntity != null) source.withDirectEntity(directEntity == damager ? rider : directEntity);
+
+		Entity causingEntity = damageSource.getCausingEntity();
+		if (causingEntity != null) source.withDirectEntity(causingEntity == damager ? rider : causingEntity);
+
+		Location damageLocation = damageSource.getDamageLocation();
+		if (damageLocation != null) source.withDamageLocation(damageLocation);
+
+		damaged.damage(event.getDamage(), source.build());
+		
+		if (!damaged.isValid()) return;
+
+		// Fire fake event to process extra behaviors from listeners
+		// E.g., fire spread, consecration, etc.
+		Map<EntityDamageEvent.DamageModifier, Double> modifiers = new HashMap<>();
+		modifiers.put(EntityDamageEvent.DamageModifier.BASE, 0D);
+		Map<EntityDamageEvent.DamageModifier, Function<Double, Double>> modifierFunctions = new HashMap<>();
+		modifierFunctions.put(EntityDamageEvent.DamageModifier.BASE, d -> 0D);
+		var fakedEvent = new EntityDamageByEntityEvent(damager, damaged, event.getCause(), event.getDamageSource(), modifiers, modifierFunctions, event.isCritical());
+		fakedEvent.callEvent();
 	}
 
 }

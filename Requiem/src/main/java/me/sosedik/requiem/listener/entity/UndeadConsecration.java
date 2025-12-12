@@ -103,12 +103,27 @@ public class UndeadConsecration implements Listener {
 				return;
 			}
 
-			switch (damageEvent.getDamager()) {
-				case Golem golem -> {
+			if (damageEvent.getDamager() instanceof LivingEntity damager && damager.getEquipment() != null) {
+				ItemStack weapon = damager.getEquipment().getItemInMainHand();
+				if (weapon.containsEnchantment(Enchantment.SMITE)) {
+					healTask.updateVulnerabilityTime(2);
+					return;
+				}
+			}
+			
+			Entity damager = damageEvent.getDamager();
+//			if (damager instanceof Player player) {
+//				LivingEntity possessed = PossessingPlayer.getPossessed(player);
+//				if (possessed != null)
+//					damager = possessed;
+//			}
+
+			switch (damager) {
+				case Golem ignored -> {
 					healTask.updateNoHealTime(5);
 					return;
 				}
-				case Wolf wolf when Tag.ENTITY_TYPES_SKELETONS.isTagged(entity.getType()) -> {
+				case Wolf ignored when Tag.ENTITY_TYPES_SKELETONS.isTagged(entity.getType()) -> {
 					healTask.updateNoHealTime(5);
 					return;
 				}
@@ -133,13 +148,6 @@ public class UndeadConsecration implements Listener {
 							healTask.updateVulnerabilityTime(20);
 							return;
 						}
-					}
-				}
-				case LivingEntity damager when damager.getEquipment() != null -> {
-					ItemStack weapon = damager.getEquipment().getItemInMainHand();
-					if (weapon.containsEnchantment(Enchantment.SMITE)) {
-						healTask.updateVulnerabilityTime(2);
-						return;
 					}
 				}
 				default -> {}

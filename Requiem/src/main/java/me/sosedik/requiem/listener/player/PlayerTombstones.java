@@ -12,6 +12,7 @@ import me.sosedik.utilizer.dataset.UtilizerTags;
 import me.sosedik.utilizer.listener.BlockStorage;
 import me.sosedik.utilizer.util.BiomeTags;
 import me.sosedik.utilizer.util.EntityUtil;
+import me.sosedik.utilizer.util.InventoryUtil;
 import me.sosedik.utilizer.util.LocationUtil;
 import me.sosedik.utilizer.util.MathUtil;
 import net.kyori.adventure.text.Component;
@@ -83,13 +84,7 @@ public class PlayerTombstones implements Listener {
 
 		Player player = event.getPlayer();
 		List<ItemStack> drops = event.getDrops();
-		for (int slot = 0; slot < player.getInventory().getSize(); slot++) {
-			ItemStack item = player.getInventory().getItem(slot);
-			if (ItemStack.isEmpty(item)) continue;
-			if (!drops.remove(item)) continue;
-
-			tombstoneCreateEvent.setItem(slot, item);
-		}
+		InventoryUtil.storeSlotted(player.getInventory(), tombstoneCreateEvent.getData(), drops::remove);
 
 		tombstoneCreateEvent.callEvent();
 		EVENT_CACHE.put(event, tombstoneCreateEvent);
@@ -288,11 +283,7 @@ public class PlayerTombstones implements Listener {
 			}
 		}
 
-		int slot = -1;
-		for (ItemStack item : event.getDrops()) {
-			tombstoneCreateEvent.setItem(slot, item);
-			slot--;
-		}
+		InventoryUtil.storeSlottedExtra(tombstoneCreateEvent.getData(), event.getDrops());
 		event.getDrops().clear();
 
 		if (oldStorage instanceof TombstoneBlockStorage storage) {

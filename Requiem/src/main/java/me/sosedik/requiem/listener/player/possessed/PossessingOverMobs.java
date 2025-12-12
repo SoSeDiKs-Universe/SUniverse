@@ -27,14 +27,14 @@ import java.util.function.Consumer;
 @NullMarked
 public class PossessingOverMobs implements Listener {
 
-	private static final String SOULBOUND_ITEM_TAG = "entity_soulbound";
+	private static final String POSSESSED_ITEM_TAG = "entity_soulbound";
 
 	static {
 		NotDroppableItems.addRule(new NotDroppableItems.NotDroppableRule(
 			(entity, item) -> {
 				if (!(entity instanceof Player player)) return false;
 				if (!PossessingPlayer.isPossessing(player)) return false;
-				if (!NBT.get(item, nbt -> (boolean) nbt.hasTag(SOULBOUND_ITEM_TAG))) return false;
+				if (!NBT.get(item, nbt -> (boolean) nbt.hasTag(POSSESSED_ITEM_TAG))) return false;
 
 				player.playSound(player, Sound.PARTICLE_SOUL_ESCAPE, SoundCategory.PLAYERS, 1F, 1F);
 				return true;
@@ -56,7 +56,7 @@ public class PossessingOverMobs implements Listener {
 		if (!player.getInventory().getItemInMainHand().isEmpty()) return;
 
 		Runnable action = () -> {
-			markSoulboundItems(entity);
+			markPossessedItems(entity);
 			PossessingPlayer.migrateStatsToPlayer(player, entity);
 		};
 		if (!PossessingPlayer.startPossessing(player, entity, action)) return;
@@ -64,7 +64,7 @@ public class PossessingOverMobs implements Listener {
 		event.setCancelled(true);
 	}
 
-	private void markSoulboundItems(LivingEntity entity) {
+	private void markPossessedItems(LivingEntity entity) {
 		EntityEquipment equipment = entity.getEquipment();
 		if (equipment == null) return;
 
@@ -77,9 +77,19 @@ public class PossessingOverMobs implements Listener {
 			item.addUnsafeEnchantment(Enchantment.BINDING_CURSE, 1);
 			item.addUnsafeEnchantment(Enchantment.VANISHING_CURSE, 1);
 			if (equipment.getDropChance(slot) <= 0.1)
-				NBT.modify(item, (Consumer<ReadWriteItemNBT>) nbt -> nbt.setBoolean(SOULBOUND_ITEM_TAG, true));
+				NBT.modify(item, (Consumer<ReadWriteItemNBT>) nbt -> nbt.setBoolean(POSSESSED_ITEM_TAG, true));
 			equipment.setItem(slot, item);
 		}
+	}
+
+	/**
+	 * Checks whether this is a possessed soulbound item
+	 *
+	 * @param item item
+	 * @return whether this is a possessed soulbound item
+	 */
+	public static boolean isPossessedSoulboundItem(ItemStack item) {
+		return NBT.get(item, nbt -> (boolean) nbt.hasTag(POSSESSED_ITEM_TAG));
 	}
 
 }

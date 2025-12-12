@@ -13,6 +13,7 @@ import me.sosedik.requiem.task.DynamicScaleTask;
 import me.sosedik.requiem.task.PoseMimicingTask;
 import me.sosedik.utilizer.api.storage.player.PlayerDataStorage;
 import me.sosedik.utilizer.util.EntityUtil;
+import me.sosedik.utilizer.util.InventoryUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Tag;
 import org.bukkit.block.data.BlockData;
@@ -49,6 +50,8 @@ import java.util.function.Predicate;
 // MCCheck: 1.21.11, new mobs visually carrying items outside entity equipment
 @NullMarked
 public class PossessingPlayer {
+
+	public static final int MAX_ATTRITION_LEVEL = 5;
 
 	private static final String POSSESSED_TAG = "possessed";
 	private static final String POSSESSED_PERSISTENT_TAG = "persistent";
@@ -123,14 +126,16 @@ public class PossessingPlayer {
 			nbt.setBoolean(POSSESSED_PERSISTENT_TAG, persistent);
 		});
 
-		int level = Math.clamp(5 - player.getLevel(), 0, 5);
-		player.addPotionEffect(new PotionEffect(RequiemEffects.ATTRITION, PotionEffect.INFINITE_DURATION, level));
+		int level = player.getLevel();
+		if (level < 2 && entity instanceof Golem)
+			level = 5;
+		applyAttrition(player, level);
 		player.setInvisible(true);
 		player.setInvulnerable(false); // Prevents mobs from targeting the player if true
 		player.setSleepingIgnored(true);
 		player.setRemainingAir(entity.getRemainingAir());
 
-		checkPossessedExtraItems(player);
+		checkPossessedExtraItems(player, false);
 
 		if (entity instanceof Bat)
 			player.addPotionEffect(infinitePotionEffect(PotionEffectType.NIGHT_VISION));
@@ -167,16 +172,21 @@ public class PossessingPlayer {
 		if (quit) {
 			if (riding != null) riding.remove();
 		} else {
-			if (riding != null && NBT.getPersistentData(riding, nbt -> nbt.hasTag(POSSESSED_TAG))) {
+			if (riding != null) {
 				NBT.modifyPersistentData(riding, nbt -> {
-					nbt = nbt.getCompound(POSSESSED_TAG);
-					if (nbt == null) return;
+					nbt = nbt.getOrCreateCompound(POSSESSED_TAG);
 
-					boolean persistent = nbt.getBoolean(POSSESSED_PERSISTENT_TAG);
-					nbt.removeKey(POSSESSED_PERSISTENT_TAG);
-					riding.setPersistent(persistent);
+					if (nbt.hasTag(POSSESSED_PERSISTENT_TAG)) {
+						boolean persistent = nbt.getBoolean(POSSESSED_PERSISTENT_TAG);
+						nbt.removeKey(POSSESSED_PERSISTENT_TAG);
+						riding.setPersistent(persistent);
+					}
+
+					if (canPreserveInventory(player))
+						InventoryUtil.storeSlotted(player.getInventory(), nbt, item -> !isExtraPossessedItem(item));
 				});
 			}
+			player.getInventory().clear();
 		}
 
 		player.setInvisible(false);
@@ -186,17 +196,16 @@ public class PossessingPlayer {
 
 		POSSESSING.remove(player.getUniqueId());
 
-		checkPossessedExtraItems(player);
+		if (riding != null)
+			removePossessedExtraItems(riding);
 
 		PotionEffect unluck = player.getPotionEffect(PotionEffectType.UNLUCK);
 		player.clearActivePotionEffects();
 		if (unluck != null)
 			player.addPotionEffect(unluck);
 
-		if (riding != null) {
-			removePossessedExtraItems(riding);
+		if (riding != null)
 			new PlayerStopPossessingEntityEvent(player, riding).callEvent();
-		}
 
 		if (quit) return riding;
 
@@ -274,7 +283,7 @@ public class PossessingPlayer {
 	 */
 	public static void migrateStatsToPlayer(Player player, LivingEntity entity) {
 		player.getInventory().clear();
-		migrateInvFromEntity(player, entity);
+		migrateInvFromEntity(player, entity, true);
 	}
 
 	/**
@@ -282,8 +291,21 @@ public class PossessingPlayer {
 	 *
 	 * @param player player
 	 * @param entity entity
+	 * @param fromNbt whether to restore inventory from nbt
 	 */
-	public static void migrateInvFromEntity(Player player, LivingEntity entity) {
+	public static void migrateInvFromEntity(Player player, LivingEntity entity, boolean fromNbt) {
+		if (fromNbt) {
+			NBT.modifyPersistentData(entity, nbt -> {
+				if (!nbt.hasTag(POSSESSED_TAG)) return;
+
+				nbt = nbt.getCompound(POSSESSED_TAG);
+				if (nbt == null) return;
+
+				InventoryUtil.restoreFromSlotted(player.getInventory(), nbt, items -> items.forEach(item -> InventoryUtil.addOrDrop(player, item, false)));
+				nbt.removeKey(InventoryUtil.STORED_SLOTTED_ITEMS_TAG);
+			});
+		}
+
 		EntityEquipment entityEquipment = entity.getEquipment();
 		if (entityEquipment == null) return;
 
@@ -318,6 +340,7 @@ public class PossessingPlayer {
 	 */
 	public static boolean isAllowedForCapture(Player player, LivingEntity entity) {
 		if (!isPossessable(entity)) return false;
+		if (!entity.getPassengers().isEmpty()) return false;
 		if (entity instanceof AbstractHorse) return false;
 		return switch (entity) {
 			case Animals animals -> true;
@@ -365,7 +388,6 @@ public class PossessingPlayer {
 
 		entity.spawnAt(player.getLocation());
 		startPossessing(player, entity, null, true);
-		checkPossessedExtraItems(player); // ToDo: restore inventory? // TODO
 
 		return true;
 	}
@@ -425,34 +447,48 @@ public class PossessingPlayer {
 	 * @param player player
 	 * @return whether the player can hold ghost items
 	 */
-	public static boolean checkPossessedExtraItems(Player player) {
-		if (!isPossessing(player)) {
-			player.getInventory().remove(RequiemItems.HOST_REVOCATOR);
+	public static boolean checkPossessedExtraItems(Player player, boolean remove) {
+		LivingEntity possessed = getPossessed(player);
+		if (possessed == null) {
+			removePossessedExtraItems(player);
 			return false;
 		}
 
-		if (player.getLevel() > 0) {
-			player.getInventory().remove(RequiemItems.HOST_REVOCATOR);
-			LivingEntity possessed = getPossessed(player);
-			if (possessed != null)
-				removePossessedExtraItems(possessed);
-			return false;
-		}
+		if (remove)
+			removePossessedExtraItems(player);
 
 		for (Predicate<Player> predicate : ITEM_RULES) {
 			if (predicate.test(player)) {
-				player.getInventory().remove(RequiemItems.HOST_REVOCATOR);
+				if (!remove)
+					removePossessedExtraItems(player);
 				return false;
 			}
 		}
 
-		if (!player.getInventory().contains(RequiemItems.HOST_REVOCATOR)) { // TODO should also be soulbound
-			if (ItemStack.isEmpty(player.getInventory().getItem(8)))
+		if (!player.getInventory().contains(RequiemItems.HOST_REVOCATOR) && canHoldHostRevocator(player, possessed)) { // TODO should also be soulbound
+			ItemStack currentItem = player.getInventory().getItem(8);
+			if (ItemStack.isEmpty(currentItem)) {
 				player.getInventory().setItem(8, ItemStack.of(RequiemItems.HOST_REVOCATOR));
-			else
-				player.getInventory().addItem(ItemStack.of(RequiemItems.HOST_REVOCATOR));
+			} else {
+				if (!player.getInventory().addItem(ItemStack.of(RequiemItems.HOST_REVOCATOR)).isEmpty()) {
+					player.getInventory().setItem(8, ItemStack.of(RequiemItems.HOST_REVOCATOR));
+					InventoryUtil.addOrDrop(player, currentItem, false);
+				}
+			}
 		}
+
 		return true;
+	}
+
+	private static boolean canHoldHostRevocator(Player player, LivingEntity possessed) {
+		return possessed instanceof Golem || hasAttritionAtOrHigherThan(player, MAX_ATTRITION_LEVEL);
+	}
+
+	private static void removePossessedExtraItems(Player player) {
+		removePossessedExtraItems((LivingEntity) player);
+		LivingEntity possessed = getPossessed(player);
+		if (possessed != null)
+			removePossessedExtraItems(possessed);
 	}
 
 	private static void removePossessedExtraItems(LivingEntity entity) {
@@ -462,9 +498,19 @@ public class PossessingPlayer {
 			if (!entity.canUseEquipmentSlot(slot)) continue;
 
 			ItemStack item = entity.getEquipment().getItem(slot);
-			if (item.getType() == RequiemItems.HOST_REVOCATOR)
+			if (isExtraPossessedItem(item))
 				entity.getEquipment().setItem(slot, null);
 		}
+	}
+
+	/**
+	 * Checks whether the item is a possessed control one
+	 *
+	 * @param item item
+	 * @return whether the item is a possessed control one
+	 */
+	public static boolean isExtraPossessedItem(ItemStack item) {
+		return item.getType() == RequiemItems.HOST_REVOCATOR;
 	}
 
 	/**
@@ -484,6 +530,81 @@ public class PossessingPlayer {
 	 */
 	public static boolean isResurrected(LivingEntity entity) {
 		return NBT.getPersistentData(entity, nbt -> nbt.getOrDefault(RESURRECTED_ENTITY_TAG, false));
+	}
+
+	/**
+	 * Applies attrition level
+	 *
+	 * @param player player
+	 * @param level level
+	 */
+	public static void applyAttrition(Player player, int level) {
+		int amplifier = Math.clamp(MAX_ATTRITION_LEVEL - level, 0, MAX_ATTRITION_LEVEL);
+		player.setLevel(level);
+		player.setExp(0F);
+		player.addPotionEffect(new PotionEffect(RequiemEffects.ATTRITION, PotionEffect.INFINITE_DURATION, amplifier));
+	}
+
+	/**
+	 * Checks whether the possessed player can drop items
+	 *
+	 * @param player player
+	 * @return whether the possessed player can drop items
+	 */
+	public static boolean canDropItems(Player player) {
+		return hasAttritionLowerThan(player, 4);
+	}
+
+	/**
+	 * Checks whether the possessed player can open inventories
+	 *
+	 * @param player player
+	 * @return whether the possessed player can open inventories
+	 */
+	public static boolean canOpenInventories(Player player) {
+		return hasAttritionLowerThan(player, 3);
+	}
+
+	/**
+	 * Checks whether the possessed player should keep items on death
+	 *
+	 * @param player player
+	 * @return whether the possessed player should keep items on death
+	 */
+	public static boolean canKeepItemsOnDeath(Player player) {
+		return hasAttritionLowerThan(player, 3);
+	}
+
+	/**
+	 * Checks whether the possessed player should preserve inventory when leaving the host
+	 *
+	 * @param player player
+	 * @return whether the possessed player should preserve inventory when leaving the host
+	 */
+	public static boolean canPreserveInventory(Player player) {
+		return hasAttritionLowerThan(player, 2);
+	}
+
+	/**
+	 * Checks whether the possessed player can trade
+	 *
+	 * @param player player
+	 * @return whether the possessed player can trade
+	 */
+	public static boolean canTrade(Player player) {
+		return hasAttritionLowerThan(player, 3);
+	}
+
+	private static boolean hasAttritionLowerThan(Player player, int level) {
+		if (!isPossessingSoft(player)) return true;
+		if (!player.hasPotionEffect(RequiemEffects.ATTRITION)) return true;
+
+		PotionEffect potionEffect = player.getPotionEffect(RequiemEffects.ATTRITION);
+		return potionEffect != null && potionEffect.getAmplifier() < level;
+	}
+
+	private static boolean hasAttritionAtOrHigherThan(Player player, int level) {
+		return !hasAttritionLowerThan(player, level);
 	}
 
 }

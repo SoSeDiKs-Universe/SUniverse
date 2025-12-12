@@ -23,9 +23,9 @@ public class AttritionEffectLevel implements Listener {
 
 		player.removePotionEffect(RequiemEffects.ATTRITION);
 
-		int level = Math.clamp(5 - event.getNewLevel(), 0, 5);
+		int level = Math.clamp(PossessingPlayer.MAX_ATTRITION_LEVEL - event.getNewLevel(), 0, PossessingPlayer.MAX_ATTRITION_LEVEL);
 		player.addPotionEffect(new PotionEffect(RequiemEffects.ATTRITION, PotionEffect.INFINITE_DURATION, level));
-		PossessingPlayer.checkPossessedExtraItems(player);
+		PossessingPlayer.checkPossessedExtraItems(player, false);
 	}
 
 }

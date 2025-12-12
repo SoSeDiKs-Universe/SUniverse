@@ -1,5 +1,6 @@
 package me.sosedik.utilizer.util;
 
+import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.BundleContents;
 import io.papermc.paper.datacomponent.item.ItemContainerContents;
@@ -10,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -17,7 +19,9 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -27,6 +31,8 @@ public class InventoryUtil {
 	private InventoryUtil() {
 		throw new IllegalStateException("Utility class");
 	}
+
+	public static final String STORED_SLOTTED_ITEMS_TAG = "items";
 
 	private static final int[] SHIFT_CLICK_SLOTS_PRIORITY = {
 		8, 7, 6, 5, 4, 3, 2, 1, 0,
@@ -294,6 +300,81 @@ public class InventoryUtil {
 
 	public static void addExtraItemChecker(Function<Player, List<@Nullable ItemStack>> checker) {
 		EXTRA_ITEM_CHECKERS.add(checker);
+	}
+
+	/**
+	 * Stores inventory contents into nbt while preserving slot positions
+	 *
+	 * @param inventory inventory
+	 * @param nbt nbt
+	 */
+	public static void storeSlotted(Inventory inventory, ReadWriteNBT nbt, @Nullable Predicate<ItemStack> storageCheck) {
+		nbt.removeKey(STORED_SLOTTED_ITEMS_TAG);
+		ReadWriteNBT itemsTag = nbt.getOrCreateCompound(STORED_SLOTTED_ITEMS_TAG);
+		for (int slot = 0; slot < inventory.getSize(); slot++) {
+			ItemStack item = inventory.getItem(slot);
+			if (ItemStack.isEmpty(item)) continue;
+			if (storageCheck != null && !storageCheck.test(item)) continue;
+
+			itemsTag.setItemStack(String.valueOf(slot), item);
+		}
+	}
+
+	/**
+	 * Restores inventory contents from nbt
+	 *
+	 * @param inventory inventory
+	 * @param nbt nbt
+	 * @param onLeftover action on leftover items
+	 */
+	public static void restoreFromSlotted(@Nullable Inventory inventory, ReadWriteNBT nbt, Consumer<List<ItemStack>> onLeftover) {
+		if (!nbt.hasTag(STORED_SLOTTED_ITEMS_TAG)) return;
+
+		ReadWriteNBT itemsTag = nbt.getCompound(STORED_SLOTTED_ITEMS_TAG);
+		if (itemsTag == null) return;
+
+		List<ItemStack> leftovers = null;
+		int inventorySize = inventory == null ? 0 : inventory.getSize();
+		for (String key : itemsTag.getKeys()) {
+			int slot;
+			try {
+				slot = Integer.parseInt(key);
+			} catch (NumberFormatException ignored) {
+				continue;
+			}
+
+			ItemStack item = itemsTag.getItemStack(key);
+			if (ItemStack.isEmpty(item)) continue;
+
+			if (slot < 0 || slot >= inventorySize || !ItemStack.isEmpty(inventory.getItem(slot))) {
+				if (leftovers == null) leftovers = new ArrayList<>();
+				leftovers.add(item);
+			} else {
+				inventory.setItem(slot, item);
+			}
+		}
+
+		if (leftovers != null)
+			onLeftover.accept(leftovers);
+	}
+
+	/**
+	 * Stores extra (non-slotted) items into stored slotted inventory
+	 *
+	 * @param nbt nbt
+	 * @param items items
+	 */
+	public static void storeSlottedExtra(ReadWriteNBT nbt, Collection<ItemStack> items) {
+		ReadWriteNBT itemsTag = nbt.getOrCreateCompound(STORED_SLOTTED_ITEMS_TAG);
+		int extraSlot = -1;
+		for (ItemStack item : items) {
+			if (ItemStack.isEmpty(item)) continue;
+
+			while (nbt.hasTag(String.valueOf(extraSlot)))
+				extraSlot--;
+
+			itemsTag.setItemStack(String.valueOf(extraSlot), item);
+		}
 	}
 
 }

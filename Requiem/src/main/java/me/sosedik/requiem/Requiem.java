@@ -12,7 +12,6 @@ import me.sosedik.requiem.impl.item.modifier.TombstoneDeathMessageModifier;
 import me.sosedik.requiem.listener.block.TombstoneCreatures;
 import me.sosedik.requiem.listener.effect.AttritionEffectLevel;
 import me.sosedik.requiem.listener.entity.CreepersDropCreeperHearts;
-import me.sosedik.requiem.listener.entity.FakeHorseSaddles;
 import me.sosedik.requiem.listener.entity.InsectsPreventSunburning;
 import me.sosedik.requiem.listener.entity.OverwriteControlledPandasGenes;
 import me.sosedik.requiem.listener.entity.PrepareGhostMobs;
@@ -90,7 +89,6 @@ public final class Requiem extends JavaPlugin {
 			AttritionEffectLevel.class,
 			// entity
 			CreepersDropCreeperHearts.class,
-			FakeHorseSaddles.class,
 			InsectsPreventSunburning.class,
 			OverwriteControlledPandasGenes.class,
 			PrepareGhostMobs.class,

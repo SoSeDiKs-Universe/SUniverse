@@ -182,8 +182,7 @@ public class PossessingPlayer {
 						riding.setPersistent(persistent);
 					}
 
-					if (canPreserveInventory(player))
-						InventoryUtil.storeSlotted(player.getInventory(), nbt, item -> !isExtraPossessedItem(item));
+					InventoryUtil.storeSlotted(player.getInventory(), nbt, item -> !isExtraPossessedItem(item));
 				});
 			}
 			player.getInventory().clear();
@@ -470,10 +469,8 @@ public class PossessingPlayer {
 			if (ItemStack.isEmpty(currentItem)) {
 				player.getInventory().setItem(8, ItemStack.of(RequiemItems.HOST_REVOCATOR));
 			} else {
-				if (!player.getInventory().addItem(ItemStack.of(RequiemItems.HOST_REVOCATOR)).isEmpty()) {
-					player.getInventory().setItem(8, ItemStack.of(RequiemItems.HOST_REVOCATOR));
-					InventoryUtil.addOrDrop(player, currentItem, false);
-				}
+				player.getInventory().setItem(8, ItemStack.of(RequiemItems.HOST_REVOCATOR));
+				InventoryUtil.addOrDrop(player, currentItem, false);
 			}
 		}
 

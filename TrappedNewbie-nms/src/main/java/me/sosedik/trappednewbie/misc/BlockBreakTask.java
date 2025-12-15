@@ -21,7 +21,6 @@ import org.bukkit.Chunk;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.SoundGroup;
 import org.bukkit.Tag;
@@ -29,10 +28,14 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.BlockState;
 import org.bukkit.block.data.Bisected;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.type.Bed;
 import org.bukkit.block.data.type.Door;
+import org.bukkit.craftbukkit.CraftWorld;
+import org.bukkit.craftbukkit.block.CraftBlockState;
+import org.bukkit.craftbukkit.util.CraftLocation;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.LivingEntity;
@@ -42,6 +45,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Transformation;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -86,7 +90,7 @@ public class BlockBreakTask extends BukkitRunnable {
 		sendBreak();
 
 		// Store needed values
-		this.properTool = GameModeSwitcherTask.isApplicableTool(player, block, this.tool);
+		this.properTool = GameModeSwitcherTask.isApplicableForBreak(player, block, this.tool);
 		this.brokenTool = DurabilityUtil.isBroken(this.tool);
 
 		// Hammer block replacing
@@ -96,7 +100,7 @@ public class BlockBreakTask extends BukkitRunnable {
 			float bestDestroyTime = Float.MAX_VALUE;
 			for (ItemStack invItem : player.getInventory().getContents()) {
 				if (ItemStack.isEmpty(invItem)) continue;
-				if (!GameModeSwitcherTask.isApplicableTool(player, block, this.tool)) continue;
+				if (!GameModeSwitcherTask.isApplicableForBreak(player, block, this.tool)) continue;
 				if (DurabilityUtil.isBroken(invItem)) continue;
 
 				this.tool = invItem;
@@ -358,6 +362,7 @@ public class BlockBreakTask extends BukkitRunnable {
 		BlockData blockData = this.block.getBlockData();
 		SoundGroup soundGroup = this.block.getBlockSoundGroup();
 
+		BlockState blockState = this.block.getState();
 		if (this.hammer != null) {
 			ItemStack tempStack = this.hammer.clone();
 			this.player.getInventory().setItemInMainHand(this.tool.asOne());
@@ -372,7 +377,7 @@ public class BlockBreakTask extends BukkitRunnable {
 		if (Tag.FIRE.isTagged(this.block.getType())) {
 			this.block.emitSound(Sound.BLOCK_FIRE_EXTINGUISH, 1F, 0.9F + (float) Math.random() * 0.2F);
 		} else {
-			this.block.getWorld().spawnParticle(Particle.BLOCK_CRUMBLE, this.block.getLocation().toCenterLocation(), 50, 0.4, 0.4, 0.4, blockData);
+			(((CraftWorld) this.block.getWorld()).getHandle()).levelEvent(net.minecraft.world.level.block.LevelEvent.PARTICLES_DESTROY_BLOCK, CraftLocation.toBlockPosition(this.block.getLocation()), net.minecraft.world.level.block.Block.getId(((CraftBlockState) blockState).getHandle()));
 			this.block.emitSound(soundGroup.getBreakSound(), 1F, (float) Math.random() * 0.4F + 0.8F);
 		}
 
@@ -452,7 +457,6 @@ public class BlockBreakTask extends BukkitRunnable {
 		int counter;
 		int crack;
 		int tick;
-		boolean barrier = false;
 		@Nullable ItemDisplay display;
 
 		DestroyState() {
@@ -501,6 +505,9 @@ public class BlockBreakTask extends BukkitRunnable {
 			this.display = loc.getWorld().spawn(loc, ItemDisplay.class, itemDisplay -> {
 				itemDisplay.setPersistent(false);
 				itemDisplay.setItemStack(ItemStack.of(TrappedNewbieItems.MATERIAL_AIR));
+				Transformation transformation = itemDisplay.getTransformation();
+				transformation.getScale().set(1.01);
+				itemDisplay.setTransformation(transformation);
 			});
 		}
 

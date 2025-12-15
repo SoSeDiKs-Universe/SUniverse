@@ -12,6 +12,7 @@ import org.jspecify.annotations.NullMarked;
 /**
  * Possesed mimic owner's poses
  */
+// MCCheck: 1.21.11, new mobs with poses
 @NullMarked
 public class PoseMimicingTask extends BukkitRunnable {
 

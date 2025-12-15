@@ -3,7 +3,10 @@ package me.sosedik.trappednewbie;
 import io.leangen.geantyref.TypeToken;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import me.sosedik.delightfulfarming.dataset.DelightfulFarmingRecipes;
+import me.sosedik.delightfulfarming.listener.item.SweepingHoes;
 import me.sosedik.limboworldgenerator.VoidChunkGenerator;
+import me.sosedik.miscme.impl.item.modifier.EnchantmentTooltipModifier;
+import me.sosedik.miscme.impl.item.modifier.FancyTooltipModifier;
 import me.sosedik.miscme.listener.entity.ShearableEntities;
 import me.sosedik.miscme.task.CustomDayCycleTask;
 import me.sosedik.requiem.feature.GhostyPlayer;
@@ -93,6 +96,7 @@ import me.sosedik.trappednewbie.listener.block.BreakableTombstones;
 import me.sosedik.trappednewbie.listener.block.CustomBlockBreaking;
 import me.sosedik.trappednewbie.listener.block.FluidPickupRequiresGloves;
 import me.sosedik.trappednewbie.listener.block.LogStrippingGivesBarks;
+import me.sosedik.trappednewbie.listener.block.ProperCropBreaking;
 import me.sosedik.trappednewbie.listener.block.SoftBlockHandBreaking;
 import me.sosedik.trappednewbie.listener.block.TreePhysics;
 import me.sosedik.trappednewbie.listener.block.UnlitCampfireByDefault;
@@ -192,6 +196,7 @@ import me.sosedik.trappednewbie.listener.world.NoDayChangeInLimbo;
 import me.sosedik.trappednewbie.listener.world.PerPlayerWorlds;
 import me.sosedik.trappednewbie.listener.world.PersonalVoidFall;
 import me.sosedik.trappednewbie.listener.world.RainRefillsWaterAndMakesPuddles;
+import me.sosedik.trappednewbie.misc.VillagerTradesHack;
 import me.sosedik.utilizer.CommandManager;
 import me.sosedik.utilizer.api.language.TranslationHolder;
 import me.sosedik.utilizer.listener.BlockStorage;
@@ -219,6 +224,7 @@ import org.jspecify.annotations.NullMarked;
 
 import java.io.File;
 import java.util.List;
+import java.util.Map;
 
 import static me.sosedik.utilizer.Utilizer.limboWorld;
 
@@ -358,6 +364,7 @@ public final class TrappedNewbie extends JavaPlugin {
 			CustomBlockBreaking.class,
 			FluidPickupRequiresGloves.class,
 			LogStrippingGivesBarks.class,
+			ProperCropBreaking.class,
 			SoftBlockHandBreaking.class,
 			TreePhysics.class,
 			UnlitCampfireByDefault.class,
@@ -479,6 +486,13 @@ public final class TrappedNewbie extends JavaPlugin {
 		GhostyPlayer.addItemsDenyRule(player -> player.getWorld() == limboWorld());
 		PossessingPlayer.addItemsDenyRule(player -> player.getWorld() == limboWorld());
 
+		SweepingHoes.addBreakable(SweepingHoes.GrassType.LEAF, TrappedNewbieTags.ROCKS.getValues());
+		SweepingHoes.addBreakable(SweepingHoes.GrassType.LEAF, TrappedNewbieTags.BRANCHES.getValues());
+
+		EnchantmentTooltipModifier.ENCHANTABLE_SAMPLES.add(Map.entry("hammer", TrappedNewbieItems.COBBLESTONE_HAMMER));
+		EnchantmentTooltipModifier.ENCHANTABLE_SAMPLES.add(Map.entry("knife", TrappedNewbieItems.IRON_KNIFE));
+		FancyTooltipModifier.addTooltipRule(FancyTooltipModifier.Tooltip.NETHERITE, item -> BucketModifier.BucketType.fromBucket(item) == BucketModifier.BucketType.NETHERITE);
+
 		new ShearableEntities.ShearableBehavior()
 			.withDrop(TrappedNewbieItems.HORSEHAIR, 2, 4)
 			.registerFor(EntityType.HORSE, EntityType.MULE);
@@ -488,6 +502,8 @@ public final class TrappedNewbie extends JavaPlugin {
 		new ShearableEntities.ShearableBehavior()
 			.withDrop(Material.BONE_MEAL, 1, 1)
 			.registerFor(EntityType.SKELETON_HORSE);
+
+		VillagerTradesHack.addTrades();
 	}
 
 	@Override

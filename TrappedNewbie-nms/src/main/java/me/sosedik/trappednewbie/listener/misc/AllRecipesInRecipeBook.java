@@ -19,7 +19,6 @@ import me.sosedik.trappednewbie.dataset.TrappedNewbieAdvancements;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieItems;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieTags;
 import me.sosedik.trappednewbie.impl.thirst.ThirstData;
-import me.sosedik.trappednewbie.listener.advancement.AdvancementRecipes;
 import me.sosedik.utilizer.api.recipe.CustomRecipe;
 import me.sosedik.utilizer.impl.recipe.BrewingCraft;
 import me.sosedik.utilizer.util.InventoryUtil;
@@ -43,6 +42,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
+import org.bukkit.event.player.PlayerLocaleChangeEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.BlastingRecipe;
 import org.bukkit.inventory.CampfireRecipe;
@@ -395,6 +395,13 @@ public class AllRecipesInRecipeBook implements Listener {
 		}
 	}
 
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onLocaleChange(PlayerLocaleChangeEvent event) {
+		Player player = event.getPlayer();
+		// Refresh locale
+		TrappedNewbie.scheduler().sync(() -> player.justSendRecipes(player.getDiscoveredRecipes(), false,false, true), 1L);
+	}
+
 	@EventHandler
 	public void onCraft(PrepareItemCraftEvent event) {
 		if (!(event.getRecipe() instanceof ShapelessRecipe recipe)) return;
@@ -446,7 +453,7 @@ public class AllRecipesInRecipeBook implements Listener {
 		if (!(event.getPlayer() instanceof Player player)) return;
 
 		if (TrappedNewbieAdvancements.MAKE_A_WORK_STATION.isDone(player))
-			AdvancementRecipes.discoverRecipes(player);
+			player.justSendRecipes(player.getDiscoveredRecipes(), false,false, true);
 	}
 
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)

@@ -11,6 +11,7 @@ import me.sosedik.utilizer.api.message.Messenger;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NullMarked;
@@ -36,9 +37,11 @@ public class CustomNameModifier extends ItemModifier {
 		boolean componentName = NBT.get(item, nbt -> {
 			if (!nbt.hasTag(NAME_COMPONENT_TAG)) return false;
 
-			Component name = GsonComponentSerializer.gson().deserialize(nbt.getString(NAME_COMPONENT_TAG))
-				.decorationIfAbsent(TextDecoration.ITALIC, TextDecoration.State.FALSE);
-			item.setData(DataComponentTypes.ITEM_NAME, name);
+			Component name = GsonComponentSerializer.gson().deserialize(nbt.getString(NAME_COMPONENT_TAG));
+			if (CustomNameModifier.requiresCustomName(item.getType()))
+				item.setData(DataComponentTypes.CUSTOM_NAME, name.decorationIfAbsent(TextDecoration.ITALIC, TextDecoration.State.FALSE));
+			else
+				item.setData(DataComponentTypes.ITEM_NAME, name);
 			return true;
 		});
 		if (componentName) return ModificationResult.OK;
@@ -55,7 +58,10 @@ public class CustomNameModifier extends ItemModifier {
 			.getMessageIfExists(nameKey);
 		if (name == null) return ModificationResult.PASS;
 
-		item.setData(DataComponentTypes.ITEM_NAME, name);
+		if (CustomNameModifier.requiresCustomName(item.getType()))
+			item.setData(DataComponentTypes.CUSTOM_NAME, name.decorationIfAbsent(TextDecoration.ITALIC, TextDecoration.State.FALSE));
+		else
+			item.setData(DataComponentTypes.ITEM_NAME, name);
 
 		return ModificationResult.OK;
 	}
@@ -68,6 +74,10 @@ public class CustomNameModifier extends ItemModifier {
 	public static ItemStack named(ItemStack item, Component name) {
 		NBT.modify(item, (Consumer<ReadWriteItemNBT>) nbt -> nbt.setString(NAME_COMPONENT_TAG, GsonComponentSerializer.gson().serialize(name)));
 		return item;
+	}
+
+	public static boolean requiresCustomName(Material type) {
+		return type == Material.PLAYER_HEAD || type == Material.SHIELD;
 	}
 
 }

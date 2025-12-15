@@ -3,6 +3,7 @@ package me.sosedik.utilizer.util;
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
 import io.papermc.paper.datacomponent.DataComponentTypes;
+import io.papermc.paper.datacomponent.item.ItemEnchantments;
 import io.papermc.paper.datacomponent.item.PotionContents;
 import io.papermc.paper.datacomponent.item.ResolvableProfile;
 import me.sosedik.kiterino.modifier.item.context.ItemModifierContext;
@@ -21,7 +22,6 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.potion.PotionType;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -82,7 +82,10 @@ public class ItemUtil {
 	 * @return whether item is a light source
 	 */
 	public static boolean isHot(ItemStack item) {
-		return UtilizerTags.HOT_ITEMS.isTagged(item.getType()) || isLitCampfire(item);
+		return UtilizerTags.HOT_ITEMS.isTagged(item.getType())
+			|| item.hasEnchant(Enchantment.FIRE_ASPECT)
+			|| (item.hasData(DataComponentTypes.STORED_ENCHANTMENTS) && Objects.requireNonNull(item.getData(DataComponentTypes.STORED_ENCHANTMENTS)).enchantments().containsKey(Enchantment.FIRE_ASPECT))
+			|| isLitCampfire(item);
 	}
 
 	/**
@@ -105,7 +108,33 @@ public class ItemUtil {
 	 */
 	public static boolean isBurningItem(ItemStack item) {
 		return UtilizerTags.BURNING_ITEMS.isTagged(item.getType())
+			|| item.hasEnchant(Enchantment.FIRE_ASPECT)
+			|| (item.hasData(DataComponentTypes.STORED_ENCHANTMENTS) && Objects.requireNonNull(item.getData(DataComponentTypes.STORED_ENCHANTMENTS)).enchantments().containsKey(Enchantment.FIRE_ASPECT))
 			|| isLitCampfire(item);
+	}
+
+	/**
+	 * Checks whether the item has Fire Aspect
+	 *
+	 * @param item item
+	 * @return whether the item has Fire Aspect
+	 */
+	public static boolean hasFireAspect(ItemStack item) {
+		return item.hasEnchant(Enchantment.FIRE_ASPECT) || hasFireAspectStored(item);
+	}
+
+	/**
+	 * Checks whether the item has Fire Aspect stored
+	 *
+	 * @param item item
+	 * @return whether the item has Fire Aspect stored
+	 */
+	public static boolean hasFireAspectStored(ItemStack item) {
+		if (!item.hasData(DataComponentTypes.STORED_ENCHANTMENTS)) return false;
+
+		ItemEnchantments data = item.getData(DataComponentTypes.STORED_ENCHANTMENTS);
+		assert data != null;
+		return data.enchantments().containsKey(Enchantment.FIRE_ASPECT);
 	}
 
 	/**
@@ -114,12 +143,10 @@ public class ItemUtil {
 	 * @param item item
 	 * @return whether this item is a lit campfire
 	 */
-	public static boolean isLitCampfire(ItemStack item) { // TODO remove meta usage
+	public static boolean isLitCampfire(ItemStack item) {
 		return Tag.CAMPFIRES.isTagged(item.getType())
-			&& item.hasItemMeta()
-			&& item.getItemMeta() instanceof BlockStateMeta meta
-			&& meta.hasBlockState()
-			&& meta.getBlockState().getBlockData() instanceof Campfire campfire
+			&& item.hasBlockData()
+			&& item.getBlockData(item.getType()) instanceof Campfire campfire
 			&& campfire.isLit();
 	}
 

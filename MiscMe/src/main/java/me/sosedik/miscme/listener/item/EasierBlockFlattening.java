@@ -8,6 +8,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.type.Snow;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -24,8 +25,9 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public class EasierBlockFlattening implements Listener {
 
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onPathing(PlayerInteractEvent event) {
+		if (event.useItemInHand() == Event.Result.DENY) return;
 		if (event.getHand() != EquipmentSlot.HAND) return;
 		if (event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
 
@@ -70,8 +72,15 @@ public class EasierBlockFlattening implements Listener {
 
 		player.swingHand(hand);
 		Block upperBlock = block.getRelative(BlockFace.UP);
-		if (!upperBlock.isEmpty())
+		if (!upperBlock.isEmpty()) {
+			boolean wasSneaking = player.isSneaking();
+			// Workaround to prevent extra behaviors from grass break
+			// as sneaking usually stands for skipping a special action
+			// Notably, prevents Sweeping enchantment from triggering
+			player.setSneaking(true);
 			player.breakBlock(upperBlock);
+			player.setSneaking(wasSneaking);
+		}
 		if (materialPre == block.getType()) block.setType(blockType);
 		block.emitSound(sound, 1F, 1F);
 		player.getInventory().getItem(hand).damage(1, player);

@@ -1,7 +1,11 @@
 package me.sosedik.requiem.listener.player.possessed;
 
 import com.destroystokyo.paper.event.player.PlayerPickupExperienceEvent;
+import com.destroystokyo.paper.event.server.ServerTickStartEvent;
+import me.sosedik.requiem.feature.GhostyPlayer;
 import me.sosedik.requiem.feature.PossessingPlayer;
+import org.bukkit.Bukkit;
+import org.bukkit.Statistic;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -25,20 +29,19 @@ import org.jspecify.annotations.NullMarked;
  * - Can't interact with some entities
  * - Can't sleep
  * - Proxy potion effect to the possessed mob
+ * - Also don't count towards survival statistics
  */
 @NullMarked
 public class PossessedLimitedControl implements Listener {
 
-	private boolean allowInteract(LivingEntity possessed, Entity target) {
-		if (target instanceof Villager) {
-			return switch (possessed.getType()) {
-				case VILLAGER, WANDERING_TRADER,
-				     ZOMBIE_VILLAGER, WITCH, ENDERMAN,
-				     PIGLIN, PIGLIN_BRUTE, ZOMBIFIED_PIGLIN -> true;
-				default -> false;
-			};
-		}
-		return true;
+	@EventHandler
+	public void onTick(ServerTickStartEvent event) {
+		Bukkit.getOnlinePlayers().forEach(player -> {
+			if (!GhostyPlayer.isGhost(player) && !PossessingPlayer.isPossessing(player)) return;
+
+			player.setStatistic(Statistic.TIME_SINCE_DEATH, 0);
+			player.setStatistic(Statistic.TIME_SINCE_REST, 0);
+		});
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
@@ -112,6 +115,18 @@ public class PossessedLimitedControl implements Listener {
 
 		if (event.getCause() != EntityPotionEffectEvent.Cause.PLUGIN)
 			possessed.addPotionEffect(potionEffect);
+	}
+
+	private boolean allowInteract(LivingEntity possessed, Entity target) {
+		if (target instanceof Villager) {
+			return switch (possessed.getType()) {
+				case VILLAGER, WANDERING_TRADER,
+				     ZOMBIE_VILLAGER, WITCH, ENDERMAN,
+				     PIGLIN, PIGLIN_BRUTE, ZOMBIFIED_PIGLIN -> true;
+				default -> false;
+			};
+		}
+		return true;
 	}
 
 }

@@ -9,6 +9,7 @@ import me.sosedik.trappednewbie.api.event.player.PlayerToolCheck;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieTags;
 import me.sosedik.trappednewbie.listener.block.SoftBlockHandBreaking;
 import me.sosedik.utilizer.dataset.UtilizerTags;
+import me.sosedik.utilizer.util.LocationUtil;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Tag;
@@ -73,7 +74,7 @@ public class GameModeSwitcherTask extends BukkitRunnable {
 
 		Material blockType = targetBlock.getType();
 		if (isInteractable(blockType)) return true;
-		if (isApplicableTool(this.player, targetBlock, mainHand)) return true;
+		if (isApplicableForBreak(this.player, targetBlock, mainHand)) return true;
 		if (targetBlockFace == BlockFace.UP && UtilizerTags.TILLABLES.isTagged(blockType)) {
 			if (Tag.ITEMS_HOES.isTagged(mainHand.getType())) return true;
 			if (Tag.ITEMS_HOES.isTagged(offHand.getType())) return true;
@@ -82,10 +83,8 @@ public class GameModeSwitcherTask extends BukkitRunnable {
 			if (MaterialTags.MINECARTS.isTagged(mainHand)) return true;
 			if (MaterialTags.MINECARTS.isTagged(offHand)) return true;
 		}
-		if (blockType == Material.FARMLAND) return true;
-		if (isBothHandsUsable(mainHand.getType())) return true;
-		if (isBothHandsUsable(offHand.getType())) return true;
-		if (Tag.JUNGLE_LOGS.isTagged(blockType) && mainHand.getType() == Material.COCOA_BEANS) return true;
+		if (isBothHandsUsable(targetBlock, targetBlockFace, mainHand)) return true;
+		if (isBothHandsUsable(targetBlock, targetBlockFace, offHand)) return true;
 		if (!new PlayerTargetBlockEvent(this.player, targetBlock, targetBlockFace).callEvent()) return true;
 
 		Entity entityTarget = this.player.getTargetEntity(5);
@@ -94,8 +93,17 @@ public class GameModeSwitcherTask extends BukkitRunnable {
 		return entityTarget.getType() == EntityType.ARMOR_STAND;
 	}
 
-	private boolean isBothHandsUsable(Material type) {
-		return type == Material.BONE_MEAL || type == Material.BRUSH;
+	private boolean isBothHandsUsable(Block block, BlockFace blockFace, ItemStack item) {
+		Material blockType = block.getType();
+		Material itemType = item.getType();
+		if (blockType == Material.FARMLAND && UtilizerTags.FARMLAND_SEEDS.isTagged(itemType))
+			return true;
+		if (blockType == Material.SOUL_SAND && UtilizerTags.SOUL_SAND_SEEDS.isTagged(itemType))
+			return true;
+		if (Tag.JUNGLE_LOGS.isTagged(blockType) && itemType == Material.COCOA_BEANS && LocationUtil.SURROUNDING_BLOCKS_XZ.contains(blockFace))
+			return true;
+		return itemType == Material.BONE_MEAL
+			|| itemType == Material.BRUSH;
 	}
 
 	private boolean isInteractable(Material blockType) {
@@ -111,24 +119,30 @@ public class GameModeSwitcherTask extends BukkitRunnable {
 		return TrappedNewbieTags.PLACEABLE_ITEMS.isTagged(itemType);
 	}
 
-	public static boolean isApplicableTool(Player player, Block block, ItemStack tool) {
-		Material type = block.getType();
-		if (TrappedNewbieTags.MINEABLE_BY_HAND.isTagged(type)) return !NoSwordInstaBreak.shouldPreventBlockBreak(tool, block);
+	public static boolean isApplicableForBreak(Player player, Block block, ItemStack tool) {
+		Material blockType = block.getType();
+		if (TrappedNewbieTags.MINEABLE_BY_HAND.isTagged(blockType))
+			return !NoSwordInstaBreak.shouldPreventBlockBreak(tool, block);
+
+		if (UtilizerTags.ALL_CROPS.isTagged(blockType))
+			return true;
 
 		if (tool.isEmpty()) {
-			if (Tag.WOODEN_BUTTONS.isTagged(type)) return true;
-			if (Tag.WOODEN_PRESSURE_PLATES.isTagged(type)) return true;
+			if (Tag.WOODEN_BUTTONS.isTagged(blockType)) return true;
+			if (Tag.WOODEN_PRESSURE_PLATES.isTagged(blockType)) return true;
 		}
 
 		if (!new PlayerToolCheck(player, block, tool).callEvent()) return true;
 
 		Material toolType = tool.getType();
-		if (TrappedNewbieTags.ROCKS.isTagged(toolType) && SoftBlockHandBreaking.getConverted(type) != null) return true;
+		if (TrappedNewbieTags.ROCKS.isTagged(toolType) && SoftBlockHandBreaking.getConverted(blockType) != null)
+			return true;
 
-		if (Tag.MINEABLE_AXE.isTagged(type)) return Tag.ITEMS_AXES.isTagged(toolType);
-		if (Tag.MINEABLE_PICKAXE.isTagged(type)) return Tag.ITEMS_PICKAXES.isTagged(toolType);
-		if (Tag.MINEABLE_SHOVEL.isTagged(type)) return Tag.ITEMS_SHOVELS.isTagged(toolType);
-		if (Tag.MINEABLE_HOE.isTagged(type)) return Tag.ITEMS_HOES.isTagged(toolType);
+		if (Tag.MINEABLE_AXE.isTagged(blockType)) return Tag.ITEMS_AXES.isTagged(toolType);
+		if (Tag.MINEABLE_PICKAXE.isTagged(blockType)) return Tag.ITEMS_PICKAXES.isTagged(toolType);
+		if (Tag.MINEABLE_SHOVEL.isTagged(blockType)) return Tag.ITEMS_SHOVELS.isTagged(toolType);
+		if (Tag.MINEABLE_HOE.isTagged(blockType)) return Tag.ITEMS_HOES.isTagged(toolType);
+
 		return !NoSwordInstaBreak.shouldPreventBlockBreak(tool, block);
 	}
 

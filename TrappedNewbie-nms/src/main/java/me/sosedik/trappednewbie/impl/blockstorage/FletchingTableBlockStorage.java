@@ -108,7 +108,16 @@ public class FletchingTableBlockStorage extends InventoryBlockDataStorageHolder 
 	public void openInventory(Player player) {
 		if (this.windows == null) this.windows = new HashMap<>();
 
-		ReferencingInventory inv = ReferencingInventory.fromStorageContents(this.inventory);
+		var inv = ReferencingInventory.fromStorageContents(this.inventory);
+		var gui = Gui.of(9, 3, inv);
+		var window = Window.builder()
+			.addCloseHandler(reason -> this.windows.remove(player.getUniqueId()))
+			.setTitle(name(player))
+			.setUpperGui(gui)
+			.setViewer(player)
+			.build();
+		window.addOpenHandler(() -> this.windows.put(player.getUniqueId(), window));
+
 		inv.addPreUpdateHandler(event -> {
 			switch (event.getSlot()) {
 				case HEAD_SLOT -> {
@@ -160,7 +169,7 @@ public class FletchingTableBlockStorage extends InventoryBlockDataStorageHolder 
 								this.infuser = null;
 								this.infusionColor = null;
 							}
-							openInventory(player);
+							window.updateTitle();
 						}
 
 						item = getInventory().getItem(MODIFIER_SLOT);
@@ -169,7 +178,7 @@ public class FletchingTableBlockStorage extends InventoryBlockDataStorageHolder 
 							if (type == Material.GLASS_BOTTLE) {
 								if (this.infusions > 0) {
 									this.infusions--;
-									openInventory(player);
+									window.updateTitle();
 								}
 								return item;
 							}
@@ -177,7 +186,7 @@ public class FletchingTableBlockStorage extends InventoryBlockDataStorageHolder 
 							if (type == Material.POTION || type == Material.SPLASH_POTION || type == Material.LINGERING_POTION) {
 								if (this.infusions > 0 && item.equals(this.infuser)) {
 									this.infusions--;
-									openInventory(player);
+									window.updateTitle();
 									return item;
 								}
 								this.infusions = 7;
@@ -185,7 +194,7 @@ public class FletchingTableBlockStorage extends InventoryBlockDataStorageHolder 
 
 								computeInfuserColor();
 
-								openInventory(player);
+								window.updateTitle();
 								if (item.getAmount() == 1)
 									return ItemStack.of(Material.GLASS_BOTTLE);
 								else
@@ -202,7 +211,6 @@ public class FletchingTableBlockStorage extends InventoryBlockDataStorageHolder 
 			}
 		});
 
-		var gui = Gui.of(9, 3, inv);
 		gui.fill(Item.simple(ItemStack.of(TrappedNewbieItems.MATERIAL_AIR)));
 		gui.setSlotElement(HEAD_SLOT, new SlotElement.InventoryLink(inv, HEAD_SLOT, emptyProvider(HEAD_SLOT, () -> {
 			var item = ItemStack.of(Material.GLASS_PANE);
@@ -239,13 +247,6 @@ public class FletchingTableBlockStorage extends InventoryBlockDataStorageHolder 
 			})));
 		}
 
-		var window = Window.builder()
-			.addCloseHandler(reason -> this.windows.remove(player.getUniqueId()))
-			.setTitle(name(player))
-			.setUpperGui(gui)
-			.setViewer(player)
-			.build();
-		window.addOpenHandler(() -> this.windows.put(player.getUniqueId(), window));
 		window.open();
 	}
 

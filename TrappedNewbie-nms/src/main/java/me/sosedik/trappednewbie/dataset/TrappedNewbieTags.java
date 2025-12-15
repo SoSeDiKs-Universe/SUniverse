@@ -1,9 +1,12 @@
 package me.sosedik.trappednewbie.dataset;
 
+import io.papermc.paper.registry.keys.tags.EnchantmentTagKeys;
+import io.papermc.paper.registry.tag.TagKey;
 import me.sosedik.trappednewbie.TrappedNewbie;
 import me.sosedik.utilizer.util.ItemUtil;
 import org.bukkit.Material;
 import org.bukkit.Tag;
+import org.bukkit.enchantments.Enchantment;
 import org.jspecify.annotations.NullMarked;
 
 // MCCheck: 1.21.11, new branches (chopping blocks, work stations), hardened
@@ -41,6 +44,8 @@ public class TrappedNewbieTags {
 	public static final Tag<Material> TOTEM_BASES = blockTag("totem_bases");
 	public static final Tag<Material> HARDENED = blockTag("hardened");
 	public static final Tag<Material> PRICKY_BLOCKS = blockTag("pricky_blocks");
+
+	public static final TagKey<Enchantment> TRADES_FARMER = EnchantmentTagKeys.create(TrappedNewbie.trappedNewbieKey("trades_farmer"));
 
 	private static Tag<Material> itemTag(String key) {
 		return ItemUtil.itemTag(TrappedNewbie.trappedNewbieKey(key));

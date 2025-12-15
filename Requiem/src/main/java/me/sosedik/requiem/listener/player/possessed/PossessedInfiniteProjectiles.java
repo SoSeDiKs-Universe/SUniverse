@@ -99,7 +99,6 @@ public class PossessedInfiniteProjectiles implements Listener {
 		if (riding == null) return;
 		if (!hasInfiniteArrows(riding.getType(), event.getItem())) return;
 
-		event.setDamage(0);
 		event.setCancelled(true);
 	}
 

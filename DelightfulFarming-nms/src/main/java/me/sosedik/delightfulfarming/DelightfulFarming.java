@@ -5,6 +5,7 @@ import me.sosedik.delightfulfarming.dataset.DelightfulFarmingRecipes;
 import me.sosedik.delightfulfarming.impl.item.modifier.BerriesModifier;
 import me.sosedik.delightfulfarming.impl.item.modifier.ClockMealModifier;
 import me.sosedik.delightfulfarming.listener.block.NoBerriesPlacement;
+import me.sosedik.delightfulfarming.listener.item.SweepingHoes;
 import me.sosedik.delightfulfarming.listener.sugar.AlwaysAllowEating;
 import me.sosedik.delightfulfarming.listener.sugar.CaloriesExhaustion;
 import me.sosedik.delightfulfarming.listener.sugar.CaloriesOnFoodConsume;
@@ -48,6 +49,8 @@ public final class DelightfulFarming extends JavaPlugin {
 		EventUtil.registerListeners(this,
 			// block
 			NoBerriesPlacement.class,
+			// item
+			SweepingHoes.class,
 			// sugar
 			AlwaysAllowEating.class,
 			CaloriesExhaustion.class,

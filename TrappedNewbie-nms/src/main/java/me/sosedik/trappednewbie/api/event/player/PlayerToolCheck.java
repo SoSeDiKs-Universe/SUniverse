@@ -51,6 +51,15 @@ public class PlayerToolCheck extends PlayerEvent implements Cancellable {
 		this.cancelled = cancel;
 	}
 
+	/**
+	 * Sets whether targeting is allowed
+	 *
+	 * @param allowed {@code true} if you wish allow targeting
+	 */
+	public void setAllowed(boolean allowed) {
+		setCancelled(allowed);
+	}
+
 	@Override
 	public HandlerList getHandlers() {
 		return handlers;

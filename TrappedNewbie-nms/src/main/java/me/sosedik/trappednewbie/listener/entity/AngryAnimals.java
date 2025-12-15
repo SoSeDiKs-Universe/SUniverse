@@ -69,7 +69,7 @@ public class AngryAnimals implements Listener {
 	}
 
 	private void applyAggroTraits(Mob mob) {
-		if (!shouldAggro(mob, mob)) return;
+		if (!shouldHaveAggroTraits(mob)) return;
 		if (!(((CraftMob) mob).getHandle() instanceof PathfinderMob nms)) return;
 
 		setAttribute(mob, Attribute.ATTACK_DAMAGE, getAttackDamage(mob));
@@ -121,16 +121,14 @@ public class AngryAnimals implements Listener {
 		mobAttribute.setBaseValue(value);
 	}
 
-	private void aggro(Mob entity) {
-		if (!(EntityUtil.getCausingDamager(entity) instanceof LivingEntity damager)) return;
+	private void aggro(Mob damagedEntity) {
+		if (!(EntityUtil.getCausingDamager(damagedEntity) instanceof LivingEntity damager)) return;
 		if (damager.isInvulnerable()) return;
 		if (damager instanceof Player player && player.getGameMode().isInvulnerable()) return;
-		if (entity instanceof Tameable tameable && tameable.isTamed() && damager.getUniqueId().equals(tameable.getOwnerUniqueId())) return;
+		if (damagedEntity instanceof Tameable tameable && tameable.isTamed() && damager.getUniqueId().equals(tameable.getOwnerUniqueId())) return;
 
-		entity.getWorld().getNearbyEntitiesByType(Mob.class, entity.getLocation(), 20, mob -> shouldAggro(entity, mob)).forEach(mob -> {
-			if (mob.getTarget() != null) return;
-
-			if (isSameType(entity, mob))
+		damagedEntity.getWorld().getNearbyEntitiesByType(Mob.class, damagedEntity.getLocation(), 20, mob -> shouldAggro(damagedEntity, mob)).forEach(mob -> {
+			if (isSameType(damagedEntity, mob))
 				EntityUtil.setTarget(mob, damager);
 			else if (mob instanceof Animals)
 				mob.setPanicTicks(40);
@@ -152,8 +150,17 @@ public class AngryAnimals implements Listener {
 	}
 
 	private boolean shouldAggro(Mob attackedMob, Mob friendlyMob) {
+		if (attackedMob == friendlyMob) return false;
+		if (friendlyMob.getTarget() != null) return false;
+		if (friendlyMob instanceof Tameable tameable && tameable.isTamed()) return false;
+		if (!friendlyMob.getPassengers().isEmpty()) return false;
 		return (attackedMob instanceof Animals && friendlyMob instanceof Animals)
 			|| (attackedMob instanceof WaterMob && friendlyMob instanceof WaterMob);
+	}
+
+	private boolean shouldHaveAggroTraits(Mob mob) {
+		return mob instanceof Animals
+			|| mob instanceof WaterMob;
 	}
 
 }

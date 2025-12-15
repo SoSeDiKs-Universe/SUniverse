@@ -42,11 +42,11 @@ public class ShovelsConvertAdditionalBlocks implements Listener {
 		Block block = event.getClickedBlock();
 		if (block == null) return;
 
-		Material converted = getConverted(block.getType());
+		Material converted = getConverted(block);
 		if (converted == null) return;
 
 		if (tryToConvert(player, EquipmentSlot.HAND)
-				|| tryToConvert(player, EquipmentSlot.OFF_HAND)) {
+			|| tryToConvert(player, EquipmentSlot.OFF_HAND)) {
 			event.setCancelled(true);
 			block.getLocation().center(1).getNearbyLivingEntities(0.25, 0.1, 0.25)
 				.forEach(entity -> {
@@ -73,8 +73,8 @@ public class ShovelsConvertAdditionalBlocks implements Listener {
 		return true;
 	}
 
-	private @Nullable Material getConverted(Material block) {
-		return switch (block) {
+	private @Nullable Material getConverted(Block block) {
+		return switch (block.getType()) {
 			case FARMLAND, DIRT_PATH -> Material.DIRT;
 			default -> null;
 		};

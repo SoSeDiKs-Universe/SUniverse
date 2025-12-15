@@ -5,6 +5,8 @@ import de.tr7zw.nbtapi.NBT;
 import de.tr7zw.nbtapi.NBTType;
 import io.papermc.paper.event.entity.TameableDeathMessageEvent;
 import me.sosedik.miscme.MiscMe;
+import me.sosedik.miscme.dataset.MiscMeTags;
+import me.sosedik.utilizer.util.ItemUtil;
 import me.sosedik.utilizer.util.LocationUtil;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -12,9 +14,6 @@ import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.data.BlockData;
-import org.bukkit.block.data.type.Campfire;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -36,7 +35,6 @@ import org.jspecify.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -47,8 +45,6 @@ public class ExplosiveCoal implements Listener {
 	private static final String EXPLOSION_MARKER_TAG = "coal_explosion";
 	private static final String EXPLODER_TAG = "exploder";
 	private static final String USED_ITEM_TAG = "used_item";
-
-	private static final Tag<Material> EXTRA_TOOL_TRIGGERS = Objects.requireNonNull(Bukkit.getTag(Tag.REGISTRY_ITEMS, MiscMe.miscMeKey("coal_explosion_extra_tool_triggers"), Material.class));
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onInteract(PlayerInteractEvent event) {
@@ -169,18 +165,10 @@ public class ExplosiveCoal implements Listener {
 
 	private boolean isExplosiveTrigger(ItemStack item, boolean countTools) {
 		Material type = item.getType();
-		if (MaterialTags.TORCHES.isTagged(type)) return true;
-		if (item.hasEnchant(Enchantment.FIRE_ASPECT)) return true;
-
-		if (Tag.CAMPFIRES.isTagged(type)) {
-			if (!item.hasBlockData()) return false;
-
-			BlockData blockData = item.getBlockData(type);
-			return blockData instanceof Campfire campfire && campfire.isLit();
-		}
+		if (ItemUtil.isBurningItem(item)) return true;
 
 		if (!countTools) return false;
-		if (EXTRA_TOOL_TRIGGERS.isTagged(type)) return true;
+		if (MiscMeTags.COAL_EXPLOSION_EXTRA_TOOL_TRIGGERS.isTagged(type)) return true;
 
 		return MaterialTags.IRON_TOOLS.isTagged(type)
 			|| MaterialTags.GOLDEN_TOOLS.isTagged(type);

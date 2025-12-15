@@ -4,6 +4,7 @@ import me.sosedik.miscme.listener.projectile.BurningProjectileCreatesFire;
 import me.sosedik.utilizer.dataset.UtilizerTags;
 import me.sosedik.utilizer.util.DurabilityUtil;
 import me.sosedik.utilizer.util.EntityUtil;
+import me.sosedik.utilizer.util.ItemUtil;
 import org.bukkit.FluidCollisionMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -11,7 +12,6 @@ import org.bukkit.SoundCategory;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Lightable;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -54,7 +54,7 @@ public class FireAspectIsFlintAndSteel implements Listener {
 	private boolean interactEntity(Player player, Entity entity, EquipmentSlot hand) {
 		ItemStack item = player.getInventory().getItem(hand);
 		if (ItemStack.isEmpty(item)) return false;
-		if (!item.hasEnchant(Enchantment.FIRE_ASPECT)) return false;
+		if (!ItemUtil.hasFireAspect(item)) return false;
 		return mimicFlintAndSteel(player, entity, hand);
 	}
 
@@ -74,6 +74,8 @@ public class FireAspectIsFlintAndSteel implements Listener {
 
 		if (damage != 0 || interactEvent.isCancelled()) {
 			player.swingHand(hand);
+			if (ItemUtil.hasFireAspectStored(item))
+				player.setFireTicks(player.getFireTicks() + 60);
 			return true;
 		}
 
@@ -105,7 +107,7 @@ public class FireAspectIsFlintAndSteel implements Listener {
 	private boolean useItem(Player player, Action action, Block block, BlockFace blockFace, EquipmentSlot hand) {
 		ItemStack item = player.getInventory().getItem(hand);
 		if (ItemStack.isEmpty(item)) return false;
-		if (!item.hasEnchant(Enchantment.FIRE_ASPECT)) return false;
+		if (!ItemUtil.hasFireAspect(item)) return false;
 		if (player.hasCooldown(item)) return false;
 		return mimicFlintAndSteel(player, null, action, block, blockFace, hand);
 	}
@@ -158,6 +160,8 @@ public class FireAspectIsFlintAndSteel implements Listener {
 			item.damage(damage, livingEntity);
 			livingEntity.getEquipment().setItem(hand, item);
 			livingEntity.swingHand(hand);
+			if (ItemUtil.hasFireAspectStored(item))
+				livingEntity.setFireTicks(livingEntity.getFireTicks() + 60);
 			return true;
 		}
 
@@ -172,6 +176,9 @@ public class FireAspectIsFlintAndSteel implements Listener {
 		}
 		livingEntity.getEquipment().setItem(hand, item);
 		livingEntity.swingHand(hand);
+
+		if (ItemUtil.hasFireAspectStored(item))
+			livingEntity.setFireTicks(livingEntity.getFireTicks() + 60);
 
 		return true;
 	}

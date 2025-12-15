@@ -152,10 +152,10 @@ public abstract class FancierAdvancementDisplay<T extends FancierAdvancementDisp
 	public Component renderAdvancementTitle(@Nullable Player viewer) {
 		if (isHidden()) return super.renderAdvancementTitle(viewer);
 		if (viewer == null) return super.renderAdvancementTitle(null);
-		if (this.advancement == null) return super.renderAdvancementTitle(null);
+		if (this.advancement == null) return super.renderAdvancementTitle(viewer);
 
 		AdvancementFrame frame = getAdvancementFrame();
-		if (!frame.requiresBackground()) return super.renderAdvancementTitle(null);
+		if (!frame.requiresBackground()) return super.renderAdvancementTitle(viewer);
 
 		boolean obtained = this.advancement.isDone(viewer);
 		FontData fontData = frame.getFontData(obtained);

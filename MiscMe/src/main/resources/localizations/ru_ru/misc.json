@@ -3,6 +3,7 @@
 	"attribute.durability.broken": "<dark_gray>(хлам)",
 	"attribute.durability.capacity": "<gray>Заполненность: <value>",
 	"attribute.repairable": "<gray>Чинится: <items>",
+	"attribute.enchantments": "Зачарования:",
 	"overlay.toggle": [
 		"<yellow><!i><key:key.sneak> + <key:key.use> в руке для переключения",
 		"<yellow><!i>отображения на экране"

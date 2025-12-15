@@ -3,8 +3,6 @@ package me.sosedik.requiem.listener.player.possessed;
 import io.papermc.paper.event.entity.EntityEquipmentChangedEvent;
 import io.papermc.paper.event.player.PlayerArmSwingEvent;
 import io.papermc.paper.event.player.PlayerInventorySlotChangeEvent;
-import io.papermc.paper.world.damagesource.CombatEntry;
-import io.papermc.paper.world.damagesource.CombatTracker;
 import me.sosedik.kiterino.event.entity.EntityStartUsingItemEvent;
 import me.sosedik.requiem.feature.PossessingPlayer;
 import me.sosedik.utilizer.util.LocationUtil;
@@ -17,6 +15,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityCombustEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
@@ -26,8 +25,6 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
-
-import java.util.List;
 
 /**
  * Possessed mimic actions of their possessor
@@ -150,39 +147,6 @@ public class PossessedMimicPossessor implements Listener {
 		entity.setFireTicks(ticks);
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onDamageAnotherEntity(EntityDamageByEntityEvent event) {
-		if (!(event.getDamager() instanceof Player player)) return;
-
-		LivingEntity entity = PossessingPlayer.getPossessed(player);
-		if (entity == null) return;
-
-		Entity damaged = event.getEntity();
-		if (entity == damaged) {
-			event.setDamage(0);
-			event.setCancelled(true);
-			return;
-		}
-
-		if (damaged instanceof LivingEntity living) {
-			CombatTracker combatTracker = living.getCombatTracker();
-			if (skipDamage(player, combatTracker)) return;
-
-			combatTracker.addCombatEntry(CombatEntry.combatEntry(event.getDamageSource(), 0F, null, 0F));
-		}
-
-		event.setCancelled(true);
-		entity.attack(damaged);
-	}
-
-	private boolean skipDamage(Player player, CombatTracker combatTracker) {
-		List<CombatEntry> combatEntries = combatTracker.getCombatEntries();
-		if (combatEntries.isEmpty()) return false;
-
-		CombatEntry last = combatEntries.getLast();
-		return last.getDamage() == 0F && last.getDamageSource().getCausingEntity() == player;
-	}
-
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onUse(EntityStartUsingItemEvent event) {
 		if (!(event.getEntity() instanceof Player player)) return;
@@ -193,6 +157,28 @@ public class PossessedMimicPossessor implements Listener {
 		EquipmentSlot hand = player.getActiveItemHand();
 
 		possessed.startUsingItem(hand);
+	}
+
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onDamageAnotherEntity(EntityDamageByEntityEvent event) {
+		if (!(event.getDamager() instanceof Player player)) return;
+		if (PossessorMimicsPossessed.isDamaging(player)) return;
+
+		LivingEntity possessed = PossessingPlayer.getPossessed(player);
+		if (possessed == null) return;
+
+		Entity damaged = event.getEntity();
+		if (possessed == damaged) {
+			event.setCancelled(true);
+			return;
+		}
+
+		for (EntityDamageEvent.DamageModifier damageModifier : EntityDamageEvent.DamageModifier.values()) {
+			if (event.isApplicable(damageModifier))
+				event.setDamage(damageModifier, 0);
+		}
+
+		possessed.attack(damaged);
 	}
 
 }

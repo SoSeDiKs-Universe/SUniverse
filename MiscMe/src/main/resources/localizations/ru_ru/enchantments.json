@@ -1,0 +1,170 @@
+{
+	"enchantment.minecraft.binding_curse.description": [
+		"Предотвращает снятие проклятого",
+		"предмета со слотов брони."
+	],
+	"enchantment.minecraft.vanishing_curse.description": [
+		"Уничтожает проклятый предмет при поломке",
+		"или смерти с ним в инвентаре."
+	],
+	"enchantment.minecraft.riptide.description": [
+		"Трезубец тянет пользователя за собой, если",
+		"тот находится под дождём или в воде."
+	],
+	"enchantment.minecraft.channeling.description": [
+		"Позволяет трезубцу вызывать молнии во",
+		"время грозы при попадании в сущность."
+	],
+	"enchantment.minecraft.wind_burst.description": [
+		"Испускает порыв ветра при атаке булавой,",
+		"который подбрасывает пользователя в воздух."
+	],
+	"enchantment.minecraft.frost_walker.description": [
+		"Временно замораживает воду в талый лёд под",
+		"ногами пользователя. Обеспечивает иммунитет",
+		"к тепловому урону, наносимому по ногам."
+	],
+	"enchantment.minecraft.lunge.description": [
+		"Запускает пользователя по горизонтали при",
+		"ударе копьём, за счёт потребления насыщения,",
+		"голода и одной единицы прочности."
+	],
+	"enchantment.minecraft.sharpness.description": [
+		"Увеличивает урон в ближнем бою."
+	],
+	"enchantment.minecraft.smite.description": [
+		"Увеличивает урон, наносимый нежити.",
+		"Считается святым уроном, нарушающим их",
+		"естественную невосприимчивость к урону."
+	],
+	"enchantment.minecraft.bane_of_arthropods.description": [
+		"Увеличивает урон, наносимый членистоногим, и",
+		"накладывает на них эффект «<lang:effect.minecraft.slowness>» IV."
+	],
+	"enchantment.minecraft.impaling.description": [
+		"Увеличивает урон по водным и",
+		"покрытым водой сущностям."
+	],
+	"enchantment.minecraft.power.description": [
+		"Увеличивает урон от стрел."
+	],
+	"enchantment.minecraft.density.description": [
+		"Увеличивает урон от удара булавой,",
+		"пропорционально расстоянию падения."
+	],
+	"enchantment.minecraft.breach.description": [
+		"Снижает эффективность брони цели,",
+		"включая врождённые значения брони»."
+	],
+	"enchantment.minecraft.piercing.description": [
+		"Позволяет стрелам пронзать сущности,",
+		"давая возможность одной стреле поразить",
+		"несколько целей. Позволяет подбирать",
+		"стрелы после попадания в цель."
+	],
+	"enchantment.minecraft.sweeping_edge.description": [
+		"Увеличивает урон разящих атак.",
+		"Не влияет на саму атакованную сущность."
+	],
+	"enchantment.minecraft.multishot.description": [
+		"Добавляет две стрелы по бокам центральной стрелы",
+		"за счёт увеличения урона по прочности."
+	],
+	"enchantment.minecraft.fire_aspect.description": [
+		"Поджигает цели. Позволяет использовать",
+		"предмет в качестве огнива."
+	],
+	"enchantment.minecraft.flame.description": [
+		"Выпущенные стрелы горят, поджигая цели."
+	],
+	"enchantment.minecraft.knockback.description": [
+		"Увеличивает отталкивание в ближнем бою."
+	],
+	"enchantment.minecraft.punch.description": [
+		"Увеличивает отталкивание от попадания стрелы."
+	],
+	"enchantment.minecraft.protection.description": [
+		"Снижает урон от большинства источников."
+	],
+	"enchantment.minecraft.blast_protection.description": [
+		"Уменьшает урон и отброс от взрывов."
+	],
+	"enchantment.minecraft.fire_protection.description": [
+		"Уменьшает урон от огня и время горения."
+	],
+	"enchantment.minecraft.projectile_protection.description": [
+		"Уменьшает урон от снарядов."
+	],
+	"enchantment.minecraft.feather_falling.description": [
+		"Уменьшает урон от падения.",
+		"Уменьшает урон от телепортации."
+	],
+	"enchantment.minecraft.fortune.description": [
+		"Шанс получить больше предметов при",
+		"разрушении определённых блоков."
+	],
+	"enchantment.minecraft.looting.description": [
+		"Шанс получить больше предметов при",
+		"убийстве определённых сущностей."
+	],
+	"enchantment.minecraft.silk_touch.description": [
+		"Некоторые блоки, исчезающие или распадающиеся",
+		"на другие предметы при разрушении, будут",
+		"выпадать целиком."
+	],
+	"enchantment.minecraft.luck_of_the_sea.description": [
+		"Увеличивает скорость получения",
+		"сокровищ во время рыбалки."
+	],
+	"enchantment.minecraft.efficiency.description": [
+		"Увеличивает скорость добычи инструмента."
+	],
+	"enchantment.minecraft.quick_charge.description": [
+		"Увеличивает скорость зарядки арбалетов."
+	],
+	"enchantment.minecraft.lure.description": [
+		"Сокращает время на поклёвку при рыбалке."
+	],
+	"enchantment.minecraft.respiration.description": [
+		"Увеличивает время дыхания под водой."
+	],
+	"enchantment.minecraft.aqua_affinity.description": [
+		"Устраняет снижение скорости добычи,",
+		"которое происходит под водой."
+	],
+	"enchantment.minecraft.soul_speed.description": [
+		"Увеличивает скорость передвижения",
+		"по блокам душ."
+	],
+	"enchantment.minecraft.swift_sneak.description": [
+		"Уменьшает снижение скорости движения,",
+		"которое происходит при подкрадывании."
+	],
+	"enchantment.minecraft.depth_strider.description": [
+		"Уменьшает снижение скорости движения,",
+		"которое происходит в воде."
+	],
+	"enchantment.minecraft.thorns.description": [
+		"Случайная возможность нанести урон сущностям,",
+		"которые атакуют пользователя, за счёт",
+		"увеличения урона по прочности."
+	],
+	"enchantment.minecraft.loyalty.description": [
+		"Возвращает трезубец его владельцу",
+		"по приземлению после броска."
+	],
+	"enchantment.minecraft.unbreaking.description": [
+		"Даёт предметам шанс игнорировать потерю",
+		"прочности, увеличивая их долговечность."
+	],
+	"enchantment.minecraft.infinity.description": [
+		"Предотвращает потребление обычных стрел."
+	],
+	"enchantment.minecraft.mending.description": [
+		"Ремонтирует предмет, используя опыт."
+	],
+	"enchantment.delightful_farming.sweeping.description": [
+		"Разрешает использовать предмет на",
+		"нескольких блоках одновременно."
+	]
+}

@@ -3,6 +3,7 @@
 	"attribute.durability.broken": "<dark_gray>(broken junk)",
 	"attribute.durability.capacity": "<gray>Capacity: <value>",
 	"attribute.repairable": "<gray>Repairable: <items>",
+	"attribute.enchantments": "Enchantments:",
 	"overlay.toggle": [
 		"<yellow><!i><key:key.sneak> + <key:key.use> while in hand",
 		"<yellow><!i>to toggle the on-screen overlay"

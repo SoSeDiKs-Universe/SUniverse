@@ -38,7 +38,7 @@ public class BreakableTombstones implements Listener {
 		if (!(BlockStorage.getByLoc(event.getBlock()) instanceof TombstoneBlockStorage storage)) return;
 		if (!storage.isPlayerTombstone()) return;
 
-		event.setCancelled(true);
+		event.setAllowed(true);
 	}
 
 }

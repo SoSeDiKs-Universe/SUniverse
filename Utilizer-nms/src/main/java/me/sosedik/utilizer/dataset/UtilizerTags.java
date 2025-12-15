@@ -54,11 +54,14 @@ public class UtilizerTags {
 	public static final Tag<Material> BOTTLEABLE_MOBS = itemTag("bottleable_mobs");
 	public static final Tag<Material> REGULAR_TORCHES = itemTag("regular_torches");
 	public static final Tag<Material> BURNING_ITEMS = itemTag("burning_items");
+	public static final Tag<Material> FARMLAND_SEEDS = itemTag("farmland_seeds");
+	public static final Tag<Material> SOUL_SAND_SEEDS = itemTag("soul_sand_seeds");
 
 	public static final Tag<Material> STONE_ORES_BLOCKS = blockTag("stone_ores");
 	public static final Tag<Material> ORES_BLOCKS = blockTag("ores");
 	public static final Tag<Material> FRAGILE_BLOCKS = blockTag("fragile_blocks");
 	public static final Tag<Material> VILLAGER_WORKSTATIONS = blockTag("villager_workstations");
+	public static final Tag<Material> ALL_CROPS = blockTag("all_crops");
 
 	// MCCheck: 1.21.11, new mobs
 	public static final Tag<EntityType> HOSTILE_MONSTERS = entityTag("hostile_monsters");

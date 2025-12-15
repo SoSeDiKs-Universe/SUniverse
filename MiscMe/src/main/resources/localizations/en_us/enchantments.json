@@ -1,0 +1,166 @@
+{
+	"enchantment.minecraft.binding_curse.description": [
+		"Prevents the cursed item from being",
+		"removed from an armor slot."
+	],
+	"enchantment.minecraft.vanishing_curse.description": [
+		"Destroys the cursed item if you break it",
+		"or die with it in your inventory."
+	],
+	"enchantment.minecraft.riptide.description": [
+		"Using the Trident while in rain or water",
+		"will launch the user forward."
+	],
+	"enchantment.minecraft.channeling.description": [
+		"Allows the Trident to summon lightning bolts",
+		"upon hitting an entity during thunderstorms."
+	],
+	"enchantment.minecraft.wind_burst.description": [
+		"Smash attacks will launch the user",
+		"back into the air."
+	],
+	"enchantment.minecraft.frost_walker.description": [
+		"Water under the user's feet will temporarily",
+		"freeze into a Frosted Ice. Provides",
+		"immunity to heat damage targeting feet."
+	],
+	"enchantment.minecraft.lunge.description": [
+		"Launches the user horizontally when using a",
+		"Spear's jab attack, at the cost of consuming",
+		"saturation, hunger and one durability."
+	],
+	"enchantment.minecraft.sharpness.description": [
+		"Increases melee damage."
+	],
+	"enchantment.minecraft.smite.description": [
+		"Increases damage dealt against undead.",
+		"Counts as holy damage, breaking their",
+		"natural damage immunity."
+	],
+	"enchantment.minecraft.bane_of_arthropods.description": [
+		"Increases damage against arthropods and",
+		"applies <lang:effect.minecraft.slowness> IV to them."
+	],
+	"enchantment.minecraft.impaling.description": [
+		"Increases damage against aquatic",
+		"and covered in water mobs."
+	],
+	"enchantment.minecraft.power.description": [
+		"Increases arrow damage."
+	],
+	"enchantment.minecraft.density.description": [
+		"Increases the damage of a Mace's smash attack,",
+		"scales with the fall distance."
+	],
+	"enchantment.minecraft.breach.description": [
+		"Reduces the effectiveness of armor on",
+		"the target, including innate armor points."
+	],
+	"enchantment.minecraft.piercing.description": [
+		"Causes fired Arrows to pierce entities,",
+		"allowing for a single Arrow to hit multiple",
+		"mobs, and allows arrows to be picked up",
+		"again after hitting a target."
+	],
+	"enchantment.minecraft.sweeping_edge.description": [
+		"Increases the damage of sweeping attacks.",
+		"Does not affect the attacked entity itself."
+	],
+	"enchantment.minecraft.multishot.description": [
+		"Adds two Arrows to the sides of the center Arrow,",
+		"at the cost of increasing incurred durability damage."
+	],
+	"enchantment.minecraft.fire_aspect.description": [
+		"Sets targets on fire. Allows using the item",
+		"as a Flint and Steel."
+	],
+	"enchantment.minecraft.flame.description": [
+		"Fired arrows are burning,",
+		"setting targets on fire."
+	],
+	"enchantment.minecraft.knockback.description": [
+		"Increases melee knockback."
+	],
+	"enchantment.minecraft.punch.description": [
+		"Increases arrow knockback."
+	],
+	"enchantment.minecraft.protection.description": [
+		"Reduces damage from most sources."
+	],
+	"enchantment.minecraft.blast_protection.description": [
+		"Reduces damage and knockback from explosions."
+	],
+	"enchantment.minecraft.fire_protection.description": [
+		"Reduces damage from fire and burning time."
+	],
+	"enchantment.minecraft.projectile_protection.description": [
+		"Reduces damage from projectiles."
+	],
+	"enchantment.minecraft.feather_falling.description": [
+		"Reduces fall damage.",
+		"Reduces teleportation damage."
+	],
+	"enchantment.minecraft.fortune.description": [
+		"Chance to receive more item drops from certain blocks."
+	],
+	"enchantment.minecraft.looting.description": [
+		"Chance to receive more item drops from certain mobs."
+	],
+	"enchantment.minecraft.silk_touch.description": [
+		"Certain blocks that would otherwise drop different",
+		"items or nothing will drop themselves instead."
+	],
+	"enchantment.minecraft.luck_of_the_sea.description": [
+		"Increases the rate of treasure items from fishing."
+	],
+	"enchantment.minecraft.efficiency.description": [
+		"Increases mining speed of the tool."
+	],
+	"enchantment.minecraft.quick_charge.description": [
+		"Increases charging speed for Crossbows."
+	],
+	"enchantment.minecraft.lure.description": [
+		"Decreases time for bites when fishing."
+	],
+	"enchantment.minecraft.respiration.description": [
+		"Extends underwater breathing time."
+	],
+	"enchantment.minecraft.aqua_affinity.description": [
+		"Removes the mining speed reduction",
+		"that occurs when underwater."
+	],
+	"enchantment.minecraft.soul_speed.description": [
+		"Increases movement speed on soul blocks."
+	],
+	"enchantment.minecraft.swift_sneak.description": [
+		"Lessens the movement speed reduction",
+		"that occurs when sneaking."
+	],
+	"enchantment.minecraft.depth_strider.description": [
+		"Lessens the movement speed reduction",
+		"that occurs when in water."
+	],
+	"enchantment.minecraft.thorns.description": [
+		"Random chance to damage entities that",
+		"attack the user, at the cost of increasing",
+		"incurred durability damage."
+	],
+	"enchantment.minecraft.loyalty.description": [
+		"Returns the trident to its owner",
+		"upon landing after being thrown."
+	],
+	"enchantment.minecraft.unbreaking.description": [
+		"Gives a chance for items to ignore durability",
+		"loss, effectively increasing their durability."
+	],
+	"enchantment.minecraft.infinity.description": [
+		"Prevents consumption of regular Arrows."
+	],
+	"enchantment.minecraft.mending.description": [
+		"Repairs the item using experience."
+	],
+	"enchantment.delightful_farming.sweeping.description": [
+		"Allows using the item on multiple",
+		"blocks at once."
+	]
+}

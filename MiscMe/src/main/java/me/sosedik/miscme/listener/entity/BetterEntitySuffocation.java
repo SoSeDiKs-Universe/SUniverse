@@ -21,7 +21,6 @@ public class BetterEntitySuffocation implements Listener {
 		Entity entity = event.getEntity();
 		if (LocationUtil.isTrulySolid(entity, entity.getLocation().getBlock())) return;
 
-		event.setDamage(0);
 		event.setCancelled(true);
 	}
 

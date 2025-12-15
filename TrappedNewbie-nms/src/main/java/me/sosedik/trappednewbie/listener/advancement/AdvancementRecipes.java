@@ -99,7 +99,7 @@ public class AdvancementRecipes implements Listener {
 		event.getTeam().getOnlinePlayers().forEach(player -> player.discoverRecipes(namespacedKeys));
 	}
 
-	private void grantAdvancementRecipes(Player player) {
+	private static void grantAdvancementRecipes(Player player) {
 		RECIPES.forEach((advancement, recipeKeys) -> {
 			if (advancement.isDone(player))
 				player.discoverRecipes(recipeKeys);
@@ -108,6 +108,10 @@ public class AdvancementRecipes implements Listener {
 
 	public static void discoverRecipes(Player player) {
 		List<NamespacedKey> recipeKeys = new ArrayList<>();
+		if (!TrappedNewbieAdvancements.MAKE_A_WORK_STATION.isDone(player)) {
+			grantAdvancementRecipes(player);
+			return;
+		}
 		Iterator<Recipe> recipeIterator = Bukkit.recipeIterator();
 		while (recipeIterator.hasNext()) {
 			if (recipeIterator.next() instanceof Keyed keyed)

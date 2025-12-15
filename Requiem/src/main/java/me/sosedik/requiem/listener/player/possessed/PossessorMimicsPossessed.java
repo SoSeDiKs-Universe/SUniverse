@@ -1,7 +1,6 @@
 package me.sosedik.requiem.listener.player.possessed;
 
 import com.destroystokyo.paper.event.server.ServerTickEndEvent;
-import com.google.common.base.Function;
 import me.sosedik.requiem.Requiem;
 import me.sosedik.requiem.feature.PossessingPlayer;
 import org.bukkit.Bukkit;
@@ -14,19 +13,21 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityPotionEffectEvent;
 import org.bukkit.potion.PotionEffect;
 import org.jspecify.annotations.NullMarked;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 /**
  * Possessor mimics actions of possessed mob
  */
 @NullMarked
 public class PossessorMimicsPossessed implements Listener {
+
+	private static final Set<UUID> DAMAGER_CACHE = new HashSet<>();
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onEffect(EntityPotionEffectEvent event) {
@@ -57,12 +58,10 @@ public class PossessorMimicsPossessed implements Listener {
 		});
 	}
 
-	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onDamageAnotherEntity(EntityDamageByEntityEvent event) {
 		if (!(event.getDamager() instanceof LivingEntity damager)) return;
 		if (!(event.getEntity() instanceof LivingEntity damaged)) return;
-		if (event.getDamage() == 0D) return;
 
 		Player rider = damager.getRider();
 		if (rider == null) return;
@@ -82,18 +81,13 @@ public class PossessorMimicsPossessed implements Listener {
 		Location damageLocation = damageSource.getDamageLocation();
 		if (damageLocation != null) source.withDamageLocation(damageLocation);
 
+		DAMAGER_CACHE.add(rider.getUniqueId());
 		damaged.damage(event.getDamage(), source.build());
-		
-		if (!damaged.isValid()) return;
+		DAMAGER_CACHE.remove(rider.getUniqueId());
+	}
 
-		// Fire fake event to process extra behaviors from listeners
-		// E.g., fire spread, consecration, etc.
-		Map<EntityDamageEvent.DamageModifier, Double> modifiers = new HashMap<>();
-		modifiers.put(EntityDamageEvent.DamageModifier.BASE, 0D);
-		Map<EntityDamageEvent.DamageModifier, Function<Double, Double>> modifierFunctions = new HashMap<>();
-		modifierFunctions.put(EntityDamageEvent.DamageModifier.BASE, d -> 0D);
-		var fakedEvent = new EntityDamageByEntityEvent(damager, damaged, event.getCause(), event.getDamageSource(), modifiers, modifierFunctions, event.isCritical());
-		fakedEvent.callEvent();
+	public static boolean isDamaging(Player player) {
+		return DAMAGER_CACHE.contains(player.getUniqueId());
 	}
 
 }

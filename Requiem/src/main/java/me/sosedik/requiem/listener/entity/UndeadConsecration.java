@@ -110,15 +110,8 @@ public class UndeadConsecration implements Listener {
 					return;
 				}
 			}
-			
-			Entity damager = damageEvent.getDamager();
-//			if (damager instanceof Player player) {
-//				LivingEntity possessed = PossessingPlayer.getPossessed(player);
-//				if (possessed != null)
-//					damager = possessed;
-//			}
 
-			switch (damager) {
+			switch (damageEvent.getDamager()) {
 				case Golem ignored -> {
 					healTask.updateNoHealTime(5);
 					return;

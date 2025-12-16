@@ -110,18 +110,23 @@ public class EnchantmentTooltipModifier extends ItemModifier {
 			if (fontData != null)
 				ENCHANTMENT_ICONS.put(key, fontData.icon());
 
-			if (enchantment.isCursed()) {
-				ENCHANTMENT_TO_TOOL_ICONS.put(key, TOOL_ICONS.get("curse"));
-				return;
-			}
+			List<Component> toolIcons = new ArrayList<>();
+			if (enchantment.isCursed())
+				toolIcons.add(TOOL_ICONS.get("curse"));
+
 			RegistryKeySet<ItemType> supportedItems = enchantment.getSupportedItems();
 			if (supportedItems.contains(TypedKey.create(RegistryKey.ITEM, Material.CARROT_ON_A_STICK.key()))) {
-				ENCHANTMENT_TO_TOOL_ICONS.put(key, TOOL_ICONS.get("universal"));
+				if (!toolIcons.isEmpty())
+					toolIcons.add(Component.space());
+				toolIcons.add(TOOL_ICONS.get("universal"));
+				ENCHANTMENT_TO_TOOL_ICONS.put(key, combined(toolIcons));
 				return;
 			}
-			List<Component> toolIcons = new ArrayList<>();
+
 			RegistryKeySet<ItemType> primaryItems = enchantment.getPrimaryItems();
 			if (primaryItems != null) {
+				if (!toolIcons.isEmpty())
+					toolIcons.add(Component.space());
 				ENCHANTABLE_SAMPLES.forEach(entry -> {
 					if (primaryItems.contains(TypedKey.create(RegistryKey.ITEM, entry.getValue().key())))
 						toolIcons.add(TOOL_ICONS.get(entry.getKey()));
@@ -129,14 +134,17 @@ public class EnchantmentTooltipModifier extends ItemModifier {
 				if (!toolIcons.isEmpty())
 					toolIcons.add(Component.space());
 			}
+
 			ENCHANTABLE_SAMPLES.forEach(entry -> {
 				TypedKey<ItemType> valueKey = TypedKey.create(RegistryKey.ITEM, entry.getValue().key());
 				if (primaryItems != null && primaryItems.contains(valueKey)) return;
 				if (supportedItems.contains(valueKey))
 					toolIcons.add(TOOL_ICONS.get(entry.getKey()));
 			});
+
 			if (toolIcons.isEmpty())
 				toolIcons.add(TOOL_ICONS.get("unknown"));
+
 			ENCHANTMENT_TO_TOOL_ICONS.put(key, combined(toolIcons));
 		});
 	}

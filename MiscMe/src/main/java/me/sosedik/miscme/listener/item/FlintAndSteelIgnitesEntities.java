@@ -4,6 +4,7 @@ import me.sosedik.utilizer.util.DurabilityUtil;
 import me.sosedik.utilizer.util.EntityUtil;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
+import org.bukkit.Statistic;
 import org.bukkit.Tag;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Mob;
@@ -32,22 +33,24 @@ public class FlintAndSteelIgnitesEntities implements Listener {
 		var player = event.getPlayer();
 		if (!(player.isSneaking() || (player.hasFixedPose() && player.getPose() == Pose.SWIMMING))) return;
 
-		if (tryLitEntity(player, rightClicked, EquipmentSlot.HAND)
-			|| tryLitEntity(player, rightClicked, EquipmentSlot.OFF_HAND))
+		if (tryToLitEntity(player, rightClicked, EquipmentSlot.HAND)
+			|| tryToLitEntity(player, rightClicked, EquipmentSlot.OFF_HAND))
 			event.setCancelled(true);
 	}
 
-	private boolean tryLitEntity(Player player, LivingEntity rightClicked, EquipmentSlot hand) {
+	private boolean tryToLitEntity(Player player, LivingEntity rightClicked, EquipmentSlot hand) {
 		ItemStack item = player.getInventory().getItem(hand);
 		if (!Tag.ITEMS_CREEPER_IGNITERS.isTagged(item.getType())) return false;
-		if (DurabilityUtil.isBroken(item)) return false;
 		if (!rightClicked.setFireTicks(FIRE_DURATION_TICKS)) return false;
 
 		player.swingHand(hand);
+		player.incrementStatistic(Statistic.USE_ITEM, item.getType());
+
 		if (DurabilityUtil.hasDurability(item))
 			item.damage(1, player);
 		else
 			item.subtract();
+
 		rightClicked.emitSound(Sound.ITEM_FIRECHARGE_USE, SoundCategory.PLAYERS, 1F, 1F);
 
 		if (rightClicked instanceof Mob mob && mob.getTarget() == null)

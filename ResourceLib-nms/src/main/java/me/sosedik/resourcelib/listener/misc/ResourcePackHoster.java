@@ -1,14 +1,17 @@
-package me.sosedik.resourcelib.util;
+package me.sosedik.resourcelib.listener.misc;
 
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
+import me.sosedik.kiterino.event.server.ServerPropertiesUpdatedEvent;
 import me.sosedik.resourcelib.ResourceLib;
 import me.sosedik.utilizer.api.language.LangOptionsStorage;
 import me.sosedik.utilizer.api.message.Messenger;
 import me.sosedik.utilizer.util.FileUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.packs.ResourcePack;
 import org.bukkit.plugin.Plugin;
 import org.jspecify.annotations.NullMarked;
@@ -30,9 +33,21 @@ import java.util.UUID;
 import static java.util.Objects.requireNonNull;
 
 @NullMarked
-public class ResourcePackHoster {
+public class ResourcePackHoster implements Listener {
 
-	public static void hostResourcePack(Plugin plugin) {
+	private final @Nullable ResourcePack resourcePack;
+
+	public ResourcePackHoster(Plugin plugin) {
+		this.resourcePack = hostResourcePack(plugin);
+		Bukkit.setServerResourcePack(this.resourcePack);
+	}
+
+	@EventHandler
+	public void onUpdate(ServerPropertiesUpdatedEvent event) {
+		Bukkit.setServerResourcePack(this.resourcePack);
+	}
+
+	private @Nullable ResourcePack hostResourcePack(Plugin plugin) {
 		File resourcePackFile = new File(plugin.getDataFolder(), "resource-pack.zip");
 		if (resourcePackFile.exists())
 			FileUtil.deleteFile(resourcePackFile);
@@ -40,13 +55,13 @@ public class ResourcePackHoster {
 		plugin.saveResource("resource-pack.zip", true);
 		if (!resourcePackFile.exists()) {
 			plugin.getLogger().warning("Couldn't host resource pack, missing file: " + resourcePackFile);
-			return;
+			return null;
 		}
 
 		int port = plugin.getConfig().getInt("resource-pack.port");
 		if (port <= 0) {
 			plugin.getLogger().warning("Couldn't host resource pack, invalid port: " + port);
-			return;
+			return null;
 		}
 
 		UUID resourcePackId;
@@ -62,9 +77,7 @@ public class ResourcePackHoster {
 
 		String ip = Bukkit.getIp();
 		ip = "http://" + (ip.isEmpty() ? "localhost" : ip) + ":" + port;
-		ResourcePack resourcePack = Bukkit.createResourcePack(resourcePackId, ip, resolveRpHash(ip), true, Messenger.messenger(LangOptionsStorage.getDefaultLangOptions()).getMessage("resource_pack.prompt"));
-		Bukkit.setServerResourcePack(resourcePack);
-		plugin.getComponentLogger().info("Started hosting server resource pack");
+		return Bukkit.createResourcePack(resourcePackId, ip, resolveRpHash(ip), true, Messenger.messenger(LangOptionsStorage.getDefaultLangOptions()).getMessage("resource_pack.prompt"));
 	}
 
 	private static @Nullable String resolveRpHash(String ip) {
@@ -111,9 +124,9 @@ public class ResourcePackHoster {
 			Headers responseHeaders = httpExchange.getResponseHeaders();
 			responseHeaders.set("Content-Type", "application/zip");
 			responseHeaders.add("Content-Disposition", "attachment; filename=resource_pack.zip");
-			httpExchange.sendResponseHeaders(200, resourcePack.length);
+			httpExchange.sendResponseHeaders(200, this.resourcePack.length);
 			try (httpExchange; OutputStream os = httpExchange.getResponseBody()) {
-				os.write(resourcePack);
+				os.write(this.resourcePack);
 			}
 		}
 

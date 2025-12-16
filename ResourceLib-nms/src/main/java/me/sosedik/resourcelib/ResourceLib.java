@@ -15,10 +15,10 @@ import me.sosedik.resourcelib.listener.block.RefreshCustomBlockLightning;
 import me.sosedik.resourcelib.listener.misc.ActionBarCatcher;
 import me.sosedik.resourcelib.listener.misc.LocalizedDeathMessages;
 import me.sosedik.resourcelib.listener.misc.LocalizedResourcePackMessage;
+import me.sosedik.resourcelib.listener.misc.ResourcePackHoster;
 import me.sosedik.resourcelib.listener.player.DisplayCustomPotionEffectsOnHud;
 import me.sosedik.resourcelib.listener.player.LoadSaveHudMessengerOnJoinLeave;
 import me.sosedik.resourcelib.listener.player.LoadSaveTabAndScoreboardRenderersOnJoinLeave;
-import me.sosedik.resourcelib.util.ResourcePackHoster;
 import me.sosedik.utilizer.CommandManager;
 import me.sosedik.utilizer.api.language.TranslationHolder;
 import me.sosedik.utilizer.api.message.Mini;
@@ -64,7 +64,6 @@ public class ResourceLib extends JavaPlugin {
 		this.storage = new ResourcePackStorage(this);
 
 		TranslationHolder.extractLocales(this);
-		ResourcePackHoster.hostResourcePack(this);
 
 		ScoreboardRenderer.init(this);
 		TabRenderer.init(this);
@@ -88,6 +87,8 @@ public class ResourceLib extends JavaPlugin {
 			// misc
 			ActionBarCatcher.class,
 			LocalizedDeathMessages.class,
+			// LocalizedDeathMessages.class,
+			ResourcePackHoster.class,
 			// player
 			DisplayCustomPotionEffectsOnHud.class,
 			LoadSaveHudMessengerOnJoinLeave.class,

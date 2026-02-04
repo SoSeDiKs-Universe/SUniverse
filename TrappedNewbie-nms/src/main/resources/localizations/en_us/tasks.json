@@ -1,24 +1,43 @@
 {
+	"task.collectable": "<gray>(<collected>/<required>)",
 	"task.current_goal": "<gold>Current goal:",
 	"task.meet_wandering_trader": [
-		"<#FFE0B2>Hit up with the <icon:trapped_newbie:wandering_trader_head> <gold>Wandering Trader",
-		"<gray>(press <yellow><key:key.attack></yellow> on it)"
+		"<#FFE0B2>Hit up with the <icon:trapped_newbie:heads/wandering_trader> <gold>Wandering Trader",
+		"<gray>(press <yellow><key:key.attack></yellow> on them)"
 	],
 	"task.open_advancements": [
-		"<#FFE0B2>Check <red>advancements</red> to view your current progression",
+		"<#FFE0B2>Utilize <red>advancements</red> to view your current <u>and future</u> progression",
 		"<gray>(press <yellow><key:key.advancements></yellow> to open advancements screen)"
 	],
 	"task.obtain_friendship_letter": [
-		"<#FFE0B2>Obtain a <red>Friendship Letter</red> from the <icon:trapped_newbie:wandering_trader_head> <gold>Wandering Trader",
+		"<#FFE0B2>Obtain a <red>Friendship Letter</red> from the <icon:trapped_newbie:heads/wandering_trader> <gold>Wandering Trader",
 		"<gray>(trade with them via <yellow><key:key.use></yellow>)"
 	],
 	"task.befriend_wandering_trader": [
-		"<#FFE0B2>Befriend the <icon:trapped_newbie:wandering_trader_head> <gold>Wandering Trader",
-		"<gray>(use (<yellow><key:key.use></yellow>) the <red>Friendship Letter</red> on it)"
+		"<#FFE0B2>Befriend the <icon:trapped_newbie:heads/wandering_trader> <gold>Wandering Trader",
+		"<gray>(use <dark_gray>(</dark_gray><yellow><key:key.use></yellow><dark_gray>)</dark_gray> the <item:trapped_newbie:letter/star_letter_closed> <red>Friendship Letter</red> on them)"
 	],
 	"task.limbo_void_fall": [
-		"<#FFE0B2>Begin your <red>epic</red> adventure",
-		"<gray>(fall into the void; optionally, make more friends for free while you can!)"
+		"<#FFE0B2>Begin your <red>epic</red> adventure by falling into the void",
+		"<gray>(optionally, make more friends for free while you can via <item:trapped_newbie:letter/star_letter_closed> Friendship Letters!)"
+	],
+	"task.first_possession": [
+		"<#FFE0B2>You are a <red>ghost</red>. <red>Possess</red> a mob to take control of it.",
+		"<gray>(press <yellow><key:key.use></yellow> with an empty hand on a <yellow>mob</yellow> with a <green>green outline</green> to possess it)"
+	],
+	"task.collect_fibers": [
+		"<#FFE0B2>You've gained a physical body! Alas, you are in an <yellow>adventure</yellow> mode.",
+		"<#FFE0B2>See <item:minecraft:rooted_dirt> <gold>«<lang:adv.trappednewbie.basics.tab.title>»</gold> advancements tab for survival guidance.",
+		"<#FFE0B2>First, break some <item:minecraft:short_grass><space:1><item:minecraft:fern><space:1><item:minecraft:bush><space:1><item:minecraft:short_dry_grass> <yellow>grass</yellow> until you get <item:trapped_newbie:fiber> <red>Plant Fibers</red> <collectable>"
+	],
+	"task.craft_twine": [
+		"<#FFE0B2>Craft a <item:trapped_newbie:twine> <red>Plant Twine</red> from your inventory",
+		"<gray>(use the <yellow>recipe book</yellow> to view the recipe)"
+	],
+	"task.find_gravel": [
+		"<#FFE0B2>Find some <item:minecraft:gravel> <red>Gravel</red> for further progression",
+		"<gray>(you can pick up a <item:trapped_newbie:rock> <yellow>Rock</yellow> from a ground and break <item:minecraft:grass_block><space:1><item:minecraft:dirt><space:1><item:minecraft:coarse_dirt> <yellow>Dirts</yellow>",
+		"<gray>until they convert into <item:minecraft:gravel> <yellow>Gravel</yellow>)"
 	],
 	"task.ritual.rain_dance": "Rain Dance",
 	"task.ritual.rain_dance.description": "Makes the sky cry",
@@ -26,6 +45,8 @@
 	"task.ritual.soul_melancholy": "Soul Melancholy",
 	"task.ritual.soul_melancholy.description": [
 		"Makes you body in peace with your soul.",
-		"Greatly removes a Weakness effect."
+		"Transforms Weakness effect into Strength,",
+		"starting a curing a process if possessing",
+		"a humanoid zombie."
 	]
 }

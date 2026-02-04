@@ -1,6 +1,7 @@
 package me.sosedik.trappednewbie.listener.player;
 
 import io.papermc.paper.event.player.PlayerClientLoadedWorldEvent;
+import me.sosedik.requiem.api.event.player.PlayerStartGhostingEvent;
 import me.sosedik.trappednewbie.api.task.BossBarTask;
 import me.sosedik.trappednewbie.api.task.event.PlayerCompletedTaskEvent;
 import me.sosedik.trappednewbie.misc.ProgressionManager;
@@ -45,6 +46,12 @@ public class TaskManagement implements Listener {
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onLanguageChange(PlayerLocaleChangeEvent event) {
 		Utilizer.scheduler().sync(() -> progressions(event.getPlayer()).bossBar().run(), 1L);
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void onGhost(PlayerStartGhostingEvent event) {
+		// In case we're in tutorial, make sure ghost task is displayed
+		progressions(event.getPlayer()).checkProgressionTasks();
 	}
 
 	public static ProgressionManager progressions(Player player) {

@@ -1,24 +1,42 @@
 {
 	"task.current_goal": "<gold>Текущая цель:",
 	"task.meet_wandering_trader": [
-		"<#FFE0B2>Поговорите со <icon:trapped_newbie:wandering_trader_head> <gold>странствующим торговцем",
+		"<#FFE0B2>Поговорите со <icon:trapped_newbie:heads/wandering_trader> <gold>странствующим торговцем",
 		"<gray>(нажмите <yellow><key:key.attack></yellow> по нему)"
 	],
 	"task.open_advancements": [
-		"<#FFE0B2>Загляните в <red>достижения</red> для просмотра текущего этапа развития событий",
+		"<#FFE0B2>Используйте <red>достижения</red> для просмотра текущего <u>и будущих</u> этапов развития",
 		"<gray>(нажмите <yellow><key:key.advancements></yellow>, чтобы быстро открыть меню достижений)"
 	],
 	"task.obtain_friendship_letter": [
-		"<#FFE0B2>Получите <red>письмо дружбы</red> от <icon:trapped_newbie:wandering_trader_head> <gold>странствующего торговца",
+		"<#FFE0B2>Получите <red>письмо дружбы</red> от <icon:trapped_newbie:heads/wandering_trader> <gold>странствующего торговца",
 		"<gray>(поторгуйтесь с ним при помощи <yellow><key:key.use></yellow>)"
 	],
 	"task.befriend_wandering_trader": [
-		"<#FFE0B2>Подружитесь со <icon:trapped_newbie:wandering_trader_head> <gold>странствующим торговцем",
-		"<gray>(используйте (<yellow><key:key.use></yellow>) <red>письмо дружбы</red> на нём)"
+		"<#FFE0B2>Подружитесь со <icon:trapped_newbie:heads/wandering_trader> <gold>странствующим торговцем",
+		"<gray>(используйте <dark_gray>(</dark_gray><yellow><key:key.use></yellow><dark_gray>)</dark_gray> <item:trapped_newbie:letter/star_letter_closed> <red>письмо дружбы</red> на нём)"
 	],
 	"task.limbo_void_fall": [
-		"<#FFE0B2>Начните Ваше <red>эпическое</red> приключение",
-		"<gray>(прыгайте в бездну; по желанию, пока есть бесплатная возможность, подружитесь с другими игроками!)"
+		"<#FFE0B2>Начните Ваше <red>эпическое</red> приключение, прыгнув в бездну",
+		"<gray>(по желанию, пока есть бесплатная возможность, подружитесь с другими игроками через <item:trapped_newbie:letter/star_letter_closed> письма дружбы!)"
+	],
+	"task.first_possession": [
+		"<#FFE0B2>Вы — <red>призрак</red>. <red>Захватите</red> контроль над другой сущностью.",
+		"<gray>(нажмите <yellow><key:key.use></yellow> пустой рукой по какой-нибудь <yellow>сущности</yellow> с <green>зелёной обводкой</green>, чтобы управлять им)"
+	],
+	"task.collect_fibers": [
+		"<#FFE0B2>Вы заполучили физическое тело! Но, Вы находитесь в режиме <yellow>приключений</yellow>.",
+		"<#FFE0B2>См. вкладку достижений <item:minecraft:rooted_dirt> <gold>«<lang:adv.trappednewbie.basics.tab.title>»</gold> для руководства по выживанию.",
+		"<#FFE0B2>Для начала, сломайте <item:minecraft:short_grass><space:1><item:minecraft:fern><space:1><item:minecraft:bush><space:1><item:minecraft:short_dry_grass> <yellow>траву</yellow>, чтобы заполучить <item:trapped_newbie:fiber> <red>травяное волокно</red> <collectable>"
+	],
+	"task.craft_twine": [
+		"<#FFE0B2>Создайте <item:trapped_newbie:twine> <red>травяную бечёвку</red> в своём инвентаре",
+		"<gray>(используйте <yellow>книгу рецептов</yellow> для просмотра рецепта)"
+	],
+	"task.find_gravel": [
+		"<#FFE0B2>Найдите <item:minecraft:gravel> <red>гравий</red> для дальнейшего развития",
+		"<gray>(Вы можете подобрать <item:trapped_newbie:rock> <yellow>камешек</yellow> с земли и ломать <item:minecraft:grass_block><space:1><item:minecraft:dirt><space:1><item:minecraft:coarse_dirt> <yellow>блоки земли</yellow>,",
+		"<gray>пока они не превратятся в <item:minecraft:gravel> <yellow>гравий</yellow>)"
 	],
 	"task.ritual.rain_dance": "Танец дождя",
 	"task.ritual.rain_dance.description": "Заставляет небо плакать",
@@ -26,6 +44,8 @@
 	"task.ritual.soul_melancholy": "Меланхолия души",
 	"task.ritual.soul_melancholy.description": [
 		"Приводит тело в гармонию с душой.",
-		"Значительно устраняет эффект слабости."
+		"Превращает эффект слабости в силу,",
+		"начиная процесс излечения при владении",
+		"гуманоидным зомби."
 	]
 }

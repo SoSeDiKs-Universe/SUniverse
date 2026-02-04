@@ -11,6 +11,7 @@ import me.sosedik.packetadvancements.imlp.advancement.mimic.MimicAdvancement;
 import me.sosedik.packetadvancements.imlp.display.FancyAdvancementDisplay;
 import me.sosedik.packetadvancements.imlp.display.SimpleAdvancementDisplay;
 import me.sosedik.resourcelib.api.font.FontData;
+import me.sosedik.resourcelib.util.SpacingUtil;
 import me.sosedik.trappednewbie.api.advancement.reward.FancyAdvancementReward;
 import me.sosedik.utilizer.api.language.LangOptionsStorage;
 import me.sosedik.utilizer.api.message.Messenger;
@@ -151,20 +152,25 @@ public abstract class FancierAdvancementDisplay<T extends FancierAdvancementDisp
 	@Override
 	public Component renderAdvancementTitle(@Nullable Player viewer) {
 		if (isHidden()) return super.renderAdvancementTitle(viewer);
-		if (viewer == null) return super.renderAdvancementTitle(null);
-		if (this.advancement == null) return super.renderAdvancementTitle(viewer);
+		if (viewer == null) return renderTitleWithSpaces(super.renderAdvancementTitle(null));
+		if (this.advancement == null) return renderTitleWithSpaces(super.renderAdvancementTitle(viewer));
 
 		AdvancementFrame frame = getAdvancementFrame();
-		if (!frame.requiresBackground()) return super.renderAdvancementTitle(viewer);
+		if (!frame.requiresBackground()) return renderTitleWithSpaces(super.renderAdvancementTitle(viewer));
 
 		boolean obtained = this.advancement.isDone(viewer);
 		FontData fontData = frame.getFontData(obtained);
-		if (fontData == null) return super.renderAdvancementTitle(viewer);
+		if (fontData == null) return renderTitleWithSpaces(super.renderAdvancementTitle(viewer));
 
 		return Component.textOfChildren(
 			fontData.offsetMapping(-32).shadowColor(ShadowColor.none()),
-			super.renderAdvancementTitle(viewer)
+			renderTitleWithSpaces(super.renderAdvancementTitle(viewer))
 		);
+	}
+
+	public Component renderTitleWithSpaces(Component title) {
+		int width = SpacingUtil.getWidth(title);
+		return width > 163 ? title : Component.textOfChildren(title, SpacingUtil.getSpacing(163 - width));
 	}
 
 	@Override

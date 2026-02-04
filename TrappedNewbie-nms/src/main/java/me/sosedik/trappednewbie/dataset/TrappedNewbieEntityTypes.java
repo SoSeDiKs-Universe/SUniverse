@@ -10,6 +10,7 @@ public class TrappedNewbieEntityTypes {
 
 	public static final EntityType PAPER_PLANE = byKey("paper_plane");
 	public static final EntityType GLIDER = byKey("glider");
+	public static final EntityType MUTANT_ZOMBIE = byKey("mutant_zombie");
 
 	private static EntityType byKey(String value) {
 		return KiterinoBootstrapEntityTypeInjector.injectEntityType(TrappedNewbie.trappedNewbieKey(value));

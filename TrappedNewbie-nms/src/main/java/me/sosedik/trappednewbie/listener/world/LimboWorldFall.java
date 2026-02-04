@@ -183,7 +183,7 @@ public class LimboWorldFall implements Listener {
 				World world = worldOwnerUuid == null
 					? Bukkit.getWorlds().getFirst()
 					: PerPlayerWorlds.getResourceWorld(worldOwnerUuid, World.Environment.NORMAL);
-				runTeleport(player, world, GhostyPlayer.isGhost(player))
+				runTeleport(player, world, null, GhostyPlayer.isGhost(player))
 					.thenRun(() -> PENDING.remove(player.getUniqueId()));
 			})
 			.build();
@@ -208,16 +208,22 @@ public class LimboWorldFall implements Listener {
 	 * Teleports the player to a spawn location in the world
 	 *
 	 * @param player player
+	 * @param loc teleport location
 	 * @param world world
 	 */
-	public static CompletableFuture<Void> runTeleport(Player player, World world, boolean leap) {
+	public static CompletableFuture<@Nullable Void> runTeleport(Player player, World world, @Nullable Location loc, boolean leap) {
 		player.setVelocity(ZERO_VELOCITY);
 		var teleported = new CompletableFuture<@Nullable Void>();
 		if (world.key().value().startsWith("worlds-resources/")) {
-			List<Player> players = world.getPlayers();
-			if (!players.isEmpty()) {
-				Player random = MathUtil.getRandom(players);
-				LocationUtil.smartTeleport(player, random.getLocation().toHighestLocation(HeightMap.MOTION_BLOCKING).addY(120), false)
+			if (loc == null) {
+				List<Player> players = world.getPlayers();
+				if (!players.isEmpty()) {
+					Player random = MathUtil.getRandom(players);
+					loc = random.getLocation().toHighestLocation(HeightMap.MOTION_BLOCKING).addY(120);
+				}
+			}
+			if (loc != null) {
+				LocationUtil.smartTeleport(player, loc, false)
 					.thenRun(() -> {
 						player.closeInventory();
 						player.setVelocity(ZERO_VELOCITY);
@@ -239,8 +245,8 @@ public class LimboWorldFall implements Listener {
 						FreeFall.startLeaping(player);
 				} else {
 					vehicle.setFallDistance(0F);
-					Location loc = player.getLocation().toHighestLocation().center(1);
-					LocationUtil.smartTeleport(player, loc, false);
+					Location highestLoc = player.getLocation().toHighestLocation().center(1);
+					LocationUtil.smartTeleport(player, highestLoc, false);
 				}
 				teleported.complete(null);
 			});

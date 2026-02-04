@@ -24,6 +24,7 @@ public class LimitedLimbo implements Listener {
 
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onInteract(PlayerInteractEntityEvent event) {
+
 		if (shouldDeny(event.getPlayer()))
 			event.setCancelled(true);
 	}

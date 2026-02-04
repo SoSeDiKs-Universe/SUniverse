@@ -1,6 +1,7 @@
 package me.sosedik.trappednewbie.listener.block;
 
 import me.sosedik.trappednewbie.api.event.player.PlayerTargetBlockEvent;
+import me.sosedik.trappednewbie.dataset.TrappedNewbieItems;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieTags;
 import me.sosedik.trappednewbie.misc.BlockBreakTask;
 import me.sosedik.utilizer.util.EntityUtil;
@@ -81,8 +82,10 @@ public class SoftBlockHandBreaking implements Listener {
 	}
 
 	private boolean isRocky(ItemStack item) {
-		return TrappedNewbieTags.ROCKS.isTagged(item.getType())
-			|| item.getType() == Material.FLINT;
+		Material type = item.getType();
+		return TrappedNewbieTags.ROCKS.isTagged(type)
+			|| type == TrappedNewbieItems.FLAKED_FLINT
+			|| type == Material.FLINT;
 	}
 
 	public static @Nullable Material getConverted(Material blockType) {

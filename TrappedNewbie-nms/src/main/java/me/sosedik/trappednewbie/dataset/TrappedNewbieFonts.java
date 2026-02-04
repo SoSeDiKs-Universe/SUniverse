@@ -8,7 +8,7 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public class TrappedNewbieFonts {
 
-	public static final FontData WANDERING_TRADER_HEAD = font("wandering_trader_head");
+	public static final FontData WANDERING_TRADER_HEAD = font("heads/wandering_trader");
 
 	private static FontData font(String key) {
 		return ResourceLib.requireFontData(TrappedNewbie.trappedNewbieKey(key));

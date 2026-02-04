@@ -4,7 +4,6 @@ import io.papermc.paper.adventure.PaperAdventure;
 import me.sosedik.kiterino.event.item.SideItemRemainEvent;
 import me.sosedik.utilizer.Utilizer;
 import me.sosedik.utilizer.api.event.recipe.ItemCraftEvent;
-import me.sosedik.utilizer.api.event.recipe.ItemCraftPrepareEvent;
 import me.sosedik.utilizer.api.event.recipe.RemainingItemEvent;
 import me.sosedik.utilizer.util.DurabilityUtil;
 import me.sosedik.utilizer.util.InventoryUtil;
@@ -131,15 +130,6 @@ public class CustomRecipeLeftovers implements Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onPreCraft(CrafterCraftEvent event) {
-		var preCraftEvent = new ItemCraftPrepareEvent(event, event.getRecipe().getKey());
-		preCraftEvent.callEvent();
-
-		if (ItemStack.isEmpty(preCraftEvent.getResult()))
-			event.setCancelled(true);
-	}
-
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onCraft(CrafterCraftEvent event) {
 		var craftEvent = new ItemCraftEvent(event, event.getRecipe().getKey());
@@ -157,7 +147,8 @@ public class CustomRecipeLeftovers implements Listener {
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onRemain(SideItemRemainEvent event) {
 		RemainingItemEvent remainingItemEvent = new RemainingItemEvent(event, null, null, SIDE_LEFTOVER, event.getItem(), 1, false);
-		remainingItemEvent.setResult(event.getRemainder());
+		ItemStack remainder = event.getRemainder();
+		remainingItemEvent.setResult(remainder.isEmpty() ? null : remainder);
 		remainingItemEvent.callEvent();
 		event.setRemainder(remainingItemEvent.getResult());
 	}

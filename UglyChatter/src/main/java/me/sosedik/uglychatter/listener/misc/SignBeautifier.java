@@ -38,7 +38,7 @@ import java.util.UUID;
 /**
  * Adds fancies support for signs
  */
-// MCCheck: 1.21.11 - 1.21.4, sign block entity data // TODO fix with 1.21.5 changes
+// MCCheck: 1.21.11, sign block entity data
 @NullMarked
 public class SignBeautifier implements PacketListener, Listener {
 
@@ -79,7 +79,6 @@ public class SignBeautifier implements PacketListener, Listener {
 
 	@Override
 	public void onPacketSend(PacketSendEvent event) {
-		if (true) return; // TODO fix with 1.21.5 changes
 		if (event.getPacketType() == PacketType.Play.Server.BLOCK_ENTITY_DATA) {
 			handleBlockEntityData(event.getPlayer(), new WrapperPlayServerBlockEntityData(event));
 		} else if (event.getPacketType() == PacketType.Play.Server.CHUNK_DATA) {
@@ -127,7 +126,6 @@ public class SignBeautifier implements PacketListener, Listener {
 
 		for (int i = 0; i < messages.size(); i++) {
 			Component line = messages.get(i);
-			player.sendMessage(line);
 			String serialized = FancyMessageRenderer.getRawInput(line);
 			if (serialized.isEmpty()) continue;
 
@@ -135,7 +133,7 @@ public class SignBeautifier implements PacketListener, Listener {
 			messages.set(i, rendered);
 		}
 
-		sideText.setList("messages", messages, AdventureSerializer.serializer(), wrapper); // TODO packetevents does not support mixed lists yet
+		sideText.setList("messages", messages, AdventureSerializer.serializer(), wrapper);
 	}
 
 }

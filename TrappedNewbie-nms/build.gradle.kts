@@ -19,6 +19,7 @@ dependencies {
     compileOnly("me.sosedik:PacketAdvancements-api:1.0-SNAPSHOT")
     compileOnly("de.tr7zw:item-nbt-api-plugin:${project.property("nbtApiVersion")}")
     compileOnly("com.github.retrooper:packetevents-spigot:${project.property("packeteventsVersion")}")
+    compileOnly("io.github.toxicity188:bettermodel-bukkit-api:${project.property("betterModelVersion")}")
 
     compileOnly("org.incendo:cloud-paper:${project.property("cloudImplVersion")}")
     compileOnly("org.incendo:cloud-annotations:${project.property("cloudVersion")}")
@@ -52,6 +53,11 @@ paper {
             joinClasspath = true
         }
         register("packetevents") {
+            load = PaperPluginDescription.RelativeLoadOrder.BEFORE
+            required = true
+            joinClasspath = true
+        }
+        register("BetterModel") {
             load = PaperPluginDescription.RelativeLoadOrder.BEFORE
             required = true
             joinClasspath = true

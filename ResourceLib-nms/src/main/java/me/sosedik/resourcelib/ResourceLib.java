@@ -11,6 +11,8 @@ import me.sosedik.resourcelib.impl.item.modifier.CustomLoreModifier;
 import me.sosedik.resourcelib.impl.item.modifier.CustomNameModifier;
 import me.sosedik.resourcelib.impl.item.modifier.ExtraItemComponentsModifier;
 import me.sosedik.resourcelib.impl.message.tag.IconTag;
+import me.sosedik.resourcelib.impl.message.tag.ItemTag;
+import me.sosedik.resourcelib.impl.message.tag.SpaceTag;
 import me.sosedik.resourcelib.listener.block.RefreshCustomBlockLightning;
 import me.sosedik.resourcelib.listener.misc.ActionBarCatcher;
 import me.sosedik.resourcelib.listener.misc.LocalizedDeathMessages;
@@ -27,6 +29,8 @@ import me.sosedik.utilizer.util.FileUtil;
 import me.sosedik.utilizer.util.Scheduler;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.kyori.adventure.text.object.ObjectContents;
 import org.bukkit.Material;
@@ -37,6 +41,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.UnknownNullability;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -74,7 +79,9 @@ public class ResourceLib extends JavaPlugin {
 		registerCommands();
 
 		Mini.registerTagResolvers(
-			IconTag.ICON
+			IconTag.ICON,
+			ItemTag.ITEM,
+			SpaceTag.SPACE
 		);
 
 		new CustomNameModifier(resourceLibKey("custom_name")).register();
@@ -259,18 +266,16 @@ public class ResourceLib extends JavaPlugin {
 	 * @return item icon
 	 */
 	public static Component getItemIcon(Key key) {
-		ItemType itemType = Registry.ITEM.get(key);
-		if (itemType == null) return Component.space();
-
 		FakeItemData fakeItemData = storage().getFakeItemData(new NamespacedKey(key.namespace(), key.value()));
 		if (fakeItemData != null && fakeItemData.model() != null)
 			key = Key.key(fakeItemData.model().namespace(), fakeItemData.model().value());
 
-		boolean blocksAtlas = itemType.hasBlockType() && !useItemTexture(itemType.asMaterial());
+		ItemType itemType = Registry.ITEM.get(key);
+		boolean blocksAtlas = itemType != null && itemType.hasBlockType() && !useItemTexture(itemType.asMaterial());
 		String value = (blocksAtlas ? "block/" : "item/") + getTextureMapping(key.value());
 		Key atlas = blocksAtlas ? BLOCKS_ATLAS : ITEMS_ATLAS;
 		Key texture = Key.key(key.namespace(), value);
-		return Mini.asIcon(Component.object(ObjectContents.sprite(atlas, texture)));
+		return Mini.asIcon(Component.object(ObjectContents.sprite(atlas, texture)).color(getItemIconColor(itemType)));
 	}
 
 	private static boolean useItemTexture(Material type) {
@@ -284,8 +289,27 @@ public class ResourceLib extends JavaPlugin {
 			case "rose_bush" -> "rose_bush_top";
 			case "sunflower" -> "sunflower_front";
 			case "flowering_azalea" -> "flowering_azalea_top";
+			case "campfire" -> "campfire_log_lit";
+			case "soul_campfire" -> "soul_campfire_log_lit";
+			case "grass_block" -> "grass_block_side";
 			default -> key;
 		};
+	}
+
+	private static TextColor getItemIconColor(@Nullable ItemType itemType) {
+		if (itemType == null) return NamedTextColor.WHITE;
+
+		// Grass and some leaves use biome color and are gray by default
+		if (itemType == ItemType.SHORT_GRASS
+		|| itemType == ItemType.TALL_GRASS
+		|| itemType == ItemType.FERN
+		|| itemType == ItemType.LARGE_FERN
+		|| itemType == ItemType.BUSH
+		|| itemType == ItemType.OAK_LEAVES
+		)
+			return TextColor.fromHexString("#618549");
+
+		return NamedTextColor.WHITE;
 	}
 
 }

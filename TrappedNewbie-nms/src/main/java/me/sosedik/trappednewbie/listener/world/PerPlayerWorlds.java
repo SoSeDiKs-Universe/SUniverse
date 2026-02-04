@@ -65,7 +65,7 @@ public class PerPlayerWorlds implements Listener {
 		Player player = event.getPlayer();
 		if (!DELAYED_FALLS.remove(player.getUniqueId())) return;
 
-		LimboWorldFall.runTeleport(player, player.getWorld(), true);
+		LimboWorldFall.runTeleport(player, player.getWorld(), null, true);
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)

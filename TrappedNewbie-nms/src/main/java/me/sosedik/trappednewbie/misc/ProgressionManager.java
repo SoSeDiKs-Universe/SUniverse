@@ -26,23 +26,30 @@ public class ProgressionManager {
 	}
 
 	public BossBarTask bossBar() {
-		return bossBarTask;
+		return this.bossBarTask;
 	}
 
 	public void checkProgressionTasks() {
-		for (TaskReference taskReference : TrappedNewbieTasks.TUTORIAL_TREE) {
-			Task task = taskReference.constructTask(player);
-			if (task.canBeSkipped()) continue;
+		Task progressionTask = this.bossBarTask.getProgressionTask();
+		if (progressionTask != null)
+			progressionTask.abort();
 
-			task.onStart();
-			bossBarTask.setProgressionTask(task);
-			return;
+		if (!TrappedNewbieTasks.TUTORIAL_TREE[TrappedNewbieTasks.TUTORIAL_TREE.length - 1].constructTask(this.player).canBeSkipped()) {
+			for (TaskReference taskReference : TrappedNewbieTasks.TUTORIAL_TREE) {
+				Task task = taskReference.constructTask(this.player);
+				if (task.canBeSkipped()) continue;
+
+				task.onStart();
+				this.bossBarTask.setProgressionTask(task);
+				return;
+			}
 		}
-		bossBarTask.setProgressionTask(null);
+
+		this.bossBarTask.setProgressionTask(null);
 	}
 
 	public boolean hasTask(String id) {
-		return currentTasks.containsKey(id);
+		return this.currentTasks.containsKey(id);
 	}
 
 	public void addTask(Task task) {
@@ -50,19 +57,19 @@ public class ProgressionManager {
 	}
 
 	public void addTask(String id, Task task) {
-		if (currentTasks.put(id, task) == null)
+		if (this.currentTasks.put(id, task) == null)
 			task.onStart();
 	}
 
 	public @Nullable Task removeTask(String id) {
-		Task task = currentTasks.remove(id);
+		Task task = this.currentTasks.remove(id);
 		if (task != null)
 			task.abort();
 		return task;
 	}
 
 	public Collection<Task> tasks() {
-		return currentTasks.values();
+		return this.currentTasks.values();
 	}
 
 	public void complete(Task task) {
@@ -82,10 +89,10 @@ public class ProgressionManager {
 	}
 
 	public void abort() {
-		for (Task task : tasks()) {
+		for (Task task : tasks())
 			task.abort();
-		}
-		Task task = bossBarTask.getProgressionTask();
+
+		Task task = this.bossBarTask.getProgressionTask();
 		if (task != null)
 			task.abort();
 	}

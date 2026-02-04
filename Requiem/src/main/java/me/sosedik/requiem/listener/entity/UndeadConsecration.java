@@ -77,7 +77,6 @@ public class UndeadConsecration implements Listener {
 		HealTask healTask = UNDEAD_MOBS.get(entity.getUniqueId());
 		if (healTask == null) return;
 
-
 		if (DamageTypeTags.IS_FIRE.isTagged(event.getDamageSource().getDamageType())) {
 			if (entity.isImmuneToFire()) {
 				event.setCancelled(true);

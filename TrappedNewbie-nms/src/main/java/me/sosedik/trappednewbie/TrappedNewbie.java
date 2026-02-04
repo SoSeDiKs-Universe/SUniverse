@@ -114,6 +114,7 @@ import me.sosedik.trappednewbie.listener.entity.BabierBabyMobs;
 import me.sosedik.trappednewbie.listener.entity.BetterPillagers;
 import me.sosedik.trappednewbie.listener.entity.CreepersLoveCrawlers;
 import me.sosedik.trappednewbie.listener.entity.CustomEntityBuckets;
+import me.sosedik.trappednewbie.listener.entity.CustomEntityModels;
 import me.sosedik.trappednewbie.listener.entity.ExtraMobGoals;
 import me.sosedik.trappednewbie.listener.entity.FleeFromScaryEffect;
 import me.sosedik.trappednewbie.listener.entity.GliderInteraction;
@@ -384,6 +385,7 @@ public final class TrappedNewbie extends JavaPlugin {
 			BetterPillagers.class,
 			CreepersLoveCrawlers.class,
 			CustomEntityBuckets.class,
+			CustomEntityModels.class,
 			ExtraMobGoals.class,
 			FleeFromScaryEffect.class,
 			GliderInteraction.class,

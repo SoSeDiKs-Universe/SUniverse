@@ -61,7 +61,7 @@ import java.util.UUID;
 import static me.sosedik.utilizer.api.message.Mini.raw;
 
 /**
- * Travelling through Necronomicon
+ * Traveling through Necronomicon
  */
 @NullMarked
 public class NecronomiconTravel implements Listener {
@@ -142,7 +142,7 @@ public class NecronomiconTravel implements Listener {
 		if (player.getWorld() == Utilizer.limboWorld() || player.getWorld().key().value().startsWith("worlds-personal/")) {
 			openFriendsTP(player);
 		} else {
-			openVoidTP(player);
+			openVoidTP(player, handItem);
 		}
 	}
 
@@ -216,7 +216,7 @@ public class NecronomiconTravel implements Listener {
 			.build();
 	}
 
-	private void openVoidTP(Player player) {
+	private void openVoidTP(Player player, ItemStack handItem) {
 		ItemStack background = ItemStack.of(TrappedNewbieItems.MATERIAL_AIR);
 		background.setData(DataComponentTypes.ITEM_MODEL, ResourceLib.storage().getItemModelMapping(TrappedNewbie.trappedNewbieKey("gui/filled")));
 
@@ -228,14 +228,15 @@ public class NecronomiconTravel implements Listener {
 					.setItemProvider(viewer -> {
 						var messenger = Messenger.messenger(viewer);
 
+						int lvlCost = SoulboundNecronomicon.getUses(player, handItem) > 0 ? 1 : 10;
 						int exp = player.calculateTotalExperiencePoints();
-						int requiredExp = MathUtil.getExpForLevel(10);
+						int requiredExp = MathUtil.getExpForLevel(lvlCost);
 						boolean canUse = exp >= requiredExp;
 
 						var item = ItemStack.of(Material.BEDROCK);
 						item = CustomNameModifier.named(item, messenger.getMessage("gui.soul_travel.destination.void", raw("owner", player.displayName())));
 						item = CustomLoreModifier.lored(item, List.of(
-							messenger.getMessages("gui.soul_travel.travel", raw("level", 10), raw("color", canUse ? "<green>" : "<red>"))
+							messenger.getMessages("gui.soul_travel.travel", raw("level", lvlCost), raw("color", canUse ? "<green>" : "<red>"))
 						));
 						return new ItemWrapper(item);
 					})
@@ -247,7 +248,7 @@ public class NecronomiconTravel implements Listener {
 						}
 
 						int exp = player.calculateTotalExperiencePoints();
-						int requiredExp = MathUtil.getExpForLevel(10);
+						int requiredExp = SoulboundNecronomicon.getUses(player, handItem) > 0 ? MathUtil.getExpForLevel(1) : MathUtil.getExpForLevel(10);
 						if (exp < requiredExp) {
 							player.closeInventory();
 							player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_SCREAM, 2F, 0.3F);
@@ -255,6 +256,7 @@ public class NecronomiconTravel implements Listener {
 							return;
 						}
 
+						SoulboundNecronomicon.increaseUses(player, handItem);
 						PENDING.put(player.getUniqueId(), null);
 						player.closeInventory();
 						player.setExperienceLevelAndProgress(exp - requiredExp);

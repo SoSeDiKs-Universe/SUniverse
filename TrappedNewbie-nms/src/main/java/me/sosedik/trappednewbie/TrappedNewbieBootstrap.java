@@ -16,9 +16,12 @@ import me.sosedik.trappednewbie.dataset.TrappedNewbieEntities;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieEntityTypes;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieItems;
 import me.sosedik.trappednewbie.entity.api.Glider;
+import me.sosedik.trappednewbie.entity.api.MutantZombie;
 import me.sosedik.trappednewbie.entity.api.PaperPlane;
 import me.sosedik.trappednewbie.entity.craft.CraftGlider;
+import me.sosedik.trappednewbie.entity.craft.CraftMutantZombie;
 import me.sosedik.trappednewbie.entity.craft.CraftPaperPlane;
+import me.sosedik.trappednewbie.entity.nms.MutantZombieImpl;
 import me.sosedik.trappednewbie.impl.block.nms.ClayKilnBlock;
 import me.sosedik.trappednewbie.impl.block.nms.SleepingBagBlock;
 import me.sosedik.trappednewbie.impl.block.nms.TotemBaseBlock;
@@ -59,6 +62,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.DefaultAttributes;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.animal.Bucketable;
 import net.minecraft.world.item.AxeItem;
@@ -67,6 +71,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.MobBucketItem;
 import net.minecraft.world.item.ShovelItem;
+import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.item.component.Consumables;
 import net.minecraft.world.item.component.CustomData;
@@ -93,6 +98,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 import static org.bukkit.craftbukkit.entity.CraftEntityTypes.createAndMoveEmptyRot;
+import static org.bukkit.craftbukkit.entity.CraftEntityTypes.createLiving;
 
 @NullMarked
 public class TrappedNewbieBootstrap implements PluginBootstrap {
@@ -446,6 +452,7 @@ public class TrappedNewbieBootstrap implements PluginBootstrap {
 				}
 			);
 			case "chainmail_bucket" -> new Item(((Item.Properties) properties).humanoidArmor(new ArmorMaterial(15, makeDefense(1, 4, 5, 2, 4), 12, SoundEvents.ARMOR_EQUIP_CHAIN, 0.0F, 0.0F, ItemTags.REPAIRS_CHAIN_ARMOR, equipmentAssets("chainmail_bucket")), ArmorType.HELMET));
+			case "mutant_zombie_spawn_egg" -> new SpawnEggItem(((Item.Properties) properties).spawnEgg(TrappedNewbieEntities.MUTANT_ZOMBIE)); // TODO dispenser?
 			default -> null;
 		});
 
@@ -453,12 +460,17 @@ public class TrappedNewbieBootstrap implements PluginBootstrap {
 			key -> switch (key.value()) {
 				case "paper_plane" -> new CraftEntityTypes.EntityTypeData<>(TrappedNewbieEntityTypes.PAPER_PLANE, PaperPlane.class, CraftPaperPlane::new, createAndMoveEmptyRot(TrappedNewbieEntities.PAPER_PLANE));
 				case "glider" -> new CraftEntityTypes.EntityTypeData<>(TrappedNewbieEntityTypes.GLIDER, Glider.class, CraftGlider::new, createAndMoveEmptyRot(TrappedNewbieEntities.GLIDER));
+				case "mutant_zombie" -> new CraftEntityTypes.EntityTypeData<>(TrappedNewbieEntityTypes.MUTANT_ZOMBIE, MutantZombie.class, CraftMutantZombie::new, createLiving(TrappedNewbieEntities.MUTANT_ZOMBIE));
 				default -> throw new IllegalArgumentException();
 			},
 			key -> {
 				switch (key.value()) {
 					case "paper_plane" -> KiterinoBootstrapEntityTypeInjectorImpl.ENTITY_TYPE_REPLACEMENTS.put(TrappedNewbieEntities.PAPER_PLANE, EntityType.SNOWBALL);
 					case "glider" -> KiterinoBootstrapEntityTypeInjectorImpl.ENTITY_TYPE_REPLACEMENTS.put(TrappedNewbieEntities.GLIDER, EntityType.ITEM_DISPLAY);
+					case "mutant_zombie" -> {
+						KiterinoBootstrapEntityTypeInjectorImpl.ENTITY_TYPE_REPLACEMENTS.put(TrappedNewbieEntities.MUTANT_ZOMBIE, EntityType.ZOMBIE);
+						DefaultAttributes.register(TrappedNewbieEntities.MUTANT_ZOMBIE, MutantZombieImpl.createAttributes().build());
+					}
 					default -> throw new IllegalArgumentException();
 				}
 			}

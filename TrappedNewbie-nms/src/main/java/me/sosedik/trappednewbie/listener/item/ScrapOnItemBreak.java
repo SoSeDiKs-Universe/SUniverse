@@ -44,7 +44,7 @@ public class ScrapOnItemBreak implements Listener {
 
 	@EventHandler
 	public void onBreak(RemainingItemEvent event) {
-		if (event.getResult() != null) return;
+		if (!ItemStack.isEmpty(event.getResult())) return;
 
 		ItemStack item = event.getItem();
 		if (item.hasEnchant(Enchantment.VANISHING_CURSE)) return;

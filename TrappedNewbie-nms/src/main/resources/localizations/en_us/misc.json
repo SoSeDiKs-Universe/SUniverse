@@ -47,17 +47,20 @@
 	"attrition.too_high": "Your attrition level is too high",
 	"gui.next_page": "Next Page",
 	"gui.previous_page": "Previous Page",
-	"gui.soul_travel": "Soul Express",
+	"gui.soul_travel": "Soul Express (pick destination)",
 	"gui.soul_travel.pick": "Where are you falling to?",
-	"gui.soul_travel.destination.limbo": "<icon:trapped_newbie:wandering_trader_head> Limbo",
+	"gui.soul_travel.destination.limbo": "<icon:trapped_newbie:heads/wandering_trader> Limbo",
 	"gui.soul_travel.destination.void": "<owner>'s Personal Void",
-	"gui.soul_travel.destination.overworld": "Overworld (Shared)",
+	"gui.soul_travel.destination.overworld": "Shared Overworld",
 	"gui.soul_travel.destination.overworld.description": [
 		"Possibility of meeting",
 		"other players, <red>dangerous"
 	],
 	"gui.soul_travel.destination.poverworld": "<owner>'s Overworld",
-	"gui.soul_travel.destination.poverworld.description": "Personal peaceful habitat",
+	"gui.soul_travel.destination.poverworld.description": [
+		"Personal peaceful habitat,",
+		"only owner and friends can join"
+	],
 	"gui.soul_travel.travel": [
 		"Click to initiate travel",
 		"Cost: <color><level> <plural:en_us:level|levels:'<level>'> (of exp)"

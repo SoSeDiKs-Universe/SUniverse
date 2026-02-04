@@ -1,8 +1,12 @@
 package me.sosedik.trappednewbie.listener.world;
 
+import de.tr7zw.nbtapi.NBTCompound;
+import de.tr7zw.nbtapi.NBTPersistentDataContainer;
 import me.sosedik.requiem.feature.GhostyPlayer;
 import me.sosedik.trappednewbie.TrappedNewbie;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieAdvancements;
+import me.sosedik.utilizer.util.NbtProxies;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.damage.DamageType;
 import org.bukkit.entity.Player;
@@ -23,6 +27,8 @@ import java.util.UUID;
 @NullMarked
 public class PersonalVoidFall implements Listener {
 
+	public static String LAST_LOCS_TAG = "last_locs";
+
 	private static final Set<UUID> PENDING = new HashSet<>();
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
@@ -38,7 +44,17 @@ public class PersonalVoidFall implements Listener {
 		if (!PENDING.add(player.getUniqueId())) return;
 
 		World newWorld = PerPlayerWorlds.resolveWorld(player, World.Environment.NORMAL);
-		LimboWorldFall.runTeleport(player, newWorld, GhostyPlayer.isGhost(player))
+
+		Location loc = null;
+		var nbt = new NBTPersistentDataContainer(newWorld.getPersistentDataContainer());
+		NBTCompound lastLocsNbt = nbt.getCompound(LAST_LOCS_TAG);
+		if (lastLocsNbt != null) {
+			String key = player.getUniqueId().toString();
+			if (lastLocsNbt.hasTag(key))
+				loc = nbt.get(key, NbtProxies.LOCATION);
+		}
+
+		LimboWorldFall.runTeleport(player, newWorld, loc, GhostyPlayer.isGhost(player))
 			.thenRun(() -> PENDING.remove(player.getUniqueId()));
 	}
 
@@ -50,6 +66,14 @@ public class PersonalVoidFall implements Listener {
 		if (!world.key().value().startsWith("worlds-personal/")) return;
 
 		TrappedNewbieAdvancements.GET_INTO_A_PERSONAL_VOID.awardAllCriteria(player);
+
+		Location fromLoc = event.getFromLoc();
+		if (fromLoc == null) return;
+
+		World from = event.getFrom();
+		var nbt = new NBTPersistentDataContainer(from.getPersistentDataContainer());
+		NBTCompound lastLocsNbt = nbt.getOrCreateCompound(LAST_LOCS_TAG);
+		lastLocsNbt.set(player.getUniqueId().toString(), player.getLocation(), NbtProxies.LOCATION);
 	}
 
 }

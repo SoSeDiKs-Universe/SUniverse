@@ -276,6 +276,8 @@ public class TrappedNewbieItems {
 	public static final Material VEX_BOOK = byKey("vex_book");
 	public static final Material ALLAY_BOOK = byKey("allay_book");
 
+	public static final Material MUTANT_ZOMBIE_SPAWN_EGG = byKey("mutant_zombie_spawn_egg");
+
 	public static final Material LEATHER_GLOVES = byKey("leather_gloves");
 
 	public static final Material DESTROY_STAGE_0 = byKey("destroy_stage_0");

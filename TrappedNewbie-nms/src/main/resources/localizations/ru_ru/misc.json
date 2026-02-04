@@ -44,7 +44,7 @@
 	"item.modifier.halloween_candy": "<gradient:gold:dark_gray>Хэллоуинская конфета",
 	"item.modifier.goodie_bag": "<dark_gray>Важно делиться с друзьями!",
 	"item.modifier.goodie_bag.looter": "<gray>Мешочек игрока <player>",
-	"attrition.too_high": "Ваш уровень одержимости слишком высок",
+	"attrition.too_low": "Ваш уровень одержимости слишком низок",
 	"gui.next_page": "Следующая страница",
 	"gui.previous_page": "Предыдущая страница",
 	"gui.soul_travel": "Душевный экспресс (выберите место)",

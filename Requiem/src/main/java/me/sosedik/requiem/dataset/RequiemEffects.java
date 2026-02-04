@@ -10,10 +10,13 @@ import org.jspecify.annotations.NullMarked;
 public final class RequiemEffects {
 
 	public static final PotionEffectType PARASITES = get("parasites");
+	public static final PotionEffectType SOUL_LINK = get("soul_link");
 	public static final PotionEffectType ATTRITION = get("attrition");
 
 	public static void init() {
-		MilkImmuneEffects.addMilkImmune(ATTRITION);
+		MilkImmuneEffects.addMilkImmune(
+			SOUL_LINK, ATTRITION
+		);
 	}
 
 	private static PotionEffectType get(String key) {

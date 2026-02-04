@@ -1073,5 +1073,6 @@
 	"item.trapped_newbie.gui_arrow_head_outline.name": "Наконечник стріли",
 	"item.trapped_newbie.gui_arrow_stick_outline.name": "Палиця",
 	"item.trapped_newbie.gui_arrow_fletching_outline.name": "Оперення стріли",
-	"item.trapped_newbie.gui_arrow_modifiers_outline.name": "Модифікатор стріли"
+	"item.trapped_newbie.gui_arrow_modifiers_outline.name": "Модифікатор стріли",
+	"item.trapped_newbie.mutant_zombie_spawn_egg.name": "Яйце виклику зомбі-мутанта"
 }

@@ -8,8 +8,7 @@
 	"item.requiem.ghost_motivator.lore": "Дозволяє проходити крізь стіни",
 	"item.requiem.host_revocator.name": "Абісальний відгук хоста",
 	"item.requiem.host_revocator.lore": [
-		"Використайте (<yellow><key:key.use></yellow>), щоб покинути тіло хосту,",
-		"знищивши всі неекіпіровані предмети в процесі",
+		"Використайте (<yellow><key:key.use></yellow>), щоб покинути тіло хосту",
 		"",
 		"Киньте (<yellow><key:key.use></yellow>) сюди предмет із інвентаря,",
 		"щоб відправити його в Безодню"

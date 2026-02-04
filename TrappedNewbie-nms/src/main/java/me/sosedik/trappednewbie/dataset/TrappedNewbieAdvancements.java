@@ -250,20 +250,24 @@ public class TrappedNewbieAdvancements {
 		.display(display().noAnnounceChat().withAdvancementFrame(AdvancementFrame.TASK).icon(Material.SUNFLOWER)).requiredProgress(requirements("interact", "open", "letter", "friendship"))
 		.visibilityRule(hidden())
 		.buildAndRegister();
-	public static final IAdvancement OPENING_HOLDER = buildFake(REQUIEM_ROOT, "holder")
-		.display(new OpeningHolderAdvancementDisplay().x(-1.25F).noAnnounceChat().withAdvancementFrame(AdvancementFrame.SPEECH_BUBBLE).icon(WANDERING_TRADER_HEAD))
+	public static final IAdvancement OPENING_HOLDER_FILLER = buildFake(REQUIEM_ROOT)
+		.display(display().x(-0.35F).noAnnounceChat().isHidden(true))
+		.requiredProgress(neverDone())
+		.buildAndRegister();
+	public static final IAdvancement OPENING_HOLDER = buildFake(OPENING_HOLDER_FILLER, "holder")
+		.display(new OpeningHolderAdvancementDisplay().xy(-1.25F, 0.75F).noAnnounceChat().withAdvancementFrame(AdvancementFrame.SPEECH_BUBBLE).icon(WANDERING_TRADER_HEAD))
 		.requiredProgress(alwaysDone())
 		.buildAndRegister();
 	public static final IAdvancement HELPER_BUBBLE_FILLER = buildFake(OPENING_HOLDER)
-		.display(display().x(0.15F).noAnnounceChat().isHidden(true))
+		.display(display().x(0.25F).noAnnounceChat().isHidden(true))
 		.requiredProgress(neverDone())
 		.buildAndRegister();
 	public static final IAdvancement HELPER_BUBBLE = buildFake(HELPER_BUBBLE_FILLER, "helper_bubble")
-		.display(display().xy(-0.15F, -1F).noAnnounceChat().withAdvancementFrame(AdvancementFrame.NONE).icon(WANDERING_TRADER_HEAD))
+		.display(display().xy(-0.25F, -1.25F).noAnnounceChat().withAdvancementFrame(AdvancementFrame.NONE).icon(WANDERING_TRADER_HEAD))
 		.requiredProgress(neverDone())
 		.buildAndRegister();
-	public static final IAdvancement HELPER_SQUIRCLE = buildFake(HELPER_BUBBLE_FILLER, "helper_squircle")
-		.display(display().xy(-1.25F, -1F).noAnnounceChat().withAdvancementFrame(AdvancementFrame.SQUIRCLE).icon(TrappedNewbieItems.MATERIAL_AIR))
+	public static final IAdvancement HELPER_SQUIRCLE = buildFake(HELPER_BUBBLE, "helper_squircle")
+		.display(display().xy(-1F, 0F).noAnnounceChat().withAdvancementFrame(AdvancementFrame.SQUIRCLE).icon(TrappedNewbieItems.MATERIAL_AIR))
 		.requiredProgress(neverDone())
 		.buildAndRegister();
 	public static final IAdvancement HELPER_BLOCK = buildFake(HELPER_SQUIRCLE, "helper_block")
@@ -319,7 +323,7 @@ public class TrappedNewbieAdvancements {
 		.requiredProgress(neverDone())
 		.buildAndRegister();
 	public static final IAdvancement BRAVE_NEW_WORLD = buildBase(REQUIEM_ROOT, "brave_new_world")
-		.display(display().x(1F).noAnnounceChat().icon(braveNewWorldItem()))
+		.display(display().x(1F).noAnnounceChat().withAdvancementFrame(AdvancementFrame.BLOCK).icon(braveNewWorldItem()))
 		.buildAndRegister();
 	public static final IAdvancement FIRST_POSSESSION = buildBase(BRAVE_NEW_WORLD, "first_possession")
 		.display(display().x(1.25F).withAdvancementFrame(AdvancementFrame.SHARP).icon(RequiemItems.HOST_REVOCATOR))

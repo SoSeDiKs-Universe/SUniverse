@@ -44,7 +44,7 @@
 	"item.modifier.halloween_candy": "<gradient:gold:dark_gray>Гелловінський смаколик",
 	"item.modifier.goodie_bag": "<dark_gray>Важливо ділитись з друзями!",
 	"item.modifier.goodie_bag.looter": "<gray>Мішечок гравця <player>",
-	"attrition.too_high": "Ваш рівень одержимості занадто високий",
+	"attrition.too_low": "Ваш рівень одержимості занадто низький",
 	"gui.next_page": "Наступна сторінка",
 	"gui.previous_page": "Попередня сторінка",
 	"gui.soul_travel": "Душевний експрес (оберіть місце)",

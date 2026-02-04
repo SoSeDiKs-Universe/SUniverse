@@ -45,7 +45,7 @@
 	"adv.trappednewbie.requiem.holder.description": "Happy to see you with us!",
 	"adv.trappednewbie.requiem.holder.title.limbo": "Welcome to the Limbo",
 	"adv.trappednewbie.requiem.holder.description.limbo": [
-		"A peaceful place, <icon:trapped_newbie:heads/wandering_trader> <gold>Wandering Trader</gold>'s personal Void",
+		"A peaceful place, <icon:trapped_newbie:heads/wandering_trader> <gold>Wandering Trader</gold>'s personal <black><shadow:white>Void",
 		"",
 		"<dark_gray>(note: this advancement always shows your current world)"
 	],
@@ -134,7 +134,7 @@
 	"adv.trappednewbie.basics.visual_root.title": "Back to the roots",
 	"adv.trappednewbie.basics.visual_root.description": "Gotta do the dirty work!",
 	"adv.trappednewbie.basics.get_a_branch.title": "Going further",
-	"adv.trappednewbie.basics.get_a_branch.description": "Get some <item:'trapped_newbie:oak_branch':'Branches'> from the <item:'minecraft:grass_block':'ground'>, <item:'minecraft:oak_leaves':'Leaves'> or a <item:'minecraft:dead_bush':'Deadbush'>",
+	"adv.trappednewbie.basics.get_a_branch.description": "Obtain some <item:'trapped_newbie:oak_branch':'Branches'> from the <item:'minecraft:grass_block':'ground'> or by breaking <item:'minecraft:oak_leaves':'Leaves'> or a <item:'minecraft:dead_bush':'Deadbush'>",
 	"adv.trappednewbie.basics.get_a_fiber.title": "Feeling green",
 	"adv.trappednewbie.basics.get_a_fiber.description": "Get a Plant Fiber from grass plants",
 	"adv.trappednewbie.basics.make_a_twine.title": "Intertwined",

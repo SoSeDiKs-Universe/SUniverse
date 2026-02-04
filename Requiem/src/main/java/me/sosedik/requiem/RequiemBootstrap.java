@@ -6,6 +6,7 @@ import me.sosedik.kiterino.registry.wrapper.KiterinoMobEffectBehaviourWrapper;
 import me.sosedik.requiem.dataset.RequiemItems;
 import me.sosedik.requiem.effect.AttritionEffect;
 import me.sosedik.requiem.effect.ParasitesEffect;
+import me.sosedik.requiem.effect.SoulLinkEffect;
 import me.sosedik.resourcelib.ResourceLibBootstrap;
 import me.sosedik.resourcelib.util.BlockCreator;
 import me.sosedik.resourcelib.util.ItemCreator;
@@ -20,6 +21,7 @@ public class RequiemBootstrap implements PluginBootstrap {
 	public void bootstrap(BootstrapContext context) {
 		Function<String, KiterinoMobEffectBehaviourWrapper> effectsProvider = key -> switch (key.substring("requiem:".length())) {
 			case "parasites" -> new ParasitesEffect();
+			case "soul_link" -> new SoulLinkEffect();
 			case "attrition" -> new AttritionEffect();
 			default -> throw new RuntimeException("Unknown effect: %s".formatted(key));
 		};

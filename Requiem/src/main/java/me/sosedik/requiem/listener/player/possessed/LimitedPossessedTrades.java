@@ -20,6 +20,7 @@ public class LimitedPossessedTrades implements Listener {
 		if (!(event.getRightClicked() instanceof AbstractVillager)) return;
 
 		Player player = event.getPlayer();
+		if (!PossessingPlayer.isPossessing(player)) return;
 		if (PossessingPlayer.canTrade(player)) return;
 
 		event.setCancelled(true);

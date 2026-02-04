@@ -7,7 +7,6 @@ import me.sosedik.requiem.feature.PossessingPlayer;
 import me.sosedik.utilizer.listener.item.NotDroppableItems;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -50,14 +49,13 @@ public class PossessingOverMobs implements Listener {
 		if (entity.hasRider()) return;
 
 		Player player = event.getPlayer();
-		if (!PossessingPlayer.isAllowedForCapture(player, entity)) return;
-		if (PossessingPlayer.isPossessing(player)) return;
 		if (!GhostyPlayer.isGhost(player)) return;
+		if (!PossessingPlayer.isAllowedForCapture(player, entity)) return;
 		if (!player.getInventory().getItemInMainHand().isEmpty()) return;
 
 		Runnable action = () -> {
 			markPossessedItems(entity);
-			PossessingPlayer.migrateStatsToPlayer(player, entity);
+			PossessingPlayer.migrateInventoryAndStatsToPlayer(player, entity);
 		};
 		if (!PossessingPlayer.startPossessing(player, entity, action)) return;
 
@@ -74,8 +72,6 @@ public class PossessingOverMobs implements Listener {
 			ItemStack item = equipment.getItem(slot);
 			if (item.isEmpty()) continue;
 
-			item.addUnsafeEnchantment(Enchantment.BINDING_CURSE, 1);
-			item.addUnsafeEnchantment(Enchantment.VANISHING_CURSE, 1);
 			if (equipment.getDropChance(slot) <= 0.1)
 				NBT.modify(item, (Consumer<ReadWriteItemNBT>) nbt -> nbt.setBoolean(POSSESSED_ITEM_TAG, true));
 			equipment.setItem(slot, item);

@@ -45,7 +45,7 @@
 	"adv.trappednewbie.requiem.holder.description": "Рады видеть Вас с нами!",
 	"adv.trappednewbie.requiem.holder.title.limbo": "Добро пожаловать в Лимбо",
 	"adv.trappednewbie.requiem.holder.description.limbo": [
-		"Спокойное место, личная пустота <icon:trapped_newbie:heads/wandering_trader> <gold>странствующего торговца</gold>",
+		"Спокойное место, личная <black><shadow:white>пустота</shadow></black> <icon:trapped_newbie:heads/wandering_trader> <gold>странствующего торговца</gold>",
 		"",
 		"<dark_gray>(примечание: это достижение всегда показывает Ваш текущий мир)"
 	],

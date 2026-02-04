@@ -171,6 +171,7 @@ import me.sosedik.trappednewbie.listener.player.ExtraPossessedDrops;
 import me.sosedik.trappednewbie.listener.player.FakeHungerLevel;
 import me.sosedik.trappednewbie.listener.player.MilkHelpsSkeletons;
 import me.sosedik.trappednewbie.listener.player.NewbieWelcome;
+import me.sosedik.trappednewbie.listener.player.NoGhostParkour;
 import me.sosedik.trappednewbie.listener.player.PossessingRegeneration;
 import me.sosedik.trappednewbie.listener.player.ReachAround;
 import me.sosedik.trappednewbie.listener.player.StartAsGhost;
@@ -217,6 +218,7 @@ import org.bukkit.Tag;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.EntityType;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.incendo.cloud.bukkit.internal.BukkitBrigadierMapper;
@@ -290,7 +292,17 @@ public final class TrappedNewbie extends JavaPlugin {
 		ChoppingBlockCrafting.registerRecipes();
 		TrappedNewbieAdvancements.setupAdvancements();
 
-		InventoryUtil.addExtraItemChecker(player -> List.of(VisualArmor.of(player).getAllContents()));
+		InventoryUtil.addExtraItemChecker(
+			player -> List.of(VisualArmor.of(player).getAllContents()),
+			(player, modifier) -> {
+				VisualArmor visualArmor = VisualArmor.of(player);
+				for (EquipmentSlot slot : EquipmentSlot.values()) {
+					if (!visualArmor.hasItem(slot)) continue;
+
+					visualArmor.setItem(slot, modifier.apply(visualArmor.getItem(slot)));
+				}
+			}
+		);
 
 		new AdvancementTrophyModifier(trappedNewbieKey("advancement_trophy")).register();
 		new AdvancementTrophyNameLoreModifier(trappedNewbieKey("advancement_trophy_name_lore")).register();
@@ -445,6 +457,7 @@ public final class TrappedNewbie extends JavaPlugin {
 			FakeHungerLevel.class,
 			MilkHelpsSkeletons.class,
 			NewbieWelcome.class,
+			NoGhostParkour.class,
 			PossessingRegeneration.class,
 			ReachAround.class,
 			StartAsGhost.class,

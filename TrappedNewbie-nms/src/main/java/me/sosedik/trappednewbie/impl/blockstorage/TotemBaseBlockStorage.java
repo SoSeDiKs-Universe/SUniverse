@@ -186,10 +186,11 @@ public class TotemBaseBlockStorage extends DisplayBlockStorage {
 				Player player = Bukkit.getPlayer(uuid);
 				if (player == null) return;
 
-				PossessingPlayer.applyAttrition(player, 4);
-				LivingEntity possessed = PossessingPlayer.getPossessed(player);
+				if (!PossessingPlayer.hasAttritionAtOrHigherThan(player, 1))
+					PossessingPlayer.applyAttrition(player, 1);
 
 				if (player.hasPotionEffect(PotionEffectType.WEAKNESS)) {
+					LivingEntity possessed = PossessingPlayer.getPossessed(player);
 					if (possessed != null && PossessedUndeadZombieCuring.canBeCured(possessed)) {
 						player.removePotionEffect(PotionEffectType.WEAKNESS);
 						PossessedUndeadZombieCuring.startCureTask(possessed);

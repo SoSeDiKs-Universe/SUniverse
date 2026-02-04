@@ -1,8 +1,10 @@
 package me.sosedik.requiem.feature;
 
+import com.destroystokyo.paper.MaterialTags;
 import de.tr7zw.nbtapi.NBT;
 import de.tr7zw.nbtapi.NBTType;
 import de.tr7zw.nbtapi.iface.ReadWriteNBT;
+import io.papermc.paper.datacomponent.DataComponentTypes;
 import me.sosedik.requiem.Requiem;
 import me.sosedik.requiem.api.event.player.PlayerStartPossessingEntityEvent;
 import me.sosedik.requiem.api.event.player.PlayerStopPossessingEntityEvent;
@@ -17,6 +19,7 @@ import me.sosedik.utilizer.util.InventoryUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Tag;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.AbstractHorse;
 import org.bukkit.entity.Ageable;
 import org.bukkit.entity.Animals;
@@ -46,6 +49,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.function.UnaryOperator;
 
 // MCCheck: 1.21.11, new mobs visually carrying items outside entity equipment
 @NullMarked
@@ -127,7 +131,7 @@ public class PossessingPlayer {
 		});
 
 		int level = player.getLevel();
-		if (level < 2 && entity instanceof Golem)
+		if (level < 5 && entity instanceof Golem)
 			level = 5;
 		applyAttrition(player, level);
 		player.setInvisible(true);
@@ -280,7 +284,7 @@ public class PossessingPlayer {
 	 * @param player player
 	 * @param entity entity
 	 */
-	public static void migrateStatsToPlayer(Player player, LivingEntity entity) {
+	public static void migrateInventoryAndStatsToPlayer(Player player, LivingEntity entity) {
 		player.getInventory().clear();
 		migrateInvFromEntity(player, entity, true);
 	}
@@ -306,24 +310,35 @@ public class PossessingPlayer {
 		}
 
 		EntityEquipment entityEquipment = entity.getEquipment();
-		if (entityEquipment == null) return;
-
-		PlayerInventory playerInventory = player.getInventory();
-		playerInventory.setItemInMainHand(entityEquipment.getItemInMainHand());
-		playerInventory.setItemInOffHand(entityEquipment.getItemInOffHand());
-		playerInventory.setHelmet(entityEquipment.getHelmet());
-		playerInventory.setChestplate(entityEquipment.getChestplate());
-		playerInventory.setLeggings(entityEquipment.getLeggings());
-		playerInventory.setBoots(entityEquipment.getBoots());
+		if (entityEquipment != null) {
+			PlayerInventory playerInventory = player.getInventory();
+			playerInventory.setItemInMainHand(entityEquipment.getItemInMainHand());
+			playerInventory.setItemInOffHand(entityEquipment.getItemInOffHand());
+			playerInventory.setHelmet(entityEquipment.getHelmet());
+			playerInventory.setChestplate(entityEquipment.getChestplate());
+			playerInventory.setLeggings(entityEquipment.getLeggings());
+			playerInventory.setBoots(entityEquipment.getBoots());
+		}
 
 		if (entity instanceof Enderman enderman) {
 			BlockData blockData = enderman.getCarriedBlock();
 			if (blockData != null) {
 				var item = ItemStack.of(blockData.getMaterial());
 				item.setBlockData(blockData);
-				playerInventory.setItemInMainHand(item);
+				player.getInventory().setItemInMainHand(item);
 			}
 		}
+
+		UnaryOperator<ItemStack> modifier = item -> {
+			if (!item.hasData(DataComponentTypes.TOOL) && !item.hasData(DataComponentTypes.WEAPON) && !MaterialTags.ARMOR.isTagged(item))
+				return item;
+
+			item.addUnsafeEnchantment(Enchantment.BINDING_CURSE, 1);
+			item.addUnsafeEnchantment(Enchantment.VANISHING_CURSE, 1);
+			return item;
+		};
+		InventoryUtil.modifyItems(entity, modifier);
+		InventoryUtil.modifyItems(player, modifier);
 	}
 
 	private static PotionEffect infinitePotionEffect(PotionEffectType type) {
@@ -536,7 +551,7 @@ public class PossessingPlayer {
 	 * @param level level
 	 */
 	public static void applyAttrition(Player player, int level) {
-		int amplifier = Math.clamp(MAX_ATTRITION_LEVEL - level, 0, MAX_ATTRITION_LEVEL);
+		int amplifier = Math.clamp(level, 0, MAX_ATTRITION_LEVEL);
 		player.setLevel(level);
 		player.setExp(0F);
 		player.addPotionEffect(new PotionEffect(RequiemEffects.ATTRITION, PotionEffect.INFINITE_DURATION, amplifier));
@@ -549,7 +564,7 @@ public class PossessingPlayer {
 	 * @return whether the possessed player can drop items
 	 */
 	public static boolean canDropItems(Player player) {
-		return hasAttritionLowerThan(player, 4);
+		return hasAttritionAtOrHigherThan(player, 1);
 	}
 
 	/**
@@ -559,27 +574,7 @@ public class PossessingPlayer {
 	 * @return whether the possessed player can open inventories
 	 */
 	public static boolean canOpenInventories(Player player) {
-		return hasAttritionLowerThan(player, 3);
-	}
-
-	/**
-	 * Checks whether the possessed player should keep items on death
-	 *
-	 * @param player player
-	 * @return whether the possessed player should keep items on death
-	 */
-	public static boolean canKeepItemsOnDeath(Player player) {
-		return hasAttritionLowerThan(player, 3);
-	}
-
-	/**
-	 * Checks whether the possessed player should preserve inventory when leaving the host
-	 *
-	 * @param player player
-	 * @return whether the possessed player should preserve inventory when leaving the host
-	 */
-	public static boolean canPreserveInventory(Player player) {
-		return hasAttritionLowerThan(player, 2);
+		return hasAttritionAtOrHigherThan(player, 1);
 	}
 
 	/**
@@ -589,19 +584,15 @@ public class PossessingPlayer {
 	 * @return whether the possessed player can trade
 	 */
 	public static boolean canTrade(Player player) {
-		return hasAttritionLowerThan(player, 3);
+		return hasAttritionAtOrHigherThan(player, 5);
 	}
 
-	private static boolean hasAttritionLowerThan(Player player, int level) {
-		if (!isPossessingSoft(player)) return true;
-		if (!player.hasPotionEffect(RequiemEffects.ATTRITION)) return true;
+	public static boolean hasAttritionAtOrHigherThan(Player player, int level) {
+		if (!isPossessingSoft(player)) return false;
+		if (!player.hasPotionEffect(RequiemEffects.ATTRITION)) return false;
 
 		PotionEffect potionEffect = player.getPotionEffect(RequiemEffects.ATTRITION);
-		return potionEffect != null && potionEffect.getAmplifier() < level;
-	}
-
-	private static boolean hasAttritionAtOrHigherThan(Player player, int level) {
-		return !hasAttritionLowerThan(player, level);
+		return potionEffect != null && potionEffect.getAmplifier() >= level;
 	}
 
 }

@@ -4,6 +4,7 @@ import me.sosedik.moves.listener.movement.FreeFall;
 import me.sosedik.requiem.Requiem;
 import me.sosedik.requiem.api.event.player.PlayerStartGhostingEvent;
 import me.sosedik.requiem.api.event.player.PlayerStopGhostingEvent;
+import me.sosedik.requiem.dataset.RequiemEffects;
 import me.sosedik.requiem.dataset.RequiemItems;
 import me.sosedik.requiem.task.GhostAuraTask;
 import me.sosedik.requiem.task.GhostMobVisionTask;
@@ -63,12 +64,14 @@ public class GhostyPlayer {
 		boolean freshAdd = GHOSTS.add(player.getUniqueId());
 
 		if (freshAdd) {
-			for (ItemStack item : player.getInventory()) {
-				if (ItemStack.isEmpty(item)) continue;
+			if (!player.isInvisible()) {
+				for (ItemStack item : player.getInventory()) {
+					if (ItemStack.isEmpty(item)) continue;
 
-				if (!item.hasEnchant(Enchantment.VANISHING_CURSE))
-					player.dropItem(item, true, i -> i.setPickupDelay(5));
-				item.setAmount(0);
+					if (!item.hasEnchant(Enchantment.VANISHING_CURSE))
+						player.dropItem(item, true, i -> i.setPickupDelay(5));
+					item.setAmount(0);
+				}
 			}
 			player.setLevel(0);
 			player.setExp(0F);
@@ -106,6 +109,7 @@ public class GhostyPlayer {
 		player.setCanPickupItems(false);
 
 		// Ghost abilities
+		player.addPotionEffect(new PotionEffect(RequiemEffects.SOUL_LINK, PotionEffect.INFINITE_DURATION, 0));
 		player.addPotionEffect(NIGHT_VISION_EFFECT);
 		float speed = player.isSprinting() ? 0.1F : 0.2F;
 		player.setWalkSpeed(speed);
@@ -156,6 +160,7 @@ public class GhostyPlayer {
 		player.setCanPickupItems(true);
 
 		// Remove abilities
+		player.removePotionEffect(RequiemEffects.SOUL_LINK);
 		player.removePotionEffect(PotionEffectType.NIGHT_VISION);
 		player.setWalkSpeed(0.2F);
 		player.setFlySpeed(0F);

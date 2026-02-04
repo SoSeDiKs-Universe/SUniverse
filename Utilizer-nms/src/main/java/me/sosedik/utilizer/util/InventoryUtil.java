@@ -21,9 +21,11 @@ import org.jspecify.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.UnaryOperator;
 
 @NullMarked
 public class InventoryUtil {
@@ -41,7 +43,9 @@ public class InventoryUtil {
 		17, 16, 15, 14, 13, 12, 11, 10, 9
 	};
 
-	private static final List<Function<Player, List<@Nullable ItemStack>>> EXTRA_ITEM_CHECKERS = new ArrayList<>();
+	private static final List<ExtraItemChecker> EXTRA_ITEM_CHECKERS = new ArrayList<>();
+
+	private record ExtraItemChecker(Function<Player, List<@Nullable ItemStack>> finder, BiConsumer<Player, UnaryOperator<ItemStack>> modifier) {}
 
 	/**
 	 * Tries to add the item into inventory
@@ -81,7 +85,7 @@ public class InventoryUtil {
 	}
 
 	/**
-	 * Tries to find an item within player's inventory
+	 * Tries to finder an item within player's inventory
 	 *
 	 * @param player player
 	 * @param predicate item predicate
@@ -126,8 +130,8 @@ public class InventoryUtil {
 		if (cursor != null)
 			return cursor;
 
-		for (Function<Player, List<@Nullable ItemStack>> extras : EXTRA_ITEM_CHECKERS) {
-			List<@Nullable ItemStack> items = extras.apply(player);
+		for (ExtraItemChecker extras : EXTRA_ITEM_CHECKERS) {
+			List<@Nullable ItemStack> items = extras.finder().apply(player);
 			for (ItemStack item : items) {
 				if (ItemStack.isEmpty(item)) continue;
 
@@ -163,6 +167,73 @@ public class InventoryUtil {
 		}
 
 		return null;
+	}
+
+	/**
+	 * Tries to finder an item within player's inventory
+	 *
+	 * @param entity entity
+	 * @param predicate item modifier
+	 */
+	public static void modifyItems(LivingEntity entity, UnaryOperator<ItemStack> predicate) {
+		EntityEquipment inventory = entity.getEquipment();
+		if (inventory == null) return;
+
+		inventory.setItemInMainHand(modifyFolding(inventory.getItemInOffHand(), predicate));
+
+		for (EquipmentSlot slot : EquipmentSlot.values()) {
+			if (!entity.canUseEquipmentSlot(slot)) continue;
+
+			inventory.setItem(slot, modifyFolding(inventory.getItem(slot), predicate));
+		}
+
+		if (entity instanceof Player player) {
+			@Nullable ItemStack[] storage = player.getInventory().getStorageContents();
+			ItemStack item;
+			for (int i = 0; i < storage.length; i++) {
+				item = storage[i];
+				if (ItemStack.isEmpty(item)) continue;
+
+				storage[i] = modifyFolding(item, predicate);
+			}
+
+			InventoryView view = player.getOpenInventory();
+			if (view.getType() == InventoryType.CRAFTING) {
+				for (int i = 1; i < 5; i++) {
+					item = view.getItem(i);
+					if (ItemStack.isEmpty(item)) continue;
+
+					view.setItem(i, modifyFolding(item, predicate));
+				}
+			}
+
+			view.setCursor(modifyFolding(view.getCursor(), predicate));
+
+			for (ExtraItemChecker extras : EXTRA_ITEM_CHECKERS)
+				extras.modifier().accept(player, predicate);
+		}
+	}
+
+	private static ItemStack modifyFolding(ItemStack item, UnaryOperator<ItemStack> predicate) {
+		item = predicate.apply(item);
+
+		if (item.hasData(DataComponentTypes.BUNDLE_CONTENTS)) {
+			BundleContents data = item.getData(DataComponentTypes.BUNDLE_CONTENTS);
+			if (data == null) return item;
+
+			List<ItemStack> contents = new ArrayList<>(data.contents());
+			contents.replaceAll(predicate);
+			item.setData(DataComponentTypes.BUNDLE_CONTENTS, BundleContents.bundleContents(contents));
+		} else if (item.hasData(DataComponentTypes.CONTAINER)) {
+			ItemContainerContents data = item.getData(DataComponentTypes.CONTAINER);
+			if (data == null) return item;
+
+			List<ItemStack> contents = new ArrayList<>(data.contents());
+			contents.replaceAll(predicate);
+			item.setData(DataComponentTypes.CONTAINER, ItemContainerContents.containerContents(contents));
+		}
+
+		return item;
 	}
 
 	/**
@@ -298,8 +369,8 @@ public class InventoryUtil {
 		};
 	}
 
-	public static void addExtraItemChecker(Function<Player, List<@Nullable ItemStack>> checker) {
-		EXTRA_ITEM_CHECKERS.add(checker);
+	public static void addExtraItemChecker(Function<Player, List<@Nullable ItemStack>> finder, BiConsumer<Player, UnaryOperator<ItemStack>> modifier) {
+		EXTRA_ITEM_CHECKERS.add(new ExtraItemChecker(finder, modifier));
 	}
 
 	/**

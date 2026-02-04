@@ -18,6 +18,7 @@ public class GhostsDontSprint implements Listener {
 	public void onSprintToggle(PlayerToggleSprintEvent event) {
 		Player player = event.getPlayer();
 		if (!GhostyPlayer.isGhost(player)) return;
+		if (!player.isFlying()) return;
 
 		boolean sprinting = event.isSprinting();
 		float speed = sprinting ? 0.1F : 0.2F;

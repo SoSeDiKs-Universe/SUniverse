@@ -9,34 +9,35 @@
 		"<gray>(нажмите <yellow><key:key.advancements></yellow>, чтобы быстро открыть меню достижений)"
 	],
 	"task.obtain_friendship_letter": [
-		"<#FFE0B2>Получите <red>письмо дружбы</red> от <icon:trapped_newbie:heads/wandering_trader> <gold>странствующего торговца",
-		"<gray>(поторгуйтесь с ним при помощи <yellow><key:key.use></yellow>)"
+		"<#FFE0B2>Получите <item:'trapped_newbie:letter/star_letter_closed':'<red>письмо дружбы'> от <icon:trapped_newbie:heads/wandering_trader> <gold>странствующего торговца",
+		"<gray>(поторгуйтесь с ним при помощи <yellow><key:key.use></yellow>)",
+		"<gray>(не забывайте почитывать <yellow>достижения</yellow> для получения дополнительной информации)"
 	],
 	"task.befriend_wandering_trader": [
 		"<#FFE0B2>Подружитесь со <icon:trapped_newbie:heads/wandering_trader> <gold>странствующим торговцем",
-		"<gray>(используйте <dark_gray>(</dark_gray><yellow><key:key.use></yellow><dark_gray>)</dark_gray> <item:trapped_newbie:letter/star_letter_closed> <red>письмо дружбы</red> на нём)"
+		"<gray>(используйте <dark_gray>(</dark_gray><yellow><key:key.use></yellow><dark_gray>)</dark_gray> <item:'trapped_newbie:letter/star_letter_closed':'<red>письмо дружбы'> на нём)"
 	],
 	"task.limbo_void_fall": [
 		"<#FFE0B2>Начните Ваше <red>эпическое</red> приключение, прыгнув в бездну",
-		"<gray>(по желанию, пока есть бесплатная возможность, подружитесь с другими игроками через <item:trapped_newbie:letter/star_letter_closed> письма дружбы!)"
+		"<gray>(по желанию, пока есть бесплатная возможность, подружитесь с другими игроками через <item:'trapped_newbie:letter/star_letter_closed':'<red>письма дружбы'>!)"
 	],
 	"task.first_possession": [
 		"<#FFE0B2>Вы — <red>призрак</red>. <red>Захватите</red> контроль над другой сущностью.",
-		"<gray>(нажмите <yellow><key:key.use></yellow> пустой рукой по какой-нибудь <yellow>сущности</yellow> с <green>зелёной обводкой</green>, чтобы управлять им)"
+		"<gray>(нажмите <yellow><key:key.use></yellow> пустой рукой по какой-нибудь <yellow>сущности</yellow> с <green>зелёной обводкой</green>, чтобы управлять ею)"
 	],
 	"task.collect_fibers": [
 		"<#FFE0B2>Вы заполучили физическое тело! Но, Вы находитесь в режиме <yellow>приключений</yellow>.",
-		"<#FFE0B2>См. вкладку достижений <item:minecraft:rooted_dirt> <gold>«<lang:adv.trappednewbie.basics.tab.title>»</gold> для руководства по выживанию.",
-		"<#FFE0B2>Для начала, сломайте <item:minecraft:short_grass><space:1><item:minecraft:fern><space:1><item:minecraft:bush><space:1><item:minecraft:short_dry_grass> <yellow>траву</yellow>, чтобы заполучить <item:trapped_newbie:fiber> <red>травяное волокно</red> <collectable>"
+		"<#FFE0B2>См. вкладку достижений <item:'minecraft:rooted_dirt'> <gold>«<lang:adv.trappednewbie.basics.tab.title>»</gold> для руководства по выживанию.",
+		"<#FFE0B2>Для начала, сломайте <item:'minecraft:short_grass;minecraft:fern;minecraft:bush;minecraft:short_dry_grass':'<yellow>травяные растения'>, чтобы заполучить <item:'trapped_newbie:fiber':'<red>травяное волокно'> <collectable>"
 	],
 	"task.craft_twine": [
-		"<#FFE0B2>Создайте <item:trapped_newbie:twine> <red>травяную бечёвку</red> в своём инвентаре",
+		"<#FFE0B2>Создайте <item:'trapped_newbie:twine':'<red>травяную бечёвку'> в своём инвентаре",
 		"<gray>(используйте <yellow>книгу рецептов</yellow> для просмотра рецепта)"
 	],
 	"task.find_gravel": [
-		"<#FFE0B2>Найдите <item:minecraft:gravel> <red>гравий</red> для дальнейшего развития",
-		"<gray>(Вы можете подобрать <item:trapped_newbie:rock> <yellow>камешек</yellow> с земли и ломать <item:minecraft:grass_block><space:1><item:minecraft:dirt><space:1><item:minecraft:coarse_dirt> <yellow>блоки земли</yellow>,",
-		"<gray>пока они не превратятся в <item:minecraft:gravel> <yellow>гравий</yellow>)"
+		"<#FFE0B2>Найдите <item:'minecraft:gravel':'<red>гравий'> для дальнейшего развития",
+		"<gray>(Вы можете подобрать <item:'trapped_newbie:rock;minecraft:flint':'<yellow>камешек<dark_gray>/</dark_gray>кремень'> с земли и ломать ими <item:'minecraft:grass_block;minecraft:dirt;minecraft:coarse_dirt':'<yellow>земляные блоки'>,",
+		"<gray>пока они не превратится в <item:'minecraft:gravel':'<yellow>гравий'>)"
 	],
 	"task.ritual.rain_dance": "Танец дождя",
 	"task.ritual.rain_dance.description": "Заставляет небо плакать",

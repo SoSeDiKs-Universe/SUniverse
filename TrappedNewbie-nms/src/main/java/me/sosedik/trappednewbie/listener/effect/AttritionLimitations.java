@@ -6,19 +6,13 @@ import me.sosedik.trappednewbie.impl.blockstorage.FlowerPotBlockStorage;
 import me.sosedik.utilizer.api.message.Messenger;
 import me.sosedik.utilizer.listener.item.NotDroppableItems;
 import org.bukkit.entity.AbstractHorse;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.InventoryHolder;
-import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NullMarked;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Attrition limits the player
@@ -30,9 +24,10 @@ public class AttritionLimitations implements Listener {
 		NotDroppableItems.addRule(new NotDroppableItems.NotDroppableRule(
 			(entity, item) -> {
 				if (!(entity instanceof Player player)) return false;
+				if (!PossessingPlayer.isPossessing(player)) return false;
 				if (PossessingPlayer.canDropItems(player)) return false;
 
-				HudMessenger.of(player).displayMessage(Messenger.messenger(player).getMessage("attrition.too_high"));
+				HudMessenger.of(player).displayMessage(Messenger.messenger(player).getMessage("attrition.too_low"));
 				return true;
 			})
 			.exclude(AttritionLimitations::isAllowedInventory)
@@ -44,47 +39,19 @@ public class AttritionLimitations implements Listener {
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onOpen(InventoryOpenEvent event) {
 		if (!(event.getPlayer() instanceof Player player)) return;
+		if (!PossessingPlayer.isPossessing(player)) return;
 		if (PossessingPlayer.canOpenInventories(player)) return;
 
 		InventoryHolder holder = event.getInventory().getHolder();
 		if (holder != null && isAllowedInventory(holder)) return;
 
 		event.setCancelled(true);
-		HudMessenger.of(player).displayMessage(Messenger.messenger(player).getMessage("attrition.too_high"));
+		HudMessenger.of(player).displayMessage(Messenger.messenger(player).getMessage("attrition.too_low"));
 	}
 
 	private static boolean isAllowedInventory(InventoryHolder holder) {
 		return holder instanceof FlowerPotBlockStorage // It has GUI, but it's meant to be of primitive kind and there's no better way yet
 			|| holder instanceof AbstractHorse; // Can't open player's own inventory otherwise
-	}
-
-	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	public void onPossessedDeath(EntityDeathEvent event) {
-		LivingEntity entity = event.getEntity();
-		Player rider = entity.getRider();
-		if (rider == null) return;
-		if (PossessingPlayer.getPossessed(rider) != entity) return;
-		if (PossessingPlayer.canKeepItemsOnDeath(rider)) return;
-
-		List<ItemStack> drops = event.getDrops();
-		if (drops.isEmpty()) return;
-
-		drops = new ArrayList<>(drops);
-		event.getDrops().clear();
-		for (ItemStack stack : drops) {
-			int originalAmount = stack.getAmount();
-			int remainingItems = 0;
-
-			for (int i = 0; i < originalAmount; i++) {
-				if (Math.random() > 0.6)
-					remainingItems++;
-			}
-
-			if (remainingItems > 0) {
-				ItemStack remainingStack = stack.asQuantity(remainingItems);
-				event.getDrops().add(remainingStack);
-			}
-		}
 	}
 
 }

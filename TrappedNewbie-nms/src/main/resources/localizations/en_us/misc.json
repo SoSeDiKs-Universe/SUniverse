@@ -44,7 +44,7 @@
 	"item.modifier.halloween_candy": "<gradient:gold:dark_gray>Halloween candy",
 	"item.modifier.goodie_bag": "<dark_gray>Sharing is caring!",
 	"item.modifier.goodie_bag.looter": "<gray><player>'s Goodie Bag",
-	"attrition.too_high": "Your attrition level is too high",
+	"attrition.too_low": "Your attrition level is too low",
 	"gui.next_page": "Next Page",
 	"gui.previous_page": "Previous Page",
 	"gui.soul_travel": "Soul Express (pick destination)",

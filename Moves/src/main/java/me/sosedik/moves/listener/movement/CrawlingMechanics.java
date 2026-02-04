@@ -2,6 +2,7 @@ package me.sosedik.moves.listener.movement;
 
 import com.destroystokyo.paper.event.player.PlayerJumpEvent;
 import me.sosedik.moves.Moves;
+import me.sosedik.moves.api.event.PlayerStartCrawlingEvent;
 import me.sosedik.moves.listener.entity.ShulkerCrawlerHandler;
 import me.sosedik.utilizer.util.LocationUtil;
 import org.bukkit.Location;
@@ -222,6 +223,11 @@ public class CrawlingMechanics implements Listener {
 
 		UUID uuid = player.getUniqueId();
 		if (!CRAWLERS.add(uuid)) return false;
+
+		if (!new PlayerStartCrawlingEvent(player).callEvent()) {
+			CRAWLERS.remove(player.getUniqueId());
+			return false;
+		}
 
 		player.emitSound(Sound.BLOCK_GRASS_STEP, 1F, 0F);
 		player.emitSound(Sound.ITEM_LEAD_BREAK, 1F, 1F);

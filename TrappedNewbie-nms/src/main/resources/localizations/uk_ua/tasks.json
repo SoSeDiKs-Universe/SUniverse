@@ -9,16 +9,17 @@
 		"<gray>(натисніть <yellow><key:key.advancements></yellow>, щоб швидко переглянути меню досягнень)"
 	],
 	"task.obtain_friendship_letter": [
-		"<#FFE0B2>Отримайте <red>лист дружби</red> від <icon:trapped_newbie:heads/wandering_trader> <gold>мандрівного крамаря",
-		"<gray>(поторгуйтесь з ним за допомоги <yellow><key:key.use></yellow>)"
+		"<#FFE0B2>Отримайте <item:'trapped_newbie:letter/star_letter_closed':'<red>лист дружби'> від <icon:trapped_newbie:heads/wandering_trader> <gold>мандрівного крамаря",
+		"<gray>(поторгуйтесь з ним за допомоги <yellow><key:key.use></yellow>)",
+		"<gray>(не забувайте почитувати <yellow>досягнення</yellow> для додаткової інформації)"
 	],
 	"task.befriend_wandering_trader": [
 		"<#FFE0B2>Потоваришуйте з <icon:trapped_newbie:heads/wandering_trader> <gold>мандрівним крамарем",
-		"<gray>(використайте <dark_gray>(</dark_gray><yellow><key:key.use></yellow><dark_gray>)</dark_gray> <item:trapped_newbie:letter/star_letter_closed> <red>лист дружби</red> на ньому)"
+		"<gray>(використайте <dark_gray>(</dark_gray><yellow><key:key.use></yellow><dark_gray>)</dark_gray> <item:'trapped_newbie:letter/star_letter_closed':'<red>лист дружби'> на ньому)"
 	],
 	"task.limbo_void_fall": [
 		"<#FFE0B2>Почніть Вашу <red>епічну</red> пригоду, стрибнувши у прірву",
-		"<gray>(за бажанням, поки є безкоштовна можливість, потоваришуйте з іншими гравцями через <item:trapped_newbie:letter/star_letter_closed> листи дружби!)"
+		"<gray>(за бажанням, поки є безкоштовна можливість, потоваришуйте з іншими гравцями через <item:trapped_newbie:letter/star_letter_closed> <red>листи дружби</red>!)"
 	],
 	"task.first_possession": [
 		"<#FFE0B2>Ви — <red>привид</red>. <red>Захопіть</red> контроль над іншою сутністю.",
@@ -26,17 +27,17 @@
 	],
 	"task.collect_fibers": [
 		"<#FFE0B2>Ви отримали фізичне тіло! Але, Ви перебуваєте в <yellow>пригодницькому</yellow> режимі.",
-		"<#FFE0B2>Див. вкладку досягнень <item:minecraft:rooted_dirt> <gold>«<lang:adv.trappednewbie.basics.tab.title>»</gold> для допомоги по виживанню.",
-		"<#FFE0B2>Для початку, ламайте <item:minecraft:short_grass><space:1><item:minecraft:fern><space:1><item:minecraft:bush><space:1><item:minecraft:short_dry_grass> <yellow>траву</yellow>, щоб отримати <item:trapped_newbie:fiber> <red>трав’яне волокно</red> <collectable>"
+		"<#FFE0B2>Див. вкладку досягнень <item:'minecraft:rooted_dirt'> <gold>«<lang:adv.trappednewbie.basics.tab.title>»</gold> для допомоги по виживанню.",
+		"<#FFE0B2>Для початку, ламайте <item:'minecraft:short_grass;minecraft:fern;minecraft:bush;minecraft:short_dry_grass':'<yellow>трав\\'яні рослини'>, щоб отримати <item:'trapped_newbie:fiber':'<red>трав\\’яне волокно'> <collectable>"
 	],
 	"task.craft_twine": [
-		"<#FFE0B2>Створіть <item:trapped_newbie:twine> <red>трав’яну мотузку</red> в своєму інвентарі",
+		"<#FFE0B2>Створіть <item:'trapped_newbie:twine':'<red>трав\\’яну мотузку'> в своєму інвентарі",
 		"<gray>(використовуйте <yellow>книгу рецептів</yellow> для перегляду рецепту)"
 	],
 	"task.find_gravel": [
-		"<#FFE0B2>Відшукайте <item:minecraft:gravel> <red>гравій</red> для подальшого розвитку",
-		"<gray>(Ви можете підібрати <item:trapped_newbie:rock> <yellow>камінчик</yellow> з землі та ламати <item:minecraft:grass_block><space:1><item:minecraft:dirt><space:1><item:minecraft:coarse_dirt> <yellow>блоки землі</yellow>,",
-		"<gray>поки вони не перетворяться на <item:minecraft:gravel> <yellow>гравій</yellow>)"
+		"<#FFE0B2>Відшукайте <item:'minecraft:gravel':'<red>гравій'> для подальшого розвитку",
+		"<gray>(Ви можете підібрати <item:'trapped_newbie:rock;minecraft:flint':'<yellow>камінчик<dark_gray>/</dark_gray>кремінь'> <item:trapped_newbie:rock> <yellow>камінчик</yellow> з землі та ламати <item:'minecraft:grass_block;minecraft:dirt;minecraft:coarse_dirt':'<yellow>земляні блоки'>,",
+		"<gray>поки вони не перетворяться в <item:'minecraft:gravel':'<yellow>гравій'>)"
 	],
 	"task.ritual.rain_dance": "Танець дощу",
 	"task.ritual.rain_dance.description": "Змушує небо плакати",

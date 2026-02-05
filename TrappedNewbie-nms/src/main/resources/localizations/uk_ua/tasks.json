@@ -27,17 +27,31 @@
 	],
 	"task.collect_fibers": [
 		"<#FFE0B2>Ви отримали фізичне тіло! Але, Ви перебуваєте в <yellow>пригодницькому</yellow> режимі.",
-		"<#FFE0B2>Див. вкладку досягнень <item:'minecraft:rooted_dirt'> <gold>«<lang:adv.trappednewbie.basics.tab.title>»</gold> для допомоги по виживанню.",
-		"<#FFE0B2>Для початку, ламайте <item:'minecraft:short_grass;minecraft:fern;minecraft:bush;minecraft:short_dry_grass':'<yellow>трав\\'яні рослини'>, щоб отримати <item:'trapped_newbie:fiber':'<red>трав\\’яне волокно'> <collectable>"
+		"<gray>(див. вкладку досягнень <item:'minecraft:rooted_dirt'> <gold>«<lang:adv.trappednewbie.basics.tab.title>»</gold> для допомоги по виживанню)",
+		"<#FFE0B2>Для початку, ламайте <item:'minecraft:short_grass;minecraft:fern;minecraft:bush;minecraft:short_dry_grass':'<yellow>травʼяні рослини'>, щоб отримати <item:'trapped_newbie:fiber':'<red>травʼяне волокно'> <collectable>"
+	],
+	"task.get_a_branch": [
+		"<#FFE0B2>Як можете бачити, навіть у режимі <yellow>пригод</yellow> все ще можливо ламати <i>деякі</i> блоки",
+		"<#FFE0B2>Зламайте <item:'minecraft:oak_leaves;minecraft:dead_bush':'<red>листя<dark_gray>/</dark_gray>мертвий кущ'> рукою, щоб отримати <item:'trapped_newbie:oak_branch':'<red>гілки'>",
+		"<gray>(або підберіть ті, що лежать на землі, якщо хочете)"
 	],
 	"task.craft_twine": [
-		"<#FFE0B2>Створіть <item:'trapped_newbie:twine':'<red>трав\\’яну мотузку'> в своєму інвентарі",
+		"<#FFE0B2>Створіть <item:'trapped_newbie:twine':'<red>травʼяну мотузку'> в своєму інвентарі",
 		"<gray>(використовуйте <yellow>книгу рецептів</yellow> для перегляду рецепту)"
 	],
 	"task.find_gravel": [
 		"<#FFE0B2>Відшукайте <item:'minecraft:gravel':'<red>гравій'> для подальшого розвитку",
 		"<gray>(Ви можете підібрати <item:'trapped_newbie:rock;minecraft:flint':'<yellow>камінчик<dark_gray>/</dark_gray>кремінь'> <item:trapped_newbie:rock> <yellow>камінчик</yellow> з землі та ламати <item:'minecraft:grass_block;minecraft:dirt;minecraft:coarse_dirt':'<yellow>земляні блоки'>,",
 		"<gray>поки вони не перетворяться в <item:'minecraft:gravel':'<yellow>гравій'>)"
+	],
+	"task.get_a_flint": [
+		"<#FFE0B2>Роздобудьте <item:'minecraft:flint':'<red>кремінь'>",
+		"<gray>(руйнуйте <item:'minecraft:gravel':'<yellow>гравій'> руками, поки він не випаде,",
+		"<gray>або змайструйте та використайте <item:'trapped_newbie:grass_mesh':'<yellow>сітку з травʼяного волокна'> для збільшеного шансу випадіння)"
+	],
+	"task.get_a_flaked_flint": [
+		"<#FFE0B2>Роздобудьте <item:'trapped_newbie:flaked_flint':'<red>кремнієвий уламок'>",
+		"<gray>(стукайте по типах <item:'minecraft:stone;minecraft:cobblestone':'<yellow>каменю'> <item:'minecraft:flint':'<yellow>кремнем'>, щоб розбити його на уламки)"
 	],
 	"task.ritual.rain_dance": "Танець дощу",
 	"task.ritual.rain_dance.description": "Змушує небо плакати",

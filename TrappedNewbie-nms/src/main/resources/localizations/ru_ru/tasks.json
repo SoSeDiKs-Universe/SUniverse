@@ -27,8 +27,13 @@
 	],
 	"task.collect_fibers": [
 		"<#FFE0B2>Вы заполучили физическое тело! Но, Вы находитесь в режиме <yellow>приключений</yellow>.",
-		"<#FFE0B2>См. вкладку достижений <item:'minecraft:rooted_dirt'> <gold>«<lang:adv.trappednewbie.basics.tab.title>»</gold> для руководства по выживанию.",
+		"<gray>(см. вкладку достижений <item:'minecraft:rooted_dirt'> <gold>«<lang:adv.trappednewbie.basics.tab.title>»</gold> для руководства по выживанию)",
 		"<#FFE0B2>Для начала, сломайте <item:'minecraft:short_grass;minecraft:fern;minecraft:bush;minecraft:short_dry_grass':'<yellow>травяные растения'>, чтобы заполучить <item:'trapped_newbie:fiber':'<red>травяное волокно'> <collectable>"
+	],
+	"task.get_a_branch": [
+		"<#FFE0B2>Как можете видеть, даже в режиме <yellow>приключений</yellow> всё ещё возможно разрушать <i>некоторые</i> блоки",
+		"<#FFE0B2>Теперь, ломайте <item:'minecraft:oak_leaves;minecraft:dead_bush':'<red>листву<dark_gray>/</dark_gray>мёртвый куст'> рукой для заполучения <item:'trapped_newbie:oak_branch':'<red>веток'>",
+		"<gray>(или поднимите лежащие на земле, если хотите)"
 	],
 	"task.craft_twine": [
 		"<#FFE0B2>Создайте <item:'trapped_newbie:twine':'<red>травяную бечёвку'> в своём инвентаре",
@@ -38,6 +43,15 @@
 		"<#FFE0B2>Найдите <item:'minecraft:gravel':'<red>гравий'> для дальнейшего развития",
 		"<gray>(Вы можете подобрать <item:'trapped_newbie:rock;minecraft:flint':'<yellow>камешек<dark_gray>/</dark_gray>кремень'> с земли и ломать ими <item:'minecraft:grass_block;minecraft:dirt;minecraft:coarse_dirt':'<yellow>земляные блоки'>,",
 		"<gray>пока они не превратится в <item:'minecraft:gravel':'<yellow>гравий'>)"
+	],
+	"task.get_a_flint": [
+		"<#FFE0B2>Заполучите <item:'minecraft:flint':'<red>кремень'>",
+		"<gray>(разрушайте <item:'minecraft:gravel':'<yellow>гравий'> руками, пока он не выпадет,",
+		"<gray>либо создайте и используйте <item:'trapped_newbie:grass_mesh':'<yellow>сетку из травяного волокна'> для повышенного шанса выпадения)"
+	],
+	"task.get_a_flaked_flint": [
+		"<#FFE0B2>Заполучите <item:'trapped_newbie:flaked_flint':'<red>кремнёвый осколок'>",
+		"<gray>(стучите о типы <item:'minecraft:stone;minecraft:cobblestone':'<yellow>камня'> <item:'minecraft:flint':'<yellow>кремнем'>, чтобы разбить его на кусочки)"
 	],
 	"task.ritual.rain_dance": "Танец дождя",
 	"task.ritual.rain_dance.description": "Заставляет небо плакать",

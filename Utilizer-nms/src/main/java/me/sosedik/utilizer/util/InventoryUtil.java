@@ -179,7 +179,7 @@ public class InventoryUtil {
 		EntityEquipment inventory = entity.getEquipment();
 		if (inventory == null) return;
 
-		inventory.setItemInMainHand(modifyFolding(inventory.getItemInOffHand(), predicate));
+		inventory.setItemInOffHand(modifyFolding(inventory.getItemInOffHand(), predicate));
 
 		for (EquipmentSlot slot : EquipmentSlot.values()) {
 			if (!entity.canUseEquipmentSlot(slot)) continue;

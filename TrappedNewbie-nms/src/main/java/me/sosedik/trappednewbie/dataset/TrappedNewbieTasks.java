@@ -8,6 +8,7 @@ import me.sosedik.trappednewbie.impl.task.tutorial.FirstPossessionTask;
 import me.sosedik.trappednewbie.impl.task.tutorial.LimboWorldFallTask;
 import me.sosedik.trappednewbie.impl.task.tutorial.MeetWanderingTraderTask;
 import me.sosedik.trappednewbie.impl.task.tutorial.OpenAdvancementsTask;
+import org.bukkit.Material;
 
 public class TrappedNewbieTasks {
 
@@ -26,14 +27,23 @@ public class TrappedNewbieTasks {
 	public static final TaskReference COLLECT_FIBERS = new TaskReference("collect_fibers",
 		p -> new GainItemTask("collect_fibers", p, TrappedNewbieAdvancements.GET_A_FIBER, TrappedNewbieItems.FIBER, 3)
 	);
+	public static final TaskReference GET_A_BRANCH = new TaskReference("get_a_branch",
+		p -> new GainItemTask("get_a_branch", p, TrappedNewbieAdvancements.GET_A_BRANCH, TrappedNewbieTags.BRANCHES)
+	);
 	public static final TaskReference CRAFT_TWINE = new TaskReference("craft_twine",
-		p -> new GainItemTask("craft_twine", p, TrappedNewbieAdvancements.GET_A_FIBER, TrappedNewbieItems.FIBER, 3)
+		p -> new GainItemTask("craft_twine", p, TrappedNewbieAdvancements.MAKE_A_TWINE, TrappedNewbieItems.TWINE)
 	);
 	public static final TaskReference FIND_GRAVEL = new TaskReference("find_gravel", p -> new ObtainAdvancementTask("find_gravel", TrappedNewbieAdvancements.FIND_GRAVEL, p));
+	public static final TaskReference GET_A_FLINT = new TaskReference("get_a_flint",
+		p -> new GainItemTask("get_a_flint", p, TrappedNewbieAdvancements.GET_A_FLINT, Material.FLINT)
+	);
+	public static final TaskReference GET_A_FLAKED_FLINT = new TaskReference("get_a_flaked_flint",
+		p -> new GainItemTask("get_a_flaked_flint", p, TrappedNewbieAdvancements.GET_A_FLAKED_FLINT, TrappedNewbieItems.FLAKED_FLINT)
+	);
 
 	public static final TaskReference[] TUTORIAL_TREE = new TaskReference[]{
 		MEET_WANDERING_TRADER, OPEN_ADVANCEMENTS, OBTAIN_FRIENDSHIP_LETTER, BEFRIEND_WANDERING_TRADER, LIMBO_VOID_FALL,
-		FIRST_POSSESSION, COLLECT_FIBERS, CRAFT_TWINE, FIND_GRAVEL
+		FIRST_POSSESSION, COLLECT_FIBERS, GET_A_BRANCH, CRAFT_TWINE, FIND_GRAVEL, GET_A_FLINT, GET_A_FLAKED_FLINT
 	};
 
 }

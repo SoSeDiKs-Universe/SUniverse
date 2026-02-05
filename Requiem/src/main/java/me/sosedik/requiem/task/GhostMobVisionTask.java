@@ -11,8 +11,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jspecify.annotations.NullMarked;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
 
@@ -39,17 +39,21 @@ public class GhostMobVisionTask extends BukkitRunnable {
 
 		Location loc = this.player.getLocation().addY(this.player.getHeight() / 2);
 
-		new ArrayList<>(this.glowingMobs.values()).forEach(mob -> {
+		Iterator<LivingEntity> iterator = this.glowingMobs.values().iterator();
+		while (iterator.hasNext()) {
+			LivingEntity mob = iterator.next();
 			Location mobLoc = mob.getLocation();
-			if (loc.getWorld() != mobLoc.getWorld()) {
-				this.glowingMobs.remove(mob.getUniqueId());
-				return;
-			}
-			if (mobLoc.distanceSquared(loc) < 900) return;
 
-			this.glowingMobs.remove(mob.getUniqueId());
-			clearGlowing(mob);
-		});
+			if (loc.getWorld() != mobLoc.getWorld()) {
+				iterator.remove();
+				continue;
+			}
+
+			if (mobLoc.distanceSquared(loc) >= 900) {
+				iterator.remove();
+				clearGlowing(mob);
+			}
+		}
 
 		loc.getNearbyLivingEntities(25, entity -> !shouldSkipGlow(entity)).forEach(entity -> {
 			this.glowingMobs.put(entity.getUniqueId(), entity);

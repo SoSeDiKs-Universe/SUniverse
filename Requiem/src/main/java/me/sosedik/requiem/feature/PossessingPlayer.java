@@ -16,6 +16,7 @@ import me.sosedik.requiem.task.PoseMimicingTask;
 import me.sosedik.utilizer.api.storage.player.PlayerDataStorage;
 import me.sosedik.utilizer.util.EntityUtil;
 import me.sosedik.utilizer.util.InventoryUtil;
+import me.sosedik.utilizer.util.ScoreboardUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Tag;
 import org.bukkit.block.data.BlockData;
@@ -138,6 +139,8 @@ public class PossessingPlayer {
 		player.setInvulnerable(false); // Prevents mobs from targeting the player if true
 		player.setSleepingIgnored(true);
 		player.setRemainingAir(entity.getRemainingAir());
+
+		ScoreboardUtil.getPlayerTeam(player).setCanSeeFriendlyInvisibles(false);
 
 		checkPossessedExtraItems(player, false);
 
@@ -287,6 +290,7 @@ public class PossessingPlayer {
 	public static void migrateInventoryAndStatsToPlayer(Player player, LivingEntity entity) {
 		player.getInventory().clear();
 		migrateInvFromEntity(player, entity, true);
+		applyCurses(player, entity);
 	}
 
 	/**
@@ -328,7 +332,9 @@ public class PossessingPlayer {
 				player.getInventory().setItemInMainHand(item);
 			}
 		}
+	}
 
+	public static void applyCurses(Player player, LivingEntity entity) {
 		UnaryOperator<ItemStack> modifier = item -> {
 			if (!item.hasData(DataComponentTypes.TOOL) && !item.hasData(DataComponentTypes.WEAPON) && !MaterialTags.ARMOR.isTagged(item))
 				return item;
@@ -493,7 +499,7 @@ public class PossessingPlayer {
 	}
 
 	private static boolean canHoldHostRevocator(Player player, LivingEntity possessed) {
-		return possessed instanceof Golem || hasAttritionAtOrHigherThan(player, MAX_ATTRITION_LEVEL);
+		return possessed instanceof Golem || !hasAttritionAtOrHigherThan(player, MAX_ATTRITION_LEVEL);
 	}
 
 	private static void removePossessedExtraItems(Player player) {

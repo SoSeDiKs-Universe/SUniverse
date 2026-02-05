@@ -81,9 +81,6 @@ public class LimboWorldFall implements Listener {
 			if (player.getOpenInventory().getTopInventory().getType() != InventoryType.CRAFTING) return;
 			if (PENDING.contains(player.getUniqueId())) return;
 
-			if (TrappedNewbieAdvancements.BRAVE_NEW_WORLD.awardAllCriteria(player))
-				removeFreeFriendshipLetters(player);
-
 			openTPMenu(player);
 		} else {
 			LocationUtil.smartTeleport(player, Utilizer.limboWorld().getSpawnLocation().center(1), false);
@@ -184,12 +181,16 @@ public class LimboWorldFall implements Listener {
 					? Bukkit.getWorlds().getFirst()
 					: PerPlayerWorlds.getResourceWorld(worldOwnerUuid, World.Environment.NORMAL);
 				runTeleport(player, world, null, GhostyPlayer.isGhost(player))
-					.thenRun(() -> PENDING.remove(player.getUniqueId()));
+					.thenRun(() -> {
+						PENDING.remove(player.getUniqueId());
+						if (TrappedNewbieAdvancements.BRAVE_NEW_WORLD.awardAllCriteria(player))
+							removeFreeFriendshipLetters(player);
+					});
 			})
 			.build();
 	}
 
-	private void removeFreeFriendshipLetters(Player player) {
+	private static void removeFreeFriendshipLetters(Player player) {
 		InventoryUtil.modifyItems(player, item -> item.getType() == TrappedNewbieItems.LETTER && LetterModifier.isFriendshipLetter(item) ? ItemStack.empty() : item);
 	}
 

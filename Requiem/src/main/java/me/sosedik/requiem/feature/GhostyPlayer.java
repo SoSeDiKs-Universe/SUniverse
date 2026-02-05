@@ -1,5 +1,7 @@
 package me.sosedik.requiem.feature;
 
+import de.tr7zw.nbtapi.iface.ReadWriteNBT;
+import de.tr7zw.nbtapi.iface.ReadableNBT;
 import me.sosedik.moves.listener.movement.FreeFall;
 import me.sosedik.requiem.Requiem;
 import me.sosedik.requiem.api.event.player.PlayerStartGhostingEvent;
@@ -38,6 +40,7 @@ public class GhostyPlayer {
 	private static final Set<UUID> GHOSTS = new HashSet<>();
 	private static final List<Predicate<Player>> FLIGHT_RULES = new ArrayList<>();
 	private static final List<Predicate<Player>> ITEM_RULES = new ArrayList<>();
+	private static final String GHOST_TAG = "ghost";
 	private static final String AURA_TASK_KEY = "ghost_aura_task";
 	private static final String VISION_TASK_KEY = "ghost_vision_task";
 
@@ -187,14 +190,22 @@ public class GhostyPlayer {
 	 * @param player player
 	 * @return whether the player is now a ghost
 	 */
-	public static boolean loadGhostData(Player player) {
-		if (!player.isInvisible()) return false;
-		if (player.getGameMode().isInvulnerable()) return false;
+	public static boolean loadGhostData(Player player, ReadableNBT data) {
+		if (!data.hasTag(GHOST_TAG)) return false;
 
 		GhostyPlayer.markGhost(player);
 		player.setCooldown(RequiemItems.GHOST_RELOCATOR, 5 * 20);
 
 		return true;
+	}
+
+	public static void saveGhostState(Player player, ReadWriteNBT data, boolean quit) {
+		if (!isGhost(player)) return;
+
+		data.setBoolean(GHOST_TAG, true);
+
+		if (quit)
+			clearGhost(player);
 	}
 
 	/**

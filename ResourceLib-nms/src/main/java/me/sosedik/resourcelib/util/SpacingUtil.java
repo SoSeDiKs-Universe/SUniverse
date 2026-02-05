@@ -177,7 +177,7 @@ public class SpacingUtil {
 				// English
 				case 'I' -> 3;
 				// Cyrillic
-				case 'І', 'Ї' -> 3;
+				case 'І', 'ї' -> 3;
 				case 'Ъ', 'Д' -> 6;
 				case 'Ш', 'Ф', 'Ы', 'Ж', 'Ю' -> 7;
 				case 'Щ' -> 8;
@@ -203,7 +203,7 @@ public class SpacingUtil {
 		} else {
 			return switch (ch) {
 				case '!', '¡', '.', ',', ';', ':', '|' -> 1;
-				case '\'', '`' -> 2;
+				case '\'', '`', 'ʼ' -> 2;
 				case '"', '*', '(', ')', '[', ']', '{', '}', ' ' -> 3;
 				case '<', '>', '°' -> 4;
 				case '@', '~' -> 6;

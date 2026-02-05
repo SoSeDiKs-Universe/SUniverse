@@ -22,6 +22,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import static me.sosedik.delightfulfarming.DelightfulFarming.delightfulFarmingKey;
 import static me.sosedik.trappednewbie.TrappedNewbie.trappedNewbieKey;
 
 /**
@@ -34,7 +35,12 @@ public class AdvancementRecipes implements Listener {
 	private static final Map<IAdvancement, List<NamespacedKey>> RECIPES = new HashMap<>();
 
 	static {
-		addRecipe(TrappedNewbieAdvancements.GET_A_FIBER, trappedNewbieKey("twine"));
+		addRecipe(TrappedNewbieAdvancements.FIRST_POSSESSION,
+			delightfulFarmingKey("roasted_spider_eye_from_smoking")
+		);
+		addRecipe(TrappedNewbieAdvancements.GET_A_FIBER,
+			trappedNewbieKey("twine")
+		);
 		addRecipe(TrappedNewbieAdvancements.GET_A_BRANCH,
 			trappedNewbieKey("acacia_sapling_to_acacia_branch"),
 			trappedNewbieKey("birch_sapling_to_birch_branch"),

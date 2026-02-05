@@ -39,7 +39,7 @@
 		"<#fffec8>вантажопідйомності класу «світлячок»,",
 		"<#fffec8>що став домівкою для його різношерстого екіпажу"
 	],
-	"trophy.get_a_stack_of_tall_grass.name": "<dark_green>Косарка для бур'янів",
+	"trophy.get_a_stack_of_tall_grass.name": "<dark_green>Косарка для бурʼянів",
 	"trophy.get_a_stack_of_tall_grass.lore": [
 		"<dark_green>Ви вже знищили всі бур'ни,",
 		"<dark_green>навіщо Вам це?"
@@ -105,7 +105,7 @@
 	"trophy.trim_with_all_materials.lore": [
 		"<#F6FEFF>Система. Цифровий Всесвіт.",
 		"<#F6FEFF>Я намагався уявити пакети даних,",
-		"<#F6FEFF>що проносяться в комп'ютері.",
+		"<#F6FEFF>що проносяться в компʼютері.",
 		"<#F6FEFF>На що вони схожі? Катери? Мотоцикли?",
 		"<#F6FEFF>Якими дорогами вони мчать?",
 		"<#F6FEFF>Я думав, що ніколи не побачу цей світ моєї мрії.",
@@ -284,7 +284,7 @@
 	"trophy.kill_500_witches_with_lingering_potions.lore": "<light_purple>Ви знаєте, що кажуть! Послідовність — це ключ до успіху!",
 	"trophy.kill_10k_silverfishes.name": "<gray>Видобуток лусківниці",
 	"trophy.kill_10k_silverfishes.lore": [
-		"<gray>Після всього цього Вам вдалося об'єднати все залізо",
+		"<gray>Після всього цього Вам вдалося обʼєднати все залізо",
 		"<gray>і луски з тих лусківниць в один блок"
 	],
 	"trophy.stand_on_a_mansion_spider_spawner.name": "<#D9CACF>Трон павукоподібного",
@@ -345,7 +345,7 @@
 	],
 	"trophy.blow_up_all_monsters_with_tnt.name": "<#DB2F1A>Бумерська футболка",
 	"trophy.blow_up_all_monsters_with_tnt.lore": "<#DB2F1A>Жодних помилок, тільки веселі бум-бумчики",
-	"trophy.more_shields.name": "<#67FF6D>Дерев'яний щит",
+	"trophy.more_shields.name": "<#67FF6D>Деревʼяний щит",
 	"trophy.more_shields.lore": "<#67FF6D>Ви витратили на це 3 стаки дошок",
 	"trophy.die_twice_within_5s.name": "<#F6FFDF>Невдаха",
 	"trophy.die_twice_within_5s.lore": "<#F6FFDF>Використовуйте, щоб не помирати",
@@ -377,18 +377,18 @@
 		"<dark_gray>Ви просиділи в дірі 6 годин. Тепер вона просидить",
 		"<dark_gray>у Вашому інвентарі до кінця Вашого життя."
 	],
-	"trophy.deflect_200.name": "<#BF7960>Незламний бар'єр",
+	"trophy.deflect_200.name": "<#BF7960>Незламний барʼєр",
 	"trophy.deflect_200.lore": [
 		"<#BF7960>Ви не просто заблокували удар,",
 		"<#BF7960>Ви його висміяли."
 	],
-	"trophy.deflect_shield.name": "<#D6B169>Дерев'яний уламок",
+	"trophy.deflect_shield.name": "<#D6B169>Деревʼяний уламок",
 	"trophy.deflect_shield.lore": [
 		"<#D6B169>Кому потрібна міцність, коли можна",
 		"<#D6B169>зламати все одним ударом?"
 	],
 	"trophy.play_365d.name": "<#B92929>Новорічний феєрверк",
-	"trophy.play_365d.lore": "<#B92929>Десять, дев'ять, вісім…",
+	"trophy.play_365d.lore": "<#B92929>Десять, девʼять, вісім…",
 	"trophy.play_1000d.name": "<#FFFFEA>Золотий пісочний годинник",
 	"trophy.play_1000d.lore": [
 		"<#FFFFEA>Ви провели досить тривалий час",
@@ -418,7 +418,7 @@
 	"trophy.eat_10k.lore": "<#176B2E>Вам би не завадило сісти на дієту",
 	"trophy.breed_2500.name": "<#1604FF>Ноїв ковчег",
 	"trophy.breed_2500.lore": "<#1604FF>Потоп насувається",
-	"trophy.kill_25k.name": "<#FFE70F>Квітка на ім'я Квітик",
+	"trophy.kill_25k.name": "<#FFE70F>Квітка на імʼя Квітик",
 	"trophy.kill_25k.lore": "<#FFE70F>Все, що залишилося від Азріеля, принца монстрів",
 	"trophy.kill_500k.name": "<#FF5359>Кривавий Місяць",
 	"trophy.kill_500k.lore": "<#FF5359>Станьте кошмаром",

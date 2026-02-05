@@ -1,6 +1,7 @@
 package me.sosedik.trappednewbie.listener.player;
 
 import me.sosedik.requiem.feature.GhostyPlayer;
+import me.sosedik.trappednewbie.dataset.TrappedNewbieAdvancements;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -17,7 +18,7 @@ public class StartAsGhost implements Listener {
 	@EventHandler(priority = EventPriority.LOW)
 	public void onJoin(PlayerJoinEvent event) {
 		Player player = event.getPlayer();
-		if (player.hasPlayedBefore()) return;
+		if (TrappedNewbieAdvancements.FIRST_POSSESSION.isDone(player)) return;
 
 		GhostyPlayer.markGhost(player);
 	}

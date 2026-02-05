@@ -1,7 +1,7 @@
 {
 	"item.requiem.ghost_relocator.name": "Просторовий переміщувач",
 	"item.requiem.ghost_relocator.lore": [
-		"Вивільніть душу й з'явіться знову",
+		"Вивільніть душу й зʼявіться знову",
 		"(телепортує в випадкову місцевість)"
 	],
 	"item.requiem.ghost_motivator.name": "Викривлювач простору",
@@ -59,7 +59,7 @@
 	"item.requiem.thief_skeleton_tombstone.name": "Скелет злодія",
 	"item.requiem.trident_skeleton_tombstone.name": "Скелет із тризубцем",
 	"item.requiem.unsaved_skeleton_tombstone.name": "Неспасений скелет",
-	"item.requiem.vines_tangled_skeleton_tombstone.name": "Обв'язаний лозами скелет",
+	"item.requiem.vines_tangled_skeleton_tombstone.name": "Обвʼязаний лозами скелет",
 	"item.requiem.waterdrop_skeleton_tombstone.name": "Скелет, що приземлився",
 	"item.requiem.webbed_skeleton_tombstone.name": "Опутаний скелет",
 	"item.requiem.winter_skeleton_tombstone.name": "Зимовий скелет",

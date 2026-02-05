@@ -10,9 +10,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.jspecify.annotations.NullMarked;
 
 /**
@@ -26,7 +23,7 @@ public class LoadSavePlayers implements Listener {
 		Player player = event.getPlayer();
 		ReadWriteNBT data = event.getData();
 		if (!PossessingPlayer.loadPossessingData(player, data))
-			GhostyPlayer.loadGhostData(player);
+			GhostyPlayer.loadGhostData(player, data);
 	}
 
 	@EventHandler
@@ -34,21 +31,10 @@ public class LoadSavePlayers implements Listener {
 		Player player = event.getPlayer();
 		ReadWriteNBT data = event.getData();
 		boolean quit = event.isQuit();
-		PossessingPlayer.savePossessedData(player, data, quit);
-	}
-
-	@EventHandler
-	public void onQuit(PlayerQuitEvent event) {
-		Player player = event.getPlayer();
-		cleanupGhostState(player);
-	}
-
-	private void cleanupGhostState(Player player) {
-		PotionEffect potionEffect = player.getPotionEffect(PotionEffectType.NIGHT_VISION);
-		if (potionEffect == null) return;
-		if (potionEffect.getDuration() != PotionEffect.INFINITE_DURATION) return;
-
-		player.removePotionEffect(PotionEffectType.NIGHT_VISION);
+		if (PossessingPlayer.isPossessing(player))
+			PossessingPlayer.savePossessedData(player, data, quit);
+		else if (GhostyPlayer.isGhost(player))
+			GhostyPlayer.saveGhostState(player, data, quit);
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)

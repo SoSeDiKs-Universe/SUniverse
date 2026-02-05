@@ -60,7 +60,7 @@
 	"trophy.get_a_stack_of_emerald_blocks.lore": "<#E5C0AE>STONKS",
 	"trophy.get_a_stack_of_large_ferns.name": "<#6ADA62>Fern Collector's Medal",
 	"trophy.get_a_stack_of_large_ferns.lore": [
-		"<#6ADA62>You’ve gathered enough grass",
+		"<#6ADA62>You've gathered enough grass",
 		"<#6ADA62>to start your own jungle"
 	],
 	"trophy.trade_a_cookie_at_midnight.name": "<#F9FFAB>Watch",
@@ -186,7 +186,7 @@
 	"trophy.eat_1k_spider_eyes.name": "<#668674>Etho's Anvil",
 	"trophy.eat_1k_spider_eyes.lore": [
 		"<#668674>Awarded to distinguished individuals",
-		"<#668674>who complete Etho’s challenge"
+		"<#668674>who complete Etho's challenge"
 	],
 	"trophy.kill_a_stray_in_a_desert.name": "<#F48522>Molten Ice Cream",
 	"trophy.kill_a_stray_in_a_desert.lore": "<#F48522>Noo! My ice cream! T_T",
@@ -290,7 +290,7 @@
 	],
 	"trophy.stand_on_a_mansion_spider_spawner.name": "<#D9CACF>Arachnid's Throne",
 	"trophy.stand_on_a_mansion_spider_spawner.lore": [
-		"<#D9CACF>Hope you’re not afraid of",
+		"<#D9CACF>Hope you're not afraid of",
 		"<#D9CACF>eight-legged roommates!"
 	],
 	"trophy.kill_a_warden.name": "<#074A5A>Warden Head",
@@ -300,7 +300,7 @@
 		"<#074A5A>You: Hold my Golden Carrots."
 	],
 	"trophy.get_a_warden_to_the_height_limit.name": "<#1C99A1>The Warden's Sign",
-	"trophy.get_a_warden_to_the_height_limit.lore": "<#1C99A1>This sign can’t stop me because I can't see!",
+	"trophy.get_a_warden_to_the_height_limit.lore": "<#1C99A1>This sign can't stop me because I can't see!",
 	"trophy.be_near_20_ravagers.name": "<#7F8399>Ravager Plushie",
 	"trophy.be_near_20_ravagers.lore": [
 		"<#7F8399>You've grown accustomed to it, and now it's",

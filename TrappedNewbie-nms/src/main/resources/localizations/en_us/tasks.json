@@ -28,8 +28,13 @@
 	],
 	"task.collect_fibers": [
 		"<#FFE0B2>You've gained a physical body! Alas, you are in an <yellow>adventure</yellow> mode.",
-		"<#FFE0B2>See <item:'minecraft:rooted_dirt'> <gold>«<lang:adv.trappednewbie.basics.tab.title>»</gold> advancements tab for survival guidance.",
+		"<gray>(see <item:'minecraft:rooted_dirt'> <gold>«<lang:adv.trappednewbie.basics.tab.title>»</gold> advancements tab for survival guidance)",
 		"<#FFE0B2>First, break some <item:'minecraft:short_grass;minecraft:fern;minecraft:bush;minecraft:short_dry_grass':'<yellow>grassy plants'> until you get <item:'trapped_newbie:fiber':'<red>Plant Fibers'> <collectable>"
+	],
+	"task.get_a_branch": [
+		"<#FFE0B2>As you may see, even in <yellow>adventure</yellow> mode you can still break <i>some</i> blocks",
+		"<#FFE0B2>Now, break some <item:'minecraft:oak_leaves;minecraft:dead_bush':'<red>Leaves<dark_gray>/</dark_gray>Deadbush'> with an arm to obtain a <item:'trapped_newbie:oak_branch':'<red>Branch'>",
+		"<gray>(or pickup some laying on the ground if you wish)"
 	],
 	"task.craft_twine": [
 		"<#FFE0B2>Craft a <item:'trapped_newbie:twine':'<red>Plant Twine'> from your inventory",
@@ -37,8 +42,17 @@
 	],
 	"task.find_gravel": [
 		"<#FFE0B2>Find some <item:'minecraft:gravel':'<red>Gravel'> for further progression",
-		"<gray>(you can pick up a <item:'trapped_newbie:rock;minecraft:flint':'<yellow>Rock<dark_gray>/</dark_gray>Flint'> laying on a ground and break <item:'minecraft:grass_block;minecraft:dirt;minecraft:coarse_dirt':'<yellow>Dirts'>",
-		"<gray>with them until dirts convert into <item:'minecraft:gravel':'<yellow>Gravel'>)"
+		"<gray>(you can pick up a <item:'trapped_newbie:rock':'<yellow>Rock'> laying on a ground and break <item:'minecraft:grass_block;minecraft:dirt;minecraft:coarse_dirt':'<yellow>Dirts'>",
+		"<gray>with it until they convert into <item:'minecraft:gravel':'<yellow>Gravel'>)"
+	],
+	"task.get_a_flint": [
+		"<#FFE0B2>Obtain a <item:'minecraft:flint':'<red>Flint'>",
+		"<gray>(break <item:'minecraft:gravel':'<yellow>Gravel'> with your fists until you get one",
+		"<gray>or make and use a <item:'trapped_newbie:grass_mesh':'<yellow>Grass Mesh'> for increased drop chances)"
+	],
+	"task.get_a_flaked_flint": [
+		"<#FFE0B2>Obtain a <item:'trapped_newbie:flaked_flint':'<red>Flaked Flint'>",
+		"<gray>(hit <item:'minecraft:stone;minecraft:cobblestone':'<yellow>Stone-like'> blocks with your <item:'minecraft:flint':'<yellow>Flint'> to crush it into pieces)"
 	],
 	"task.ritual.rain_dance": "Rain Dance",
 	"task.ritual.rain_dance.description": "Makes the sky cry",

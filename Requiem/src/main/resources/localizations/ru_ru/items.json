@@ -10,7 +10,7 @@
 	"item.requiem.host_revocator.lore": [
 		"Используйте (<yellow><key:key.use></yellow>), чтобы покинуть тело хоста",
 		"",
-		"Бросьте (<yellow><key:key.use></yellow>) сюда предмет из инвентаря,",
+		"Бросьте (через <yellow><key:key.use></yellow>) сюда предмет из инвентаря,",
 		"чтобы отправить его в Бездну"
 	],
 	"item.requiem.creeper_heart.name": "Сердце крипера",

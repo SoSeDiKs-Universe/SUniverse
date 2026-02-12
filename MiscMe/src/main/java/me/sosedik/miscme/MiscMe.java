@@ -7,6 +7,7 @@ import me.sosedik.miscme.impl.item.modifier.BookAuthorOnlineModifier;
 import me.sosedik.miscme.impl.item.modifier.ClockModifier;
 import me.sosedik.miscme.impl.item.modifier.ColoredShulkerShellModifier;
 import me.sosedik.miscme.impl.item.modifier.CompassModifier;
+import me.sosedik.miscme.impl.item.modifier.CustomPaintingDescriptionModifier;
 import me.sosedik.miscme.impl.item.modifier.DepthMeterModifier;
 import me.sosedik.miscme.impl.item.modifier.DurabilityTooltipModifier;
 import me.sosedik.miscme.impl.item.modifier.EnchantmentTooltipModifier;
@@ -59,6 +60,7 @@ import me.sosedik.miscme.listener.entity.MinecartSlimeBoost;
 import me.sosedik.miscme.listener.entity.MobPatting;
 import me.sosedik.miscme.listener.entity.MoreBabyMobs;
 import me.sosedik.miscme.listener.entity.MovingMinecartsHurtEntities;
+import me.sosedik.miscme.listener.entity.PaintingsKeepVariant;
 import me.sosedik.miscme.listener.entity.PrimingExplosiveMinecart;
 import me.sosedik.miscme.listener.entity.RainbowSheepDropRandomWool;
 import me.sosedik.miscme.listener.entity.ReleaseEntityFromVehicle;
@@ -80,6 +82,7 @@ import me.sosedik.miscme.listener.item.ImmersiveDyes;
 import me.sosedik.miscme.listener.item.InventoryRefresher;
 import me.sosedik.miscme.listener.item.ItemRightClickMessages;
 import me.sosedik.miscme.listener.item.NoSwordInstaBreak;
+import me.sosedik.miscme.listener.item.PaintingSwitcher;
 import me.sosedik.miscme.listener.item.ReadableBooksInFrames;
 import me.sosedik.miscme.listener.item.ShovelsConvertAdditionalBlocks;
 import me.sosedik.miscme.listener.item.ShovelsRemoveSnow;
@@ -140,6 +143,7 @@ public final class MiscMe extends JavaPlugin {
 		new ClockModifier(miscMeKey("clock")).register();
 		new ColoredShulkerShellModifier(miscMeKey("colored_shulker_shell")).register();
 		new CompassModifier(miscMeKey("compass")).register();
+		new CustomPaintingDescriptionModifier(miscMeKey("painting_description")).register();
 		new DepthMeterModifier(miscMeKey("depth_meter")).register();
 		new DurabilityTooltipModifier(miscMeKey("durability_tooltip")).register();
 		new EnchantmentTooltipModifier(miscMeKey("enchantment_tooltip")).register();
@@ -198,6 +202,7 @@ public final class MiscMe extends JavaPlugin {
 			MobPatting.class,
 			MoreBabyMobs.class,
 			MovingMinecartsHurtEntities.class,
+			PaintingsKeepVariant.class,
 			PrimingExplosiveMinecart.class,
 			RainbowSheepDropRandomWool.class,
 			ReleaseEntityFromVehicle.class,
@@ -221,6 +226,7 @@ public final class MiscMe extends JavaPlugin {
 			InventoryRefresher.class,
 			ItemRightClickMessages.class,
 			NoSwordInstaBreak.class,
+			PaintingSwitcher.class,
 			ReadableBooksInFrames.class,
 			ShovelsConvertAdditionalBlocks.class,
 			ShovelsRemoveSnow.class,

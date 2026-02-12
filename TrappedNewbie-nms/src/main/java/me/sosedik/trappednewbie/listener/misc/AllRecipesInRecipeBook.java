@@ -50,6 +50,7 @@ import org.bukkit.inventory.CookingRecipe;
 import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ItemType;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapedRecipe;
@@ -527,11 +528,11 @@ public class AllRecipesInRecipeBook implements Listener {
 
 	// MCCheck: 1.21.11, new potion mixes
 	private static void addVanillaPotionMixes() { // From PotionBrewing class
-		addVanillaPotionMix("splash_potion", "", List.of(ItemStack.of(Material.SPLASH_POTION)), new RecipeChoice.MaterialChoice(Material.GUNPOWDER), new RecipeChoice.MaterialChoice(Material.POTION), null, null);
-		addVanillaPotionMix("lingering_potion", "", List.of(ItemStack.of(Material.LINGERING_POTION)), new RecipeChoice.MaterialChoice(Material.DRAGON_BREATH), new RecipeChoice.MaterialChoice(Material.SPLASH_POTION), null, null);
+		addVanillaPotionMix("splash_potion", "", List.of(ItemStack.of(Material.SPLASH_POTION)), RecipeChoice.itemType(ItemType.GUNPOWDER), RecipeChoice.itemType(ItemType.POTION), null, null);
+		addVanillaPotionMix("lingering_potion", "", List.of(ItemStack.of(Material.LINGERING_POTION)), RecipeChoice.itemType(ItemType.DRAGON_BREATH), RecipeChoice.itemType(ItemType.SPLASH_POTION), null, null);
 		ItemStack waterPotion = ThirstData.of(WaterAwareBottleReset.getWaterBottle(1)).withThirstChance(0.5F).saveInto(WaterAwareBottleReset.getWaterBottle(1));
 		addVanillaPotionMix("", PotionType.MUNDANE, potions(PotionType.MUNDANE), new RecipeChoice.ExactChoice(BrewingCraft.MUNDANE_INGREDIENTS.stream().map(ItemStack::of).toList()), new RecipeChoice.ExactChoice(waterPotion), null, null);
-		addVanillaPotionMix("", PotionType.THICK, potions(PotionType.THICK), new RecipeChoice.MaterialChoice(Material.GLOWSTONE_DUST), new RecipeChoice.ExactChoice(waterPotion), null, null);
+		addVanillaPotionMix("", PotionType.THICK, potions(PotionType.THICK), RecipeChoice.itemType(ItemType.GLOWSTONE_DUST), new RecipeChoice.ExactChoice(waterPotion), null, null);
 		addVanillaPotionMix("", PotionType.AWKWARD, potions(PotionType.AWKWARD), new RecipeChoice.ExactChoice(ItemStack.of(Material.NETHER_WART)), new RecipeChoice.ExactChoice(waterPotion), null, null);
 		addVanillaPotionMix("", PotionType.NIGHT_VISION, Material.GOLDEN_CARROT, null, PotionType.LONG_NIGHT_VISION);
 		addVanillaPotionMix("", PotionType.INVISIBILITY, Material.FERMENTED_SPIDER_EYE, PotionType.NIGHT_VISION, null, PotionType.LONG_INVISIBILITY);
@@ -573,7 +574,7 @@ public class AllRecipesInRecipeBook implements Listener {
 			type.key().value() + "_potion_from_" + ingredient.key().value(),
 			group,
 			potions(type),
-			new RecipeChoice.MaterialChoice(ingredient),
+			RecipeChoice.itemType(ingredient.asItemType()),
 			new RecipeChoice.ExactChoice(choices),
 			upgraded == null ? null : potions(upgraded),
 			extended == null ? null : potions(extended)
@@ -589,7 +590,7 @@ public class AllRecipesInRecipeBook implements Listener {
 			type.key().value() + "_potion_from_" + ingredient.key().value(),
 			group,
 			potions(type),
-			new RecipeChoice.MaterialChoice(ingredient),
+			RecipeChoice.itemType(ingredient.asItemType()),
 			new RecipeChoice.ExactChoice(MiscUtil.combineToList(potions(base), upgraded == null ? potions(extended) : potions(upgraded))),
 			upgraded == null ? null : potions(upgraded),
 			extended == null ? null : potions(extended)

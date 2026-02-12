@@ -49,5 +49,12 @@
 	"compass.south_east": "<white>↘</white> SE",
 	"compass.south_west": "<white>↙</white> SW",
 	"item.luxmeter.light_level": "<gray><!i>Light level: <level> (<sky> sky, <block> block)",
-	"item.luxmeter.light_level.click": "Light level: <level> (<sky> sky, <block> block)"
+	"item.luxmeter.light_level.click": "Light level: <level> (<sky> sky, <block> block)",
+	"paintings.picker.use": [
+		"<yellow><!i><key:key.sneak> + <key:key.use> onto air",
+		"<yellow><!i>to pick a painting"
+	],
+	"paintings.picker.title": "Painting Picker",
+	"paintings.picker.filter.title": "Filter by name/author",
+	"paintings.picker.filter.apply": "Apply filter"
 }

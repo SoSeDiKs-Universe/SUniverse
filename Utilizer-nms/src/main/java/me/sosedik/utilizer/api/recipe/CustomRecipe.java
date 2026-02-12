@@ -1,9 +1,11 @@
 package me.sosedik.utilizer.api.recipe;
 
 import org.bukkit.Keyed;
+import org.bukkit.Registry;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.RecipeChoice;
+import org.jetbrains.annotations.Unmodifiable;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -44,9 +46,10 @@ public interface CustomRecipe extends Recipe, Keyed {
 	}
 
 	@SuppressWarnings("deprecation")
-	static List<ItemStack> getFromChoice(RecipeChoice recipeChoice) {
+	static @Unmodifiable List<ItemStack> getFromChoice(RecipeChoice recipeChoice) {
 		return switch (recipeChoice) {
 			case RecipeChoice.ExactChoice choice -> choice.getChoices();
+			case RecipeChoice.ItemTypeChoice choice -> choice.itemTypes().values().stream().map(key -> Registry.ITEM.getOrThrow(key).createItemStack()).toList();
 			case RecipeChoice.MaterialChoice choice -> choice.getChoices().stream().map(ItemStack::of).toList();
 			default -> List.of(recipeChoice.getItemStack());
 		};

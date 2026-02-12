@@ -45,6 +45,7 @@ import org.bukkit.DyeColor;
 import org.bukkit.Keyed;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Registry;
 import org.bukkit.Tag;
 import org.bukkit.damage.DamageSource;
 import org.bukkit.enchantments.Enchantment;
@@ -507,9 +508,9 @@ public class TrappedNewbieRecipes {
 			.addIngredients('C', Material.DIAMOND)
 			.register();
 		Bukkit.addRecipe(new SmithingTransformRecipe(trappedNewbieKey("netherite_bucket"), BucketModifier.BucketType.NETHERITE.save(ItemStack.of(Material.BUCKET)),
-			new RecipeChoice.MaterialChoice(Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
+			RecipeChoice.itemType(ItemType.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
 			CustomRecipe.makeChoice(BucketModifier.BucketType.DIAMOND.save(ItemStack.of(Material.BUCKET)), item -> BucketModifier.BucketType.fromBucket(item) == BucketModifier.BucketType.DIAMOND),
-			new RecipeChoice.MaterialChoice(Material.NETHERITE_INGOT),
+			RecipeChoice.itemType(ItemType.NETHERITE_INGOT),
 			true
 		));
 
@@ -917,7 +918,10 @@ public class TrappedNewbieRecipes {
 		if (recipe instanceof ShapedRecipe shapedRecipe) {
 			Map<Character, RecipeChoice> choiceMap = shapedRecipe.getChoiceMap();
 			for (Map.Entry<Character, RecipeChoice> entry : choiceMap.entrySet()) {
-				RecipeChoice choice = updateChoice(replacements, entry.getValue(), ((Keyed) recipe).getKey());
+				RecipeChoice choice = entry.getValue();
+				if (choice == null) continue;
+
+				choice = updateChoice(replacements, choice, ((Keyed) recipe).getKey());
 				if (choice == null) continue;
 
 				modified = true;
@@ -942,30 +946,49 @@ public class TrappedNewbieRecipes {
 		Set<ItemStack> items = new HashSet<>(); // Avoid duplicates if recipes already account for replacements
 		Predicate<ItemStack> predicate = null;
 		boolean modified = false;
-		if (recipeChoice instanceof RecipeChoice.MaterialChoice materialChoice) {
-			for (Material material : materialChoice.getChoices()) {
-				IngredientReplacement replacements = map.get(material);
-				if (replacements == null || replacements.exclusions().contains(recipeKey)) {
-					items.add(ItemStack.of(material));
-				} else {
-					modified = true;
-					predicate = replacements.ingredientCheck;
-					items.addAll(replacements.ingredients());
-				}
-			}
-		} else if (recipeChoice instanceof RecipeChoice.ExactChoice exactChoice) {
-			predicate = exactChoice.getPredicate();
-			for (ItemStack item : exactChoice.getChoices()) {
-				IngredientReplacement replacements = map.get(item.getType());
-				if (replacements == null || replacements.exclusions().contains(recipeKey)) {
-					items.add(item);
-				} else {
-					modified = true;
-					if (predicate == null)
+		switch (recipeChoice) {
+			case RecipeChoice.ItemTypeChoice itemTypeChoice -> {
+				for (TypedKey<ItemType> key : itemTypeChoice.itemTypes()) {
+					Material material = Registry.ITEM.getOrThrow(key).asMaterial();
+					if (material == null)
+						throw new RuntimeException("Couldn't get material for " + key);
+					IngredientReplacement replacements = map.get(material);
+					if (replacements == null || replacements.exclusions().contains(recipeKey)) {
+						items.add(ItemStack.of(material));
+					} else {
+						modified = true;
 						predicate = replacements.ingredientCheck;
-					items.addAll(replacements.ingredients());
+						items.addAll(replacements.ingredients());
+					}
 				}
 			}
+			case RecipeChoice.MaterialChoice materialChoice -> {
+				for (Material material : materialChoice.getChoices()) {
+					IngredientReplacement replacements = map.get(material);
+					if (replacements == null || replacements.exclusions().contains(recipeKey)) {
+						items.add(ItemStack.of(material));
+					} else {
+						modified = true;
+						predicate = replacements.ingredientCheck;
+						items.addAll(replacements.ingredients());
+					}
+				}
+			}
+			case RecipeChoice.ExactChoice exactChoice -> {
+				predicate = exactChoice.getPredicate();
+				for (ItemStack item : exactChoice.getChoices()) {
+					IngredientReplacement replacements = map.get(item.getType());
+					if (replacements == null || replacements.exclusions().contains(recipeKey)) {
+						items.add(item);
+					} else {
+						modified = true;
+						if (predicate == null)
+							predicate = replacements.ingredientCheck;
+						items.addAll(replacements.ingredients());
+					}
+				}
+			}
+			default -> {}
 		}
 
 		if (!modified) return null;

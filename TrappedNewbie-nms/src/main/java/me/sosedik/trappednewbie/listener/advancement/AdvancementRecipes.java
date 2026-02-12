@@ -36,6 +36,7 @@ public class AdvancementRecipes implements Listener {
 
 	static {
 		addRecipe(TrappedNewbieAdvancements.FIRST_POSSESSION,
+			delightfulFarmingKey("roasted_spider_eye_from_campfire_cooking"),
 			delightfulFarmingKey("roasted_spider_eye_from_smoking")
 		);
 		addRecipe(TrappedNewbieAdvancements.GET_A_FIBER,

@@ -431,31 +431,35 @@ public class TrappedNewbieAdvancements {
 			.withReward(rewards().withExp(50).addItems(ItemStack.of(Material.FLINT, 8)))
 			.requiredProgress(vanilla(inventoryChanged().withItems(ItemTriggerCondition.of(Material.FLINT).withMinAmount(64))))
 			.buildAndRegister();
-	public static final IAdvancement CAMPING_OUT = buildBase(MAKE_ROUGH_STICKS, "camping_out").display(display().xy(1.2F, -1F).withAdvancementFrame(AdvancementFrame.BLOCK).icon(Material.CAMPFIRE))
-			.withReward(rewards().withExp(10).addItems(ItemStack.of(TrappedNewbieItems.ROUGH_STICK, 4))) // TODO ghastshmallow
-			.visibilityRule(parentGranted())
-			.buildAndRegister();
-	public static final IAdvancement SPAWN_CAMPING = buildBase(CAMPING_OUT, "spawn_camping").display(display().xy(0.5F, 1F).withAdvancementFrame(AdvancementFrame.STAR).fancyDescriptionParent(NamedTextColor.AQUA).icon(Material.ENDER_EYE))
-			.withReward(rewards().withExp(50).addItems(ItemStack.of(Material.PORKCHOP, 16)))
-			.buildAndRegister();
-	public static final IAdvancement NOT_SPAWN_CAMPING = buildBase(SPAWN_CAMPING, "not_spawn_camping").display(display().xy(1F, 0.3F).challengeFrame().torture().fancyDescriptionParent(NamedTextColor.DARK_RED).icon(() -> {
-				var item = ItemStack.of(Material.CAMPFIRE);
-				item.setBlockData(Material.CAMPFIRE.createBlockData(data -> ((Campfire) data).setLit(true)));
-				return item;
-			}))
-			.withReward(rewards()
-				.withTrophy(ItemStack.of(Material.COMPASS))
-			)
-			.buildAndRegister();
-	public static final IAdvancement CORNER_CAMPING = buildBase(NOT_SPAWN_CAMPING, "corner_camping").display(display().xy(1F, 0.3F).withAdvancementFrame(AdvancementFrame.BUTTERFLY).torture().fancyDescriptionParent(NamedTextColor.DARK_RED).icon(() -> {
-				var item = ItemStack.of(Material.SOUL_CAMPFIRE);
-				item.setBlockData(Material.SOUL_CAMPFIRE.createBlockData(data -> ((Campfire) data).setLit(true)));
-				return item;
-			}))
-			.withReward(rewards()
-				.withTrophy(ItemStack.of(Material.BOW))
-			)
-			.buildAndRegister();
+	public static final IAdvancement CAMPING_OUT = buildBase(MAKE_ROUGH_STICKS, "camping_out")
+		.display(display().xy(1.2F, -1F).withAdvancementFrame(AdvancementFrame.BLOCK).icon(Material.CAMPFIRE))
+		.withReward(rewards().withExp(10).addItems(ItemStack.of(TrappedNewbieItems.ROUGH_STICK, 4))) // TODO ghastshmallow
+		.visibilityRule(parentGranted())
+		.buildAndRegister();
+	public static final IAdvancement SPAWN_CAMPING = buildBase(CAMPING_OUT, "spawn_camping")
+		.display(display().xy(0.5F, 1F).withAdvancementFrame(AdvancementFrame.CHALLENGE).fancyDescriptionParent(NamedTextColor.AQUA).icon(Material.ENDER_EYE))
+		.withReward(rewards().withExp(50).addItems(ItemStack.of(Material.PORKCHOP, 16)))
+		.buildAndRegister();
+	public static final IAdvancement NOT_SPAWN_CAMPING = buildBase(SPAWN_CAMPING, "not_spawn_camping")
+		.display(display().xy(1F, 0.3F).withAdvancementFrame(AdvancementFrame.STAR).torture().fancyDescriptionParent(NamedTextColor.DARK_RED).icon(() -> {
+			var item = ItemStack.of(Material.CAMPFIRE);
+			item.setBlockData(Material.CAMPFIRE.createBlockData(data -> ((Campfire) data).setLit(true)));
+			return item;
+		}))
+		.withReward(rewards()
+			.withTrophy(ItemStack.of(Material.COMPASS))
+		)
+		.buildAndRegister();
+	public static final IAdvancement CORNER_CAMPING = buildBase(NOT_SPAWN_CAMPING, "corner_camping")
+		.display(display().xy(1F, 0.3F).withAdvancementFrame(AdvancementFrame.BUTTERFLY).torture().fancyDescriptionParent(NamedTextColor.DARK_RED).icon(() -> {
+			var item = ItemStack.of(Material.SOUL_CAMPFIRE);
+			item.setBlockData(Material.SOUL_CAMPFIRE.createBlockData(data -> ((Campfire) data).setLit(true)));
+			return item;
+		}))
+		.withReward(rewards()
+			.withTrophy(ItemStack.of(Material.BOW))
+		)
+		.buildAndRegister();
 	public static final IAdvancement MAKE_A_FIRE = buildBase(CAMPING_OUT, "make_a_fire").display(display().x(1F).goalFrame().icon(TrappedNewbieItems.INVENTORY_FIRE))
 			.buildAndRegister();
 	public static final IAdvancement MAKE_A_FIRE_FILLER = buildFake(MAKE_A_FIRE).display(display().x(0.5F).isHidden(true))

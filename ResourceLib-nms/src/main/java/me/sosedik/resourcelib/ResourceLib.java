@@ -84,8 +84,8 @@ public class ResourceLib extends JavaPlugin {
 			SpaceTag.SPACE
 		);
 
-		new CustomNameModifier(resourceLibKey("custom_name")).register();
 		new CustomLoreModifier(resourceLibKey("custom_lore")).register();
+		new CustomNameModifier(resourceLibKey("custom_name")).register();
 		new ExtraItemComponentsModifier(resourceLibKey("extra_components")).register();
 
 		EventUtil.registerListeners(this,

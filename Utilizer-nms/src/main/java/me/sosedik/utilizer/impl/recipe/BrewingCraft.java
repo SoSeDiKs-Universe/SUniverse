@@ -10,6 +10,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ItemType;
 import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.potion.PotionType;
 import org.jspecify.annotations.NullMarked;
@@ -91,7 +92,7 @@ public class BrewingCraft extends OneItemRecipe<BrewingCraft> implements CustomR
 	public BrewingCraft splash(ItemStack result) {
 		result = result.clone();
 		this.splash = result;
-		Bukkit.getPotionBrewer().addPotionMix(new PotionMix(new NamespacedKey(this.key.namespace(), this.key.value() + "_splash" + RECIPE_SUFFIX), result, new RecipeChoice.ExactChoice(this.result), new RecipeChoice.MaterialChoice(Material.GUNPOWDER)));
+		Bukkit.getPotionBrewer().addPotionMix(new PotionMix(new NamespacedKey(this.key.namespace(), this.key.value() + "_splash" + RECIPE_SUFFIX), result, new RecipeChoice.ExactChoice(this.result), RecipeChoice.itemType(ItemType.GUNPOWDER)));
 		return this;
 	}
 
@@ -99,7 +100,7 @@ public class BrewingCraft extends OneItemRecipe<BrewingCraft> implements CustomR
 		result = result.clone();
 		this.lingering = result;
 		assert this.splash != null;
-		Bukkit.getPotionBrewer().addPotionMix(new PotionMix(new NamespacedKey(this.key.namespace(), this.key.value() + "_lingering" + RECIPE_SUFFIX), result, new RecipeChoice.ExactChoice(this.splash), new RecipeChoice.MaterialChoice(Material.DRAGON_BREATH)));
+		Bukkit.getPotionBrewer().addPotionMix(new PotionMix(new NamespacedKey(this.key.namespace(), this.key.value() + "_lingering" + RECIPE_SUFFIX), result, new RecipeChoice.ExactChoice(this.splash), RecipeChoice.itemType(ItemType.DRAGON_BREATH)));
 		return this;
 	}
 

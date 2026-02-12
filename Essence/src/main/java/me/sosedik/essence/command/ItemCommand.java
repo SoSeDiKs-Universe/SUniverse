@@ -1,11 +1,10 @@
 package me.sosedik.essence.command;
 
 import io.papermc.paper.command.brigadier.CommandSourceStack;
-import io.papermc.paper.registry.RegistryAccess;
-import io.papermc.paper.registry.RegistryKey;
 import me.sosedik.essence.Essence;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Registry;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.incendo.cloud.annotation.specifier.Range;
@@ -29,7 +28,7 @@ public class ItemCommand {
 	private final List<String> suggestions;
 
 	public ItemCommand() {
-		this.suggestions = RegistryAccess.registryAccess().getRegistry(RegistryKey.ITEM).keyStream()
+		this.suggestions = Registry.ITEM.keyStream()
 			.map(NamespacedKey::asString)
 			.toList();
 	}

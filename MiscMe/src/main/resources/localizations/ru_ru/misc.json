@@ -49,5 +49,12 @@
 	"compass.south_east": "<white>↘</white> ЮВ",
 	"compass.south_west": "<white>↙</white> ЮЗ",
 	"item.luxmeter.light_level": "<gray><!i>Уровень света: <level> (<sky> небо, <block> блок)",
-	"item.luxmeter.light_level.click": "Уровень света: <level> (<sky> небо, <block> блок)"
+	"item.luxmeter.light_level.click": "Уровень света: <level> (<sky> небо, <block> блок)",
+	"paintings.picker.use": [
+		"<yellow><!i><key:key.sneak> + <key:key.use> по воздуху",
+		"<yellow><!i>для выбора картины"
+	],
+	"paintings.picker.title": "Выбор картины",
+	"paintings.picker.filter.title": "Фильтровать по названию/автору",
+	"paintings.picker.filter.apply": "Применить фильтр"
 }

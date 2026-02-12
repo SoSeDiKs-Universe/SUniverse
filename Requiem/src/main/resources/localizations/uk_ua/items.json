@@ -10,7 +10,7 @@
 	"item.requiem.host_revocator.lore": [
 		"Використайте (<yellow><key:key.use></yellow>), щоб покинути тіло хосту",
 		"",
-		"Киньте (<yellow><key:key.use></yellow>) сюди предмет із інвентаря,",
+		"Киньте (через <yellow><key:key.use></yellow>) сюди предмет із інвентаря,",
 		"щоб відправити його в Безодню"
 	],
 	"item.requiem.creeper_heart.name": "Серце кріпера",

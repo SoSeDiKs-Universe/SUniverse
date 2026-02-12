@@ -65,6 +65,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.DefaultAttributes;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.animal.Bucketable;
+import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -480,9 +481,60 @@ public class TrappedNewbieBootstrap implements PluginBootstrap {
 			ResourceLibBootstrap.getComponentsMap(Items.WATER_BUCKET).put(DataComponents.USE_REMAINDER, new UseRemainder(new ItemStack(Items.BUCKET)));
 			ResourceLibBootstrap.getComponentsMap(Items.WATER_BUCKET).put(DataComponents.CONSUMABLE, Consumables.defaultDrink().consumeSeconds(8F).build());
 			ExtraItemComponentsModifier.addExtra(Material.WATER_BUCKET, DataComponentTypes.USE_REMAINDER, DataComponentTypes.CONSUMABLE);
+
 			ResourceLibBootstrap.getComponentsMap(Items.LAVA_BUCKET).put(DataComponents.USE_REMAINDER, new UseRemainder(new ItemStack(Items.BUCKET)));
 			ResourceLibBootstrap.getComponentsMap(Items.LAVA_BUCKET).put(DataComponents.CONSUMABLE, Consumables.defaultDrink().consumeSeconds(8F).build());
 			ExtraItemComponentsModifier.addExtra(Material.LAVA_BUCKET, DataComponentTypes.USE_REMAINDER, DataComponentTypes.CONSUMABLE);
+
+			Map.ofEntries(
+				Map.entry(Items.SUGAR, Material.SUGAR),
+				Map.entry(Items.BLAZE_POWDER, Material.BLAZE_POWDER),
+				Map.entry(Items.GLOWSTONE_DUST, Material.GLOWSTONE_DUST),
+				Map.entry(Items.SLIME_BALL, Material.SLIME_BALL),
+				Map.entry(Items.MAGMA_CREAM, Material.MAGMA_CREAM),
+				Map.entry(Items.GHAST_TEAR, Material.GHAST_TEAR),
+				Map.entry(Items.PHANTOM_MEMBRANE, Material.PHANTOM_MEMBRANE),
+				Map.entry(Items.RABBIT_FOOT, Material.RABBIT_FOOT),
+				Map.entry(Items.COCOA_BEANS, Material.COCOA_BEANS),
+				Map.entry(Items.NETHER_WART, Material.NETHER_WART),
+				Map.entry(Items.KELP, Material.KELP)
+			).forEach((nmsItem, bukkitItem) -> {
+				ResourceLibBootstrap.getComponentsMap(nmsItem).put(DataComponents.CONSUMABLE, Consumables.defaultFood().build());
+				ResourceLibBootstrap.getComponentsMap(nmsItem).put(DataComponents.FOOD, new FoodProperties.Builder().alwaysEdible().nutrition(1).saturationModifier(0.1F).build());
+				ExtraItemComponentsModifier.addExtra(bukkitItem, DataComponentTypes.CONSUMABLE, DataComponentTypes.FOOD);
+			});
+			Map.ofEntries(
+				Map.entry(Items.WHEAT_SEEDS, Material.WHEAT_SEEDS),
+				Map.entry(Items.BEETROOT_SEEDS, Material.BEETROOT_SEEDS),
+				Map.entry(Items.MELON_SEEDS, Material.MELON_SEEDS),
+				Map.entry(Items.PUMPKIN_SEEDS, Material.PUMPKIN_SEEDS)
+			).forEach((nmsItem, bukkitItem) -> {
+				ResourceLibBootstrap.getComponentsMap(nmsItem).put(DataComponents.CONSUMABLE, Consumables.defaultFood().consumeSeconds(0.8F).build());
+				ResourceLibBootstrap.getComponentsMap(nmsItem).put(DataComponents.FOOD, new FoodProperties.Builder().alwaysEdible().nutrition(1).saturationModifier(0.1F).build());
+				ExtraItemComponentsModifier.addExtra(bukkitItem, DataComponentTypes.CONSUMABLE, DataComponentTypes.FOOD);
+			});
+			Map.ofEntries(
+				Map.entry(Items.BLACK_DYE, Material.BLACK_DYE),
+				Map.entry(Items.BLUE_DYE, Material.BLUE_DYE),
+				Map.entry(Items.BROWN_DYE, Material.BROWN_DYE),
+				Map.entry(Items.CYAN_DYE, Material.CYAN_DYE),
+				Map.entry(Items.GRAY_DYE, Material.GRAY_DYE),
+				Map.entry(Items.GREEN_DYE, Material.GREEN_DYE),
+				Map.entry(Items.LIGHT_BLUE_DYE, Material.LIGHT_BLUE_DYE),
+				Map.entry(Items.LIGHT_GRAY_DYE, Material.LIGHT_GRAY_DYE),
+				Map.entry(Items.LIME_DYE, Material.LIME_DYE),
+				Map.entry(Items.MAGENTA_DYE, Material.MAGENTA_DYE),
+				Map.entry(Items.ORANGE_DYE, Material.ORANGE_DYE),
+				Map.entry(Items.PINK_DYE, Material.PINK_DYE),
+				Map.entry(Items.PURPLE_DYE, Material.PURPLE_DYE),
+				Map.entry(Items.RED_DYE, Material.RED_DYE),
+				Map.entry(Items.WHITE_DYE, Material.WHITE_DYE),
+				Map.entry(Items.YELLOW_DYE, Material.YELLOW_DYE)
+			).forEach((nmsItem, bukkitItem) -> {
+				ResourceLibBootstrap.getComponentsMap(nmsItem).put(DataComponents.CONSUMABLE, Consumables.defaultFood().build());
+				ResourceLibBootstrap.getComponentsMap(nmsItem).put(DataComponents.FOOD, new FoodProperties.Builder().alwaysEdible().nutrition(1).saturationModifier(0.1F).build());
+				ExtraItemComponentsModifier.addExtra(bukkitItem, DataComponentTypes.CONSUMABLE, DataComponentTypes.FOOD);
+			});
 		});
 	}
 

@@ -21,6 +21,7 @@ import me.sosedik.miscme.impl.item.modifier.SignsShowTextInLoreModifier;
 import me.sosedik.miscme.impl.item.modifier.SpeedometerModifier;
 import me.sosedik.miscme.impl.item.modifier.ToolTooltipModifier;
 import me.sosedik.miscme.listener.block.BlockKnocking;
+import me.sosedik.miscme.listener.block.BreakReplaceables;
 import me.sosedik.miscme.listener.block.CampfireSetsOnFire;
 import me.sosedik.miscme.listener.block.ChestThrowsEntities;
 import me.sosedik.miscme.listener.block.ClickThroughHanging;
@@ -162,6 +163,7 @@ public final class MiscMe extends JavaPlugin {
 		EventUtil.registerListeners(this,
 			// block
 			BlockKnocking.class,
+			BreakReplaceables.class,
 			CampfireSetsOnFire.class,
 			ChestThrowsEntities.class,
 			ClickThroughHanging.class,

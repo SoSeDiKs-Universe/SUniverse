@@ -1,14 +1,15 @@
 package me.sosedik.trappednewbie.listener.entity;
 
 import com.destroystokyo.paper.entity.ai.PaperGoal;
+import me.sosedik.kiterino.util.KiterinoUnsafeUtil;
 import me.sosedik.requiem.feature.GhostyPlayer;
 import me.sosedik.utilizer.Utilizer;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.InteractGoal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.RangedAttackGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
@@ -103,7 +104,13 @@ public class LimboEntities implements Listener {
 			Bukkit.getMobGoals().removeAllGoals(wanderingTrader);
 			Bukkit.getMobGoals().addGoal(wanderingTrader, 0, new PaperGoal<>(new FloatGoal(nms)));
 			Bukkit.getMobGoals().addGoal(wanderingTrader, 1, new PaperGoal<>(new InteractGoal(nms, Player.class, 3F, 1F)));
-			Bukkit.getMobGoals().addGoal(wanderingTrader, 2, new PaperGoal<>(new LookAtPlayerGoal(nms, Mob.class, 8F)));
+			LookAtPlayerGoal lookAtPlayerGoal = new LookAtPlayerGoal(nms, Player.class, 8F);
+			Bukkit.getMobGoals().addGoal(wanderingTrader, 2, new PaperGoal<>(lookAtPlayerGoal));
+			try {
+				((TargetingConditions) KiterinoUnsafeUtil.getField(LookAtPlayerGoal.class, "lookAtContext").get(lookAtPlayerGoal)).ignoreInvisibilityTesting();
+			} catch (IllegalAccessException e) {
+				throw new RuntimeException("Couldn't set target conditions", e);
+			}
 		} else if (entity instanceof TraderLlama traderLlama) {
 			traderLlama.setCollidable(false);
 
@@ -112,15 +119,23 @@ public class LimboEntities implements Listener {
 			Bukkit.getMobGoals().removeAllGoals(traderLlama);
 			Bukkit.getMobGoals().addGoal(traderLlama, 0, new PaperGoal<>(new FloatGoal(nms)));
 			Bukkit.getMobGoals().addGoal(traderLlama, 1, new PaperGoal<>(new RangedAttackGoal(nms, 1.25, 40, 20F)));
-			Bukkit.getMobGoals().addGoal(traderLlama, 2, new PaperGoal<>(new NearestAttackableTargetGoal<>(nms, Player.class, true)));
-			Bukkit.getMobGoals().addGoal(traderLlama, 3, new PaperGoal<>(new LookAtPlayerGoal(nms, Player.class, 6F)));
+			NearestAttackableTargetGoal<Player> nearestAttackableTargetGoal = new NearestAttackableTargetGoal<>(nms, Player.class, false);
+			Bukkit.getMobGoals().addGoal(traderLlama, 2, new PaperGoal<>(nearestAttackableTargetGoal));
+			LookAtPlayerGoal lookAtPlayerGoal = new LookAtPlayerGoal(nms, Player.class, 6F);
+			Bukkit.getMobGoals().addGoal(traderLlama, 3, new PaperGoal<>(lookAtPlayerGoal));
+			try {
+				((TargetingConditions) KiterinoUnsafeUtil.getField(LookAtPlayerGoal.class, "lookAtContext").get(lookAtPlayerGoal)).ignoreInvisibilityTesting();
+				((TargetingConditions) KiterinoUnsafeUtil.getField(NearestAttackableTargetGoal.class, "targetConditions").get(nearestAttackableTargetGoal)).ignoreInvisibilityTesting();
+			} catch (IllegalAccessException e) {
+				throw new RuntimeException("Couldn't set target conditions", e);
+			}
 		}
 	}
 
 	@EventHandler(priority = EventPriority.LOW)
 	public void onTarget(EntityTargetLivingEntityEvent event) {
 		if (!event.isCancelled()) return;
-		if (!(event.getEntity() instanceof TraderLlama)) return;
+		if (!(event.getEntity() instanceof WanderingTrader) && !(event.getEntity() instanceof TraderLlama)) return;
 		if (!(event.getTarget() instanceof org.bukkit.entity.Player player)) return;
 		if (!GhostyPlayer.isGhost(player)) return;
 

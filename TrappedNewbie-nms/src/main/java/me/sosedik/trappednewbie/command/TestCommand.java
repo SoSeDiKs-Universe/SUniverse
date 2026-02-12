@@ -1,6 +1,7 @@
 package me.sosedik.trappednewbie.command;
 
 import io.papermc.paper.command.brigadier.CommandSourceStack;
+import me.sosedik.resourcelib.ResourceLib;
 import me.sosedik.trappednewbie.TrappedNewbie;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Command;
@@ -25,6 +26,7 @@ public class TestCommand {
 
 		TrappedNewbie.scheduler().sync(() -> {
 			// Stuff!
+			player.sendMessage("T: " + ResourceLib.storage().getItemModelMapping(TrappedNewbie.trappedNewbieKey("clay_bucket")));
 //			TrappedNewbieAdvancements.IGNITE_A_CREEPER.showToast(player);
 //			List.of(Material.BOW, Material.CROSSBOW).forEach(axe -> {
 //				var item = ItemStack.of(axe);

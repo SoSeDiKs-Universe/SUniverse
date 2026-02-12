@@ -45,7 +45,11 @@ import org.jspecify.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Enumeration;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -57,6 +61,7 @@ public class ResourceLib extends JavaPlugin {
 	private static @UnknownNullability ResourceLib instance;
 	private static final Key BLOCKS_ATLAS = Key.key("blocks");
 	private static final Key ITEMS_ATLAS = Key.key("items");
+	private static final Set<Material> BLOCKS_AS_ITEMS = new HashSet<>();
 
 	private @UnknownNullability Scheduler scheduler;
 	private @UnknownNullability ResourcePackStorage storage;
@@ -77,6 +82,12 @@ public class ResourceLib extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		registerCommands();
+
+		addBlockAsItemTextureRef(
+			Material.PITCHER_PLANT,
+			Material.STRING,
+			Material.FLOWER_POT
+		);
 
 		Mini.registerTagResolvers(
 			IconTag.ICON,
@@ -262,38 +273,60 @@ public class ResourceLib extends JavaPlugin {
 	/**
 	 * Gets the item icon
 	 *
-	 * @param key item key
+	 * @param itemKey item key
 	 * @return item icon
 	 */
-	public static Component getItemIcon(Key key) {
-		FakeItemData fakeItemData = storage().getFakeItemData(new NamespacedKey(key.namespace(), key.value()));
-		if (fakeItemData != null && fakeItemData.model() != null)
-			key = Key.key(fakeItemData.model().namespace(), fakeItemData.model().value());
+	public static Component getItemIcon(Key itemKey) {
+		Key textureKey = getTextureMapping(itemKey);
+		textureKey = storage().getItemModelMapping(new NamespacedKey(textureKey.namespace(), textureKey.value()));
 
-		ItemType itemType = Registry.ITEM.get(key);
-		boolean blocksAtlas = itemType != null && itemType.hasBlockType() && !useItemTexture(itemType.asMaterial());
-		String value = (blocksAtlas ? "block/" : "item/") + getTextureMapping(key.value());
+		ItemType itemType = Registry.ITEM.get(itemKey);
+		boolean blocksAtlas = (itemType == null && Registry.BLOCK.get(itemKey) != null) || (itemType != null && itemType.hasBlockType() && !useItemTexture(itemType.asMaterial()));
+		if (blocksAtlas && itemKey.value().endsWith("_bucket")) blocksAtlas = false;
+		String value = (blocksAtlas ? "block/" : "item/") + textureKey.value();
 		Key atlas = blocksAtlas ? BLOCKS_ATLAS : ITEMS_ATLAS;
-		Key texture = Key.key(key.namespace(), value);
+		Key texture = Key.key(textureKey.namespace(), value);
 		return Mini.asIcon(Component.object(ObjectContents.sprite(atlas, texture)).color(getItemIconColor(itemType)));
 	}
 
 	private static boolean useItemTexture(Material type) {
-		return type == Material.PITCHER_PLANT;
+		return BLOCKS_AS_ITEMS.contains(type);
 	}
 
-	private static String getTextureMapping(String key) {
-		return switch (key) {
-			case "lilac" -> "lilac_top";
-			case "peony" -> "peony_top";
-			case "rose_bush" -> "rose_bush_top";
-			case "sunflower" -> "sunflower_front";
-			case "flowering_azalea" -> "flowering_azalea_top";
-			case "campfire" -> "campfire_log_lit";
-			case "soul_campfire" -> "soul_campfire_log_lit";
-			case "grass_block" -> "grass_block_side";
-			default -> key;
+	private static Key getTextureMapping(Key key) {
+		return switch (key.namespace()) {
+			case "trapped_newbie" -> switch (key.value()) {
+				case "oak_chopping_block" -> Key.key("oak_log_top");
+				case "oak_work_station" -> Key.key("trapped_newbie", "oak_crafting_grid");
+				case "oak_totem_base" -> Key.key("stripped_oak_log");
+				case "clay_kiln" -> Key.key("clay");
+				default -> key;
+			};
+			default -> switch (key.value()) {
+				case "compass" -> Key.key("compass_16");
+				case "lilac" -> Key.key("lilac_top");
+				case "peony" -> Key.key("peony_top");
+				case "rose_bush" -> Key.key("rose_bush_top");
+				case "sunflower" -> Key.key("sunflower_front");
+				case "flowering_azalea" -> Key.key("flowering_azalea_top");
+				case "campfire" -> Key.key("campfire_log_lit");
+				case "soul_campfire" -> Key.key("soul_campfire_log_lit");
+				case "grass_block" -> Key.key("grass_block_side");
+				case "dirt_path" -> Key.key("dirt_path_side");
+				case "water" -> Key.key("water_still");
+				case "lava" -> Key.key("lava_still");
+				case "white_carpet" -> Key.key("white_wool");
+				default -> key;
+			};
 		};
+	}
+
+	public static void addBlockAsItemTextureRef(Material... types) {
+		addBlockAsItemTextureRef(List.of(types));
+	}
+
+	public static void addBlockAsItemTextureRef(Collection<Material> types) {
+		BLOCKS_AS_ITEMS.addAll(types);
 	}
 
 	private static TextColor getItemIconColor(@Nullable ItemType itemType) {

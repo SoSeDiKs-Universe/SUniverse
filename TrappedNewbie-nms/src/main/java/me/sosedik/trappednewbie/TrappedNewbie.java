@@ -264,6 +264,8 @@ public final class TrappedNewbie extends JavaPlugin {
 		BlockStorage.addMapping(TrappedNewbieItems.CLAY_KILN, ClayKilnBlockStorage.class);
 		BlockStorage.addMapping(TrappedNewbieItems.SLEEPING_BAG, SleepingBagBlockStorage.class);
 
+		ResourceLib.addBlockAsItemTextureRef(TrappedNewbieTags.BRANCHES.getValues());
+
 		FillingBowlWithWater.BOWLS_BOTTLES.forEach((bowl, filledBowl) -> {
 			ItemStack filled = TrappedNewbieRecipes.getFilled(ItemStack.of(bowl), ThirstData.DrinkType.MILK);
 			assert filled != null;

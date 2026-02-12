@@ -9,6 +9,7 @@ import me.sosedik.trappednewbie.impl.task.tutorial.LimboWorldFallTask;
 import me.sosedik.trappednewbie.impl.task.tutorial.MeetWanderingTraderTask;
 import me.sosedik.trappednewbie.impl.task.tutorial.OpenAdvancementsTask;
 import org.bukkit.Material;
+import org.bukkit.Tag;
 
 public class TrappedNewbieTasks {
 
@@ -40,10 +41,23 @@ public class TrappedNewbieTasks {
 	public static final TaskReference GET_A_FLAKED_FLINT = new TaskReference("get_a_flaked_flint",
 		p -> new GainItemTask("get_a_flaked_flint", p, TrappedNewbieAdvancements.GET_A_FLAKED_FLINT, TrappedNewbieItems.FLAKED_FLINT)
 	);
+	public static final TaskReference GET_A_ROUGH_STICK = new TaskReference("get_a_rough_stick",
+		p -> new GainItemTask("get_a_rough_stick", p, TrappedNewbieAdvancements.MAKE_ROUGH_STICKS, TrappedNewbieItems.ROUGH_STICK)
+	);
+	public static final TaskReference CRAFT_A_FLINT_AXE = new TaskReference("craft_a_flint_axe",
+		p -> new GainItemTask("craft_a_flint_axe", p, TrappedNewbieAdvancements.MAKE_A_FLINT_AXE, TrappedNewbieItems.FLINT_AXE)
+	);
+	public static final TaskReference GET_A_LOG = new TaskReference("get_a_log",
+		p -> new GainItemTask("get_a_log", p, TrappedNewbieAdvancements.GET_A_LOG, Tag.LOGS)
+	);
+	public static final TaskReference CRAFT_A_FLOWER_BOUQUET = new TaskReference("craft_a_flower_bouquet",
+		p -> new GainItemTask("craft_a_flower_bouquet", p, TrappedNewbieAdvancements.GET_A_LOG, Tag.LOGS)
+	);
 
 	public static final TaskReference[] TUTORIAL_TREE = new TaskReference[]{
 		MEET_WANDERING_TRADER, OPEN_ADVANCEMENTS, OBTAIN_FRIENDSHIP_LETTER, BEFRIEND_WANDERING_TRADER, LIMBO_VOID_FALL,
-		FIRST_POSSESSION, COLLECT_FIBERS, GET_A_BRANCH, CRAFT_TWINE, FIND_GRAVEL, GET_A_FLINT, GET_A_FLAKED_FLINT
+		FIRST_POSSESSION, COLLECT_FIBERS, GET_A_BRANCH, CRAFT_TWINE, FIND_GRAVEL, GET_A_FLINT, GET_A_FLAKED_FLINT,
+		GET_A_ROUGH_STICK, CRAFT_A_FLINT_AXE, GET_A_LOG, CRAFT_A_FLOWER_BOUQUET
 	};
 
 }

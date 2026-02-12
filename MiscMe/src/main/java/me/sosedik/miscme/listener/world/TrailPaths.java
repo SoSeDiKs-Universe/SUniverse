@@ -2,6 +2,7 @@ package me.sosedik.miscme.listener.world;
 
 import me.sosedik.miscme.MiscMe;
 import me.sosedik.utilizer.api.math.WorldChunkPosition;
+import me.sosedik.utilizer.util.EntityUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChunkSnapshot;
 import org.bukkit.Location;
@@ -62,7 +63,7 @@ public class TrailPaths extends BukkitRunnable implements Listener {
 		if (player.isSneaking()) return;
 		if (player.isSwimming()) return;
 
-		Location playerLocation = player.getLocation();
+		Location playerLocation = EntityUtil.getRootVehicle(player).getLocation();
 		Location oldLocation = this.storedLocations.computeIfAbsent(player.getUniqueId(), k -> playerLocation);
 		if (oldLocation.getWorld() == playerLocation.getWorld() && oldLocation.isBlockSame(playerLocation)) return;
 

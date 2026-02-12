@@ -50,7 +50,7 @@ public class TaskManagement implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onGhost(PlayerStartGhostingEvent event) {
-		// In case we're in tutorial, make sure ghost task is displayed
+		// In case we're in tutorial, make sure the ghost task is displayed
 		progressions(event.getPlayer()).checkProgressionTasks();
 	}
 

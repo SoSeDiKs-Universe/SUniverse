@@ -422,17 +422,21 @@ public class TrappedNewbieAdvancements {
 	public static final IAdvancement MAKE_STICKS = buildBase(MAKE_PLANKS, "make_sticks").display(display().x(-1.05F).icon(TrappedNewbieItems.OAK_STICK))
 			.requiredProgress(vanilla(inventoryChanged().withItems(ItemTriggerCondition.of(TrappedNewbieTags.STICKS))))
 			.buildAndRegister();
-	public static final IAdvancement MAKE_A_GRASS_MESH = buildBase(BASICS_ROOT, "make_a_grass_mesh").display(display().xy(1F, -2.5F).goalFrame().icon(TrappedNewbieItems.GRASS_MESH))
-			.visibilityRule(ifDone(MAKE_ROUGH_STICKS))
-			.requiredProgress(vanilla(inventoryChanged().withItems(ItemTriggerCondition.of(TrappedNewbieItems.GRASS_MESH))))
-			.buildAndRegister();
-	public static final IAdvancement TREASURE_HUNT = buildBase(MAKE_A_GRASS_MESH, "treasure_hunt").display(display().x(1F).withAdvancementFrame(AdvancementFrame.CIRCLE).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.BOWL)).buildAndRegister();
-	public static final IAdvancement MEET_THE_FLINTSTONES = buildBase(TREASURE_HUNT, "meet_the_flintstones").display(display().x(1F).withAdvancementFrame(AdvancementFrame.STAR).fancyDescriptionParent(NamedTextColor.AQUA).icon(Material.FLINT))
-			.withReward(rewards().withExp(50).addItems(ItemStack.of(Material.FLINT, 8)))
-			.requiredProgress(vanilla(inventoryChanged().withItems(ItemTriggerCondition.of(Material.FLINT).withMinAmount(64))))
-			.buildAndRegister();
+	public static final IAdvancement MAKE_A_GRASS_MESH = buildBase(BASICS_ROOT, "make_a_grass_mesh")
+		.display(display().xy(1F, -2.5F).icon(TrappedNewbieItems.GRASS_MESH))
+		.visibilityRule(ifDone(MAKE_A_TWINE))
+		.requiredProgress(vanilla(inventoryChanged().withItems(ItemTriggerCondition.of(TrappedNewbieItems.GRASS_MESH))))
+		.buildAndRegister();
+	public static final IAdvancement TREASURE_HUNT = buildBase(MAKE_A_GRASS_MESH, "treasure_hunt")
+		.display(display().x(1F).withAdvancementFrame(AdvancementFrame.CIRCLE).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.BOWL))
+		.buildAndRegister();
+	public static final IAdvancement MEET_THE_FLINTSTONES = buildBase(TREASURE_HUNT, "meet_the_flintstones")
+		.display(display().x(1F).withAdvancementFrame(AdvancementFrame.CIRCLE).fancyDescriptionParent(NamedTextColor.AQUA).icon(Material.FLINT))
+		.withReward(rewards().withExp(50).addItems(ItemStack.of(Material.FLINT, 8)))
+		.requiredProgress(vanilla(inventoryChanged().withItems(ItemTriggerCondition.of(Material.FLINT).withMinAmount(64))))
+		.buildAndRegister();
 	public static final IAdvancement CAMPING_OUT = buildBase(MAKE_ROUGH_STICKS, "camping_out")
-		.display(display().xy(1.2F, -1F).withAdvancementFrame(AdvancementFrame.BLOCK).icon(Material.CAMPFIRE))
+		.display(display().xy(1.2F, -1F).icon(Material.CAMPFIRE))
 		.withReward(rewards().withExp(10).addItems(ItemStack.of(TrappedNewbieItems.ROUGH_STICK, 4))) // TODO ghastshmallow
 		.visibilityRule(parentGranted())
 		.buildAndRegister();
@@ -460,17 +464,20 @@ public class TrappedNewbieAdvancements {
 			.withTrophy(ItemStack.of(Material.BOW))
 		)
 		.buildAndRegister();
-	public static final IAdvancement MAKE_A_FIRE = buildBase(CAMPING_OUT, "make_a_fire").display(display().x(1F).goalFrame().icon(TrappedNewbieItems.INVENTORY_FIRE))
-			.buildAndRegister();
-	public static final IAdvancement MAKE_A_FIRE_FILLER = buildFake(MAKE_A_FIRE).display(display().x(0.5F).isHidden(true))
-			.requiredProgress(neverDone())
-			.buildAndRegister();
+	public static final IAdvancement MAKE_A_FIRE = buildBase(CAMPING_OUT, "make_a_fire")
+		.display(display().x(1F).goalFrame().icon(TrappedNewbieItems.INVENTORY_FIRE))
+		.buildAndRegister();
+	public static final IAdvancement MAKE_A_FIRE_FILLER = buildFake(MAKE_A_FIRE)
+		.display(display().x(0.5F).isHidden(true))
+		.requiredProgress(neverDone())
+		.buildAndRegister();
 	public static final IAdvancement GET_A_CHARCOAL = buildBase(MAKE_A_FIRE_FILLER, "get_a_charcoal").display(display().xy(1F, -0.55F).icon(Material.CHARCOAL))
 			.requiredProgress(vanilla(inventoryChanged().withItems(ItemTriggerCondition.of(Material.CHARCOAL))))
 			.buildAndRegister();
-	public static final IAdvancement MAKE_A_FIRESTRIKER = buildBase(GET_A_CHARCOAL, "make_a_firestriker").display(display().x(1F).goalFrame().icon(TrappedNewbieItems.FIRESTRIKER))
-			.requiredProgress(vanilla(inventoryChanged().withItems(ItemTriggerCondition.of(TrappedNewbieItems.FIRESTRIKER))))
-			.buildAndRegister();
+	public static final IAdvancement MAKE_A_FIRESTRIKER = buildBase(GET_A_CHARCOAL, "make_a_firestriker")
+		.display(display().x(1F).icon(TrappedNewbieItems.FIRESTRIKER))
+		.requiredProgress(vanilla(inventoryChanged().withItems(ItemTriggerCondition.of(TrappedNewbieItems.FIRESTRIKER))))
+		.buildAndRegister();
 	public static final IAdvancement MAKE_A_FLINT_PICKAXE = buildBase(MAKE_STICKS, "make_a_flint_pickaxe").display(display().xy(0.5F, 1.5F).goalFrame().icon(TrappedNewbieItems.FLINT_PICKAXE))
 			.visibilityRule(ifDone(MAKE_PLANKS))
 			.requiredProgress(vanilla(inventoryChanged().withItems(ItemTriggerCondition.of(TrappedNewbieItems.FLINT_PICKAXE))))
@@ -479,16 +486,16 @@ public class TrappedNewbieAdvancements {
 			.requiredProgress(vanilla(inventoryChanged().withItems(ItemTriggerCondition.of(TrappedNewbieTags.ITEM_WORK_STATIONS))))
 			.buildAndRegister();
 	public static final IAdvancement MAKE_A_FLINT_KNIFE = buildBase(MAKE_ROUGH_STICKS, "make_a_flint_knife")
-		.display(display().xy(0.5F, -3.9F).goalFrame().icon(TrappedNewbieItems.FLINT_KNIFE))
+		.display(display().xy(0.5F, -3.9F).withAdvancementFrame(AdvancementFrame.ARROW_RIGHT).icon(TrappedNewbieItems.FLINT_KNIFE))
 		.visibilityRule(parentGranted())
 		.requiredProgress(vanilla(inventoryChanged().withItems(ItemTriggerCondition.of(TrappedNewbieItems.FLINT_KNIFE))))
 		.buildAndRegister();
-	public static final IAdvancement MAKE_A_TOTEM_BASE = buildBase(MAKE_A_FLINT_KNIFE, "make_a_totem_base").display(display().x(1F).icon(TrappedNewbieItems.OAK_TOTEM_BASE))
-			.visibilityRule(ifDone(MAKE_A_WORK_STATION))
-			.buildAndRegister();
-	public static final IAdvancement PERFORM_A_RITUAL = buildBase(MAKE_A_TOTEM_BASE, "perform_a_ritual").display(display().x(1F).icon(TrappedNewbieItems.TOTEMIC_STAFF))
-			.visibilityRule(ifDone(MAKE_A_WORK_STATION))
-			.buildAndRegister();
+	public static final IAdvancement MAKE_A_TOTEM_BASE = buildBase(MAKE_A_FLINT_KNIFE, "make_a_totem_base")
+		.display(display().x(1F).icon(TrappedNewbieItems.OAK_TOTEM_BASE))
+		.buildAndRegister();
+	public static final IAdvancement PERFORM_A_RITUAL = buildBase(MAKE_A_TOTEM_BASE, "perform_a_ritual")
+		.display(display().x(1F).icon(TrappedNewbieItems.TOTEMIC_STAFF))
+		.buildAndRegister();
 
 	public static final IAdvancement GET_A_STRING = buildBase(PERFORM_A_RITUAL, "get_a_string").display(display().xy(1.3F, -0.5F).icon(Material.STRING))
 			.withReward(rewards().addItems(ItemStack.of(Material.STRING, 3)))
@@ -509,13 +516,14 @@ public class TrappedNewbieAdvancements {
 //			.buildAndRegister();
 //	public static final IAdvancement LUCID_DREAMING = buildBase(SLEEP_IN_BED, "lucid_dreaming").display(display().xy(1.5F, 0.6F).challengeFrame().icon(Material.PHANTOM_SPAWN_EGG)).visibilityRule(parentGranted()).buildAndRegister(); // TODO
 	public static final IAdvancement GLIDE_IN_A_HANG_GLIDER = buildBase(GET_A_WOOL, "glide_in_a_hang_glider")
-		.display(display().xy(1.5F, 0.75F).withAdvancementFrame(AdvancementFrame.ARROW_UP).icon(TrappedNewbieItems.HANG_GLIDER))
+		.display(display().xy(1.5F, 0.75F).icon(TrappedNewbieItems.HANG_GLIDER))
 		.withReward(rewards().addItems(ItemStack.of(Material.PHANTOM_MEMBRANE, 3)))
 		.buildAndRegister();
-	public static final IAdvancement MAKE_A_FLINT_SHOVEL = buildBase(MAKE_ROUGH_STICKS, "make_a_flint_shovel").display(display().xy(1.25F, 1.75F).goalFrame().icon(TrappedNewbieItems.FLINT_SHOVEL))
-			.visibilityRule(parentGranted())
-			.requiredProgress(vanilla(inventoryChanged().withItems(ItemTriggerCondition.of(TrappedNewbieItems.FLINT_SHOVEL))))
-			.buildAndRegister();
+	public static final IAdvancement MAKE_A_FLINT_SHOVEL = buildBase(MAKE_ROUGH_STICKS, "make_a_flint_shovel")
+		.display(display().xy(1.25F, 1.75F).withAdvancementFrame(AdvancementFrame.ARROW_RIGHT).icon(TrappedNewbieItems.FLINT_SHOVEL))
+		.visibilityRule(parentGranted())
+		.requiredProgress(vanilla(inventoryChanged().withItems(ItemTriggerCondition.of(TrappedNewbieItems.FLINT_SHOVEL))))
+		.buildAndRegister();
 	public static final IAdvancement PATHWAYS = buildBase(MAKE_A_FLINT_SHOVEL, "pathways").display(display().xy(0.5F, 1F).withAdvancementFrame(AdvancementFrame.CIRCLE).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.DIRT_PATH))
 			.buildAndRegister();
 	public static final IAdvancement GET_A_CLAY_BALL = buildBase(MAKE_A_FLINT_SHOVEL, "get_a_clay_ball").display(display().x(1.25F).withAdvancementFrame(AdvancementFrame.SHARP).icon(Material.CLAY_BALL))
@@ -562,11 +570,13 @@ public class TrappedNewbieAdvancements {
 //				inventoryChanged().withItems(ItemTriggerCondition.of(Material.STONE_SWORD)))
 //			)
 //			.buildAndRegister();
-	public static final IAdvancement GET_A_BRICK = buildBase(MAKE_A_FIRE_FILLER, "get_a_brick").display(display().xy(1F, 0.55F).icon(Material.BRICK))
+	public static final IAdvancement GET_A_BRICK = buildBase(MAKE_A_FIRE_FILLER, "get_a_brick")
+		.display(display().xy(1F, 0.55F).icon(Material.BRICK))
 		.withReward(rewards().addItems(ItemStack.of(Material.BRICK, 8)))
 		.requiredProgress(vanilla(inventoryChanged().withItems(ItemTriggerCondition.of(Material.BRICK))))
 		.buildAndRegister();
-	public static final IAdvancement MAKE_A_POT = buildBase(GET_A_BRICK, "make_a_pot").display(display().x(1F).withAdvancementFrame(AdvancementFrame.BLOCK).icon(Material.FLOWER_POT))
+	public static final IAdvancement MAKE_A_POT = buildBase(GET_A_BRICK, "make_a_pot")
+		.display(display().x(1F).withAdvancementFrame(AdvancementFrame.CIRCLE).icon(Material.FLOWER_POT))
 		.requiredProgress(vanilla(inventoryChanged().withItems(ItemTriggerCondition.of(Material.FLOWER_POT))))
 		.buildAndRegister();
 //	public static final IAdvancement GET_LEAVES = buildBase(MAKE_FLINT_SHEARS, "get_leaves").display(display().xy(0.5F, -1.1F).withAdvancementFrame(AdvancementFrame.CIRCLE).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.OAK_LEAVES))

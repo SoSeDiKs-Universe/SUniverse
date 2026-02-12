@@ -53,6 +53,22 @@
 		"<#FFE0B2>Роздобудьте <item:'trapped_newbie:flaked_flint':'<red>кремнієвий уламок'>",
 		"<gray>(стукайте по типах <item:'minecraft:stone;minecraft:cobblestone':'<yellow>каменю'> <item:'minecraft:flint':'<yellow>кремнем'>, щоб розбити його на уламки)"
 	],
+	"task.craft_flint_shears": [
+		"<#FFE0B2>Вам знадобляться <red>інструменти</red>, щоб мати реальний вплив на світ.",
+		"<#FFE0B2>Змайструйте <item:'trapped_newbie:flint_shears':'<yellow>кремнієві ножиці'> та зістрижіть <item:'trapped_newbie:oak_branch':'<yellow>гілки'> в <item:'trapped_newbie:rough_stick':'<red>палиці'>"
+	],
+	"task.craft_a_flint_axe": [
+		"<#FFE0B2>Змайструйте <item:'trapped_newbie:flint_axe':'<red>кремнієву сокиру'>, щоб люто зрубати <i>ось те</i> дерево"
+	],
+	"task.get_a_log": [
+		"<#FFE0B2>Зрубайте дерево <item:'trapped_newbie:flint_axe':'<yellow>сокирою'>, щоб отримати <item:'minecraft:oak_log':'<red>колоду дерева'>"
+	],
+	"task.craft_a_flower_bouquet": [
+		"<#FFE0B2>Ви <gold>ГІДНІ</gold>! <i>…чи, може?</i>",
+		"<#FFE0B2>Створіть <item:'trapped_newbie:flower_bouquet':'<red>букет квітів'> на <item:'trapped_newbie:oak_work_station':'<yellow>робочому столі'> та йдіть підкорювати світ!",
+		"<gray>(памʼятайте стежити за <yellow>досягненнями</yellow> — можливо, вони підкажуть наступні кроки, як-от становлення <aqua>людиною</aqua>)"
+	],
+
 	"task.ritual.rain_dance": "Танець дощу",
 	"task.ritual.rain_dance.description": "Змушує небо плакати",
 	"task.ritual.rain_dance.requirement": "Будь-яка сира риба",

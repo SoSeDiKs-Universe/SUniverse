@@ -7,6 +7,7 @@ import io.papermc.paper.datacomponent.item.ItemContainerContents;
 import me.sosedik.packetadvancements.api.advancement.IAdvancement;
 import me.sosedik.packetadvancements.imlp.reward.SimpleAdvancementRewardBuilder;
 import me.sosedik.requiem.feature.GhostyPlayer;
+import me.sosedik.resourcelib.ResourceLib;
 import me.sosedik.trappednewbie.impl.item.modifier.AdvancementTrophyModifier;
 import me.sosedik.trappednewbie.listener.advancement.AdvancementTrophies;
 import me.sosedik.utilizer.api.message.Messenger;
@@ -177,7 +178,7 @@ public class FancyAdvancementReward extends SimpleAdvancementRewardBuilder<Fancy
 	public static Component getItemMessage(ItemStack item, TextColor color) {
 		int amount = item.getAmount();
 		if (amount > item.getMaxStackSize()) item = item.asOne();
-		return Component.text(" +" + amount + " ", color).append(item.effectiveName().hoverEvent(item));
+		return Component.text(" +" + amount + " ", color).append(ResourceLib.getItemIcon(item.getType().key()), Component.space(), item.effectiveName().hoverEvent(item));
 	}
 
 }

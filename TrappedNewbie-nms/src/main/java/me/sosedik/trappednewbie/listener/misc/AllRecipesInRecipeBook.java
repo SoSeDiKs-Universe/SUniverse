@@ -44,6 +44,7 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerLocaleChangeEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerRecipeDiscoverEvent;
 import org.bukkit.inventory.BlastingRecipe;
 import org.bukkit.inventory.CampfireRecipe;
 import org.bukkit.inventory.CookingRecipe;
@@ -474,6 +475,16 @@ public class AllRecipesInRecipeBook implements Listener {
 			if (recipeDisplay != null)
 				recipeDisplay.cancel();
 		}
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onRecipe(PlayerRecipeDiscoverEvent event) {
+		NamespacedKey recipeKey = event.getRecipe();
+		if (FAKE_RECIPE_NAMESPACE.equals(recipeKey.namespace())) return;
+
+		NamespacedKey fakedKey = constructFakedKey(recipeKey);
+		if (Bukkit.getRecipe(fakedKey) != null)
+			event.getPlayer().discoverRecipe(fakedKey);
 	}
 
 	private static class RecipeDisplay extends BukkitRunnable {

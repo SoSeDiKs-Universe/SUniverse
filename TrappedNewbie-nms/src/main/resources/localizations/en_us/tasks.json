@@ -33,7 +33,7 @@
 	],
 	"task.get_a_branch": [
 		"<#FFE0B2>As you may see, even in <yellow>adventure</yellow> mode you can still break <i>some</i> blocks",
-		"<#FFE0B2>Now, break some <item:'minecraft:oak_leaves;minecraft:dead_bush':'<red>Leaves<dark_gray>/</dark_gray>Deadbush'> with an arm to obtain a <item:'trapped_newbie:oak_branch':'<red>Branch'>",
+		"<#FFE0B2>Now, break some <item:'minecraft:oak_leaves;minecraft:dead_bush':'<red>Leaves<dark_gray>/</dark_gray>Deadbush'> with a hand to obtain a <item:'trapped_newbie:oak_branch':'<red>Branch'>",
 		"<gray>(or pickup some laying on the ground if you wish)"
 	],
 	"task.craft_twine": [
@@ -54,6 +54,22 @@
 		"<#FFE0B2>Obtain a <item:'trapped_newbie:flaked_flint':'<red>Flaked Flint'>",
 		"<gray>(hit <item:'minecraft:stone;minecraft:cobblestone':'<yellow>Stone-like'> blocks with your <item:'minecraft:flint':'<yellow>Flint'> to crush it into pieces)"
 	],
+	"task.craft_flint_shears": [
+		"<#FFE0B2>You'll need <red>tools</red> to make some real impact on the world.",
+		"<#FFE0B2>Make <item:'trapped_newbie:flint_shears':'<yellow>Flint Shears'> and cut some <item:'trapped_newbie:oak_branch':'<yellow>Branches'> into <item:'trapped_newbie:rough_stick':'<red>Sticks'>"
+	],
+	"task.craft_a_flint_axe": [
+		"<#FFE0B2>Craft a <item:'trapped_newbie:flint_axe':'<red>Flint Axe'> to go berserk on <i>that one</i> tree"
+	],
+	"task.get_a_log": [
+		"<#FFE0B2>Chop down a tree with an <item:'trapped_newbie:flint_axe':'<yellow>Axe'> to obtain some <item:'minecraft:oak_log':'<red>Logs'>"
+	],
+	"task.craft_a_flower_bouquet": [
+		"<#FFE0B2>You are <gold>WORTHY</gold>! <i>…or are you?</i>",
+		"<#FFE0B2>Make yourself a <item:'trapped_newbie:flower_bouquet':'<red>Flower Bouquet'> on a <item:'trapped_newbie:oak_work_station':'<yellow>Work Station'> and go rule the wold!",
+		"<gray>(remember to follow <yellow>advancements</yellow> for possible next steps, like becoming a <aqua>human</aqua>)"
+	],
+
 	"task.ritual.rain_dance": "Rain Dance",
 	"task.ritual.rain_dance.description": "Makes the sky cry",
 	"task.ritual.rain_dance.requirement": "Any raw fish",

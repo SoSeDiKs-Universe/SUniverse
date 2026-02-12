@@ -6,6 +6,8 @@ import me.sosedik.packetadvancements.api.event.TeamMadeAdvancementEvent;
 import me.sosedik.trappednewbie.TrappedNewbie;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieAdvancements;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieTags;
+import me.sosedik.trappednewbie.listener.misc.AllRecipesInRecipeBook;
+import me.sosedik.utilizer.util.MiscUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Keyed;
 import org.bukkit.Material;
@@ -52,9 +54,7 @@ public class AdvancementRecipes implements Listener {
 			trappedNewbieKey("oak_sapling_to_oak_branch"),
 			trappedNewbieKey("pale_oak_sapling_to_pale_oak_branch"),
 			trappedNewbieKey("spruce_sapling_to_spruce_branch"),
-			trappedNewbieKey("dead_bush_to_dead_branch")
-		);
-		addRecipe(TrappedNewbieAdvancements.MAKE_FLINT_SHEARS,
+			trappedNewbieKey("dead_bush_to_dead_branch"),
 			trappedNewbieKey("rough_stick")
 		);
 		addRecipe(TrappedNewbieAdvancements.MAKE_ROUGH_STICKS,
@@ -108,8 +108,11 @@ public class AdvancementRecipes implements Listener {
 
 	private static void grantAdvancementRecipes(Player player) {
 		RECIPES.forEach((advancement, recipeKeys) -> {
-			if (advancement.isDone(player))
-				player.discoverRecipes(recipeKeys);
+			if (!advancement.isDone(player)) return;
+
+			List<NamespacedKey> fakedRecipeKeys = recipeKeys.stream().map(AllRecipesInRecipeBook::constructFakedKey).toList();
+
+			player.discoverRecipes(MiscUtil.combineToList(recipeKeys, fakedRecipeKeys));
 		});
 	}
 

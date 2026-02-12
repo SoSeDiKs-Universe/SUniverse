@@ -53,6 +53,22 @@
 		"<#FFE0B2>Заполучите <item:'trapped_newbie:flaked_flint':'<red>кремнёвый осколок'>",
 		"<gray>(стучите о типы <item:'minecraft:stone;minecraft:cobblestone':'<yellow>камня'> <item:'minecraft:flint':'<yellow>кремнем'>, чтобы разбить его на кусочки)"
 	],
+	"task.craft_flint_shears": [
+		"<#FFE0B2>Вам понадобятся <red>инструменты</red>, чтобы оказать реальное влияние на мир.",
+		"<#FFE0B2>Создайте <item:'trapped_newbie:flint_shears':'<yellow>кремнёвые ножницы'> и состригите <item:'trapped_newbie:oak_branch':'<yellow>ветки'> в <item:'trapped_newbie:rough_stick':'<red>палки'>"
+	],
+	"task.craft_a_flint_axe": [
+		"<#FFE0B2>Создайте <item:'trapped_newbie:flint_axe':'<red>кремнёвый топорик'>, чтобы яростно срубить <i>вон то</i> дерево"
+	],
+	"task.get_a_log": [
+		"<#FFE0B2>Срубите дерево <item:'trapped_newbie:flint_axe':'<yellow>топором'>, чтобы получить <item:'minecraft:oak_log':'<red>брёвна'>"
+	],
+	"task.craft_a_flower_bouquet": [
+		"<#FFE0B2>Вы <gold>ДОСТОЙНЫ</gold>! <i>…или, может?</i>",
+		"<#FFE0B2>Смастерите <item:'trapped_newbie:flower_bouquet':'<red>букет цветов'> на <item:'trapped_newbie:oak_work_station':'<yellow>рабочем столе'> и идите покорять мир!",
+		"<gray>(помните следовать <yellow>достижениям</yellow> — возможно, они подскажут следующие шаги, такие как становление <aqua>человеком</aqua>)"
+	],
+
 	"task.ritual.rain_dance": "Танец дождя",
 	"task.ritual.rain_dance.description": "Заставляет небо плакать",
 	"task.ritual.rain_dance.requirement": "Любая сырая рыба",

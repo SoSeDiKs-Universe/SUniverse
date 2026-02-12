@@ -266,4 +266,19 @@ public class EntityUtil {
 		};
 	}
 
+	/**
+	 * Gets the root vehicle or a rider if not inside a vehicle
+	 *
+	 * @param rider rider
+	 * @return the root vehicle or a rider if not inside a vehicle
+	 */
+	public static Entity getRootVehicle(Entity rider) {
+		Entity vehicle = rider.getVehicle();
+		while (vehicle != null) {
+			rider = vehicle;
+			vehicle = vehicle.getVehicle();
+		}
+		return rider;
+	}
+
 }

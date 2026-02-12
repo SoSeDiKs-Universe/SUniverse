@@ -226,6 +226,7 @@ public class TrappedNewbieRecipes {
 
 		new ShapedCraft(ItemStack.of(TrappedNewbieItems.GRASS_MESH), trappedNewbieKey("grass_mesh"), "TS", "ST")
 			.addIngredients('S', Material.STICK, TrappedNewbieItems.ROUGH_STICK)
+			.addIngredients('S', TrappedNewbieTags.BRANCHES.getValues())
 			.addIngredients('T', Material.STRING, TrappedNewbieItems.TWINE)
 			.register();
 
@@ -773,7 +774,7 @@ public class TrappedNewbieRecipes {
 			.addIngredients('S', Material.STRING, TrappedNewbieItems.TWINE);
 		for (int i = 0; i < 7; i++)
 			recipe.addIngredients(MiscUtil.rotate(i, Tag.ITEMS_FLOWERS.getValues()));
-		recipe.withPreCheck(uniqueIngredientsCheck(3));
+		recipe.withPreCheck(uniqueIngredientsCheck(2));
 		recipe.register();
 	}
 

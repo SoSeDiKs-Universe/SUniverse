@@ -3,7 +3,7 @@ package me.sosedik.trappednewbie.impl.task.tutorial;
 import me.sosedik.requiem.api.event.player.PlayerStopGhostingEvent;
 import me.sosedik.requiem.feature.GhostyPlayer;
 import me.sosedik.trappednewbie.api.task.Task;
-import me.sosedik.trappednewbie.dataset.TrappedNewbieAdvancements;
+import me.sosedik.trappednewbie.dataset.TrappedNewbieTasks;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -20,7 +20,7 @@ public class FirstPossessionTask extends Task implements Listener {
 	@Override
 	public boolean canBeSkipped() {
 		Player player = getPlayer();
-		return !GhostyPlayer.isGhost(player) || TrappedNewbieAdvancements.FIRST_POSSESSION.isDone(player);
+		return !GhostyPlayer.isGhost(player) || TrappedNewbieTasks.TUTORIAL_TREE[TrappedNewbieTasks.TUTORIAL_TREE.length - 1].constructTask(player).canBeSkipped();
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)

@@ -91,7 +91,7 @@ public class GhostyPlayer {
 //			}
 //		});
 		// Legacy, remove? (clashes with no player nametags)
-		ScoreboardUtil.getPlayerTeam(player).setCanSeeFriendlyInvisibles(false);
+		ScoreboardUtil.getPlayerTeam(player).setCanSeeFriendlyInvisibles(true);
 //		PrepareGhostMobs.hideVisibility(player, true);
 //		for (UUID uuid : GHOSTS) {
 //			Player onlinePlayer = Bukkit.getPlayer(uuid);
@@ -152,7 +152,7 @@ public class GhostyPlayer {
 //			}
 //		});
 		// Legacy, remove?
-		ScoreboardUtil.getPlayerTeam(player).setCanSeeFriendlyInvisibles(true);
+		ScoreboardUtil.getPlayerTeam(player).setCanSeeFriendlyInvisibles(false);
 //		PrepareGhostMobs.hideVisibility(player, false);
 
 		// Restore attributes

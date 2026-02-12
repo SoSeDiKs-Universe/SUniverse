@@ -32,6 +32,23 @@ import static me.sosedik.utilizer.api.message.Mini.combined;
 @NullMarked
 public class FancyMessageRenderer implements ChatRenderer {
 
+	private static final TagResolver CHAT_TAG_RESOLVER = TagResolver.resolver(
+		StandardTags.color(),
+		StandardTags.gradient(),
+		StandardTags.transition(),
+		StandardTags.rainbow(),
+		StandardTags.pride(),
+		StandardTags.reset(),
+		StandardTags.shadowColor(),
+		StandardTags.decorations(),
+		StandardTags.keybind(),
+		StandardTags.translatable(),
+		StandardTags.translatableFallback(),
+		StandardTags.newline(),
+		StandardTags.insertion(),
+		StandardTags.sprite()
+	);
+
 	private final Map<String, String> translations = new HashMap<>();
 	private @Nullable String cachedRawMessage = null;
 
@@ -46,18 +63,7 @@ public class FancyMessageRenderer implements ChatRenderer {
 
 		boolean self = source == viewer;
 		TextColor baseColor = TextColor.fromHexString(self ? "#fbe9d1" : "#dceefa");
-		var messenger = Messenger.messenger(viewer, TagResolver.resolver(
-			StandardTags.color(),
-			StandardTags.keybind(),
-			StandardTags.translatable(),
-			StandardTags.translatableFallback(),
-			StandardTags.decorations(),
-			StandardTags.gradient(),
-			StandardTags.rainbow(),
-			StandardTags.reset(),
-			StandardTags.newline(),
-			StandardTags.transition()
-		));
+		var messenger = Messenger.messenger(viewer, CHAT_TAG_RESOLVER);
 		Component renderedMessage = renderAndTranslate(messenger.miniMessage(), this.cachedRawMessage, source, playerViewer, Style.style(baseColor));
 
 		return combined(

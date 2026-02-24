@@ -254,7 +254,12 @@ public class ImmersiveDyes implements Listener {
 				return Material.CANDLE;
 			if (Tag.CANDLE_CAKES.isTagged(dyingItem))
 				return Material.CANDLE_CAKE;
-			return null;
+			return switch (dyingItem) {
+				case DARK_PRISMARINE -> Material.PRISMARINE;
+				case DARK_PRISMARINE_STAIRS -> Material.PRISMARINE_STAIRS;
+				case DARK_PRISMARINE_SLAB -> Material.PRISMARINE_SLAB;
+				default -> null;
+			};
 		}
 
 		if (MaterialTags.GLASS.isTagged(dyingItem))
@@ -287,6 +292,15 @@ public class ImmersiveDyes implements Listener {
 			return Material.getMaterial(dyeItem.name().replace("DYE", "CANDLE_CAKE"));
 		if (Tag.ITEMS_HARNESSES.isTagged(dyingItem))
 			return Material.getMaterial(dyeItem.name().replace("DYE", "HARNESS"));
+
+		if (dyeItem == Material.BLACK_DYE) {
+			if (dyingItem == Material.PRISMARINE)
+				return Material.DARK_PRISMARINE;
+			if (dyingItem == Material.PRISMARINE_STAIRS)
+				return Material.DARK_PRISMARINE_STAIRS;
+			if (dyingItem == Material.PRISMARINE_SLAB)
+				return Material.DARK_PRISMARINE_SLAB;
+		}
 
 		return null;
 	}

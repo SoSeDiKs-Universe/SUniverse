@@ -78,18 +78,17 @@ public class AdvancementRecipes implements Listener {
 			trappedNewbieKey("flint_shovel_2")
 		);
 		addRecipe(TrappedNewbieAdvancements.MAKE_A_FLINT_KNIFE, trappedNewbieKey("sleeping_bag"));
-		addRecipe(TrappedNewbieAdvancements.GET_A_LOG, trappedNewbieKey("campfire"));
+		addRecipe(TrappedNewbieAdvancements.GET_A_LOG,
+			trappedNewbieKey("campfire"),
+			trappedNewbieKey("bowl_from_planks")
+		);
 		addRecipe(TrappedNewbieAdvancements.GET_A_LOG, TrappedNewbieTags.CHOPPING_BLOCKS.getValues().stream().map(Material::getKey).toArray(NamespacedKey[]::new));
 		addRecipe(TrappedNewbieAdvancements.GET_A_LOG, TrappedNewbieTags.WORK_STATIONS.getValues().stream().map(Material::getKey).toArray(NamespacedKey[]::new));
 	}
 
 	@EventHandler
 	public void onJoin(PlayerClientLoadedWorldEvent event) {
-		Player player = event.getPlayer();
-		if (TrappedNewbieAdvancements.MAKE_A_WORK_STATION.isDone(player))
-			discoverRecipes(player);
-		else
-			grantAdvancementRecipes(player);
+		discoverRecipes(event.getPlayer());
 	}
 
 	@EventHandler
@@ -117,11 +116,11 @@ public class AdvancementRecipes implements Listener {
 	}
 
 	public static void discoverRecipes(Player player) {
-		List<NamespacedKey> recipeKeys = new ArrayList<>();
 		if (!TrappedNewbieAdvancements.MAKE_A_WORK_STATION.isDone(player)) {
 			grantAdvancementRecipes(player);
 			return;
 		}
+		List<NamespacedKey> recipeKeys = new ArrayList<>();
 		Iterator<Recipe> recipeIterator = Bukkit.recipeIterator();
 		while (recipeIterator.hasNext()) {
 			if (recipeIterator.next() instanceof Keyed keyed)

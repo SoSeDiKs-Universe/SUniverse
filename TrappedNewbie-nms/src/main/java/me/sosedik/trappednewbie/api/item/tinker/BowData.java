@@ -1,10 +1,7 @@
 package me.sosedik.trappednewbie.api.item.tinker;
 
 import de.tr7zw.nbtapi.NBT;
-import de.tr7zw.nbtapi.iface.ReadWriteItemNBT;
 import de.tr7zw.nbtapi.iface.ReadableNBTList;
-import io.papermc.paper.datacomponent.DataComponentTypes;
-import io.papermc.paper.datacomponent.item.CustomModelData;
 import me.sosedik.utilizer.util.MiscUtil;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -12,7 +9,6 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
-import java.util.function.Consumer;
 
 @NullMarked
 public record BowData(
@@ -21,9 +17,7 @@ public record BowData(
 	@Nullable Material string,
 	@Nullable Material modifier,
 	@Nullable ArrowData arrowData
-) {
-
-	private static final String DATA_TAG = "materials";
+) implements TinkerData {
 
 	public List<String> serialize(boolean includeDefaults) {
 		return MiscUtil.combineToList(
@@ -39,16 +33,8 @@ public record BowData(
 		);
 	}
 
-	public void saveToCustomModelData(ItemStack bow, boolean includeDefaults) {
-		bow.setData(DataComponentTypes.CUSTOM_MODEL_DATA, CustomModelData.customModelData().addStrings(serialize(includeDefaults)).build());
-	}
-
-	public void saveToCustomData(ItemStack arrow, boolean includeDefaults) {
-		NBT.modify(arrow, (Consumer<ReadWriteItemNBT>) nbt -> nbt.getStringList(DATA_TAG).addAll(serialize(includeDefaults)));
-	}
-
-	public static BowData fromBow(ItemStack bow, @Nullable ItemStack arrow) {
-		return NBT.get(bow, nbt -> {
+	public static BowData fromBow(ItemStack item, @Nullable ItemStack arrow) {
+		return NBT.get(item, nbt -> {
 			if (!nbt.hasTag(DATA_TAG)) return defaultData(arrow == null ? null : ArrowData.fromArrow(arrow));
 
 			ReadableNBTList<String> strings = nbt.getStringList(DATA_TAG);

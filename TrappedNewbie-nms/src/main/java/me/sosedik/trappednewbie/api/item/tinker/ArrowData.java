@@ -2,8 +2,6 @@ package me.sosedik.trappednewbie.api.item.tinker;
 
 import de.tr7zw.nbtapi.NBT;
 import de.tr7zw.nbtapi.iface.ReadableNBTList;
-import io.papermc.paper.datacomponent.DataComponentTypes;
-import io.papermc.paper.datacomponent.item.CustomModelData;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NullMarked;
@@ -18,9 +16,7 @@ public record ArrowData(
 	@Nullable Material stick,
 	@Nullable Material fletching,
 	@Nullable Material modifier
-) {
-
-	private static final String DATA_TAG = "materials";
+) implements TinkerData {
 
 	public List<String> serialize(boolean includeDefaults) {
 		return List.of(
@@ -31,14 +27,12 @@ public record ArrowData(
 		);
 	}
 
-	public void saveToCustomModelData(ItemStack arrow, boolean includeDefaults) {
-		arrow.setData(DataComponentTypes.CUSTOM_MODEL_DATA, CustomModelData.customModelData().addStrings(serialize(includeDefaults)).build());
-	}
-
-	public void saveToCustomData(ItemStack arrow, boolean includeDefaults) {
-		NBT.modify(arrow, nbt -> {
+	@Override
+	public void saveToCustomData(ItemStack item, boolean includeDefaults) {
+		NBT.modify(item, nbt -> {
 			nbt.removeKey(DATA_TAG);
 			nbt.getStringList(DATA_TAG).addAll(List.of(
+				// Omitted arrow type
 				this.head == null ? (includeDefaults ? Material.FLINT.getKey().asString() : "") : this.head.getKey().asString(),
 				this.stick == null ? (includeDefaults ? Material.STICK.getKey().asString() : "") : this.stick.getKey().asString(),
 				this.fletching == null ? (includeDefaults ? Material.FEATHER.getKey().asString() : "") : this.fletching.getKey().asString()
@@ -46,12 +40,12 @@ public record ArrowData(
 		});
 	}
 
-	public static ArrowData fromArrow(ItemStack arrow) {
-		return fromArrow(arrow, arrow.getType());
+	public static ArrowData fromArrow(ItemStack item) {
+		return fromArrow(item, item.getType());
 	}
 
-	public static ArrowData fromArrow(ItemStack arrow, Material arrowType) {
-		return NBT.get(arrow, nbt -> {
+	public static ArrowData fromArrow(ItemStack item, Material arrowType) {
+		return NBT.get(item, nbt -> {
 			if (!nbt.hasTag(DATA_TAG)) return defaultData(arrowType);
 
 			ReadableNBTList<String> strings = nbt.getStringList(DATA_TAG);

@@ -249,10 +249,9 @@ public class AllRecipesInRecipeBook implements Listener {
 		for (int i = 1; i < 5; i++) items.put(i, FILLED);
 		for (int i = 0; i < 27; i++) items.put(i + 9, FILLED);
 
-		if (stonecuttingRecipe.getGroup().isEmpty()) {
-			items.put(1, getFromChoice(stonecuttingRecipe.getInputChoice()));
-			items.put(3, List.of(ItemStack.of(Material.STONECUTTER)));
-		} else {
+		items.put(1, getFromChoice(stonecuttingRecipe.getInputChoice()));
+		items.put(3, List.of(ItemStack.of(Material.STONECUTTER)));
+		if (!stonecuttingRecipe.getGroup().isEmpty()) {
 			List<ItemStack> inputs = new ArrayList<>();
 			List<ItemStack> results = new ArrayList<>();
 			ItemStack result = stonecuttingRecipe.getResult();
@@ -261,19 +260,20 @@ public class AllRecipesInRecipeBook implements Listener {
 				inputs.add(getFromChoice(recipe.getInputChoice()).getFirst());
 				results.add(recipe.getResult());
 			}
-			items.put(1, getFromChoice(stonecuttingRecipe.getInputChoice()));
-			items.put(24, inputs);
-			items.put(26, results);
-			items.put(18, List.of(ItemStack.of(Material.STONECUTTER)));
-			for (int gridSlot : GRID_SLOTS) items.remove(gridSlot - 2);
-			int inputsSize = inputs.size();
-			int iterations = (int) Math.ceil((double) inputsSize / GRID_SLOTS.length) * GRID_SLOTS.length;
-			for (int i = 0; i < iterations; i++) {
-				int gridIndex = i % GRID_SLOTS.length;
+			if (inputs.size() > 1 || results.size() > 1) {
+				items.put(24, inputs);
+				items.put(26, results);
+				items.put(18, List.of(ItemStack.of(Material.STONECUTTER)));
+				for (int gridSlot : GRID_SLOTS) items.remove(gridSlot - 2);
+				int inputsSize = inputs.size();
+				int iterations = (int) Math.ceil((double) inputsSize / GRID_SLOTS.length) * GRID_SLOTS.length;
+				for (int i = 0; i < iterations; i++) {
+					int gridIndex = i % GRID_SLOTS.length;
 
-				items.computeIfAbsent(GRID_SLOTS[gridIndex] - 2, k -> new ArrayList<>()).add(
-					i < inputsSize ? inputs.get(i) : ItemStack.empty()
-				);
+					items.computeIfAbsent(GRID_SLOTS[gridIndex] - 2, k -> new ArrayList<>()).add(
+						i < inputsSize ? inputs.get(i) : ItemStack.empty()
+					);
+				}
 			}
 		}
 		VIEWERS.put(player.getUniqueId(), new RecipeDisplay(player, items, 30));
@@ -446,7 +446,7 @@ public class AllRecipesInRecipeBook implements Listener {
 		if (event.getInventory().getType() != InventoryType.WORKBENCH) return;
 		if (!(event.getPlayer() instanceof Player player)) return;
 
-		player.undiscoverRecipes(player.getDiscoveredRecipes().stream().filter(key -> FAKE_RECIPE_NAMESPACE.equals(key.getNamespace())).toList());
+		player.justSendRecipes(player.getDiscoveredRecipes().stream().filter(key -> FAKE_RECIPE_NAMESPACE.equals(key.getNamespace())).toList(), false, false, true);
 	}
 
 	@EventHandler
@@ -455,7 +455,7 @@ public class AllRecipesInRecipeBook implements Listener {
 		if (!(event.getPlayer() instanceof Player player)) return;
 
 		if (TrappedNewbieAdvancements.MAKE_A_WORK_STATION.isDone(player))
-			player.justSendRecipes(player.getDiscoveredRecipes(), false,false, true);
+			player.justSendRecipes(player.getDiscoveredRecipes(), false, false, true);
 	}
 
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)

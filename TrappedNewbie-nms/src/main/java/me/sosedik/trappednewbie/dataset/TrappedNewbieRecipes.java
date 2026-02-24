@@ -1,5 +1,6 @@
 package me.sosedik.trappednewbie.dataset;
 
+import com.destroystokyo.paper.MaterialTags;
 import de.tr7zw.nbtapi.NBT;
 import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import de.tr7zw.nbtapi.iface.ReadableNBT;
@@ -29,6 +30,7 @@ import me.sosedik.utilizer.api.event.recipe.ItemCraftPrepareEvent;
 import me.sosedik.utilizer.api.recipe.CraftingRecipeBuilder;
 import me.sosedik.utilizer.api.recipe.CustomRecipe;
 import me.sosedik.utilizer.dataset.UtilizerTags;
+import me.sosedik.utilizer.impl.recipe.BlastingCraft;
 import me.sosedik.utilizer.impl.recipe.BrewingCraft;
 import me.sosedik.utilizer.impl.recipe.CampfireCraft;
 import me.sosedik.utilizer.impl.recipe.FireCraft;
@@ -355,6 +357,14 @@ public class TrappedNewbieRecipes {
 				.register();
 		});
 
+		Material[] books = new Material[] {
+			Material.BOOK, Material.ENCHANTED_BOOK, Material.WRITABLE_BOOK, Material.WRITTEN_BOOK, Material.KNOWLEDGE_BOOK
+		};
+		new ShapedCraft(ItemStack.of(Material.BOOKSHELF), trappedNewbieKey("bookshelf"), "PPP", "BBB", "PPP")
+			.addIngredients('B', books)
+			.addIngredients('P', Tag.PLANKS.getValues())
+			.register();
+
 		new ShapelessCraft(ItemStack.of(TrappedNewbieItems.RAW_HIDE), trappedNewbieKey("raw_hide"))
 			.addIngredients(UtilizerTags.HIDES.getValues())
 			.addIngredients(UtilizerTags.KNIFES.getValues())
@@ -364,6 +374,7 @@ public class TrappedNewbieRecipes {
 			.register();
 
 		new ShapelessCraft(ItemStack.of(Material.PAPER), trappedNewbieKey("paper_from_birch_barks"))
+			.withGroup("paper")
 			.addIngredients(TrappedNewbieItems.BIRCH_BARK, 3)
 			.register();
 
@@ -379,6 +390,14 @@ public class TrappedNewbieRecipes {
 			.addIngredients('S', TrappedNewbieItems.TWINE, Material.STRING)
 			.addIngredients(TrappedNewbieTags.GLASS_SHARDS.getValues(), 2)
 			.register();
+		new ShapelessCraft(ItemStack.of(TrappedNewbieItems.GLASS_SHARD, 2), trappedNewbieKey("glass_bottle_to_glass_shards"))
+			.addIngredients(Material.GLASS_BOTTLE)
+			.addIngredients(TrappedNewbieTags.HAMMERS.getValues())
+			.register();
+		new StonecuttingCraft(ItemStack.of(TrappedNewbieItems.GLASS_SHARD, 2), trappedNewbieKey("glass_bottle_to_glass_shards"))
+			.withGroup(formatStonecutterGroup(TrappedNewbieItems.GLASS_SHARD))
+			.addIngredients(Material.GLASS_BOTTLE)
+			.register();
 
 		FillingBowlWithWater.BOWLS_BOTTLES.forEach((bowl, filledBowl) -> {
 			if (bowl == Material.GLASS_BOTTLE) return;
@@ -388,6 +407,7 @@ public class TrappedNewbieRecipes {
 				.withExemptLeftovers()
 				.register();
 		});
+
 		TrappedNewbieTags.CANTEENS.getValues().forEach(canteen -> {
 			new ShapelessCraft(ItemStack.of(canteen), trappedNewbieKey(canteen.key().value() + "_emptying"))
 				.special()
@@ -409,6 +429,12 @@ public class TrappedNewbieRecipes {
 				})
 				.register();
 		});
+
+		new ShapelessCraft(ItemStack.of(Material.BOWL), trappedNewbieKey("stew_emptying"))
+			.special()
+			.withGroup("bowl_emptying")
+			.addIngredients('B', Material.MUSHROOM_STEW, Material.RABBIT_STEW, Material.SUSPICIOUS_STEW, Material.BEETROOT_SOUP, DelightfulFarmingItems.GLOWGURT)
+			.register();
 
 		new ShapedCraft(ScrapModifier.makeScrap(ItemStack.of(TrappedNewbieItems.CANTEEN)), trappedNewbieKey("canteen"), "TLT", "LIL", "LLL")
 			.withCategory(CraftingBookCategory.EQUIPMENT)
@@ -477,6 +503,24 @@ public class TrappedNewbieRecipes {
 				.register();
 		}
 
+		for (Material carpet : Tag.WOOL_CARPETS.getValues()) {
+			Material wool = Material.matchMaterial(carpet.key().value().replace("carpet", "wool"));
+			assert wool != null;
+			// Wool to carpets with a knife
+			new ShapelessCraft(ItemStack.of(carpet, 3), trappedNewbieKey(carpet.key().value() + "_from_wool")).withGroup("carpets_from_wool")
+				.addIngredients('S', UtilizerTags.KNIFES.getValues())
+				.addIngredients(wool)
+				.register();
+			// Wool to carpets in a stonecutter
+			new StonecuttingCraft(ItemStack.of(carpet, 3), trappedNewbieKey(carpet.key().value() + "_to_carpet")).withGroup("wool_to_carpet_from_stonecutting")
+				.addIngredients(wool)
+				.register();
+			// Carpets to wool
+			new ShapelessCraft(ItemStack.of(wool), trappedNewbieKey(carpet.key().value() + "_to_wool")).withGroup("carpets_to_wool")
+				.addIngredients(carpet, 3)
+				.register();
+		}
+
 		new ShapedCraft(BucketModifier.BucketType.CLAY.save(ItemStack.of(Material.BUCKET)), trappedNewbieKey("clay_bucket"), "C C", " C ")
 			.addIngredients('C', Material.CLAY_BALL)
 			.register();
@@ -493,10 +537,6 @@ public class TrappedNewbieRecipes {
 			BucketModifier.BucketType bucketType = BucketModifier.BucketType.valueOf(planks.name().replace("_PLANKS", ""));
 
 			new ShapedCraft(bucketType.save(ItemStack.of(Material.BUCKET)), bucketType.getKey(), "P P", " P ")
-				.withGroup("wooden_bucket")
-				.addIngredients('P', planks)
-				.register();
-			new StonecuttingCraft(bucketType.save(ItemStack.of(Material.BUCKET)), bucketType.getKey())
 				.withGroup("wooden_bucket")
 				.addIngredients('P', planks)
 				.register();
@@ -625,6 +665,635 @@ public class TrappedNewbieRecipes {
 		addRockRecipe(TrappedNewbieItems.ICE_CUBE, Material.ICE);
 		addRockRecipe(TrappedNewbieItems.ICE_PEBBLE, Material.ICE);
 
+		Material[] toDirt = new Material[] {
+			Material.GRASS_BLOCK, Material.PODZOL, Material.MYCELIUM,
+			Material.DIRT_PATH, Material.FARMLAND,
+			Material.COARSE_DIRT, Material.MUD
+		};
+		new ShapelessCraft(ItemStack.of(Material.DIRT), trappedNewbieKey("grass_block_to_dirt"))
+			.addIngredients('G', toDirt)
+			.register();
+		new StonecuttingCraft(ItemStack.of(Material.DIRT), trappedNewbieKey("grass_block_to_dirt"))
+			.withGroup(formatStonecutterGroup(Material.DIRT))
+			.addIngredients('D', toDirt)
+			.register();
+
+		new ShapelessCraft(ItemStack.of(Material.SNOW_BLOCK), trappedNewbieKey("snow_block"))
+			.addIngredients(Material.SNOWBALL, 8)
+			.register();
+		new ShapelessCraft(ItemStack.of(Material.SNOWBALL, 8), trappedNewbieKey("snowball"))
+			.withGroup("snowball")
+			.addIngredients(Material.SNOW_BLOCK)
+			.register();
+		new ShapelessCraft(ItemStack.of(Material.SNOWBALL), trappedNewbieKey("snowball_from_snow"))
+			.withGroup("snowball")
+			.addIngredients(Material.SNOW)
+			.register();
+		new ShapelessCraft(ItemStack.of(Material.SNOW), trappedNewbieKey("snow"))
+			.addIngredients(Material.SNOWBALL)
+			.register();
+		new StonecuttingCraft(ItemStack.of(Material.SNOWBALL, 8), trappedNewbieKey("snow_block_to_snowball"))
+			.withGroup(formatStonecutterGroup(Material.SNOWBALL))
+			.addIngredients(Material.SNOW_BLOCK)
+			.register();
+		new StonecuttingCraft(ItemStack.of(Material.SNOW, 8), trappedNewbieKey("snow_block_to_snow"))
+			.withGroup(formatStonecutterGroup(Material.SNOW))
+			.addIngredients(Material.SNOW_BLOCK)
+			.register();
+
+		// MCCheck: 1.21.11, new logs
+		List.of(
+			Material.OAK_LOG, Material.BIRCH_LOG, Material.SPRUCE_LOG, Material.JUNGLE_LOG,
+			Material.ACACIA_LOG, Material.DARK_OAK_LOG, Material.MANGROVE_LOG, Material.CHERRY_LOG,
+			Material.PALE_OAK_LOG,
+			Material.BAMBOO_BLOCK,
+			Material.CRIMSON_STEM, Material.WARPED_STEM
+		).forEach(log -> {
+			Material strippedLog = Material.matchMaterial("stripped_" + log.key().value());
+			Material wood = log == Material.BAMBOO_BLOCK ? null : Material.matchMaterial(log.key().value().replace("log", "wood").replace("stem", "hyphae"));
+			Material strippedWood = log == Material.BAMBOO_BLOCK ? null : Material.matchMaterial("stripped_" + log.key().value().replace("log", "wood").replace("stem", "hyphae"));
+			Material planks = Material.matchMaterial(log.key().value().replaceAll("(log|stem|block)", "planks"));
+			if (strippedLog == null) {
+				TrappedNewbie.logger().warn("Couldn't find stripped log for a log: {}", log.key());
+				return;
+			}
+			if (wood == null) {
+				if (log != Material.BAMBOO_BLOCK)
+					TrappedNewbie.logger().warn("Couldn't find wood for a log: {}", log.key());
+				return;
+			}
+			if (planks == null) {
+				TrappedNewbie.logger().warn("Couldn't find planks for a log: {}", log.key());
+				return;
+			}
+
+			// Logs -> Planks
+			new StonecuttingCraft(ItemStack.of(planks, 4), trappedNewbieKey(log.key().value() + "_to_" + planks.key().value()))
+				.withGroup(formatStonecutterGroup(planks))
+				.addIngredients(log)
+				.register();
+			new StonecuttingCraft(ItemStack.of(planks, 4), trappedNewbieKey(strippedLog.key().value() + "_to_" + planks.key().value()))
+				.withGroup(formatStonecutterGroup(planks))
+				.addIngredients(strippedLog)
+				.register();
+			new StonecuttingCraft(ItemStack.of(planks, 4), trappedNewbieKey(wood.key().value() + "_to_" + planks.key().value()))
+				.withGroup(formatStonecutterGroup(planks))
+				.addIngredients(wood)
+				.register();
+			new StonecuttingCraft(ItemStack.of(planks, 4), trappedNewbieKey(strippedWood.key().value() + "_to_" + planks.key().value()))
+				.withGroup(formatStonecutterGroup(planks))
+				.addIngredients(strippedWood)
+				.register();
+
+			// Wood stripping
+			new StonecuttingCraft(ItemStack.of(log), trappedNewbieKey(wood.key().value() + "_to_" + log.key().value()))
+				.withGroup(formatStonecutterGroup(log))
+				.addIngredients(wood)
+				.register();
+			new StonecuttingCraft(ItemStack.of(strippedLog), trappedNewbieKey(wood.key().value() + "_to_" + strippedLog.key().value()))
+				.withGroup(formatStonecutterGroup(strippedLog))
+				.addIngredients(wood)
+				.register();
+			new StonecuttingCraft(ItemStack.of(strippedWood), trappedNewbieKey(wood.key().value() + "_to_" + strippedWood.key().value()))
+				.withGroup(formatStonecutterGroup(strippedWood))
+				.addIngredients(wood)
+				.register();
+
+			// Log stripping
+			new StonecuttingCraft(ItemStack.of(strippedLog), trappedNewbieKey(log.key().value() + "_to_" + strippedLog.key().value()))
+				.withGroup(formatStonecutterGroup(strippedLog))
+				.addIngredients(log)
+				.register();
+		});
+
+		new StonecuttingCraft(ItemStack.of(Material.CHIPPED_ANVIL), trappedNewbieKey("anvil_to_chipped_anvil"))
+			.withGroup("anvil_damaging")
+			.addIngredients(Material.ANVIL)
+			.register();
+		new StonecuttingCraft(ItemStack.of(Material.DAMAGED_ANVIL), trappedNewbieKey("anvil_to_damaged_anvil"))
+			.withGroup("anvil_damaging")
+			.addIngredients(Material.ANVIL)
+			.register();
+		new StonecuttingCraft(ItemStack.of(Material.DAMAGED_ANVIL), trappedNewbieKey("chipped_anvil_to_damaged_anvil"))
+			.withGroup("anvil_damaging")
+			.addIngredients(Material.CHIPPED_ANVIL)
+			.register();
+
+		new StonecuttingCraft(ItemStack.of(Material.CHEST), trappedNewbieKey("trapped_chest_to_chest"))
+			.withGroup(formatStonecutterGroup(Material.CHEST))
+			.addIngredients(Material.TRAPPED_CHEST)
+			.register();
+
+		new StonecuttingCraft(ItemStack.of(Material.IRON_CHAIN), trappedNewbieKey("iron_ingot_to_iron_chain"))
+			.withGroup(formatStonecutterGroup(Material.IRON_CHAIN))
+			.addIngredients(Material.IRON_INGOT)
+			.register();
+		new BlastingCraft(ItemStack.of(Material.IRON_NUGGET, 8), 5 * 20, trappedNewbieKey("iron_chain_to_iron_nuggets"))
+			.withExp(2)
+			.addIngredients(Material.IRON_CHAIN)
+			.register();
+		new StonecuttingCraft(ItemStack.of(Material.IRON_BARS, 2), trappedNewbieKey("iron_ingot_to_iron_bars"))
+			.withGroup(formatStonecutterGroup(Material.IRON_BARS))
+			.addIngredients(Material.IRON_INGOT)
+			.register();
+		new BlastingCraft(ItemStack.of(Material.IRON_NUGGET, 4), 50, trappedNewbieKey("iron_bars_to_iron_nuggets"))
+			.withExp(1)
+			.addIngredients(Material.IRON_BARS)
+			.register();
+		new StonecuttingCraft(ItemStack.of(Material.COPPER_CHAIN), trappedNewbieKey("copper_ingot_to_copper_chain"))
+			.withGroup(formatStonecutterGroup(Material.COPPER_CHAIN))
+			.addIngredients(Material.COPPER_INGOT)
+			.register();
+		new BlastingCraft(ItemStack.of(Material.COPPER_NUGGET, 8), 5 * 20, trappedNewbieKey("copper_chain_to_copper_nuggets"))
+			.withExp(2)
+			.addIngredients('C',
+				Material.COPPER_CHAIN, Material.EXPOSED_COPPER_CHAIN, Material.WEATHERED_COPPER_CHAIN, Material.OXIDIZED_COPPER_CHAIN,
+				Material.WAXED_COPPER_CHAIN, Material.WAXED_EXPOSED_COPPER_CHAIN, Material.WAXED_WEATHERED_COPPER_CHAIN, Material.WAXED_OXIDIZED_COPPER_CHAIN
+			)
+			.register();
+		new StonecuttingCraft(ItemStack.of(Material.COPPER_BARS, 2), trappedNewbieKey("copper_ingot_to_copper_bars"))
+			.withGroup(formatStonecutterGroup(Material.COPPER_BARS))
+			.addIngredients(Material.COPPER_INGOT)
+			.register();
+		new BlastingCraft(ItemStack.of(Material.COPPER_NUGGET, 4), 50, trappedNewbieKey("copper_bars_to_copper_nuggets"))
+			.withExp(1)
+			.addIngredients('C',
+				Material.COPPER_BARS, Material.EXPOSED_COPPER_BARS, Material.WEATHERED_COPPER_BARS, Material.OXIDIZED_COPPER_BARS,
+				Material.WAXED_COPPER_BARS, Material.WAXED_EXPOSED_COPPER_BARS, Material.WAXED_WEATHERED_COPPER_BARS, Material.WAXED_OXIDIZED_COPPER_BARS
+			)
+			.register();
+
+		Material[] packedMudVariations = new Material[] {
+			Material.PACKED_MUD,
+			Material.MUD_BRICKS, Material.MUD_BRICK_STAIRS, Material.MUD_BRICK_SLAB, Material.MUD_BRICK_WALL
+		};
+		addStonecutterRecipesWithRemoval(packedMudVariations);
+		new StonecuttingCraft(ItemStack.of(Material.MUD), trappedNewbieKey("packed_mud_to_mud"))
+			.withGroup(formatStonecutterGroup(Material.MUD))
+			.addIngredients('M', packedMudVariations)
+			.register();
+		new StonecuttingCraft(ItemStack.of(Material.MUD), trappedNewbieKey("muddy_mungrove_roots_to_mud"))
+			.withGroup(formatStonecutterGroup(Material.MUD))
+			.addIngredients(Material.MUDDY_MANGROVE_ROOTS)
+			.register();
+		new StonecuttingCraft(ItemStack.of(Material.MANGROVE_ROOTS), trappedNewbieKey("muddy_mungrove_roots_to_mangrove_roots"))
+			.withGroup(formatStonecutterGroup(Material.MANGROVE_ROOTS))
+			.addIngredients(Material.MUDDY_MANGROVE_ROOTS)
+			.register();
+
+		new StonecuttingCraft(ItemStack.of(Material.GLOWSTONE_DUST, 4), trappedNewbieKey("glowstone_to_glowstone_dust"))
+			.withGroup(formatStonecutterGroup(Material.GLOWSTONE_DUST))
+			.addIngredients(Material.GLOWSTONE)
+			.register();
+
+		new StonecuttingCraft(ItemStack.of(Material.HONEYCOMB, 4), trappedNewbieKey("honeycomb_block_to_honeycomb"))
+			.withGroup(formatStonecutterGroup(Material.HONEYCOMB))
+			.addIngredients(Material.HONEYCOMB_BLOCK)
+			.register();
+
+		new StonecuttingCraft(ItemStack.of(Material.AMETHYST_SHARD, 4), trappedNewbieKey("amethyst_block_to_amethyst_shard"))
+			.withGroup(formatStonecutterGroup(Material.AMETHYST_SHARD))
+			.addIngredients(Material.AMETHYST_BLOCK)
+			.register();
+
+		new StonecuttingCraft(ItemStack.of(Material.CLAY_BALL, 4), trappedNewbieKey("clay_to_clay_ball"))
+			.withGroup(formatStonecutterGroup(Material.CLAY_BALL))
+			.addIngredients(Material.CLAY)
+			.register();
+
+		new StonecuttingCraft(ItemStack.of(Material.POINTED_DRIPSTONE, 4), trappedNewbieKey("dripstone_to_pointed_dripstone"))
+			.withGroup(formatStonecutterGroup(Material.POINTED_DRIPSTONE))
+			.addIngredients(Material.DRIPSTONE_BLOCK)
+			.register();
+
+		new StonecuttingCraft(ItemStack.of(Material.PRISMARINE_CRYSTALS, 5), trappedNewbieKey("sea_lantern_to_prismarine_crystals"))
+			.withGroup(formatStonecutterGroup(Material.PRISMARINE_CRYSTALS))
+			.addIngredients(Material.SEA_LANTERN)
+			.register();
+
+		new StonecuttingCraft(ItemStack.of(Material.WHEAT, 9), trappedNewbieKey("hay_block_to_wheat"))
+			.withGroup(formatStonecutterGroup(Material.WHEAT))
+			.addIngredients(Material.HAY_BLOCK)
+			.register();
+
+		new StonecuttingCraft(ItemStack.of(Material.DRIED_KELP, 9), trappedNewbieKey("dried_kelp_block_to_dried_kelp"))
+			.withGroup(formatStonecutterGroup(Material.DRIED_KELP))
+			.addIngredients(Material.DRIED_KELP_BLOCK)
+			.register();
+
+		new StonecuttingCraft(ItemStack.of(Material.BAMBOO, 9), trappedNewbieKey("bamboo_block_to_bamboo"))
+			.withGroup(formatStonecutterGroup(Material.BAMBOO))
+			.addIngredients(Material.BAMBOO_BLOCK)
+			.register();
+
+		new StonecuttingCraft(ItemStack.of(Material.COAL, 9), trappedNewbieKey("coal_block_to_coal"))
+			.withGroup(formatStonecutterGroup(Material.COAL))
+			.addIngredients(Material.COAL_BLOCK)
+			.register();
+		new StonecuttingCraft(ItemStack.of(Material.CHARCOAL, 9), trappedNewbieKey("charcoal_block_to_coal"))
+			.withGroup(formatStonecutterGroup(Material.CHARCOAL))
+			.addIngredients(DelightfulFarmingItems.CHARCOAL_BLOCK)
+			.register();
+
+		new StonecuttingCraft(ItemStack.of(Material.DIAMOND, 9), trappedNewbieKey("diamond_block_to_diamond"))
+			.withGroup(formatStonecutterGroup(Material.DIAMOND))
+			.addIngredients(Material.DIAMOND_BLOCK)
+			.register();
+
+		new StonecuttingCraft(ItemStack.of(Material.EMERALD, 9), trappedNewbieKey("emeral_block_to_emerald"))
+			.withGroup(formatStonecutterGroup(Material.EMERALD))
+			.addIngredients(Material.EMERALD_BLOCK)
+			.register();
+
+		new StonecuttingCraft(ItemStack.of(Material.IRON_INGOT, 9), trappedNewbieKey("iron_block_to_iron_ingot"))
+			.withGroup(formatStonecutterGroup(Material.IRON_INGOT))
+			.addIngredients(Material.IRON_BLOCK)
+			.register();
+
+		new StonecuttingCraft(ItemStack.of(Material.IRON_NUGGET, 9), trappedNewbieKey("iron_ingot_to_iron_nugget"))
+			.withGroup(formatStonecutterGroup(Material.IRON_NUGGET))
+			.addIngredients(Material.IRON_INGOT)
+			.register();
+
+		new StonecuttingCraft(ItemStack.of(Material.RAW_IRON, 9), trappedNewbieKey("raw_iron_block_to_raw_iron"))
+			.withGroup(formatStonecutterGroup(Material.IRON_INGOT))
+			.addIngredients(Material.RAW_IRON_BLOCK)
+			.register();
+
+		new StonecuttingCraft(ItemStack.of(Material.GOLD_INGOT, 9), trappedNewbieKey("gold_block_to_gold_ingot"))
+			.withGroup(formatStonecutterGroup(Material.GOLD_INGOT))
+			.addIngredients(Material.GOLD_BLOCK)
+			.register();
+
+		new StonecuttingCraft(ItemStack.of(Material.GOLD_NUGGET, 9), trappedNewbieKey("gold_ingot_to_gold_nugget"))
+			.withGroup(formatStonecutterGroup(Material.GOLD_NUGGET))
+			.addIngredients(Material.GOLD_INGOT)
+			.register();
+
+		new StonecuttingCraft(ItemStack.of(Material.RAW_GOLD, 9), trappedNewbieKey("raw_gold_block_to_raw_gold"))
+			.withGroup(formatStonecutterGroup(Material.RAW_GOLD))
+			.addIngredients(Material.RAW_GOLD_BLOCK)
+			.register();
+
+		new StonecuttingCraft(ItemStack.of(Material.COPPER_INGOT, 9), trappedNewbieKey("copper_block_to_copper_ingot"))
+			.withGroup(formatStonecutterGroup(Material.COPPER_INGOT))
+			.addIngredients(Material.COPPER_BLOCK)
+			.register();
+		new StonecuttingCraft(ItemStack.of(Material.COPPER_INGOT, 9), trappedNewbieKey("waxed_copper_block_to_copper_ingot"))
+			.withGroup(formatStonecutterGroup(Material.COPPER_INGOT))
+			.addIngredients(Material.WAXED_COPPER_BLOCK)
+			.register();
+
+		new StonecuttingCraft(ItemStack.of(Material.COPPER_NUGGET, 9), trappedNewbieKey("copper_ingot_to_copper_nugget"))
+			.withGroup(formatStonecutterGroup(Material.COPPER_NUGGET))
+			.addIngredients(Material.COPPER_INGOT)
+			.register();
+
+		new StonecuttingCraft(ItemStack.of(Material.RAW_COPPER, 9), trappedNewbieKey("raw_copper_block_to_raw_copper"))
+			.withGroup(formatStonecutterGroup(Material.RAW_COPPER))
+			.addIngredients(Material.RAW_COPPER_BLOCK)
+			.register();
+
+		new StonecuttingCraft(ItemStack.of(Material.LAPIS_LAZULI, 9), trappedNewbieKey("lapis_block_to_lapis_lazuli"))
+			.withGroup(formatStonecutterGroup(Material.LAPIS_LAZULI))
+			.addIngredients(Material.LAPIS_BLOCK)
+			.register();
+
+		new StonecuttingCraft(ItemStack.of(Material.REDSTONE, 9), trappedNewbieKey("redstone_block_to_redstone"))
+			.withGroup(formatStonecutterGroup(Material.REDSTONE))
+			.addIngredients(Material.REDSTONE_BLOCK)
+			.register();
+
+		new StonecuttingCraft(ItemStack.of(Material.NETHERITE_INGOT, 9), trappedNewbieKey("netherite_block_to_netherite_ingot"))
+			.withGroup(formatStonecutterGroup(Material.NETHERITE_INGOT))
+			.addIngredients(Material.NETHERITE_BLOCK)
+			.register();
+
+		new StonecuttingCraft(ItemStack.of(Material.RESIN_CLUMP, 9), trappedNewbieKey("resin_block_to_resin_clump"))
+			.withGroup(formatStonecutterGroup(Material.RESIN_CLUMP))
+			.addIngredients(Material.RESIN_BLOCK)
+			.register();
+
+		new StonecuttingCraft(ItemStack.of(Material.BONE_MEAL, 9), trappedNewbieKey("bone_block_to_bone_meal"))
+			.withGroup(formatStonecutterGroup(Material.BONE_MEAL))
+			.addIngredients(Material.BONE_BLOCK)
+			.register();
+		new StonecuttingCraft(ItemStack.of(Material.BONE_MEAL, 3), trappedNewbieKey("bone_to_bone_meal"))
+			.withGroup(formatStonecutterGroup(Material.BONE_MEAL))
+			.addIngredients(Material.BONE)
+			.register();
+
+		new StonecuttingCraft(ItemStack.of(Material.PUMPKIN_SEEDS, 4), trappedNewbieKey("pumpkin_to_pumpkin_seeds"))
+			.withGroup(formatStonecutterGroup(Material.PUMPKIN_SEEDS))
+			.addIngredients(Material.PUMPKIN)
+			.register();
+
+		new StonecuttingCraft(ItemStack.of(Material.MELON_SEEDS), trappedNewbieKey("melon_slice_to_melon_seeds"))
+			.withGroup(formatStonecutterGroup(Material.MELON_SEEDS))
+			.addIngredients(Material.MELON_SLICE)
+			.register();
+
+		new StonecuttingCraft(ItemStack.of(Material.MELON_SLICE, 9), trappedNewbieKey("melon_to_melon_slice"))
+			.withGroup(formatStonecutterGroup(Material.MELON_SLICE))
+			.addIngredients(Material.MELON)
+			.register();
+
+		new StonecuttingCraft(ItemStack.of(Material.SWEET_BERRIES, 9), trappedNewbieKey("sweet_berry_basket_to_sweet_berries"))
+			.withGroup(formatStonecutterGroup(Material.SWEET_BERRIES))
+			.addIngredients(DelightfulFarmingItems.SWEET_BERRY_BASKET)
+			.register();
+
+		new StonecuttingCraft(ItemStack.of(Material.GLOW_BERRIES, 9), trappedNewbieKey("glow_berry_basket_to_glow_berries"))
+			.withGroup(formatStonecutterGroup(Material.GLOW_BERRIES))
+			.addIngredients(DelightfulFarmingItems.GLOW_BERRY_BASKET)
+			.register();
+
+		new StonecuttingCraft(ItemStack.of(Material.SLIME_BALL, 9), trappedNewbieKey("slime_block_to_slime_ball"))
+			.withGroup(formatStonecutterGroup(Material.SLIME_BALL))
+			.addIngredients(Material.SLIME_BLOCK)
+			.register();
+
+		new ShapelessCraft(ItemStack.of(Material.NETHER_WART, 9), trappedNewbieKey("nether_wart_block_to_nether_wart"))
+			.addIngredients(Material.NETHER_WART_BLOCK)
+			.register();
+		new StonecuttingCraft(ItemStack.of(Material.NETHER_WART, 9), trappedNewbieKey("nether_wart_block_to_nether_wart"))
+			.withGroup(formatStonecutterGroup(Material.NETHER_WART))
+			.addIngredients(Material.NETHER_WART_BLOCK)
+			.register();
+
+		new StonecuttingCraft(ItemStack.of(Material.ICE, 9), trappedNewbieKey("packed_ice_to_ice"))
+			.withGroup(formatStonecutterGroup(Material.ICE))
+			.addIngredients(Material.PACKED_ICE)
+			.register();
+		new StonecuttingCraft(ItemStack.of(Material.PACKED_ICE, 9), trappedNewbieKey("blue_ice_to_packed_ice"))
+			.withGroup(formatStonecutterGroup(Material.PACKED_ICE))
+			.addIngredients(Material.BLUE_ICE)
+			.register();
+
+		Material[] sandstoneVariations = new Material[] {
+			Material.SANDSTONE, Material.SANDSTONE_STAIRS, Material.SANDSTONE_SLAB, Material.SANDSTONE_WALL,
+			Material.SMOOTH_SANDSTONE, Material.SMOOTH_SANDSTONE_STAIRS, Material.SMOOTH_SANDSTONE_SLAB,
+			Material.CUT_SANDSTONE, Material.CUT_SANDSTONE_SLAB, Material.CHISELED_SANDSTONE
+		};
+		addStonecutterRecipesWithRemoval(sandstoneVariations);
+		new StonecuttingCraft(ItemStack.of(Material.SAND, 4), trappedNewbieKey("sandstone_to_sand"))
+			.withGroup(formatStonecutterGroup(Material.SAND))
+			.addIngredients('S', sandstoneVariations)
+			.register();
+		Material[] redSandstoneVariations = new Material[] {
+			Material.RED_SANDSTONE, Material.RED_SANDSTONE_STAIRS, Material.RED_SANDSTONE_SLAB, Material.RED_SANDSTONE_WALL,
+			Material.SMOOTH_RED_SANDSTONE, Material.SMOOTH_RED_SANDSTONE_STAIRS, Material.SMOOTH_RED_SANDSTONE_SLAB,
+			Material.CUT_RED_SANDSTONE, Material.CUT_RED_SANDSTONE_SLAB, Material.CHISELED_RED_SANDSTONE
+		};
+		addStonecutterRecipesWithRemoval(redSandstoneVariations);
+		new StonecuttingCraft(ItemStack.of(Material.RED_SAND, 4), trappedNewbieKey("red_sandstone_to_red_sand"))
+			.withGroup(formatStonecutterGroup(Material.RED_SAND))
+			.addIngredients('S', redSandstoneVariations)
+			.register();
+
+		Material[] bricksVariations = new Material[] {
+			Material.BRICKS, Material.BRICK_STAIRS, Material.BRICK_SLAB, Material.BRICK_WALL
+		};
+		addStonecutterRecipesWithRemoval(bricksVariations);
+		new StonecuttingCraft(ItemStack.of(Material.BRICK, 4), trappedNewbieKey("bricks_to_brick"))
+			.withGroup(formatStonecutterGroup(Material.BRICK))
+			.addIngredients('B', bricksVariations)
+			.register();
+
+		Material[] prismarineVariations = new Material[] {
+			Material.PRISMARINE, Material.PRISMARINE_STAIRS, Material.PRISMARINE_SLAB, Material.PRISMARINE_WALL,
+			Material.PRISMARINE_BRICKS, Material.PRISMARINE_BRICK_STAIRS, Material.PRISMARINE_BRICK_SLAB
+		};
+		Material[] darkPrismarineVariations = new Material[] {
+			Material.DARK_PRISMARINE, Material.DARK_PRISMARINE_STAIRS, Material.DARK_PRISMARINE_SLAB
+		};
+		addStonecutterRecipesWithRemoval(prismarineVariations);
+		addStonecutterRecipesWithRemoval(darkPrismarineVariations);
+		new StonecuttingCraft(ItemStack.of(Material.PRISMARINE_SHARD, 9), trappedNewbieKey("prismarine_to_prismarine_shards"))
+			.withGroup(formatStonecutterGroup(Material.PRISMARINE_SHARD))
+			.addIngredients('P', MiscUtil.combineArrays(prismarineVariations, darkPrismarineVariations))
+			.register();
+
+		Material[] quartzs = new Material[] {
+			Material.QUARTZ_BLOCK, Material.QUARTZ_STAIRS, Material.QUARTZ_SLAB,
+			Material.SMOOTH_QUARTZ, Material.SMOOTH_QUARTZ_STAIRS, Material.SMOOTH_QUARTZ_SLAB,
+			Material.QUARTZ_BRICKS, Material.QUARTZ_PILLAR,
+			Material.CHISELED_QUARTZ_BLOCK
+		};
+		addStonecutterRecipesWithRemoval(quartzs);
+		new StonecuttingCraft(ItemStack.of(Material.QUARTZ, 4), trappedNewbieKey("quartz_block_to_quartz"))
+			.withGroup(formatStonecutterGroup(Material.QUARTZ))
+			.addIngredients('Q', quartzs)
+			.register();
+
+		Material[] oakWoods = new Material[] {
+			Material.OAK_PLANKS, Material.OAK_STAIRS, Material.OAK_SLAB,
+			Material.OAK_DOOR, Material.OAK_TRAPDOOR,
+			Material.OAK_SHELF, Material.OAK_FENCE, Material.OAK_FENCE_GATE,
+			Material.OAK_SIGN, Material.OAK_HANGING_SIGN,
+			Material.OAK_PRESSURE_PLATE, Material.OAK_BUTTON,
+			Material.PETRIFIED_OAK_SLAB
+		};
+		Material[] spruceWoods = new Material[] {
+			Material.SPRUCE_PLANKS, Material.SPRUCE_STAIRS, Material.SPRUCE_SLAB,
+			Material.SPRUCE_DOOR, Material.SPRUCE_TRAPDOOR,
+			Material.SPRUCE_SHELF, Material.SPRUCE_FENCE, Material.SPRUCE_FENCE_GATE,
+			Material.SPRUCE_SIGN, Material.SPRUCE_HANGING_SIGN,
+			Material.SPRUCE_PRESSURE_PLATE, Material.SPRUCE_BUTTON
+		};
+		Material[] birchWoods = new Material[] {
+			Material.BIRCH_PLANKS, Material.BIRCH_STAIRS, Material.BIRCH_SLAB,
+			Material.BIRCH_DOOR, Material.BIRCH_TRAPDOOR,
+			Material.BIRCH_SHELF, Material.BIRCH_FENCE, Material.BIRCH_FENCE_GATE,
+			Material.BIRCH_SIGN, Material.BIRCH_HANGING_SIGN,
+			Material.BIRCH_PRESSURE_PLATE, Material.BIRCH_BUTTON
+		};
+		Material[] jungleWoods = new Material[] {
+			Material.JUNGLE_PLANKS, Material.JUNGLE_STAIRS, Material.JUNGLE_SLAB,
+			Material.JUNGLE_DOOR, Material.JUNGLE_TRAPDOOR,
+			Material.JUNGLE_SHELF, Material.JUNGLE_FENCE, Material.JUNGLE_FENCE_GATE,
+			Material.JUNGLE_SIGN, Material.JUNGLE_HANGING_SIGN,
+			Material.JUNGLE_PRESSURE_PLATE, Material.JUNGLE_BUTTON
+		};
+		Material[] acaciaWoods = new Material[] {
+			Material.ACACIA_PLANKS, Material.ACACIA_STAIRS, Material.ACACIA_SLAB,
+			Material.ACACIA_DOOR, Material.ACACIA_TRAPDOOR,
+			Material.ACACIA_SHELF, Material.ACACIA_FENCE, Material.ACACIA_FENCE_GATE,
+			Material.ACACIA_SIGN, Material.ACACIA_HANGING_SIGN,
+			Material.ACACIA_PRESSURE_PLATE, Material.ACACIA_BUTTON
+		};
+		Material[] darkOakWoods = new Material[] {
+			Material.DARK_OAK_PLANKS, Material.DARK_OAK_STAIRS, Material.DARK_OAK_SLAB,
+			Material.DARK_OAK_DOOR, Material.DARK_OAK_TRAPDOOR,
+			Material.DARK_OAK_SHELF, Material.DARK_OAK_FENCE, Material.DARK_OAK_FENCE_GATE,
+			Material.DARK_OAK_SIGN, Material.DARK_OAK_HANGING_SIGN,
+			Material.DARK_OAK_PRESSURE_PLATE, Material.DARK_OAK_BUTTON
+		};
+		Material[] mangroveWoods = new Material[] {
+			Material.MANGROVE_PLANKS, Material.MANGROVE_STAIRS, Material.MANGROVE_SLAB,
+			Material.MANGROVE_DOOR, Material.MANGROVE_TRAPDOOR,
+			Material.MANGROVE_SHELF, Material.MANGROVE_FENCE, Material.MANGROVE_FENCE_GATE,
+			Material.MANGROVE_SIGN, Material.MANGROVE_HANGING_SIGN,
+			Material.MANGROVE_PRESSURE_PLATE, Material.MANGROVE_BUTTON
+		};
+		Material[] cherryWoods = new Material[] {
+			Material.CHERRY_PLANKS, Material.CHERRY_STAIRS, Material.CHERRY_SLAB,
+			Material.CHERRY_DOOR, Material.CHERRY_TRAPDOOR,
+			Material.CHERRY_SHELF, Material.CHERRY_FENCE, Material.CHERRY_FENCE_GATE,
+			Material.CHERRY_SIGN, Material.CHERRY_HANGING_SIGN,
+			Material.CHERRY_PRESSURE_PLATE, Material.CHERRY_BUTTON
+		};
+		Material[] paleOakWoods = new Material[] {
+			Material.PALE_OAK_PLANKS, Material.PALE_OAK_STAIRS, Material.PALE_OAK_SLAB,
+			Material.PALE_OAK_DOOR, Material.PALE_OAK_TRAPDOOR,
+			Material.PALE_OAK_SHELF, Material.PALE_OAK_FENCE, Material.PALE_OAK_FENCE_GATE,
+			Material.PALE_OAK_SIGN, Material.PALE_OAK_HANGING_SIGN,
+			Material.PALE_OAK_PRESSURE_PLATE, Material.PALE_OAK_BUTTON
+		};
+		Material[] crimsonWoods = new Material[] {
+			Material.CRIMSON_PLANKS, Material.CRIMSON_STAIRS, Material.CRIMSON_SLAB,
+			Material.CRIMSON_DOOR, Material.CRIMSON_TRAPDOOR,
+			Material.CRIMSON_SHELF, Material.CRIMSON_FENCE, Material.CRIMSON_FENCE_GATE,
+			Material.CRIMSON_SIGN, Material.CRIMSON_HANGING_SIGN,
+			Material.CRIMSON_PRESSURE_PLATE, Material.CRIMSON_BUTTON
+		};
+		Material[] warpedWoods = new Material[] {
+			Material.WARPED_PLANKS, Material.WARPED_STAIRS, Material.WARPED_SLAB,
+			Material.WARPED_DOOR, Material.WARPED_TRAPDOOR,
+			Material.WARPED_SHELF, Material.WARPED_FENCE, Material.WARPED_FENCE_GATE,
+			Material.WARPED_SIGN, Material.WARPED_HANGING_SIGN,
+			Material.WARPED_PRESSURE_PLATE, Material.WARPED_BUTTON
+		};
+		Material[] bambooWoods = new Material[] {
+			Material.BAMBOO_PLANKS, Material.BAMBOO_STAIRS, Material.BAMBOO_SLAB,
+			Material.BAMBOO_DOOR, Material.BAMBOO_TRAPDOOR,
+			Material.BAMBOO_SHELF, Material.BAMBOO_FENCE, Material.BAMBOO_FENCE_GATE,
+			Material.BAMBOO_SIGN, Material.BAMBOO_HANGING_SIGN,
+			Material.BAMBOO_PRESSURE_PLATE, Material.BAMBOO_BUTTON,
+			Material.BAMBOO_MOSAIC, Material.BAMBOO_MOSAIC_STAIRS, Material.BAMBOO_MOSAIC_SLAB
+		};
+		addWoodStonecutterRecipesWithRemoval(oakWoods, TrappedNewbieItems.OAK_STICK, BucketModifier.BucketType.OAK);
+		addWoodStonecutterRecipesWithRemoval(spruceWoods, TrappedNewbieItems.SPRUCE_STICK, BucketModifier.BucketType.SPRUCE);
+		addWoodStonecutterRecipesWithRemoval(birchWoods, TrappedNewbieItems.BIRCH_STICK, BucketModifier.BucketType.BIRCH);
+		addWoodStonecutterRecipesWithRemoval(jungleWoods, TrappedNewbieItems.JUNGLE_STICK, BucketModifier.BucketType.JUNGLE);
+		addWoodStonecutterRecipesWithRemoval(acaciaWoods, TrappedNewbieItems.ACACIA_STICK, BucketModifier.BucketType.ACACIA);
+		addWoodStonecutterRecipesWithRemoval(darkOakWoods, TrappedNewbieItems.DARK_OAK_STICK, BucketModifier.BucketType.DARK_OAK);
+		addWoodStonecutterRecipesWithRemoval(mangroveWoods, TrappedNewbieItems.MANGROVE_STICK, BucketModifier.BucketType.MANGROVE);
+		addWoodStonecutterRecipesWithRemoval(cherryWoods, TrappedNewbieItems.CHERRY_STICK, BucketModifier.BucketType.CHERRY);
+		addWoodStonecutterRecipesWithRemoval(paleOakWoods, TrappedNewbieItems.PALE_OAK_STICK, BucketModifier.BucketType.PALE_OAK);
+		addWoodStonecutterRecipesWithRemoval(crimsonWoods, TrappedNewbieItems.CRIMSON_STICK, BucketModifier.BucketType.CRIMSON);
+		addWoodStonecutterRecipesWithRemoval(warpedWoods, TrappedNewbieItems.WARPED_STICK, BucketModifier.BucketType.WARPED);
+		addWoodStonecutterRecipesWithRemoval(bambooWoods, TrappedNewbieItems.BAMBOOS_STICK, BucketModifier.BucketType.BAMBOO);
+
+		addStonecutterRecipesWithRemoval(
+			Material.STONE, Material.STONE_STAIRS, Material.STONE_SLAB,
+			Material.STONE_BRICKS, Material.STONE_BRICK_STAIRS, Material.STONE_BRICK_SLAB, Material.STONE_BRICK_WALL,
+			Material.CHISELED_STONE_BRICKS, Material.CRACKED_STONE_BRICKS,
+			Material.COBBLESTONE, Material.COBBLESTONE_STAIRS, Material.COBBLESTONE_SLAB, Material.COBBLESTONE_WALL,
+			Material.SMOOTH_STONE, Material.SMOOTH_STONE_SLAB,
+			Material.STONE_PRESSURE_PLATE, Material.STONE_BUTTON
+		);
+		addStonecutterRecipesWithRemoval(
+			Material.MOSSY_COBBLESTONE, Material.MOSSY_COBBLESTONE_STAIRS, Material.MOSSY_COBBLESTONE_SLAB, Material.MOSSY_COBBLESTONE_WALL,
+			Material.MOSSY_STONE_BRICKS, Material.MOSSY_STONE_BRICK_STAIRS, Material.MOSSY_STONE_BRICK_SLAB, Material.MOSSY_STONE_BRICK_WALL
+		);
+		addStonecutterRecipesWithRemoval(
+			Material.DIORITE, Material.DIORITE_STAIRS, Material.DIORITE_SLAB, Material.DIORITE_WALL,
+			Material.POLISHED_DIORITE, Material.POLISHED_DIORITE_STAIRS, Material.POLISHED_DIORITE_SLAB
+		);
+		addStonecutterRecipesWithRemoval(
+			Material.GRANITE, Material.GRANITE_STAIRS, Material.GRANITE_SLAB, Material.GRANITE_WALL,
+			Material.POLISHED_GRANITE, Material.POLISHED_GRANITE_STAIRS, Material.POLISHED_GRANITE_SLAB
+		);
+		addStonecutterRecipesWithRemoval(
+			Material.ANDESITE, Material.ANDESITE_STAIRS, Material.ANDESITE_SLAB, Material.ANDESITE_WALL,
+			Material.POLISHED_ANDESITE, Material.POLISHED_ANDESITE_STAIRS, Material.POLISHED_ANDESITE_SLAB
+		);
+		addStonecutterRecipesWithRemoval(
+			Material.TUFF, Material.TUFF_STAIRS, Material.TUFF_SLAB, Material.TUFF_WALL,
+			Material.TUFF_BRICKS, Material.TUFF_BRICK_STAIRS, Material.TUFF_BRICK_SLAB, Material.TUFF_BRICK_WALL,
+			Material.POLISHED_TUFF, Material.POLISHED_TUFF_STAIRS, Material.POLISHED_TUFF_SLAB, Material.POLISHED_TUFF_WALL,
+			Material.CHISELED_TUFF, Material.CHISELED_TUFF_BRICKS
+		);
+		addStonecutterRecipesWithRemoval(
+			Material.DEEPSLATE, Material.CHISELED_DEEPSLATE,
+			Material.POLISHED_DEEPSLATE, Material.POLISHED_DEEPSLATE_STAIRS, Material.POLISHED_DEEPSLATE_SLAB, Material.POLISHED_DEEPSLATE_WALL,
+			Material.COBBLED_DEEPSLATE, Material.COBBLED_DEEPSLATE_STAIRS, Material.COBBLED_DEEPSLATE_SLAB, Material.COBBLED_DEEPSLATE_WALL,
+			Material.DEEPSLATE_TILES, Material.DEEPSLATE_TILE_STAIRS, Material.DEEPSLATE_TILE_SLAB, Material.DEEPSLATE_TILE_WALL,
+			Material.DEEPSLATE_BRICKS, Material.DEEPSLATE_BRICK_STAIRS, Material.DEEPSLATE_BRICK_SLAB, Material.DEEPSLATE_BRICK_WALL,
+			Material.CRACKED_DEEPSLATE_BRICKS, Material.CRACKED_DEEPSLATE_TILES
+		);
+		addStonecutterRecipesWithRemoval(
+			Material.RESIN_BRICKS, Material.RESIN_BRICK_STAIRS, Material.RESIN_BRICK_SLAB, Material.RESIN_BRICK_WALL,
+			Material.CHISELED_RESIN_BRICKS
+		);
+		addStonecutterRecipesWithRemoval(
+			Material.NETHER_BRICKS, Material.NETHER_BRICK_STAIRS, Material.NETHER_BRICK_SLAB, Material.NETHER_BRICK_WALL,
+			Material.NETHER_BRICK_FENCE, Material.CHISELED_NETHER_BRICKS, Material.CRACKED_NETHER_BRICKS
+		);
+		addStonecutterRecipesWithRemoval(
+			Material.RED_NETHER_BRICKS, Material.RED_NETHER_BRICK_STAIRS, Material.RED_NETHER_BRICK_SLAB, Material.RED_NETHER_BRICK_WALL
+		);
+		addStonecutterRecipesWithRemoval(
+			Material.BLACKSTONE, Material.BLACKSTONE_STAIRS, Material.BLACKSTONE_SLAB, Material.BLACKSTONE_WALL,
+			Material.POLISHED_BLACKSTONE, Material.POLISHED_BLACKSTONE_STAIRS, Material.POLISHED_BLACKSTONE_SLAB, Material.POLISHED_BLACKSTONE_WALL,
+			Material.POLISHED_BLACKSTONE_BRICKS, Material.POLISHED_BLACKSTONE_BRICK_STAIRS, Material.POLISHED_BLACKSTONE_BRICK_SLAB, Material.POLISHED_BLACKSTONE_BRICK_WALL,
+			Material.CHISELED_POLISHED_BLACKSTONE, Material.CRACKED_POLISHED_BLACKSTONE_BRICKS,
+			Material.POLISHED_BLACKSTONE_PRESSURE_PLATE, Material.POLISHED_BLACKSTONE_BUTTON
+		);
+		addStonecutterRecipesWithRemoval(
+			Material.END_STONE,
+			Material.END_STONE_BRICKS, Material.END_STONE_BRICK_STAIRS, Material.END_STONE_BRICK_SLAB, Material.END_STONE_BRICK_WALL
+		);
+		addStonecutterRecipesWithRemoval(
+			Material.POPPED_CHORUS_FRUIT,
+			Material.PURPUR_BLOCK, Material.PURPUR_STAIRS, Material.PURPUR_SLAB,
+			Material.PURPUR_PILLAR
+		);
+		addStonecutterRecipesWithRemoval(
+			Material.COPPER_BLOCK, Material.CHISELED_COPPER, Material.COPPER_GRATE,
+			Material.CUT_COPPER, Material.CUT_COPPER_STAIRS, Material.CUT_COPPER_SLAB,
+			Material.COPPER_DOOR, Material.COPPER_TRAPDOOR, Material.LIGHTNING_ROD
+		);
+		addStonecutterRecipesWithRemoval(
+			Material.WAXED_COPPER_BLOCK, Material.WAXED_CHISELED_COPPER, Material.WAXED_COPPER_GRATE,
+			Material.WAXED_CUT_COPPER, Material.WAXED_CUT_COPPER_STAIRS, Material.WAXED_CUT_COPPER_SLAB,
+			Material.WAXED_COPPER_DOOR, Material.WAXED_COPPER_TRAPDOOR, Material.WAXED_LIGHTNING_ROD
+		);
+		addStonecutterRecipesWithRemoval(
+			Material.EXPOSED_COPPER, Material.EXPOSED_CHISELED_COPPER, Material.EXPOSED_COPPER_GRATE,
+			Material.EXPOSED_CUT_COPPER, Material.EXPOSED_CUT_COPPER_STAIRS, Material.EXPOSED_CUT_COPPER_SLAB,
+			Material.EXPOSED_COPPER_DOOR, Material.EXPOSED_COPPER_TRAPDOOR, Material.EXPOSED_LIGHTNING_ROD
+		);
+		addStonecutterRecipesWithRemoval(
+			Material.WAXED_EXPOSED_COPPER, Material.WAXED_EXPOSED_CHISELED_COPPER, Material.WAXED_EXPOSED_COPPER_GRATE,
+			Material.WAXED_EXPOSED_CUT_COPPER, Material.WAXED_EXPOSED_CUT_COPPER_STAIRS, Material.WAXED_EXPOSED_CUT_COPPER_SLAB,
+			Material.WAXED_EXPOSED_COPPER_DOOR, Material.WAXED_EXPOSED_COPPER_TRAPDOOR, Material.WAXED_EXPOSED_LIGHTNING_ROD
+		);
+		addStonecutterRecipesWithRemoval(
+			Material.WEATHERED_COPPER, Material.WEATHERED_CHISELED_COPPER, Material.WEATHERED_COPPER_GRATE,
+			Material.WEATHERED_CUT_COPPER, Material.WEATHERED_CUT_COPPER_STAIRS, Material.WEATHERED_CUT_COPPER_SLAB,
+			Material.WEATHERED_COPPER_DOOR, Material.WEATHERED_COPPER_TRAPDOOR, Material.WEATHERED_LIGHTNING_ROD
+		);
+		addStonecutterRecipesWithRemoval(
+			Material.WAXED_WEATHERED_COPPER, Material.WAXED_WEATHERED_CHISELED_COPPER, Material.WAXED_WEATHERED_COPPER_GRATE,
+			Material.WAXED_WEATHERED_CUT_COPPER, Material.WAXED_WEATHERED_CUT_COPPER_STAIRS, Material.WAXED_WEATHERED_CUT_COPPER_SLAB,
+			Material.WAXED_WEATHERED_COPPER_DOOR, Material.WAXED_WEATHERED_COPPER_TRAPDOOR, Material.WAXED_WEATHERED_LIGHTNING_ROD
+		);
+		addStonecutterRecipesWithRemoval(
+			Material.OXIDIZED_COPPER, Material.OXIDIZED_CHISELED_COPPER, Material.OXIDIZED_COPPER_GRATE,
+			Material.OXIDIZED_CUT_COPPER, Material.OXIDIZED_CUT_COPPER_STAIRS, Material.OXIDIZED_CUT_COPPER_SLAB,
+			Material.OXIDIZED_COPPER_DOOR, Material.OXIDIZED_COPPER_TRAPDOOR, Material.OXIDIZED_LIGHTNING_ROD
+		);
+		addStonecutterRecipesWithRemoval(
+			Material.WAXED_OXIDIZED_COPPER, Material.WAXED_OXIDIZED_CHISELED_COPPER, Material.WAXED_OXIDIZED_COPPER_GRATE,
+			Material.WAXED_OXIDIZED_CUT_COPPER, Material.WAXED_OXIDIZED_CUT_COPPER_STAIRS, Material.WAXED_OXIDIZED_CUT_COPPER_SLAB,
+			Material.WAXED_OXIDIZED_COPPER_DOOR, Material.WAXED_OXIDIZED_COPPER_TRAPDOOR, Material.WAXED_OXIDIZED_LIGHTNING_ROD
+		);
+		addStonecutterRecipesWithRemoval(
+			Material.BASALT, Material.POLISHED_BASALT
+		);
+
 		TrappedNewbieTags.CHOPPING_BLOCKS.getValues().forEach(type -> {
 			new ShapelessCraft(ItemStack.of(type), type.getKey())
 				.withGroup("chopping_block")
@@ -641,8 +1310,10 @@ public class TrappedNewbieRecipes {
 		});
 
 		TrappedNewbieTags.GLASS_SHARDS.getValues().forEach(type -> {
-			Material base = type == TrappedNewbieItems.GLASS_SHARD ? Material.GLASS : Material.getMaterial(type.name().replace("_GLASS_SHARD", "_STAINED_GLASS"));
+			Material base = type == TrappedNewbieItems.GLASS_SHARD ? Material.GLASS : Material.matchMaterial(type.key().value().replace("_glass_shard", "_stained_glass"));
+			Material pane = type == TrappedNewbieItems.GLASS_SHARD ? Material.GLASS_PANE : Material.matchMaterial(type.key().value().replace("_glass_shard", "_stained_glass_pane"));
 			if (base == null) return;
+			if (pane == null) return;
 
 			new ShapelessCraft(ItemStack.of(base), trappedNewbieKey(base.key().value() + "_from_shards"))
 				.withGroup("glass_from_shards")
@@ -652,6 +1323,16 @@ public class TrappedNewbieRecipes {
 				.withGroup("glass_to_shards")
 				.addIngredients(base)
 				.addIngredients(TrappedNewbieTags.HAMMERS.getValues())
+				.register();
+
+			new StonecuttingCraft(ItemStack.of(type, 4), trappedNewbieKey(base.key().value() + "_to_glass_shards"))
+				.withGroup(formatStonecutterGroup(TrappedNewbieItems.GLASS_SHARD))
+				.addIngredients(base)
+				.register();
+
+			new StonecuttingCraft(ItemStack.of(pane, 2), trappedNewbieKey(base.key().value() + "_to_" + pane.key().value()))
+				.withGroup(formatStonecutterGroup(pane))
+				.addIngredients(base)
 				.register();
 		});
 
@@ -700,11 +1381,70 @@ public class TrappedNewbieRecipes {
 			.addIngredients('S', Material.STICK, TrappedNewbieItems.ROUGH_STICK)
 			.addIngredients('L', Tag.LOGS.getValues())
 			.register();
+		new ShapelessCraft(ItemStack.of(Material.PAPER, 3), trappedNewbieKey("paper"))
+			.withGroup("paper")
+			.addIngredients(Material.SUGAR_CANE, 3)
+			.register();
+		new ShapelessCraft(ItemStack.of(Material.BOWL, 3), trappedNewbieKey("bowl_from_planks")).withGroup("bowl_from_planks")
+			.addIngredients('P', Tag.PLANKS.getValues())
+			.addIngredients('A', Tag.ITEMS_AXES.getValues())
+			.addIngredients('A', UtilizerTags.KNIFES.getValues())
+			.register();
 
 		addFuels();
 		addBrews();
 		removeRecipes();
 		makeIngredientReplacements();
+	}
+
+	private static void addWoodStonecutterRecipesWithRemoval(Material[] woods, Material stick, BucketModifier.BucketType bucketType) {
+		addStonecutterRecipesWithRemoval(woods);
+		String prefix = bucketType.name().toLowerCase(Locale.US);
+		new StonecuttingCraft(ItemStack.of(stick, 4), trappedNewbieKey(prefix + "_wood_to_" + stick.key().value()))
+			.withGroup(formatStonecutterGroup(stick))
+			.addIngredients('P', woods)
+			.register();
+		new StonecuttingCraft(ItemStack.of(Material.LADDER, 2), trappedNewbieKey(prefix + "_wood_to_ladder"))
+			.withGroup(formatStonecutterGroup(Material.LADDER))
+			.addIngredients('P', woods)
+			.register();
+		new StonecuttingCraft(ItemStack.of(Material.BOWL, 3), trappedNewbieKey(prefix + "_wood_to_bowl"))
+			.withGroup(formatStonecutterGroup(Material.BOWL))
+			.addIngredients('P', woods)
+			.register();
+		new StonecuttingCraft(bucketType.save(ItemStack.of(Material.BUCKET)), bucketType.getKey())
+			.withGroup("wooden_bucket")
+			.addIngredients('P', woods)
+			.register();
+	}
+
+	private static void addStonecutterRecipesWithRemoval(Material... materials) {
+		for (Material material : materials) {
+			List<Material> woods = new ArrayList<>(List.of(materials));
+			woods.remove(material);
+			new StonecuttingCraft(ItemStack.of(material), trappedNewbieKey(material.key().value()))
+				.withGroup(formatStonecutterGroup(material))
+				.addIngredients('P', woods)
+				.register();
+		}
+
+		for (int i = 0; i < materials.length; i++) {
+			Material material1 = materials[i];
+			for (int j = i + 1; j < materials.length; j++) {
+				Material material2 = materials[j];
+				Bukkit.removeRecipe(NamespacedKey.minecraft(material1.key().value() + "_from_" + material2.key().value() + "_stonecutting"), false);
+				Bukkit.removeRecipe(NamespacedKey.minecraft(material1.key().value() + "_from_" + material2.key().value().replace("bricks", "brick") + "_stonecutting"), false);
+				Bukkit.removeRecipe(NamespacedKey.minecraft(material2.key().value() + "_from_" + material1.key().value() + "_stonecutting"), false);
+				Bukkit.removeRecipe(NamespacedKey.minecraft(material2.key().value() + "_from_" + material1.key().value().replace("bricks", "brick") + "_stonecutting"), false);
+			}
+
+			Bukkit.removeRecipe(NamespacedKey.minecraft(material1.key().value()), false);
+			Bukkit.removeRecipe(NamespacedKey.minecraft(material1.key().value() + "_from_stonecutting"), false);
+		}
+	}
+
+	private static String formatStonecutterGroup(Material output) {
+		return output.key().value() + "_from_stonecutting";
 	}
 
 	private static Material figureOutLog(Material type, String suffix) {
@@ -827,15 +1567,34 @@ public class TrappedNewbieRecipes {
 			"repair_item",
 			// Tweaked
 			"stick", "stick_from_bamboo_item", "campfire",// "soul_campfire",
-			"leather", "arrow", "spectral_arrow", "tipped_arrow"
+			"leather", "arrow", "spectral_arrow", "tipped_arrow",
+			"paper", "bowl",
+			"iron_bars", "iron_chain", "copper_bars", "copper_chain",
+			"snow_block", "snow",
+			"bookshelf",
+			/// There aren't deleted automatically due to typos
+			"chiseled_stone_bricks_stone_from_stonecutting", "stone_brick_walls_from_stone_stonecutting"
 		}) {
 			removeRecipe(recipe);
 		}
 
-		Tag.PLANKS.getValues().forEach(r -> removeRecipe(r.key().value()));
 		Tag.WOOL.getValues().forEach(r -> removeRecipe("dye_" + r.key().value()));
 		Tag.WOOL_CARPETS.getValues().forEach(r -> removeRecipe("dye_" + r.key().value()));
 		Tag.BEDS.getValues().forEach(r -> removeRecipe("dye_" + r.key().value()));
+		Tag.TERRACOTTA.getValues().forEach(r -> {
+			if (r != Material.TERRACOTTA) removeRecipe(r.key().value());
+		});
+		Tag.CANDLES.getValues().forEach(r -> {
+			if (r != Material.CANDLE) removeRecipe(r.key().value());
+		});
+		Tag.SHULKER_BOXES.getValues().forEach(r -> {
+			if (r != Material.SHULKER_BOX) removeRecipe(r.key().value());
+		});
+		MaterialTags.GLASS_PANES.getValues().forEach(r -> {
+			if (r != Material.GLASS_PANE) removeRecipe(r.key().value() + "_from_glass_pane");
+		});
+		MaterialTags.STAINED_GLASS.getValues().forEach(r -> removeRecipe(r.key().value()));
+		Tag.ITEMS_HARNESSES.getValues().forEach(r -> removeRecipe("dye_" + r.key().value()));
 	}
 
 	private static void makeIngredientReplacements() {

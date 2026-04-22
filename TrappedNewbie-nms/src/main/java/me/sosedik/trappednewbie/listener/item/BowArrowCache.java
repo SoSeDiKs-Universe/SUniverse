@@ -25,19 +25,16 @@ import java.util.UUID;
 @NullMarked
 public class BowArrowCache implements Listener {
 
-	private static final Map<UUID, ItemStack> CACHE = new HashMap<>();
+	private static final Map<UUID, Map<Material, ItemStack>> CACHE = new HashMap<>();
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onLoad(EntityLoadsProjectileEvent event) {
 		if (!(event.getEntity() instanceof Player player)) return;
 
-		Material weaponType = event.getWeapon().getType();
-		if (weaponType != Material.BOW && weaponType != Material.CROSSBOW) return;
-
 		ItemStack projectile = event.getProjectile();
-		if (ItemStack.isEmpty(projectile)) return;
+		if (projectile.isEmpty()) return;
 
-		CACHE.put(player.getUniqueId(), projectile);
+		CACHE.computeIfAbsent(player.getUniqueId(), k -> new HashMap<>()).put(event.getWeapon().getType(), projectile);
 
 		TrappedNewbie.scheduler().sync(() -> {
 			EquipmentSlot hand = player.getActiveItemHand();
@@ -60,10 +57,12 @@ public class BowArrowCache implements Listener {
 	 * Gets the last used projectile
 	 * 
 	 * @param player player
+	 * @param weapon weapon type
 	 * @return last used projectile
 	 */
-	public static @Nullable ItemStack getLastCachedProjectile(Player player) {
-		return CACHE.get(player.getUniqueId());
+	public static @Nullable ItemStack getLastCachedProjectile(Player player, Material weapon) {
+		Map<Material, ItemStack> cache = CACHE.get(player.getUniqueId());
+		return cache == null ? null : cache.get(weapon);
 	}
 
 }

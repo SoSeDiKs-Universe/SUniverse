@@ -53,7 +53,7 @@ public class SuicideCommand {
 			return;
 		}
 
-		LivingEntity possessed = PossessingPlayer.stopPossessing(player);
+		LivingEntity possessed = PossessingPlayer.stopPossessing(player, false);
 		if (possessed != null) {
 			if (possessed.getEquipment() != null) possessed.getEquipment().clear();
 			possessed.remove();

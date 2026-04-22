@@ -191,7 +191,7 @@ public class PossessedUndeadZombieCuring implements Listener {
 			if (rider == null) return; // Huh??
 
 			Collection<PotionEffect> effects = rider.getActivePotionEffects();
-			PossessingPlayer.stopPossessing(rider, this.entity, false);
+			PossessingPlayer.stopPossessing(rider, this.entity, false, false);
 			this.entity.remove();
 			GhostyPlayer.clearGhost(rider);
 			rider.addPotionEffects(effects);

@@ -18,6 +18,7 @@ import me.sosedik.utilizer.util.EntityUtil;
 import me.sosedik.utilizer.util.InventoryUtil;
 import me.sosedik.utilizer.util.ScoreboardUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Tag;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.enchantments.Enchantment;
@@ -35,6 +36,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Squid;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.MainHand;
 import org.bukkit.inventory.PlayerInventory;
@@ -76,7 +78,7 @@ public class PossessingPlayer {
 		boolean possessing = isPossessingSoft(player);
 		if (possessing && getPossessed(player) == null) {
 			possessing = false;
-			stopPossessing(player);
+			stopPossessing(player, true);
 		}
 		return possessing;
 	}
@@ -163,8 +165,8 @@ public class PossessingPlayer {
 	 *
 	 * @param player player
 	 */
-	public static @Nullable LivingEntity stopPossessing(Player player) {
-		return stopPossessing(player, getPossessed(player), false);
+	public static @Nullable LivingEntity stopPossessing(Player player, boolean saveInventoryToMob) {
+		return stopPossessing(player, getPossessed(player), false, saveInventoryToMob);
 	}
 
 	/**
@@ -172,13 +174,14 @@ public class PossessingPlayer {
 	 *
 	 * @param player player
 	 * @param riding possessed entity
+	 * @param saveInventoryToMob whether to save player's inventory to mob, clearing the player's one in the process
 	 */
-	public static @Nullable LivingEntity stopPossessing(Player player, @Nullable LivingEntity riding, boolean quit) {
+	public static @Nullable LivingEntity stopPossessing(Player player, @Nullable LivingEntity riding, boolean quit, boolean saveInventoryToMob) {
 		if (!isPossessingSoft(player)) return null;
 
 		if (quit) {
 			if (riding != null) riding.remove();
-		} else {
+		} else if (saveInventoryToMob) {
 			if (riding != null) {
 				NBT.modifyPersistentData(riding, nbt -> {
 					nbt = nbt.getOrCreateCompound(POSSESSED_TAG);
@@ -191,6 +194,16 @@ public class PossessingPlayer {
 
 					InventoryUtil.storeSlotted(player.getInventory(), nbt, item -> !isExtraPossessedItem(item));
 				});
+			} else {
+				Inventory inventory = player.getInventory();
+				Location loc = player.getLocation();
+				for (int slot = 0; slot < inventory.getSize(); slot++) {
+					ItemStack item = inventory.getItem(slot);
+					if (ItemStack.isEmpty(item)) continue;
+					if (isExtraPossessedItem(item)) continue;
+
+					loc.getWorld().dropItemNaturally(loc, item);
+				}
 			}
 			player.getInventory().clear();
 		}
@@ -431,7 +444,7 @@ public class PossessingPlayer {
 		byte[] entityData = Bukkit.getUnsafe().serializeEntity(entity);
 
 		if (quit) {
-			stopPossessing(player, entity, true);
+			stopPossessing(player, entity, true, false);
 			entity.remove();
 		}
 

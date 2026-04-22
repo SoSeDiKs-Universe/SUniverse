@@ -88,7 +88,7 @@ public class CustomBowArrowModifier extends ItemModifier {
 		if (fromCache && target instanceof Player playerTarget && target.hasActiveItem()) {
 			ItemStack activeItem = target.getActiveItem();
 			if (item.equals(activeItem))
-				projectile = BowArrowCache.getLastCachedProjectile(playerTarget);
+				projectile = BowArrowCache.getLastCachedProjectile(playerTarget, Material.BOW);
 		}
 
 		if (projectile != null) {

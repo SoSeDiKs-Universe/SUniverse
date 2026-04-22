@@ -39,6 +39,7 @@ import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.component.Consumable;
@@ -347,6 +348,9 @@ public class ResourceLibBootstrap implements PluginBootstrap {
 
 		if (consumableJson.has("consume_seconds"))
 			consumable.consumeSeconds(consumableJson.get("consume_seconds").getAsFloat());
+
+		if (consumableJson.has("animation"))
+			consumable.animation(ItemUseAnimation.valueOf(consumableJson.get("animation").getAsString().toUpperCase(Locale.US)));
 
 		if (consumableJson.has("effects")) {
 			for (JsonElement effectElement : consumableJson.getAsJsonArray("effects")) {

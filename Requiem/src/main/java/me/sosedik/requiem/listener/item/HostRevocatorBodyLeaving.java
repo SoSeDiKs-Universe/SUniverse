@@ -23,7 +23,7 @@ public class HostRevocatorBodyLeaving implements Listener {
 
 		event.setCancelled(true);
 
-		PossessingPlayer.stopPossessing(player);
+		PossessingPlayer.stopPossessing(player, true);
 		GhostyPlayer.markGhost(player);
 	}
 

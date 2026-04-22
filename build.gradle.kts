@@ -49,7 +49,7 @@ subprojects {
 
         compileJava {
             options.encoding = Charsets.UTF_8.name()
-            options.release.set(21)
+            options.release.set(25)
         }
         javadoc {
             options.encoding = Charsets.UTF_8.name()

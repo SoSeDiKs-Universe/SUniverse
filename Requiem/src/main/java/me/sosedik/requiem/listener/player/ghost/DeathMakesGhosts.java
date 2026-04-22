@@ -56,7 +56,7 @@ public class DeathMakesGhosts implements Listener {
 		if (rider == null) return;
 		if (PossessingPlayer.getPossessed(rider) != entity) return;
 
-		PossessingPlayer.stopPossessing(rider, entity, false);
+		PossessingPlayer.stopPossessing(rider, entity, false, false);
 		rider.getInventory().clear();
 		GhostyPlayer.markGhost(rider);
 	}

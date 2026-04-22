@@ -120,16 +120,45 @@ public class ResourcePackHoster implements Listener {
 
 		@Override
 		public void handle(HttpExchange httpExchange) throws IOException {
-			httpExchange.setAttribute("Content-Type", "application/zip");
-			Headers responseHeaders = httpExchange.getResponseHeaders();
-			responseHeaders.set("Content-Type", "application/zip");
-			responseHeaders.add("Content-Disposition", "attachment; filename=resource_pack.zip");
-			httpExchange.sendResponseHeaders(200, this.resourcePack.length);
-			try (httpExchange; OutputStream os = httpExchange.getResponseBody()) {
-				os.write(this.resourcePack);
+			boolean headersSent = false;
+			try {
+				// Discard request body
+				httpExchange.getRequestBody().readAllBytes();
+
+				Headers responseHeaders = httpExchange.getResponseHeaders();
+				responseHeaders.set("Content-Type", "application/zip");
+				responseHeaders.add("Content-Disposition", "attachment; filename=resource_pack.zip");
+				httpExchange.sendResponseHeaders(200, this.resourcePack.length);
+				headersSent = true;
+
+				try (OutputStream os = httpExchange.getResponseBody()) {
+					os.write(this.resourcePack);
+				}
+			} catch (IOException e) {
+				// Client disconnected
+				if (isConnectionReset(e)) {
+					ResourceLib.logger().debug("Client disconnected while downloading resource pack: {}", e.getMessage());
+				} else {
+					ResourceLib.logger().warn("Error while sending resource pack", e);
+				}
+
+				if (!headersSent) {
+					try {
+						httpExchange.sendResponseHeaders(500, -1);
+					} catch (IOException ignored) {
+						// Connection already closed
+					}
+				}
+			} finally {
+				httpExchange.close();
 			}
 		}
 
+		private boolean isConnectionReset(IOException e) {
+			String message = e.getMessage();
+			return message != null &&
+				(message.contains("Broken pipe") || message.contains("Connection reset by peer"));
+		}
 	}
 
 }

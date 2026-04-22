@@ -59,7 +59,7 @@ public class CustomCrossbowArrowModifier extends ItemModifier {
 		} else if (fromCache && target instanceof Player playerTarget && playerTarget.hasActiveItem()) {
 			ItemStack activeItem = playerTarget.getActiveItem();
 			if (item.equals(activeItem))
-				projectile = BowArrowCache.getLastCachedProjectile(playerTarget);
+				projectile = BowArrowCache.getLastCachedProjectile(playerTarget, Material.CROSSBOW);
 		}
 
 		if (projectile != null) {

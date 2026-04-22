@@ -46,7 +46,7 @@ public class PossessedDismount implements Listener {
 			LivingEntity possessed = PossessingPlayer.getPossessed(player);
 			if (possessed != null) return;
 
-			PossessingPlayer.stopPossessing(player, vehicle, false);
+			PossessingPlayer.stopPossessing(player, vehicle, false, true);
 			GhostyPlayer.markGhost(player);
 		}, 1L);
 	}

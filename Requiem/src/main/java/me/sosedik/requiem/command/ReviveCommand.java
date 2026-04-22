@@ -40,7 +40,7 @@ public class ReviveCommand {
 			boolean stateChanged = false;
 			if (PossessingPlayer.isPossessing(target)) {
 				stateChanged = true;
-				PossessingPlayer.stopPossessing(target);
+				PossessingPlayer.stopPossessing(target, false);
 			} else if (GhostyPlayer.isGhost(target)) {
 				stateChanged = true;
 				GhostyPlayer.clearGhost(target);

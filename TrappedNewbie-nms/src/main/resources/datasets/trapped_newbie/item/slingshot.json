@@ -1,0 +1,8 @@
+{
+	"parser": "tinkers",
+	"client_type": "minecraft:iron_nugget",
+	"stack_size": 1,
+	"durability": 50,
+	"enchantable": 3,
+	"no_texture": true
+}

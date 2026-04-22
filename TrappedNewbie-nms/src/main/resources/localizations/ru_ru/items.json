@@ -1074,5 +1074,6 @@
 	"item.trapped_newbie.gui_arrow_stick_outline.name": "Палка",
 	"item.trapped_newbie.gui_arrow_fletching_outline.name": "Оперение стрелы",
 	"item.trapped_newbie.gui_arrow_modifiers_outline.name": "Модификатор стрелы",
-	"item.trapped_newbie.mutant_zombie_spawn_egg.name": "Яйцо призыва зомби-мутанта"
+	"item.trapped_newbie.mutant_zombie_spawn_egg.name": "Яйцо призыва зомби-мутанта",
+	"item.trapped_newbie.slingshot.name": "Рогатка"
 }

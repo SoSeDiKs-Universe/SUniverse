@@ -41,6 +41,7 @@ import me.sosedik.trappednewbie.impl.effect.WaterboltEffect;
 import me.sosedik.trappednewbie.impl.item.nms.HangGliderItem;
 import me.sosedik.trappednewbie.impl.item.nms.KnifeItem;
 import me.sosedik.trappednewbie.impl.item.nms.PaperPlaneItem;
+import me.sosedik.trappednewbie.impl.item.nms.SlingshotItem;
 import me.sosedik.trappednewbie.impl.item.nms.ThrowableRockItem;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.UUIDUtil;
@@ -74,6 +75,7 @@ import net.minecraft.world.item.MobBucketItem;
 import net.minecraft.world.item.ShovelItem;
 import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.item.ToolMaterial;
+import net.minecraft.world.item.component.Consumable;
 import net.minecraft.world.item.component.Consumables;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.component.UseRemainder;
@@ -148,8 +150,10 @@ public class TrappedNewbieBootstrap implements PluginBootstrap {
 			case String k when k.equals("rock") || k.equals("ball_of_mud") || k.endsWith("_rock") -> {
 				var item = new ThrowableRockItem(properties);
 				DispenserBlock.registerProjectileBehavior(item);
+				SlingshotItem.addProjectile(item);
 				yield item;
 			}
+			case "slingshot" -> new SlingshotItem(((Item.Properties) properties));
 			case String k when k.endsWith("hang_glider") -> new HangGliderItem(properties);
 			case "firestriker", "trumpet", "canteen", "reinforced_canteen", "dragon_flask" -> ItemCreator.crossbowItem(properties, (item, entity, timeLeft) -> true);
 			case String k when k.endsWith("glass_shard") || k.endsWith("goodie_bag") -> ItemCreator.crossbowItem(properties, (item, entity, timeLeft) -> true);

@@ -17,6 +17,7 @@ import me.sosedik.requiem.dataset.RequiemItems;
 import me.sosedik.requiem.feature.PossessingPlayer;
 import me.sosedik.requiem.listener.item.SoulboundNecronomicon;
 import me.sosedik.trappednewbie.TrappedNewbie;
+import me.sosedik.trappednewbie.api.item.tinker.SlingshotData;
 import me.sosedik.trappednewbie.impl.item.modifier.BucketModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.LetterModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.ScrapModifier;
@@ -210,6 +211,33 @@ public class TrappedNewbieRecipes {
 			.addIngredients('T', Material.STRING, TrappedNewbieItems.TWINE)
 			.addIngredients('S', Material.STICK)
 			.addIngredients('I', Material.IRON_INGOT)
+			.register();
+
+		new ShapelessCraft(ItemStack.of(TrappedNewbieItems.SLINGSHOT), trappedNewbieKey("slingshot"))
+			.addIngredients('M', TrappedNewbieItems.RAW_HIDE, Material.LEATHER)
+			.addIngredients('T', Material.STRING, TrappedNewbieItems.TWINE)
+			.addIngredients('S', Material.STICK, TrappedNewbieItems.ROUGH_STICK)
+			.withPreCheck(event -> {
+				ItemStack result = event.getResult();
+				if (ItemStack.isEmpty(result)) return;
+
+				Material material = null;
+				Material base = null;
+				Material string = null;
+				for (ItemStack matrixItem : event.getMatrix()) {
+					if (ItemStack.isEmpty(matrixItem)) continue;
+
+					Material itemType = matrixItem.getType();
+					if (TrappedNewbieTags.STICKS.isTagged(itemType) || itemType == TrappedNewbieItems.ROUGH_STICK)
+						base = itemType;
+					else if (itemType == TrappedNewbieItems.RAW_HIDE || itemType == Material.LEATHER)
+						material = itemType;
+					else
+						string = itemType;
+				}
+				new SlingshotData(material, base, string, null).saveToCustomData(result, false);
+				event.setResult(result);
+			})
 			.register();
 
 		new ShapelessCraft(ItemStack.of(TrappedNewbieItems.ROUGH_STICK), trappedNewbieKey("rough_stick"))

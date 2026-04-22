@@ -13,6 +13,8 @@ public class TrappedNewbieSoundKeys {
 	public static final NamespacedKey TRUMPET_DOOT = sound("item/doot_doot");
 	public static final NamespacedKey GOODIE_BAG_OPEN_SOUND = sound("item/goodie_bag_open");
 	public static final NamespacedKey HAND_GLIDER_OPEN = sound("item/hand_glider_open");
+	public static final NamespacedKey SLINGSHOT_LOAD = sound("extra/slingshot_load");
+	public static final NamespacedKey SLINGSHOT_SHOOT = sound("extra/slingshot_shoot");
 	public static final NamespacedKey AMBIENT_WIND = sound("ambient/wind");
 
 	private static NamespacedKey sound(String key) {

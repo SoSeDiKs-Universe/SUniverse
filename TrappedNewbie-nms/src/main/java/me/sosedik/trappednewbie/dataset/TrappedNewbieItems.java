@@ -71,6 +71,7 @@ public class TrappedNewbieItems {
 	public static final Material GRASS_MESH = byKey("grass_mesh");
 	public static final Material FIRESTRIKER = byKey("firestriker");
 	public static final Material STEEL_AND_FLINT = byKey("steel_and_flint");
+	public static final Material SLINGSHOT = byKey("slingshot");
 
 	// Sticks
 	public static final Material ACACIA_STICK = byKey("acacia_stick");

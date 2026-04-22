@@ -49,6 +49,7 @@ import me.sosedik.trappednewbie.impl.item.modifier.ItemOverlayToggleModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.LetterModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.PaperPlaneModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.ScrapModifier;
+import me.sosedik.trappednewbie.impl.item.modifier.SlingshotArrowModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.ThirstTooltipModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.TippedArrowPotionTypeModifier;
 import me.sosedik.trappednewbie.impl.item.modifier.UnlitCampfireModifier;
@@ -328,6 +329,7 @@ public final class TrappedNewbie extends JavaPlugin {
 		new LetterModifier(trappedNewbieKey("letter")).register();
 		new PaperPlaneModifier(trappedNewbieKey("paper_plane")).register();
 		new ScrapModifier(trappedNewbieKey("scrap")).register();
+		new SlingshotArrowModifier(trappedNewbieKey("slingshot")).register();
 		new ThirstTooltipModifier(trappedNewbieKey("thirst_tooltip")).register();
 		new TippedArrowPotionTypeModifier(trappedNewbieKey("tipped_arrow_potion_type")).register();
 		new UnlitCampfireModifier(trappedNewbieKey("unlit_campfire")).register();

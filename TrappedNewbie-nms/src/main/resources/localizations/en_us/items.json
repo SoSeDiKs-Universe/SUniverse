@@ -1074,5 +1074,6 @@
 	"item.trapped_newbie.gui_arrow_stick_outline.name": "Arrow Stick",
 	"item.trapped_newbie.gui_arrow_fletching_outline.name": "Arrow Fletching",
 	"item.trapped_newbie.gui_arrow_modifiers_outline.name": "Arrow Modifier",
-	"item.trapped_newbie.mutant_zombie_spawn_egg.name": "Mutant Zombie Spawn Egg"
+	"item.trapped_newbie.mutant_zombie_spawn_egg.name": "Mutant Zombie Spawn Egg",
+	"item.trapped_newbie.slingshot.name": "Slingshot"
 }

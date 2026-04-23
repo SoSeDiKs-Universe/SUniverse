@@ -55,8 +55,9 @@ public class MinecraftEventLogger implements Listener {
 				goThoughChildren(component, sb);
 				continue;
 			}
+			if (!(hoverEvent.value() instanceof Component hoverValue)) continue;
 
-			addAdvLore(((HoverEvent<Component>) hoverEvent).value(), sb);
+			addAdvLore(hoverValue, sb);
 		}
 	}
 
@@ -67,8 +68,9 @@ public class MinecraftEventLogger implements Listener {
 				goThoughChildren(text, sb);
 				continue;
 			}
+			if (!(hoverEvent.value() instanceof Component hoverValue)) continue;
 
-			addAdvLore(((HoverEvent<Component>) hoverEvent).value(), sb);
+			addAdvLore(hoverValue, sb);
 		}
 	}
 

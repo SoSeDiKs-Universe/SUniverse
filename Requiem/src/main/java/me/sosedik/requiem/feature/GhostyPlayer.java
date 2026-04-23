@@ -68,13 +68,13 @@ public class GhostyPlayer {
 
 		if (freshAdd) {
 			if (!player.isInvisible()) {
-				for (ItemStack item : player.getInventory()) {
-					if (ItemStack.isEmpty(item)) continue;
+				player.getInventory().forEach(item -> {
+					if (ItemStack.isEmpty(item)) return;
 
 					if (!item.hasEnchant(Enchantment.VANISHING_CURSE))
 						player.dropItem(item, true, i -> i.setPickupDelay(5));
 					item.setAmount(0);
-				}
+				});
 			}
 			player.setLevel(0);
 			player.setExp(0F);

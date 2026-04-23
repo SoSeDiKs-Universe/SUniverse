@@ -7,6 +7,7 @@ import me.sosedik.utilizer.api.language.LangOptions;
 import me.sosedik.utilizer.api.language.LangOptionsStorage;
 import me.sosedik.utilizer.api.message.Messenger;
 import me.sosedik.utilizer.util.ChatUtil;
+import me.sosedik.utilizer.util.CommandUtils;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Argument;
 import org.incendo.cloud.annotations.Command;
@@ -45,24 +46,23 @@ public class LangCommand {
 	) {
 		String languageKey = languageKeyS.string();
 
-		Player target;
-		if (player == null) {
-			if (!(stack.getExecutor() instanceof Player executor)) return;
-			target = executor;
-		} else {
-			target = player;
-		}
+		Player target = CommandUtils.getTargetPlayer(stack, player);
+		if (target == null) return;
 
 		LangOptions langOptions = this.languages.get(languageKey);
 		if (langOptions == null) {
-			Messenger.messenger(stack.getSender()).sendMessage("command.lang.unsupported", raw("language", langOptions.displayName()));
+			Messenger.messenger(stack.getSender()).sendMessage("command.lang.unsupported", raw("language", languageKey));
 			return;
 		}
 
 		var langHolder = LangHolder.langHolder(target);
 		langHolder.setLangOptions(langOptions);
-		if (!silent) Messenger.messenger(target).sendMessage("command.lang.set", raw("language", langOptions.displayName()));
-		if (stack.getSender() != target) Messenger.messenger(stack.getSender()).sendMessage("command.lang.set.other", raw("language", langOptions.displayName()), raw("player", target.displayName()));
+
+		if (!silent)
+			Messenger.messenger(target).sendMessage("command.lang.set", raw("language", langOptions.displayName()));
+
+		if (CommandUtils.isTargetingOther(stack, target))
+			Messenger.messenger(stack.getSender()).sendMessage("command.lang.set.other", raw("language", langOptions.displayName()), raw("player", target.displayName()));
 	}
 
 	@Suggestions("@langCommandSuggestionLanguages")

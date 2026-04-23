@@ -28,9 +28,9 @@ public class MoreCommand {
 	@Command("more [amount]")
 	public void onCommand(
 			CommandSourceStack stack,
-			@Nullable @Argument(value = "amount") @Range(min = "0") Integer amount, // , suggestions = "@moreCommandSuggestionAmount"
+			@Nullable @Argument(value = "amount", suggestions = "@moreCommandSuggestionAmount") @Range(min = "0") Integer amount,
 			@Flag(value = "offHand") boolean offHand,
-			@Flag(value = "feedback") boolean feedback
+			@Flag(value = "silent") boolean silent
 	) {
 		if (!(stack.getExecutor() instanceof Player target)) return;
 
@@ -39,7 +39,7 @@ public class MoreCommand {
 			int finAmount = amount == null ? item.getMaxStackSize() : amount;
 			item.setAmount(finAmount);
 
-			if (feedback)
+			if (!silent)
 				Messenger.messenger(stack.getSender()).sendMessage("command.more", raw("amount", finAmount), raw("item", item.displayName()));
 		});
 	}

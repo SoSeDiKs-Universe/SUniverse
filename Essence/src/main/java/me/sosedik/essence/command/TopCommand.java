@@ -2,6 +2,7 @@ package me.sosedik.essence.command;
 
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import me.sosedik.essence.Essence;
+import me.sosedik.utilizer.util.CommandUtils;
 import me.sosedik.utilizer.util.LocationUtil;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Argument;
@@ -22,13 +23,8 @@ public class TopCommand {
 		CommandSourceStack stack,
 		@Nullable @Argument(value = "player") Player player
 	) {
-		Player target;
-		if (player == null) {
-			if (!(stack.getExecutor() instanceof Player executor)) return;
-			target = executor;
-		} else {
-			target = player;
-		}
+		Player target = CommandUtils.getTargetPlayer(stack, player);
+		if (target == null) return;
 
 		Essence.scheduler().sync(() -> LocationUtil.smartTeleport(target, target.getLocation().toHighestLocation().addY(1), false));
 	}

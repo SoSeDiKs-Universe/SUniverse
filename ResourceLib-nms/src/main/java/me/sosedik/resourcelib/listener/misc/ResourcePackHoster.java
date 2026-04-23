@@ -119,7 +119,7 @@ public class ResourcePackHoster implements Listener {
 	private record ResourcePackHandler(byte[] resourcePack) implements HttpHandler {
 
 		@Override
-		public void handle(HttpExchange httpExchange) throws IOException {
+		public void handle(HttpExchange httpExchange) {
 			boolean headersSent = false;
 			try {
 				// Discard request body

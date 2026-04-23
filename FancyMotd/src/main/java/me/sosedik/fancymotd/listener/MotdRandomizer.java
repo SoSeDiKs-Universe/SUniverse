@@ -2,17 +2,12 @@ package me.sosedik.fancymotd.listener;
 
 import com.destroystokyo.paper.event.server.PaperServerListPingEvent;
 import me.sosedik.fancymotd.Pinger;
-import me.sosedik.fancymotd.feature.MotdIconStorage;
 import me.sosedik.utilizer.api.message.Messenger;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.util.CachedServerIcon;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
@@ -26,23 +21,17 @@ import static me.sosedik.utilizer.api.message.Mini.raw;
  * Custom motd messages
  */
 @NullMarked
-public class MotdRandomizer implements Listener {
+public class MotdRandomizer extends AbstractMotdRandomizer {
 
 	private static final String SPACER = LegacyComponentSerializer.legacySection().serialize(Component.text("..", NamedTextColor.BLACK));
-	private static final String VERSION = " [" + Bukkit.getMinecraftVersion() + "]";
 
-	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	public void onPing(PaperServerListPingEvent event) {
-		// Change version requirement if whitelist
-		boolean whitelist = Bukkit.hasWhitelist();
-		if (whitelist) event.setProtocolVersion(Integer.MAX_VALUE);
-		else event.setVersion(Bukkit.getServerName() + VERSION);
+	// Time calculation constants
+	private static final int TICKS_PER_HOUR = 1000;
+	private static final int HOURS_PER_DAY = 24;
+	private static final int MINUTES_PER_HOUR = 60;
 
-		// Apply random icon
-		CachedServerIcon icon = MotdIconStorage.getRandomIcon();
-		if (icon != null)
-			event.setServerIcon(icon);
-
+	@Override
+	protected Component getMotd(PaperServerListPingEvent event, boolean whitelist) {
 		// Get ip and obtain Pinger instance
 		String ip = event.getClient().getAddress().getAddress().getHostAddress();
 		var pinger = Pinger.getPinger(ip);
@@ -67,40 +56,33 @@ public class MotdRandomizer implements Listener {
 		// Special message if whitelisted
 		if (whitelist) {
 			event.setVersion(String.join("", messenger.getRawMessage("motd.whitelist")));
-			Component motd = combine(Component.newline(),
+			return combine(Component.newline(),
 				messenger.getMessage("motd.whitelist.header"),
 				messenger.getMessage("motd.whitelist.splash")
 			);
-			event.motd(motd);
-			return;
 		}
 
 		// Special message for outdated clients
 		if (event.getClient().getProtocolVersion() < event.getProtocolVersion()) {
-			Component motd = combine(Component.newline(),
+			return combine(Component.newline(),
 				messenger.getMessage("motd.header", component("clock_time", getTime(pinger, messenger))),
 				messenger.getMessage("motd.outdated_client")
 			);
-			event.motd(motd);
-			return;
 		}
 
 		// Special welcome for newbies
 		if (pinger.isNewbie()) {
-			Component motd = combine(Component.newline(),
+			return combine(Component.newline(),
 				messenger.getMessage("motd.welcome.header"),
 				messenger.getMessage("motd.welcome.splash")
 			);
-			event.motd(motd);
-			return;
 		}
 
 		// Random motd
-		Component motd = combine(Component.newline(),
+		return combine(Component.newline(),
 			messenger.getMessage("motd.header", component("clock_time", getTime(pinger, messenger))),
 			messenger.getMessage("motd.splash")
 		);
-		event.motd(motd);
 	}
 
 	// Player names in motd do not support modern colors, using legacy hack
@@ -111,12 +93,11 @@ public class MotdRandomizer implements Listener {
 
 	private Component getTime(Pinger pinger, Messenger messenger) {
 		if (!pinger.hasClock()) return Component.empty();
-		int h = (int) (Bukkit.getWorlds().getFirst().getTime() / 1000) + 6;
-		if (h > 23)
-			h -= 24;
-		int m = (int) ((60 * (Bukkit.getWorlds().getFirst().getTime() % 1000)) / 1000);
+		int h = (int) (Bukkit.getWorlds().getFirst().getTime() / TICKS_PER_HOUR) + 6;
+		if (h >= HOURS_PER_DAY)
+			h -= HOURS_PER_DAY;
+		int m = (int) ((MINUTES_PER_HOUR * (Bukkit.getWorlds().getFirst().getTime() % TICKS_PER_HOUR)) / TICKS_PER_HOUR);
 		return messenger.getMessage("motd.clock_time", raw("hours", (h < 10 ? "0" : "") + h), raw("minutes", (m < 10 ? "0" : "") + m));
 	}
-
 
 }

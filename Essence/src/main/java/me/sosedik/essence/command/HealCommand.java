@@ -4,6 +4,7 @@ import io.papermc.paper.command.brigadier.CommandSourceStack;
 import me.sosedik.essence.Essence;
 import me.sosedik.essence.api.event.AsyncPlayerHealCommandEvent;
 import me.sosedik.utilizer.api.message.Messenger;
+import me.sosedik.utilizer.util.CommandUtils;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
@@ -35,13 +36,8 @@ public class HealCommand {
 		@Nullable @Argument(value = "player") Player player,
 		@Flag(value = "silent") boolean silent
 	) {
-		Player target;
-		if (player == null) {
-			if (!(stack.getExecutor() instanceof Player executor)) return;
-			target = executor;
-		} else {
-			target = player;
-		}
+		Player target = CommandUtils.getTargetPlayer(stack, player);
+		if (target == null) return;
 
 		Essence.scheduler().sync(() -> {
 			target.setHealth(target.getMaxHealth());
@@ -59,8 +55,11 @@ public class HealCommand {
 		});
 
 		new AsyncPlayerHealCommandEvent(target).callEvent();
-		if (!silent) Messenger.messenger(target).sendMessage("command.heal");
-		if (stack.getSender() != target)
+
+		if (!silent)
+			Messenger.messenger(target).sendMessage("command.heal");
+
+		if (CommandUtils.isTargetingOther(stack, target))
 			Messenger.messenger(stack.getSender()).sendMessage("command.heal.other", raw("player", target.displayName()));
 	}
 

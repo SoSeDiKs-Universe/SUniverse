@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
-import java.util.Objects;
 import java.util.Random;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -52,29 +51,46 @@ public class MotdIconStorage {
 
 		FileUtil.createFolder(storage);
 		var jarFile = new File(plugin.getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
-		if (!jarFile.isFile()) return;
+		if (!jarFile.isFile()) {
+			FancyMotd.logger().warn("Could not locate plugin JAR file for icon extraction");
+			return;
+		}
 
 		try (var jar = new JarFile(jarFile)) {
 			Enumeration<JarEntry> entries = jar.entries();
 			while (entries.hasMoreElements()) {
 				JarEntry entry = entries.nextElement();
 				String name = entry.getName();
-				if (name.startsWith("icons") && name.endsWith(".png"))
+				if (name.startsWith("icons/") && name.endsWith(".png")) {
 					plugin.saveResource(name, false);
+				}
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			FancyMotd.logger().error("Failed to extract icons from JAR file", e);
 		}
 	}
 
 	private static void loadIcons(File storage) {
-		for (File icon : Objects.requireNonNull(storage.listFiles())) {
-			if (!icon.getName().endsWith(".png")) continue;
+		File[] iconFiles = storage.listFiles();
+		if (iconFiles == null) {
+			FancyMotd.logger().warn("Could not list files in icons directory: {}", storage.getPath());
+			return;
+		}
+
+		for (File icon : iconFiles) {
+			if (!icon.getName().toLowerCase().endsWith(".png")) continue;
+
 			try {
 				SERVER_ICONS.add(Bukkit.loadServerIcon(icon));
 			} catch (Exception e) {
-				e.printStackTrace();
+				FancyMotd.logger().error("Error loading server icon from file: {}", icon.getName(), e);
 			}
+		}
+
+		if (SERVER_ICONS.isEmpty()) {
+			FancyMotd.logger().warn("No valid server icons found in directory: {}", storage.getPath());
+		} else {
+			FancyMotd.logger().info("Loaded {} server icons", SERVER_ICONS.size());
 		}
 	}
 

@@ -4,6 +4,7 @@ import io.papermc.paper.command.brigadier.CommandSourceStack;
 import me.sosedik.trappednewbie.TrappedNewbie;
 import me.sosedik.trappednewbie.impl.thirst.ThirstyPlayer;
 import me.sosedik.utilizer.api.message.Messenger;
+import me.sosedik.utilizer.util.CommandUtils;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotation.specifier.Range;
@@ -33,20 +34,20 @@ public class ThirstCommand {
 		@Nullable @Argument(value = "player") Player player,
 		@Flag(value = "silent") boolean silent
 	) {
-		Player target;
-		if (player == null) {
-			if (!(stack.getExecutor() instanceof Player executor)) return;
-			target = executor;
-		} else {
-			target = player;
-		}
+		Player target = CommandUtils.getTargetPlayer(stack, player);
+		if (target == null) return;
 
 		TrappedNewbie.scheduler().sync(() -> ThirstyPlayer.of(target).setThirst(amount));
 
-		TagResolver amountTag = raw("amount", amount);
-		if (!silent) Messenger.messenger(target).sendMessage("command.thirst", amountTag);
-		if (stack.getSender() != target)
+		if (!silent) {
+			TagResolver amountTag = raw("amount", amount);
+			Messenger.messenger(target).sendMessage("command.thirst", amountTag);
+		}
+
+		if (CommandUtils.isTargetingOther(stack, target)) {
+			TagResolver amountTag = raw("amount", amount);
 			Messenger.messenger(stack.getSender()).sendMessage("command.thirst.other", amountTag, raw("player", target.displayName()));
+		}
 	}
 
 	@Suggestions("@thirstCommandSuggestionAmount")

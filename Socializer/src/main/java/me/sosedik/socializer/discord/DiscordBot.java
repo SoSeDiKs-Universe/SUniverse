@@ -13,6 +13,8 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 @NullMarked
@@ -23,9 +25,10 @@ public class DiscordBot {
 	}
 
 	private static @Nullable JDA discordBot;
-	private static Guild guild;
-	private static WebhookClient chatHook;
+	private static @Nullable Guild guild;
+	private static @Nullable WebhookClient chatHook;
 	private static @Nullable WebhookClient chatThreadHook;
+	private static final String AVATAR_BASE_URL = "https://minotar.net/helm/";
 
 	/**
 	 * Setups a Discord bot
@@ -33,11 +36,27 @@ public class DiscordBot {
 	 * @param plugin plugin instance
 	 */
 	public static void setupBot(Socializer plugin) {
-		if (discordBot != null) return;
+		if (isEnabled()) return;
 
 		ConfigurationSection config = plugin.getConfig().getConfigurationSection("discord");
-		if (config == null) return;
+		if (config == null) {
+			Socializer.logger().error("Discord configuration section is missing");
+			return;
+		}
 		if (!config.getBoolean("run-bot")) return;
+
+		if (!config.contains("token") || config.getString("token", "").isBlank()) {
+			Socializer.logger().error("Discord token is missing or empty");
+			return;
+		}
+		if (!config.contains("guild") || config.getLong("guild") == 0) {
+			Socializer.logger().error("Discord guild ID is missing or invalid");
+			return;
+		}
+		if (!config.contains("channels.server-chat") || config.getLong("channels.server-chat") == 0) {
+			Socializer.logger().error("Discord server chat channel ID is missing or invalid");
+			return;
+		}
 
 		try {
 			discordBot = JDABuilder.createDefault(config.getString("token"), GatewayIntent.getIntents(GatewayIntent.ALL_INTENTS))
@@ -45,26 +64,47 @@ public class DiscordBot {
 				.build();
 			discordBot.awaitReady();
 			guild = discordBot.getGuildById(config.getLong("guild"));
+			if (guild == null) {
+				Socializer.logger().error("Failed to find Discord guild with ID {}", config.getLong("guild"));
+				shutdown();
+				return;
+			}
+
 			String chatHookUrl = config.getString("chat-hook", "");
-			chatHook = WebhookClient.withUrl(chatHookUrl);
-			long threadId = config.getLong("chat-hook-thread-id", -1L);
-			chatThreadHook = threadId == -1L ? null : WebhookClient.withUrl(chatHookUrl).onThread(threadId);
+			if (!chatHookUrl.isBlank()) {
+				chatHook = WebhookClient.withUrl(chatHookUrl);
+				long threadId = config.getLong("chat-hook-thread-id", -1L);
+				if (threadId != -1L)
+					chatThreadHook = WebhookClient.withUrl(chatHookUrl).onThread(threadId);
+			}
 
 			DiscordUtil.setupUtils(plugin);
 			Discorder.setupDatabase();
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			Socializer.logger().error("Failed to setup Discord bot", e);
 		}
 	}
 
 	/**
-	 * Shuts down Discord bot
+	 * Shuts down Discord bot and cleans up resources
 	 */
-	public static void shutdown() {
+	public static synchronized void shutdown() {
 		if (!isEnabled()) return;
 
 		DiscordUtil.updateStatus(":coffee: The server is temporary offline.");
+
+		assert discordBot != null;
 		discordBot.shutdown();
+		if (chatHook != null)
+			chatHook.close();
+
+		if (chatThreadHook != null)
+			chatThreadHook.close();
+
+		discordBot = null;
+		guild = null;
+		chatHook = null;
+		chatThreadHook = null;
 	}
 
 	/**
@@ -76,12 +116,18 @@ public class DiscordBot {
 	 */
 	public static void sendMessage(String nickname, @Nullable String uuid, WebhookMessageBuilder builder, boolean thread) {
 		if (thread && chatThreadHook == null) return;
+
 		// Setting chat hook's avatar seems to break things :(
-		builder.setAvatarUrl("https://minotar.net/helm/" + Objects.requireNonNullElse(uuid, nickname));
-		if (thread)
-			chatThreadHook.send(builder.build());
-		else
-			chatHook.send(builder.build());
+		String avatarParam = uuid != null ? uuid : URLEncoder.encode(nickname, StandardCharsets.UTF_8);
+		builder.setAvatarUrl(AVATAR_BASE_URL + avatarParam);
+		try {
+			if (thread)
+				chatThreadHook.send(builder.build());
+			else if (chatHook != null)
+				chatHook.send(builder.build());
+		} catch (Exception e) {
+			Socializer.logger().error("Failed to send Discord message", e);
+		}
 	}
 
 	/**
@@ -108,9 +154,10 @@ public class DiscordBot {
 	 * Gets the server Discord guild
 	 *
 	 * @return the server guild
+	 * @throws NullPointerException if not enabled
 	 */
 	public static Guild getGuild() {
-		return guild;
+		return Objects.requireNonNull(guild);
 	}
 
 }

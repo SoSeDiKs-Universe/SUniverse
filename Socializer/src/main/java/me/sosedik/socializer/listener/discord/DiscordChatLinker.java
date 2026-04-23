@@ -41,6 +41,11 @@ public class DiscordChatLinker extends ListenerAdapter {
 
 	private static final Pattern IMAGE_URL = Pattern.compile("(http(s?):)([/.\\w\\s:-])*\\.(?:jpg|gif|png)(\\S*)");
 	private static final String DISCORD_EMOTE = "<:discord:971000408124293151>";
+	private static final int EMBED_COLOR = 3158326;
+	private static final String DEFAULT_AUTHOR_NAME = "Bot";
+	private static final long CLEANUP_INTERVAL_TICKS = 60 * 20L;
+	private static final long MAX_ATTACHMENT_SIZE = 20 * 1024 * 1024; // 20MB
+	private static final long DOWNLOAD_TIMEOUT_SECONDS = 30;
 	private static final LoadingCache<Long, String> CHAT_USERS = CacheBuilder.newBuilder()
 			.expireAfterAccess(5, TimeUnit.MINUTES)
 			.build(
@@ -55,15 +60,26 @@ public class DiscordChatLinker extends ListenerAdapter {
 
 	private final MinecraftChatRenderer chatRenderer;
 
+	/**
+	 * Constructs a new DiscordChatLinker to handle Discord chat events.
+	 *
+	 * @param plugin the plugin instance
+	 * @param chatRenderer the renderer for sending messages to Minecraft
+	 */
 	public DiscordChatLinker(Socializer plugin, MinecraftChatRenderer chatRenderer) {
 		this.chatRenderer = chatRenderer;
 		serverChat = DiscordBot.getDiscordBot().getTextChannelById(plugin.getConfig().getLong("discord.channels.server-chat"));
+		if (serverChat == null) {
+			Socializer.logger().error("Failed to find Discord server chat channel with ID {}", plugin.getConfig().getLong("discord.channels.server-chat"));
+			return;
+		}
 		DiscordBot.getDiscordBot().addEventListener(this);
 		runCleanupTask();
 	}
 
 	@Override
 	public void onMessageReceived(MessageReceivedEvent event) {
+		if (serverChat == null) return;
 		if (event.getAuthor().isBot()) return;
 		if (!event.isFromGuild()) return;
 		if (event.getChannel().getIdLong() != serverChat.getIdLong()) return;
@@ -85,11 +101,14 @@ public class DiscordChatLinker extends ListenerAdapter {
 			try {
 				if (attachment.isImage()) {
 					// ToDo: in-game images
-					webhookMessageBuilder.addEmbeds(new WebhookEmbedBuilder().setImageUrl(attachment.getUrl()).setColor(3158326).build());
-				} else
-					webhookMessageBuilder.addFile(attachment.getProxy().downloadToFile(new File(attachment.getFileName())).get());
-			} catch (Exception ignored) {
-				Socializer.logger().warn("Could not download the file! {} : {}", attachment.getFileName(), attachment.getUrl());
+					webhookMessageBuilder.addEmbeds(new WebhookEmbedBuilder().setImageUrl(attachment.getUrl()).setColor(EMBED_COLOR).build());
+				} else if (attachment.getSize() <= MAX_ATTACHMENT_SIZE) {
+					webhookMessageBuilder.addFile(attachment.getProxy().downloadToFile(new File(attachment.getFileName())).get(DOWNLOAD_TIMEOUT_SECONDS, TimeUnit.SECONDS));
+				} else {
+					Socializer.logger().warn("Attachment {} is too large ({} bytes), skipping", attachment.getFileName(), attachment.getSize());
+				}
+			} catch (Exception e) {
+				Socializer.logger().warn("Could not download the file! {} : {}", attachment.getFileName(), attachment.getUrl(), e);
 			}
 		}
 
@@ -104,9 +123,57 @@ public class DiscordChatLinker extends ListenerAdapter {
 			// ToDo: in-game images
 			rawMessage = rawMessage.replace(imageUrl, "[image]");
 			gameMessage = gameMessage.replace(imageUrl, "[image]");
-			webhookMessageBuilder.addEmbeds(new WebhookEmbedBuilder().setImageUrl(imageUrl).setColor(3158326).build());
+			webhookMessageBuilder.addEmbeds(new WebhookEmbedBuilder().setImageUrl(imageUrl).setColor(EMBED_COLOR).build());
 		}
 
+		processAttachments(message, webhookMessageBuilder);
+		processEmbeds(message, webhookMessageBuilder);
+		String[] processedMessages = processImageLinks(rawMessage, gameMessage, webhookMessageBuilder);
+		rawMessage = processedMessages[0];
+		gameMessage = processedMessages[1];
+
+		buildAndSendWebhook(nickname, rawMessage, webhookMessageBuilder);
+		message.delete().queue();
+
+		logAndSendToGame(nickname, gameMessage);
+	}
+
+	private void processAttachments(Message message, WebhookMessageBuilder webhookMessageBuilder) {
+		for (Message.Attachment attachment : message.getAttachments()) {
+			try {
+				if (attachment.isImage()) {
+					// ToDo: in-game images
+					webhookMessageBuilder.addEmbeds(new WebhookEmbedBuilder().setImageUrl(attachment.getUrl()).setColor(EMBED_COLOR).build());
+				} else if (attachment.getSize() <= MAX_ATTACHMENT_SIZE) {
+					webhookMessageBuilder.addFile(attachment.getProxy().downloadToFile(new File(attachment.getFileName())).get(DOWNLOAD_TIMEOUT_SECONDS, TimeUnit.SECONDS));
+				} else {
+					Socializer.logger().warn("Attachment {} is too large ({} bytes), skipping", attachment.getFileName(), attachment.getSize());
+				}
+			} catch (Exception e) {
+				Socializer.logger().warn("Could not download the file! {} : {}", attachment.getFileName(), attachment.getUrl(), e);
+			}
+		}
+	}
+
+	private void processEmbeds(Message message, WebhookMessageBuilder webhookMessageBuilder) {
+		for (MessageEmbed embed : message.getEmbeds())
+			webhookMessageBuilder.addEmbeds(convertEmbed(embed));
+	}
+
+	private String[] processImageLinks(String rawMessage, String gameMessage, WebhookMessageBuilder webhookMessageBuilder) {
+		// Parse image links in message
+		var matcher = IMAGE_URL.matcher(rawMessage);
+		while (matcher.find()) {
+			String imageUrl = matcher.group();
+			// ToDo: in-game images
+			rawMessage = rawMessage.replace(imageUrl, "[image]");
+			gameMessage = gameMessage.replace(imageUrl, "[image]");
+			webhookMessageBuilder.addEmbeds(new WebhookEmbedBuilder().setImageUrl(imageUrl).setColor(EMBED_COLOR).build());
+		}
+		return new String[]{rawMessage, gameMessage};
+	}
+
+	private void buildAndSendWebhook(String nickname, String rawMessage, WebhookMessageBuilder webhookMessageBuilder) {
 		String[] lines = rawMessage.split("\n");
 		webhookMessageBuilder.append(DiscordUtil.formatGameMessage(DISCORD_EMOTE, lines[0]));
 		for (int i = 1; i < lines.length; i++)
@@ -115,15 +182,18 @@ public class DiscordChatLinker extends ListenerAdapter {
 		try {
 			DiscordBot.sendMessage(nickname, null, webhookMessageBuilder, false);
 		} catch (Exception e) {
-			e.printStackTrace();
+			Socializer.logger().error("Failed to send Discord message", e);
 		}
-		message.delete().queue();
+	}
 
-		String logMessage = gameMessage.isBlank() ? "[some embeds]" : MiniMarkdown.markdownToMini(gameMessage);
-		logMessage = "[D] " + nickname + " said: " + logMessage;
-		Bukkit.getConsoleSender().sendMessage(MiniMessage.miniMessage().deserialize(logMessage));
+	private void logAndSendToGame(String nickname, String gameMessage) {
+		Socializer.instance().getServer().getScheduler().runTask(Socializer.instance(), () -> {
+			String logMessage = gameMessage.isBlank() ? "[some embeds]" : MiniMarkdown.markdownToMini(gameMessage);
+			logMessage = "[D] " + nickname + " said: " + logMessage;
+			Bukkit.getConsoleSender().sendMessage(MiniMessage.miniMessage().deserialize(logMessage));
 
-		chatRenderer.sendBukkitMessage(nickname, gameMessage);
+			chatRenderer.sendBukkitMessage(nickname, gameMessage);
+		});
 	}
 
 	private WebhookEmbed convertEmbed(MessageEmbed embed) {
@@ -132,7 +202,7 @@ public class DiscordChatLinker extends ListenerAdapter {
 				.setTimestamp(embed.getTimestamp());
 		var author = embed.getAuthor();
 		if (author != null)
-			embedBuilder.setAuthor(new WebhookEmbed.EmbedAuthor(author.getName() == null ? "Bot" : author.getName(), author.getIconUrl(), author.getUrl()));
+			embedBuilder.setAuthor(new WebhookEmbed.EmbedAuthor(author.getName() == null ? DEFAULT_AUTHOR_NAME : author.getName(), author.getIconUrl(), author.getUrl()));
 
 		var footer = embed.getFooter();
 		if (footer != null)
@@ -158,9 +228,10 @@ public class DiscordChatLinker extends ListenerAdapter {
 	}
 
 	private static String fetchUserById(long id) {
-		String selectSql = "SELECT `UUID` FROM `" + Discorder.DATABASE_NAME + "` WHERE `DiscordId` = '" + id + "';";
+		String selectSql = "SELECT `UUID` FROM `" + Discorder.DATABASE_NAME + "` WHERE `DiscordId` = ?;";
 		try (Connection connection = Socializer.database().openConnection();
 			 PreparedStatement ps = connection.prepareStatement(selectSql)) {
+			ps.setLong(1, id);
 			ResultSet rs = ps.executeQuery();
 			if (!rs.next()) return "";
 
@@ -169,14 +240,13 @@ public class DiscordChatLinker extends ListenerAdapter {
 			String name = offlinePlayer.getName();
 			return name == null ? "" : name;
 		} catch (SQLException | IllegalArgumentException ex) {
-			ex.printStackTrace();
+			Socializer.logger().error("Failed to fetch user by Discord ID: {}", id, ex);
 			return "";
 		}
 	}
 
 	private static void runCleanupTask() {
-		long cleanupInterval = 60 * 20L;
-		Utilizer.scheduler().async(CHAT_USERS::cleanUp, cleanupInterval, cleanupInterval);
+		Utilizer.scheduler().async(CHAT_USERS::cleanUp, CLEANUP_INTERVAL_TICKS, CLEANUP_INTERVAL_TICKS);
 	}
 
 }

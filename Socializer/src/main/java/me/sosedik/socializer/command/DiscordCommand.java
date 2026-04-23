@@ -3,6 +3,7 @@ package me.sosedik.socializer.command;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import me.sosedik.socializer.Socializer;
 import me.sosedik.socializer.discord.Discorder;
+import me.sosedik.socializer.util.DiscordUserVerificationCache;
 import me.sosedik.socializer.util.DiscordUtil;
 import me.sosedik.utilizer.api.message.Messenger;
 import net.kyori.adventure.text.Component;
@@ -14,10 +15,6 @@ import org.incendo.cloud.annotations.Flag;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-
 import static me.sosedik.utilizer.api.message.Mini.combined;
 import static me.sosedik.utilizer.api.message.Mini.raw;
 
@@ -26,8 +23,6 @@ import static me.sosedik.utilizer.api.message.Mini.raw;
  */
 @NullMarked
 public class DiscordCommand {
-
-	private static final Map<UUID, Long> verify = new HashMap<>();
 
 	@Command("discord")
 	private void onCommand(
@@ -64,14 +59,27 @@ public class DiscordCommand {
 			return;
 		}
 
-		Long neededCode = verify.get(player.getUniqueId());
-		if (neededCode == null) return;
-		if (!neededCode.equals(discordId)) return;
+		if (discordId <= 0) {
+			Messenger.messenger(player).sendMessage("discord.invalid-id");
+			Socializer.logger().warn("Player {} attempted to verify with invalid Discord ID: {}", player.getName(), discordId);
+			return;
+		}
+
+		Long neededCode = Socializer.discordUserVerificationCache().get(player.getUniqueId());
+		if (neededCode == null) {
+			Messenger.messenger(player).sendMessage("discord.verify.expired");
+			return;
+		}
+		if (!neededCode.equals(discordId)) {
+			Messenger.messenger(player).sendMessage("discord.verify.mismatch");
+			return;
+		}
 
 		Messenger.messenger(executor).sendMessage("discord.verify.verified");
 		Discorder.getDiscorder(player).setDiscordId(discordId);
 		DiscordUtil.announceVerify(discordId, player.getUniqueId().toString(), player.getName());
-		verify.remove(player.getUniqueId());
+		Socializer.discordUserVerificationCache().remove(player.getUniqueId());
+		Socializer.logger().info("Player {} successfully linked Discord account {}", player.getName(), discordId);
 
 		Socializer.scheduler().async(DiscordUtil::updateStatus);
 	}
@@ -85,10 +93,10 @@ public class DiscordCommand {
 	 * @return whether the suggestion was sent
 	 */
 	public static boolean suggestVerification(Player player, long discordId, String discordTag) {
-		if (verify.containsKey(player.getUniqueId())) return false;
+		DiscordUserVerificationCache cache = Socializer.discordUserVerificationCache();
+		if (!cache.put(player.getUniqueId(), discordId)) return false;
 
-		verify.put(player.getUniqueId(), discordId);
-		Socializer.scheduler().async(() -> verify.remove(player.getUniqueId()), 5 * 60 * 20L);
+		Socializer.scheduler().async(() -> cache.remove(player.getUniqueId()), 5 * 60 * 20L);
 
 		var messenger = Messenger.messenger(player);
 		Component message = combined(
@@ -100,6 +108,7 @@ public class DiscordCommand {
 		);
 
 		player.sendMessage(message);
+		Socializer.logger().info("Sent verification request to {} for Discord ID {}", player.getName(), discordId);
 		return true;
 	}
 

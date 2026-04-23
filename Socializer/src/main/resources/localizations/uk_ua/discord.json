@@ -4,8 +4,12 @@
 	"discord.verify.yes": "<gray>[<green>ТАК</green>]",
 	"discord.verify.yes.hover": "<green>Підтвердити акаунт",
 	"discord.verify.verified": "<gray>Дякуємо за підтвердження Вашого <#5662f6>Discord</#5662f6>!",
+	"discord.verify.expired": "<red>Ваш код підтвердження застарів. Спробуйте ще раз.",
+	"discord.verify.mismatch": "<red>Наданий Discord ID не співпадає з Вашим кодом підтвердження.",
+	"discord.invalid-id": "<red>Невірний формат Discord ID.",
 	"discord.not_verified": "<gray>Ваш <#5662f6>Discord</#5662f6> ще не був привʼязаний.",
 	"discord.unlink": "<gray>Ви впевнені? Напишіть <red>/discord --unverify --sure</red>, щоб продовжити.",
 	"discord.unlinked": "<gray>Ваш <#5662f6>Discord</#5662f6> було відвʼязано!",
-	"discord.pm.error": "<red>Discord бот сервера не зміг написати Вам в особисті повідомлення."
+	"discord.pm.error": "<red>Discord бот сервера не зміг написати Вам в особисті повідомлення.",
+	"discord.pm.disable": "<red>Неможливо надіслати приватне повідомлення в Discord. Увімкніть отримання приватних повідомлень від учасників сервера."
 }

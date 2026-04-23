@@ -7,6 +7,7 @@ import me.sosedik.utilizer.api.language.LangOptionsStorage;
 import me.sosedik.utilizer.api.language.translator.TranslationLanguage;
 import me.sosedik.utilizer.api.message.Messenger;
 import me.sosedik.utilizer.util.ChatUtil;
+import me.sosedik.utilizer.util.CommandUtils;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Argument;
 import org.incendo.cloud.annotations.Command;
@@ -45,13 +46,8 @@ public class TranslatorCommand {
 	) {
 		String translatorKey = translatorKeyS.string();
 
-		Player target;
-		if (player == null) {
-			if (!(stack.getExecutor() instanceof Player executor)) return;
-			target = executor;
-		} else {
-			target = player;
-		}
+		Player target = CommandUtils.getTargetPlayer(stack, player);
+		if (target == null) return;
 
 		TranslationLanguage translationLanguage = this.translators.get(translatorKey);
 		if (translationLanguage == null) {
@@ -61,8 +57,12 @@ public class TranslatorCommand {
 
 		var langHolder = LangHolder.langHolder(target);
 		langHolder.setTranslationLanguage(translationLanguage);
-		if (!silent) Messenger.messenger(target).sendMessage("command.translator.set", raw("translation", translatorKey));
-		if (stack.getSender() != target) Messenger.messenger(stack.getSender()).sendMessage("command.translator.set.other", raw("translation", translatorKey), raw("player", target.displayName()));
+
+		if (!silent)
+			Messenger.messenger(target).sendMessage("command.translator.set", raw("translation", translatorKey));
+
+		if (CommandUtils.isTargetingOther(stack, target))
+			Messenger.messenger(stack.getSender()).sendMessage("command.translator.set.other", raw("translation", translatorKey), raw("player", target.displayName()));
 	}
 
 	@Suggestions("@translatorCommandSuggestionTranslators")

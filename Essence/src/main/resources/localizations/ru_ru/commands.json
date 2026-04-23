@@ -9,7 +9,12 @@
 	"command.health.other": "Вы установили сердца на <yellow><amount></yellow> для игрока <yellow><player>",
 	"command.hunger": "Ваш голод был установлен на <yellow><amount>",
 	"command.hunger.other": "Вы установили голод на <yellow><amount></yellow> для игрока <yellow><player>",
+	"command.item.received": "Вы получили <yellow><amount></yellow> <dark_gray>×</dark_gray> <item>",
+	"command.item.gave": "Выдано <yellow><amount></yellow> <dark_gray>×</dark_gray> <item> игроку <yellow><player>",
+	"command.item.invalid": "Неверный предмет: <red><item>",
 	"command.more": "Количество установлено на <yellow><amount></yellow> для <item>",
 	"command.world": "Телепортирование в мир <yellow><world>",
-	"command.world.other": "Игрок <yellow><player></yellow> телепортирован в мир <yellow><world>"
+	"command.world.other": "Игрок <yellow><player></yellow> телепортирован в мир <yellow><world>",
+	"command.world.already_in": "Вы уже находитесь в мире <yellow><world>",
+	"command.world.already_in.other": "Игрок уже находится в мире <yellow><world>"
 }

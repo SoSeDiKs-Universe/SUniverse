@@ -4,6 +4,7 @@ import io.papermc.paper.command.brigadier.CommandSourceStack;
 import me.sosedik.essence.Essence;
 import me.sosedik.utilizer.Utilizer;
 import me.sosedik.utilizer.api.message.Messenger;
+import me.sosedik.utilizer.util.CommandUtils;
 import me.sosedik.utilizer.util.LocationUtil;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -31,13 +32,8 @@ public class BedSpawnCommand {
 		@Nullable @Argument(value = "player") Player player,
 		@Flag(value = "silent") boolean silent
 	) {
-		Player target;
-		if (player == null) {
-			if (!(stack.getExecutor() instanceof Player executor)) return;
-			target = executor;
-		} else {
-			target = player;
-		}
+		Player target = CommandUtils.getTargetPlayer(stack, player);
+		if (target == null) return;
 
 		Essence.scheduler().sync(() -> {
 			Location loc = target.getRespawnLocation();
@@ -46,8 +42,10 @@ public class BedSpawnCommand {
 			LocationUtil.smartTeleport(target, loc, false).thenRun(() -> target.addPotionEffect(new PotionEffect(PotionEffectType.RESISTANCE, 25 * 20, 10)));
 		});
 
-		if (!silent) Messenger.messenger(target).sendMessage("command.bedspawn");
-		if (stack.getSender() != target)
+		if (!silent)
+			Messenger.messenger(target).sendMessage("command.bedspawn");
+
+		if (CommandUtils.isTargetingOther(stack, target))
 			Messenger.messenger(stack.getSender()).sendMessage("command.bedspawn.other", raw("player", target.displayName()));
 	}
 

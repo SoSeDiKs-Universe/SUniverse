@@ -4,6 +4,7 @@ import io.papermc.paper.command.brigadier.CommandSourceStack;
 import me.sosedik.resourcelib.ResourceLib;
 import me.sosedik.resourcelib.listener.player.DisplayCustomPotionEffectsOnHud;
 import me.sosedik.utilizer.api.message.Messenger;
+import me.sosedik.utilizer.util.CommandUtils;
 import net.kyori.adventure.text.Component;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
@@ -43,13 +44,8 @@ public class CEffectCommand { // TODO not really needed, should fix vanilla comm
 		@Nullable @Argument(value = "player") Player player,
 		@Flag(value = "silent") boolean silent
 	) {
-		Player target;
-		if (player == null) {
-			if (!(stack.getExecutor() instanceof Player executor)) return;
-			target = executor;
-		} else {
-			target = player;
-		}
+		Player target = CommandUtils.getTargetPlayer(stack, player);
+		if (target == null) return;
 
 		PotionEffectType effectType = Registry.EFFECT.get(effectKey);
 		if (effectType == null) return;
@@ -57,8 +53,11 @@ public class CEffectCommand { // TODO not really needed, should fix vanilla comm
 		ResourceLib.scheduler().sync(() -> {
 			var effect = new PotionEffect(effectType, duration * 20, amplifier);
 			target.addPotionEffect(effect);
-			if (!silent) Messenger.messenger(target).sendMessage("command.ceffect.give", raw("effect", combine(Component.space(), DisplayCustomPotionEffectsOnHud.getIconAndName(target, effect))));
-			if (stack.getSender() != target)
+
+			if (!silent)
+				Messenger.messenger(target).sendMessage("command.ceffect.give", raw("effect", combine(Component.space(), DisplayCustomPotionEffectsOnHud.getIconAndName(target, effect))));
+
+			if (CommandUtils.isTargetingOther(stack, target))
 				Messenger.messenger(stack.getSender()).sendMessage("command.ceffect.give.other", raw("effect", DisplayCustomPotionEffectsOnHud.getIconAndName(stack.getSender(), effect)), raw("player", target.displayName()));
 		});
 	}
@@ -70,13 +69,8 @@ public class CEffectCommand { // TODO not really needed, should fix vanilla comm
 		@Nullable @Argument(value = "player") Player player,
 		@Flag(value = "silent") boolean silent
 	) {
-		Player target;
-		if (player == null) {
-			if (!(stack.getExecutor() instanceof Player executor)) return;
-			target = executor;
-		} else {
-			target = player;
-		}
+		Player target = CommandUtils.getTargetPlayer(stack, player);
+		if (target == null) return;
 
 		if (effectKey != null && !"minecraft:all".equals(effectKey.asString())) {
 			PotionEffectType effectType = Registry.EFFECT.get(effectKey);
@@ -88,8 +82,10 @@ public class CEffectCommand { // TODO not really needed, should fix vanilla comm
 
 				target.removePotionEffect(effectType);
 
-				if (!silent) Messenger.messenger(target).sendMessage("command.ceffect.clear", raw("effect", DisplayCustomPotionEffectsOnHud.getIconAndName(target, effect)));
-				if (stack.getSender() != target)
+				if (!silent)
+					Messenger.messenger(target).sendMessage("command.ceffect.clear", raw("effect", DisplayCustomPotionEffectsOnHud.getIconAndName(target, effect)));
+
+				if (CommandUtils.isTargetingOther(stack, target))
 					Messenger.messenger(stack.getSender()).sendMessage("command.ceffect.clear.other", raw("effect", DisplayCustomPotionEffectsOnHud.getIconAndName(stack.getSender(), effect)), raw("player", target.displayName()));
 			});
 		} else {

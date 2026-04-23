@@ -316,6 +316,7 @@ public class ResourceLib extends JavaPlugin {
 				case "water" -> Key.key("water_still");
 				case "lava" -> Key.key("lava_still");
 				case "white_carpet" -> Key.key("white_wool");
+				case "fern" -> Key.key("large_fern_top"); // TODO MCCheck: 1.21.11, For some reason [short] fern does not work
 				default -> key;
 			};
 		};

@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -32,8 +33,12 @@ public class Pinger {
 	public static final String DATABASE_NAME = "Pingers";
 	private static final Database PINGERS_DATABASE = Database.prepareDatabase(FancyMotd.instance(), DATABASE_NAME.toLowerCase());
 
+	// Cache configuration
+	private static final int CACHE_EXPIRY_MINUTES = 5;
+	private static final int CLEANUP_INTERVAL_MINUTES = 10;
+
 	private static final LoadingCache<String, Pinger> PINGERS = CacheBuilder.newBuilder()
-			.expireAfterAccess(5, TimeUnit.MINUTES)
+			.expireAfterAccess(CACHE_EXPIRY_MINUTES, TimeUnit.MINUTES)
 			.build(
 				new CacheLoader<>() {
 					public Pinger load(String ip) {
@@ -101,7 +106,8 @@ public class Pinger {
 	 */
 	private static Pinger constructPinger(String ip) {
 		try (var con = PINGERS_DATABASE.openConnection();
-			 var ps = con.prepareStatement("SELECT * FROM " + DATABASE_NAME + " WHERE IP LIKE '%" + ip + "%'")) {
+			 var ps = con.prepareStatement("SELECT * FROM " + DATABASE_NAME + " WHERE IP LIKE ?")) {
+			ps.setString(1, "%" + ip + "%");
 			ResultSet rs = ps.executeQuery();
 			boolean hasClock = clockAccessor == null;
 			LangOptions language = null;
@@ -130,8 +136,11 @@ public class Pinger {
 		InetSocketAddress address = player.getAddress();
 		if (address == null) return;
 
+		InetAddress inetAddress = address.getAddress();
+		if (inetAddress == null) return;
+
+		String ip = inetAddress.getHostAddress();
 		UUID uuid = player.getUniqueId();
-		String ip = address.getAddress().getHostAddress();
 		Pinger pinger = new Pinger(uuid);
 		PINGERS.put(ip, pinger);
 
@@ -148,37 +157,41 @@ public class Pinger {
 	}
 
 	private static void updatePingerData(Pinger pinger, UUID uuid, String ip) {
-		String getIpsSql = "SELECT IP FROM " + DATABASE_NAME + " WHERE UUID = '" + uuid + "';";
+		String getIpsSql = "SELECT IP FROM " + DATABASE_NAME + " WHERE UUID = ?";
 		String updateDataSql = "INSERT OR REPLACE INTO " + DATABASE_NAME + "(UUID, IP, LastLang, Clock) VALUES(?, ?, ?, ?)";
 		try (Connection con = PINGERS_DATABASE.openConnection();
-			 PreparedStatement ps = con.prepareStatement(getIpsSql)) {
-			ResultSet rs = ps.executeQuery();
-			if (rs.next()) {
-				String[] oldIps = rs.getString("IP").split("\\|");
-				boolean updateIps = true;
-				for (String oldIp : oldIps) {
-					if (ip.equals(oldIp)) {
-						updateIps = false;
-						break;
+			 PreparedStatement selectPs = con.prepareStatement(getIpsSql);
+			 PreparedStatement updatePs = con.prepareStatement(updateDataSql)) {
+
+			selectPs.setString(1, uuid.toString());
+			try (ResultSet rs = selectPs.executeQuery()) {
+				String finalIp = ip;
+				if (rs.next()) {
+					String[] oldIps = rs.getString("IP").split("\\|");
+					boolean updateIps = true;
+					for (String oldIp : oldIps) {
+						if (ip.equals(oldIp)) {
+							updateIps = false;
+							break;
+						}
+					}
+					if (updateIps) {
+						finalIp = switch (oldIps.length) {
+							case 1 -> oldIps[0] + "|" + ip;
+							case 2 -> oldIps[0] + "|" + oldIps[1] + "|" + ip;
+							default -> oldIps[1] + "|" + oldIps[2] + "|" + ip;
+						};
 					}
 				}
-				if (updateIps) {
-					ip = switch (oldIps.length) {
-						case 1 -> oldIps[0] + "|" + ip;
-						case 2 -> oldIps[0] + "|" + oldIps[1] + "|" + ip;
-						default -> oldIps[1] + "|" + oldIps[2] + "|" + ip;
-					};
-				}
+
+				updatePs.setString(1, uuid.toString());
+				updatePs.setString(2, finalIp);
+				updatePs.setString(3, pinger.getLanguage().minecraftId());
+				updatePs.setBoolean(4, clockAccessor != null && pinger.hasClock());
+				updatePs.executeUpdate();
 			}
-			try (PreparedStatement ps1 = con.prepareStatement(updateDataSql)) {
-				ps1.setString(1, uuid.toString());
-				ps1.setString(2, ip);
-				ps1.setString(3, pinger.getLanguage().minecraftId());
-				ps1.setBoolean(4, clockAccessor != null && pinger.hasClock());
-				ps1.executeUpdate();
-			}
-		} catch (SQLException ex) {
-			ex.printStackTrace();
+		} catch (SQLException e) {
+			FancyMotd.logger().error("Failed to update pinger data for player {}", uuid, e);
 		}
 	}
 
@@ -204,7 +217,14 @@ public class Pinger {
 	}
 
 	static void setupDatabase() {
-		String createTableSql = "CREATE TABLE IF NOT EXISTS " + DATABASE_NAME + "(`UUID` varchar(64) NOT NULL, `IP` varchar(64), `LastLang` varchar(64), 'Clock' BIT(1), PRIMARY KEY(`UUID`));";
+		String createTableSql = """
+			CREATE TABLE IF NOT EXISTS %s(
+				UUID varchar(64) NOT NULL,
+				IP varchar(64),
+				LastLang varchar(64),
+				Clock BIT(1),
+				PRIMARY KEY(UUID)
+			)""".formatted(DATABASE_NAME);
 		try (Connection con = PINGERS_DATABASE.openConnection();
 		     PreparedStatement ps = con.prepareStatement(createTableSql)) {
 			ps.executeUpdate();
@@ -219,7 +239,7 @@ public class Pinger {
 	}
 
 	static void runCleanupTask() {
-		long cleanupInterval = 60 * 20L;
+		long cleanupInterval = CLEANUP_INTERVAL_MINUTES * 60 * 20L; // minutes to ticks
 		Utilizer.scheduler().async(PINGERS::cleanUp, cleanupInterval, cleanupInterval);
 	}
 

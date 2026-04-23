@@ -34,11 +34,13 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
+import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -50,6 +52,7 @@ public class TranslationHolder implements Translator {
 
 	private static final TranslationHolder TRANSLATION_HOLDER = new TranslationHolder();
 	private static final Random RANDOM = new Random();
+	private static final Set<String> MISSING_LOCALES = new HashSet<>();
 
 	static {
 		GlobalTranslator.translator().addSource(TRANSLATION_HOLDER);
@@ -104,7 +107,8 @@ public class TranslationHolder implements Translator {
 			if (defaultLangOptions != langOptions)
 				return getMessage(defaultLangOptions, path, scream);
 			if (scream) {
-				Utilizer.logger().warn("Missing localization for {}", path);
+				if (MISSING_LOCALES.add(path))
+					Utilizer.logger().warn("Missing localization for {}", path);
 				return new String[]{path};
 			}
 			return null;

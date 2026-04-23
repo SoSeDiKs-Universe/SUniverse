@@ -45,7 +45,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -144,7 +143,6 @@ public class DiscordUtil {
 	private static Map<String, Map.Entry<Component, String>> getMentions(List<String> mentions) {
 		Map<String, Map.Entry<Component, String>> mentionMappings = new HashMap<>();
 
-		// Custom aliases
 		for (String mention : mentions) {
 			if (mention.equalsIgnoreCase("admin"))
 				mentionMappings.put(mention, Map.entry(Component.text("@Admin", NamedTextColor.RED), staffRole.getAsMention()));
@@ -154,33 +152,39 @@ public class DiscordUtil {
 				mentionMappings.put(mention, Map.entry(Component.text("@Owner", NamedTextColor.GOLD), ownerRole.getAsMention()));
 		}
 
-		// Server roles
-		for (Role role : DiscordBot.getGuild().getRoles()) {
-			for (String mention : mentions) {
-				if (mentionMappings.containsKey(mention)) continue;
-				if (role.getName().equalsIgnoreCase(mention)) {
-					Color color = role.getColor();
-					mentionMappings.put(mention, Map.entry(Component.text("@", color == null ? NamedTextColor.YELLOW : TextColor.color(color.getRGB())), role.getAsMention()));
-				}
-			}
+		Map<String, Role> roleMap = new HashMap<>();
+		for (Role role : DiscordBot.getGuild().getRoles())
+			roleMap.put(role.getName().toLowerCase(), role);
+
+		for (String mention : mentions) {
+			if (mentionMappings.containsKey(mention)) continue;
+
+			Role role = roleMap.get(mention.toLowerCase());
+			if (role == null) continue;
+
+			Color color = role.getColor();
+			mentionMappings.put(mention, Map.entry(Component.text("@", color == null ? NamedTextColor.YELLOW : TextColor.color(color.getRGB())), role.getAsMention()));
 		}
 
-		// Discord users
-		DiscordBot.getGuild().findMembers(member -> {
-			for (String mention : mentions) {
-				if (mentionMappings.containsKey(mention)) continue;
-				if (member.getEffectiveName().equalsIgnoreCase(mention)) {
-					TextColor color = TextColor.fromHexString("#7289da");
-					String nickname = "@" + member.getEffectiveName();
-					Component display = Component.text(nickname, color)
-						.hoverEvent(Component.text("Discord"))
-						.clickEvent(ClickEvent.suggestCommand(nickname));
-					mentionMappings.put(mention, Map.entry(display, member.getAsMention()));
-					return true;
-				}
-			}
-			return false;
-		}).get();
+		Map<String, Member> memberMap = new HashMap<>();
+		for (Member member : DiscordBot.getGuild().getMembers()) {
+			String name = member.getEffectiveName().toLowerCase();
+			memberMap.putIfAbsent(name, member);
+		}
+
+		for (String mention : mentions) {
+			if (mentionMappings.containsKey(mention)) continue;
+
+			Member member = memberMap.get(mention.toLowerCase());
+			if (member == null) continue;
+
+			TextColor color = TextColor.fromHexString("#7289da");
+			String nickname = "@" + member.getEffectiveName();
+			Component display = Component.text(nickname, color)
+				.hoverEvent(Component.text("Discord"))
+				.clickEvent(ClickEvent.suggestCommand(nickname));
+			mentionMappings.put(mention, Map.entry(display, member.getAsMention()));
+		}
 
 		return mentionMappings;
 	}
@@ -230,18 +234,21 @@ public class DiscordUtil {
 			.queue(member -> modifyNickname(member, nickname),
 				error -> {
 					if (!(error instanceof ErrorResponseException e)) {
-						error.printStackTrace();
+						Socializer.logger().error("Unexpected error during Discord nickname change for {}", nickname, error);
 						return;
 					}
-					if (e.getErrorCode() == ErrorResponse.UNKNOWN_MEMBER.getCode()
-							|| e.getErrorCode() == ErrorResponse.UNKNOWN_USER.getCode()) {
-						Socializer.logger().info("Couldn't find user {} (id: {}), removing", nickname, id);
+
+					int code = e.getErrorCode();
+					if (code == ErrorResponse.UNKNOWN_MEMBER.getCode() || code == ErrorResponse.UNKNOWN_USER.getCode()) {
+						Socializer.logger().info("User {} (id: {}) not found on Discord, unlinking", nickname, id);
 						Socializer.scheduler().sync(() -> {
 							Player player = Bukkit.getPlayerExact(nickname);
 							if (player != null)
 								player.performCommand("discord --unverify --sure");
 						});
+						return;
 					}
+					Socializer.logger().warn("Discord API error {} while updating nickname for {}: {}", code, nickname, e.getMessage());
 				}
 			);
 	}
@@ -254,8 +261,15 @@ public class DiscordUtil {
 	 */
 	public static void modifyNickname(Member member, @Nullable String nickname) {
 		if (nickname != null) NoNicknameChange.whitelist(member.getIdLong(), nickname);
-		if (PermissionUtil.canInteract(Objects.requireNonNull(DiscordBot.getGuild().getMember(DiscordBot.getDiscordBot().getSelfUser())), member))
-			member.modifyNickname(nickname).queue();
+
+		Member botMember = DiscordBot.getGuild().getMember(DiscordBot.getDiscordBot().getSelfUser());
+		if (botMember == null) return;
+		if (!PermissionUtil.canInteract(botMember, member)) return;
+
+		member.modifyNickname(nickname).queue(
+			success -> { /* nickname updated successfully */ },
+			error -> Socializer.logger().warn("Failed to update Discord nickname for member {}: {}", member.getId(), error.getMessage())
+		);
 	}
 
 	/**
@@ -389,13 +403,21 @@ public class DiscordUtil {
 						if (e.getErrorCode() == ErrorResponse.UNKNOWN_MEMBER.getCode()) return;
 						if (e.getErrorCode() == ErrorResponse.UNKNOWN_USER.getCode()) return;
 					}
-					error.printStackTrace();
+					Socializer.logger().error("Failed to remove verified role from Discord user {}", id, error);
 				}
 			);
 	}
 
 	public static void sendGameProgressResetRequest(Player player, Discorder discorder) {
-		if (!discorder.hasDiscord()) return;
+		if (!discorder.hasDiscord()) {
+			Socializer.logger().debug("Player {} has no linked Discord, skipping progress reset request", player.getName());
+			return;
+		}
+
+		if (!player.isOnline()) {
+			Socializer.logger().debug("Player {} went offline before sending progress reset request", player.getName());
+			return;
+		}
 
 		long id = discorder.getDiscordId();
 		DiscordBot.getGuild().retrieveMemberById(id).queue(member -> {
@@ -404,15 +426,48 @@ public class DiscordUtil {
 					.mentionUsers(id)
 					.setContent("‼️ Do you want to reset your in-game progress?")
 					.addActionRow(Button.danger("reset_progress", "Reset"));
-				chat.sendMessage(message.build()).queue();
-			}, error -> Messenger.messenger(player).sendMessage("discord.pm.error"));
+				chat.sendMessage(message.build()).queue(
+					success -> Socializer.logger().debug("Sent progress reset request to {} (Discord: {})", player.getName(), id),
+					error -> {
+						if (error instanceof ErrorResponseException e) {
+							int code = e.getErrorCode();
+							if (code == ErrorResponse.CANNOT_SEND_TO_USER.getCode()) {
+								Messenger.messenger(player).sendMessage("discord.pm.disable");
+								Socializer.logger().info("Cannot send DM to Discord user {} (player {}): DMs disabled or blocked", id, player.getName());
+								return;
+							}
+							if (code == ErrorResponse.UNKNOWN_USER.getCode() || code == ErrorResponse.UNKNOWN_MEMBER.getCode()) {
+								Socializer.logger().info("Discord user {} not in guild, unlinking player {}", id, player.getName());
+								Socializer.scheduler().sync(() -> {
+									if (player.isOnline()) {
+										player.performCommand("discord --unverify --sure");
+									}
+								});
+								return;
+							}
+						}
+						Socializer.logger().error("Failed to send progress reset DM to player {} (Discord: {})", player.getName(), id, error);
+						Messenger.messenger(player).sendMessage("discord.pm.error");
+					}
+				);
+			}, error -> {
+				Socializer.logger().error("Failed to open private channel with Discord user {} for player {}", id, player.getName(), error);
+				Messenger.messenger(player).sendMessage("discord.pm.error");
+			});
 		}, error -> {
 			Messenger.messenger(player).sendMessage("discord.pm.error");
 			if (error instanceof ErrorResponseException e) {
-				if (e.getErrorCode() == ErrorResponse.UNKNOWN_MEMBER.getCode()) return;
-				if (e.getErrorCode() == ErrorResponse.UNKNOWN_USER.getCode()) return;
+				int code = e.getErrorCode();
+				if (code == ErrorResponse.UNKNOWN_MEMBER.getCode() || code == ErrorResponse.UNKNOWN_USER.getCode()) {
+					Socializer.logger().info("Discord user {} not found, unlinking player {}", id, player.getName());
+					Socializer.scheduler().sync(() -> {
+						if (player.isOnline())
+							player.performCommand("discord --unverify --sure");
+					});
+					return;
+				}
 			}
-			error.printStackTrace();
+			Socializer.logger().error("Failed to retrieve Discord member {} for player {}", id, player.getName(), error);
 		});
 	}
 

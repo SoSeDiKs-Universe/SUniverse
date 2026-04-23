@@ -4,8 +4,12 @@
 	"discord.verify.yes": "<gray>[<green>YES</green>]",
 	"discord.verify.yes.hover": "<green>Verify account",
 	"discord.verify.verified": "<gray>Thank you for verifying your <#5662f6>Discord</#5662f6>!",
+	"discord.verify.expired": "<red>Your verification code has expired. Please try again.",
+	"discord.verify.mismatch": "<red>The provided Discord ID doesn't match your verification code.",
+	"discord.invalid-id": "<red>Invalid Discord ID format.",
 	"discord.not_verified": "<gray>Your <#5662f6>Discord</#5662f6> wasn't linked yet.",
 	"discord.unlink": "<gray>Are you sure? Type <red>/discord --unverify --sure</red> to continue.",
 	"discord.unlinked": "<gray>Your <#5662f6>Discord</#5662f6> was unlinked!",
-	"discord.pm.error": "<red>Discord server bot wasn't able to private message you."
+	"discord.pm.error": "<red>Discord server bot wasn't able to private message you.",
+	"discord.pm.disable": "<red>Cannot send Discord DM. Enable private messages from server members."
 }

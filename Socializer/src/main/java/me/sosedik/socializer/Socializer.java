@@ -13,6 +13,7 @@ import me.sosedik.socializer.listener.discord.ConsoleCommands;
 import me.sosedik.socializer.listener.discord.DiscordChatLinker;
 import me.sosedik.socializer.listener.discord.MembershipGaining;
 import me.sosedik.socializer.listener.discord.NoNicknameChange;
+import me.sosedik.socializer.util.DiscordUserVerificationCache;
 import me.sosedik.utilizer.CommandManager;
 import me.sosedik.utilizer.api.database.Database;
 import me.sosedik.utilizer.api.language.TranslationHolder;
@@ -33,6 +34,7 @@ public final class Socializer extends JavaPlugin {
 
 	private @UnknownNullability Scheduler scheduler;
 	private @UnknownNullability Database database;
+	private @UnknownNullability DiscordUserVerificationCache discordUserVerificationCache;
 
 	@Override
 	public void onLoad() {
@@ -49,20 +51,25 @@ public final class Socializer extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
+		this.discordUserVerificationCache = new DiscordUserVerificationCache(this);
+
 		// Discord listeners
 		if (getConfig().getBoolean("discord.run-bot", false)) {
-			new AccountLinking(this);
-			new ConsoleCommands(this);
-			new DiscordChatLinker(this, new DiscordChatRenderer());
-			new MembershipGaining(this);
-			new NoNicknameChange();
+			DiscordBot.setupBot(this);
+			if (DiscordBot.isEnabled()) {
+				new AccountLinking(this);
+				new ConsoleCommands(this);
+				new DiscordChatLinker(this, new DiscordChatRenderer());
+				new MembershipGaining(this);
+				new NoNicknameChange();
 
-			EventUtil.registerListeners(this,
-				DiscordServerStatusUpdater.class
-			);
+				EventUtil.registerListeners(this,
+					DiscordServerStatusUpdater.class
+				);
 
-			// Load early, so it's available in classpath during disable
-			loadClasses(ShutdownEvent.class, AudioManagerImpl.class);
+				// Load early, so it's available in classpath during disable
+				loadClasses(ShutdownEvent.class, AudioManagerImpl.class);
+			}
 		}
 
 		EventUtil.registerListeners(this,
@@ -77,6 +84,7 @@ public final class Socializer extends JavaPlugin {
 		);
 	}
 
+	@SuppressWarnings("unused")
 	private void loadClasses(Class<?>... classes) {
 		// Yay!
 	}
@@ -84,6 +92,7 @@ public final class Socializer extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		DiscordBot.shutdown();
+		this.discordUserVerificationCache.clear();
 	}
 
 	/**
@@ -130,6 +139,15 @@ public final class Socializer extends JavaPlugin {
 	 */
 	public static Database database() {
 		return instance().database;
+	}
+
+	/**
+	 * Gets the verification cache.
+	 *
+	 * @return the verification cache instance
+	 */
+	public static DiscordUserVerificationCache discordUserVerificationCache() {
+		return instance().discordUserVerificationCache;
 	}
 
 }

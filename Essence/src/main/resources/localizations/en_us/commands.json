@@ -9,7 +9,12 @@
 	"command.health.other": "You've set health to <yellow><amount></yellow> for <yellow><player>",
 	"command.hunger": "Your hunger was set to <yellow><amount>",
 	"command.hunger.other": "You've set hunger to <yellow><amount></yellow> for <yellow><player>",
+	"command.item.received": "You received <yellow><amount></yellow> <dark_gray>×</dark_gray> <item>",
+	"command.item.gave": "Gave <yellow><amount></yellow> <dark_gray>×</dark_gray> <item> to <yellow><player>",
+	"command.item.invalid": "Invalid item: <red><item>",
 	"command.more": "<item>'s amount set to <yellow><amount>",
 	"command.world": "Teleporting to <yellow><world>",
-	"command.world.other": "Teleported <yellow><player></yellow> to <yellow><world>"
+	"command.world.other": "Teleported <yellow><player></yellow> to <yellow><world>",
+	"command.world.already_in": "You're already in <yellow><world>",
+	"command.world.already_in.other": "Player is already in <yellow><world>"
 }

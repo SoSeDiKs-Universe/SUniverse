@@ -2,6 +2,7 @@ package me.sosedik.essence.command;
 
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import me.sosedik.essence.Essence;
+import me.sosedik.utilizer.util.CommandUtils;
 import me.sosedik.utilizer.util.LocationUtil;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -29,13 +30,8 @@ public class UpCommand {
 		@Argument(value = "amount") @Default(value = "1") int amount,
 		@Nullable @Argument(value = "player") Player player
 	) {
-		Player target;
-		if (player == null) {
-			if (!(stack.getExecutor() instanceof Player executor)) return;
-			target = executor;
-		} else {
-			target = player;
-		}
+		Player target = CommandUtils.getTargetPlayer(stack, player);
+		if (target == null) return;
 
 		Essence.scheduler().sync(() -> {
 			World world = target.getWorld();

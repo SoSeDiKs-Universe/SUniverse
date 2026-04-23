@@ -5,6 +5,7 @@ import me.sosedik.requiem.Requiem;
 import me.sosedik.requiem.feature.GhostyPlayer;
 import me.sosedik.requiem.feature.PossessingPlayer;
 import me.sosedik.utilizer.api.message.Messenger;
+import me.sosedik.utilizer.util.CommandUtils;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Argument;
 import org.incendo.cloud.annotations.Command;
@@ -28,13 +29,8 @@ public class ReviveCommand {
 		@Nullable @Argument(value = "player") Player player,
 		@Flag(value = "silent") boolean silent
 	) {
-		Player target;
-		if (player == null) {
-			if (!(stack.getExecutor() instanceof Player executor)) return;
-			target = executor;
-		} else {
-			target = player;
-		}
+		Player target = CommandUtils.getTargetPlayer(stack, player);
+		if (target == null) return;
 
 		Requiem.scheduler().sync(() -> {
 			boolean stateChanged = false;
@@ -47,14 +43,15 @@ public class ReviveCommand {
 			}
 
 			if (!stateChanged) {
-				if (silent) return;
-
-				Messenger.messenger(stack.getSender()).sendMessage("command.revive.target_alive", raw("player", target.displayName()));
+				if (!silent)
+					Messenger.messenger(stack.getSender()).sendMessage("command.revive.target_alive", raw("player", target.displayName()));
 				return;
 			}
 
-			if (!silent) Messenger.messenger(target).sendMessage("command.revive");
-			if (stack.getSender() != target)
+			if (!silent)
+				Messenger.messenger(target).sendMessage("command.revive");
+
+			if (CommandUtils.isTargetingOther(stack, target))
 				Messenger.messenger(stack.getSender()).sendMessage("command.revive.other", raw("player", target.displayName()));
 		});
 	}

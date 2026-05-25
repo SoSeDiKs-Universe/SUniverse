@@ -54,8 +54,9 @@ public class MelonPumpkinBlowing implements Listener {
 		LootContext.Builder lootContext = new LootContext.Builder(loc.getWorld())
 			.with(LootContextKey.BLOCK_DATA, blockData)
 			.with(LootContextKey.ORIGIN, loc)
-			.with(LootContextKey.TOOL, weapon == null ? ItemStack.empty() : weapon)
 			.with(LootContextKey.THIS_ENTITY, source);
+		if (weapon != null && !weapon.isEmpty())
+			lootContext.with(LootContextKey.TOOL, weapon);
 
 		block.setType(Material.AIR);
 

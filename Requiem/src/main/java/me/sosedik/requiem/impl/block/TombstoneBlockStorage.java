@@ -5,6 +5,7 @@ import de.tr7zw.nbtapi.NBT;
 import de.tr7zw.nbtapi.NBTType;
 import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import io.papermc.paper.loot.LootContextKey;
+import me.sosedik.requiem.Requiem;
 import me.sosedik.requiem.api.event.player.TombstoneDestroyEvent;
 import me.sosedik.requiem.dataset.RequiemItems;
 import me.sosedik.requiem.feature.PossessingPlayer;
@@ -192,13 +193,20 @@ public class TombstoneBlockStorage extends BlockDataStorageHolder implements Ext
 		else if (event instanceof BlockDestroyEvent destroyEvent)
 			destroyEvent.setWillDrop(false);
 
-		LootContext lootContext = new LootContext.Builder(this.block.getWorld())
+		var lootContextBuilder = new LootContext.Builder(this.block.getWorld())
 			.luck(player == null ? 0F : (float) Objects.requireNonNull(player.getAttribute(Attribute.LUCK)).getValue())
 			.with(LootContextKey.BLOCK_DATA, this.block.getBlockData())
-			.with(LootContextKey.ORIGIN, this.block.getLocation())
-			.with(LootContextKey.TOOL, player == null ? ItemStack.empty() : player.getInventory().getItemInMainHand())
-			.build();
-		drops.addAll(lootTable.populateLoot(RANDOM, lootContext));
+			.with(LootContextKey.ORIGIN, this.block.getLocation());
+		if (player != null) {
+			ItemStack tool = player.getInventory().getItemInMainHand();
+			if (!tool.isEmpty())
+				lootContextBuilder.with(LootContextKey.TOOL, tool);
+		}
+		try {
+			drops.addAll(lootTable.populateLoot(RANDOM, lootContextBuilder.build()));
+		} catch (IllegalStateException e) {
+			Requiem.logger().warn("Couldn't populate loot for {}", this.block.getType().key(), e);
+		}
 
 		return drops;
 	}

@@ -84,7 +84,6 @@ public class FallingBeeNests implements Listener {
 		LootContext.Builder lootContext = new LootContext.Builder(loc.getWorld())
 			.with(LootContextKey.BLOCK_DATA, beehive.getBlockData())
 			.with(LootContextKey.ORIGIN, loc)
-			.with(LootContextKey.TOOL, ItemStack.empty())
 			.with(LootContextKey.THIS_ENTITY, fallingBlock);
 
 		Collection<ItemStack> drops = BEE_NEST_FALL_LOOT_TABLE.populateLoot(RANDOM, lootContext.build());

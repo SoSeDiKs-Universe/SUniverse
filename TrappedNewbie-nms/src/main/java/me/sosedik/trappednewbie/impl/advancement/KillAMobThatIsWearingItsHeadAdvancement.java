@@ -16,7 +16,7 @@ import java.util.List;
 
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.playerKilledEntity;
 
-// MCCheck: 1.21.11, new mob heads
+// MCCheck: 26.1.2, new mob heads
 @NullMarked
 public class KillAMobThatIsWearingItsHeadAdvancement extends BaseAdvancement {
 

@@ -10,7 +10,7 @@ import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.jspecify.annotations.NullMarked;
@@ -33,7 +33,7 @@ public class CustomEntityBuckets implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	public void onInteract(PlayerInteractEntityEvent event) {
+	public void onInteract(PlayerInteractAtEntityEvent event) {
 		if (event.getHand() != EquipmentSlot.HAND) return;
 		if (!(event.getRightClicked() instanceof CraftLivingEntity entity)) return;
 		if (!(event.getPlayer() instanceof CraftPlayer player)) return;

@@ -19,7 +19,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
@@ -30,12 +30,12 @@ import org.jspecify.annotations.NullMarked;
 /**
  * Allow opening containers behind hanging entities
  */
-// MCCheck: 1.21.11: new containers
+// MCCheck: 26.1.2: new containers
 @NullMarked
 public class ClickThroughHanging implements Listener {
 
 	@EventHandler(ignoreCancelled = true)
-	public void onInteract(PlayerInteractEntityEvent event) {
+	public void onInteract(PlayerInteractAtEntityEvent event) {
 		if (event.getHand() != EquipmentSlot.HAND) return;
 		if (!(event.getRightClicked() instanceof Hanging hanging)) return;
 
@@ -132,7 +132,6 @@ public class ClickThroughHanging implements Listener {
 		}
 
 		if (BlockStorage.getByLoc(container) instanceof InventoryBlockDataStorageHolder storage) {
-			Inventory inventory = storage.getInventory();
 			if (!canInteractWithContainer(player, container, blockFace)) {
 				if (storage.isViewing(player)) // In case interact triggered opening
 					return TriState.TRUE;

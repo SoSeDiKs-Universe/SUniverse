@@ -1,12 +1,12 @@
 package me.sosedik.miscme.listener.item;
 
+import io.papermc.paper.datacomponent.DataComponentTypes;
 import org.bukkit.Material;
-import org.bukkit.Tag;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NullMarked;
@@ -18,7 +18,7 @@ import org.jspecify.annotations.NullMarked;
 public class DyeableItemsInItemFrames implements Listener {
 
 	@EventHandler(ignoreCancelled = true)
-	public void onInteract(PlayerInteractEntityEvent event) {
+	public void onInteract(PlayerInteractAtEntityEvent event) {
 		if (event.getHand() != EquipmentSlot.HAND) return;
 		if (!(event.getRightClicked() instanceof ItemFrame itemFrame)) return;
 
@@ -29,7 +29,7 @@ public class DyeableItemsInItemFrames implements Listener {
 			tryToDye(event, itemFrame, item, player, EquipmentSlot.OFF_HAND);
 	}
 
-	private boolean tryToDye(PlayerInteractEntityEvent event, ItemFrame itemFrame, ItemStack frameItem, Player player, EquipmentSlot hand) {
+	private boolean tryToDye(PlayerInteractAtEntityEvent event, ItemFrame itemFrame, ItemStack frameItem, Player player, EquipmentSlot hand) {
 		ItemStack handItem = player.getInventory().getItem(hand);
 		if (!ImmersiveDyes.isDyingItem(handItem)) return false;
 
@@ -63,7 +63,7 @@ public class DyeableItemsInItemFrames implements Listener {
 			return true;
 		}
 
-		if (!Tag.ITEMS_DYEABLE.isTagged(frameItem.getType())) return true;
+		if (!frameItem.hasData(DataComponentTypes.DYED_COLOR)) return true;
 
 		event.setCancelled(true);
 		player.swingHand(hand);

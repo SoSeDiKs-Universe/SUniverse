@@ -98,14 +98,8 @@ public final class PlayerWorldParser<C> implements ArgumentParser.FutureArgument
 			return future;
 		}
 
-		// Try getting by name first, fallback to namespaced key
-		World world = Bukkit.getWorld(input);
-		if (world == null) {
-			var key = NamespacedKey.fromString(input);
-			if (key != null) {
-				world = Bukkit.getWorld(key);
-			}
-		}
+		var key = NamespacedKey.fromString(input);
+		World world = key == null ? null : Bukkit.getWorld(key);
 
 		if (world == null)
 			return ArgumentParseResult.failureFuture(new WorldParser.WorldParseException(input, commandContext));
@@ -146,6 +140,7 @@ public final class PlayerWorldParser<C> implements ArgumentParser.FutureArgument
 				completions.add(Suggestion.suggestion(playerPrefix));
 				for (World.Environment environment : World.Environment.values()) {
 					if (environment == World.Environment.CUSTOM) continue;
+
 					completions.add(Suggestion.suggestion(playerPrefix + ENV_SEPARATOR + MiscUtil.getDimensionKey(environment)));
 				}
 			}
@@ -153,19 +148,15 @@ public final class PlayerWorldParser<C> implements ArgumentParser.FutureArgument
 
 		for (World world : Bukkit.getWorlds()) {
 			NamespacedKey key = world.getKey();
-			if (TrappedNewbie.NAMESPACE.equals(key.getNamespace())) {
-				if (key.getKey().startsWith("worlds-personal/")) continue;
-				if (key.getKey().startsWith("worlds-resources/")) continue;
-			}
+			if (PerPlayerWorlds.PERSONAL_WORLDS_NAMESPACE.equals(key.namespace())) continue;
+			if (key.namespace().startsWith(PerPlayerWorlds.RESOURCE_WORLDS_NAMESPACE_PREFIX)) continue;
 
 			if (target != null && target.getWorld() == world) continue;
 
-			completions.add(Suggestion.suggestion(world.getName()));
+			if (input.hasRemainingInput() && NamespacedKey.MINECRAFT_NAMESPACE.equals(key.namespace()))
+				completions.add(Suggestion.suggestion(key.value()));
 
-			if (input.hasRemainingInput() && key.getNamespace().equals(NamespacedKey.MINECRAFT_NAMESPACE)) {
-				completions.add(Suggestion.suggestion(key.getKey()));
-			}
-			completions.add(Suggestion.suggestion(key.getNamespace() + ':' + key.getKey()));
+			completions.add(Suggestion.suggestion(key.asString()));
 		}
 
 		return CompletableFuture.completedFuture(completions);

@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.minecart.ExplosiveMinecart;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NullMarked;
@@ -21,7 +21,7 @@ import org.jspecify.annotations.NullMarked;
 public class PrimingExplosiveMinecart implements Listener {
 
 	@EventHandler(ignoreCancelled = true)
-	public void onInteract(PlayerInteractEntityEvent event) {
+	public void onInteract(PlayerInteractAtEntityEvent event) {
 		if (event.getHand() != EquipmentSlot.HAND) return;
 		if (!(event.getRightClicked() instanceof ExplosiveMinecart minecart)) return;
 

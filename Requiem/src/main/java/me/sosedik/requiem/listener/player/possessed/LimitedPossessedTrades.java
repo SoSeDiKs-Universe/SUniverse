@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.jspecify.annotations.NullMarked;
 
 /**
@@ -16,7 +16,7 @@ import org.jspecify.annotations.NullMarked;
 public class LimitedPossessedTrades implements Listener {
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onTrade(PlayerInteractEntityEvent event) {
+	public void onTrade(PlayerInteractAtEntityEvent event) {
 		if (!(event.getRightClicked() instanceof AbstractVillager)) return;
 
 		Player player = event.getPlayer();

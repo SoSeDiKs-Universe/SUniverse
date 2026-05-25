@@ -12,6 +12,7 @@ import org.bukkit.craftbukkit.CraftWorld;
 import org.bukkit.craftbukkit.damage.CraftDamageSource;
 import org.bukkit.craftbukkit.entity.CraftFirework;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
+import org.bukkit.craftbukkit.util.CraftVector;
 import org.bukkit.damage.DamageType;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Firework;
@@ -58,7 +59,7 @@ public class GliderInteraction implements Listener {
 		if (!(event.getPlayer() instanceof CraftPlayer player)) return;
 
 		GliderEntityImpl gliderEntity = craftGlider.getHandle();
-		gliderEntity.interact(player.getHandle(), InteractionHand.OFF_HAND);
+		gliderEntity.interact(player.getHandle(), InteractionHand.OFF_HAND, CraftVector.toVec3(event.getClickedPosition()));
 	}
 
 	@EventHandler

@@ -11,7 +11,7 @@ import org.jspecify.annotations.NullMarked;
 /**
  * Advancements for washing items
  */
-// MCCheck: 1.21.11, new washable items
+// MCCheck: 26.1.2, new washable items
 @NullMarked
 public class WashAdvancements implements Listener {
 

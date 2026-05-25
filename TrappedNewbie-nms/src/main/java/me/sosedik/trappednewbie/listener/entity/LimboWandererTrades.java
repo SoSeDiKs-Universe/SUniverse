@@ -19,7 +19,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.TradeSelectEvent;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.MenuType;
 import org.bukkit.inventory.Merchant;
@@ -37,7 +37,7 @@ import java.util.List;
 public class LimboWandererTrades implements Listener {
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onInteract(PlayerInteractEntityEvent event) {
+	public void onInteract(PlayerInteractAtEntityEvent event) {
 		if (!(event.getRightClicked() instanceof WanderingTrader entity)) return;
 		if (entity.getWorld() != Utilizer.limboWorld()) return;
 

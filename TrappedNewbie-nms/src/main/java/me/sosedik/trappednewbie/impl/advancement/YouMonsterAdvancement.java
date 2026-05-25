@@ -27,7 +27,7 @@ import java.util.Locale;
 
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.playerKilledEntity;
 
-// MCCheck: 1.21.11, new baby animals, entity nbt tags
+// MCCheck: 26.1.2, new baby animals, entity nbt tags
 @NullMarked
 public class YouMonsterAdvancement extends BaseAdvancement {
 

@@ -199,7 +199,6 @@ import me.sosedik.trappednewbie.listener.world.NoDayChangeInLimbo;
 import me.sosedik.trappednewbie.listener.world.PerPlayerWorlds;
 import me.sosedik.trappednewbie.listener.world.PersonalVoidFall;
 import me.sosedik.trappednewbie.listener.world.RainRefillsWaterAndMakesPuddles;
-import me.sosedik.trappednewbie.misc.VillagerTradesHack;
 import me.sosedik.utilizer.CommandManager;
 import me.sosedik.utilizer.api.language.TranslationHolder;
 import me.sosedik.utilizer.listener.BlockStorage;
@@ -226,7 +225,6 @@ import org.incendo.cloud.bukkit.internal.BukkitBrigadierMapper;
 import org.jetbrains.annotations.UnknownNullability;
 import org.jspecify.annotations.NullMarked;
 
-import java.io.File;
 import java.util.List;
 import java.util.Map;
 
@@ -280,8 +278,13 @@ public final class TrappedNewbie extends JavaPlugin {
 	}
 
 	private void cleanupTemporaryWorlds() {
-		if (true) return; // TODO only if month had passed?
-		FileUtil.deleteFolder(new File(Bukkit.getWorldContainer(), "worlds-resources"));
+		if (true) return; // TODO only if month had passed or so?
+
+		for (World.Environment environment : World.Environment.values()) {
+			if (environment == World.Environment.CUSTOM) continue;
+
+			FileUtil.deleteFolder(PerPlayerWorlds.getWorldsContainer(environment));
+		}
 	}
 
 	@Override
@@ -521,8 +524,6 @@ public final class TrappedNewbie extends JavaPlugin {
 		new ShearableEntities.ShearableBehavior()
 			.withDrop(Material.BONE_MEAL, 1, 1)
 			.registerFor(EntityType.SKELETON_HORSE);
-
-		VillagerTradesHack.addTrades();
 	}
 
 	@Override
@@ -560,9 +561,11 @@ public final class TrappedNewbie extends JavaPlugin {
 		world.setGameRule(GameRules.SPREAD_VINES, false);
 		world.setGameRule(GameRules.RANDOM_TICK_SPEED, 0);
 		world.setGameRule(GameRules.MOB_GRIEFING, false);
+
 		new CustomDayCycleTask(world, () -> {
 			if (Bukkit.getServerTickManager().isFrozen()) return 0D;
 			if (limboWorld().getPlayers().isEmpty()) return 0D;
+
 			return Bukkit.getServerTickManager().getTickRate() / 2D;
 		});
 

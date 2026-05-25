@@ -51,7 +51,7 @@ import org.jspecify.annotations.NullMarked;
 /**
  * Some extra entity AI goals
  */
-// MCCheck: 1.21.11, new mobs
+// MCCheck: 26.1.2, new mobs
 @NullMarked
 public class ExtraMobGoals implements Listener {
 

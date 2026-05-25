@@ -385,7 +385,7 @@ public class GliderEntityImpl extends Display.ItemDisplay {
 	}
 
 	@Override
-	public InteractionResult interact(net.minecraft.world.entity.player.Player player, InteractionHand hand) {
+	public InteractionResult interact(net.minecraft.world.entity.player.Player player, InteractionHand hand, Vec3 location) {
 		Entity passenger = getFirstPassenger();
 		if (passenger != null) {
 			if (this.hitbox != null && passenger.getBukkitEntity().getUniqueId().equals(this.hitbox.getUniqueId())) {

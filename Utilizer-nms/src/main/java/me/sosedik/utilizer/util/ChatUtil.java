@@ -53,9 +53,8 @@ public class ChatUtil {
 	 * @return split component
 	 */
 	public static List<Component> wrapComponent(final Component component, final int length) {
-		if (!(component instanceof final TextComponent text)) {
+		if (!(component instanceof final TextComponent text))
 			return new ArrayList<>(List.of(component));
-		}
 
 		final List<Component> wrapped = new ArrayList<>();
 		final List<Component> parts = flattenTextComponents(text);
@@ -75,9 +74,7 @@ public class ChatUtil {
 			final String[] words = content.split("(?<=\\s)|(?=\\n)");
 
 			for (final String word : words) {
-				if (word.isEmpty()) {
-					continue;
-				}
+				if (word.isEmpty()) continue;
 
 				final int wordLength = word.length();
 				final int totalLength = lineLength + wordLength;
@@ -94,9 +91,8 @@ public class ChatUtil {
 			}
 		}
 
-		if (lineLength > 0) {
+		if (lineLength > 0)
 			wrapped.add(currentLine);
-		}
 
 		return wrapped;
 	}
@@ -117,9 +113,8 @@ public class ChatUtil {
 				continue;
 			}
 			final String content = textComponent.content();
-			if (!content.isEmpty()) {
+			if (!content.isEmpty())
 				flattened.add(parent);
-			}
 
 			final List<Component> reversedChildren = parent.children().reversed();
 			for (final Component child : reversedChildren) {

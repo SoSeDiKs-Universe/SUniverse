@@ -10,7 +10,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 // TODO should use vanilla tags, really
-// MCCheck: 1.21.11, new biomes
+// MCCheck: 26.1.2, new biomes
 @NullMarked
 public class BiomeTags {
 

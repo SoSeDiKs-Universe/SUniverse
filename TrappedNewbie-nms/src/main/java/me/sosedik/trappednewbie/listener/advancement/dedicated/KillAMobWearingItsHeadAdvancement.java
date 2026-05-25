@@ -17,7 +17,7 @@ import org.jspecify.annotations.NullMarked;
 import java.util.HashMap;
 import java.util.Map;
 
-// MCCheck: 1.21.11, new mob heads
+// MCCheck: 26.1.2, new mob heads
 @NullMarked
 public class KillAMobWearingItsHeadAdvancement implements Listener {
 

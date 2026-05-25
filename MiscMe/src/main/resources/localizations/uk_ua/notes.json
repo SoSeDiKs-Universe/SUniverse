@@ -14,5 +14,9 @@
 	"note_block.note.didgeridoo.name": "Діджеріду",
 	"note_block.note.bit.name": "Меандр",
 	"note_block.note.banjo.name": "Банджо",
-	"note_block.note.pling.name": "Електропіано"
+	"note_block.note.pling.name": "Електропіано",
+	"note_block.note.trumpet.name": "Труба",
+	"note_block.note.trumpet_exposed.name": "Потемніла труба (ріг)",
+	"note_block.note.trumpet_oxidized.name": "Окислена труба (туба)",
+	"note_block.note.trumpet_weathered.name": "Зістарена труба (тромбон)"
 }

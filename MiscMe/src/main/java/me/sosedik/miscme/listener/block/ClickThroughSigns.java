@@ -1,9 +1,9 @@
 package me.sosedik.miscme.listener.block;
 
-import com.destroystokyo.paper.MaterialTags;
 import me.sosedik.miscme.listener.item.ImmersiveDyes;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
+import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
@@ -45,7 +45,7 @@ public class ClickThroughSigns implements Listener {
 		ItemStack handItem = player.getInventory().getItemInMainHand();
 		if (handItem.isEmpty()) {
 			if (!sign.isWaxed()) return;
-		} else if (MaterialTags.DYES.isTagged(handItem.getType())) {
+		} else if (Tag.ITEMS_DYES.isTagged(handItem.getType())) {
 			DyeColor dyeColor = ImmersiveDyes.getDyeColor(handItem);
 			if (dyeColor != sign.getTargetSide(player).getColor()) return;
 		} else if (handItem.getType() == Material.GLOW_INK_SAC) {

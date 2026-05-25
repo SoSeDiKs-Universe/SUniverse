@@ -1491,7 +1491,7 @@ public class TrappedNewbieAdvancements {
 				.withItem(ItemTriggerCondition.of(Material.COOKIE))
 				.withEntity(entity -> entity.withEntityType(EntityType.VILLAGER))
 				.withPlayer(
-					new TimeTriggerCondition(24_000L, MinMaxBoundsTriggerCondition.Ints.ofIntegers(21_000, 22_000))
+					new TimeTriggerCondition(Bukkit.getWorlds().getFirst(), 24_000L, MinMaxBoundsTriggerCondition.Ints.ofIntegers(21_000, 22_000))
 				)
 		))
 		.buildAndRegister();
@@ -1541,7 +1541,7 @@ public class TrappedNewbieAdvancements {
 		.display(display().xy(1F, -1F).goalFrame().fancyDescriptionParent(NamedTextColor.AQUA).icon(Material.ACACIA_LOG))
 		.withReward(rewards().addItems(ItemStack.of(Material.EMERALD, 5)))
 		.requiredProgress(vanilla(
-			// MCCheck: 1.21.11, new natural villager types
+			// MCCheck: 26.1.2, new natural villager types
 			Stream.of(VillagerTypeKeys.PLAINS, VillagerTypeKeys.DESERT, VillagerTypeKeys.SAVANNA, VillagerTypeKeys.TAIGA, VillagerTypeKeys.SNOW)
 				.map(type -> villagerTrade(type.key().value())
 					.withEntity(entity -> entity
@@ -1659,7 +1659,7 @@ public class TrappedNewbieAdvancements {
 		.requiredProgress(vanilla(
 			anyBlockUse()
 				.withPlayer(
-					new TimeTriggerCondition(24_000L, MinMaxBoundsTriggerCondition.Ints.ofIntegers(0, 500))
+					new TimeTriggerCondition(Bukkit.getWorlds().getFirst(), 24_000L, MinMaxBoundsTriggerCondition.Ints.ofIntegers(0, 500))
 				)
 				.withLocation(loc -> loc
 					.withBlock(BlockTriggerCondition.of(Material.BELL))
@@ -3879,7 +3879,7 @@ public class TrappedNewbieAdvancements {
 			.withExp(180)
 			.withTrophy(() -> {
 				ItemStack item = ItemUtil.texturedHead("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvODQ0YWU5MmJiNDM0N2RlOWVhNWI2MzAwOGM0NDZiMzQwOWEwMjVkODU0N2M4OWFlOThiZTVjYWU4ZDAxMjFjNyJ9fX0=");
-				item.setData(DataComponentTypes.DAMAGE_RESISTANT, DamageResistant.damageResistant(DamageTypeTagKeys.IS_FIRE));
+				item.setData(DataComponentTypes.DAMAGE_RESISTANT, DamageResistant.damageResistant(RegistryAccess.registryAccess().getRegistry(RegistryKey.DAMAGE_TYPE).getTag(DamageTypeTagKeys.IS_FIRE)));
 				return item;
 			})
 		)

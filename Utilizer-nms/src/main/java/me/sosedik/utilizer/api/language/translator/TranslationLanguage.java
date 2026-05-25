@@ -12,7 +12,7 @@ import org.jspecify.annotations.NullMarked;
 public record TranslationLanguage(String id, String displayName) {
 
 	/**
-	 * Auto detect language
+	 * Auto-detect language
 	 */
 	public static final TranslationLanguage AUTO = new TranslationLanguage("auto", "Auto");
 

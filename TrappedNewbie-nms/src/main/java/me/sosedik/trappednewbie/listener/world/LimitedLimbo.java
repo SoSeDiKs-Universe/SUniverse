@@ -12,7 +12,6 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityMountEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.jspecify.annotations.NullMarked;
 
@@ -21,13 +20,6 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 public class LimitedLimbo implements Listener {
-
-	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-	public void onInteract(PlayerInteractEntityEvent event) {
-
-		if (shouldDeny(event.getPlayer()))
-			event.setCancelled(true);
-	}
 
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onInteract(PlayerInteractAtEntityEvent event) {

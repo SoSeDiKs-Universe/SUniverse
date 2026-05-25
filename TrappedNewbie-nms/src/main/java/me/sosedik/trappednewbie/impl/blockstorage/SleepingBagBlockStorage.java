@@ -1,6 +1,5 @@
 package me.sosedik.trappednewbie.impl.blockstorage;
 
-import com.destroystokyo.paper.MaterialTags;
 import de.tr7zw.nbtapi.NBT;
 import de.tr7zw.nbtapi.iface.ReadWriteItemNBT;
 import de.tr7zw.nbtapi.iface.ReadWriteNBT;
@@ -19,6 +18,7 @@ import org.bukkit.DyeColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.ItemDisplay;
@@ -66,7 +66,7 @@ public class SleepingBagBlockStorage extends BlockDataStorageHolder implements E
 
 	public boolean tryToDye(Player player, EquipmentSlot hand) {
 		ItemStack item = player.getInventory().getItem(hand);
-		if (!MaterialTags.DYES.isTagged(item)) return false;
+		if (!Tag.ITEMS_DYES.isTagged(item.getType())) return false;
 
 		DyedItemColor data = this.storedItem.getData(DataComponentTypes.DYED_COLOR);
 		Color currentColor = data == null ? Color.WHITE : data.color();

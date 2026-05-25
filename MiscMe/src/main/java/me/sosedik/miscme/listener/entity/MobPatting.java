@@ -14,7 +14,7 @@ import org.bukkit.entity.Wolf;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.HashSet;
@@ -25,7 +25,7 @@ import java.util.UUID;
 /**
  * Pat allowed mobs
  */
-// MCCheck: 1.21.11, new baby mobs
+// MCCheck: 26.1.2, new baby mobs
 @NullMarked
 public class MobPatting implements Listener {
 
@@ -33,7 +33,7 @@ public class MobPatting implements Listener {
 	private static final Random RANDOM = new Random();
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	public void onPat(PlayerInteractEntityEvent event) {
+	public void onPat(PlayerInteractAtEntityEvent event) {
 		if (!(event.getRightClicked() instanceof Mob entity)) return;
 		if (PATTED.contains(entity.getUniqueId())) return;
 

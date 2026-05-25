@@ -33,7 +33,7 @@ import java.util.UUID;
 /**
  * General utilities around items
  */
-// MCCheck: 1.21.11, item types
+// MCCheck: 26.1.2, item types
 @NullMarked
 public class ItemUtil {
 

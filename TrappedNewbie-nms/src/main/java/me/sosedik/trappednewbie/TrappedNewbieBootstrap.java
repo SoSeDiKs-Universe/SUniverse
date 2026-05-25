@@ -45,6 +45,7 @@ import me.sosedik.trappednewbie.impl.item.nms.SlingshotItem;
 import me.sosedik.trappednewbie.impl.item.nms.ThrowableRockItem;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.UUIDUtil;
+import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.registries.VanillaRegistries;
@@ -70,6 +71,7 @@ import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.MobBucketItem;
 import net.minecraft.world.item.ShovelItem;
@@ -99,6 +101,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import static me.sosedik.resourcelib.ResourceLibBootstrap.addExtraComponent;
 import static org.bukkit.craftbukkit.entity.CraftEntityTypes.createAndMoveEmptyRot;
 import static org.bukkit.craftbukkit.entity.CraftEntityTypes.createLiving;
 
@@ -238,13 +241,13 @@ public class TrappedNewbieBootstrap implements PluginBootstrap {
 				(entity, stack) -> {
 					CustomData.update(DataComponents.BUCKET_ENTITY_DATA, stack, tag -> {
 						tag.putInt("Age", entity.getAge());
-						tag.putBoolean("AgeLocked", entity.ageLocked);
+						tag.putBoolean("AgeLocked", entity.isAgeLocked());
 						tag.putBoolean("has_egg", entity.hasEgg());
 					});
 				},
 				(entity, tag) -> {
 					entity.setAge(tag.getIntOr("Age", 0));
-					entity.ageLocked = tag.getBooleanOr("AgeLocked", false);
+					entity.setAgeLocked(tag.getBooleanOr("AgeLocked", false));
 					entity.setHasEgg(tag.getBooleanOr("has_egg", false));
 				}
 			);
@@ -263,7 +266,7 @@ public class TrappedNewbieBootstrap implements PluginBootstrap {
 				(entity, stack) -> {
 					CustomData.update(DataComponents.BUCKET_ENTITY_DATA, stack, tag -> {
 						tag.putInt("Age", entity.getAge());
-						tag.putBoolean("AgeLocked", entity.ageLocked);
+						tag.putBoolean("AgeLocked", entity.isAgeLocked());
 						ItemStack saddleItem = entity.getItemBySlot(EquipmentSlot.SADDLE);
 						if (!saddleItem.isEmpty()) {
 							CompoundTag equipmentTag = new CompoundTag();
@@ -274,7 +277,7 @@ public class TrappedNewbieBootstrap implements PluginBootstrap {
 				},
 				(entity, tag) -> {
 					entity.setAge(tag.getIntOr("Age", 0));
-					entity.ageLocked = tag.getBooleanOr("AgeLocked", false);
+					entity.setAgeLocked(tag.getBooleanOr("AgeLocked", false));
 					entity.setItemSlot(EquipmentSlot.SADDLE, tag.getCompoundOrEmpty("equipment").read("saddle", ItemStack.CODEC).orElse(ItemStack.EMPTY));
 				}
 			);
@@ -283,7 +286,7 @@ public class TrappedNewbieBootstrap implements PluginBootstrap {
 				(entity, stack) -> {
 					CustomData.update(DataComponents.BUCKET_ENTITY_DATA, stack, tag -> {
 						tag.putInt("Age", entity.getAge());
-						tag.putBoolean("AgeLocked", entity.ageLocked);
+						tag.putBoolean("AgeLocked", entity.isAgeLocked());
 						ItemStack saddleItem = entity.getItemBySlot(EquipmentSlot.SADDLE);
 						if (!saddleItem.isEmpty()) {
 							CompoundTag equipmentTag = new CompoundTag();
@@ -294,7 +297,7 @@ public class TrappedNewbieBootstrap implements PluginBootstrap {
 				},
 				(entity, tag) -> {
 					entity.setAge(tag.getIntOr("Age", 0));
-					entity.ageLocked = tag.getBooleanOr("AgeLocked", false);
+					entity.setAgeLocked(tag.getBooleanOr("AgeLocked", false));
 					entity.setItemSlot(EquipmentSlot.SADDLE, tag.getCompoundOrEmpty("equipment").read("saddle", ItemStack.CODEC).orElse(ItemStack.EMPTY));
 				}
 			);
@@ -303,7 +306,7 @@ public class TrappedNewbieBootstrap implements PluginBootstrap {
 				(entity, stack) -> {
 					CustomData.update(DataComponents.BUCKET_ENTITY_DATA, stack, tag -> {
 						tag.putInt("Age", entity.getAge());
-						tag.putBoolean("AgeLocked", entity.ageLocked);
+						tag.putBoolean("AgeLocked", entity.isAgeLocked());
 						ItemStack saddleItem = entity.getItemBySlot(EquipmentSlot.SADDLE);
 						if (!saddleItem.isEmpty()) {
 							CompoundTag equipmentTag = new CompoundTag();
@@ -315,7 +318,7 @@ public class TrappedNewbieBootstrap implements PluginBootstrap {
 				},
 				(entity, tag) -> {
 					entity.setAge(tag.getIntOr("Age", 0));
-					entity.ageLocked = tag.getBooleanOr("AgeLocked", false);
+					entity.setAgeLocked(tag.getBooleanOr("AgeLocked", false));
 					entity.setItemSlot(EquipmentSlot.SADDLE, tag.getCompoundOrEmpty("equipment").read("saddle", ItemStack.CODEC).orElse(ItemStack.EMPTY));
 					tag.read("variant", Identifier.CODEC).map(identifier -> ResourceKey.create(Registries.ZOMBIE_NAUTILUS_VARIANT, identifier)).flatMap(getRegistryLookup()::get);
 				}
@@ -325,7 +328,7 @@ public class TrappedNewbieBootstrap implements PluginBootstrap {
 				(entity, stack) -> {
 					CustomData.update(DataComponents.BUCKET_ENTITY_DATA, stack, tag -> {
 						tag.putInt("Age", entity.getAge());
-						tag.putBoolean("AgeLocked", entity.ageLocked);
+						tag.putBoolean("AgeLocked", entity.isAgeLocked());
 						tag.putBoolean("HasNectar", entity.hasNectar());
 						tag.putBoolean("HasStung", entity.hasStung());
 						tag.putInt("TicksSincePollination", entity.ticksWithoutNectarSinceExitingHive);
@@ -339,7 +342,7 @@ public class TrappedNewbieBootstrap implements PluginBootstrap {
 				},
 				(entity, tag) -> {
 					entity.setAge(tag.getIntOr("Age", 0));
-					entity.ageLocked = tag.getBooleanOr("AgeLocked", false);
+					entity.setAgeLocked(tag.getBooleanOr("AgeLocked", false));
 					entity.setHasNectar(tag.getBooleanOr("HasNectar", false));
 					entity.setHasStung(tag.getBooleanOr("HasStung", false));
 					entity.ticksWithoutNectarSinceExitingHive = tag.getIntOr("TicksSincePollination", 0);
@@ -481,12 +484,12 @@ public class TrappedNewbieBootstrap implements PluginBootstrap {
 		);
 
 		context.getLifecycleManager().registerEventHandler(RegistryEvents.ITEM.compose(), event -> {
-			ResourceLibBootstrap.getComponentsMap(Items.WATER_BUCKET).put(DataComponents.USE_REMAINDER, new UseRemainder(new ItemStack(Items.BUCKET)));
-			ResourceLibBootstrap.getComponentsMap(Items.WATER_BUCKET).put(DataComponents.CONSUMABLE, Consumables.defaultDrink().consumeSeconds(8F).build());
+			addExtraComponent(Items.WATER_BUCKET, () -> Map.entry(DataComponents.USE_REMAINDER, new UseRemainder(new ItemStackTemplate(Items.BUCKET.builtInRegistryHolder(), 1, DataComponentPatch.EMPTY))));
+			addExtraComponent(Items.WATER_BUCKET, () -> Map.entry(DataComponents.CONSUMABLE, Consumables.defaultDrink().consumeSeconds(8F).build()));
 			ExtraItemComponentsModifier.addExtra(Material.WATER_BUCKET, DataComponentTypes.USE_REMAINDER, DataComponentTypes.CONSUMABLE);
 
-			ResourceLibBootstrap.getComponentsMap(Items.LAVA_BUCKET).put(DataComponents.USE_REMAINDER, new UseRemainder(new ItemStack(Items.BUCKET)));
-			ResourceLibBootstrap.getComponentsMap(Items.LAVA_BUCKET).put(DataComponents.CONSUMABLE, Consumables.defaultDrink().consumeSeconds(8F).build());
+			addExtraComponent(Items.LAVA_BUCKET, () -> Map.entry(DataComponents.USE_REMAINDER, new UseRemainder(new ItemStackTemplate(Items.BUCKET.builtInRegistryHolder(), 1, DataComponentPatch.EMPTY))));
+			addExtraComponent(Items.LAVA_BUCKET, () -> Map.entry(DataComponents.CONSUMABLE, Consumables.defaultDrink().consumeSeconds(8F).build()));
 			ExtraItemComponentsModifier.addExtra(Material.LAVA_BUCKET, DataComponentTypes.USE_REMAINDER, DataComponentTypes.CONSUMABLE);
 
 			Map.ofEntries(
@@ -502,8 +505,8 @@ public class TrappedNewbieBootstrap implements PluginBootstrap {
 				Map.entry(Items.NETHER_WART, Material.NETHER_WART),
 				Map.entry(Items.KELP, Material.KELP)
 			).forEach((nmsItem, bukkitItem) -> {
-				ResourceLibBootstrap.getComponentsMap(nmsItem).put(DataComponents.CONSUMABLE, Consumables.defaultFood().build());
-				ResourceLibBootstrap.getComponentsMap(nmsItem).put(DataComponents.FOOD, new FoodProperties.Builder().alwaysEdible().nutrition(1).saturationModifier(0.1F).build());
+				addExtraComponent(nmsItem, () -> Map.entry(DataComponents.CONSUMABLE, Consumables.defaultFood().build()));
+				addExtraComponent(nmsItem, () -> Map.entry(DataComponents.FOOD, new FoodProperties.Builder().alwaysEdible().nutrition(1).saturationModifier(0.1F).build()));
 				ExtraItemComponentsModifier.addExtra(bukkitItem, DataComponentTypes.CONSUMABLE, DataComponentTypes.FOOD);
 			});
 			Map.ofEntries(
@@ -512,8 +515,8 @@ public class TrappedNewbieBootstrap implements PluginBootstrap {
 				Map.entry(Items.MELON_SEEDS, Material.MELON_SEEDS),
 				Map.entry(Items.PUMPKIN_SEEDS, Material.PUMPKIN_SEEDS)
 			).forEach((nmsItem, bukkitItem) -> {
-				ResourceLibBootstrap.getComponentsMap(nmsItem).put(DataComponents.CONSUMABLE, Consumables.defaultFood().consumeSeconds(0.8F).build());
-				ResourceLibBootstrap.getComponentsMap(nmsItem).put(DataComponents.FOOD, new FoodProperties.Builder().alwaysEdible().nutrition(1).saturationModifier(0.1F).build());
+				addExtraComponent(nmsItem, () -> Map.entry(DataComponents.CONSUMABLE, Consumables.defaultFood().consumeSeconds(0.8F).build()));
+				addExtraComponent(nmsItem, () -> Map.entry(DataComponents.FOOD, new FoodProperties.Builder().alwaysEdible().nutrition(1).saturationModifier(0.1F).build()));
 				ExtraItemComponentsModifier.addExtra(bukkitItem, DataComponentTypes.CONSUMABLE, DataComponentTypes.FOOD);
 			});
 			Map.ofEntries(
@@ -534,8 +537,8 @@ public class TrappedNewbieBootstrap implements PluginBootstrap {
 				Map.entry(Items.WHITE_DYE, Material.WHITE_DYE),
 				Map.entry(Items.YELLOW_DYE, Material.YELLOW_DYE)
 			).forEach((nmsItem, bukkitItem) -> {
-				ResourceLibBootstrap.getComponentsMap(nmsItem).put(DataComponents.CONSUMABLE, Consumables.defaultFood().build());
-				ResourceLibBootstrap.getComponentsMap(nmsItem).put(DataComponents.FOOD, new FoodProperties.Builder().alwaysEdible().nutrition(1).saturationModifier(0.1F).build());
+				addExtraComponent(nmsItem, () -> Map.entry(DataComponents.CONSUMABLE, Consumables.defaultFood().build()));
+				addExtraComponent(nmsItem, () -> Map.entry(DataComponents.FOOD, new FoodProperties.Builder().alwaysEdible().nutrition(1).saturationModifier(0.1F).build()));
 				ExtraItemComponentsModifier.addExtra(bukkitItem, DataComponentTypes.CONSUMABLE, DataComponentTypes.FOOD);
 			});
 		});

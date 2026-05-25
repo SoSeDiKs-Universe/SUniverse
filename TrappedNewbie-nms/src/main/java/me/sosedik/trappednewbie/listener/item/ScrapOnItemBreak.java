@@ -17,7 +17,7 @@ import org.jspecify.annotations.NullMarked;
 /**
  * Scrap is made upon item break
  */
-// MCCheck: 1.21.11, Maybe possible to set replacement item via API?
+// MCCheck: 26.1.2, Maybe possible to set replacement item via API?
 @NullMarked
 public class ScrapOnItemBreak implements Listener {
 

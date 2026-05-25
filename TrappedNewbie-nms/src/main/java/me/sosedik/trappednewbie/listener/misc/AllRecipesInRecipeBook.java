@@ -537,7 +537,7 @@ public class AllRecipesInRecipeBook implements Listener {
 
 	}
 
-	// MCCheck: 1.21.11, new potion mixes
+	// MCCheck: 26.1.2, new potion mixes
 	private static void addVanillaPotionMixes() { // From PotionBrewing class
 		addVanillaPotionMix("splash_potion", "", List.of(ItemStack.of(Material.SPLASH_POTION)), RecipeChoice.itemType(ItemType.GUNPOWDER), RecipeChoice.itemType(ItemType.POTION), null, null);
 		addVanillaPotionMix("lingering_potion", "", List.of(ItemStack.of(Material.LINGERING_POTION)), RecipeChoice.itemType(ItemType.DRAGON_BREATH), RecipeChoice.itemType(ItemType.SPLASH_POTION), null, null);

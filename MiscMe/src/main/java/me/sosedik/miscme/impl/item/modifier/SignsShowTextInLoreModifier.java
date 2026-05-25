@@ -33,7 +33,7 @@ import static me.sosedik.utilizer.api.message.Mini.combined;
 /**
  * Signs show stored text in lore
  */
-// MCCheck: 1.21.11, item block entity tag
+// MCCheck: 26.1.2, item block entity tag
 @NullMarked
 public class SignsShowTextInLoreModifier extends ItemModifier {
 

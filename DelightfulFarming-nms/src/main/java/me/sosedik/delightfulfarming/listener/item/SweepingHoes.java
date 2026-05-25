@@ -46,7 +46,7 @@ import java.util.Set;
  * Handles Sweeping enchantment on hoes,
  * as well as allows for quick replanting
  */
-// MCCheck: 1.21.11, new crops/seeds / grassy blocks
+// MCCheck: 26.1.2, new crops/seeds / grassy blocks
 @NullMarked
 public class SweepingHoes implements Listener {
 
@@ -206,7 +206,7 @@ public class SweepingHoes implements Listener {
 			}
 
 			Location sideBlockLoc = sideBlock.getLocation();
-			BlockPos blockPosition = CraftLocation.toBlockPosition(sideBlockLoc);
+			BlockPos blockPosition = CraftLocation.toBlockPos(sideBlockLoc);
 			if (!((CraftPlayer) player).getHandle().mayInteract(serverLevel, blockPosition)) continue;
 
 			TO_REPLANT.put(sideBlockLoc, player);
@@ -265,7 +265,7 @@ public class SweepingHoes implements Listener {
 			if (!materials.contains(sideBlock.getType())) continue;
 
 			Location sideBlockLoc = sideBlock.getLocation();
-			BlockPos blockPosition = CraftLocation.toBlockPosition(sideBlockLoc);
+			BlockPos blockPosition = CraftLocation.toBlockPos(sideBlockLoc);
 			if (!((CraftPlayer) player).getHandle().mayInteract(serverLevel, blockPosition)) continue;
 
 			BlockState blockState = sideBlock.getState();

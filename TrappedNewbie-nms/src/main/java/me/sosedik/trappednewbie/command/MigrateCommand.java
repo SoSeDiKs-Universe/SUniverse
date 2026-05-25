@@ -4,10 +4,12 @@ import com.google.gson.JsonObject;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import me.sosedik.fancymotd.Pinger;
 import me.sosedik.trappednewbie.TrappedNewbie;
+import me.sosedik.trappednewbie.listener.world.PerPlayerWorlds;
 import me.sosedik.utilizer.Utilizer;
 import me.sosedik.utilizer.api.message.Messenger;
 import me.sosedik.utilizer.util.FileUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
@@ -22,7 +24,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
@@ -55,10 +56,10 @@ public class MigrateCommand implements Listener {
 	public record ResetData(boolean advancements, boolean stats) {}
 
 	public static void migrate(UUID oldUuid, @Nullable UUID newUuid, ResetData resetData) {
-		File worldFolder = Bukkit.getWorlds().getFirst().getWorldFolder();
-		var file = new File(worldFolder, "playerdata" + File.separator + oldUuid + ".dat");
+		var worldFolder = new File(Bukkit.getWorldContainer(), "world");
+		var file = new File(worldFolder, "players" + File.separator + "data" + File.separator + oldUuid + ".dat");
 		if (!file.exists()) {
-			TrappedNewbie.logger().warn("UUID's playerdata does not exist: {}", oldUuid);
+			TrappedNewbie.logger().warn("UUID's player data does not exist: {}", oldUuid);
 			return;
 		}
 
@@ -74,48 +75,40 @@ public class MigrateCommand implements Listener {
 		}
 
 		try {
-			// playerdata
+			// data
 			if (delete) file.delete();
-			else Files.move(file.toPath(), new File(worldFolder, "playerdata" + File.separator + newUuid + ".dat").toPath());
-			file = new File(worldFolder, "playerdata" + File.separator + oldUuid + ".dat_old");
+			else Files.move(file.toPath(), new File(worldFolder, "players" + File.separator + "data" + File.separator + newUuid + ".dat").toPath());
+			file = new File(worldFolder, "players" + File.separator + "data" + File.separator + oldUuid + ".dat_old");
 			if (file.exists()) {
 				if (delete) file.delete();
-				else Files.move(file.toPath(), new File(worldFolder, "playerdata" + File.separator + newUuid + ".dat_old").toPath());
+				else Files.move(file.toPath(), new File(worldFolder, "players" + File.separator + "data" + File.separator + newUuid + ".dat_old").toPath());
 			}
 
 			// advancements
 			if (resetData.advancements()) {
-				file = new File(worldFolder, "advancements" + File.separator + oldUuid + ".json");
+				file = new File(worldFolder, "players" + File.separator + "advancements" + File.separator + oldUuid + ".json");
 				if (file.exists()) {
 					if (delete) file.delete();
-					else Files.move(file.toPath(), new File(worldFolder, "advancements" + File.separator + newUuid + ".json").toPath());
+					else Files.move(file.toPath(), new File(worldFolder, "players" + File.separator + "advancements" + File.separator + newUuid + ".json").toPath());
 				}
 			}
 
 			// stats
 			if (resetData.stats()) {
-				file = new File(worldFolder, "stats" + File.separator + oldUuid + ".json");
+				file = new File(worldFolder, "players" + File.separator + "data" + File.separator + oldUuid + ".json");
 				if (file.exists()) {
 					if (delete) file.delete();
-					else Files.move(file.toPath(), new File(worldFolder, "stats" + File.separator + newUuid + ".json").toPath());
+					else Files.move(file.toPath(), new File(worldFolder, "players" + File.separator + "data" + File.separator + newUuid + ".json").toPath());
 				}
 			}
 
 			// player worlds
-			File customWorldsFolder = new File(worldFolder.getParentFile(), "worlds-personal");
-			file = new File(customWorldsFolder, oldUuid.toString());
-			if (file.exists()) {
-				if (delete) FileUtil.deleteFolder(file);
-				else Files.move(file.toPath(), new File(customWorldsFolder, newUuid.toString()).toPath());
-			}
-			customWorldsFolder = new File(worldFolder.getParentFile(), "worlds-resources");
-			if (customWorldsFolder.exists()) {
-				for (File worldTypeFolder : Objects.requireNonNull(customWorldsFolder.listFiles())) {
-					file = new File(worldTypeFolder, oldUuid.toString());
-					if (file.exists()) {
-						if (delete) FileUtil.deleteFolder(file);
-						else Files.move(file.toPath(), new File(worldTypeFolder, newUuid.toString()).toPath());
-					}
+			for (World.Environment environment : World.Environment.values()) {
+				File worldsContainer = PerPlayerWorlds.getWorldsContainer(environment);
+				file = new File(worldsContainer, oldUuid.toString());
+				if (file.exists()) {
+					if (delete) FileUtil.deleteFolder(file);
+					else Files.move(file.toPath(), new File(worldsContainer, newUuid.toString()).toPath());
 				}
 			}
 

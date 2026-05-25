@@ -22,7 +22,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -37,7 +37,7 @@ public class WindInABottleInteractions implements Listener {
 	private static final NamespacedKey BOTTLE_CONSUME_KEY = TrappedNewbie.trappedNewbieKey("wind_in_a_bottle_consume");
 
 	@EventHandler(ignoreCancelled = true)
-	public void onInteract(PlayerInteractEntityEvent event) {
+	public void onInteract(PlayerInteractAtEntityEvent event) {
 		if (event.getHand() != EquipmentSlot.HAND) return;
 
 		if (event.getRightClicked() instanceof AbstractWindCharge windCharge) {

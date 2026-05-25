@@ -30,7 +30,7 @@ import java.util.Locale;
 
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.thrownItemPickedUpByEntity;
 
-// MCCheck: 1.21.11, new unobtainable items, new suspicious stew effects, new special items
+// MCCheck: 26.1.2, new unobtainable items, new suspicious stew effects, new special items
 @NullMarked
 public class CommunismAdvancement extends BaseAdvancement {
 

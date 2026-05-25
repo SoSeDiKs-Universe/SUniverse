@@ -5,7 +5,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.jspecify.annotations.NullMarked;
 
 /**
@@ -15,7 +15,7 @@ import org.jspecify.annotations.NullMarked;
 public class ReleaseEntityFromVehicle implements Listener {
 
 	@EventHandler(ignoreCancelled = true)
-	public void onInteract(PlayerInteractEntityEvent event) {
+	public void onInteract(PlayerInteractAtEntityEvent event) {
 		if (!(event.getRightClicked() instanceof LivingEntity entity)) return;
 		if (entity instanceof Player) return;
 		if (!entity.isInsideVehicle()) return;

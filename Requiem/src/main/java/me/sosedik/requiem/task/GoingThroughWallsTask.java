@@ -104,7 +104,7 @@ public class GoingThroughWallsTask extends BukkitRunnable {
 		return !LocationUtil.isTrulySolid(this.player, block);
 	}
 
-	// MCCheck: 1.21.11, new blocks
+	// MCCheck: 26.1.2, new blocks
 	private boolean isExempt(Material type) {
 		return Tag.SAND.isTagged(type)
 			|| type == Material.GRAVEL || type == Material.SUSPICIOUS_GRAVEL

@@ -28,6 +28,13 @@ public class CustomDayCycleTask extends BukkitRunnable {
 		this.world = world;
 		this.timeIncrementRule = timeIncrementRule;
 
+		try {
+			world.setFullTime(world.getFullTime());
+		} catch (IllegalArgumentException _) {
+			MiscMe.logger().warn("Cannot set time in world without world clock: {}", world.key());
+			return;
+		}
+
 		world.setGameRule(GameRules.ADVANCE_TIME, false);
 
 		TASKS.put(world.getUID(), this);

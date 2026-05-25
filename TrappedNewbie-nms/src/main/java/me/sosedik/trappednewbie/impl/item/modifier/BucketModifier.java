@@ -6,6 +6,8 @@ import de.tr7zw.nbtapi.iface.ReadableNBT;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.DamageResistant;
 import io.papermc.paper.datacomponent.item.DyedItemColor;
+import io.papermc.paper.registry.RegistryAccess;
+import io.papermc.paper.registry.RegistryKey;
 import io.papermc.paper.registry.keys.tags.DamageTypeTagKeys;
 import me.sosedik.kiterino.modifier.item.ItemContextBox;
 import me.sosedik.kiterino.modifier.item.ItemModifier;
@@ -37,7 +39,7 @@ import static me.sosedik.trappednewbie.TrappedNewbie.trappedNewbieKey;
 /**
  * Bucket visuals
  */
-// MCCheck: 1.21.11, new wood types / new buckets
+// MCCheck: 26.1.2, new wood types / new buckets
 @NullMarked
 public class BucketModifier extends ItemModifier {
 
@@ -213,7 +215,7 @@ public class BucketModifier extends ItemModifier {
 				saveTo.setData(DataComponentTypes.MAX_DAMAGE, MAX_NETHERITE_USES);
 
 			if (this == NETHERITE && !saveTo.hasData(DataComponentTypes.DAMAGE_RESISTANT))
-				saveTo.setData(DataComponentTypes.DAMAGE_RESISTANT, DamageResistant.damageResistant(DamageTypeTagKeys.IS_FIRE));
+				saveTo.setData(DataComponentTypes.DAMAGE_RESISTANT, DamageResistant.damageResistant(RegistryAccess.registryAccess().getRegistry(RegistryKey.DAMAGE_TYPE).getTag(DamageTypeTagKeys.IS_FIRE)));
 
 			if (saveTo.hasData(DataComponentTypes.MAX_DAMAGE)) {
 				if (saveFrom != null && saveFrom.hasData(DataComponentTypes.DAMAGE))

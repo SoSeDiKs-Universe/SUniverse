@@ -24,7 +24,7 @@ dependencies {
     compileOnly("org.incendo:cloud-paper:${project.property("cloudImplVersion")}")
     compileOnly("org.incendo:cloud-annotations:${project.property("cloudVersion")}")
 
-    compileOnly("xyz.xenondevs.invui:invui:${project.property("invApiVersion")}")
+    compileOnly("xyz.xenondevs.invui:invui:${project.property("invUIVersion")}")
 }
 
 tasks.withType<ShadowJar> {

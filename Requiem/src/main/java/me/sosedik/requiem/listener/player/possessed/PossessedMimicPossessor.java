@@ -108,7 +108,7 @@ public class PossessedMimicPossessor implements Listener {
 		updateMainHandVisuals(entity, mainHandItem);
 	}
 
-	// MCCheck: 1.21.11, new mobs carrying items
+	// MCCheck: 26.1.2, new mobs carrying items
 	private void updateMainHandVisuals(LivingEntity entity, @Nullable ItemStack item) {
 		if (entity instanceof Enderman enderman) {
 			if (item != null && item.getType().isBlock()) {

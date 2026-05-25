@@ -126,7 +126,7 @@ public class SleepingBagBlock extends BedBlock implements KiterinoBlock {
 		}
 
 		if (state.getValue(OCCUPIED)) {
-			player.displayClientMessage(Component.translatable("block.minecraft.bed.occupied"), true);
+			player.sendOverlayMessage(Component.translatable("block.minecraft.bed.occupied"));
 		} else {
 			final BlockPos finalBlockPos = pos;
 			final BlockFace facing = player.getBukkitEntity().getFacing();
@@ -139,7 +139,7 @@ public class SleepingBagBlock extends BedBlock implements KiterinoBlock {
 					}
 					final net.kyori.adventure.text.Component message = event.getMessage();
 					if (message != null)
-						player.displayClientMessage(io.papermc.paper.adventure.PaperAdventure.asVanilla(message), true);
+						player.sendOverlayMessage(io.papermc.paper.adventure.PaperAdventure.asVanilla(message));
 				}
 				// Paper end - PlayerBedFailEnterEvent
 			}).ifRight(u -> {

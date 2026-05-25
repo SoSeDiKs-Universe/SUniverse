@@ -18,7 +18,6 @@ import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.EntityPotionEffectEvent;
 import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.potion.PotionEffect;
 import org.jspecify.annotations.NullMarked;
 
@@ -69,17 +68,6 @@ public class PossessedLimitedControl implements Listener {
 		event.setDamage(0);
 		if (event.getCause() != EntityDamageEvent.DamageCause.CUSTOM)
 			event.setCancelled(true);
-	}
-
-	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onInteractEntity(PlayerInteractEntityEvent event) {
-		Player player = event.getPlayer();
-		if (!PossessingPlayer.isPossessing(player)) return;
-
-		LivingEntity possessed = PossessingPlayer.getPossessed(player);
-		if (possessed != null && allowInteract(possessed, event.getRightClicked())) return;
-
-		event.setCancelled(true);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)

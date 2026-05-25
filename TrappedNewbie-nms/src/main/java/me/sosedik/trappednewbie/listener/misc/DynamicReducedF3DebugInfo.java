@@ -19,7 +19,7 @@ import java.util.UUID;
 /**
  * Dynamically toggle reduced debug info
  */
-// MCCheck: 1.21.11, packet changes
+// MCCheck: 26.1.2, packet changes
 @NullMarked
 public class DynamicReducedF3DebugInfo implements Listener {
 

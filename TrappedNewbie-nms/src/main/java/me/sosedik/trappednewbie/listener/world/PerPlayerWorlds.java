@@ -5,6 +5,7 @@ import io.papermc.paper.connection.PlayerConfigurationConnection;
 import io.papermc.paper.event.connection.PlayerConnectionValidateLoginEvent;
 import io.papermc.paper.event.entity.EntityPortalReadyEvent;
 import io.papermc.paper.event.player.AsyncPlayerSpawnLocationEvent;
+import io.papermc.paper.math.Position;
 import me.sosedik.delightfulfarming.feature.sugar.MealTime;
 import me.sosedik.limboworldgenerator.VoidChunkGenerator;
 import me.sosedik.miscme.task.CustomDayCycleTask;
@@ -12,6 +13,7 @@ import me.sosedik.trappednewbie.TrappedNewbie;
 import me.sosedik.utilizer.Utilizer;
 import me.sosedik.utilizer.util.FileUtil;
 import me.sosedik.utilizer.util.MiscUtil;
+import net.kyori.adventure.key.Key;
 import org.bukkit.Bukkit;
 import org.bukkit.Difficulty;
 import org.bukkit.GameRules;
@@ -36,12 +38,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-import java.util.function.BiFunction;
+import java.util.function.Supplier;
 
 import static java.util.Objects.requireNonNull;
 
@@ -51,9 +52,12 @@ import static java.util.Objects.requireNonNull;
 @NullMarked
 public class PerPlayerWorlds implements Listener {
 
+	public static final String PERSONAL_WORLDS_NAMESPACE = "personal";
+	public static final String RESOURCE_WORLDS_NAMESPACE_PREFIX = "resources-";
+
 	private static final double DAY_TIME_TICK_INCREASE = 0.375; // 40 minutes
 	private static final double NIGHT_TIME_TICK_INCREASE = 0.25; // 20 minutes
-	
+
 	private static final List<World.Environment> RESOURCE_ENVIRONMENTS = List.of(
 		World.Environment.NORMAL, World.Environment.NETHER, World.Environment.THE_END
 	);
@@ -94,28 +98,29 @@ public class PerPlayerWorlds implements Listener {
 
 		NamespacedKey dimensionId = event.getInitialDimensionId();
 		if (dimensionId == null) return;
-		if (!TrappedNewbie.NAMESPACE.equals(dimensionId.getNamespace())) return;
 
-		String worldKey = dimensionId.getKey();
-		World world = Bukkit.getWorld(worldKey);
+		World world = Bukkit.getWorld(dimensionId);
 		if (world != null) {
 			event.setSpawnLocation(event.getInitialLocation().world(world));
 			return;
 		}
 
-		if (worldKey.startsWith("worlds-resources/")) {
-			String[] split = worldKey.split("/");
-			UUID uuid;
+		if (dimensionId.namespace().startsWith(RESOURCE_WORLDS_NAMESPACE_PREFIX)) {
+			UUID worldPlayerUuid;
 			try {
-				uuid = UUID.fromString(split[split.length - 1]);
+				worldPlayerUuid = UUID.fromString(dimensionId.value());
 			} catch (IllegalArgumentException ignored) {
 				event.setSpawnLocation(Utilizer.limboWorld().getSpawnLocation().center(1));
 				return;
 			}
-			boolean rtp = !new File(Bukkit.getWorldContainer(), worldKey).exists();
-			World.Environment environment = MiscUtil.parseOr(split[1], World.Environment.NORMAL);
+			boolean rtp = !new File(getWorldsContainer(), dimensionId.namespace() + File.separator + worldPlayerUuid).exists();
+			World.Environment environment = switch (dimensionId.namespace()) {
+				case RESOURCE_WORLDS_NAMESPACE_PREFIX + "the_nether" -> World.Environment.NETHER;
+				case RESOURCE_WORLDS_NAMESPACE_PREFIX + "the_end" -> World.Environment.THE_END;
+				default -> World.Environment.NORMAL;
+			};
 			CompletableFuture<World> worldGetter = new CompletableFuture<>();
-			TrappedNewbie.scheduler().sync(() -> worldGetter.complete(getResourceWorld(uuid, environment)));
+			TrappedNewbie.scheduler().sync(() -> worldGetter.complete(getResourceWorld(worldPlayerUuid, environment)));
 			world = worldGetter.get();
 			if (!rtp) {
 				event.setSpawnLocation(event.getInitialLocation().world(world));
@@ -125,22 +130,21 @@ public class PerPlayerWorlds implements Listener {
 			UUID playerUuid = event.getConnection().getProfile().getId();
 			if (playerUuid != null)
 				DELAYED_FALLS.add(playerUuid);
-		} else if (worldKey.startsWith("worlds-personal/")) {
-			if (!new File(Bukkit.getWorldContainer(), worldKey).exists()) {
+		} else if (PERSONAL_WORLDS_NAMESPACE.equals(dimensionId.namespace())) {
+			if (!new File(getWorldsContainer(World.Environment.CUSTOM), dimensionId.value()).exists()) {
 				event.setSpawnLocation(Utilizer.limboWorld().getSpawnLocation().center(1));
 				return;
 			}
 
-			String[] split = worldKey.split("/");
-			UUID uuid;
+			UUID worldPlayerUuid;
 			try {
-				uuid = UUID.fromString(split[split.length - 1]);
+				worldPlayerUuid = UUID.fromString(dimensionId.value());
 			} catch (IllegalArgumentException ignored) {
 				event.setSpawnLocation(Utilizer.limboWorld().getSpawnLocation().center(1));
 				return;
 			}
 			CompletableFuture<World> worldGetter = new CompletableFuture<>();
-			TrappedNewbie.scheduler().sync(() -> worldGetter.complete(getPersonalWorld(uuid)));
+			TrappedNewbie.scheduler().sync(() -> worldGetter.complete(getPersonalWorld(worldPlayerUuid)));
 			world = worldGetter.get();
 			event.setSpawnLocation(event.getInitialLocation().world(world));
 		}
@@ -154,10 +158,7 @@ public class PerPlayerWorlds implements Listener {
 			return;
 		}
 
-		if (!TrappedNewbie.NAMESPACE.equals(worldFrom.key().namespace())) return;
-
-		String worldKey = worldFrom.key().value();
-		if (!worldKey.startsWith("worlds-personal/")) return;
+		if (!PERSONAL_WORLDS_NAMESPACE.equals(worldFrom.key().namespace())) return;
 
 		event.setCancelled(true);
 	}
@@ -171,19 +172,18 @@ public class PerPlayerWorlds implements Listener {
 			return;
 		}
 
-		if (!TrappedNewbie.NAMESPACE.equals(worldFrom.key().namespace())) return;
-
-		String worldKey = worldFrom.key().value();
-		if (!worldKey.startsWith("worlds-resources/")) {
+		Key worldKey = worldFrom.key();
+		if (PERSONAL_WORLDS_NAMESPACE.equals(worldKey.namespace())) {
 			event.setTargetWorld(null);
 			event.setCancelled(true);
 			return;
 		}
 
-		String[] split = worldKey.split("/");
+		if (!worldKey.namespace().startsWith(RESOURCE_WORLDS_NAMESPACE_PREFIX)) return;
+
 		UUID playerUuid;
 		try {
-			playerUuid = UUID.fromString(split[split.length - 1]);
+			playerUuid = UUID.fromString(worldKey.value());
 		} catch (IndexOutOfBoundsException | IllegalArgumentException e) {
 			event.setTargetWorld(null);
 			event.setCancelled(true);
@@ -271,27 +271,22 @@ public class PerPlayerWorlds implements Listener {
 	 */
 	public static World resolveWorld(Player player, World.Environment environment) {
 		World world = player.getWorld();
-		if (world == Utilizer.limboWorld() || NamespacedKey.MINECRAFT.equals(world.key().namespace()))
+		Key worldKey = world.key();
+		if (world == Utilizer.limboWorld() || NamespacedKey.MINECRAFT.equals(worldKey.namespace()))
 			return resolveVanillaWorld(environment);
 
-		if (!TrappedNewbie.NAMESPACE.equals(world.key().namespace()))
-			return Utilizer.limboWorld();
-
-		String worldKey = world.key().value();
-		if (!worldKey.startsWith("worlds-personal/") && !worldKey.startsWith("worlds-resources/"))
-			return Utilizer.limboWorld();
-
-		String[] split = worldKey.split("/");
-		UUID playerUuid;
-		try {
-			playerUuid = UUID.fromString(split[split.length - 1]);
-		} catch (IndexOutOfBoundsException | IllegalArgumentException ignored) {
-			return Utilizer.limboWorld();
+		if (PERSONAL_WORLDS_NAMESPACE.equals(worldKey.namespace()) || worldKey.namespace().startsWith(RESOURCE_WORLDS_NAMESPACE_PREFIX)) {
+			try {
+				UUID playerUuid = UUID.fromString(worldKey.value());
+				return environment == World.Environment.CUSTOM
+					? getPersonalWorld(playerUuid)
+					: getResourceWorld(playerUuid, environment, true);
+			} catch (IndexOutOfBoundsException | IllegalArgumentException ignored) {
+				return Utilizer.limboWorld();
+			}
 		}
 
-		return environment == World.Environment.CUSTOM
-			? getPersonalWorld(playerUuid)
-			: getResourceWorld(playerUuid, environment, true);
+		return Utilizer.limboWorld();
 	}
 
 	/**
@@ -328,13 +323,13 @@ public class PerPlayerWorlds implements Listener {
 	 */
 	@Contract("_, true -> !null")
 	public static @Nullable World getPersonalWorld(UUID playerUuid, boolean load) {
-		return getWorld("worlds-personal/", playerUuid,
-				(levelName, worldKey) -> requireNonNull(
-					 WorldCreator.ofNameAndKey(levelName, worldKey)
-						.generator(VoidChunkGenerator.GENERATOR)
-						.createWorld()
-				), load
-		);
+		var worldKey = new NamespacedKey(PERSONAL_WORLDS_NAMESPACE, playerUuid.toString());
+		return getWorld(worldKey, load, true, () -> requireNonNull(
+				 WorldCreator.ofKey(worldKey)
+					 .generator(VoidChunkGenerator.GENERATOR)
+					 .forcedSpawnPosition(Position.fine(0.5, 121, 0.5), 0F, 0F)
+					 .createWorld()
+			));
 	}
 
 	/**
@@ -359,27 +354,50 @@ public class PerPlayerWorlds implements Listener {
 	@Contract("_, _, true -> !null")
 	public static @Nullable World getResourceWorld(UUID playerUuid, World.Environment environment, boolean load) {
 		if (!RESOURCE_ENVIRONMENTS.contains(environment)) throw new IllegalArgumentException("Invalid resources dimension: %s".formatted(environment.name()));
-		return getWorld("worlds-resources/" + environment.name().toLowerCase(Locale.US) + "/", playerUuid,
-				(levelName, worldKey) -> {
-					File mainWorldFile = Bukkit.getWorlds().getFirst().getWorldFolder();
-					File settingsFile = null;
-					switch (environment) {
-						case NORMAL -> settingsFile = new File(mainWorldFile, "paper-world.yml");
-						case NETHER -> settingsFile = new File(mainWorldFile.getParentFile(), mainWorldFile.getName() + "_nether/paper-world.yml");
-						case THE_END -> settingsFile = new File(mainWorldFile.getParentFile(), mainWorldFile.getName() + "_the_end/paper-world.yml");
-					}
-					if (settingsFile != null && settingsFile.exists()) {
-						var destinationFile = new File(mainWorldFile.getParentFile(), "worlds-resources" + File.separator + environment.name().toLowerCase(Locale.US) + File.separator + playerUuid + "/paper-world.yml");
-						FileUtil.deleteFile(destinationFile);
-						FileUtil.copyFile(settingsFile, destinationFile);
-					}
-					return requireNonNull(
-						new WorldCreator(levelName, worldKey)
-							.environment(environment)
-							.createWorld()
-					);
-				}, load
-		);
+
+		String environmentKey = MiscUtil.getDimensionKey(environment);
+		var worldKey = new NamespacedKey(RESOURCE_WORLDS_NAMESPACE_PREFIX + environmentKey, playerUuid.toString());
+		return getWorld(worldKey, load, environment == World.Environment.NORMAL, () -> {
+				File mainWorldFile = Bukkit.getWorlds().getFirst().getWorldFolder();
+				File settingsFile = null;
+				switch (environment) {
+					case NORMAL -> settingsFile = new File(mainWorldFile, "paper-world.yml");
+					case NETHER -> settingsFile = new File(mainWorldFile.getParentFile(), "the_nether/paper-world.yml");
+					case THE_END -> settingsFile = new File(mainWorldFile.getParentFile(), "the_end/paper-world.yml");
+				}
+				if (settingsFile.exists()) {
+					var destinationFile = new File(getWorldsContainer(), worldKey.namespace() + File.separator + worldKey.value() + "/paper-world.yml");
+					FileUtil.deleteFile(destinationFile);
+					FileUtil.copyFile(settingsFile, destinationFile);
+				}
+				return requireNonNull(
+					new WorldCreator(worldKey)
+						.environment(environment)
+						.createWorld()
+				);
+			});
+	}
+
+	/**
+	 * Gets the folder where worlds lie
+	 *
+	 * @return the folder where worlds lie
+	 */
+	public static File getWorldsContainer() {
+		return Bukkit.getWorlds().getFirst().getWorldFolder().getParentFile().getParentFile();
+	}
+
+	/**
+	 * Gets the folder where worlds lie
+	 *
+	 * @param environment environment, {@link World.Environment#CUSTOM} for personal worlds
+	 * @return the folder where worlds lie
+	 */
+	public static File getWorldsContainer(World.Environment environment) {
+		return switch (environment) {
+			case NORMAL, NETHER, THE_END -> new File(getWorldsContainer(), RESOURCE_WORLDS_NAMESPACE_PREFIX + MiscUtil.getDimensionKey(environment));
+			case CUSTOM -> new File(getWorldsContainer(), PERSONAL_WORLDS_NAMESPACE);
+		};
 	}
 
 	/**
@@ -413,21 +431,17 @@ public class PerPlayerWorlds implements Listener {
 		}
 	}
 
-	private static @Nullable World getWorld(String prefix, UUID playerUuid, BiFunction<String, NamespacedKey, World> worldCreator, boolean load) {
-		var worldKey = worldKey(prefix, playerUuid);
+	private static @Nullable World getWorld(NamespacedKey worldKey, boolean load, boolean tickTime, Supplier<World> worldCreator) {
 		World world = Bukkit.getWorld(worldKey);
 		if (world == null && load) {
-			world = worldCreator.apply(prefix + playerUuid, worldKey);
+			world = worldCreator.get();
 			applyWorldRules(world);
-			if (world.key().value().startsWith("worlds-personal/"))
+			if (PERSONAL_WORLDS_NAMESPACE.equals(worldKey.namespace()))
 				applyVoidWorldRules(world);
-			startDayCycleTask(world);
+			if (tickTime)
+				startDayCycleTask(world);
 		}
 		return world;
-	}
-
-	private static NamespacedKey worldKey(String prefix, UUID uuid) {
-		return TrappedNewbie.trappedNewbieKey(prefix + uuid);
 	}
 
 }

@@ -90,7 +90,7 @@ public class Pinger {
 	}
 
 	/**
-	 * Checks if this user wasn't recognized as already played
+	 * Checks if this user wasn't recognized as already known player
 	 *
 	 * @return true, if a player hasn't joined the server before
 	 */

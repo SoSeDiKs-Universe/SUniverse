@@ -26,7 +26,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.world.EntitiesLoadEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -83,9 +83,9 @@ public class PaperPlanes implements Listener {
 
 	private void pressButton(Block block) {
 		if (!(block instanceof CraftBlock craftBlock)) return;
-		if (!(craftBlock.getHandle() instanceof Level level)) return;
+		if (!(craftBlock.getLevel() instanceof Level level)) return;
 
-		BlockState nmsBlockState = craftBlock.getNMS();
+		BlockState nmsBlockState = craftBlock.getBlockState();
 		if (nmsBlockState == null) return;
 		if (!(nmsBlockState.getBlock() instanceof ButtonBlock buttonBlock)) return;
 
@@ -93,7 +93,7 @@ public class PaperPlanes implements Listener {
 	}
 
 	@EventHandler(ignoreCancelled = true)
-	public void onModifierApply(PlayerInteractEntityEvent event) {
+	public void onModifierApply(PlayerInteractAtEntityEvent event) {
 		if (!(event.getRightClicked() instanceof ItemFrame itemFrame)) return;
 
 		ItemStack item = itemFrame.getItem();
@@ -105,7 +105,7 @@ public class PaperPlanes implements Listener {
 			tryToApplyModifier(event, itemFrame, item, player, EquipmentSlot.OFF_HAND);
 	}
 
-	private boolean tryToApplyModifier(PlayerInteractEntityEvent event, ItemFrame itemFrame, ItemStack item, Player player, EquipmentSlot hand) {
+	private boolean tryToApplyModifier(PlayerInteractAtEntityEvent event, ItemFrame itemFrame, ItemStack item, Player player, EquipmentSlot hand) {
 		ItemStack handItem = player.getInventory().getItem(hand);
 
 		boolean modifiedItem = false;

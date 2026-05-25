@@ -12,7 +12,6 @@ import org.bukkit.event.player.PlayerAttemptPickupItemEvent;
 import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerPickupArrowEvent;
 import org.bukkit.event.player.PlayerStatisticIncrementEvent;
@@ -29,13 +28,6 @@ public class NoGhostInteractions implements Listener {
 	@EventHandler(priority = EventPriority.LOWEST) // Interact has special cancellation
 	public void onInteractWorld(PlayerInteractEvent event) {
 		if (event.getPlayer().getGameMode().isInvulnerable()) return;
-		if (!GhostyPlayer.isGhost(event.getPlayer())) return;
-
-		event.setCancelled(true);
-	}
-
-	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-	public void onInteractEntity(PlayerInteractEntityEvent event) {
 		if (!GhostyPlayer.isGhost(event.getPlayer())) return;
 
 		event.setCancelled(true);

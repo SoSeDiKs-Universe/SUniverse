@@ -47,7 +47,7 @@ import java.util.Objects;
  * Dyes can be applied onto blocks immersible.
  * Also allows applying/removing sticky state from pistons.
  */
-// MCCheck: 1.21.11, new colored blocks / items
+// MCCheck: 26.1.2, new colored blocks / items
 @NullMarked
 public class ImmersiveDyes implements Listener {
 
@@ -325,7 +325,7 @@ public class ImmersiveDyes implements Listener {
 	 */
 	public static boolean isDyingItem(ItemStack item) {
 		Material type = item.getType();
-		return MaterialTags.DYES.isTagged(type) || type == CLEARING_MATERIAL;
+		return Tag.ITEMS_DYES.isTagged(type) || type == CLEARING_MATERIAL;
 	}
 
 	/**

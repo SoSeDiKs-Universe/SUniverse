@@ -12,23 +12,28 @@ import java.sql.SQLException;
 @NullMarked
 public class SQLite implements Database {
 
-	private final File dataFolder;
+	private final File databaseFile;
 
 	public SQLite(Plugin plugin, File folder, String databaseName) {
-		dataFolder = new File(folder, databaseName + ".db");
-		if (!dataFolder.exists()) {
-			try {
-				if (!dataFolder.createNewFile())
-					plugin.getComponentLogger().error("Could not create a database file!");
-			} catch (IOException e) {
-				plugin.getComponentLogger().error("File write error: {}.db", databaseName);
-			}
+		this.databaseFile = new File(folder, databaseName + ".db");
+
+		createDatabase(plugin);
+	}
+
+	private void createDatabase(Plugin plugin) {
+		if (this.databaseFile.exists()) return;
+
+		try {
+			if (!this.databaseFile.createNewFile())
+				plugin.getComponentLogger().error("Could not create a database file!");
+		} catch (IOException e) {
+			plugin.getComponentLogger().error("File write error: {}.db", this.databaseFile.getName(), e);
 		}
 	}
 
 	@Override
 	public Connection openConnection() throws SQLException {
-		return DriverManager.getConnection("jdbc:sqlite:" + dataFolder);
+		return DriverManager.getConnection("jdbc:sqlite:" + this.databaseFile);
 	}
 
 	@Override

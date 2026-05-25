@@ -43,11 +43,11 @@ public class PluralTag {
 
 	/**
 	 * Formulas source:
-	 * <a href="http://docs.translatehouse.org/projects/localization-guide/en/latest/l10n/pluralforms.html">Plural forms</a>
+	 * <a href="https://docs.translatehouse.org/projects/localization-guide/en/latest/l10n/pluralforms.html">Plural forms</a>
 	 */
 	public enum PluralType {
 
-		NON_PLURAL(n -> 0),
+		NON_PLURAL(_ -> 0),
 		ARABIC(n -> {
 			if (n == 0) return 0;
 			if (n == 1) return 1;
@@ -72,8 +72,11 @@ public class PluralTag {
 		static {
 			for (PluralType pluralType : PluralType.values())
 				BY_NAME.put(pluralType.name(), pluralType);
+			BY_NAME.put("en".toUpperCase(Locale.US), ENGLISH);
 			BY_NAME.put("en_us".toUpperCase(Locale.US), ENGLISH);
+			BY_NAME.put("ru".toUpperCase(Locale.US), RU_UK);
 			BY_NAME.put("ru_ru".toUpperCase(Locale.US), RU_UK);
+			BY_NAME.put("uk".toUpperCase(Locale.US), RU_UK);
 			BY_NAME.put("uk_ua".toUpperCase(Locale.US), RU_UK);
 		}
 

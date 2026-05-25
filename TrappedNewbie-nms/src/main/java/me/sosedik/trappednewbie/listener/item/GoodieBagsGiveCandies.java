@@ -23,7 +23,7 @@ import java.util.UUID;
 /**
  * Goodie bags give candies upon consumption
  */
-// MCCheck: 1.21.11, new candies
+// MCCheck: 26.1.2, new candies
 @NullMarked
 public class GoodieBagsGiveCandies implements Listener {
 

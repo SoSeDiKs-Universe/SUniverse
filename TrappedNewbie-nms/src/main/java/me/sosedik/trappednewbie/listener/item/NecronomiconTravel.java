@@ -139,7 +139,7 @@ public class NecronomiconTravel implements Listener {
 			return;
 		}
 
-		if (player.getWorld() == Utilizer.limboWorld() || player.getWorld().key().value().startsWith("worlds-personal/")) {
+		if (player.getWorld() == Utilizer.limboWorld() || PerPlayerWorlds.PERSONAL_WORLDS_NAMESPACE.equals(player.getWorld().key().namespace())) {
 			openFriendsTP(player);
 		} else {
 			openVoidTP(player, handItem);

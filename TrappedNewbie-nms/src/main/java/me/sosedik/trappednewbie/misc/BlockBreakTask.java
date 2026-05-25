@@ -377,7 +377,7 @@ public class BlockBreakTask extends BukkitRunnable {
 		if (Tag.FIRE.isTagged(this.block.getType())) {
 			this.block.emitSound(Sound.BLOCK_FIRE_EXTINGUISH, 1F, 0.9F + (float) Math.random() * 0.2F);
 		} else {
-			(((CraftWorld) this.block.getWorld()).getHandle()).levelEvent(net.minecraft.world.level.block.LevelEvent.PARTICLES_DESTROY_BLOCK, CraftLocation.toBlockPosition(this.block.getLocation()), net.minecraft.world.level.block.Block.getId(((CraftBlockState) blockState).getHandle()));
+			(((CraftWorld) this.block.getWorld()).getHandle()).levelEvent(net.minecraft.world.level.block.LevelEvent.PARTICLES_DESTROY_BLOCK, CraftLocation.toBlockPos(this.block.getLocation()), net.minecraft.world.level.block.Block.getId(((CraftBlockState) blockState).getHandle()));
 			this.block.emitSound(soundGroup.getBreakSound(), 1F, (float) Math.random() * 0.4F + 0.8F);
 		}
 

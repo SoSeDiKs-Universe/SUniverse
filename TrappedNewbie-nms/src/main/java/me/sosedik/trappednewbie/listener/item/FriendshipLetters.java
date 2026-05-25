@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NullMarked;
 
@@ -23,7 +23,7 @@ import static me.sosedik.utilizer.api.message.Mini.raw;
 public class FriendshipLetters implements Listener {
 
 	@EventHandler(priority = EventPriority.LOW)
-	public void onFriendship(PlayerInteractEntityEvent event) {
+	public void onFriendship(PlayerInteractAtEntityEvent event) {
 		if (!(event.getRightClicked() instanceof Player playerTo)) return;
 		if (!playerTo.getInventory().getItemInMainHand().isEmpty()) return;
 

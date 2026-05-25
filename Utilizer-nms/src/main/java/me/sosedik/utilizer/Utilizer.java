@@ -3,6 +3,7 @@ package me.sosedik.utilizer;
 import com.destroystokyo.paper.MaterialTags;
 import io.leangen.geantyref.TypeToken;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
+import io.papermc.paper.math.Position;
 import me.sosedik.limboworldgenerator.VoidChunkGenerator;
 import me.sosedik.utilizer.api.command.parser.AnyString;
 import me.sosedik.utilizer.api.language.LangOptionsStorage;
@@ -246,8 +247,9 @@ public final class Utilizer extends JavaPlugin {
 		NamespacedKey worldKey = utilizerKey("limbo");
 		World world = Bukkit.getWorld(worldKey);
 		if (world == null) {
-			world = WorldCreator.ofNameAndKey("world_limbo", worldKey)
+			world = WorldCreator.ofKey(worldKey)
 				.generator(VoidChunkGenerator.GENERATOR)
+				.forcedSpawnPosition(Position.fine(0.5, 121, 0.5), 0F, 0F)
 				.createWorld();
 		}
 		return Objects.requireNonNull(world);

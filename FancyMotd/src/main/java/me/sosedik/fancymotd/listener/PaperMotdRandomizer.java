@@ -43,9 +43,8 @@ public class PaperMotdRandomizer extends AbstractMotdRandomizer {
 		}
 
 		// Special message for outdated clients
-		if (event.getClient().getProtocolVersion() < event.getProtocolVersion()) {
+		if (event.getClient().getProtocolVersion() < event.getProtocolVersion())
 			return OUTDATED_MOTD;
-		}
 
 		// Default MOTD
 		return DEFAULT_MOTD;

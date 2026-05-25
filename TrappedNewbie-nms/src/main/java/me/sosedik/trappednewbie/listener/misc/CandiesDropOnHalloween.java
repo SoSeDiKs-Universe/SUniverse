@@ -22,7 +22,7 @@ import java.util.function.Consumer;
 /**
  * Some mobs drop candies on Halloween
  */
-// MCCheck: 1.21.11, new mods
+// MCCheck: 26.1.2, new mods
 @NullMarked
 public class CandiesDropOnHalloween implements Listener {
 

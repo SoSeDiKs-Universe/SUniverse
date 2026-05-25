@@ -10,7 +10,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.vehicle.VehicleDamageEvent;
 import org.bukkit.inventory.EquipmentSlot;
@@ -39,16 +38,6 @@ public class FixLeftAirClickWhenRightClickingEntity implements Listener {
 		if (!ON_COOLDOWN.contains(player.getUniqueId())) return;
 
 		event.setCancelled(true);
-	}
-
-	@EventHandler(priority = EventPriority.LOWEST)
-	public void onInteract(PlayerInteractEntityEvent event) {
-		if (event.getHand() != EquipmentSlot.HAND) return;
-
-		Player player = event.getPlayer();
-		if (player.isSneaking()) return;
-
-		setCooldown(player);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)

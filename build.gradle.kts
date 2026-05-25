@@ -1,13 +1,14 @@
 plugins {
     `java-library`
-    id("io.papermc.paperweight.userdev") version "2.0.0-beta.19" // Accessing NMS
-    id("de.eldoria.plugin-yml.paper") version "0.8.0" // Generates paper-plugin.yml
-    id("com.gradleup.shadow") version "9.2.2" // Shading
+    id("io.papermc.paperweight.userdev") version "2.0.0-SNAPSHOT" // Accessing NMS
+    id("de.eldoria.plugin-yml.paper") version "0.9.0" // Generates paper-plugin.yml
+    id("com.gradleup.shadow") version "9.4.1" // Shading
 }
 
 val mcVersion: String = rootProject.property("mcVersion").toString()
+val paperDevVersion: String = "${mcVersion}.local-SNAPSHOT"
 dependencies {
-    paperweight.paperDevBundle(mcVersion, "me.sosedik.kiterino")
+    paperweight.paperDevBundle(paperDevVersion, "me.sosedik.kiterino")
 }
 
 allprojects {
@@ -62,17 +63,17 @@ subprojects {
     if (project.name.endsWith("-nms")) {
         apply(plugin = "io.papermc.paperweight.userdev")
         dependencies {
-            paperweight.paperDevBundle(mcVersion, "me.sosedik.kiterino")
+            paperweight.paperDevBundle(paperDevVersion, "me.sosedik.kiterino")
         }
     } else {
         dependencies {
-            compileOnly("me.sosedik.kiterino:kiterino-api:$mcVersion")
+            compileOnly("me.sosedik.kiterino:kiterino-api:$paperDevVersion")
         }
     }
 
     apply(plugin = "de.eldoria.plugin-yml.paper")
     paper {
-        apiVersion = "${rootProject.property("apiVersion")}"
+        apiVersion = mcVersion
         authors = listOf("SoSeDiK")
     }
 }

@@ -22,7 +22,7 @@ import org.jspecify.annotations.Nullable;
 /**
  * Knifes can create totem bases from logs
  */
-// MCCheck: 1.21.11, new wood types
+// MCCheck: 26.1.2, new wood types
 @NullMarked
 public class KnifeCarvesTotemBases implements Listener {
 

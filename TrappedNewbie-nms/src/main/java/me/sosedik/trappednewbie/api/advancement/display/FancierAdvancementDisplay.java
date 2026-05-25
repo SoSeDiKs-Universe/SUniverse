@@ -36,7 +36,7 @@ import static me.sosedik.utilizer.api.message.Mini.raw;
 
 @NullMarked
 @SuppressWarnings("unchecked")
-// MCCheck: 1.21.11, hopefully background workaround is no longer needed
+// MCCheck: 26.1.2, hopefully background workaround is no longer needed
 public abstract class FancierAdvancementDisplay<T extends FancierAdvancementDisplay<T>> extends FancyAdvancementDisplay<T> {
 
 	private static final Component DEFAULT_PARENT = Component.empty().shadowColor(ShadowColor.none());

@@ -3,7 +3,7 @@ import net.minecrell.pluginyml.bukkit.BukkitPluginDescription
 description = "Holds a void generator, that's it"
 
 plugins {
-    id("xyz.jpenilla.run-paper") version "2.3.1" // Test server
+    id("xyz.jpenilla.run-paper") version "3.0.2" // Test server
 }
 
 tasks {
@@ -20,7 +20,7 @@ tasks {
 tasks.withType(xyz.jpenilla.runtask.task.AbstractRun::class) {
     javaLauncher = javaToolchains.launcherFor {
         vendor = JvmVendorSpec.JETBRAINS
-        languageVersion = JavaLanguageVersion.of(21)
+        languageVersion = JavaLanguageVersion.of(25)
     }
     jvmArgs("-XX:+AllowEnhancedClassRedefinition", "--add-opens", "java.base/java.lang=ALL-UNNAMED")
 }

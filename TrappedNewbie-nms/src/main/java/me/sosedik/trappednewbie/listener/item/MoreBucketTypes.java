@@ -59,7 +59,7 @@ import org.jspecify.annotations.Nullable;
 /**
  * Custom buckets handler
  */
-// MCCheck: 1.21.11, new buckets (spills)
+// MCCheck: 26.1.2, new buckets (spills)
 @NullMarked
 public class MoreBucketTypes implements Listener {
 
@@ -260,7 +260,7 @@ public class MoreBucketTypes implements Listener {
 			ItemFrameSpillables.addSpillable(bucketMaterial, (spiller, item, block) -> {
 				net.minecraft.world.item.ItemStack itemStack = net.minecraft.world.item.ItemStack.fromBukkitCopy(item);
 				if (itemStack.getItem() instanceof MobBucketItem mobBucketItem)
-					mobBucketItem.checkExtraContent(spiller instanceof CraftLivingEntity living ? living.getHandle() : null, ((CraftWorld) block.getWorld()).getHandle(), itemStack, CraftLocation.toBlockPosition(block.getLocation()));
+					mobBucketItem.checkExtraContent(spiller instanceof CraftLivingEntity living ? living.getHandle() : null, ((CraftWorld) block.getWorld()).getHandle(), itemStack, CraftLocation.toBlockPos(block.getLocation()));
 
 				if (UtilizerTags.HOT_BUCKETABLE.isTagged(item.getType())) {
 					BucketModifier.BucketType bucketType = BucketModifier.BucketType.fromBucket(item);

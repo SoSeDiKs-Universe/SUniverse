@@ -25,6 +25,7 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.minecraft.core.HolderSet;
+import net.minecraft.core.component.DataComponentInitializers;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
@@ -39,6 +40,7 @@ import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.Rarity;
@@ -84,6 +86,7 @@ import java.util.NoSuchElementException;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.stream.Stream;
@@ -93,7 +96,7 @@ import static java.util.Objects.requireNonNull;
 @NullMarked
 public class ResourceLibBootstrap implements PluginBootstrap {
 
-	private static List<Runnable> postActions = new ArrayList<>();
+	private static @Nullable List<Runnable> postActions = new ArrayList<>();
 
 	@Override
 	public void bootstrap(BootstrapContext context) {
@@ -167,7 +170,7 @@ public class ResourceLibBootstrap implements PluginBootstrap {
 		if (json.has("explosion_resistance")) properties.explosionResistance(json.get("explosion_resistance").getAsFloat());
 		if (json.has("light_level")) {
 			int lightLevel = json.get("light_level").getAsInt();
-			properties.lightLevel(state -> lightLevel);
+			properties.lightLevel(_ -> lightLevel);
 		}
 		if (json.has("ignited_by_lava") && json.get("ignited_by_lava").getAsBoolean()) properties.ignitedByLava();
 		if (json.has("no_collision") && json.get("no_collision").getAsBoolean()) properties.noCollision();
@@ -222,12 +225,25 @@ public class ResourceLibBootstrap implements PluginBootstrap {
 		});
 	}
 
-	public static Reference2ObjectMap<DataComponentType<?>, Object> getComponentsMap(Item item) {
+	private static Reference2ObjectMap<DataComponentType<?>, Object> addExtraComponent(Item item) {
 		if (!(item.components() instanceof DataComponentMap.Builder.SimpleMap(
 			Reference2ObjectMap<DataComponentType<?>, Object> map
 		)))
 			throw new RuntimeException("Couldn't get Item's components map");
 		return map;
+	}
+
+	public static <T> void addExtraComponent(Item item, DataComponentType<T> dataComponentType, T value) {
+		addExtraComponent(item).put(dataComponentType,  value);
+	}
+
+	public static <T> void addExtraComponent(Item item, Supplier<Map.Entry<DataComponentType<T>, T>> supplier) {
+		DataComponentInitializers.Initializer<Item> componentInitializer = (builder, _, _) -> builder.addValidator(_ -> {});
+		componentInitializer = componentInitializer.andThen((builder, _, _) -> {
+			Map.Entry<DataComponentType<T>, T> entry = supplier.get();
+			builder.set(entry.getKey(), entry.getValue());
+		});
+		BuiltInRegistries.DATA_COMPONENT_INITIALIZERS.add(item.builtInRegistryHolder().key(), componentInitializer);
 	}
 
 	private static Item.Properties applyItemProperties(BootstrapContext context, Key itemKey, JsonObject json, Object props) {
@@ -241,6 +257,7 @@ public class ResourceLibBootstrap implements PluginBootstrap {
 			} else {
 				Item item = BuiltInRegistries.ITEM.getValue(Identifier.parse(tag));
 				if (item == Items.AIR) {
+					assert postActions != null;
 					postActions.add(() -> {
 						Item repairItem = BuiltInRegistries.ITEM.getValue(Identifier.parse(tag));
 						if (repairItem == Items.AIR) {
@@ -248,7 +265,7 @@ public class ResourceLibBootstrap implements PluginBootstrap {
 							return;
 						}
 						Item ogItem = BuiltInRegistries.ITEM.getValue(PaperAdventure.asVanilla(itemKey));
-						getComponentsMap(ogItem).put(DataComponents.REPAIRABLE, new Repairable(HolderSet.direct(repairItem.builtInRegistryHolder())));
+						addExtraComponent(ogItem, DataComponents.REPAIRABLE, new Repairable(HolderSet.direct(repairItem.builtInRegistryHolder())));
 					});
 				} else {
 					properties.repairable(item);
@@ -259,6 +276,7 @@ public class ResourceLibBootstrap implements PluginBootstrap {
 			String itemId = json.get("remaining_item").getAsString();
 			Item item = BuiltInRegistries.ITEM.getValue(Identifier.parse(itemId));
 			if (item == Items.AIR) {
+				assert postActions != null;
 				postActions.add(() -> {
 					Item remainingItem = BuiltInRegistries.ITEM.getValue(Identifier.parse(itemId));
 					if (remainingItem == Items.AIR) {
@@ -267,7 +285,7 @@ public class ResourceLibBootstrap implements PluginBootstrap {
 					}
 					Item ogItem = BuiltInRegistries.ITEM.getValue(PaperAdventure.asVanilla(itemKey));
 					try {
-						KiterinoUnsafeUtil.getField(Item.class, "craftingRemainingItem").set(ogItem, remainingItem);
+						KiterinoUnsafeUtil.getField(Item.class, "craftingRemainingItem").set(ogItem, ItemStackTemplate.fromNonEmptyStack(remainingItem.getDefaultInstance()));
 					} catch (IllegalAccessException e) {
 						throw new RuntimeException(e);
 					}
@@ -280,6 +298,7 @@ public class ResourceLibBootstrap implements PluginBootstrap {
 			String itemId = json.get("using_converts_to").getAsString();
 			Item item = BuiltInRegistries.ITEM.getValue(Identifier.parse(itemId));
 			if (item == Items.AIR) {
+				assert postActions != null;
 				postActions.add(() -> {
 					Item usingConvertsTo = BuiltInRegistries.ITEM.getValue(Identifier.parse(itemId));
 					if (usingConvertsTo == Items.AIR) {
@@ -287,7 +306,7 @@ public class ResourceLibBootstrap implements PluginBootstrap {
 						return;
 					}
 					Item ogItem = BuiltInRegistries.ITEM.getValue(PaperAdventure.asVanilla(itemKey));
-					getComponentsMap(ogItem).put(DataComponents.USE_REMAINDER, new UseRemainder(new ItemStack(usingConvertsTo)));
+					addExtraComponent(ogItem, DataComponents.USE_REMAINDER, new UseRemainder(ItemStackTemplate.fromNonEmptyStack(new ItemStack(usingConvertsTo))));
 				});
 			} else {
 				properties.usingConvertsTo(item);
@@ -493,6 +512,8 @@ public class ResourceLibBootstrap implements PluginBootstrap {
 	}
 
 	public static void runPostInitActions() {
+		if (postActions == null) return;
+
 		postActions.forEach(Runnable::run);
 		postActions = null;
 	}

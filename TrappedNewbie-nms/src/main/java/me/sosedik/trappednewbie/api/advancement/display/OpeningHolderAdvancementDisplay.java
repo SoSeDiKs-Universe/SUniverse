@@ -2,7 +2,7 @@ package me.sosedik.trappednewbie.api.advancement.display;
 
 import io.papermc.paper.advancement.AdvancementDisplay;
 import me.sosedik.packetadvancements.api.advancement.IAdvancement;
-import me.sosedik.trappednewbie.TrappedNewbie;
+import me.sosedik.trappednewbie.listener.world.PerPlayerWorlds;
 import me.sosedik.utilizer.Utilizer;
 import me.sosedik.utilizer.api.message.Messenger;
 import net.kyori.adventure.key.Key;
@@ -47,9 +47,9 @@ public class OpeningHolderAdvancementDisplay extends FancierAdvancementDisplay<O
 
 		Component title;
 		if (worldData.ownerName() == null)
-			title = messenger.getMessageIfExists("adv." + this.key + ".title." + worldData.key());
+			title = messenger.getMessageIfExists("adv." + this.key + ".title." + worldData.localeKey());
 		else
-			title = messenger.getMessageIfExists("adv." + this.key + ".title." + worldData.key() + ".guest", raw("owner", worldData.ownerName()));
+			title = messenger.getMessageIfExists("adv." + this.key + ".title." + worldData.localeKey() + ".guest", raw("owner", worldData.ownerName()));
 
 		return title == null ? super.renderTitle(viewer) : title;
 	}
@@ -64,53 +64,47 @@ public class OpeningHolderAdvancementDisplay extends FancierAdvancementDisplay<O
 
 		Component description;
 		if (worldData.ownerName() == null)
-			description = messenger.getMessageIfExists("adv." + this.key + ".description." + worldData.key());
+			description = messenger.getMessageIfExists("adv." + this.key + ".description." + worldData.localeKey());
 		else
-			description = messenger.getMessageIfExists("adv." + this.key + ".description." + worldData.key() + ".guest", raw("owner", worldData.ownerName()));
+			description = messenger.getMessageIfExists("adv." + this.key + ".description." + worldData.localeKey() + ".guest", raw("owner", worldData.ownerName()));
 
 		return description == null ? super.renderDescription(viewer) : description;
 	}
 
 	private WorldData getWorldKey(Player player) {
 		World world = player.getWorld();
+		if (Utilizer.limboWorld() == world)
+			return new WorldData("limbo", null);
+
 		Key worldKey = world.key();
-		if (!TrappedNewbie.NAMESPACE.equals(worldKey.namespace())) {
-			if (Utilizer.limboWorld() == world)
-				return new WorldData("limbo", null);
-			return new WorldData(worldKey.value(), null);
-		}
-
-		final String value = worldKey.value();
-
-		if (value.startsWith("worlds-personal/")) {
+		if (PerPlayerWorlds.PERSONAL_WORLDS_NAMESPACE.equals(worldKey.namespace())) {
 			try {
-				UUID uuid = UUID.fromString(value.substring("worlds-personal/".length()));
+				UUID uuid = UUID.fromString(worldKey.value());
 				if (player.getUniqueId().equals(uuid))
-					return new WorldData("personal", null);
+					return new WorldData(worldKey.namespace(), null);
 
 				OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
-				return new WorldData("personal", offlinePlayer.getName());
-			} catch (IllegalArgumentException ignored) {}
-			return new WorldData(value, null);
+				return new WorldData(worldKey.namespace(), offlinePlayer.getName());
+			} catch (IllegalArgumentException _) {}
+			return new WorldData(worldKey.namespace(), null);
 		}
 
-		if (value.startsWith("worlds-resources/")) {
-			String[] split = value.split("/");
+		if (worldKey.namespace().startsWith(PerPlayerWorlds.RESOURCE_WORLDS_NAMESPACE_PREFIX)) {
 			try {
-				UUID uuid = UUID.fromString(split[split.length - 1]);
+				UUID uuid = UUID.fromString(worldKey.value());
 				if (player.getUniqueId().equals(uuid))
-					return new WorldData("resource." + split[1], null);
+					return new WorldData(worldKey.namespace(), null);
 
 				OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
-				return new WorldData("resource." + split[1], offlinePlayer.getName());
-			} catch (IndexOutOfBoundsException | IllegalArgumentException ignored) {}
-			return new WorldData(value, null);
+				return new WorldData(worldKey.namespace(), offlinePlayer.getName());
+			} catch (IndexOutOfBoundsException | IllegalArgumentException _) {}
+			return new WorldData(worldKey.namespace(), null);
 		}
 
-		return new WorldData(value, null);
+		return new WorldData(worldKey.namespace(), null);
 	}
 
-	private record WorldData(String key, @Nullable String ownerName) {}
+	private record WorldData(String localeKey, @Nullable String ownerName) {}
 
 	@Override
 	public OpeningHolderAdvancementDisplay clone() {

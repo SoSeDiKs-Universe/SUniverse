@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Shulker;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NullMarked;
@@ -26,7 +26,7 @@ public class DyeableShulkers implements Listener {
 	public static final String CLEARED_SHULKER_KEY = "cleared";
 
 	@EventHandler(ignoreCancelled = true)
-	private void onDye(PlayerInteractEntityEvent event) {
+	private void onDye(PlayerInteractAtEntityEvent event) {
 		if (event.getHand() != EquipmentSlot.HAND) return;
 		if (!(event.getRightClicked() instanceof Shulker shulker)) return;
 

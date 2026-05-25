@@ -3,7 +3,6 @@ package me.sosedik.trappednewbie.listener.world;
 import de.tr7zw.nbtapi.NBTCompound;
 import de.tr7zw.nbtapi.NBTPersistentDataContainer;
 import me.sosedik.requiem.feature.GhostyPlayer;
-import me.sosedik.trappednewbie.TrappedNewbie;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieAdvancements;
 import me.sosedik.utilizer.util.NbtProxies;
 import org.bukkit.Location;
@@ -27,7 +26,7 @@ import java.util.UUID;
 @NullMarked
 public class PersonalVoidFall implements Listener {
 
-	public static String LAST_LOCS_TAG = "last_locs";
+	public static final String LAST_LOCS_TAG = "last_locs";
 
 	private static final Set<UUID> PENDING = new HashSet<>();
 
@@ -37,8 +36,7 @@ public class PersonalVoidFall implements Listener {
 		if (event.getDamageSource().getDamageType() != DamageType.OUT_OF_WORLD) return;
 
 		World world = player.getWorld();
-		if (!TrappedNewbie.NAMESPACE.equals(world.key().namespace())) return;
-		if (!world.key().value().startsWith("worlds-personal/")) return;
+		if (!PerPlayerWorlds.PERSONAL_WORLDS_NAMESPACE.equals(world.key().namespace())) return;
 
 		event.setCancelled(true);
 		if (!PENDING.add(player.getUniqueId())) return;
@@ -62,8 +60,7 @@ public class PersonalVoidFall implements Listener {
 	public void onWorldChange(PlayerChangedWorldEvent event) {
 		Player player = event.getPlayer();
 		World world = player.getWorld();
-		if (!TrappedNewbie.NAMESPACE.equals(world.key().namespace())) return;
-		if (!world.key().value().startsWith("worlds-personal/")) return;
+		if (!PerPlayerWorlds.PERSONAL_WORLDS_NAMESPACE.equals(world.key().namespace())) return;
 
 		TrappedNewbieAdvancements.GET_INTO_A_PERSONAL_VOID.awardAllCriteria(player);
 

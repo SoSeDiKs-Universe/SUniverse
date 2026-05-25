@@ -15,7 +15,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NullMarked;
@@ -28,7 +28,7 @@ import org.jspecify.annotations.NullMarked;
 public class IgniteACreeperCompatAdvancement implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR)
-	public void onIgnite(PlayerInteractEntityEvent event) {
+	public void onIgnite(PlayerInteractAtEntityEvent event) {
 		if (!event.isCancelled()) return;
 		if (event.getHand() != EquipmentSlot.HAND) return;
 		if (event.getRightClicked().getType() != EntityType.CREEPER) return;

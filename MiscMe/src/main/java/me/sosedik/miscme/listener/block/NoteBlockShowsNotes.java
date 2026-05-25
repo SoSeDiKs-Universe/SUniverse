@@ -17,7 +17,7 @@ import java.util.Locale;
 /**
  * Display notes when playing note block
  */
-// MCCheck: 1.21.11, new instruments
+// MCCheck: 26.1.2, new instruments
 @NullMarked
 public class NoteBlockShowsNotes implements Listener {
 

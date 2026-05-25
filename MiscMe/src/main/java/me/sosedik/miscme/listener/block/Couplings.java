@@ -125,7 +125,7 @@ public class Couplings implements Listener {
 					return;
 				}
 
-				// Don't close if neighbour is powered
+				// Don't close if neighbor is powered
 				if (newCurrent <= 7 && neighbourBlock.getBlockPower() > 7) {
 					event.setNewCurrent(neighbourBlock.getBlockPower());
 					return;
@@ -168,7 +168,7 @@ public class Couplings implements Listener {
 
 	private boolean isEmptyHanded(Player player) {
 		PlayerInventory inv = player.getInventory();
-		return inv.getItemInMainHand().getType() == Material.AIR && inv.getItemInOffHand().getType() == Material.AIR;
+		return inv.getItemInMainHand().isEmpty() && inv.getItemInOffHand().isEmpty();
 	}
 
 	private void switchOpenableState(Block block, Openable openable, Sound soundOpened, Sound soundClosed) {

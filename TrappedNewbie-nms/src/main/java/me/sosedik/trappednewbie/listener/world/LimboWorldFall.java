@@ -212,7 +212,7 @@ public class LimboWorldFall implements Listener {
 	public static CompletableFuture<@Nullable Void> runTeleport(Player player, World world, @Nullable Location loc, boolean leap) {
 		player.setVelocity(ZERO_VELOCITY);
 		var teleported = new CompletableFuture<@Nullable Void>();
-		if (world.key().value().startsWith("worlds-resources/")) {
+		if (world.key().namespace().startsWith(PerPlayerWorlds.RESOURCE_WORLDS_NAMESPACE_PREFIX)) {
 			if (loc == null) {
 				List<Player> players = world.getPlayers();
 				if (!players.isEmpty()) {

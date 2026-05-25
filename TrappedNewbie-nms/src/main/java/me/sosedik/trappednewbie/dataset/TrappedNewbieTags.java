@@ -9,7 +9,7 @@ import org.bukkit.Tag;
 import org.bukkit.enchantments.Enchantment;
 import org.jspecify.annotations.NullMarked;
 
-// MCCheck: 1.21.11, new branches (chopping blocks, work stations), hardened
+// MCCheck: 26.1.2, new branches (chopping blocks, work stations), hardened
 @NullMarked
 public class TrappedNewbieTags {
 

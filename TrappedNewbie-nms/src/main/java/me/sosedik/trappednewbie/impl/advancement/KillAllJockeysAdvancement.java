@@ -13,7 +13,7 @@ import java.util.List;
 
 import static me.sosedik.packetadvancements.imlp.progress.vanilla.types.VanillaTriggerData.playerKilledEntity;
 
-// MCCheck: 1.21.11, new jockeys
+// MCCheck: 26.1.2, new jockeys
 @NullMarked
 public class KillAllJockeysAdvancement extends BaseAdvancement {
 

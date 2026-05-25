@@ -35,18 +35,18 @@ public class WorldCommand {
 		if (target == null) return;
 
 		if (target.getWorld() == world) {
-			Messenger.messenger(stack.getSender()).sendMessage(CommandUtils.isTargetingOther(stack, target) ? "command.world.already_in.other" : "command.world.already_in", raw("world", world.getName()));
+			Messenger.messenger(stack.getSender()).sendMessage(CommandUtils.isTargetingOther(stack, target) ? "command.world.already_in.other" : "command.world.already_in", raw("world", world.key().asString()));
 			return;
 		}
 
 		if (CommandUtils.isTargetingOther(stack, target))
-			Messenger.messenger(stack.getSender()).sendMessage("command.world.other", raw("world", world.getName()), raw("player", target.displayName()));
+			Messenger.messenger(stack.getSender()).sendMessage("command.world.other", raw("world", world.key().asString()), raw("player", target.displayName()));
 
 		Essence.scheduler().sync(() -> {
 			LocationUtil.smartTeleport(target, keepPos ? target.getLocation().world(world) : world.getSpawnLocation().center(1), false)
 				.thenAccept(_ -> {
 					if (!silent)
-						Messenger.messenger(target).sendMessage("command.world", raw("world", world.getName()));
+						Messenger.messenger(target).sendMessage("command.world", raw("world", world.key().asString()));
 				});
 		});
 	}

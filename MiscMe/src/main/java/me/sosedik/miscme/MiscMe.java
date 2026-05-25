@@ -39,7 +39,6 @@ import me.sosedik.miscme.listener.block.NoIceInNether;
 import me.sosedik.miscme.listener.block.NoteBlockShowsNotes;
 import me.sosedik.miscme.listener.block.PickableSnow;
 import me.sosedik.miscme.listener.block.SignsRetain;
-import me.sosedik.miscme.listener.entity.AnimalAgeLocking;
 import me.sosedik.miscme.listener.entity.ArmorStandBedrockPoses;
 import me.sosedik.miscme.listener.entity.ArmorStandSpawnsWithArms;
 import me.sosedik.miscme.listener.entity.BetterEntitySuffocation;
@@ -182,7 +181,6 @@ public final class MiscMe extends JavaPlugin {
 			PickableSnow.class,
 			SignsRetain.class,
 			// entity
-			AnimalAgeLocking.class,
 			ArmorStandBedrockPoses.class,
 			ArmorStandSpawnsWithArms.class,
 			BetterEntitySuffocation.class,

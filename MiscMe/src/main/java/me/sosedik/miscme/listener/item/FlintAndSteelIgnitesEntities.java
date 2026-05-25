@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Pose;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NullMarked;
@@ -26,7 +26,7 @@ public class FlintAndSteelIgnitesEntities implements Listener {
 	public static final int FIRE_DURATION_TICKS = 8 * 20;
 	
 	@EventHandler(ignoreCancelled = true)
-	public void onFlintAndSteelApply(PlayerInteractEntityEvent event) {
+	public void onFlintAndSteelApply(PlayerInteractAtEntityEvent event) {
 		if (event.getHand() != EquipmentSlot.HAND) return;
 		if (!(event.getRightClicked() instanceof LivingEntity rightClicked)) return;
 

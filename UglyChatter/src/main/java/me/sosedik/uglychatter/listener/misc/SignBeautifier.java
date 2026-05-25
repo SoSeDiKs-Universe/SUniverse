@@ -15,6 +15,7 @@ import com.github.retrooper.packetevents.wrapper.PacketWrapper;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerBlockEntityData;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerChunkData;
 import io.papermc.paper.event.player.PlayerOpenSignEvent;
+import me.sosedik.uglychatter.UglyChatter;
 import me.sosedik.uglychatter.api.chat.FancyMessageRenderer;
 import me.sosedik.uglychatter.api.chat.FancyRendererTag;
 import me.sosedik.utilizer.api.message.Messenger;
@@ -27,6 +28,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.SignChangeEvent;
+import org.bukkit.event.player.PlayerLocaleChangeEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.jspecify.annotations.NullMarked;
 
@@ -38,22 +40,23 @@ import java.util.UUID;
 /**
  * Adds fancies support for signs
  */
-// MCCheck: 1.21.11, sign block entity data
+// MCCheck: 26.1.2, sign block entity data
 @NullMarked
 public class SignBeautifier implements PacketListener, Listener {
 
-	private static final Set<UUID> RENDER_BLACKLIST = new HashSet<>();
+	private final Set<UUID> renderBlacklist = new HashSet<>();
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onSignChange(SignChangeEvent event) {
 		Player player = event.getPlayer();
-		RENDER_BLACKLIST.remove(player.getUniqueId());
+		this.renderBlacklist.remove(player.getUniqueId());
 
 		// Note: event.lines() is a live container
 		List<Component> lines = event.lines();
 		for (var i = 0; i < lines.size(); i++) {
 			Component line = lines.get(i);
 			if (line == null) continue;
+
 			// Reset input to make it easier to parse later
 			String rawLine = FancyMessageRenderer.getRawInput(line, FancyRendererTag.SKIP_MARKDOWN);
 			line = Component.text(rawLine);
@@ -63,18 +66,24 @@ public class SignBeautifier implements PacketListener, Listener {
 
 	@EventHandler
 	public void onQuit(PlayerQuitEvent event) {
-		Player player = event.getPlayer();
-		RENDER_BLACKLIST.remove(player.getUniqueId());
+		this.renderBlacklist.remove(event.getPlayer().getUniqueId());
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onSignClick(PlayerOpenSignEvent event) {
 		Player player = event.getPlayer();
-		RENDER_BLACKLIST.add(player.getUniqueId());
+		this.renderBlacklist.add(player.getUniqueId());
 
 		// Resend raw (not rendered) sign data
 		Sign sign = event.getSign();
 		player.sendBlockUpdate(sign.getLocation(), sign);
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void onLocaleChange(PlayerLocaleChangeEvent event) {
+		Player player = event.getPlayer();
+		UglyChatter.scheduler().sync(() -> player.getSentChunks().forEach(chunk -> chunk.getTileEntities(block -> block.getState(false) instanceof Sign, false)
+			.forEach(blockState -> player.sendBlockUpdate(blockState.getLocation(), (Sign) blockState))), 1L);
 	}
 
 	@Override
@@ -88,7 +97,7 @@ public class SignBeautifier implements PacketListener, Listener {
 
 	private void handleBlockEntityData(Player player, WrapperPlayServerBlockEntityData wrapper) {
 		if (!isSign(wrapper.getBlockEntityType())) return;
-		if (RENDER_BLACKLIST.contains(player.getUniqueId())) return;
+		if (this.renderBlacklist.contains(player.getUniqueId())) return;
 
 		MiniMessage miniMessage = Messenger.messenger(player).miniMessage();
 		NBTCompound nbt = wrapper.getNBT();

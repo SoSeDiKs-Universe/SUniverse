@@ -31,7 +31,7 @@ public interface Database {
 	 * Opens the database connection
 	 *
 	 * @return database connection
-	 * @throws SQLException sql exception
+	 * @throws SQLException SQL exception
 	 */
 	Connection openConnection() throws SQLException;
 

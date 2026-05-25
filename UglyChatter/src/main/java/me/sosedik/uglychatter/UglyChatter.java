@@ -14,6 +14,7 @@ import me.sosedik.uglychatter.listener.misc.SignBeautifier;
 import me.sosedik.utilizer.api.language.TranslationHolder;
 import me.sosedik.utilizer.api.message.Mini;
 import me.sosedik.utilizer.util.EventUtil;
+import me.sosedik.utilizer.util.Scheduler;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -25,9 +26,12 @@ public class UglyChatter extends JavaPlugin {
 
 	private static @UnknownNullability UglyChatter instance;
 
+	private @UnknownNullability Scheduler scheduler;
+
 	@Override
 	public void onLoad() {
 		UglyChatter.instance = this;
+		this.scheduler = new Scheduler(this);
 
 		TranslationHolder.extractLocales(this);
 
@@ -68,6 +72,15 @@ public class UglyChatter extends JavaPlugin {
 	 */
 	public static UglyChatter instance() {
 		return UglyChatter.instance;
+	}
+
+	/**
+	 * Gets the plugin's task scheduler
+	 *
+	 * @return the plugin's task scheduler
+	 */
+	public static Scheduler scheduler() {
+		return instance().scheduler;
 	}
 
 	/**

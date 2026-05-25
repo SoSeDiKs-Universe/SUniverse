@@ -16,7 +16,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NullMarked;
@@ -37,7 +37,7 @@ public class ShearableEntities implements Listener {
 	private static final String LAST_SHEAR_TAG = "last_shear";
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-	public void onShear(PlayerInteractEntityEvent event) {
+	public void onShear(PlayerInteractAtEntityEvent event) {
 		if (event.getHand() != EquipmentSlot.HAND) return;
 		if (!(event.getRightClicked() instanceof LivingEntity entity)) return;
 		if (!entity.isValid()) return;

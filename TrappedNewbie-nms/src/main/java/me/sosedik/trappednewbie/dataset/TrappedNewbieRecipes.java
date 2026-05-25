@@ -729,7 +729,7 @@ public class TrappedNewbieRecipes {
 			.addIngredients(Material.SNOW_BLOCK)
 			.register();
 
-		// MCCheck: 1.21.11, new logs
+		// MCCheck: 26.1.2, new logs
 		List.of(
 			Material.OAK_LOG, Material.BIRCH_LOG, Material.SPRUCE_LOG, Material.JUNGLE_LOG,
 			Material.ACACIA_LOG, Material.DARK_OAK_LOG, Material.MANGROVE_LOG, Material.CHERRY_LOG,
@@ -1599,9 +1599,7 @@ public class TrappedNewbieRecipes {
 			"paper", "bowl",
 			"iron_bars", "iron_chain", "copper_bars", "copper_chain",
 			"snow_block", "snow",
-			"bookshelf",
-			/// There aren't deleted automatically due to typos
-			"chiseled_stone_bricks_stone_from_stonecutting", "stone_brick_walls_from_stone_stonecutting"
+			"bookshelf"
 		}) {
 			removeRecipe(recipe);
 		}

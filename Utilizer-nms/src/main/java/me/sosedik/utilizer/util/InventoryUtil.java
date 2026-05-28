@@ -85,7 +85,7 @@ public class InventoryUtil {
 	}
 
 	/**
-	 * Tries to finder an item within player's inventory
+	 * Tries to find an item within player's inventory
 	 *
 	 * @param player player
 	 * @param predicate item predicate
@@ -170,7 +170,7 @@ public class InventoryUtil {
 	}
 
 	/**
-	 * Tries to finder an item within player's inventory
+	 * Tries to find and modify an item within player's inventory
 	 *
 	 * @param entity entity
 	 * @param predicate item modifier
@@ -179,12 +179,16 @@ public class InventoryUtil {
 		EntityEquipment inventory = entity.getEquipment();
 		if (inventory == null) return;
 
-		inventory.setItemInOffHand(modifyFolding(inventory.getItemInOffHand(), predicate));
+		ItemStack tempItem = inventory.getItemInOffHand();
+		if (!tempItem.isEmpty())
+			inventory.setItemInOffHand(modifyFolding(tempItem, predicate));
 
 		for (EquipmentSlot slot : EquipmentSlot.values()) {
 			if (!entity.canUseEquipmentSlot(slot)) continue;
 
-			inventory.setItem(slot, modifyFolding(inventory.getItem(slot), predicate));
+			tempItem = inventory.getItem(slot);
+			if (!tempItem.isEmpty())
+				inventory.setItem(slot, modifyFolding(tempItem, predicate));
 		}
 
 		if (entity instanceof Player player) {
@@ -196,6 +200,7 @@ public class InventoryUtil {
 
 				storage[i] = modifyFolding(item, predicate);
 			}
+			player.getInventory().setStorageContents(storage);
 
 			InventoryView view = player.getOpenInventory();
 			if (view.getType() == InventoryType.CRAFTING) {
@@ -207,7 +212,9 @@ public class InventoryUtil {
 				}
 			}
 
-			view.setCursor(modifyFolding(view.getCursor(), predicate));
+			tempItem = view.getCursor();
+			if (!tempItem.isEmpty())
+				view.setCursor(modifyFolding(tempItem, predicate));
 
 			for (ExtraItemChecker extras : EXTRA_ITEM_CHECKERS)
 				extras.modifier().accept(player, predicate);
@@ -378,17 +385,21 @@ public class InventoryUtil {
 	 *
 	 * @param inventory inventory
 	 * @param nbt nbt
+	 * @return whether any item was stored
 	 */
-	public static void storeSlotted(Inventory inventory, ReadWriteNBT nbt, @Nullable Predicate<ItemStack> storageCheck) {
+	public static boolean storeSlotted(Inventory inventory, ReadWriteNBT nbt, @Nullable Predicate<ItemStack> storageCheck) {
 		nbt.removeKey(STORED_SLOTTED_ITEMS_TAG);
 		ReadWriteNBT itemsTag = nbt.getOrCreateCompound(STORED_SLOTTED_ITEMS_TAG);
+		boolean storedAny = false;
 		for (int slot = 0; slot < inventory.getSize(); slot++) {
 			ItemStack item = inventory.getItem(slot);
 			if (ItemStack.isEmpty(item)) continue;
 			if (storageCheck != null && !storageCheck.test(item)) continue;
 
+			storedAny = true;
 			itemsTag.setItemStack(String.valueOf(slot), item);
 		}
+		return storedAny;
 	}
 
 	/**

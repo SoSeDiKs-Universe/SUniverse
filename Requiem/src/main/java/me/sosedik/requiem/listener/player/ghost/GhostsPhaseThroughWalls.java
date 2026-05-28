@@ -42,10 +42,11 @@ public class GhostsPhaseThroughWalls implements Listener {
 	public void onBow(EntityShootBowEvent event) {
 		if (!(event.getEntity() instanceof Player player)) return;
 		if (!ItemStack.isType(event.getBow(), RequiemItems.GHOST_RELOCATOR)) return;
-		if (event.getForce() < 1F) return;
-		if (!GhostyPlayer.isGhost(player)) return;
 
 		event.setCancelled(true);
+
+		if (event.getForce() < 1F) return;
+		if (!GhostyPlayer.isGhost(player)) return;
 
 		CustomTotemOfUndyingModifier.playTotemEffect(player, event.getBow());
 		LocationUtil.smartTeleport(player, player.getLocation().y(320), false)

@@ -51,17 +51,17 @@ public class ItemCommand {
 			return;
 		}
 
-		ItemStack item = ItemStack.of(type, amount);
+		var item = ItemStack.of(type, amount);
 		Essence.scheduler().sync(() -> {
 			target.getInventory().addItem(item);
 			if (!silent) {
 				Messenger.messenger(target).sendMessage("command.item.received",
-					raw("item", item.effectiveName()),
+					raw("item", item.effectiveName().hoverEvent(item)),
 					raw("amount", amount));
 			}
 			if (CommandUtils.isTargetingOther(stack, target)) {
 				Messenger.messenger(stack.getSender()).sendMessage("command.item.gave",
-					raw("item", item.effectiveName()),
+					raw("item", item.effectiveName().hoverEvent(item)),
 					raw("amount", amount),
 					raw("player", target.displayName()));
 			}

@@ -11,6 +11,7 @@ import me.sosedik.requiem.api.event.player.PlayerStopPossessingEntityEvent;
 import me.sosedik.requiem.api.event.player.PlayerTryPossessingEntityEvent;
 import me.sosedik.requiem.dataset.RequiemEffects;
 import me.sosedik.requiem.dataset.RequiemItems;
+import me.sosedik.requiem.listener.player.possessed.PossessingOverMobs;
 import me.sosedik.requiem.task.DynamicScaleTask;
 import me.sosedik.requiem.task.PoseMimicingTask;
 import me.sosedik.utilizer.api.storage.player.PlayerDataStorage;
@@ -35,7 +36,6 @@ import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Squid;
 import org.bukkit.inventory.EntityEquipment;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.MainHand;
@@ -69,7 +69,11 @@ public class PossessingPlayer {
 	private static final List<Predicate<Player>> ITEM_RULES = new ArrayList<>();
 
 	/**
-	 * Checks whether the player is possessing a mob
+	 * Checks whether the player is possessing a mob.
+	 * <p>
+	 * {@link #isPossessingSoft(Player)} should be used if the call
+	 * can happen during e.g. cross-dimension teleports, where the
+	 * possessed entity may briefly be not ridden.
 	 *
 	 * @param player player
 	 * @return whether the player is possessing a mob
@@ -78,7 +82,7 @@ public class PossessingPlayer {
 		boolean possessing = isPossessingSoft(player);
 		if (possessing && getPossessed(player) == null) {
 			possessing = false;
-			stopPossessing(player, true);
+			stopPossessing(player, null, false, true);
 		}
 		return possessing;
 	}
@@ -156,7 +160,7 @@ public class PossessingPlayer {
 		new DynamicScaleTask(player, entity);
 		new PoseMimicingTask(player, entity);
 
-		Requiem.logger().info("Making " + player.getName() + " possess " + entity.getType().getKey());
+		Requiem.logger().info("Making {} possess {}", player.getName(), entity.getType().getKey());
 		return true;
 	}
 
@@ -174,25 +178,27 @@ public class PossessingPlayer {
 	 *
 	 * @param player player
 	 * @param riding possessed entity
+	 * @param quit whether the possession is stopped due to player leaving the game
 	 * @param saveInventoryToMob whether to save player's inventory to mob, clearing the player's one in the process
 	 */
 	public static @Nullable LivingEntity stopPossessing(Player player, @Nullable LivingEntity riding, boolean quit, boolean saveInventoryToMob) {
-		if (!isPossessingSoft(player)) return null;
+		if (!isPossessingSoft(player)) {
+			checkPossessedExtraItems(player, true);
+			return null;
+		}
 
 		if (quit) {
 			if (riding != null) riding.remove();
 		} else if (saveInventoryToMob) {
 			if (riding != null) {
+				if (riding.getEquipment() != null)
+					riding.getEquipment().clear(); // It'll get populated from player
 				NBT.modifyPersistentData(riding, nbt -> {
 					nbt = nbt.getOrCreateCompound(POSSESSED_TAG);
 
-					if (nbt.hasTag(POSSESSED_PERSISTENT_TAG)) {
-						boolean persistent = nbt.getBoolean(POSSESSED_PERSISTENT_TAG);
-						nbt.removeKey(POSSESSED_PERSISTENT_TAG);
-						riding.setPersistent(persistent);
-					}
-
-					InventoryUtil.storeSlotted(player.getInventory(), nbt, item -> !isExtraPossessedItem(item));
+					boolean storedAny = InventoryUtil.storeSlotted(player.getInventory(), nbt, item -> !isExtraPossessedItem(item) && !PossessingOverMobs.restorePossessedItem(riding, item));
+					if (storedAny)
+						riding.setPersistent(true);
 				});
 			} else {
 				Inventory inventory = player.getInventory();
@@ -202,10 +208,22 @@ public class PossessingPlayer {
 					if (ItemStack.isEmpty(item)) continue;
 					if (isExtraPossessedItem(item)) continue;
 
+					PossessingOverMobs.unmarkPossessedItem(item);
+
 					loc.getWorld().dropItemNaturally(loc, item);
 				}
 			}
 			player.getInventory().clear();
+		} else if (riding != null) {
+			NBT.modifyPersistentData(riding, nbt -> {
+				nbt = nbt.getOrCreateCompound(POSSESSED_TAG);
+
+				if (nbt.hasTag(POSSESSED_PERSISTENT_TAG)) {
+					boolean persistent = nbt.getBoolean(POSSESSED_PERSISTENT_TAG);
+					nbt.removeKey(POSSESSED_PERSISTENT_TAG);
+					riding.setPersistent(persistent);
+				}
+			});
 		}
 
 		player.setInvisible(false);
@@ -215,8 +233,7 @@ public class PossessingPlayer {
 
 		POSSESSING.remove(player.getUniqueId());
 
-		if (riding != null)
-			removePossessedExtraItems(riding);
+		checkPossessedExtraItems(player, true);
 
 		PotionEffect unluck = player.getPotionEffect(PotionEffectType.UNLUCK);
 		player.clearActivePotionEffects();
@@ -233,8 +250,8 @@ public class PossessingPlayer {
 
 		player.leaveVehicle();
 
-		if (riding != null) Requiem.logger().info("Making " + player.getName() + " no longer possess " + riding.getType().name());
-		else Requiem.logger().info("Making " + player.getName() + " no longer possess an entity");
+		if (riding != null) Requiem.logger().info("Making {} no longer possess {}", player.getName(), riding.getType().name());
+		else Requiem.logger().info("Making {} no longer possess an entity", player.getName());
 
 		return riding;
 	}
@@ -349,15 +366,22 @@ public class PossessingPlayer {
 
 	public static void applyCurses(Player player, LivingEntity entity) {
 		UnaryOperator<ItemStack> modifier = item -> {
-			if (!item.hasData(DataComponentTypes.TOOL) && !item.hasData(DataComponentTypes.WEAPON) && !MaterialTags.ARMOR.isTagged(item))
-				return item;
+			if (!shouldHoldCurse(item)) return item;
 
-			item.addUnsafeEnchantment(Enchantment.BINDING_CURSE, 1);
+			if (Enchantment.BINDING_CURSE.canEnchantItem(item))
+				item.addUnsafeEnchantment(Enchantment.BINDING_CURSE, 1);
 			item.addUnsafeEnchantment(Enchantment.VANISHING_CURSE, 1);
 			return item;
 		};
 		InventoryUtil.modifyItems(entity, modifier);
 		InventoryUtil.modifyItems(player, modifier);
+	}
+
+	private static boolean shouldHoldCurse(ItemStack item) {
+		return item.hasData(DataComponentTypes.TOOL)
+			|| item.hasData(DataComponentTypes.WEAPON)
+			|| MaterialTags.ARMOR.isTagged(item)
+			|| item.hasData(DataComponentTypes.ENCHANTABLE);
 	}
 
 	private static PotionEffect infinitePotionEffect(PotionEffectType type) {
@@ -376,10 +400,7 @@ public class PossessingPlayer {
 		if (!entity.getPassengers().isEmpty()) return false;
 		if (entity instanceof AbstractHorse) return false;
 		return switch (entity) {
-			case Animals animals -> true;
-			case Fish fish -> true;
-			case Squid squid -> true;
-			case Golem golem -> true;
+			case Animals _, Fish _, Squid _, Golem _ -> true;
 			default -> {
 				EntityType entityType = entity.getType();
 				yield Tag.ENTITY_TYPES_UNDEAD.isTagged(entityType);
@@ -399,6 +420,21 @@ public class PossessingPlayer {
 			case PLAYER, ARMOR_STAND, MANNEQUIN, ENDER_DRAGON, WITHER -> false;
 			default -> true;
 		};
+	}
+
+	/**
+	 * Gets items stored on entity
+	 *
+	 * @param entity entity
+	 * @return the items stored on entity
+	 */
+	public static List<ItemStack> getStoredItems(LivingEntity entity) {
+		return NBT.modifyPersistentData(entity, nbt -> {
+			nbt = nbt.getOrCreateCompound(POSSESSED_TAG);
+			List<ItemStack> items = new ArrayList<>();
+			InventoryUtil.restoreFromSlotted(null, nbt, items::addAll);
+			return items;
+		});
 	}
 
 	/**
@@ -433,7 +469,7 @@ public class PossessingPlayer {
 	 * @param quit whether this saving is due to player quitting
 	 */
 	public static void savePossessedData(Player player, ReadWriteNBT data, boolean quit) {
-		if (!isPossessing(player)) return;
+		if (!isPossessingSoft(player)) return;
 
 		LivingEntity entity = getPossessed(player);
 		if (entity == null) return;
@@ -482,18 +518,32 @@ public class PossessingPlayer {
 	 */
 	public static boolean checkPossessedExtraItems(Player player, boolean remove) {
 		LivingEntity possessed = getPossessed(player);
+		if (!isPossessingSoft(player)) {
+			removePossessedExtraItems(player);
+			if (remove)
+				PossessingOverMobs.unmarkPossessedItems(player);
+			if (possessed != null)
+				removePossessedExtraItems(possessed);
+			return false;
+		}
+
 		if (possessed == null) {
 			removePossessedExtraItems(player);
 			return false;
 		}
 
-		if (remove)
+		if (remove) {
 			removePossessedExtraItems(player);
+			removePossessedExtraItems(possessed);
+			PossessingOverMobs.unmarkPossessedItems(player);
+		}
 
 		for (Predicate<Player> predicate : ITEM_RULES) {
 			if (predicate.test(player)) {
-				if (!remove)
+				if (!remove) {
 					removePossessedExtraItems(player);
+					removePossessedExtraItems(possessed);
+				}
 				return false;
 			}
 		}
@@ -515,23 +565,8 @@ public class PossessingPlayer {
 		return possessed instanceof Golem || !hasAttritionAtOrHigherThan(player, MAX_ATTRITION_LEVEL);
 	}
 
-	private static void removePossessedExtraItems(Player player) {
-		removePossessedExtraItems((LivingEntity) player);
-		LivingEntity possessed = getPossessed(player);
-		if (possessed != null)
-			removePossessedExtraItems(possessed);
-	}
-
 	private static void removePossessedExtraItems(LivingEntity entity) {
-		if (entity.getEquipment() == null) return;
-
-		for (EquipmentSlot slot : EquipmentSlot.values()) {
-			if (!entity.canUseEquipmentSlot(slot)) continue;
-
-			ItemStack item = entity.getEquipment().getItem(slot);
-			if (isExtraPossessedItem(item))
-				entity.getEquipment().setItem(slot, null);
-		}
+		InventoryUtil.modifyItems(entity, item -> isExtraPossessedItem(item) ? ItemStack.empty() : item);
 	}
 
 	/**

@@ -36,8 +36,12 @@ public class MathUtil {
 	 * @return decimal part of the value
 	 */
 	public static double getDecimalPart(double value) {
-		var bigDecimal = BigDecimal.valueOf(value);
-		return bigDecimal.subtract(new BigDecimal(bigDecimal.intValue())).doubleValue();
+		try {
+			var bigDecimal = BigDecimal.valueOf(value);
+			return bigDecimal.subtract(new BigDecimal(bigDecimal.intValue())).doubleValue();
+		} catch (NumberFormatException _) {
+			return 0D;
+		}
 	}
 
 	/**

@@ -22,7 +22,7 @@ public class DeathMakesGhosts implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onRespawn(PlayerRespawnEvent event) {
-		if (event.getRespawnFlags().contains(PlayerRespawnEvent.RespawnFlag.END_PORTAL)) return;
+		if (event.getRespawnReason() == PlayerRespawnEvent.RespawnReason.END_PORTAL) return;
 
 		Player player = event.getPlayer();
 		event.setRespawnLocation(player.getLocation());
@@ -31,7 +31,7 @@ public class DeathMakesGhosts implements Listener {
 
 	@EventHandler
 	public void onPostRespawn(PlayerPostRespawnEvent event) {
-		if (event.getRespawnFlags().contains(PlayerRespawnEvent.RespawnFlag.END_PORTAL)) return;
+		if (event.getRespawnReason() == PlayerRespawnEvent.RespawnReason.END_PORTAL) return;
 
 		Player player = event.getPlayer();
 		if (!GhostyPlayer.isGhost(player)) return;

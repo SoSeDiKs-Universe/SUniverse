@@ -22,6 +22,7 @@ public class HostRevocatorBodyLeaving implements Listener {
 		if (event.getForce() < 1F) return;
 
 		event.setCancelled(true);
+		if (GhostyPlayer.isGhost(player)) return;
 
 		PossessingPlayer.stopPossessing(player, true);
 		GhostyPlayer.markGhost(player);

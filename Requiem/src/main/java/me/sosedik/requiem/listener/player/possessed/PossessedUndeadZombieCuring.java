@@ -178,7 +178,7 @@ public class PossessedUndeadZombieCuring implements Listener {
 
 			Player rider = this.entity.getRider();
 			if (rider == null) return true;
-			if (!PossessingPlayer.isPossessing(rider)) return true;
+			if (!PossessingPlayer.isPossessingSoft(rider)) return true;
 
 			if (!rider.hasPotionEffect(PotionEffectType.STRENGTH))
 				rider.addPotionEffect(PotionEffectType.STRENGTH.createEffect(this.cureTicks, 0));

@@ -22,7 +22,7 @@ public class AttritionLimitations implements Listener {
 
 	static {
 		NotDroppableItems.addRule(new NotDroppableItems.NotDroppableRule(
-			(entity, item) -> {
+			(entity, _) -> {
 				if (!(entity instanceof Player player)) return false;
 				if (!PossessingPlayer.isPossessing(player)) return false;
 				if (PossessingPlayer.canDropItems(player)) return false;

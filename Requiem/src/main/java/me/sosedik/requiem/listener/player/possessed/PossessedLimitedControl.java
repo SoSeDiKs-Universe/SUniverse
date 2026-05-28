@@ -36,7 +36,7 @@ public class PossessedLimitedControl implements Listener {
 	@EventHandler
 	public void onTick(ServerTickStartEvent event) {
 		Bukkit.getOnlinePlayers().forEach(player -> {
-			if (!GhostyPlayer.isGhost(player) && !PossessingPlayer.isPossessing(player)) return;
+			if (!GhostyPlayer.isGhost(player) && !PossessingPlayer.isPossessingSoft(player)) return;
 
 			player.setStatistic(Statistic.TIME_SINCE_DEATH, 0);
 			player.setStatistic(Statistic.TIME_SINCE_REST, 0);

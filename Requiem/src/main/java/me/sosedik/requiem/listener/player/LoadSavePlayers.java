@@ -31,7 +31,7 @@ public class LoadSavePlayers implements Listener {
 		Player player = event.getPlayer();
 		ReadWriteNBT data = event.getData();
 		boolean quit = event.isQuit();
-		if (PossessingPlayer.isPossessing(player))
+		if (PossessingPlayer.isPossessingSoft(player))
 			PossessingPlayer.savePossessedData(player, data, quit);
 		else if (GhostyPlayer.isGhost(player))
 			GhostyPlayer.saveGhostState(player, data, quit);

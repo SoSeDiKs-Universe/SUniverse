@@ -38,7 +38,7 @@ public class NotDroppableItems implements Listener {
 	private static final List<NotDroppableRule> RULES = new ArrayList<>();
 
 	static {
-		addRule(new NotDroppableRule((entity, item) -> UtilizerTags.NOT_DROPPABLE.isTagged(item.getType())));
+		addRule(new NotDroppableRule((_, item) -> UtilizerTags.NOT_DROPPABLE.isTagged(item.getType())));
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
@@ -141,7 +141,7 @@ public class NotDroppableItems implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onPickup(ItemSpawnEvent event) {
+	public void onSpawn(ItemSpawnEvent event) {
 		ItemStack item = event.getEntity().getItemStack();
 		for (NotDroppableRule rule : RULES) {
 			if (!rule.rule.test(event.getEntity(), item)) continue;

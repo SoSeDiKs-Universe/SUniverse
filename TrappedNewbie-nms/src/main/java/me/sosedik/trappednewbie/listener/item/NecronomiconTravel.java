@@ -190,7 +190,7 @@ public class NecronomiconTravel implements Listener {
 				item.setData(DataComponentTypes.TOOLTIP_DISPLAY, TooltipDisplay.tooltipDisplay().addHiddenComponents(DataComponentTypes.PROFILE).build());
 				return new ItemWrapper(item);
 			})
-			.addClickHandler(click -> {
+			.addClickHandler(_ -> {
 				if (PENDING.containsKey(player.getUniqueId()) || PossessingPlayer.isPossessing(player)) {
 					player.closeInventory();
 					player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_SCREAM, 2F, 0.3F);
@@ -240,7 +240,7 @@ public class NecronomiconTravel implements Listener {
 						));
 						return new ItemWrapper(item);
 					})
-					.addClickHandler(click -> {
+					.addClickHandler(_ -> {
 						if (PENDING.containsKey(player.getUniqueId()) || PossessingPlayer.isPossessing(player)) {
 							player.closeInventory();
 							player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_SCREAM, 2F, 0.3F);

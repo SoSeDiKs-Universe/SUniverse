@@ -64,8 +64,12 @@ public class WorldAwareRequiemAbilities implements Listener {
 		if (GhostyPlayer.isGhost(player)) {
 			GhostyPlayer.checkCanGhostFly(player);
 			GhostyPlayer.checkCanHoldGhostItems(player);
-		} else if (PossessingPlayer.isPossessing(player)) {
-			PossessingPlayer.checkPossessedExtraItems(player, false);
+		} else if (PossessingPlayer.isPossessingSoft(player)) {
+			// Delay is needed as teleport re-mount happens after the player has changed the world
+			Requiem.scheduler().sync(() -> {
+				if (PossessingPlayer.isPossessing(player))
+					PossessingPlayer.checkPossessedExtraItems(player, false);
+			}, 1L);
 		}
 	}
 

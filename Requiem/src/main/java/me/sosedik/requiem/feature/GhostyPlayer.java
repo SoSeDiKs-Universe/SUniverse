@@ -67,15 +67,14 @@ public class GhostyPlayer {
 		boolean freshAdd = GHOSTS.add(player.getUniqueId());
 
 		if (freshAdd) {
-			if (!player.isInvisible()) {
-				player.getInventory().forEach(item -> {
-					if (ItemStack.isEmpty(item)) return;
+			player.getInventory().forEach(item -> {
+				if (ItemStack.isEmpty(item)) return;
 
-					if (!item.hasEnchant(Enchantment.VANISHING_CURSE))
-						player.dropItem(item, true, i -> i.setPickupDelay(5));
-					item.setAmount(0);
-				});
-			}
+				if (!item.hasEnchant(Enchantment.VANISHING_CURSE))
+					player.dropItem(item, true, i -> i.setPickupDelay(5));
+				player.sendMessage(item.effectiveName());
+				item.setAmount(0);
+			});
 			player.setLevel(0);
 			player.setExp(0F);
 		}

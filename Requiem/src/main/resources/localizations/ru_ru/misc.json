@@ -6,5 +6,6 @@
 	"creeper_heart.subtitle.3": "<gold>Желудок необычно урчит",
 	"creeper_heart.subtitle.2": "<gold>Почему?..",
 	"creeper_heart.subtitle.1": "<gold>Ваш разум расширяется",
-	"creeper_heart.subtitle.0": ""
+	"creeper_heart.subtitle.0": "",
+	"drop.entity_soulbound": "Предметы, привязанные к душе управляемого тела, нельзя выбросить"
 }

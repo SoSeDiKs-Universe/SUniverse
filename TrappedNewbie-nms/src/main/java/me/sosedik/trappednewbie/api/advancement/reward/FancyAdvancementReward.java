@@ -115,6 +115,7 @@ public class FancyAdvancementReward extends SimpleAdvancementRewardBuilder<Fancy
 
 	public FancyAdvancementReward withDeathTrophy(Supplier<ItemStack> item) {
 		return withTrophy(item, true).withExtraAction(data -> {
+			if (true) return; // TODO re-enable trophies
 			Player completer = data.completer();
 			if (completer == null) return;
 

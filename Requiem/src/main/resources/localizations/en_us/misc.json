@@ -6,5 +6,6 @@
 	"creeper_heart.subtitle.3": "<gold>Your stomach feels weird",
 	"creeper_heart.subtitle.2": "<gold>Why?..",
 	"creeper_heart.subtitle.1": "<gold>Your mind is expanding",
-	"creeper_heart.subtitle.0": ""
+	"creeper_heart.subtitle.0": "",
+	"drop.entity_soulbound": "Your possessed body's soulbound items can't be dropped"
 }

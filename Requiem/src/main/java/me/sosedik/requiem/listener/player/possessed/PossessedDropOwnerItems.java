@@ -27,11 +27,17 @@ public class PossessedDropOwnerItems implements Listener {
 		if (PossessingPlayer.getPossessed(rider) != entity) return;
 
 		List<ItemStack> drops = event.getDrops();
-		drops.clear();
+
 		List<ItemStack> newDrops = Arrays.stream(rider.getInventory().getContents())
-			.filter(item -> !ItemStack.isEmpty(item))
-			.filter(item -> !item.hasEnchant(Enchantment.VANISHING_CURSE))
+			.filter(item -> {
+				if (ItemStack.isEmpty(item)) return false;
+				if (item.hasEnchant(Enchantment.VANISHING_CURSE)) return false;
+
+				float dropChance = PossessingOverMobs.getPossessedSoulboundItemDropChance(item, true);
+				return dropChance >= 1F || Math.random() <= dropChance;
+			})
 			.toList();
+
 		drops.addAll(newDrops);
 	}
 

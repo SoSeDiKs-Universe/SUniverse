@@ -15,7 +15,7 @@ public final class AttritionEffect extends TickableCustomEffect {
 
 	@Override
 	public boolean applyEffectTick(LivingEntity entity, int amplifier) {
-		return entity instanceof Player player && PossessingPlayer.isPossessing(player);
+		return entity instanceof Player player && PossessingPlayer.isPossessingSoft(player);
 	}
 
 }

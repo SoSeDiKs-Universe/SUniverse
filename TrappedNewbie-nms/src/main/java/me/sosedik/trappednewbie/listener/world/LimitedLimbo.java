@@ -3,6 +3,7 @@ package me.sosedik.trappednewbie.listener.world;
 import io.papermc.paper.event.player.PrePlayerAttackEntityEvent;
 import me.sosedik.requiem.api.event.player.PlayerTryPossessingEntityEvent;
 import me.sosedik.utilizer.Utilizer;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -53,8 +54,11 @@ public class LimitedLimbo implements Listener {
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onMount(EntityMountEvent event) {
-		if (event.getEntity().getWorld() == Utilizer.limboWorld())
-			event.setCancelled(true);
+		Entity entity = event.getEntity();
+		if (entity.getWorld() != Utilizer.limboWorld()) return;
+		if (event.getMount().getRider() == entity) return;
+
+		event.setCancelled(true);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)

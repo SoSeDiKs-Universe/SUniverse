@@ -29,7 +29,7 @@ public class TrappedNewbieTasks {
 		p -> new GainItemTask("collect_fibers", p, TrappedNewbieAdvancements.GET_A_FIBER, TrappedNewbieItems.FIBER, 3)
 	);
 	public static final TaskReference GET_A_BRANCH = new TaskReference("get_a_branch",
-		p -> new GainItemTask("get_a_branch", p, TrappedNewbieAdvancements.GET_A_BRANCH, TrappedNewbieTags.BRANCHES)
+		p -> new GainItemTask("get_a_branch", p, TrappedNewbieAdvancements.GET_A_BRANCH, TrappedNewbieTags.ITEMS_BRANCHES)
 	);
 	public static final TaskReference CRAFT_TWINE = new TaskReference("craft_twine",
 		p -> new GainItemTask("craft_twine", p, TrappedNewbieAdvancements.MAKE_A_TWINE, TrappedNewbieItems.TWINE)

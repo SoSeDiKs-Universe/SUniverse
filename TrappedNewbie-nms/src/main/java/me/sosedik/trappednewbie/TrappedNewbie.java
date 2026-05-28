@@ -263,7 +263,7 @@ public final class TrappedNewbie extends JavaPlugin {
 		BlockStorage.addMapping(TrappedNewbieItems.CLAY_KILN, ClayKilnBlockStorage.class);
 		BlockStorage.addMapping(TrappedNewbieItems.SLEEPING_BAG, SleepingBagBlockStorage.class);
 
-		ResourceLib.addBlockAsItemTextureRef(TrappedNewbieTags.BRANCHES.getValues());
+		ResourceLib.addBlockAsItemTextureRef(TrappedNewbieTags.ITEMS_BRANCHES.getValues());
 
 		FillingBowlWithWater.BOWLS_BOTTLES.forEach((bowl, filledBowl) -> {
 			ItemStack filled = TrappedNewbieRecipes.getFilled(ItemStack.of(bowl), ThirstData.DrinkType.MILK);
@@ -498,7 +498,7 @@ public final class TrappedNewbie extends JavaPlugin {
 			MigrateCommand.class
 		);
 
-		TrappedNewbieTags.ROCKS.getValues().forEach(rock -> {
+		TrappedNewbieTags.ITEMS_ROCKS.getValues().forEach(rock -> {
 			Material pebble = Material.getMaterial(rock.name().replace("ROCK", "PEBBLE"));
 			if (pebble != null)
 				PlaceableBlockItems.addMapping(rock, pebble);
@@ -508,8 +508,8 @@ public final class TrappedNewbie extends JavaPlugin {
 		GhostyPlayer.addItemsDenyRule(player -> player.getWorld() == limboWorld());
 		PossessingPlayer.addItemsDenyRule(player -> player.getWorld() == limboWorld());
 
-		SweepingHoes.addBreakable(SweepingHoes.GrassType.LEAF, TrappedNewbieTags.ROCKS.getValues());
-		SweepingHoes.addBreakable(SweepingHoes.GrassType.LEAF, TrappedNewbieTags.BRANCHES.getValues());
+		SweepingHoes.addBreakable(SweepingHoes.GrassType.LEAF, TrappedNewbieTags.ITEMS_ROCKS.getValues());
+		SweepingHoes.addBreakable(SweepingHoes.GrassType.LEAF, TrappedNewbieTags.ITEMS_BRANCHES.getValues());
 
 		EnchantmentTooltipModifier.ENCHANTABLE_SAMPLES.add(Map.entry("hammer", TrappedNewbieItems.COBBLESTONE_HAMMER));
 		EnchantmentTooltipModifier.ENCHANTABLE_SAMPLES.add(Map.entry("knife", TrappedNewbieItems.IRON_KNIFE));

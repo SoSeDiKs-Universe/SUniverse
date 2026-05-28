@@ -1,12 +1,9 @@
 package me.sosedik.trappednewbie.dataset;
 
-import io.papermc.paper.registry.keys.tags.EnchantmentTagKeys;
-import io.papermc.paper.registry.tag.TagKey;
 import me.sosedik.trappednewbie.TrappedNewbie;
 import me.sosedik.utilizer.util.ItemUtil;
 import org.bukkit.Material;
 import org.bukkit.Tag;
-import org.bukkit.enchantments.Enchantment;
 import org.jspecify.annotations.NullMarked;
 
 // MCCheck: 26.1.2, new branches (chopping blocks, work stations), hardened
@@ -18,9 +15,9 @@ public class TrappedNewbieTags {
 	public static final Tag<Material> ARROW_STICK_MATERIALS = itemTag("arrow_stick_materials");
 	public static final Tag<Material> ARROW_FLETCHING_MATERIALS = itemTag("arrow_fletching_materials");
 	public static final Tag<Material> ARROW_INFUSION_MATERIALS = itemTag("arrow_infusion_materials");
-	public static final Tag<Material> STICKS = itemTag("sticks");
-	public static final Tag<Material> BRANCHES = itemTag("branches");
-	public static final Tag<Material> ROCKS = itemTag("rocks");
+	public static final Tag<Material> ITEMS_STICKS = itemTag("sticks");
+	public static final Tag<Material> ITEMS_BRANCHES = itemTag("branches");
+	public static final Tag<Material> ITEMS_ROCKS = itemTag("rocks");
 	public static final Tag<Material> ROCKY = itemTag("rocky");
 	public static final Tag<Material> GLOVES = itemTag("gloves");
 	public static final Tag<Material> HAMMERS = itemTag("hammers");
@@ -38,14 +35,15 @@ public class TrappedNewbieTags {
 
 	// blocks
 	public static final Tag<Material> MINEABLE_BY_HAND = blockTag("mineable/hand");
+	public static final Tag<Material> BRANCHES = blockTag("branches");
+	public static final Tag<Material> BREAKABLE_IN_DARK = blockTag("breakable_in_dark");
 	public static final Tag<Material> CHOPPING_BLOCKS = blockTag("chopping_blocks");
-	public static final Tag<Material> WORK_STATIONS = blockTag("work_stations");
 	public static final Tag<Material> DRUMS = blockTag("drums");
-	public static final Tag<Material> TOTEM_BASES = blockTag("totem_bases");
 	public static final Tag<Material> HARDENED = blockTag("hardened");
+	public static final Tag<Material> PEBBLES = blockTag("pebbles");
 	public static final Tag<Material> PRICKY_BLOCKS = blockTag("pricky_blocks");
-
-	public static final TagKey<Enchantment> TRADES_FARMER = EnchantmentTagKeys.create(TrappedNewbie.trappedNewbieKey("trades_farmer"));
+	public static final Tag<Material> TOTEM_BASES = blockTag("totem_bases");
+	public static final Tag<Material> WORK_STATIONS = blockTag("work_stations");
 
 	private static Tag<Material> itemTag(String key) {
 		return ItemUtil.itemTag(TrappedNewbie.trappedNewbieKey(key));

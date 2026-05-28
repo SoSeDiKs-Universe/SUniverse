@@ -396,7 +396,7 @@ public class TrappedNewbieAdvancements {
 			.requiredProgress(vanilla(inventoryChanged().withItems(ItemTriggerCondition.of(TrappedNewbieItems.FLINT_SHEARS))))
 			.buildAndRegister();
 	public static final IAdvancement GET_A_BRANCH = buildBase(BASICS_ROOT, "get_a_branch").display(display().xy(2F, 1F).withAdvancementFrame(AdvancementFrame.SHARP).icon(TrappedNewbieItems.OAK_BRANCH))
-			.requiredProgress(vanilla(inventoryChanged().withItems(ItemTriggerCondition.of(TrappedNewbieTags.BRANCHES))))
+			.requiredProgress(vanilla(inventoryChanged().withItems(ItemTriggerCondition.of(TrappedNewbieTags.ITEMS_BRANCHES))))
 			.buildAndRegister();
 	public static final IAdvancement MAKE_ROUGH_STICKS = buildBase(MAKE_FLINT_SHEARS, "make_rough_sticks").display(display().xy(1.2F, 0.75F).withAdvancementFrame(AdvancementFrame.SHARP).icon(TrappedNewbieItems.ROUGH_STICK))
 			.withReward(rewards().addItems(ItemStack.of(TrappedNewbieItems.ROUGH_STICK, 3)))
@@ -420,7 +420,7 @@ public class TrappedNewbieAdvancements {
 			.requiredProgress(vanilla(inventoryChanged().withItems(ItemTriggerCondition.of(Tag.PLANKS))))
 			.buildAndRegister();
 	public static final IAdvancement MAKE_STICKS = buildBase(MAKE_PLANKS, "make_sticks").display(display().x(-1.05F).icon(TrappedNewbieItems.OAK_STICK))
-			.requiredProgress(vanilla(inventoryChanged().withItems(ItemTriggerCondition.of(TrappedNewbieTags.STICKS))))
+			.requiredProgress(vanilla(inventoryChanged().withItems(ItemTriggerCondition.of(TrappedNewbieTags.ITEMS_STICKS))))
 			.buildAndRegister();
 	public static final IAdvancement MAKE_A_GRASS_MESH = buildBase(BASICS_ROOT, "make_a_grass_mesh")
 		.display(display().xy(1F, -2.5F).icon(TrappedNewbieItems.GRASS_MESH))
@@ -2048,7 +2048,7 @@ public class TrappedNewbieAdvancements {
 		))
 		.buildAndRegister();
 	public static final IAdvancement EXPELLIARMUS = buildBase(WEAPONRY_ROOT, "expelliarmus").display(display().x(1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(ItemUtil.glint(TrappedNewbieItems.ROUGH_STICK)))
-		.requiredProgress(vanilla(playerHurtEntity("expelliarmus").withEntity(entity -> entity.withDistanceToPlayer(distance -> distance.maxAbsolute(5D))).withPlayer(player -> player.withEquipment(equipment -> equipment.withMainHand(ItemTriggerCondition.of(MiscUtil.combineArrays(TrappedNewbieTags.STICKS.getValues().toArray(new Material[0]), new Material[] {TrappedNewbieItems.ROUGH_STICK})))))))
+		.requiredProgress(vanilla(playerHurtEntity("expelliarmus").withEntity(entity -> entity.withDistanceToPlayer(distance -> distance.maxAbsolute(5D))).withPlayer(player -> player.withEquipment(equipment -> equipment.withMainHand(ItemTriggerCondition.of(MiscUtil.combineArrays(TrappedNewbieTags.ITEMS_STICKS.getValues().toArray(new Material[0]), new Material[] {TrappedNewbieItems.ROUGH_STICK})))))))
 		.buildAndRegister();
 	public static final IAdvancement SLAPFISH = buildBase(EXPELLIARMUS, "slapfish").display(display().x(1F).fancyDescriptionParent(NamedTextColor.GREEN).icon(Material.COD))
 		.requiredProgress(vanilla(playerHurtEntity("slapfish").withEntity(entity -> entity.withDistanceToPlayer(distance -> distance.maxAbsolute(5D))).withPlayer(player -> player.withEquipment(equipment -> equipment.withMainHand(Tag.ITEMS_FISHES)))))

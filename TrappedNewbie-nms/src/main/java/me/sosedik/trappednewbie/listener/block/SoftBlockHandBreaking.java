@@ -83,7 +83,7 @@ public class SoftBlockHandBreaking implements Listener {
 
 	private boolean isRocky(ItemStack item) {
 		Material type = item.getType();
-		return TrappedNewbieTags.ROCKS.isTagged(type)
+		return TrappedNewbieTags.ITEMS_ROCKS.isTagged(type)
 			|| type == TrappedNewbieItems.FLAKED_FLINT
 			|| type == Material.FLINT;
 	}

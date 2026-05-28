@@ -126,7 +126,7 @@ public class BlockBreakTask extends BukkitRunnable {
 		}
 
 		// Insta-break
-		if (!this.brokenTool && canSee()) {
+		if (!this.brokenTool && canBreakBlock()) {
 			if (getDestroySpeed() == 0) {
 				if (this.properTool) {
 					clearBlock(block);
@@ -179,8 +179,8 @@ public class BlockBreakTask extends BukkitRunnable {
 		return type == Material.BEDROCK || type == Material.BARRIER || type == Material.COMMAND_BLOCK;
 	}
 
-	private boolean canSee() {
-		return EntityUtil.canSee(this.player);
+	private boolean canBreakBlock() {
+		return EntityUtil.canSee(this.player) || TrappedNewbieTags.BREAKABLE_IN_DARK.isTagged(this.block.getType());
 	}
 
 	@Override
@@ -192,7 +192,7 @@ public class BlockBreakTask extends BukkitRunnable {
 		}
 
 		// No breaking in darkness
-		if (!canSee()) {
+		if (!canBreakBlock()) {
 			this.failures++;
 			if (this.failures == 25) {
 //				this.player.showTitle(DARKNESS_TITLE);

@@ -32,7 +32,7 @@ public class ThrowableRockBehavior implements Listener {
 		if (!(event.getEntity() instanceof Snowball snowball)) return;
 
 		ItemStack projectile = snowball.getItem();
-		if (!TrappedNewbieTags.ROCKS.isTagged(projectile.getType())) return;
+		if (!TrappedNewbieTags.ITEMS_ROCKS.isTagged(projectile.getType())) return;
 
 		TrappedNewbie.scheduler().sync(task -> {
 			if (!snowball.isValid()) return true;
@@ -60,7 +60,7 @@ public class ThrowableRockBehavior implements Listener {
 		ItemStack projectile = snowball.getItem();
 		if (projectile.getType() == TrappedNewbieItems.BALL_OF_MUD) {
 			target.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 5 * 20, 2));
-		} else if (TrappedNewbieTags.ROCKS.isTagged(projectile.getType())) {
+		} else if (TrappedNewbieTags.ITEMS_ROCKS.isTagged(projectile.getType())) {
 			LivingEntity shooter = snowball.getShooter() instanceof LivingEntity livingEntity ? livingEntity : null;
 			DamageSource.Builder builder = DamageSource.builder(TrappedNewbieDamageTypes.THROWN_ROCK)
 				.withDirectEntity(snowball)
@@ -78,7 +78,7 @@ public class ThrowableRockBehavior implements Listener {
 		if (block == null) return;
 
 		ItemStack projectile = snowball.getItem();
-		if (!TrappedNewbieTags.ROCKS.isTagged(projectile.getType())) return;
+		if (!TrappedNewbieTags.ITEMS_ROCKS.isTagged(projectile.getType())) return;
 
 		if (!UtilizerTags.FRAGILE_BLOCKS.isTagged(block.getType())) {
 			block.emitSound(Sound.BLOCK_STONE_HIT, 1F, 1F);

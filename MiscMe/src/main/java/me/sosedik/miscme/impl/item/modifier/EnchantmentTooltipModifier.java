@@ -43,6 +43,7 @@ import static me.sosedik.utilizer.api.message.Mini.combined;
 /**
  * Renders fancy enchantments in tooltip
  */
+// MCCheck: 1.21.2, new tools/armor/enchantments
 @NullMarked
 public class EnchantmentTooltipModifier extends ItemModifier {
 
@@ -154,23 +155,22 @@ public class EnchantmentTooltipModifier extends ItemModifier {
 		if (!contextBox.getContext().getContextType().hasVisibleLore()) return ModificationResult.PASS;
 
 		ItemStack item = contextBox.getItem();
-		boolean rendered = false;
+		boolean changed = false;
 
 		if (item.hasData(DataComponentTypes.STORED_ENCHANTMENTS)) {
-			rendered = true;
-			contextBox.addHiddenComponents(DataComponentTypes.STORED_ENCHANTMENTS);
-			renderEnchants(contextBox, item.getData(DataComponentTypes.STORED_ENCHANTMENTS), true);
+			changed = renderEnchants(contextBox, item.getData(DataComponentTypes.STORED_ENCHANTMENTS), true);
+			if (changed)
+				contextBox.addHiddenComponents(DataComponentTypes.STORED_ENCHANTMENTS);
 		}
+
 		if (item.hasData(DataComponentTypes.ENCHANTMENTS)) {
-			rendered = true;
-			contextBox.addHiddenComponents(DataComponentTypes.ENCHANTMENTS);
-			renderEnchants(contextBox, item.getData(DataComponentTypes.ENCHANTMENTS), false);
+			boolean rendered = renderEnchants(contextBox, item.getData(DataComponentTypes.ENCHANTMENTS), false);
+			changed = rendered || changed;
+			if (rendered)
+				contextBox.addHiddenComponents(DataComponentTypes.ENCHANTMENTS);
 		}
-		if (!rendered) return ModificationResult.PASS;
 
-		contextBox.addHiddenComponents(DataComponentTypes.ENCHANTMENTS, DataComponentTypes.STORED_ENCHANTMENTS);
-
-		return ModificationResult.OK;
+		return changed ? ModificationResult.OK : ModificationResult.PASS;
 	}
 
 	private boolean renderEnchants(ItemContextBox contextBox, @Nullable ItemEnchantments data, boolean storedEnchants) {

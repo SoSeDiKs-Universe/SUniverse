@@ -135,7 +135,7 @@ public class GameModeSwitcherTask extends BukkitRunnable {
 		if (!new PlayerToolCheck(player, block, tool).callEvent()) return true;
 
 		Material toolType = tool.getType();
-		if (TrappedNewbieTags.ROCKS.isTagged(toolType) && SoftBlockHandBreaking.getConverted(blockType) != null)
+		if (TrappedNewbieTags.ITEMS_ROCKS.isTagged(toolType) && SoftBlockHandBreaking.getConverted(blockType) != null)
 			return true;
 
 		if (Tag.MINEABLE_AXE.isTagged(blockType)) return Tag.ITEMS_AXES.isTagged(toolType);

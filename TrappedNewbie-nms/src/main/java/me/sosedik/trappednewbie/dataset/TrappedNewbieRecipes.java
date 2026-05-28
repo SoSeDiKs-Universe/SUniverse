@@ -228,7 +228,7 @@ public class TrappedNewbieRecipes {
 					if (ItemStack.isEmpty(matrixItem)) continue;
 
 					Material itemType = matrixItem.getType();
-					if (TrappedNewbieTags.STICKS.isTagged(itemType) || itemType == TrappedNewbieItems.ROUGH_STICK)
+					if (TrappedNewbieTags.ITEMS_STICKS.isTagged(itemType) || itemType == TrappedNewbieItems.ROUGH_STICK)
 						base = itemType;
 					else if (itemType == TrappedNewbieItems.RAW_HIDE || itemType == Material.LEATHER)
 						material = itemType;
@@ -241,7 +241,7 @@ public class TrappedNewbieRecipes {
 			.register();
 
 		new ShapelessCraft(ItemStack.of(TrappedNewbieItems.ROUGH_STICK), trappedNewbieKey("rough_stick"))
-			.addIngredients(TrappedNewbieTags.BRANCHES.getValues())
+			.addIngredients(TrappedNewbieTags.ITEMS_BRANCHES.getValues())
 			.addIngredients('S', UtilizerTags.SHEARS.getValues())
 			.addIngredients('S', UtilizerTags.KNIFES.getValues())
 			.register();
@@ -256,7 +256,7 @@ public class TrappedNewbieRecipes {
 
 		new ShapedCraft(ItemStack.of(TrappedNewbieItems.GRASS_MESH), trappedNewbieKey("grass_mesh"), "TS", "ST")
 			.addIngredients('S', Material.STICK, TrappedNewbieItems.ROUGH_STICK)
-			.addIngredients('S', TrappedNewbieTags.BRANCHES.getValues())
+			.addIngredients('S', TrappedNewbieTags.ITEMS_BRANCHES.getValues())
 			.addIngredients('T', Material.STRING, TrappedNewbieItems.TWINE)
 			.register();
 
@@ -1563,8 +1563,8 @@ public class TrappedNewbieRecipes {
 		Bukkit.addFuel(TrappedNewbieItems.ROUGH_STICK, 100);
 		Bukkit.addFuel(TrappedNewbieItems.MAGMA_CUBE_BUCKET, 1000 * 20);
 		Bukkit.addFuel(TrappedNewbieItems.MAGMA_CUBE_BOTTLE, 1000 * 20);
-		TrappedNewbieTags.BRANCHES.getValues().forEach(material -> Bukkit.addFuel(material, 100));
-		TrappedNewbieTags.STICKS.getValues().forEach(material -> Bukkit.addFuel(material, 100));
+		TrappedNewbieTags.ITEMS_BRANCHES.getValues().forEach(material -> Bukkit.addFuel(material, 100));
+		TrappedNewbieTags.ITEMS_STICKS.getValues().forEach(material -> Bukkit.addFuel(material, 100));
 		UtilizerTags.LAVA_BUCKETS.getValues().forEach(material -> {
 			if (material != Material.LAVA_BUCKET)
 				Bukkit.addFuel(material, 1000 * 20);
@@ -1626,7 +1626,7 @@ public class TrappedNewbieRecipes {
 	private static void makeIngredientReplacements() {
 		Map<Material, IngredientReplacement> replacements = new HashMap<>();
 
-		addReplacements(replacements, Material.STICK, TrappedNewbieTags.STICKS, null);
+		addReplacements(replacements, Material.STICK, TrappedNewbieTags.ITEMS_STICKS, null);
 		addReplacements(replacements, Material.SHEARS, UtilizerTags.SHEARS, null);
 		addReplacements(replacements, Material.STRING, List.of(Material.STRING, TrappedNewbieItems.HORSEHAIR), null, NamespacedKey.minecraft("white_wool_from_string"));
 		addReplacements(replacements, Material.RABBIT_HIDE, UtilizerTags.HIDES, null);

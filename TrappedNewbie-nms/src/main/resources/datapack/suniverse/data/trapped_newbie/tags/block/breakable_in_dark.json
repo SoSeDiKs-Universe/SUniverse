@@ -1,0 +1,17 @@
+{
+	"values": [
+		"#minecraft:replaceable",
+		"#minecraft:flowers",
+		"#minecraft:saplings",
+		"#minecraft:leaves",
+		"minecraft:flower_pot",
+		"minecraft:sugar_cane",
+		"minecraft:lily_pad",
+		"#utilizer:all_crops",
+		"#utilizer:fragile_blocks",
+		"#utilizer:skulls",
+		"#requiem:tombstones",
+		"#trapped_newbie:branches",
+		"#trapped_newbie:pebbles"
+	]
+}

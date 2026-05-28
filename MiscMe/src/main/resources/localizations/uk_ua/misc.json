@@ -4,6 +4,8 @@
 	"attribute.durability.capacity": "<gray>Заповненість: <value>",
 	"attribute.repairable": "<gray>Ремонтується: <items>",
 	"attribute.enchantments": "Зачарування:",
+	"attribute.cursed": "Проклятий",
+	"attribute.has_curses": "Містить прокляття",
 	"overlay.toggle": [
 		"<yellow><!i><key:key.sneak> + <key:key.use> в руці для перемикання",
 		"<yellow><!i>відображення на екрані"

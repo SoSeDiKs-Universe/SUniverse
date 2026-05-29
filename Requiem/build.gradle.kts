@@ -7,11 +7,11 @@ dependencies {
     compileOnly(project(":ResourceLib-nms"))
     compileOnly(project(":Moves"))
 
-    compileOnly("org.incendo:cloud-paper:${project.property("cloudImplVersion")}")
-    compileOnly("org.incendo:cloud-annotations:${project.property("cloudVersion")}")
+    compileOnly(libs.cloud.paper)
+    compileOnly(libs.cloud.annotations)
 
-    compileOnly("de.tr7zw:item-nbt-api-plugin:${project.property("nbtApiVersion")}")
-    compileOnly("com.github.retrooper:packetevents-spigot:${project.property("packeteventsVersion")}")
+    compileOnly(libs.item.nbt.api.plugin)
+    compileOnly(libs.packetevents.spigot)
 }
 
 paper {

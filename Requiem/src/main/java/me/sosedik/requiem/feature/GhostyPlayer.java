@@ -64,15 +64,25 @@ public class GhostyPlayer {
 	 * @param player player
 	 */
 	public static void markGhost(Player player) {
+		markGhost(player, false);
+	}
+
+	/**
+	 * Turns the player into ghost
+	 *
+	 * @param player player
+	 * @param fromLoad whether the ghost state is applied due to data loading
+	 */
+	private static void markGhost(Player player, boolean fromLoad) {
 		boolean freshAdd = GHOSTS.add(player.getUniqueId());
 
-		if (freshAdd) {
+		new RuntimeException("Huh " + fromLoad + " | " + freshAdd).printStackTrace();
+		if (freshAdd && !fromLoad) {
 			player.getInventory().forEach(item -> {
 				if (ItemStack.isEmpty(item)) return;
 
 				if (!item.hasEnchant(Enchantment.VANISHING_CURSE))
 					player.dropItem(item, true, i -> i.setPickupDelay(5));
-				player.sendMessage(item.effectiveName());
 				item.setAmount(0);
 			});
 			player.setLevel(0);
@@ -192,7 +202,7 @@ public class GhostyPlayer {
 	public static boolean loadGhostData(Player player, ReadableNBT data) {
 		if (!data.hasTag(GHOST_TAG)) return false;
 
-		GhostyPlayer.markGhost(player);
+		GhostyPlayer.markGhost(player, true);
 		player.setCooldown(RequiemItems.GHOST_RELOCATOR, 5 * 20);
 
 		return true;

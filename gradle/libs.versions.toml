@@ -1,0 +1,41 @@
+[versions]
+mcVersion = "26.1.2"
+javaVersion = "25"
+cloudVersion = "2.0.0"
+cloudImplVersion = "2.0.0-beta.15"
+packeteventsVersion = "2.12.1"
+nbtApiVersion = "2.15.7"
+commonmarkVersion = "0.28.0"
+invUIVersion = "2.1.0"
+betterModelVersion = "3.1.0"
+zip4jVersion = "2.11.5"
+hikariCPVersion = "7.0.2"
+jdaVersion = "5.6.1"
+discordWebhooksVersion = "0.8.4"
+runPaperVersion = "3.0.2"
+paperweightVersion = "2.0.0-SNAPSHOT"
+pluginYmlVersion = "0.9.0"
+shadowVersion = "9.4.1"
+foojayResolverVersion = "1.0.0"
+
+[libraries]
+cloud-paper = { module = "org.incendo:cloud-paper", version.ref = "cloudImplVersion" }
+cloud-annotations = { module = "org.incendo:cloud-annotations", version.ref = "cloudVersion" }
+packetevents-spigot = { module = "com.github.retrooper:packetevents-spigot", version.ref = "packeteventsVersion" }
+item-nbt-api-plugin = { module = "de.tr7zw:item-nbt-api-plugin", version.ref = "nbtApiVersion" }
+commonmark = { module = "org.commonmark:commonmark", version.ref = "commonmarkVersion" }
+commonmark-ext-autolink = { module = "org.commonmark:commonmark-ext-autolink", version.ref = "commonmarkVersion" }
+invui = { module = "xyz.xenondevs.invui:invui", version.ref = "invUIVersion" }
+bettermodel-bukkit-api = { module = "io.github.toxicity188:bettermodel-bukkit-api", version.ref = "betterModelVersion" }
+zip4j = { module = "net.lingala.zip4j:zip4j", version.ref = "zip4jVersion" }
+hikariCP = { module = "com.zaxxer:HikariCP", version.ref = "hikariCPVersion" }
+jda = { module = "net.dv8tion:JDA", version.ref = "jdaVersion" }
+discord-webhooks = { module = "club.minnced:discord-webhooks", version.ref = "discordWebhooksVersion" }
+packetadvancements-api = { module = "me.sosedik:PacketAdvancements-api", version = "1.0-SNAPSHOT" }
+
+[plugins]
+paperweight-userdev = { id = "io.papermc.paperweight.userdev", version.ref = "paperweightVersion" }
+plugin-yml-paper = { id = "de.eldoria.plugin-yml.paper", version.ref = "pluginYmlVersion" }
+shadow = { id = "com.gradleup.shadow", version.ref = "shadowVersion" }
+run-paper = { id = "xyz.jpenilla.run-paper", version.ref = "runPaperVersion" }
+foojay-resolver = { id = "org.gradle.toolchains.foojay-resolver-convention", version.ref = "foojayResolverVersion" }

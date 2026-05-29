@@ -7,15 +7,15 @@ dependencies {
     compileOnly(project(":ResourceLib-nms"))
     compileOnly(project(":UglyChatter"))
 
-    compileOnly("de.tr7zw:item-nbt-api-plugin:${project.property("nbtApiVersion")}")
+    compileOnly(libs.item.nbt.api.plugin)
 
-    compileOnly("org.incendo:cloud-paper:${project.property("cloudImplVersion")}")
-    compileOnly("org.incendo:cloud-annotations:${project.property("cloudVersion")}")
+    compileOnly(libs.cloud.paper)
+    compileOnly(libs.cloud.annotations)
 
-    paperLibrary("net.dv8tion:JDA:5.6.1") {
+    paperLibrary(libs.jda) {
         exclude("opus-java")
     }
-    paperLibrary("club.minnced:discord-webhooks:0.8.4")
+    paperLibrary(libs.discord.webhooks)
 }
 
 paper {

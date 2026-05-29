@@ -16,15 +16,15 @@ dependencies {
     compileOnly(project(":UglyChatter"))
     compileOnly(project(":DelightfulFarming-nms"))
 
-    compileOnly("me.sosedik:PacketAdvancements-api:1.0-SNAPSHOT")
-    compileOnly("de.tr7zw:item-nbt-api-plugin:${project.property("nbtApiVersion")}")
-    compileOnly("com.github.retrooper:packetevents-spigot:${project.property("packeteventsVersion")}")
-    compileOnly("io.github.toxicity188:bettermodel-bukkit-api:${project.property("betterModelVersion")}")
+    compileOnly(libs.packetadvancements.api)
+    compileOnly(libs.item.nbt.api.plugin)
+    compileOnly(libs.packetevents.spigot)
+    compileOnly(libs.bettermodel.bukkit.api)
 
-    compileOnly("org.incendo:cloud-paper:${project.property("cloudImplVersion")}")
-    compileOnly("org.incendo:cloud-annotations:${project.property("cloudVersion")}")
+    compileOnly(libs.cloud.paper)
+    compileOnly(libs.cloud.annotations)
 
-    compileOnly("xyz.xenondevs.invui:invui:${project.property("invUIVersion")}")
+    compileOnly(libs.invui)
 }
 
 tasks.withType<ShadowJar> {

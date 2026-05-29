@@ -6,10 +6,10 @@ dependencies {
     compileOnly(project(":Utilizer-nms"))
     compileOnly(project(":ResourceLib-nms"))
 
-    paperLibrary("org.commonmark:commonmark:${project.property("commonmarkVersion")}")
-    paperLibrary("org.commonmark:commonmark-ext-autolink:${project.property("commonmarkVersion")}")
+    paperLibrary(libs.commonmark)
+    paperLibrary(libs.commonmark.ext.autolink)
 
-    compileOnly("com.github.retrooper:packetevents-spigot:${project.property("packeteventsVersion")}")
+    compileOnly(libs.packetevents.spigot)
 }
 
 paper {

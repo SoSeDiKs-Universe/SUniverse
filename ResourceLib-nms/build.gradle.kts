@@ -7,13 +7,13 @@ dependencies {
     compileOnly(project(":Utilizer-nms"))
     compileOnly(project(":FancyMotd"))
 
-    paperLibrary("net.lingala.zip4j:zip4j:2.11.5")
+    paperLibrary(libs.zip4j)
 
-    compileOnly("de.tr7zw:item-nbt-api-plugin:${project.property("nbtApiVersion")}")
-    compileOnly("com.github.retrooper:packetevents-spigot:${project.property("packeteventsVersion")}")
+    compileOnly(libs.item.nbt.api.plugin)
+    compileOnly(libs.packetevents.spigot)
 
-    compileOnly("org.incendo:cloud-paper:${project.property("cloudImplVersion")}")
-    compileOnly("org.incendo:cloud-annotations:${project.property("cloudVersion")}")
+    compileOnly(libs.cloud.paper)
+    compileOnly(libs.cloud.annotations)
 }
 
 tasks.withType<ShadowJar> {

@@ -12,9 +12,9 @@ import org.jspecify.annotations.NullMarked;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -27,42 +27,43 @@ import static me.sosedik.utilizer.api.message.Mini.combine;
 @NullMarked
 public class EmojiPlaceholder extends ReplacementPlaceholder {
 
-	private static final Map<String, String> EMOJI_REPLACEMENTS = new LinkedHashMap<>();
+	private static final Map<String, String> REVERSE_EMOJI_REPLACEMENTS = new HashMap<>();
 	private static final String EMOJI_VARIANT_SYMBOL = "\ufe0f";
 
 	private final Component display;
 
 	public EmojiPlaceholder(String rawEmoji, Set<String> aliases) {
 		// aliases is modified later, hence the copy of the set
-		Iterator<String> aliasesIterator = new HashSet<>(aliases).iterator();
+		Iterator<String> aliasesIterator = new LinkedHashSet<>(aliases).iterator();
 
-		String mapping = aliasesIterator.next();
-		this.shortcode = mapping;
-
-		String emojied = mapping.substring(0, mapping.length() - 1) + rawEmoji + ":";
-		ExtraChatTabSuggestions.addTabSuggestion(emojied);
-		aliases.add(emojied);
-
+		String mapping = null;
 		List<Component> hovers = new ArrayList<>();
-		hovers.add(Component.text(emojied));
 		while (aliasesIterator.hasNext()) {
 			String current = aliasesIterator.next();
-			emojied = current.substring(0, current.length() - 1) + rawEmoji + ":";
+			if (current.charAt(0) != ':') continue;
+
+			String emojied = current.substring(0, current.length() - 1) + rawEmoji + ":";
 			hovers.add(Component.text(emojied));
 			ExtraChatTabSuggestions.addTabSuggestion(emojied);
 			aliases.add(emojied);
-			if (current.length() < mapping.length())
+			if (mapping == null)
+				mapping = current;
+			else if (current.length() < mapping.length())
 				mapping = current;
 		}
 
+		this.shortcode = mapping == null ? rawEmoji : mapping;
+
 		this.display = Component.text().content(rawEmoji)
 			.color(NamedTextColor.WHITE)
-			.hoverEvent(combine(Component.newline(), hovers))
+			.hoverEvent(hovers.isEmpty() ? null : combine(Component.newline(), hovers))
 			.clickEvent(ClickEvent.copyToClipboard(rawEmoji))
 			.build();
 
 		aliases.add(rawEmoji); // Parse raw symbols as well to always preserve a fancy display
 		setReplacementPattern(aliases);
+
+		aliases.forEach(alias -> REVERSE_EMOJI_REPLACEMENTS.put(alias, REVERSE_EMOJI_REPLACEMENTS.getOrDefault(rawEmoji, rawEmoji)));
 
 		register();
 	}
@@ -78,8 +79,8 @@ public class EmojiPlaceholder extends ReplacementPlaceholder {
 	 * @param text text string
 	 * @return remapped text string
 	 */
-	public static String applyMappings(String text) {
-		for (Map.Entry<String, String> entry : EMOJI_REPLACEMENTS.entrySet())
+	public static String applyReverseMappings(String text) {
+		for (Map.Entry<String, String> entry : REVERSE_EMOJI_REPLACEMENTS.entrySet())
 			text = text.replace(entry.getKey(), entry.getValue());
 		return text;
 	}
@@ -96,29 +97,30 @@ public class EmojiPlaceholder extends ReplacementPlaceholder {
 			return;
 		}
 
-		// Load emoji remappings
-		JsonObject emojiRemappings = FileUtil.readJsonObject(new File(emojiAssetsDir, "emoji_remappings/lang/en_us.json"));
-		List<Map.Entry<String, String>> replacements = new ArrayList<>();
-		emojiRemappings.entrySet().forEach(entry -> replacements.add(Map.entry(entry.getKey(), entry.getValue().getAsString())));
-		replacements.sort((e1, e2) -> Integer.compare(e2.getKey().length(), e1.getKey().length()));
-		replacements.forEach(entry -> EMOJI_REPLACEMENTS.put(entry.getKey(), entry.getValue()));
+		Map<String, Set<String>> emojiMappings = new LinkedHashMap<>();
 
-		// Load emoji mappings
-		Map<String, Set<String>> emojiMappings = new HashMap<>();
+		// Load emoji remappings (real emoji -> resource pack mapping)
+		JsonObject emojiRemappings = FileUtil.readJsonObject(new File(emojiAssetsDir, "emoji_remappings/lang/en_us.json"));
+		emojiRemappings.entrySet().stream()
+			.sorted((e1, e2) -> Integer.compare(e2.getKey().length(), e1.getKey().length()))
+			.forEach(entry -> {
+				String realEmoji = entry.getKey();
+				String emojiReplacement = entry.getValue().getAsString();
+				REVERSE_EMOJI_REPLACEMENTS.put(emojiReplacement, realEmoji);
+				Set<String> replacements = emojiMappings.computeIfAbsent(emojiReplacement, _ -> new LinkedHashSet<>());
+				replacements.add(realEmoji);
+				if (realEmoji.contains(EMOJI_VARIANT_SYMBOL))
+					replacements.add(realEmoji.replace(EMOJI_VARIANT_SYMBOL, ""));
+			});
+
+		// Load emoji mappings (shortcode -> emoji)
 		var emojiShortcodes = FileUtil.readJsonObject(new File(emojiAssetsDir, "emoji_shortcodes/lang/en_us.json"));
 		emojiShortcodes.entrySet().forEach(entry -> {
 			String shortcode = entry.getKey();
-			String rawEmoji = entry.getValue().getAsString();
-			// Replace emoji with a mapping if needed
-			rawEmoji = EMOJI_REPLACEMENTS.getOrDefault(rawEmoji, rawEmoji);
-			// Save emoji-less variant mapping as well
-			if (rawEmoji.endsWith(EMOJI_VARIANT_SYMBOL)) {
-				String oldEmoji = rawEmoji;
-				rawEmoji = rawEmoji.substring(0, rawEmoji.length() - 1);
-				EMOJI_REPLACEMENTS.put(oldEmoji, rawEmoji);
-			}
-			emojiMappings.computeIfAbsent(rawEmoji, k -> new HashSet<>()).add(shortcode);
+			String emojiReplacement = entry.getValue().getAsString();
+			emojiMappings.computeIfAbsent(emojiReplacement, _ -> new LinkedHashSet<>()).add(shortcode);
 		});
+
 		emojiMappings.forEach(EmojiPlaceholder::new);
 	}
 

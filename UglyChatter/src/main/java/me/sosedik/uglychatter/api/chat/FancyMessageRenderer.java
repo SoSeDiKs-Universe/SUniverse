@@ -2,7 +2,6 @@ package me.sosedik.uglychatter.api.chat;
 
 import io.papermc.paper.chat.ChatRenderer;
 import me.sosedik.uglychatter.api.markdown.MiniMarkdown;
-import me.sosedik.uglychatter.api.mini.placeholder.EmojiPlaceholder;
 import me.sosedik.uglychatter.api.mini.placeholder.ReplacementPlaceholder;
 import me.sosedik.utilizer.api.language.LangHolder;
 import me.sosedik.utilizer.api.language.translator.TranslationLanguage;
@@ -92,7 +91,7 @@ public class FancyMessageRenderer implements ChatRenderer {
 
 	private Component getTranslation(MiniMessage deserializer, String rawMessage, Player source, Player viewer) {
 		TranslationLanguage translateTo = LangHolder.langHolder(viewer).getTranslationLanguage();
-		String translated = this.translations.computeIfAbsent(translateTo.id(), k -> OnlineTranslator.translate(rawMessage, TranslationLanguage.AUTO, translateTo));
+		String translated = this.translations.computeIfAbsent(translateTo.id(), _ -> OnlineTranslator.translate(rawMessage, TranslationLanguage.AUTO, translateTo));
 		return renderMessage(deserializer, translated, source, viewer);
 	}
 
@@ -125,9 +124,7 @@ public class FancyMessageRenderer implements ChatRenderer {
 		String plain = Mini.buildMini()
 			.serialize(message)
 			.replace("\\<", "<");
-		// Replace unsupported emoji sequences with mappings
-		if (!rendererTags.contains(FancyRendererTag.SKIP_EMOJI_MAPPINGS)) plain = EmojiPlaceholder.applyMappings(plain);
-		// Strip placeholders
+		// Strip placeholders (including emoji)
 		if (!rendererTags.contains(FancyRendererTag.SKIP_PLACEHOLDERS)) plain = ReplacementPlaceholder.stripPlaceholders(plain);
 		// Apply markdown
 		if (!rendererTags.contains(FancyRendererTag.SKIP_MARKDOWN)) plain = MiniMarkdown.markdownToMini(plain);

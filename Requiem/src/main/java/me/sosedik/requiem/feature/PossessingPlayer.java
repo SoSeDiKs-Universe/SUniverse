@@ -187,7 +187,11 @@ public class PossessingPlayer {
 			return null;
 		}
 
+		POSSESSING.remove(player.getUniqueId());
+
 		if (quit) {
+			// Note: this triggers EntityDismountEvent, the player must not count as possessed at this point,
+			// as otherwise stopPossessing will be called due to entity being invalid on dismount
 			if (riding != null) riding.remove();
 		} else if (saveInventoryToMob) {
 			if (riding != null) {
@@ -230,8 +234,6 @@ public class PossessingPlayer {
 		player.setSleepingIgnored(false);
 
 //		TemperaturedPlayer.of(player).removeFlag(TempFlag.GHOST_IMMUNE); // TODO
-
-		POSSESSING.remove(player.getUniqueId());
 
 		checkPossessedExtraItems(player, true);
 
@@ -474,15 +476,10 @@ public class PossessingPlayer {
 		LivingEntity entity = getPossessed(player);
 		if (entity == null) return;
 
-		if (quit)
-			player.leaveVehicle();
-
 		byte[] entityData = Bukkit.getUnsafe().serializeEntity(entity);
 
-		if (quit) {
+		if (quit)
 			stopPossessing(player, entity, true, false);
-			entity.remove();
-		}
 
 		data = data.getOrCreateCompound(POSSESSED_TAG);
 		data.setByteArray(POSSESSED_ENTITY_DATA, entityData);

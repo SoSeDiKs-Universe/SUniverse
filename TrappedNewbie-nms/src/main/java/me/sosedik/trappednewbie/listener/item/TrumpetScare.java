@@ -2,6 +2,7 @@ package me.sosedik.trappednewbie.listener.item;
 
 import me.sosedik.kiterino.event.entity.EntityItemConsumeEvent;
 import me.sosedik.kiterino.event.entity.ItemConsumeEvent;
+import me.sosedik.requiem.feature.PossessingPlayer;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieItems;
 import me.sosedik.trappednewbie.dataset.TrappedNewbieSoundKeys;
 import me.sosedik.trappednewbie.listener.player.TotemRituals;
@@ -35,6 +36,11 @@ public class TrumpetScare implements Listener {
 		if (!ItemStack.isType(event.getItem(), TrappedNewbieItems.TRUMPET)) return;
 
 		LivingEntity livingEntity = event.getEntity();
+		if (livingEntity instanceof Player player) {
+			LivingEntity possessed = PossessingPlayer.getPossessed(player);
+			if (possessed != null)
+				livingEntity = possessed;
+		}
 		livingEntity.emitSound(Sound.sound(TrappedNewbieSoundKeys.TRUMPET_DOOT, Sound.Source.HOSTILE, 1F, 0.9F + (float) Math.random() * 0.2F));
 		if (livingEntity instanceof Player player)
 			TotemRituals.playedInstrument(player, TrappedNewbieItems.TRUMPET, player.getLocation());
@@ -43,17 +49,18 @@ public class TrumpetScare implements Listener {
 		if (livingEntity instanceof Player player && !player.getGameMode().isInvulnerable())
 			event.setReplacement(event.getItem().damage(1, livingEntity));
 
+		LivingEntity finalLivingEntity = livingEntity;
 		livingEntity.getWorld().getNearbyEntities(livingEntity.getBoundingBox().expand(5), livingEntity::hasLineOfSight).forEach(entity -> {
-			if (entity == livingEntity) return;
+			if (entity == finalLivingEntity) return;
 			if (!(entity instanceof LivingEntity living)) return;
 			if (undead && Tag.ENTITY_TYPES_UNDEAD.isTagged(entity.getType())) return;
 
-			double deltaX = entity.getX() - livingEntity.getX() + Math.random() - Math.random();
-			double deltaZ = entity.getZ() - livingEntity.getZ() + Math.random() - Math.random();
+			double deltaX = entity.getX() - finalLivingEntity.getX() + Math.random() - Math.random();
+			double deltaZ = entity.getZ() - finalLivingEntity.getZ() + Math.random() - Math.random();
 			double distance = Math.sqrt(deltaX * deltaX + deltaZ * deltaZ);
 			entity.setVelocity(new Vector(deltaX / (10 + distance), 5 / (10 + distance), deltaZ / (10 + distance)));
 
-			living.damage(1, livingEntity);
+			living.damage(1, finalLivingEntity);
 		});
 	}
 

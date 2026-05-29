@@ -157,8 +157,8 @@ public class TrappedNewbieBootstrap implements PluginBootstrap {
 			}
 			case "slingshot" -> new SlingshotItem(((Item.Properties) properties));
 			case String k when k.endsWith("hang_glider") -> new HangGliderItem(properties);
-			case "firestriker", "trumpet", "canteen", "reinforced_canteen", "dragon_flask" -> ItemCreator.crossbowItem(properties, (item, entity, timeLeft) -> true);
-			case String k when k.endsWith("glass_shard") || k.endsWith("goodie_bag") -> ItemCreator.crossbowItem(properties, (item, entity, timeLeft) -> true);
+			case "firestriker", "trumpet", "canteen", "reinforced_canteen", "dragon_flask" -> ItemCreator.crossbowItem(properties, (_, _, _) -> true);
+			case String k when k.endsWith("glass_shard") || k.endsWith("goodie_bag") -> ItemCreator.crossbowItem(properties, (_, _, _) -> true);
 			case "flint_axe" -> new AxeItem(dummyMaterial, 6F, -3.2F, (Item.Properties) properties);
 			case "flint_pickaxe" -> new Item(((Item.Properties) properties).pickaxe(dummyMaterial, 1F, -3F));
 			case "flint_shovel" -> new ShovelItem(dummyMaterial, 1.5F, -3F, (Item.Properties) properties);

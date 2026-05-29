@@ -131,16 +131,6 @@ public abstract class ReplacementPlaceholder {
 	 * Parses the registered replacement placeholders
 	 *
 	 * @param text text
-	 * @return modified text
-	 */
-	public static Component parsePlaceholders(Component text) {
-		return parsePlaceholders(text, null, null);
-	}
-
-	/**
-	 * Parses the registered replacement placeholders
-	 *
-	 * @param text text
 	 * @param sender sender
 	 * @param viewer viewer
 	 * @return modified text

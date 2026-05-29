@@ -5,12 +5,15 @@ import me.sosedik.utilizer.api.language.LangOptions;
 import me.sosedik.utilizer.api.language.LangOptionsStorage;
 import me.sosedik.utilizer.api.language.TranslationHolder;
 import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.entity.Player;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
+
+import java.util.Locale;
 
 import static me.sosedik.utilizer.api.message.Mini.buildMini;
 import static me.sosedik.utilizer.api.message.Mini.combine;
@@ -61,7 +64,13 @@ public class Messenger {
 	 */
 	public LangOptions getLangOptions() {
 		if (this.langOptions != null) return this.langOptions;
-		return this.audience instanceof Player player ? LangHolder.langHolder(player).getLangOptions() : LangOptionsStorage.getDefaultLangOptions();
+		if (this.audience instanceof Player player) return LangHolder.langHolder(player).getLangOptions();
+		if (this.audience != null) {
+			Locale locale = this.audience.get(Identity.LOCALE).orElse(null);
+			if (locale != null)
+				return LangOptionsStorage.getByLocale(locale);
+		}
+		return LangOptionsStorage.getDefaultLangOptions();
 	}
 
 	/**

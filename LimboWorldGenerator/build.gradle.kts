@@ -3,12 +3,12 @@ import net.minecrell.pluginyml.bukkit.BukkitPluginDescription
 description = "Holds a void generator, that's it"
 
 plugins {
-    id("xyz.jpenilla.run-paper") version "3.0.2" // Test server
+    alias(libs.plugins.run.paper) // Test server
 }
 
 tasks {
     runServer {
-        minecraftVersion(rootProject.property("mcVersion").toString())
+        minecraftVersion(libs.versions.mcVersion.get())
         runDirectory = rootProject.projectDir.resolve("server")
         serverJar(rootProject.projectDir.resolve("server/server.jar"))
         repositories {
@@ -20,7 +20,7 @@ tasks {
 tasks.withType(xyz.jpenilla.runtask.task.AbstractRun::class) {
     javaLauncher = javaToolchains.launcherFor {
         vendor = JvmVendorSpec.JETBRAINS
-        languageVersion = JavaLanguageVersion.of(25)
+        languageVersion = JavaLanguageVersion.of(libs.versions.javaVersion.get())
     }
     jvmArgs("-XX:+AllowEnhancedClassRedefinition", "--add-opens", "java.base/java.lang=ALL-UNNAMED")
 }

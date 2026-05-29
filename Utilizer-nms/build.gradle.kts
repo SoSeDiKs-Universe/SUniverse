@@ -5,15 +5,15 @@ description = "Shared dumping ground for SoSeDiK's Universe witchery"
 dependencies {
     compileOnly(project(":LimboWorldGenerator"))
 
-    paperLibrary("com.zaxxer:HikariCP:7.0.2")
+    paperLibrary(libs.hikariCP)
 
-    paperLibrary("org.incendo:cloud-paper:${project.property("cloudImplVersion")}")
-    paperLibrary("org.incendo:cloud-annotations:${project.property("cloudVersion")}")
+    paperLibrary(libs.cloud.paper)
+    paperLibrary(libs.cloud.annotations)
 
-    paperLibrary("xyz.xenondevs.invui:invui:${project.property("invUIVersion")}")
+    paperLibrary(libs.invui)
 
-    compileOnly("de.tr7zw:item-nbt-api-plugin:${project.property("nbtApiVersion")}")
-    compileOnly("com.github.retrooper:packetevents-spigot:${project.property("packeteventsVersion")}")
+    compileOnly(libs.item.nbt.api.plugin)
+    compileOnly(libs.packetevents.spigot)
 }
 
 paper {

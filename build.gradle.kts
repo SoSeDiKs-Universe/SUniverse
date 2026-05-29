@@ -1,11 +1,11 @@
 plugins {
     `java-library`
-    id("io.papermc.paperweight.userdev") version "2.0.0-SNAPSHOT" // Accessing NMS
-    id("de.eldoria.plugin-yml.paper") version "0.9.0" // Generates paper-plugin.yml
-    id("com.gradleup.shadow") version "9.4.1" // Shading
+    alias(libs.plugins.paperweight.userdev) // Accessing NMS
+    alias(libs.plugins.plugin.yml.paper) // Generates paper-plugin.yml
+    alias(libs.plugins.shadow) // Shading
 }
 
-val mcVersion: String = rootProject.property("mcVersion").toString()
+val mcVersion: String = libs.versions.mcVersion.get()
 val paperDevVersion: String = "${mcVersion}.local-SNAPSHOT"
 dependencies {
     paperweight.paperDevBundle(paperDevVersion, "me.sosedik.kiterino")
@@ -50,7 +50,7 @@ subprojects {
 
         compileJava {
             options.encoding = Charsets.UTF_8.name()
-            options.release.set(25)
+            options.release.set(libs.versions.javaVersion.get().toInt())
         }
         javadoc {
             options.encoding = Charsets.UTF_8.name()

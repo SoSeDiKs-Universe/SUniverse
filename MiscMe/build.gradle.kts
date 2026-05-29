@@ -7,8 +7,8 @@ dependencies {
     compileOnly(project(":ResourceLib-nms"))
     compileOnly(project(":UglyChatter"))
 
-    compileOnly("de.tr7zw:item-nbt-api-plugin:${project.property("nbtApiVersion")}")
-    compileOnly("com.github.retrooper:packetevents-spigot:${project.property("packeteventsVersion")}")
+    compileOnly(libs.item.nbt.api.plugin)
+    compileOnly(libs.packetevents.spigot)
 }
 
 paper {

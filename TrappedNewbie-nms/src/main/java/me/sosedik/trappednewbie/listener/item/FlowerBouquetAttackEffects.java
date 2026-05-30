@@ -16,7 +16,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.util.RayTraceResult;
 import org.jspecify.annotations.NullMarked;
 
 /**
@@ -35,10 +34,7 @@ public class FlowerBouquetAttackEffects implements Listener {
 		if (item.getType() != TrappedNewbieItems.FLOWER_BOUQUET) return;
 		if (ItemUtil.getAttributeValue(item, EquipmentSlot.HAND, Attribute.ATTACK_DAMAGE, player) != 0) return;
 
-		RayTraceResult rayTraceResult = player.getWorld().rayTraceEntities(player.getEyeLocation(),
-				player.getEyeLocation().getDirection(), EntityUtil.PLAYER_REACH, entity -> entity != player);
-		if (rayTraceResult == null) return;
-		if (!(rayTraceResult.getHitEntity() instanceof LivingEntity entity)) return;
+		if (!(EntityUtil.getEntityThoughGrass(player, EquipmentSlot.HAND) instanceof LivingEntity entity)) return;
 
 		event.setCancelled(true);
 		entity.damage(0, player);

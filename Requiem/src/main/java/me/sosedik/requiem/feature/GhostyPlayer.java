@@ -10,6 +10,7 @@ import me.sosedik.requiem.dataset.RequiemEffects;
 import me.sosedik.requiem.dataset.RequiemItems;
 import me.sosedik.requiem.task.GhostAuraTask;
 import me.sosedik.requiem.task.GhostMobVisionTask;
+import me.sosedik.utilizer.api.storage.player.PlayerDataStorage;
 import me.sosedik.utilizer.util.EntityUtil;
 import me.sosedik.utilizer.util.MetadataUtil;
 import me.sosedik.utilizer.util.ScoreboardUtil;
@@ -76,7 +77,6 @@ public class GhostyPlayer {
 	private static void markGhost(Player player, boolean fromLoad) {
 		boolean freshAdd = GHOSTS.add(player.getUniqueId());
 
-		new RuntimeException("Huh " + fromLoad + " | " + freshAdd).printStackTrace();
 		if (freshAdd && !fromLoad) {
 			player.getInventory().forEach(item -> {
 				if (ItemStack.isEmpty(item)) return;
@@ -225,8 +225,7 @@ public class GhostyPlayer {
 			Player player = Bukkit.getPlayer(uuid);
 			if (player == null) continue;
 
-			clearGhost(player);
-			player.setInvisible(true);
+			saveGhostState(player, PlayerDataStorage.getData(uuid), true);
 		}
 		GHOSTS.clear();
 	}

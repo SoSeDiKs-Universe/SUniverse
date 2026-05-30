@@ -5,6 +5,7 @@ import me.sosedik.requiem.feature.PossessingPlayer;
 import me.sosedik.utilizer.util.LocationUtil;
 import me.sosedik.utilizer.util.MathUtil;
 import org.bukkit.Location;
+import org.bukkit.Tag;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.block.Block;
@@ -60,7 +61,7 @@ public class DynamicScaleTask extends BukkitRunnable {
 		Location loc = entity.getLocation();
 		double height = loc.clone().subtract(loc.toBlockLocation()).getY() + baseEntityHeight;
 		Block upperBlock = loc.clone().addY(height + 0.5).getBlock();
-		if (LocationUtil.isCube(upperBlock) || LocationUtil.isTrulySolid(player, upperBlock)) { // TODO foliage is also cube :f
+		if (Tag.LEAVES.isTagged(upperBlock.getType()) || LocationUtil.isTrulySolid(player, upperBlock)) {
 			double playerScale = 0.5;
 			double entityScale = 1;
 			double heightToRoof = 1D - MathUtil.getDecimalPart(height);

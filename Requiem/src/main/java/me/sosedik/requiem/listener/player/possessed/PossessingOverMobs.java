@@ -9,17 +9,20 @@ import me.sosedik.requiem.api.event.player.PlayerPossessedCuredEvent;
 import me.sosedik.requiem.feature.GhostyPlayer;
 import me.sosedik.requiem.feature.PossessingPlayer;
 import me.sosedik.resourcelib.feature.HudMessenger;
+import me.sosedik.utilizer.api.message.Messenger;
 import me.sosedik.utilizer.listener.item.NotDroppableItems;
+import me.sosedik.utilizer.util.EntityUtil;
 import me.sosedik.utilizer.util.InventoryUtil;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -44,8 +47,7 @@ public class PossessingOverMobs implements Listener {
 				if (!PossessingPlayer.isPossessing(player)) return false;
 				if (!NBT.get(item, nbt -> (boolean) nbt.hasTag(POSSESSED_ITEM_TAG))) return false;
 
-//				HudMessenger.of(player).displayMessage(Messenger.messenger(player).getMessage("drop.entity_soulbound"));
-				HudMessenger.of(player).displayMessage(Component.text("Предмети, прив’язані до душі керованого тіла, не можна викинути"));
+				HudMessenger.of(player).displayMessage(Messenger.messenger(player).getMessage("drop.entity_soulbound"));
 				player.playSound(player, Sound.PARTICLE_SOUL_ESCAPE, SoundCategory.PLAYERS, 1F, 1F);
 				return true;
 			})
@@ -64,13 +66,35 @@ public class PossessingOverMobs implements Listener {
 		if (!PossessingPlayer.isAllowedForCapture(player, entity)) return;
 		if (!player.getInventory().getItemInMainHand().isEmpty()) return;
 
+		if (!tryToPossess(player, entity)) return;
+
+		event.setCancelled(true);
+	}
+
+	@EventHandler(priority = EventPriority.LOW)
+	public void onInteract(PlayerInteractEvent event) {
+		if (event.useItemInHand() != Event.Result.DENY) return; // Interact is canceled for ghosts
+		if (event.getHand() != EquipmentSlot.HAND) return;
+
+		Player player = event.getPlayer();
+		if (!GhostyPlayer.isGhost(player)) return;
+		if (!player.getInventory().getItemInMainHand().isEmpty()) return;
+
+		if (!(EntityUtil.getEntityThoughGrass(player, null) instanceof LivingEntity entity)) return;
+		if (entity.hasRider()) return;
+		if (!PossessingPlayer.isAllowedForCapture(player, entity)) return;
+
+		if (!tryToPossess(player, entity)) return;
+
+		event.setCancelled(true);
+	}
+
+	private boolean tryToPossess(Player player, LivingEntity entity) {
 		Runnable action = () -> {
 			markPossessedItems(entity);
 			PossessingPlayer.migrateInventoryAndStatsToPlayer(player, entity);
 		};
-		if (!PossessingPlayer.startPossessing(player, entity, action)) return;
-
-		event.setCancelled(true);
+		return PossessingPlayer.startPossessing(player, entity, action);
 	}
 
 	@EventHandler

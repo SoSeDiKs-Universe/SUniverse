@@ -4,6 +4,7 @@ import com.destroystokyo.paper.event.player.PlayerPickupExperienceEvent;
 import com.destroystokyo.paper.event.server.ServerTickStartEvent;
 import me.sosedik.requiem.feature.GhostyPlayer;
 import me.sosedik.requiem.feature.PossessingPlayer;
+import me.sosedik.utilizer.util.EntityUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Statistic;
 import org.bukkit.entity.Entity;
@@ -13,6 +14,7 @@ import org.bukkit.entity.Villager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.EntityPotionEffectEvent;
@@ -68,6 +70,21 @@ public class PossessedLimitedControl implements Listener {
 		event.setDamage(0);
 		if (event.getCause() != EntityDamageEvent.DamageCause.CUSTOM)
 			event.setCancelled(true);
+	}
+
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onDamage(EntityDamageByEntityEvent event) {
+		if (!(event.getEntity() instanceof LivingEntity living)) return;
+
+		Player rider = living.getRider();
+		if (rider == null) return;
+		if (PossessingPlayer.getPossessed(rider) != living) return;
+
+		Entity causingDamager = EntityUtil.getCausingDamager(event);
+		if (causingDamager != rider) return;
+
+		event.setDamage(0);
+		event.setCancelled(true);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)

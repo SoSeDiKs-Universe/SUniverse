@@ -33,6 +33,7 @@ public class HalfAHeartAdvancements implements Listener {
 				playerData.setInteger(HALF_A_HEART_TICKS_NO_ARMOR_NO_EFFECTS_TAG, 0);
 				continue;
 			}
+			if (player.isInvulnerable()) continue;
 
 			boolean armor = hasAnyArmor(player);
 			boolean effects = !player.getActivePotionEffects().isEmpty();
@@ -74,7 +75,7 @@ public class HalfAHeartAdvancements implements Listener {
 	}
 
 	private boolean shouldReset(Player player) {
-		return player.isDead() || player.getHealth() > 1;
+		return player.isDead() || player.getHealth() > 1 || player.getGameMode().isInvulnerable();
 	}
 
 	private boolean hasAnyArmor(Player player) {

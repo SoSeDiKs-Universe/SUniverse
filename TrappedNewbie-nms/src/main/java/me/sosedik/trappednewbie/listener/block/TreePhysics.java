@@ -17,6 +17,7 @@ import org.bukkit.entity.Display;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Transformation;
 import org.joml.Quaternionf;
@@ -40,7 +41,7 @@ public class TreePhysics implements Listener {
 		Player player = event.getPlayer();
 		if (!Tag.ITEMS_AXES.isTagged(player.getInventory().getItemInMainHand().getType())) return;
 
-		BlockFace fallDirection = player.getTargetBlockFace(EntityUtil.PLAYER_REACH, FluidCollisionMode.NEVER);
+		BlockFace fallDirection = player.getTargetBlockFace(EntityUtil.getEntityReachBlocks(player, EquipmentSlot.HAND), FluidCollisionMode.NEVER);
 		if (fallDirection == null)
 			fallDirection = player.getFacing().getOppositeFace();
 

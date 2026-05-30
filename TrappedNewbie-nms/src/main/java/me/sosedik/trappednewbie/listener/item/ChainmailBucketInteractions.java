@@ -47,7 +47,7 @@ public class ChainmailBucketInteractions implements Listener {
 		ItemStack item = player.getInventory().getItem(hand);
 		if (item.getType() != TrappedNewbieItems.CHAINMAIL_BUCKET) return TriState.FALSE;
 
-		RayTraceResult rayTraceResult = player.rayTraceBlocks(EntityUtil.PLAYER_REACH, FluidCollisionMode.SOURCE_ONLY);
+		RayTraceResult rayTraceResult = player.rayTraceBlocks(EntityUtil.getEntityReachBlocks(player, hand), FluidCollisionMode.SOURCE_ONLY);
 		if (rayTraceResult == null) return TriState.NOT_SET;
 
 		Block block = rayTraceResult.getHitBlock();

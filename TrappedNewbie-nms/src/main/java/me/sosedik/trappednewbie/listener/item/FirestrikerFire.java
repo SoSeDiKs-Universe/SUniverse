@@ -33,13 +33,14 @@ public class FirestrikerFire implements Listener {
 		ItemStack item = event.getWeapon();
 		if (item.getType() != TrappedNewbieItems.FIRESTRIKER) return;
 
-		TrappedNewbie.scheduler().sync(task -> {
+		TrappedNewbie.scheduler().sync(_ -> {
 			if (!player.isOnline()) return true;
 			if (!item.equals(player.getActiveItem())) return true;
 
-			RayTraceResult rayTraceResult = player.rayTraceEntities(EntityUtil.PLAYER_REACH);
+			double reach = EntityUtil.getEntityReach(player, player.getActiveItemHand());
+			RayTraceResult rayTraceResult = player.rayTraceEntities((int) Math.floor(reach));
 			if (rayTraceResult == null) {
-				rayTraceResult = player.rayTraceBlocks(EntityUtil.PLAYER_REACH - 1D, FluidCollisionMode.ALWAYS);
+				rayTraceResult = player.rayTraceBlocks(reach - 1D, FluidCollisionMode.ALWAYS);
 				if (rayTraceResult == null) return false;
 			}
 

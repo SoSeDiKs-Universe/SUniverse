@@ -1,10 +1,15 @@
 package me.sosedik.utilizer.util;
 
+import io.papermc.paper.datacomponent.DataComponentTypes;
+import io.papermc.paper.datacomponent.item.AttackRange;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.HeightMap;
+import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Tag;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.entity.AbstractHorse;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Chicken;
@@ -28,6 +33,7 @@ import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.RayTraceResult;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -43,10 +49,6 @@ public class EntityUtil {
 		throw new IllegalStateException("Utility class");
 	}
 
-	/**
-	 * How far the player's hand can reach
-	 */
-	public static final int PLAYER_REACH = 5; // TODO Unhardcode, depens on other variables like the held item (attack_range)
 	public static final int DARKNESS_LIGHT_LEVEL = 3;
 
 	/**
@@ -54,6 +56,10 @@ public class EntityUtil {
 	 */
 	public static Predicate<LivingEntity> IGNORE_INTERACTION = (entity) -> entity instanceof ArmorStand armorStand && armorStand.isMarker();
 
+	/**
+	 * How far the player's hand can reach
+	 */
+	private static final int PLAYER_REACH = 5;
 	private static final List<Predicate<LivingEntity>> EXTRA_PLAYER_VISIBILITY_RULES = new ArrayList<>();
 
 	/**
@@ -147,20 +153,30 @@ public class EntityUtil {
 	 * Tries to find entity's last damager
 	 *
 	 * @param entity damaged entity
-	 * @return player damager
+	 * @return damager
 	 */
 	public static @Nullable Entity getCausingDamager(Entity entity) {
 		if (entity instanceof LivingEntity livingEntity && livingEntity.getKiller() != null) return livingEntity.getKiller();
 		if (!(entity.getLastDamageCause() instanceof EntityDamageByEntityEvent lastDamage)) return null;
-		if (lastDamage.getDamager() instanceof Projectile projectile && projectile.getShooter() instanceof Entity shooter) return shooter;
-		return lastDamage.getDamager();
+		return getCausingDamager(lastDamage);
+	}
+
+	/**
+	 * Tries to find causing damager
+	 *
+	 * @param damage damage event
+	 * @return damager
+	 */
+	public static Entity getCausingDamager(EntityDamageByEntityEvent damage) {
+		if (damage.getDamager() instanceof Projectile projectile && projectile.getShooter() instanceof Entity shooter) return shooter;
+		return damage.getDamager();
 	}
 
 	/**
 	 * Tries to find entity's last direct damager
 	 *
 	 * @param entity damaged entity
-	 * @return player damager
+	 * @return damager
 	 */
 	public static @Nullable Entity getDirectDamager(Entity entity) {
 		if (entity instanceof LivingEntity livingEntity && livingEntity.getKiller() != null) return livingEntity.getKiller();
@@ -279,6 +295,62 @@ public class EntityUtil {
 			vehicle = vehicle.getVehicle();
 		}
 		return rider;
+	}
+
+	/**
+	 * Gets the targeted entity, ignoring the grass on the way
+	 *
+	 * @param player player
+	 * @param hand hand, for applying item's reach
+	 * @return targeted entity
+	 */
+	public static @Nullable LivingEntity getEntityThoughGrass(Player player, @Nullable EquipmentSlot hand) {
+		double reach = getEntityReach(player, hand);
+		Block block = player.getTargetBlockExact((int) Math.floor(reach));
+		if (block == null) return null;
+		if (block.getType().isCollidable()) return null;
+
+		if (hand != null && block.getType().getHardness() > 0) {
+			if (LocationUtil.isCube(block) && !Tag.ITEMS_ENCHANTABLE_WEAPON.isTagged(player.getInventory().getItem(hand).getType())) return null;
+		}
+
+		Location eyeLocation = player.getEyeLocation();
+		RayTraceResult rayTraceResult = player.getWorld().rayTraceEntities(eyeLocation, eyeLocation.getDirection(), reach, entity -> entity != player);
+		if (rayTraceResult == null) return null;
+
+		return rayTraceResult.getHitEntity() instanceof LivingEntity entity ? entity : null;
+	}
+
+	/**
+	 * Gets the entity's reach distance
+	 *
+	 * @param entity entity
+	 * @param hand hand, for applying item's reach
+	 * @return the entity's reach distance
+	 */
+	public static int getEntityReachBlocks(LivingEntity entity, @Nullable EquipmentSlot hand) {
+		return (int) Math.floor(getEntityReach(entity, hand));
+	}
+
+	/**
+	 * Gets the entity's reach distance
+	 *
+	 * @param entity entity
+	 * @param hand hand, for applying item's reach
+	 * @return the entity's reach distance
+	 */
+	public static double getEntityReach(LivingEntity entity, @Nullable EquipmentSlot hand) {
+		if (hand == null) return PLAYER_REACH;
+
+		EntityEquipment equipment = entity.getEquipment();
+		if (equipment == null) return PLAYER_REACH;
+
+		ItemStack item = equipment.getItem(hand);
+		AttackRange data = item.getData(DataComponentTypes.ATTACK_RANGE);
+		if (data == null) return PLAYER_REACH;
+		if (!(entity instanceof Player player)) return data.maxReach();
+
+		return player.getGameMode() == GameMode.CREATIVE ? data.maxCreativeReach() : data.maxReach();
 	}
 
 }

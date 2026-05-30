@@ -3,6 +3,7 @@ package me.sosedik.requiem.listener.player.possessed;
 import io.papermc.paper.event.entity.EntityEquipmentChangedEvent;
 import io.papermc.paper.event.player.PlayerArmSwingEvent;
 import io.papermc.paper.event.player.PlayerInventorySlotChangeEvent;
+import me.sosedik.kiterino.event.damage.EntityDamageSourcePick;
 import me.sosedik.kiterino.event.entity.EntityStartUsingItemEvent;
 import me.sosedik.requiem.feature.PossessingPlayer;
 import me.sosedik.utilizer.util.LocationUtil;
@@ -10,13 +11,16 @@ import org.bukkit.entity.Enderman;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityCombustEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
+import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
@@ -179,6 +183,41 @@ public class PossessedMimicPossessor implements Listener {
 		}
 
 		possessed.attack(damaged);
+	}
+
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onDamageSourcePick(EntityDamageSourcePick event) {
+		if (event.getCausingEntity() instanceof Player player && PossessingPlayer.isPossessing(player)) {
+			LivingEntity possessed = PossessingPlayer.getPossessed(player);
+			if (possessed != null)
+				event.setCausingEntity(possessed);
+		}
+		if (event.getDirectEntity() instanceof Player player && PossessingPlayer.isPossessing(player)) {
+			LivingEntity possessed = PossessingPlayer.getPossessed(player);
+			if (possessed != null)
+				event.setDirectEntity(possessed);
+		}
+	}
+
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onShoot(EntityShootBowEvent event) {
+		if (event.getProjectile() instanceof Projectile projectile)
+			updateProjectileShooter(projectile);
+	}
+
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onLaunch(ProjectileLaunchEvent event) {
+		updateProjectileShooter(event.getEntity());
+	}
+
+	private void updateProjectileShooter(Projectile projectile) {
+		if (!(projectile.getShooter() instanceof Player player)) return;
+		if (!PossessingPlayer.isPossessing(player)) return;
+
+		LivingEntity possessed = PossessingPlayer.getPossessed(player);
+		if  (possessed == null) return;
+
+		projectile.setShooter(possessed);
 	}
 
 }

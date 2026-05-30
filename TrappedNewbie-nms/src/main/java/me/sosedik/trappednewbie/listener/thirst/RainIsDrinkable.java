@@ -69,7 +69,7 @@ public class RainIsDrinkable implements Listener {
 		var thirstyPlayer = ThirstyPlayer.of(player);
 		if (thirstyPlayer.hasFullThirst()) return false;
 
-		return player.rayTraceBlocks(EntityUtil.PLAYER_REACH) == null;
+		return player.rayTraceBlocks(EntityUtil.getEntityReach(player, null)) == null;
 	}
 
 }

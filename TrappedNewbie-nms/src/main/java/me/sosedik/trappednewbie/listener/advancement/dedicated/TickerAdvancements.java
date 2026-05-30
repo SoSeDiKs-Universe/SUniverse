@@ -186,7 +186,7 @@ public class TickerAdvancements implements Listener {
 	private void checkLookAtAdvancements(Player player) {
 		if (TrappedNewbieAdvancements.GEAR_UP_A_VILLAGER_IN_NETHERITE.isDone(player)) return;
 
-		Entity targetEntity = player.getTargetEntity(EntityUtil.PLAYER_REACH);
+		Entity targetEntity = player.getTargetEntity(EntityUtil.getEntityReachBlocks(player, null));
 		if (targetEntity instanceof Villager villager) {
 			EntityEquipment equipment = villager.getEquipment();
 			if (equipment.getHelmet().getType() != Material.NETHERITE_HELMET) return;

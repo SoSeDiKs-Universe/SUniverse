@@ -116,14 +116,14 @@ public class FireAspectIsFlintAndSteel implements Listener {
 	}
 
 	public static boolean mimicFlintAndSteelRightClick(LivingEntity livingEntity, EquipmentSlot hand) {
-		RayTraceResult rayTraceResult = livingEntity.rayTraceEntities(EntityUtil.PLAYER_REACH);
+		RayTraceResult rayTraceResult = livingEntity.rayTraceEntities(EntityUtil.getEntityReachBlocks(livingEntity, hand));
 		if (rayTraceResult != null) {
 			Entity hitEntity = rayTraceResult.getHitEntity();
 			if (hitEntity != null)
 				return mimicFlintAndSteel(livingEntity, hitEntity, rayTraceResult.getHitPosition(), null, null, null, hand);
 		}
 
-		rayTraceResult = livingEntity.rayTraceBlocks(EntityUtil.PLAYER_REACH - 1D, FluidCollisionMode.ALWAYS);
+		rayTraceResult = livingEntity.rayTraceBlocks(EntityUtil.getEntityReach(livingEntity, hand) - 1D, FluidCollisionMode.ALWAYS);
 		if (rayTraceResult == null) return false;
 
 		Block block = rayTraceResult.getHitBlock();

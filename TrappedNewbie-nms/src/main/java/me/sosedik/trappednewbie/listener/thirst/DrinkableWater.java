@@ -130,7 +130,7 @@ public class DrinkableWater implements Listener {
 		if (block == null) return null;
 		if (block.getType() != Material.WATER) return null;
 
-		if (player.rayTraceBlocks(EntityUtil.PLAYER_REACH) != null) return null; // Block interact will catch it anyway
+		if (player.rayTraceBlocks(EntityUtil.getEntityReach(player, null)) != null) return null; // Block interact will catch it anyway
 
 		return block;
 	}

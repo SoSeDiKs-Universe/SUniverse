@@ -17,6 +17,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDamageEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -74,7 +75,7 @@ public class SoftBlockHandBreaking implements Listener {
 		block.emitSound(soundGroup.getBreakSound(), 1F, 0.8F);
 
 		block.setType(replacement);
-		BlockFace blockFace = player.getTargetBlockFace(EntityUtil.PLAYER_REACH);
+		BlockFace blockFace = player.getTargetBlockFace(EntityUtil.getEntityReachBlocks(player, EquipmentSlot.HAND));
 		if (blockFace == null) blockFace = player.getFacing().getOppositeFace();
 
 		// Continue breaking

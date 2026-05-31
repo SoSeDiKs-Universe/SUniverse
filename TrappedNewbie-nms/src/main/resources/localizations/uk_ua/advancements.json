@@ -241,7 +241,7 @@
 	"adv.trappednewbie.basics.moar_tools.title": "БІЛЬШЕ інструментів",
 	"adv.trappednewbie.basics.moar_tools.description": "Створіть камʼяні кайло, сокиру, лопату, мотику та меч",
 	"adv.trappednewbie.basics.make_a_totem_base.title": "Віруючий",
-	"adv.trappednewbie.basics.make_a_totem_base.description": "Використайте <item:'trapped_newbie:flint_knife':'ніж'> на item:'minecraft:oak_log':'колоді'> в присяді, щоб вирізати <item:'trapped_newbie:oak_totem_base':'основу тотема'>",
+	"adv.trappednewbie.basics.make_a_totem_base.description": "Використайте <item:'trapped_newbie:flint_knife':'ніж'> на <item:'minecraft:oak_log':'колоді'> в присяді, щоб вирізати <item:'trapped_newbie:oak_totem_base':'основу тотема'>",
 	"adv.trappednewbie.basics.perform_a_ritual.title": "Задобрювач богів",
 	"adv.trappednewbie.basics.perform_a_ritual.description": "Використайте <item:'trapped_newbie:totemic_staff':'тотемний посох'> на <item:'trapped_newbie:oak_totem_base':'основі тотему'> та успішно завершіть ритуал",
 

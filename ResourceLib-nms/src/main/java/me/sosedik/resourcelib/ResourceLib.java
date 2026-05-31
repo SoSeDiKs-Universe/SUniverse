@@ -26,11 +26,11 @@ import me.sosedik.utilizer.api.language.TranslationHolder;
 import me.sosedik.utilizer.api.message.Mini;
 import me.sosedik.utilizer.util.EventUtil;
 import me.sosedik.utilizer.util.FileUtil;
+import me.sosedik.utilizer.util.MaterialSprites;
 import me.sosedik.utilizer.util.Scheduler;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.kyori.adventure.text.object.ObjectContents;
 import org.bukkit.Material;
@@ -41,14 +41,12 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.UnknownNullability;
 import org.jspecify.annotations.NullMarked;
-import org.jspecify.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -82,12 +80,6 @@ public class ResourceLib extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		registerCommands();
-
-		addBlockAsItemTextureRef(
-			Material.PITCHER_PLANT,
-			Material.STRING,
-			Material.FLOWER_POT
-		);
 
 		Mini.registerTagResolvers(
 			IconTag.ICON,
@@ -277,6 +269,12 @@ public class ResourceLib extends JavaPlugin {
 	 * @return item icon
 	 */
 	public static Component getItemIcon(Key itemKey) {
+		if (NamespacedKey.MINECRAFT_NAMESPACE.equals(itemKey.namespace())) {
+			Material type = Material.matchMaterial(itemKey.asString());
+			if (type != null)
+				return MaterialSprites.get(type);
+		}
+
 		Key textureKey = getTextureMapping(itemKey);
 		textureKey = storage().getItemModelMapping(new NamespacedKey(textureKey.namespace(), textureKey.value()));
 
@@ -286,7 +284,7 @@ public class ResourceLib extends JavaPlugin {
 		String value = (blocksAtlas ? "block/" : "item/") + textureKey.value();
 		Key atlas = blocksAtlas ? BLOCKS_ATLAS : ITEMS_ATLAS;
 		Key texture = Key.key(textureKey.namespace(), value);
-		return Mini.asIcon(Component.object(ObjectContents.sprite(atlas, texture)).color(getItemIconColor(itemType)));
+		return Mini.asIcon(Component.object(ObjectContents.sprite(atlas, texture)).color(NamedTextColor.WHITE));
 	}
 
 	private static boolean useItemTexture(Material type) {
@@ -302,48 +300,12 @@ public class ResourceLib extends JavaPlugin {
 				case "clay_kiln" -> Key.key("clay");
 				default -> key;
 			};
-			default -> switch (key.value()) {
-				case "compass" -> Key.key("compass_16");
-				case "lilac" -> Key.key("lilac_top");
-				case "peony" -> Key.key("peony_top");
-				case "rose_bush" -> Key.key("rose_bush_top");
-				case "sunflower" -> Key.key("sunflower_front");
-				case "flowering_azalea" -> Key.key("flowering_azalea_top");
-				case "campfire" -> Key.key("campfire_log_lit");
-				case "soul_campfire" -> Key.key("soul_campfire_log_lit");
-				case "grass_block" -> Key.key("grass_block_side");
-				case "dirt_path" -> Key.key("dirt_path_side");
-				case "water" -> Key.key("water_still");
-				case "lava" -> Key.key("lava_still");
-				case "white_carpet" -> Key.key("white_wool");
-				case "fern" -> Key.key("large_fern_top"); // TODO MCCheck: 1.21.11, For some reason [short] fern does not work
-				default -> key;
-			};
+			default -> key;
 		};
-	}
-
-	public static void addBlockAsItemTextureRef(Material... types) {
-		addBlockAsItemTextureRef(List.of(types));
 	}
 
 	public static void addBlockAsItemTextureRef(Collection<Material> types) {
 		BLOCKS_AS_ITEMS.addAll(types);
-	}
-
-	private static TextColor getItemIconColor(@Nullable ItemType itemType) {
-		if (itemType == null) return NamedTextColor.WHITE;
-
-		// Grass and some leaves use biome color and are gray by default
-		if (itemType == ItemType.SHORT_GRASS
-		|| itemType == ItemType.TALL_GRASS
-		|| itemType == ItemType.FERN
-		|| itemType == ItemType.LARGE_FERN
-		|| itemType == ItemType.BUSH
-		|| itemType == ItemType.OAK_LEAVES
-		)
-			return TextColor.fromHexString("#618549");
-
-		return NamedTextColor.WHITE;
 	}
 
 }

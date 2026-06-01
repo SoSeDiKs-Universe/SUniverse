@@ -126,19 +126,19 @@ public class PaintingSwitcher implements Listener {
 			if (parsedPaintingItem != null && parsedPaintingItem.hasLore())
 				builder.tooltip(Mini.combine(Component.newline(), parsedPaintingItem.lore()));
 
-			builder.action(DialogAction.customClick((responseView, audience) -> action.accept(art), ClickCallback.Options.builder().build()));
+			builder.action(DialogAction.customClick((_, _) -> action.accept(art), ClickCallback.Options.builder().build()));
 
 			return builder.width(22).build();
 		}).collect(Collectors.toCollection(ArrayList::new));
 
 		ActionButton.Builder randomPaintingBuilder = ActionButton.builder(RANDOM_PAINTING_ICON);
 		randomPaintingBuilder.tooltip(Component.translatable("painting.random", NamedTextColor.YELLOW));
-		randomPaintingBuilder.action(DialogAction.customClick((responseView, audience) -> action.accept(null), ClickCallback.Options.builder().build()));
+		randomPaintingBuilder.action(DialogAction.customClick((_, _) -> action.accept(null), ClickCallback.Options.builder().build()));
 		actions.addFirst(randomPaintingBuilder.width(22).build());
 
 		var filterAction = ActionButton
 			.builder(messenger.getMessage("paintings.picker.filter.apply"))
-			.action(DialogAction.customClick((responseView, audience) -> showDialog(player, responseView.getText("filter")), ClickCallback.Options.builder().build()))
+			.action(DialogAction.customClick((responseView, _) -> showDialog(player, responseView.getText("filter")), ClickCallback.Options.builder().build()))
 			.build();
 
 		String finalFilter = filter;
@@ -146,7 +146,7 @@ public class PaintingSwitcher implements Listener {
 			.base(
 				DialogBase
 					.builder(messenger.getMessage("paintings.picker.title"))
-					.canCloseWithEscape(false)
+					.canCloseWithEscape(false) // Esc triggers filter action
 					.inputs(List.of(
 						DialogInput
 							.text("filter", messenger.getMessage("paintings.picker.filter.title"))

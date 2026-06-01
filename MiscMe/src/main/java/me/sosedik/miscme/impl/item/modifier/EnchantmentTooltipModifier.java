@@ -32,6 +32,7 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -96,7 +97,13 @@ public class EnchantmentTooltipModifier extends ItemModifier {
 	private static final Component DESCRIPTION_PREFIX = combined(SpacingUtil.getSpacing(10), Component.text("◇", NamedTextColor.GRAY), SpacingUtil.getSpacing(3));
 	private static final Component DESCRIPTION_INDENT = SpacingUtil.getSpacing(19);
 	private static final TextColor LVL_COLOR = Objects.requireNonNull(TextColor.fromHexString("#444455"));
-	private static final List<Enchantment> SORT_ORDER = List.copyOf(MiscUtil.getTagValues(EnchantmentTagKeys.TOOLTIP_ORDER));
+	private static final Map<Enchantment, Integer> SORT_ORDER_MAP = new HashMap<>();
+	static {
+		Collection<Enchantment> enchantments = MiscUtil.getTagValues(EnchantmentTagKeys.TOOLTIP_ORDER);
+		int order = 0;
+		for (Enchantment enchantment : enchantments)
+			SORT_ORDER_MAP.put(enchantment, order++);
+	}
 
 	private static Component toolIcon(String key) {
 		return ResourceLib.requireFontData(miscMeKey("enchantment/tool_type/" + key)).icon().color(null);
@@ -184,11 +191,8 @@ public class EnchantmentTooltipModifier extends ItemModifier {
 		List<Component> enchantDisplays = renderDescriptions ? new ArrayList<>() : new ArrayList<>(enchantments.size());
 		enchantments.entrySet().stream()
 			.sorted((e1, e2) -> {
-				int index1 = SORT_ORDER.indexOf(e1.getKey());
-				int index2 = SORT_ORDER.indexOf(e2.getKey());
-
-				if (index1 == -1) index1 = Integer.MAX_VALUE;
-				if (index2 == -1) index2 = Integer.MAX_VALUE;
+				int index1 = SORT_ORDER_MAP.getOrDefault(e1.getKey(), Integer.MAX_VALUE);
+				int index2 = SORT_ORDER_MAP.getOrDefault(e2.getKey(), Integer.MAX_VALUE);
 
 				return Integer.compare(index1, index2);
 			})

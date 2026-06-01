@@ -8,6 +8,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityPotionEffectEvent;
+import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.player.PlayerAttemptPickupItemEvent;
 import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -27,8 +28,9 @@ public class NoGhostInteractions implements Listener {
 
 	@EventHandler(priority = EventPriority.LOWEST) // Interact has special cancellation
 	public void onInteractWorld(PlayerInteractEvent event) {
-		if (event.getPlayer().getGameMode().isInvulnerable()) return;
-		if (!GhostyPlayer.isGhost(event.getPlayer())) return;
+		Player player = event.getPlayer();
+		if (player.getGameMode().isInvulnerable()) return;
+		if (!GhostyPlayer.isGhost(player)) return;
 
 		event.setCancelled(true);
 	}
@@ -41,9 +43,18 @@ public class NoGhostInteractions implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onHangingBreak(HangingBreakByEntityEvent event) {
+		if (!(event.getRemover() instanceof Player player)) return;
+		if (!GhostyPlayer.isGhost(player)) return;
+
+		event.setCancelled(true);
+	}
+
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onInteractWorld(BlockBreakEvent event) {
-		if (event.getPlayer().getGameMode().isInvulnerable()) return;
-		if (!GhostyPlayer.isGhost(event.getPlayer())) return;
+		Player player = event.getPlayer();
+		if (player.getGameMode().isInvulnerable()) return;
+		if (!GhostyPlayer.isGhost(player)) return;
 
 		event.setCancelled(true);
 	}

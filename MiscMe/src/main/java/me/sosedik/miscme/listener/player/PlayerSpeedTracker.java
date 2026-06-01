@@ -63,6 +63,7 @@ public class PlayerSpeedTracker implements Listener {
 		private final List<Double> speeds = new ArrayList<>();
 		private double lastSpeed = 0;
 		private double speed = 0;
+		private double speedSum = 0;
 		private Location lastLoc;
 		private int immuneTicks = 0;
 
@@ -81,7 +82,7 @@ public class PlayerSpeedTracker implements Listener {
 			}
 
 			if (this.speeds.size() > 30)
-				this.speeds.removeFirst();
+				this.speedSum -= this.speeds.removeFirst();
 
 			if (this.immuneTicks > 0) {
 				this.immuneTicks--;
@@ -90,17 +91,11 @@ public class PlayerSpeedTracker implements Listener {
 					double speed = this.lastLoc.distance(this.player.getLocation()) * 20D;
 					this.lastSpeed = speed;
 					this.speeds.add(speed);
+					this.speedSum += speed;
 				}
 			}
 
-			double speed = 0;
-			if (!this.speeds.isEmpty()) {
-				for (double s : this.speeds)
-					speed += s;
-				speed = speed / this.speeds.size();
-			}
-
-			this.speed = speed;
+			this.speed = this.speeds.isEmpty() ? 0 : this.speedSum / this.speeds.size();
 			this.lastLoc = this.player.getLocation();
 		}
 

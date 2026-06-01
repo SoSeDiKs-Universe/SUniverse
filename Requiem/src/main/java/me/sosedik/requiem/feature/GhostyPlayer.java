@@ -119,6 +119,7 @@ public class GhostyPlayer {
 		player.setSleepingIgnored(true);
 		player.setInvisible(true);
 		player.setCanPickupItems(false);
+		player.setArrowsInBody(0, false);
 
 		// Ghost abilities
 		player.addPotionEffect(new PotionEffect(RequiemEffects.SOUL_LINK, PotionEffect.INFINITE_DURATION, 0));

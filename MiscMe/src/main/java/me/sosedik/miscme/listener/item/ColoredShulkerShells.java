@@ -17,6 +17,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Locale;
@@ -26,6 +27,7 @@ import java.util.function.Consumer;
 /**
  * Colored shulkers drop colored shells
  */
+@NullMarked
 public class ColoredShulkerShells implements Listener {
 
 	public static final String COLOR_TAG = "color";

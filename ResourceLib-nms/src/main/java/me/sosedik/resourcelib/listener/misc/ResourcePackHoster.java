@@ -73,11 +73,24 @@ public class ResourcePackHoster implements Listener {
 			plugin.saveConfig();
 		}
 
-		hostResourcePack(resourcePackFile, port);
+		String hostIp = Bukkit.getIp();
+		hostIp = "http://" + (hostIp.isEmpty() ? "localhost" : hostIp) + ":" + port;
 
-		String ip = Bukkit.getIp();
-		ip = "http://" + (ip.isEmpty() ? "localhost" : ip) + ":" + port;
-		return Bukkit.createResourcePack(resourcePackId, ip, resolveRpHash(ip), true, Messenger.messenger(LangOptionsStorage.getDefaultLangOptions()).getMessage("resource_pack.prompt"));
+		String ip = null;
+		if (plugin.getConfig().contains("resource-pack.ip")) {
+			ip = plugin.getConfig().getString("resource-pack.ip");
+			if (ip != null) {
+				if (!ip.startsWith("http://") && !ip.startsWith("https://"))
+					ip = "http://" + ip;
+				ip += ":" + port;
+			}
+		}
+		if (ip == null)
+			ip = hostIp;
+
+		hostResourcePack(resourcePackFile, ip, port);
+
+		return Bukkit.createResourcePack(resourcePackId, ip, resolveRpHash(hostIp), true, Messenger.messenger(LangOptionsStorage.getDefaultLangOptions()).getMessage("resource_pack.prompt"));
 	}
 
 	private static @Nullable String resolveRpHash(String ip) {
@@ -104,13 +117,13 @@ public class ResourcePackHoster implements Listener {
 		return null;
 	}
 
-	private static void hostResourcePack(File resourcePackFile, int port) {
+	private static void hostResourcePack(File resourcePackFile, String ip, int port) {
 		try {
 			var server = HttpServer.create(new InetSocketAddress(port), 0);
 			server.createContext("/", new ResourcePackHandler(Files.readAllBytes(resourcePackFile.toPath())));
 			server.setExecutor(null); // Creates a default executor
 			server.start();
-			ResourceLib.logger().info("Started resource pack hosting on port {}", port);
+			ResourceLib.logger().info("Started resource pack hosting on {}:{}", ip, port);
 		} catch (IOException e) {
 			ResourceLib.logger().error("Couldn't start http server to host the resource pack", e);
 		}

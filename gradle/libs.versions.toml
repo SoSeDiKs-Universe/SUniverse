@@ -16,7 +16,6 @@ runPaperVersion = "3.0.2"
 paperweightVersion = "2.0.0-SNAPSHOT"
 pluginYmlVersion = "0.9.0"
 shadowVersion = "9.4.1"
-foojayResolverVersion = "1.0.0"
 
 [libraries]
 cloud-paper = { module = "org.incendo:cloud-paper", version.ref = "cloudImplVersion" }
@@ -38,4 +37,3 @@ paperweight-userdev = { id = "io.papermc.paperweight.userdev", version.ref = "pa
 plugin-yml-paper = { id = "de.eldoria.plugin-yml.paper", version.ref = "pluginYmlVersion" }
 shadow = { id = "com.gradleup.shadow", version.ref = "shadowVersion" }
 run-paper = { id = "xyz.jpenilla.run-paper", version.ref = "runPaperVersion" }
-foojay-resolver = { id = "org.gradle.toolchains.foojay-resolver-convention", version.ref = "foojayResolverVersion" }

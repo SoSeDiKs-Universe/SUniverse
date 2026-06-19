@@ -88,6 +88,7 @@ public class SittingMechanics implements Listener {
 		for (Player nearbyPlayer : loc.getNearbyEntitiesByType(Player.class, 0.45)) {
 			if (isSitting(nearbyPlayer) && !nearbyPlayer.getCollidableExemptions().contains(player.getUniqueId())) {
 				if (sitting) return null;
+
 				unSit(nearbyPlayer, true);
 			}
 		}
@@ -122,7 +123,7 @@ public class SittingMechanics implements Listener {
 	}
 
 	private static void runSittingTask(Player player, ArmorStand sit, boolean rotate) {
-		Moves.scheduler().sync(task -> {
+		Moves.scheduler().sync(_ -> {
 			if (!sit.isValid()) return true;
 
 			List<Entity> passengers = sit.getPassengers();
@@ -270,20 +271,23 @@ public class SittingMechanics implements Listener {
 			if (oldSittingData != null && oldSittingData.sitCase() == SitCase.STATIC && oldSittingData.loc().isBlockSame(loc)) return;
 
 			player.teleport(tpLoc);
-			sit(player, loc, SitCase.STATIC);
+			Location finalLoc = loc;
+			// Riding sitting stand causes internal teleport, causing "build.tooHigh" message
+			// Delay is needed to work around that
+			Moves.scheduler().sync(() -> sit(player, finalLoc, SitCase.STATIC), 1L);
 		} else if (block.getBlockData() instanceof Slab slab) {
 			event.setCancelled(true);
 			boolean lower = slab.getType() == Slab.Type.BOTTOM;
 			Location loc = block.getLocation().center(lower ? 0.5 : 0.99);
-			sit(player, loc, SitCase.ROTATING);
+			Moves.scheduler().sync(() -> sit(player, loc, SitCase.ROTATING), 1L);
 		} else if (Tag.WOOL_CARPETS.isTagged(block.getType())) {
 			event.setCancelled(true);
 			Location loc = block.getLocation().center(0.1);
-			sit(player, loc, SitCase.ROTATING);
+			Moves.scheduler().sync(() -> sit(player, loc, SitCase.ROTATING), 1L);
 		} else if (Tag.PRESSURE_PLATES.isTagged(block.getType())) {
 			event.setCancelled(true);
 			Location loc = block.getLocation().center(0.1);
-			sit(player, loc, SitCase.ROTATING);
+			Moves.scheduler().sync(() -> sit(player, loc, SitCase.ROTATING), 1L);
 		}
 	}
 

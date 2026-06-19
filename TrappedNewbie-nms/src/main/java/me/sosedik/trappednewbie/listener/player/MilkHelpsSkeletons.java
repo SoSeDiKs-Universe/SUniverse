@@ -43,6 +43,7 @@ public class MilkHelpsSkeletons implements Listener {
 	}
 
 	private boolean hasMilk(ItemStack item) {
+		if (item.isEmpty()) return false;
 		return RLibItemTags.MILK_DRINKABLES.isTagged(item.getType())
 			|| ThirstData.of(item).drinkType() == ThirstData.DrinkType.MILK;
 	}
